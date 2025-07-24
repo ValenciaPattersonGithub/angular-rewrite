@@ -1,0 +1,72 @@
+﻿.activeBtnLayout {
+
+    background-color: @brand-color_white;
+    padding: @brand-padding_md;
+
+    &__btnIcon {
+        width: 38px;
+        height: 38px;        
+        float: left;
+        margin: -10px 0 0 -10px;
+
+        .img {
+            border: none;
+        }
+    }
+    &__removeBtn{
+         margin-left:-12px;
+    }
+    &__btnText {        
+        display: inline-block;        
+        width: 90px;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+
+    &__btn {
+        .btn;
+        .btn-default;
+        text-overflow: ellipsis;
+        border-radius: 5px;
+        margin-bottom: @brand-padding_sm;
+        margin-right: @brand-padding_sm;
+        width: 148px;
+        height: 38px;
+        font-family: @brand-font;
+        border: 1px solid;
+
+        &.condBtnColor {
+            border-color: #6FAEEE;
+        }
+
+        &.svcBtnColor {
+            border-color: #FD9290;
+        }
+
+        &.swiftCodeBtnColor {
+            border-color: #67C1BD;
+        }    
+        .bold-search-text {
+            color: @brand-color_white;
+        }        
+    } 
+    &__selected {
+        background-color: @brand-color_white;
+        height: 130px;
+        overflow-y: scroll;
+    }
+
+    &__dropTarget {
+        border: 3px dashed @brand-color_darker-gray;
+        margin: @brand-margin_lg auto 0 auto;
+        padding: @brand-padding_lg;
+        text-align: center;
+        width: 30%;
+    }
+
+    .k-listview {
+        border: none;
+    }
+}

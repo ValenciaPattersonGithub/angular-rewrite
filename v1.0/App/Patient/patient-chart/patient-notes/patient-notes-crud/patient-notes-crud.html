@@ -1,0 +1,150 @@
+﻿<div class="patNoteCrud" ng-form="frmNoteCrud">
+    <div class="patNoteCrud__secondary" ng-if="editMode" ng-hide="templateSelected">
+        <span id="lblNoteTypes" class="patNoteCrud__typeTitle">{{ 'Note Templates' | i18n }}</span>
+        <note-templates-list selected-template="selectedTemplate" edit-mode="false" collapse-all="collapseTemplates" show-menu="false"></note-templates-list>
+    </div>
+    <div class="patNoteCrud__primary" ng-class="{edit:editMode}" ng-hide="templateSelected">
+        <div class="patNoteCrud__note" ng-init="noteVm.history=false">
+            <div class="patNoteCrud__noteOptions">
+                <button id="btnClose" ng-if="!editMode" uib-tooltip="{{ 'Close' | i18n }}" class="patNoteCrud__close" ng-click="cancel()"><i class="fa fa-times"></i></button>
+                <!--<button id="btnSanitize" uib-tooltip="{{ 'Sanitize' | i18n }}" class="patNoteCrud__close" ng-click="toggleNoteSanitize()">Sanitize</button>-->
+                <button id="patNoteCrudPrint" ng-if="!editMode" uib-tooltip="{{ 'Print {0}' | i18n:['Note'] }}" check-auth-z="soar-clin-cnotes-view" class="patNoteCrud__print" ng-click="printNote()"><i class="fa fa-print"></i></button>
+                <!--<button id="patNoteCrudShare" class="patNoteCrud__share"><i class="fa fa-share-alt fa-2x"></i></button>-->
+                <button id="patNoteCrudDelete" class="patNoteCrud__delete" ng-if="!editMode && noteVm.NoteTypeId !== 5" uib-tooltip="{{ 'Delete {0}' | i18n:['Note'] }}" ng-click="deleteNote(noteVm)" ng-disabled="!noteVm.NoteId || noteVm.StatusTypeId===3" check-auth-z="soar-clin-cnotes-delete"><i class="fa fas fa-trash"></i></button>
+                <button id="btnEditMode"
+                        ng-if="!editMode && noteVm.NoteTypeId !== 5"
+                        uib-tooltip="{{ 'Edit {0}' | i18n:['Note'] }}"
+                        ng-disabled="noteVm.StatusTypeId===3"
+                        class="btn btn-xs btn-link patNoteCrud__editMode"
+                        ng-click="setEditMode()"
+                        check-auth-z="soar-clin-cnotes-edit">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button id="btnShowHistory1"
+                        ng-if="noteVm.CreatedDate && !editMode && noteVm.NoteTypeId !== 5 && noteVm.history"
+                        uib-tooltip="{{'Show {0}' | i18n:['Edit History']}}"
+                        class="btn btn-xs btn-link patNoteCrud__showHistory"
+                        ng-click="noteVm.history=!noteVm.history">
+                    <i class="fas fa-history"></i>
+                </button>
+                <button id="btnShowHistory2"
+                        ng-if="noteVm.CreatedDate && !editMode && noteVm.NoteTypeId !== 5 && !noteVm.history"
+                        uib-tooltip="{{'Show {0}' | i18n:['Edit History']}}"
+                        class="btn btn-xs btn-link patNoteCrud__showHistory_color"
+                        ng-click="noteVm.history=!noteVm.history">
+                    <i class="fas fa-history"></i>
+                </button>
+            </div>
+            <div class="patNoteCrud__details">
+                <div class="patNoteCrud__titleWrapper">
+                    <div class="patNoteCrud__titleNote" ng-class="{error:!validNote && !frmNoteCrud.inpNoteTitle.$valid}">
+                        <h4 id="lblNoteTitle" class="patNoteCrud__title" ng-if="!editMode">
+                            {{noteVm.NoteTitle }} {{noteVm.AutomaticLockTime == null ? '':' (Open)'|i18n}} - {{noteVm.$$OriginalCreatedDate + "Z" | toShortDisplayDate }}
+                        </h4>
+                        <div class="patNoteCrud__noteTitleLabel" ng-if="editMode">{{'Note Title' | i18n}}</div>
+                        <input id="inpNoteTitle" class="patNoteCrud__titleInput" ng-class="{error:!validNote && !frmNoteCrud.inpNoteTitle.$valid}" ng-if="editMode" placeholder="{{ 'Title' | i18n }}"
+                               ng-model="noteVm.NoteTitle" capitalize-first-with-override name="inpNoteTitle" maxlength="100" required />
+                        <label id="lblNoteTitleRequired" class="help-text " ng-show="!validNote && !frmNoteCrud.inpNoteTitle.$valid">
+                            {{ 'This field is required.' | i18n }}
+                        </label>
+                    </div>
+                    <div class="patNoteCrud__providerWrapper">
+                        <div class="patNoteCrud__providerSelector">
+                            <div class="patNoteCrud__providerLabel" ng-if="editMode">{{'Assigned To' | i18n}}</div>
+                            <!--<provider-selector ng-if="loadProviderSelector===true && showProviderSelector ===true"-->
+                            <provider-selector ng-if="editMode && allowProviderEditing"
+                                               input-id="lstpatNoteCrudProvider"                                               
+                                               patient-info="patientInfo"
+                                               set-preferred="true"
+                                               required="false"
+                                               provider-type-ids="[1,2,3,5]"                                               
+                                               filter-inactive-providers="true"
+                                               selected-provider="noteVm.AssignedProviderId"
+                                               disable-input="!allowProviderEditing"
+                                               sb-change="assignedProviderChanged"
+                                               sort-for-clinical-notes="true">
+                            </provider-selector>
+                            <provider-selector ng-if="editMode && !allowProviderEditing"
+                                               input-id="lstpatNoteCrudProvider"
+                                               exception-provider-id="noteVm.AssignedProviderId"
+                                               patient-info="patientInfo"
+                                               set-preferred="true"
+                                               required="false"
+                                               provider-type-ids="[1,2,3,4,5]"                                               
+                                               filter-inactive-providers="true"
+                                               selected-provider="noteVm.AssignedProviderId"
+                                               disable-input="!allowProviderEditing"
+                                               sb-change="assignedProviderChanged"
+                                               sort-for-clinical-notes="true">
+                            </provider-selector>
+
+                        </div>                        
+                    </div>
+                </div>
+                                                    
+                <!--Have Tim review this-->
+                <img id="toothImg" class="patNoteCrud__toothImg" ng-if="noteVm.ToothNumbers.length>0" ng-src="{{ 'Images/tooth_tag.svg' }}" />
+                <label id="lblToothNumbers" class="patNoteCrud__titleInput" ng-if="noteVm.ToothNumbers.length > 0">{{getToothNumbers(noteVm);}}</label>
+
+                <div id="lblNoteDate" class="patNoteCrud__date" ng-if="noteVm.CreatedDate && !editMode"></div>
+                <div id="lblNoteCreator" class="patNoteCrud__provider" ng-if="noteVm.CreatedDate  && !editMode">
+                    {{ lastNoteAction |i18n}}{{noteVm.$$DisplayNameAndDesignation}} {{'on'|i18n}} {{noteVm.CreatedDate + "Z" | toDisplayDate }} at {{noteVm.CreatedDate + "Z" | date:'h:mm a' }}
+
+                </div>
+            </div>
+            
+            <div class="patNoteCrud__editor" ng-if="editMode" ng-class="editMode ? 'active' : 'inactive'">                
+                    <text-editor id="noteEditor" focus="true" editor-id="inpNotes" content="noteVm.Note" on-cancel="cancel()" on-save="checkLockAndSave()" extra-content="selectedTeeth" tool-options="noteToolOptions">{{noteVm.Note}} </text-editor>                
+            </div>
+            <div class="patNoteCrud__notebody" ng-if="!editMode">
+                <div class="patNoteCrud__noteText" ng-if="!editMode && noteVm.StatusTypeId!==3">
+                    <textarea ng-bind-html="noteVm.Note" id="readOnlyNotesInKendoEditor"
+                              kendo-editor="KendoEditorReadOnly"
+                              rows='5'
+                              cols='20'
+                              ng-model="noteVm.Note"
+                              resizeable="true"
+                              k-encoded="false"
+                              k-tools="[]">
+                    </textarea>
+                </div>
+                <!--deleted note-->
+                <div class="patNoteCrud__noteText" ng-if="!editMode && noteVm.StatusTypeId===3">
+                    <textarea ng-bind-html="noteVm.Note" id="deletedReadOnlyNotesInKendoEditor"
+                              kendo-editor="KendoEditorDeletedNote"
+                              rows='5'
+                              cols='20'
+                              ng-model="noteVm.Note"
+                              resizeable="true"
+                              k-encoded="false"
+                              k-tools="[]">
+                    </textarea>
+                </div>
+
+                <div class="note_history" ng-if="noteVm.history && !editMode">
+                    <div ng-repeat="noteHistory in noteVm.histories">
+                        <div id="lblNoteDate" class="patNoteCrud__date" ng-if="noteHistory.CreatedDate"><span ng-if="!$last">{{"Updated by "|i18n}}</span><span ng-if="$last">{{"Created by "|i18n}}</span> {{noteHistory.$$DisplayNameAndDesignation}} on {{noteHistory.CreatedDate + "Z" | toDisplayDate }} at {{noteHistory.CreatedDate + "Z"  | toDisplayTime }}</div>
+                        <div ng-bind-html="noteHistory.Note | displayDeletedNote "></div>
+                    </div>
+                </div>
+				<div class="patNoteCrud__finalize" ng-if="noteVm.AutomaticLockTime != null">
+                    <button id="btnNoteFinalize" check-auth-z="soar-clin-cnotes-edit" class="btn btn-primary pull-right" ng-click="checkLockAndSave(true)">{{'Finalize {0}'|i18n:['Note']
+					}}</button>
+				</div>
+            </div>            
+            <!--error for note required-->
+            <div ng-class="{error:  !validNote && (!noteVm.Note || noteVm.Note===null || noteVm.Note==='')}">
+                <label id="lblNoteRequired" class="help-text " ng-show="!validNote && (!noteVm.Note || noteVm.Note===null || noteVm.Note==='')">
+                    {{ 'Note is required.' | i18n }}
+                </label>
+            </div>
+
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div ng-hide="!selectedTemplate">
+        <patient-note-template selected-template="selectedTemplate" current-note="noteVm" on-finish="onFinishTemplate()" on-cancel="onCancelTemplate()"></patient-note-template>
+    </div>
+
+    <div class="patNoteCrud__footer"></div>
+</div>

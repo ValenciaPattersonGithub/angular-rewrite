@@ -1,0 +1,69 @@
+﻿<div class="patSrvTile" ng-class="{active:serviceEdited, 'deleted-transaction-display-color':patientService.IsDeleted}"
+     >
+    <div class="timelineTile" ng-class="{timelineTileBorder : true, deleted : patientService.IsDeleted}">
+        <div class="timelineTile__row">
+            <div class="timelineTile__iconContainer">
+                <img class="timelineTile__icon" ng-src="{{ ::'Images/TimelineFilterIcons/services.svg'}}" />
+            </div>
+            <div class="timelineTile__content">
+                <div class="patSrvTile__dtlRight">
+
+                    <div class="patSrvTile__displayAs">
+                        <!--DisplayAs-->
+                        <span id="lblServiceTooth{{::tileIndex}}" ng-hide="!patientService.Tooth">
+                            <span ng-if="!displayingCode">#</span>{{ ::convertedTooth }}
+                        </span>
+
+                        <span ng-if="patientService.DisplayAs" id="lblServiceDisplayAs{{::tileIndex}}"
+                              title="{{ ::patientService.DisplayAs }}">
+                            {{ ::truncatedDisplayAs }}&nbsp;&nbsp;
+                        </span>
+                        <span ng-if="!patientService.DisplayAs" id="lblServiceCode{{::tileIndex}}"
+                              title="{{ ::patientService.ServiceCode }}">
+                            {{ ::patientService.ServiceCode }}&nbsp;&nbsp;
+                        </span>
+                        <span ng-if="patientService.CdtCodeName" id="lblCdtCode{{::tileIndex}}"
+                              title="{{ ::patientService.CdtCodeName }}">
+                            ({{ ::patientService.CdtCodeName }})
+                        </span>
+                    </div>
+
+                    <div>
+                        <div class="patSrvTile__desc">
+                            <div >
+                                <span id="lblServiceArea{{::tileIndex}}" ng-show="!!affectedArea">{{ ::affectedArea }}&nbsp;-&nbsp;</span>
+
+                                <!--Description-->
+                                <span id="lblServiceDescription{{::tileIndex}}"
+                                      uib-tooltip="{{ ::patientService.Description | i18n }}">
+                                    {{ ::truncatedDescription }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        {{ ::transactionStatus }} - {{ ::currencyFee }}
+                    </div>
+                </div>
+
+                <div class="action">
+                    <button id="{{patientService.ServiceTransactionId}}_btnLedgerRowActionEllipses" class="patSrvTile__toggle" ng-click="toggleEllipsesMenu($event)" ng-blur="showEllipsesMenu = false;">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </button>
+                    <div class="patSrvTile__actions" ng-class="{active : showEllipsesMenu, orientTop : orientTop}">
+                        <button id="{{patientService.ServiceTransactionId}}_btnLedgerRowEdit" 
+                                title="{{editToolTip}}"
+                                class="btn btn-link" ng-disabled="!canEditService" 
+                                ng-mousedown="editService()" check-auth-z="{{ps.editAMFA}}">{{ 'Edit' | i18n }}</button><br />
+                        <button id="{{patientService.ServiceTransactionId}}_btnLedgerRowDelete" 
+                                title="{{deleteToolTip}}"
+                                class="btn btn-link" 
+                                ng-disabled="patientService.ServiceTransactionStatusId == '4' || patientService.ServiceTransactionStatusId == '5' || !canDeleteService " 
+                                ng-mousedown="deleteServiceTransaction()" >{{ 'Delete' | i18n }}</button><br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

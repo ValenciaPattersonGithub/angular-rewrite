@@ -1,0 +1,23 @@
+﻿<ng-form name="questionCommentEssay" novalidate>
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div id="questionTextComment{{sectionIndex}}_{{sectionItemIndex}}" class="row">
+                {{ 'Question Text' |i18n }}:<span class="bold padding5 size-h4">*</span>
+            </div>
+            <div class="row">
+                <input ng-class="{'red-border': (questionCommentEssay.questionCommentEssayText.$invalid && customForm.SectionValidationFlag) || (questionCommentEssay.questionCommentEssayText.$invalid  && $index == customForm.SectionCopyValidationFlag )}" name="questionCommentEssayText" id="questionCommentEssayText{{sectionIndex}}_{{sectionItemIndex}}" class="col-md-10" type="text" ng-model="sectionItem.FormBankItem.ItemText" maxlength="500" required/>
+                <br/>
+            </div>
+            <div class="row error" ng-show="(questionCommentEssay.questionCommentEssayText.$invalid && customForm.SectionValidationFlag) || (questionCommentEssay.questionCommentEssayText.$invalid  && $index == customForm.SectionCopyValidationFlag )">
+                <span id="requiredComment{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required.' | i18n }}</span>
+            </div>
+
+            <div class="row">
+                <div class="margin-left-minus16 form-checkbox">
+                    <input type="checkbox" ng-value="true" ng-selected ng-model="sectionItem.IsRequired" id="questionCommentEssayCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="lblQuestionCommentEssay{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionCommentEssayCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This question is required' | i18n }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-form>

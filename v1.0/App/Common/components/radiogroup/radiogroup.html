@@ -1,0 +1,5 @@
+﻿<div class="utilRadio">   
+    <button ng-repeat="option in options" id="btnRadio{{uniqueId}}{{$index}}" class="utilRadio__ctrl" ng-focus="focused = true" ng-blur="focused = false" ng-click="changeValue($index)" ng-disabled="disabled" tabindex="{{(tabIndex=='0'||tabIndex)?tabIndex:0}}">
+        <span class="utilRadio__label" ng-class="{ 'active': value == option, 'inactive': value != option }" ng-show="labels.length > 0">{{ labels[$index] | i18n }}</span>
+    </button>
+</div>

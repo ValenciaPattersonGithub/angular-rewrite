@@ -1,0 +1,161 @@
+﻿<!-- <business-nav></business-nav>   -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div>
+    <div class="predetAuth">
+        <div class="rowFull white">
+            <div class="predetAuth__header">
+                <!--Breadcrumbs-->
+                <ul class="predetAuth__breadcrumb">
+                    <li ng-repeat="breadcrumb in dataForCrudOperation.BreadCrumbs">
+                        <ng-switch on="$last">
+                            <span id="lastBreadCrumbName" ng-switch-when="true" ng-click="cancelCarrierResponse(breadcrumb)">{{breadcrumb.name | i18n }}</span>
+                            <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="cancelCarrierResponse(breadcrumb)"><a>{{breadcrumb.name | i18n }}</a></span>
+                        </ng-switch>
+                    </li>
+                </ul>
+                <!--Title-->
+                <div class="predetAuth__title">
+                    <h1>{{ claim.IsReceived ? 'View Carrier Response' : 'Enter Carrier Response' | i18n }} {{displayedPatientName}}</h1>
+                </div>
+
+                <button ng-class="{'disabled': !isValid || claim.Status === 7 || claim.Status === 8 || claim.AnyServicesCheckedOut}"  
+                        tooltip-enable="claim.AnyServicesCheckedOut" uib-tooltip="{{ 'Services have already been checked out' | i18n }}"
+                        check-auth-z="soar-ins-iclaim-edit" type="button" class="btn btn-primary" ng-click="saveCarrierResponse()">{{ 'Save' | i18n }}
+                </button>
+
+                <button type="button" class="btn btn-default" ng-click="cancelCarrierResponse()">{{ 'Cancel' | i18n }}</button>
+                <button ng-disabled="claim.Status === 7 || claim.Status === 8 || claim.AnyServicesCheckedOut" ng-if="!claim.DocumentId > 0" check-auth-z="soar-ins-iclaim-edit" class="btn btn-default" icon="fa-upload" ng-click="openDocUploader()">{{ (claim.Status === 7 || claim.Status === 8 || claim.AnyServicesCheckedOut) ? 'No EOB' : "Upload EOB" }}</button>
+                <button ng-disabled="preDMetadata == null" ng-if="claim.DocumentId" class="btn btn-default" icon="fa-upload" ng-click="viewPredeterminationDocument()">{{ 'View Response Document' | i18n }}</button>
+            </div>
+        </div>
+        <div class="rowFull">
+            <!--Grid-->
+            <fieldset class="predetAuth__body" ng-disabled="claim.Status === 7 || claim.Status === 8 || claim.AnyServicesCheckedOut">
+
+                <div class="predetAuth__toolbar">
+                    <div class="form-col-3">
+                        <label class="control-label">Predetermination/Preauthorization Number</label>
+                        <input class="form-control" 
+                               check-auth-z="soar-ins-iclaim-edit" 
+                               maxlength="40" 
+                               size="200" 
+                               ng-change="changeUserDataEntryFlag()"
+                               ng-model="claim.PredeterminationNumber">
+                    </div>
+                </div>
+                <div class="rowFull white">
+                    <table id="tableClaimsMgmt" class="table claimsMgmt__table table-striped">
+                        <thead class="claimsMgmt__header">
+                            <tr>
+                                <td id="dateEnteredHeader">
+                                    <a id="colModifiedDate" ng-click="changeSorting('colCreatedDate', 'service.DateEntered')">{{ 'Date Created' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="serviceCodeHeader">
+                                    <a id="colServiceCode" ng-click="changeSorting('colServiceCode', 'service.ServiceCode')">{{ 'Service' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="descriptionHeader">
+                                    <a id="colDescription" ng-click="changeSorting('colDescription', 'service.Description')">{{ 'Description' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="toothHeader">
+                                    <a id="colTooth" ng-click="changeSorting('colTooth', 'service.Tooth')">{{ 'Tooth' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="areaHeader">
+                                    <a id="colArea" ng-click="changeSorting('colArea', 'service.Area')">{{ 'Area' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="providerNameHeader">
+                                    <a id="colProviderName" ng-click="changeSorting('colProviderName', 'service.PatientName')">{{ 'Provider' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="chargesHeader">
+                                    <a id="colCharges" ng-click="changeSorting('colCharges', 'Charges')">{{ 'Charge' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="adjEstHeader">
+                                    <a id="colAdjEst" ng-click="changeSorting('colEstIns', 'AdjEst')">{{ 'Est Adj' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="estInsuranceHeader">
+                                    <a id="colEstIns" ng-click="changeSorting('colEstIns', 'EstIns')">{{ 'Est Ins' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="patientPortionHeader">
+                                    <a id="colEstPatPor" ng-click="changeSorting('colEstPatPor', 'EstPatPor')">{{ 'Est Patient Portion' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+                                </td>
+                                <td id="approvedAmountHeader">
+                                    <a id="colAppAmt" ng-click="changeSorting('colAppAmt', 'AppAmt')">{{ 'Approved Amount' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>                                  
+                                </td>                           
+                            </tr>
+                        </thead>
+                        <tbody class="claimsMgmt__body">
+                            <tr ng-repeat="service in claim.CarrierResponseDetail">
+                                <!--checkbox disabled if status is closed-->
+                                <td id="serviceCreatedDate" title="{{ service.DateEntered }}">
+                                    <span>{{ service.DateEntered |date:'MM/dd/yyyy'}}</span>
+                                </td>
+                                <td id="serviceCode" title="Service Code">
+                                    <span>{{service.ServiceCode}}</span>
+                                </td>
+                                <td id="serviceCodeDesc" title="Description">
+                                    <span>{{service.ServiceDescription}}</span>
+                                </td>
+                                <td id="serviceTooth" title="Tooth">
+                                    <span>{{service.Tooth}}</span>
+                                </td>
+                                <td id="serviceArea" title="Area">
+                                    <span>{{service.Area}}</span>
+                                </td>
+                                <td id="serviceProviderName" title="{{ claim.ProviderName }}">
+                                    <span>{{ claim.ProviderName }}</span>
+                                </td>
+                                <td id="serviceCharges" title="{{ service.Charges }}">
+                                    <span>{{service.Charges | currency}}</span>
+                                </td>
+                                <td id="serviceAdjEst" title="Est Adj">
+                                    <span> {{service.AdjustedEstimate | currency}} </span>
+                                </td>
+                                <td id="serviceEstIns" title="Estimated Insurance">
+                                    <span> {{service.InsuranceEstimate | currency}} </span>
+                                </td>
+                                <td id="serviceEstPatPor" title="Estimated Patient Portion">
+                                    <span>{{service.Balance | currency }}</span>
+                                </td>
+                                <td id="serviceAppAmt" title="Approved Amount">
+                                    <input ng-change="responseAmountChange()" 
+                                           type="text" 
+                                           check-auth-z="soar-ins-iclaim-edit" 
+                                           ng-class="{'creditTrans__amount-error': (service.ResponseAmount > service.Charges)}" 
+                                           ng-model="service.ResponseAmount" 
+                                           class="form-control ng-pristine ng-valid ng-not-empty ng-valid-maxlength ng-touched" 
+                                           placeholder="$0.00" 
+                                           model-format="currency"/>
+                                    <span ng-if="service.ResponseAmount > service.Charges" class="error help-text">{{'Amount cannot be greater than'}}<br />{{'the charge of '}} {{service.Charges | currency}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div ng-show="!claim">
+                        <no-results filtering-message="'There are no Claims that match the search criteria.'" loading-message="'No claims were found.'" loading="true"></no-results>
+                    </div>
+                </div>
+
+                <!--Actions-->
+                <div class="predetAuth__actions">
+                    <div class="block">
+                        <div>
+                            <checkbox checkbox-id="closePredet"
+                                      checkbox-value="pdaChkBox"
+                                      checkbox-label=" 'Close Predetermination' "
+                                      change-function="changeUserDataEntryFlag()"
+                                      checkbox-disabled="claim.AnyServicesCheckedOut"
+                                      checkbox-hidden="false">
+                            </checkbox>
+                        </div>                        
+                    </div>
+                </div>
+                <div kendo-window="docCtrls"
+                     k-title="'Document Uploader'"
+                     k-visible="false"
+                     k-on-open="docCtrlsOpen = true"
+                     k-on-close="docCtrlsOpen = false">
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

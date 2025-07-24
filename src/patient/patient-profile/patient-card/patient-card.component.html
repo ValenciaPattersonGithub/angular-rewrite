@@ -1,0 +1,97 @@
+<div class="ptientcard-container">
+    <div class="patientcard">
+        <div class="patientcard-initialsname">
+            <div class="patientcard-initialsname-wrapper">
+                <div class="patientcard-initialsname-wrapper-badgeinitial" id="pd-initial">
+                    <div class="initialBadge" id="pd-initialBadge">
+                        <div class="patientPhotoCover" *ngIf="hasImage">
+                            <img class="patientPhoto" [src]="imageUrl">
+                        </div>
+                        <div *ngIf="!hasImage">
+                            <span> {{patientInitials}} </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="patientcard-initialsname-wrapper-name">
+                    <span>
+                        {{ patientName }}
+                    </span>
+                </div>
+                <div *ngIf="patientDetails && patientDetails.DateOfBirth" class="patientcard-initialsname-wrapper-dob">
+                    <span> {{ "D.O.B. " }}{{ patientDetails && patientDetails.DateOfBirth | date: "MM/dd/yyyy" }} </span>
+                    <span class="patientcard-initialsname-wrapper-age"> {{ "Age: " }}{{ patientDetails.DateOfBirth | age: patientDetails.DateOfBirth }} </span>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="patientcard-content">
+            <div class="patientcard-content-wrapper">
+                <div class="patientcard-content-wrapper-gender">
+                    <div class="patientcard-gender-label">
+                        <app-label [label]="'Gender'"> </app-label>
+                    </div>
+                    <span>
+                        {{ gender }}
+                    </span>
+                </div>
+                <div class="patientcard-initialsname-wrapper-signature">
+                    <div class="patientcard-signature-label">
+                        <app-label [label]="'Signature on File'"> </app-label>
+                    </div>
+                    <span>{{ signatureOnFile }}<br /></span>
+                </div>
+
+                <div class="patientcard-content-wrapper-patient">
+                    <div class="patientcard-patient-label">
+                        <app-label [label]="'Patient'"> </app-label>
+                    </div>
+                    <span *ngIf="patientDetails">{{ patientDetails.IsPatient ? "Yes" : "No" }}<br /></span>
+                </div>
+                <div class="patientcard-initialsname-wrapper-status">
+                    <div class="patientcard-status-label">
+                        <app-label [label]="'Status'"> </app-label>
+                    </div>
+                    <span *ngIf="patientDetails">{{ patientDetails.IsActive ? "Active" : "Inactive" }}<br /></span>
+                </div>
+
+                <div class="patientcard-content-wrapper-responsible-party">
+                    <div class="patientcard-responsible-party-label">
+                        <app-label [label]="'Responsible Party'"> </app-label>
+                    </div>
+                    <span>
+                        <span>{{ responsiblePerson }}<br /></span>
+                    </span>
+                </div>
+                <div class="patientcard-content-wrapper-edit">
+                  <app-button
+                    id="btncontactedit"
+                    buttonLabel="{{ 'Edit' | translate }}"
+                    variation="secondary"
+                    class="ml-10"
+                    (onClick)="updatePerson()"
+                    *ngIf="patientProfile"
+                    [isDisabled]="!hasEditAccess"
+                  ></app-button>
+                </div>
+                <div class="patientcard-content-wrapper-weight">
+                    <div class="patientcard-weight-label">
+                        <app-label [label]="'Height & Weight'"> </app-label>
+                    </div>
+                    <span>
+                        <span>{{ heightweight }}<br /></span>
+                    </span>
+                </div>
+                <div class="patientcard-content-wrapper-seperator">
+                    <hr />
+                </div>
+
+                <div class="patientcard-content-wrapper-appointments">
+                    <div class="patientcard-header">
+                        <span class="patientcard-title">{{ "Next Appointment" | translate }}</span>
+                    </div>
+                    <drawer-appointment-cards [featureName]="'PatientProfile'" [patientProfile]="patientProfile"></drawer-appointment-cards>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+﻿// #region Multi-Selector
+
+.multi-selector {
+	left: 0;
+	position: relative;
+	top: 0;
+	margin-right: 10px;
+
+	&__button {
+		height: 39px;
+		border: @brand-form_border;
+		border-radius: 2px;
+		color: @link-color;
+		background: white;
+		padding: 8px;
+		min-width: 100%;
+		text-align: right;
+		padding-right: 15px;
+
+		&__text {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			float: left;
+			padding-right: 5px;
+		}
+	}
+
+	&__item {
+		margin-left: 5px !important;
+		font-weight: normal;
+	}
+
+	&__ddWidth {
+		max-width: 300px;
+		min-width: 100%;
+		overflow-x: auto;
+		white-space: nowrap;
+		max-height: 400px;
+		overflow-y: auto;
+	}
+
+	&__status-header {
+		margin-left: 27px;
+		color: #999;
+	}
+
+	&__aligned-status-header {
+		color: #999;
+		padding-left: 40px;
+	}
+
+	&__aligned-status {
+		padding-left: 40px;
+	}
+
+	&__active {
+		width: 100%;
+		margin-top: 7px;
+	}
+
+	&__with-border-top {
+		border-top: 1px solid #999;
+	}
+
+	&__not-active {
+		width: 100%;
+		border-top: 1px solid #999;
+		margin-top: 10px;
+		padding-top: 13px;
+	}
+}

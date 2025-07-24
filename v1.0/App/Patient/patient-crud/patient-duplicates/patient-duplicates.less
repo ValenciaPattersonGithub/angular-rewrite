@@ -1,0 +1,116 @@
+﻿.patDuplicate {
+    .clearfix;
+    position: relative;
+    padding: 8px;
+    background: #eee;
+    border: @brand-form_border;
+
+    &__load {
+        .clearfix;
+    }
+    &__header {
+        .clearfix;
+
+        h5 {
+            margin-top: 4px;
+        }
+    }
+    &__close {
+        .btn;
+        .btn-link;
+        .btn-sm;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+    &__body {
+
+    }
+    &__link {
+        display: block;
+        margin-bottom: 8px;
+        padding: 8px;
+        border: @brand-form_border;
+        background-color: @brand-color_white;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: @brand-color_lighter-gray;
+        }
+        .fName,
+        .lName,
+        .dob,
+        .age,
+        .loc {
+            color: @brand-color_font-regular;
+        }
+
+        &:hover {
+            .fName,
+            .lName,
+            .dob,
+            .age,
+            .loc {
+                color: @brand-color_font-regular;
+            }
+        }
+    }
+    &__linkName {
+        font-weight: 700;
+    }
+    &__linkDetails {
+        span {
+            color: @brand-color_font-regular;
+
+        }
+    }
+}
+#duplicate-results {
+    width: 300px;
+    background: #eee;
+    border: 1px solid #999;
+
+@media only screen and (min-width: 320px) and (max-width: 992px) {
+        float: right;
+    }
+
+@media only screen and (min-width: 992px) {
+        right: 20%;
+        position: absolute;
+    }
+}
+
+.duplicate-results-wrapper {
+    height: 260px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.duplicate-results-msg {
+    margin: 10px 0 0 0;
+    padding: 5px 10px 5px 10px;
+}
+
+.duplicate-results-icon {
+    position: relative;
+    top: 4px;
+}
+
+.duplicate-results-body {
+    margin-top: 2px;
+    font-size: 13px;
+}
+
+.duplicate-result-item {
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid @bg-light;
+    padding: 10px 0 10px 0;
+    margin: 0 10px 10px 10px;
+    height: 76px;
+}
+
+.duplicate-result-item-field {
+    color: @add-color;
+}

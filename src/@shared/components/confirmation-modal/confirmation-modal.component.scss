@@ -1,0 +1,80 @@
+@import 'variables';
+
+:host {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0, 0.6);
+}
+
+// Style was not being put in place without the ng-deep I would rather not utilize that however now it works.
+::ng-deep .app-confirmation-modal-overlay-backdrop {
+    position: relative !important;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5 !important; // important was added otherwise this is overwritten by a different style
+    background: #000000;
+}
+
+:host .app-confirmation-modal-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.app-modal {
+    height: 100%;
+    display: grid;
+    grid-template: 40px 1fr auto / auto;
+    grid-template-areas:
+            'header'
+            'content'
+            'footer';
+}
+
+.app-modal-header {
+    grid-area: header;
+    font-size: $app-modal-header-font-size;
+    font-weight: $app-modal-header-font-weight;
+    font-family: $global-font-family;
+    border-bottom: $app-modal-header-border;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    
+}
+
+.app-modal-body {
+    grid-area: content;
+    padding: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+.app-modal-footer {
+    grid-area: footer;
+    padding: 15px;
+    border-top: $app-modal-header-border;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.app-modal-bold-text {
+    font-weight: bold;
+}
+
+.app-modal-text {
+    font-weight: normal;
+}
+
+.app-modal-body,
+.app-modal-body p,
+.app-modal-text,
+.app-modal-bold-text {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}

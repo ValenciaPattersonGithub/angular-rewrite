@@ -1,0 +1,43 @@
+﻿<div class="dropdown multi-select-new"  ng-class="{'disabled': disableInput}">
+    <button class="btn dropdown-link dropdown-toggle" data-toggle="dropdown">
+        <div class="dropdown-text"><span>{{ getSelectedOption() }}</span></div>
+        <div class="dropdown-caret"><span class="fa fa-caret-down"></span></div>
+    </button>
+    <div class="dropdown-menu" ng-style="dropDownStyle">
+        <div ng-if="!showStatus" class="option" ng-repeat="option in options" ng-class="{ 'default': option.IsDefault }" ng-click="click(option, $event)">
+            <checkbox checkbox-value="option[valueField]"
+                      checkbox-label="option[textField]"
+                      change-function="change(option)">
+            </checkbox>
+        </div>
+        <div ng-if="showStatus">
+            <div class="option" ng-repeat="option in options" ng-if="option.Status === 'All'" ng-class="{ 'default': option.IsDefault }" ng-click="click(option, $event)">
+                <checkbox checkbox-value="option[valueField]"
+                          checkbox-label="option[textField]"
+                          change-function="change(option)">
+                </checkbox>
+            </div>
+            <div ng-if="hasStatus(options, 'Active')" class="option-header">{{'Active' | i18n}}</div>
+            <div class="option" ng-repeat="option in options" ng-if="option.Status === 'Active'" ng-class="{ 'default': option.IsDefault }" ng-click="click(option, $event)">
+                <checkbox checkbox-value="option[valueField]"
+                          checkbox-label="option[textField]"
+                          change-function="change(option)">
+                </checkbox>
+            </div>
+            <div ng-if="hasStatus(options, 'Pending Inactive')" class="option-header">{{'Pending Inactive' | i18n}}</div>
+            <div class="option" ng-repeat="option in options" ng-if="option.Status === 'Pending Inactive'" ng-class="{ 'default': option.IsDefault }" ng-click="click(option, $event)">
+                <checkbox checkbox-value="option[valueField]"
+                          checkbox-label="option[textField]"
+                          change-function="change(option)">
+                </checkbox>
+            </div>
+            <div ng-if="hasStatus(options, 'Inactive')" class="option-header">{{'Inactive' | i18n}}</div>
+            <div class="option" ng-repeat="option in options" ng-if="option.Status === 'Inactive'" ng-class="{ 'default': option.IsDefault }" ng-click="click(option, $event)">
+                <checkbox checkbox-value="option[valueField]"
+                          checkbox-label="option[textField]"
+                          change-function="change(option)">
+                </checkbox>
+            </div>
+        </div>
+    </div>
+</div>

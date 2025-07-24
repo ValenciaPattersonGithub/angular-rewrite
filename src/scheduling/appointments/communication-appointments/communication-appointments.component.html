@@ -1,0 +1,23 @@
+<div class="appointment-title-wrapper">
+   <div class="appointment-title" id="appointment-title-label">
+      <span class="appointment-main-title" id="general-info-main-title">{{ 'Appointments' | translate }}</span>
+   </div>
+   <div class="appointment-createicon" id="appointment-create-icon" (click)="addAppointment()">
+      <span class="appointment-span-svg">
+         <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            overflow="visible" preserveAspectRatio="none" viewBox="0 0 24 20" width="18" height="18">
+            <g>
+               <path xmlns:default="http://www.w3.org/2000/svg" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                  style="fill: rgb(45, 171, 203);" vector-effect="non-scaling-stroke" />
+            </g>
+         </svg>
+      </span>
+   </div>
+</div>
+<div class="appointment-wrapper">
+   <div class="appointment-row">
+      <div class="appointment-card-wrapper">
+         <drawer-appointment-cards></drawer-appointment-cards>
+      </div>
+   </div>
+</div>

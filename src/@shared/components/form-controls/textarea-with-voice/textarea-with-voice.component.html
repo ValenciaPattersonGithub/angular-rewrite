@@ -1,0 +1,18 @@
+<!-- Search Form -->
+<div class="speech">
+    <div style="float:right">
+        <div (click)="toggleDictation()">
+            <svg-icon *ngIf="isSpeechInit != true" name="micNoneIcon" iconHeight="30px" role="button" iconWidth="30px"></svg-icon>
+            <svg-icon *ngIf="isSpeechInit === true && voiceRecognitionService.isStoppedSpeechRecog != true" name="micOnIcon" iconHeight="30px" role="button" iconWidth="30px"></svg-icon>
+            <svg-icon *ngIf="isSpeechInit === true && voiceRecognitionService.isStoppedSpeechRecog === true" name="micOffIcon" iconHeight="30px" role="button" iconWidth="30px"></svg-icon>
+        </div>
+    </div>
+    <div>
+        <textarea class="form-control"
+                  id="txtNotes"
+                  maxlength="500"
+                  rows="10" cols="38">{{voiceRecognitionService.text}}</textarea>
+    </div>
+</div>
+
+

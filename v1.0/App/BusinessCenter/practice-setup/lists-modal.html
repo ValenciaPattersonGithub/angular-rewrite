@@ -1,0 +1,14 @@
+﻿<div ng-class="'fade-in'">
+    <div class="modal-header">
+        <h1>
+            {{ title }}
+        </h1>
+        <div class="pull-right">
+            <button id="btnClose" ng-click="close()" class="btn btn-link fa fa-times icon-click"></button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div ng-include src="template"></div>
+    </div>
+    <!--<div class="modal-footer background-grey"></div>-->
+</div>

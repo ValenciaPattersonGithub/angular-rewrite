@@ -1,0 +1,133 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Dates.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Dates.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{ 'Date Seen' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Location' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Address' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Phone Number' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Responsible Party' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'CDT Code' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Date Entered' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Referral Source' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="date in data.Dates" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-1 cell">{{ date.DateSeen | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-1 cell">{{ date.Locations[0].Location}}</td>
+                    <td class="col-sm-2 cell">{{ date.Locations[0].Patients[0].Patient}}</td>
+                    <td class="col-sm-2 cell">
+                        <div ng-if="date.Locations[0].Patients[0].Address">{{ date.Locations[0].Patients[0].Address }}</div>
+                        <div ng-if="date.Locations[0].Patients[0].Address2">{{ date.Locations[0].Patients[0].Address2 }}</div>
+                        <div>
+                            {{ date.Locations[0].Patients[0].City }}<span ng-if="date.Locations[0].Patients[0].City">,</span> {{ date.Locations[0].Patients[0].State }} {{ date.Locations[0].Patients[0].ZipCode }}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">
+                        <div ng-if="date.Locations[0].Patients[0].PhoneNumber">
+                            {{ date.Locations[0].Patients[0].PhoneNumber | tel }} - {{date.Locations[0].Patients[0].PhoneNumberType}}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">{{date.Locations[0].Patients[0].ResponsibleParty}}</td>
+                    <td class="col-sm-1 cell">{{date.Locations[0].Patients[0].CdtCode}}</td>
+                    <td class="col-sm-1 cell">{{date.Locations[0].Patients[0].Provider}}</td>
+                    <td class="col-sm-1 cell">{{date.Locations[0].Patients[0].DateEntered | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell">{{date.Locations[0].Patients[0].ReferralSource}}</td>
+                </tr>
+                <tr ng-if="date.Locations[0].Patients.length < 2">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="10">{{'New Patients Seen:' | i18n}} {{date.Locations[0].Patients.length}}</td>
+                </tr>
+                <tr ng-if="date.Locations[0].Patients.length >= 2" ng-repeat="patient in date.Locations[0].Patients | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell">{{ patient.Patient}}</td>
+                    <td class="col-sm-2 cell">
+                        <div ng-if="patient.Address">{{ patient.Address }}</div>
+                        <div ng-if="patient.Address2">{{ patient.Address2 }}</div>
+                        <div>
+                            {{ patient.City }}<span ng-if="patient.City">,</span> {{ patient.State }} {{ patient.ZipCode }}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">
+                        <div ng-if="patient.PhoneNumber">
+                            {{ patient.PhoneNumber | tel }} - {{patient.PhoneNumberType}}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">{{patient.ResponsibleParty}}</td>
+                    <td class="col-sm-1 cell">{{patient.CdtCode}}</td>
+                    <td class="col-sm-1 cell">{{patient.Provider}}</td>
+                    <td class="col-sm-1 cell">{{patient.DateEntered | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell">{{patient.ReferralSource}}</td>
+                </tr>
+                <tr ng-if="date.Locations[0].Patients.length >= 2">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="10">{{'New Patients Seen:' | i18n}} {{date.Locations[0].Patients.length}}</td>
+                </tr>
+                <tr ng-repeat-start="location in date.Locations | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{location.Location}}</td>
+                    <td class="col-sm-2 cell">{{location.Patients[0].Patient}}</td>
+                    <td class="col-sm-2 cell">
+                        <div ng-if="location.Patients[0].Address">{{ location.Patients[0].Address }}</div>
+                        <div ng-if="location.Patients[0].Address2">{{ location.Patients[0].Address2 }}</div>
+                        <div>
+                            {{ location.Patients[0].City }}<span ng-if="location.Patients[0].City">,</span> {{ location.Patients[0].State }} {{ location.Patients[0].ZipCode }}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">
+                        <div ng-if="location.Patients[0].PhoneNumber">
+                            {{ location.Patients[0].PhoneNumber | tel }} - {{location.Patients[0].PhoneNumberType}}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">{{location.Patients[0].ResponsibleParty}}</td>
+                    <td class="col-sm-1 cell">{{location.Patients[0].CdtCode}}</td>
+                    <td class="col-sm-1 cell">{{location.Patients[0].Provider}}</td>
+                    <td class="col-sm-1 cell">{{location.Patients[0].DateEntered | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell">{{location.Patients[0].ReferralSource}}</td>
+                </tr>
+                <tr ng-if="location.Patients.length < 2">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="10">{{'New Patients Seen:' | i18n}} {{location.Patients.length}}</td>
+                </tr>
+                <tr ng-repeat="pat in location.Patients | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell">{{ pat.Patient}}</td>
+                    <td class="col-sm-2 cell">
+                        <div ng-if="pat.Address">{{ pat.Address }}</div>
+                        <div ng-if="pat.Address2">{{ pat.Address2 }}</div>
+                        <div>
+                            {{ pat.City }}<span ng-if="pat.City">,</span> {{ pat.State }} {{ pat.ZipCode }}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">
+                        <div ng-if="pat.PhoneNumber">
+                            {{ pat.PhoneNumber | tel }} - {{pat.PhoneNumberType}}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">{{pat.ResponsibleParty}}</td>
+                    <td class="col-sm-1 cell">{{pat.CdtCode}}</td>
+                    <td class="col-sm-1 cell">{{pat.Provider}}</td>
+                    <td class="col-sm-1 cell">{{pat.DateEntered | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell">{{pat.ReferralSource}}</td>
+                </tr>
+                <tr ng-repeat-end ng-if="location.Patients.length > 1">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="10">{{'New Patients Seen:' | i18n}} {{location.Patients.length}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.Dates.length > 0 && !showFilterMessage">
+                <tr>
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="10">{{'Total' | i18n}} {{'New Patients Seen:' | i18n}} {{ data.TotalNewPatientsSeen }}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="10">{{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

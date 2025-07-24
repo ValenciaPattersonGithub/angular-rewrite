@@ -1,0 +1,478 @@
+<div class="srvcCodeCrud">
+    <div class="srvcCodeCrud__header">
+        <div class="headerborder" keep-top>
+            <div class="headertitle col-md-12">
+                <h1>
+                    <span id="lblAddServiceCodeHeader" *ngIf="!editMode" class="modal-title">
+                        &nbsp;{{'Add a Service Code' | translate }}
+                    </span>
+                    <span id="lblEditServiceCodeHeader" *ngIf="editMode" class="modal-title">
+                        &nbsp;{{'Edit a Service Code' | translate }}
+                    </span>
+                </h1>
+            </div>
+            <div class="headerbuttons col-md-12">
+                <div class="srvcCodeCrud__btn" (click)="cancelOnClick()">
+                    <a id="btnCancel" class="btn btn-default">{{ 'Discard'| translate }}</a>
+                </div>
+                <div class="srvcCodeCrud__btn" (click)="saveServiceCode()">
+                    <button id="btnConfirm" class="btn btn-primary" type="button">{{ 'Save' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="srvcCodeCrud__body">
+        <form name="addServiceCodeForm" #addServiceCodeForm="ngForm">
+            <!-- code information header -->
+            <div>
+                <div id="codeInformationHeader">
+                    <profile-section [baseId]="'codeInformationHeader'" [sectionTitle]="'Code Information'">
+                        <ng-container layout1>
+                            <!-- code information section -->
+                            <div id="codeInfo">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <!-- Service Code -->
+                                                <div class="col-sm-12 " *ngIf="!editMode">
+                                                    <label id="lblServiceCode" for="inpServiceCode"
+                                                           class="col-sm-12 srvcCodeCrud__noSidePadding control-label">
+                                                        {{'Service Code' | translate}}*
+                                                    </label>
+                                                    <div class="col-sm-12 srvcCodeCrud__noSidePadding">
+                                                        <input class="form-input required valid" name="inpServiceCode"
+                                                               id="inpServiceCode" [(ngModel)]="serviceCode.Data.Code" (blur)="checkUniqueServiceCode()"
+                                                               (change)="serviceCodeOnChange()" #inpServiceCode="ngModel" #inputServiceCode maxlength="8" required />
+                                                    </div>
+                                                    <div class="col-sm-12 srvcCodeCrud__noSidePadding">
+                                                        <label id="lblServiceCodeRequired" class="error font-weight-normal"
+                                                               *ngIf="inpServiceCode?.errors?.required && saveAttempted">{{ 'This field is required.'|translate }}</label>
+                                                        <label id="lblUniqueServiceCodeServerMessage" class="error font-weight-normal"
+                                                               *ngIf="serviceCode.IsDuplicate">{{ uniqueServiceCodeServerMessage }}</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 srvcCodeCrud__noSidePadding" *ngIf="editMode">
+                                                    <label id="lblServiceCode" for="inpServiceCode" class="col-sm-12 control-label">
+                                                        {{ 'Service Code'| translate }} *
+                                                    </label>
+                                                    <div class="col-sm-12">
+                                                        <span id="labeledServiceCode" class="span-text">{{ serviceCode?.Data?.Code }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- CDT Code -->
+                                                <div class="col-sm-6" *ngIf="editMode && serviceCode?.IsServiceCodeUsed">
+                                                    <label class="col-sm-12  control-label " for="cdtCodeTypeAhead">{{ 'CDT Code'| translate }}</label>
+                                                    <div class="col-md-6 ">
+                                                        <span id="lblCdtCode" class="span-text">{{serviceCode?.Data?.CdtCodeName}} </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 srvcCodeCrud__noSidePadding" *ngIf="!editMode || !serviceCode?.IsServiceCodeUsed">
+                                                    <label class="col-sm-12  control-label"
+                                                           for="cdtCodeTypeAhead">{{ 'CDT Code'| translate }}</label>
+                                                    <div class="col-md-8 ">
+                                                        <search-bar-autocomplete [list]="searchResults" [inputValueBind]="cdtCodeselected"
+                                                                                 [placeholder]="placeholder" [template]="template"
+                                                                                 [valueF]="'Name'"
+                                                                                 (selectedValueChange)="selectResult($event)" 
+                                                                                 (filterValueChange)="activateSearch($event)" required>
+                                                        </search-bar-autocomplete>
+
+                                                        <div id="validCdtCodeServerMessage" *ngIf="!isValidCdtCode" class="error">
+                                                            {{validCdtCodeServerMessage}}
+                                                        </div>
+                                                    </div>
+                                                    <cdt-code-picker-modal (closeModal)="onCTDCodePickerModalClose($event)"></cdt-code-picker-modal>
+                                                    <button 
+                                                            checkRoleAccess="soar-biz-bsvccd-view"
+                                                            class="btn btn-link col-md-4"
+                                                            id="btnCdtCodeSelectFromList"
+                                                            (click)="openCTDCodePickerModal()" type="button">
+                                                        {{ 'Select from list'| translate }}
+                                                    </button>
+                                                </div>
+                                                <!-- Chart Icon -->
+                                                <div class="col-sm-12" *ngIf="editMode">
+                                                    <img class="srvcCodeCrud__chartIcon center-block" src="Images/ChartIcons/{{serviceCode?.Data?.$$IconFileName}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Display As -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblDisplayAs" class="col-sm-12 control-label" for="inpDisplayAs">{{ 'Display As' | translate }}</label>
+                                                <div class="col-sm-12">
+                                                    <input class="form-input" [disabled]="!serviceCode?.Data?.IsActive" [(ngModel)]="serviceCode.Data.DisplayAs" name="inpDisplayAs" id="inpDisplayAs" #inpDisplayAs
+                                                           maxlength="16" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Description -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblDescription" class="col-sm-12 control-label" for="inpDescription">{{ 'Description' | translate }} *</label>
+                                                <div class="col-sm-12">
+                                                    <input [disabled]="!serviceCode.Data.IsActive" #inpDescription="ngModel" class="form-input required valid" [(ngModel)]="serviceCode.Data.Description" name="inpDescription" id="inpDescription" #inputDescription maxlength="256" required />
+                                                </div>
+                                                <div class="col-sm-12" *ngIf="inpDescription?.errors?.required  && saveAttempted">
+                                                    <label id="lblDescriptionRequired" class="error font-weight-normal" *ngIf="inpDescription?.errors?.required">{{ 'This field is required.'| translate }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Service Type -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblServiceType" class="col-sm-12 control-label"
+                                                       for="lstServiceType">{{ 'Service Type' | translate }} *</label>
+                                                <div class="col-sm-12" [ngClass]="{'error': (serviceTypeIdError===true)}">
+
+                                                    <soar-select-list id="lstServiceType" name="lstServiceType" #lstServiceType
+                                                                      [placeHolder]="'Select Service Type'"
+                                                                      [textField]="'Description'" [valueField]="'Description'"
+                                                                      [optionList]="serviceTypes" [disableInput]="!serviceCode?.Data?.IsActive"
+                                                                      [sbTab]="10"
+                                                                      class="fill-width required"
+                                                                      [(ngModel)]="serviceCode.Data.ServiceTypeDescription"
+                                                                      (selectedItemValueChange)="validateServiceTypeChange($event)" (blurEvent)="serviceTypeBlur()" required>
+                                                    </soar-select-list>
+                                                </div>
+                                                <div class="col-sm-12" [ngClass]="{error: !serviceTypeIdError===true}" *ngIf="serviceTypeIdError===true">
+                                                    <label id="lblServiceTypeRequired" class="error font-weight-normal" *ngIf="serviceTypeIdError===true">{{ 'This field is required.'|translate }}</label>
+                                                    <label id="lblServiceTypeFailedToLoad" class="error font-weight-normal" *ngIf="serviceTypes == null || serviceTypes.length == 0">{{'Failed to load the service types list.' | translate }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Affected Area -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblAffectedArea" class="col-sm-12 control-label" for="lstAffectedArea">{{'Affected Area' | translate }} *</label>
+                                                <div class="col-sm-12" [ngClass]="{'error': (affectedAreas == null || affectedAreas.length == 0) || (affectedAreaIdError===true)}">
+                                                    <soar-select-list id="lstAffectedArea" name="lstAffectedArea" #lstAffectedArea
+                                                                      [placeHolder]="'Select Affected Area'"
+                                                                      [textField]="'Name'" [valueField]="'Name'"
+                                                                      [(ngModel)]="serviceCode.Data.AffectedAreaName"
+                                                                      [optionList]="affectedAreas" [disableInput]="!serviceCode?.Data?.IsActive" [sbTab]="10"
+                                                                      class="fill-width required" (blurEvent)="affectedAreaBlur()" (selectedItemValueChange)="validateAffectedAreaChange($event)" required>
+                                                    </soar-select-list>
+                                                </div>
+                                                <div class="col-sm-12" [ngClass]="{error: affectedAreas == null || affectedAreas.length == 0}" *ngIf="affectedAreas == null || affectedAreas.length == 0">
+                                                    <label id="lblAffectedAreaFailedToLoad" class="error font-weight-normal" *ngIf="affectedAreas == null || affectedAreas.length == 0">{{ 'Failed to load the affected area list.' | translate }}</label>
+                                                </div>
+                                                <div class="col-sm-12" [ngClass]="{error: affectedAreaIdError === true}" *ngIf="affectedAreaIdError===true">
+                                                    <label id="lblServiceTypeRequired" class="error font-weight-normal" *ngIf="affectedAreaIdError===true">{{ 'This field is required.'| translate }}</label>
+                                                </div>
+                                            </div>
+                                            <div class="smartCodeSetup" *ngIf="serviceCode?.Data?.AffectedAreaId == 5 || serviceCode?.Data?.AffectedAreaId == 3 || serviceCode?.Data?.AffectedAreaId == 4">
+                                                <button class="btn btn-link" (click)="openSmartCodeSetup()">{{ 'Smart Code Setup' | translate}}</button>
+                                                <smart-code-setup [serviceCodeInputData]="serviceCode?.Data" [allServiceCodes]="allServiceCodes" (ClosePopup)="closeSmartCode($event)"></smart-code-setup>
+                                            </div>
+                                            <div class="row" *ngIf="serviceCode?.Data?.AffectedAreaId == 5">
+                                                <!-- Missing Tooth -->
+                                                <div class="col-xs-4 pull-right">
+                                                    <label id="lblSetsToothAsMissing" class="control-label" for="inpSetsToothAsMissing">
+                                                        {{ 'Sets Tooth as Missing' | translate }}
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-1 pull-right">
+                                                    <div class="onoffswitch" disabled>
+                                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="setsToothAsMissing"
+                                                               [disabled]="serviceCode?.Data?.AffectedAreaId != 5" [(ngModel)]="serviceCode.Data.SetsToothAsMissing">
+                                                        <label [ngClass]="{'not-allowed': !serviceCode?.Data?.IsActive}" class="onoffswitch-label" for="setsToothAsMissing"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Draw Type -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblDrawType" class="col-sm-12 control-label"
+                                                       for="lstDrawType">{{'Draw Type' | translate }} </label>
+                                                <div class="col-sm-12">
+                                                    <soar-select-list id="lstDrawType" #lstDrawType name="lstDrawType"
+                                                                      [placeHolder]="'Select Draw Type'" [textField]="'Description'"
+                                                                      [valueField]="'Description'" [optionList]="filteredDrawTypes"
+                                                                      [(ngModel)]="serviceCode.Data.DrawTypeDescription"
+                                                                      [disableInput]="filteredDrawTypes == null || filteredDrawTypes.length == 0 || !serviceCode?.Data?.IsActive"
+                                                                      [sbTab]="10" class="fill-width required"
+                                                                      (blurEvent)="drawTypeBlur()" required>
+                                                    </soar-select-list>
+                                                </div>
+                                                <div class="col-sm-12" [ngClass]="{error: drawTypes == null || drawTypes?.length == 0}" *ngIf="drawTypes == null || drawTypes?.length == 0">
+                                                    <label id="lblDrawTypeFailedToLoad" class="error font-weight-normal" *ngIf="drawTypes == null || drawTypes?.length == 0">
+                                                        {{'Failed to load the draw types list.' | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Usually Performed By -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblUsuallyPerformedBy" class="col-sm-12 control-label" for="lstUsuallyPerformedBy">{{'Usually Performed By' | translate }}</label>
+                                                <div class="col-sm-12">
+                                                    <soar-select-list id="lstUsuallyPerformedBy" name="lstUsuallyPerformedBy"
+                                                                      [placeHolder]="'Select Usually Performed By'" [textField]="'Name'"
+                                                                      [valueField]="'Name'" [optionList]="providerTypes"
+                                                                      [(ngModel)]="serviceCode.Data.UsuallyPerformedByProviderTypeName"
+                                                                      [disableInput]="!serviceCode?.Data?.IsActive" (blurEvent)="usuallyPerformedByProviderTypeBlur()"
+                                                                      [sbTab]="10" class="fill-width required"
+                                                                      required>
+                                                    </soar-select-list>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <!-- AMA Diagnosis Code -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblDiagnosisCode" class="col-sm-12 control-label"
+                                                       for="inpDiagnosisCode">{{ 'AMA Diagnosis Code'| translate }}</label>
+                                                <div class="col-sm-12">
+                                                    <input class="form-input" name="inpDiagnosisCode" [disabled]="!serviceCode?.Data?.IsActive"
+                                                           id="inpDiagnosisCode" maxlength="20" [(ngModel)]="serviceCode.Data.AmaDiagnosisCode" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- CPT -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblCPT" class="col-sm-12 control-label" for="inpCPT">
+                                                    {{'CPT'| translate}}
+                                                </label>
+                                                <div class="col-sm-12">
+                                                    <input class="form-input" name="inpCPT" id="inpCPT" maxlength="6" [(ngModel)]="serviceCode.Data.CPT"
+                                                           [disabled]="!serviceCode?.Data?.IsActive" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modifier -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label id="lblModifier" class="col-sm-12 control-label"
+                                                       for="inpModifier">{{ 'Modifier'| translate }}</label>
+                                                <div class="col-sm-12">
+                                                    <input class="form-input" name="inpModifier" id="inpModifier" [(ngModel)]="serviceCode.Data.Modifier"
+                                                           [disabled]="!serviceCode?.Data?.IsActive"
+                                                           maxlength="2" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <!-- Submit on Insurance -->
+                                                    <div class="col-xs-12">
+                                                        <label id="lblActive" class="control-label" for="inpSubmitOnInsurance">{{ 'Submit on Insurance' | translate }} </label>
+                                                    </div>
+
+                                                    <div class="col-xs-12">
+                                                        <div class="onoffswitch">
+                                                            <input type="checkbox" name="chkSubmitOnInsurance" class="onoffswitch-checkbox" id="chkSubmitOnInsurance"
+                                                                   [disabled]="!serviceCode?.Data?.IsActive" [(ngModel)]="serviceCode.Data.SubmitOnInsurance">
+                                                            <label [ngClass]="{'not-allowed': !serviceCode?.Data?.IsActive}" class="onoffswitch-label" for="chkSubmitOnInsurance"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <!-- Is Eligible For Discount -->
+                                                    <div class="col-xs-12">
+                                                        <label id="lblActive" class="control-label" for="inpIsEligibleForDiscount">{{ 'Eligible for Discount' | translate }} </label>
+                                                    </div>
+
+                                                    <div class="col-xs-12">
+                                                        <div class="onoffswitch">
+                                                            <input type="checkbox" name="chkIsEligibleForDiscount" class="onoffswitch-checkbox" id="chkIsEligibleForDiscount"
+                                                                   [disabled]="!serviceCode?.Data?.IsActive" [(ngModel)]="serviceCode.Data.IsEligibleForDiscount">
+                                                            <label [ngClass]="{'not-allowed': !serviceCode?.Data?.IsActive}" class="onoffswitch-label" for="chkIsEligibleForDiscount"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <!-- Is Active -->
+                                                    <div class="col-xs-12">
+                                                        <label id="lblActive" class="control-label" for="inpActive">{{ 'Active' | translate }} </label>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <div class="onoffswitch">
+                                                            <input checkRoleAccess="soar-biz-bsvccd-delete"
+                                                                   [disabled]="!hasDeleteAccess"
+                                                                   type="checkbox"
+                                                                   name="chkIsActive"
+                                                                   class="onoffswitch-checkbox"
+                                                                   id="chkIsActive"
+                                                                   [(ngModel)]="serviceCode.Data.IsActive"
+                                                                   (ngModelChange)="toggleIsActive($event)">
+                                                            <label class="onoffswitch-label" for="chkIsActive"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Inactive Message -->
+                                        <div class="form-group">
+                                            <div class="row" *ngIf="serviceCode?.Data && !serviceCode?.Data?.IsActive">
+                                                <div class="col-sm-12">
+                                                    <div class="panel">
+                                                        <div class="panel-heading warning-inactivate-service">
+                                                            <div class="panel-title">
+                                                                <i class="fa fa-exclamation-triangle"></i>
+                                                                <h4 class="ng-binding">Inactivating Service Code<span class="ng-binding"></span></h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-4">
+                                                                    <label>Inactivation Date</label>
+                                                                    <app-date-selector [disabled]="true" [minDate]="minDate" [value]="serviceCode?.Data?.InactivationDate"
+                                                                                       [maxDate]="maxDate" [isValidDate]="inactivationDateIsValid" name="inpInactivationDate"
+                                                                                       id="inpInactivationDate"></app-date-selector>
+                                                                </div>
+                                                                <div class="col-sm-8">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12 margin-top-10">
+                                                                            <div class="checkbox">
+                                                                                <label id="lbinpInactivationRemoveReferences">
+                                                                                    <input type="checkbox" [(ngModel)]="serviceCode.Data.InactivationRemoveReferences"
+                                                                                           name="inpInactivationRemoveReferences" id="inpInactivationRemoveReferences" />
+                                                                                    Remove service code from all Applicable Swift Code and Preventive Care Categories
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Chart Icon -->
+                                        <div class="col-sm-12" *ngIf="!editMode">
+                                            <img class="srvcCodeCrud__chartIcon center-block" src="Images/ChartIcons/{{serviceCode?.Data?.$$IconFileName}}">
+                                        </div>
+                                        <div class="fuseGrid pull-left col-md-12 form-group svc-code-cat">
+                                            <div class="row header">
+                                                <div *ngFor="let column of header; let i = index" [ngClass]="column.size">
+                                                    <div *ngIf="column.sortable">
+                                                        <i class="fa fa-caret-down" *ngIf="column.sorted && sortedColumn[0]=='-'"></i>
+                                                        <i class="fa fa-caret-up" *ngIf="column.sorted && sortedColumn[0]!='-'"></i>
+                                                        {{column.label}}
+                                                    </div>
+                                                    <div *ngIf="!column.sortable">
+                                                        {{column.label}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <!--Set up new categorys on the js. Pass the info from Service-code-search-controller into this controller-->
+                                            <!--Use headerCategories in the controller to set up this section-->
+                                            <div class="row body" infinite-scroll="search()" *ngFor="let headerEle of headerCategories; let i = index">
+                                                <div class="col-sm-1 cell" *ngIf="data[headerEle?.data]?.length" (click)="headerEle.show = !headerEle.show">
+                                                    <i class="fa fa-lg fa-angle-right" *ngIf="!headerEle?.show"></i>
+                                                    <i class="fa fa-lg fa-angle-down" *ngIf="headerEle?.show"></i>
+                                                </div>
+                                                <div class="col-sm-1 cell" *ngIf="!data[headerEle?.data]?.length">
+                                                    <i class="fa fa-lg fa-angle-right" *ngIf="!headerEle?.show"></i>
+                                                </div>
+                                                <div class="col-sm-5 cell">
+                                                    {{headerEle.label}}
+                                                </div>
+                                                <div class="col-sm-6 cell">
+                                                    {{data[headerEle.data]?.length > 0 ? data[headerEle.data]?.length : 0 }}
+                                                </div>
+                                                <div class="col-md-12 svc-code-body" *ngIf="headerEle?.show">
+                                                    <div class="fuseGrid pull-left col-md-offset-1 col-md-11 svc-code-primary">
+                                                        <div class="row header">
+                                                            <div [ngClass]="column.size" *ngFor="let column of headerEle.header">
+                                                                <div *ngIf="column.sortable" (click)="sort(column.label)">
+                                                                    <i class="fa fa-caret-down" *ngIf="column.sorted && sortedColumn[0]=='-'"></i>
+                                                                    <i class="fa fa-caret-up" *ngIf="column.sorted && sortedColumn[0]!='-'"></i>
+                                                                    {{column.label}}
+                                                                </div>
+                                                                <div *ngIf="!column.sortable">
+                                                                    {{column.label}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr />
+                                                        <div class="service-grid-scroll">
+                                                            <div class="body" *ngFor="let code of data[headerEle?.data];let i=index">
+                                                                <div class="col-xs-1 cell">
+                                                                    {{i + 1}}
+                                                                </div>
+                                                                <div class="col-sm-10 pull-left cell" *ngIf="headerEle?.data == 'PreventiveServices'">
+                                                                    {{code[headerEle.field + '_Name']}}
+                                                                </div>
+                                                                <div class="col-sm-10 pull-left cell" *ngIf="headerEle?.data == 'SwiftCodes'">
+                                                                    {{code[headerEle.field]}}
+                                                                </div>
+                                                                <div class="col-sm-10 pull-left cell" *ngIf="headerEle?.data == 'Favorites'">
+                                                                    {{code[headerEle.field + '_UserName']}}
+                                                                </div>
+                                                                <div class="col-sm-1 cell">
+                                                                    <i class="fa fa-lg fa-times-circle" *ngIf="headerEle?.data != 'Favorites'"
+                                                                       (click)="deleteReference(code,headerEle)"></i>
+                                                                </div>
+                                                                <hr />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        <!-- Notes -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <textarea class="form-input" placeholder="Notes" name="inpNotes" id="inpNotes" maxlength="500" rows="6" spellcheck="true"
+                                                              [(ngModel)]="serviceCode.Data.Notes" [disabled]="!serviceCode?.Data?.IsActive"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </profile-section>
+                    <profile-section [baseId]="'feesHeader'" [sectionTitle]="'Fees'">
+                        <ng-container layout1>
+                            <!-- fees section -->
+                            <div id="fees" class="form-section-container collapse in">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <!-- Fee -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <span ng-disabled="true" class="">
+                                                    <button auth-z="soar-biz-feelst-view" class="btn btn-link pull-left" type="button" (click)="openFeesByLocation()">
+                                                        {{ 'View Fees' | translate }}
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <!-- Fees By Location-->
+                                        <div class="row">
+                                            <service-fees-by-location [ServiceCodeData]="serviceCode?.Data" (ClosePopup)="closeFeesByLocation($event)"></service-fees-by-location>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </profile-section>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<swiftpick-code-crud [data]="swiftPickServiceCode" (closeModal)="onSwiftCodeModalClose($event)"></swiftpick-code-crud>
+<div kendoDialogContainer></div>

@@ -1,0 +1,254 @@
+﻿<div ng-show="!loadingServices" class="cdtTransCrud panel">
+    <div class="modal-header padding-bottom-none">
+        <div class="panel-header cdtTransCrud__headercursor-pointer" id="modalScroll">
+            <div class="pull-right">
+                <button data-qa="cdt-trans-close-btn" id="btnClose" ng-click="closeModal()" class="btn btn-link fa fa-times icon-click"></button>
+            </div>
+        </div>
+        <div class="page-title-responsive form-header-newer padding-top-none">
+            <div class="row ">
+                <div class="col-xs-12">
+                    <span data-qa="cdt-trans-lbl-title" id="lblTitleDate">
+                        {{ transaction.TitleDate }}
+                    </span>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-xs-12">
+                    <span data-qa="cdt-trans-type" ng-if="!editMode">
+                        {{transaction.TransactionType}}
+                    </span>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-xs-12">
+                    <span data-qa="cdt-trans-service-type" id="lblServiceType">
+                        {{transaction.ServiceType}}
+                    </span>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-xs-12">
+                    <span data-qa="cdt-trans-lbl-carrier" id="lblCarrier">
+                        {{transaction.CarrierName && transaction.CarrierName !== null ? transaction.CarrierName : transaction.carrierDisplay }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-10">
+                <form name="viewTransactionForm" role="form" action="javascript:void(0);" novalidate>
+                    <div class="cdtTransCrud__formItem">
+                        <div data-qa="cdt-trans-date" class="cdtTransCrud__formLbl" id="dvDate">
+                            {{'Date' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-if="!editMode">
+                            <label data-qa="cdt-trans-lbl-date-entered" class="lbl-text" id="lblDate">{{transaction.$$DateEntered | date:'MM/dd/yyyy hh:mm:ss a'}}</label>
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="dateForm">
+                                <date-selector data-qa="cdt-trans-inp-date" id="inpTransactionDate" input-id="inpTransactionDate" name="inpTransactionDate"
+                                               ng-class="{'error': (dateForm.inpTransactionDate.$error.required && validateFlag
+                                               && !( (transaction.$$DateEntered !=undefined || transaction.$$DateEntered !=null) && transaction.$$DateEntered!='')
+                                                           && transaction.ValidDate)}"
+                                               date-var="transaction.$$DateEntered" valid="transaction.ValidDate" ng-model="transaction.$$DateEntered"
+                                               format="MM/dd/yyyy" min-date="transactionMinDate" max-date="transactionMaxDate" mode="day" set-focus
+                                               placeholder="00/00/0000" required class="service-datepicker service-picker-datepicker vertical-align-top"></date-selector>
+                                <div class="error" ng-if="(dateForm.inpTransactionDate.$error.required && validateFlag && transaction.$$DateEntered!='')">
+                                    <span class="help-text" id="lblRequiredTransactionDate">{{ 'Date {0}' | i18n:['Required'] }}</span>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem">
+                        <div data-qa="cdt-trans-patient" class="cdtTransCrud__formLbl" id="dvPatient">
+                            {{'Patient' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl">
+                            <label data-qa="cdt-trans-lbl-patient-name" class="lbl-text" id="lblPatient">{{transaction.PatientDetailedName}}</label>
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem" ng-if="editMode">
+                        <div class="cdtTransCrud__formLbl" id="dvProvider">
+                            {{'Provider' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl">
+                            <label data-qa="cdt-trans-lbl-provider" class="lbl-text" id="lblProvider">{{transaction.ProviderName}}</label>
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem" ng-if="editMode">
+                        <div class="cdtTransCrud__formLbl" id="dvLocation">
+                            {{'Location' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl">
+                            <label data-qa="cdt-trans-lbl-location" class="lbl-text" id="lblLocation">{{transaction.Location}}</label>
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem" id="dvType" ng-if="editMode">
+                        <div class="cdtTransCrud__formLbl">
+                            {{'Type' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-if="editMode">
+                            <label data-qa="cdt-trans-lbl-trans-type" class="lbl-text" id="lblType">{{transaction.TransactionType}}</label>
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-if="!editMode">
+                            <label data-qa="cdt-trans-lbl-trans-prompt-title" class="lbl-text" id="lblType">{{transaction.TransactionType}} {{transaction.PromptTitle}}</label>
+                        </div>
+
+                        <div class="cdtTransCrud__formLbl" ng-if="transaction.TransactionTypeId==4">
+                            {{'Negative Adjustment Type' | i18n}}
+                        </div>
+
+                        <ng-form name="adjustmentTypeForm" ng-if="transaction.TransactionTypeId==4">
+                            <div class="cdtTransCrud__formCtrl">
+                                <div data-qa="cdt-trans-trans-adj-type" ng-class="{'error': (adjustmentTypeForm.lstAdjustmentType.$error.required && validateFlag)}">
+                                    <soar-select-list id="lstAdjustmentType"
+                                                      name="lstAdjustmentType"
+                                                      placeholder="{{ 'Adjustment Type' | i18n }}"
+                                                      text-field="Description"
+                                                      value-field="AdjustmentTypeId"
+                                                      option-list="adjustmentTypes"
+                                                      ng-model="transaction.AdjustmentTypeId"
+                                                      sb-required="required"></soar-select-list>
+                                </div>
+                                <div class="error" ng-if="(adjustmentTypeForm.lstAdjustmentType.$error.required && validateFlag)">
+                                    <span class="help-text" id="lblRequiredPaymentType">{{ 'Type {0}' | i18n:['Required'] }}</span>
+                                </div>
+                            </div>
+                        </ng-form>
+                    </div>
+                    <div class="cdtTransCrud__formItem" id="dvPaymentType" ng-if="transaction.TransactionTypeId != 4 && editMode ">
+                        <div class="cdtTransCrud__formLbl" ng-if="editMode">
+                            {{'Payment type' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-if="editMode">
+                            <div data-qa="cdt-trans-payment-type" ng-class="{'error': (viewTransactionForm.lstPaymentType.$error.required && validateFlag)}">
+                                <soar-select-list id="lstPaymentType"
+                                                  name="lstPaymentType"
+                                                  placeholder="{{ 'Payment Type' | i18n }}"
+                                                  text-field="Description"
+                                                  value-field="PaymentTypeId"
+                                                  option-list="paymentTypes"
+                                                  ng-model="transaction.PaymentTypeId"
+                                                  sb-required="required"
+                                                  sb-change="paymentTypeOnChange"></soar-select-list>
+                            </div>
+                            <div class="error" ng-if="(viewTransactionForm.lstPaymentType.$error.required && validateFlag)">
+                                <span class="help-text" id="lblRequiredPaymentType">{{ 'Type {0}' | i18n:['Required'] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem" ng-if="!editMode">
+                        <div class="cdtTransCrud__formLbl" id="dvDescription">
+                            {{'Type' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-if="!editMode && transaction.TransactionTypeId == 2">
+                            <label data-qa="cdt-trans-lbl-disp-name" class="lbl-text" id="lblDescription">{{transaction.DisplayType}}</label>
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-if="!editMode && transaction.TransactionTypeId == 4">
+                            <label data-qa="cdt-trans-lbl-trans-adj-type-name" class="lbl-text" id="lblType">{{transaction.AdjustmentTypeName}}</label>
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-if="!editMode && transaction.TransactionTypeId == 3">
+                            <label data-qa="cdt-trans-lbl-trans-disp-type" class="lbl-text" id="lblDescription">{{transaction.DisplayType}}</label>
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem" ng-if="editMode && transaction.PromptTitle && transaction.PromptTitle!=''">
+                        <div class="cdtTransCrud__formLbl" id="dvPrompt">
+                            <label data-qa="cdt-trans-edit-lbl-prompt-title" class="lbl-text" id="lblPromtTitle">{{transaction.PromptTitle}}</label>
+                        </div>
+                        <div class="cdtTransCrud__formCtrl">
+                            <input data-qa="cdt-trans-inp-pymt-type-promt-val" class="form-input" type="text" id="inpPrompt" ng-model="transaction.PaymentTypePromptValue" maxlength="25" placeholder="{{'Enter {0}' |i18n:[{skip:transaction.PromptTitle}]}}" />
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem">
+                        <div class="cdtTransCrud__formLbl" id="dvNote">
+                            {{'Note' | i18n}}
+                        </div>
+
+                       <!--These are for account payment & negative adjustment in view mode-->
+                        <div class="cdtTransCrud__formCtrl" ng-if="transaction.TransactionTypeId ==2 || (transaction.TransactionTypeId ==4 && !editMode)">
+                            <label data-qa="cdt-trans-lbl-note" class="overflow-hidden lbl-text note-desc" title="{{transaction.Note}}" id="lblNote">{{transaction.Note}}</label>
+                        </div>
+
+                        <!--These are for insurance payment transaction types in view mode-->
+                        <div class="cdtTransCrud__formCtrl" ng-if="transaction.TransactionTypeId == 3">
+                            <label data-qa="cdt-trans-lbl-payment-note" class="overflow-hidden lbl-text note-desc" title="{{transaction.PaymentNote}}" id="lblNote">{{transaction.PaymentNote}}</label>
+                        </div>
+
+                        <!--For negative adjustment edit mode-->
+                        <div class="cdtTransCrud__formCtrl" ng-if="transaction.TransactionTypeId==4 && editMode">
+                            <textarea data-qa="cdt-trans-txt-adj-note" id="inpAdjustmentNotes" class="form-input-textarea form-textarea" name="inpAdjustmentNotes" maxlength="500" rows="3" cols="50" ng-disabled="disableInput" ng-model="transaction.Note" placeholder="{{'Enter note...' | i18n }}"></textarea>
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem">
+                        <div class="cdtTransCrud__formLbl" id="dvAmount">
+                            {{'Amount' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" >
+                            <label data-qa="cdt-trans-lbl-fee" class="lbl-text" id="lblFee">{{transaction.Amount | currency}}</label>
+                        </div>
+                    </div>
+                    <div class="cdtTransCrud__formItem" ng-if="!editMode">
+                        <div class="cdtTransCrud__formLbl" id="dvEncounters">
+                            {{'Related Encounter(s)' | i18n}}
+                        </div>
+                        <div class="cdtTransCrud__formCtrl">
+                            <div class="cdtTransCrud__relatedEncounterRow" ng-repeat="x in transaction.Encounters | orderBy: '-EncounterDate'" ng-if="x.EncounterId !== null || x.AppliedTransactionId !== null">
+                                <a ng-click="x.EncounterId !== null ? openEncounterTab(x.EncounterId) : openEncounterTab(x.AppliedTransactionId)" check-auth-z="{{TransactionType==4?'soar-acct-cdtadj-edit':'soar-acct-aapmt-edit'}}" id="lnkEncounterDate{{$index}}" class="lbl-text-encounter">{{x.EncounterDate | date:'MM/dd/yyyy'}}</a><br />
+                                <div class="row">
+                                    <label data-qa="cdt-trans-lbl-pat-name" id="lblPatientName_{{$index}}" class="lbl-text-encounter col-sm-6">
+                                        {{x.PatientName}}
+                                    </label>
+                                    <br />
+                                </div>
+                                <label data-qa="cdt-trans-lbl-trans-desc" id="lblTransactionType_{{$index}}" ng-if="x.TransactionTypeId !== null" class="lbl-text-encounter">{{setTransactionDescription(x.TransactionTypeId)}}</label>
+                                <label data-qa="cdt-trans-lbl-trans-serv-code" ng-if="x.ServiceCodeDisplayAsCsv !== ''" id="lblEncounter_{{$index}}" class="lbl-text-encounter note-desc">{{x.ServiceCodeDisplayAsCsv}}</label> <br />
+                                <label data-qa="cdt-trans-lbl-trans-amt-paid" id="lblAppliedAmt_{{$index}}" class="lbl-text-encounter">{{x.AmountPaid | currency}}</label>
+                                <div data-qa="cdt-trans-encounter" class="divider" ng-if="$index !== transaction.Encounters.length -1 || ($index === transaction.Encounters.length -1 && transaction.UnassignedTransactions.length > 0)"><hr /></div>
+                            </div>
+                        </div>
+                        <div class="cdtTransCrud__formCtrl" ng-class="{'cdtTransCrud__relatedUnappliedTrnx': encounters.length > 0, 'cdtTransCrud__onlyUnappliedTrnx': encounters.length == 0}">
+                            <div class="cdtTransCrud__relatedUnappliedTrnxRow" ng-repeat="x in transaction.UnassignedTransactions | orderBy:'-Amount'">
+                                <a class="lbl-text-encounter" check-auth-z="soar-acct-actsrv-view" id=lnkUnappliedText_{{$index}} ng-click="openEncounterTab(transaction.CreditTransactionId)">{{x.UnassignedText}}</a><br />
+                                <span ng-if="x.ProviderUserId !== null"><label data-qa="cdt-trans-lbl-trans-assigned-to" class="lbl-text-encounter" id="lblDisplayName_{{$index}}">{{'Assigned to:' | i18n }} {{x.ProviderDisplayName}}</label><br /></span>
+                                <label data-qa="cdt-trans-lbl-applied-amt" class="lbl-text-encounter" id="lblAppliedAmount_{{$index}}">{{x.AmountPaid | currency}}</label>
+                                <div class="divider" ng-if="$index !== transaction.UnassignedTransactions.length - 1"><hr /></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-xs-2 tooltipPadding"
+                 uib-tooltip="{{ disableMessage | i18n}} "
+                 tooltip-placement="auto left"
+                 tooltip-enable="transaction.IsAuthorized || transaction.IsDeposited || isVendorPayment">
+                <button data-qa="cdt-trans-btn-edit" id="btnEdit" ng-disabled="transaction.IsAuthorized || transaction.IsDeposited || isVendorPayment" check-auth-z="{{soarAuthEditKey}}" class="btn btn-link"
+                    ng-show="!editMode && (transaction.TransactionTypeId == 2 || transaction.TransactionTypeId == 4)" ng-click="editTransaction()">{{'Edit'|i18n}}</button>
+            </div>
+        </div>
+        <div class="row cdtTransCrud__relatedEncountersTopBorder">
+            <div class="col-xs-10">
+                <div class="cdtTransCrud__formItem">
+                    <div class="cdtTransCrud__formLbl" id="dvEnteredBy">
+                        {{'Entered By' | i18n}}
+                    </div>
+                    <div class="cdtTransCrud__formCtrl">
+                        <label data-qa="cdt-trans-lbl-entered-by" class="lbl-text" id="lblEnteredBy">
+                            {{transaction.EnteredByName}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer background-grey" ng-if="editMode">
+            <div class="row">
+                <div class="col-xs-12">
+                    <button data-qa="cdt-trans-btn-apply" id="btnApply" check-auth-z="{{soarAuthEditKey}}" class="btn btn-primary pull-left" ng-click="saveTransaction()" ng-disabled="alreadySaving || previousAmountChanged">{{ 'Save' | i18n }}</button>
+                    <button data-qa="cdt-trans-btn-cancel" id="btnCancel" class="btn btn-link" ng-click="closeModal()" ng-disabled="alreadySaving">{{ 'Cancel' | i18n }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

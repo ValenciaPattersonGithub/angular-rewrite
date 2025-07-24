@@ -1,0 +1,1 @@
+﻿describe('PatientAccountPortionController ->', function () {});

@@ -1,0 +1,137 @@
+@import 'variables';
+
+.svg-display-grid {
+    display: grid;
+    grid-template: auto / repeat(6, min-content);
+    grid-gap: 15px;
+
+    & svg-icon {
+        color: $fuse-purple;
+    }
+}
+
+.grid-dimensions {
+    height: 450px;
+    width: 350px;
+  }
+
+.svg-test {
+    color: $action-blue;
+
+    &:hover {
+        color: $light-action-blue;
+    }
+}
+
+.basic-input-example {
+    padding: 20px;
+    background: $background-color;
+    border-radius: 5px;
+}
+
+.colorPickerPreview {
+    min-height: 40px;
+    width: 40px;
+}
+
+.textareaExample {
+    width: 700px;
+    padding: 20px;
+    border: 1px solid $border-grey;
+}
+
+.tooltip-example {
+    margin: 20px;
+    width: 700px;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.p-1 {
+    padding-left: 5rem;
+}
+
+.date-ranger-picker-mlb {
+    margin-bottom: 100px;
+    margin-left: 200px;
+}
+
+.date-ranger-picker-width {
+    width: 245px;
+}
+
+.tx-plans-hover {
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+    color: #0C85AD;
+    box-shadow: 10px 10px 5px #888;
+    max-width: 396px;
+    min-width: 0px !important;
+    left: 30rem;
+    top: 1rem;
+}
+
+.tx-plans-header {
+    font-weight: 800;
+    display: inline-flex;
+}
+
+.tx-plans-item-name {
+    max-width: 200px;
+    min-width: 80px;
+    padding-right: 0px;
+    padding-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tx-plans-item-date {
+    width: 100px;
+    padding-left: 10px;
+    padding-right: 0px;
+}
+
+.tx-plans-item-total {
+    max-width: 80px;
+    min-width: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.tx-plans-item-status {
+    width: 100px;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+.tx-plans-item-icon {
+    color: black;
+}
+
+.tx-plans-item-cursor {
+    cursor: pointer;
+}
+
+::ng-deep .numeric-ranger-picker-mlb {
+    margin-bottom: 5%;
+    margin-left: 15%;
+    
+    kendo-grid-list.k-grid-container {
+        position: absolute;
+        top: 5em;
+        height: 20rem;
+        overflow-y: auto;
+    }
+
+    .k-grid .k-grid-aria-root {
+        position: relative;
+        height: 30rem;
+    }
+
+    .k-grid .k-grid-content {
+        overflow-y: auto;
+    }
+}

@@ -1,0 +1,429 @@
+﻿.patientOverview {
+    .containerStandard;
+
+    &__primary {
+        .make-md-column(8);
+    }
+
+    &__secondary {
+        .make-md-column(4);
+    }
+
+    &__details {
+        margin-bottom: 20px;
+
+        > ul {
+            .unsetList;
+
+            > li {
+                display: inline-block;
+                width: 32%;
+            }
+        }
+    }
+}
+
+
+// #region patient-appointments
+
+.patient-appointments .appointment-link {
+    font-weight: bold;
+    color: black;
+}
+
+.patient-appointments .appointment-link:hover {
+    font-weight: bold;
+    color: #808080;
+}
+
+.patient-appointments .late-appointment .appointment-link {
+    font-weight: bold;
+    color: @brand-warning;
+}
+
+.patient-appointments .late-appointment .appointment-link:hover {
+    font-weight: bold;
+    color: lighten(@brand-warning, 25%);
+}
+
+.patient-appointments .appointment-status .k-dropdown-wrap {
+    border: none;
+    padding: 0;
+}
+
+.patient-appointments .appointment-status .k-icon {
+}
+
+.alertPanel {
+    margin-bottom: 0;
+
+    &__tab {
+        display: inline-block;
+        padding: 3px 10px;
+        background-color: @brand-color_alert;
+        border: 3px solid @brand-color_alert;
+        border-bottom: none;
+        border-top-left-radius: @brand-scaff_radius-small;
+        border-top-right-radius: @brand-scaff_radius-small;
+        color: @brand-color_white;
+    }
+
+    &__content {
+        border: 3px solid @brand-color_alert;
+    }
+
+    &__pendingEncounterLink {
+        text-align: right;
+        float: right;
+        width: 230px;
+        padding-right: 12px;
+        padding-top: 9px;
+    }
+}
+
+.patient-pending-encounter {
+    padding-top: 0 !important;
+
+    .pendingEncounters {
+        .table;
+
+        &__header {
+            > tr {
+                background-color: @brand-color_white;
+                width: 100%;
+
+                td {
+                    padding-top: 5px;
+                    padding-bottom: 5px;
+                    vertical-align: middle;
+                    text-align: left;
+                    font-size: 1.1em !important;
+                    font-weight: 100 !important;
+                  
+                    label {
+                        margin-bottom: 0;
+                    }
+
+                    .date {
+                        width: 11%;
+                        padding-left: 10px;
+                    }
+
+                    .location-provider,
+                    .trans-type {
+                        width: 11%;
+                    }
+
+                    .amount {
+                        width: 10%;
+                        text-align: right;
+                        padding-left: 5px;
+                        padding-right: 5px;
+                    }
+
+                    .description {
+                        padding-left: 10px;
+                    }
+
+                    .tooth {
+                        width: 5.5%;
+                        padding-bottom: 5px;
+                        padding-top: 5px;
+                    }
+
+                    .surface {
+                        width: 5.5%;
+                    }
+                }
+
+                .header-col-details {
+                    width: 60% !important;
+                }
+
+                .header-col-actions {
+                    width: 40% !important;
+                }
+
+                .date {
+                    width: 11%;
+                    padding-left: 10px;
+                }
+
+                .location-provider,
+                .trans-type {
+                    width: 11%;
+                }
+
+                .amount {
+                    width: 10%;
+                    text-align: right;
+                    padding-left: 5px;
+                }
+
+                .balance {
+                    width: 10%;
+                    text-align: right;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+
+                .edit-toggle {
+                    width: 4%;
+                    text-align: right;
+                    padding-right: 10px;
+                }
+
+                .description {
+                    padding-left: 10px;
+                }
+
+                .tooth {
+                    width: 5%;
+                }
+
+                .surface {
+                    width: 5%;
+                }
+
+                .col-details {
+                    width: 83% !important;
+                }
+
+                .col-actions {
+                    width: 17% !important;
+                }
+
+                .provider-desc {
+                    display: inline-block;
+                    float: left;
+                    width: 120px;
+                    text-align: left;
+                    padding-bottom: 4.5px;
+                    white-space: nowrap;
+                    -ms-word-wrap: break-word;
+                    word-wrap: break-word;
+                    font-weight: 200;
+                    overflow: hidden;
+                    font-weight: lighter;
+                    -ms-text-overflow: ellipsis;
+                    -o-text-overflow: ellipsis;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+
+    .pendingEncEntry {
+        .table;
+        .table-striped;
+        .table-hover;
+    
+        &__header {
+            > tr {
+                background-color: @brand-color_white;
+                width: 100%;
+
+                td {
+                    padding-top: 3.5px;
+                    padding-bottom: 3.5px;
+                    vertical-align: middle;
+                    text-align: left;
+                    font-size: 1em;
+                    font-weight: 100;
+
+                    label {
+                        margin-bottom: 0;
+                        font-weight: 200;
+                    }
+                }
+
+                .date {
+                    width: 11.05%;
+                    padding-left: 10px;
+                }
+
+                .location-provider,
+                .trans-type, .type {
+                    width: 22.05%;
+                    padding-left: 10px;
+                }
+
+                .amount {
+                    width: 10%;
+                    text-align: right;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+
+                .balance {
+                    width: 10%;
+                    text-align: right;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+
+                .checkoutlink {
+                    width: 10%;
+                    text-align: right;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+
+                .edit-toggle {
+                    width: 4%;
+                    text-align: right;
+                    padding-right: 10px;
+                }
+
+                .description {
+                    padding-left: 10px;
+                }
+
+                .tooth {
+                    width: 5%;
+                }
+
+                .surface {
+                    width: 5%;
+                }
+
+                .col-details {
+                    width: 83% !important;
+                }
+
+                .col-actions {
+                    width: 17% !important;
+                }
+
+                .cursor-pointer {
+                    cursor: pointer !important;
+                }
+
+                .provider-desc {
+                    display: inline-block;
+                    float: left;
+                    width: 120px;
+                    text-align: left;
+                    padding-bottom: 4.5px;
+                    white-space: nowrap;
+                    -ms-word-wrap: break-word;
+                    word-wrap: break-word;
+                    font-weight: 200;
+                    overflow: hidden;
+                    font-weight: lighter;
+                    -ms-text-overflow: ellipsis;
+                    -o-text-overflow: ellipsis;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+
+        &__body {
+
+            > tr {
+
+                > td {
+                    vertical-align: top;
+                }
+            }
+
+            td {
+                padding-top: 3.5px;
+                padding-bottom: 3.5px;
+                vertical-align: middle;
+                text-align: left;
+                font-size: 1em;
+                font-weight: 100;
+
+                label {
+                    margin-bottom: 0;
+                    font-weight: 200;
+                }
+            }
+
+            .date {
+                width: 11.05%;
+                padding-left: 10px;
+            }
+
+            .location-provider,
+            .trans-type {
+                width: 5.05%;
+                padding-right: 5px;
+            }
+
+            .amount {
+                width: 10%;
+                text-align: right;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+            .balance {
+                width: 10%;
+                text-align: right;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+            .edit-toggle {
+                width: 4%;
+                text-align: right;
+            }
+
+            .description {
+                padding-left: 10px;
+            }
+
+            .tooth {
+                width: 5%;
+            }
+
+            .surface {
+                width: 5%;
+            }
+
+            .col-details {
+                width: 83% !important;
+            }
+
+            .col-actions {
+                width: 17% !important;
+            }
+
+            .encounter-details {
+                background-color: @brand-color_white;
+                border-top: 1px solid @brand-color_dark-gray;
+
+                .services-container {
+                    vertical-align: top;
+                    background-color: @brand-color_gray;
+                }
+
+                .action-button-area {
+                    border-left: 1px solid @brand-tbl_border-color;
+                    background-color: @brand-color_white;
+                }
+            }
+        }
+    }
+
+
+    .provider-desc {
+        display: inline-block;
+        float: left;
+        width: 120px;
+        text-align: left;
+        padding-bottom: 4.5px;
+        padding-left: 10px;
+        white-space: nowrap;
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        font-weight: 200;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+}
+// #endregion

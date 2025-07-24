@@ -1,0 +1,24 @@
+﻿<div class="accountMembersWidget">
+    <ul id="lstAccountMembers" class="accountMembersWidget__list" ng-show="loadingAccountMembers==false">
+        <li id="liAccountMembersWidget{{$index}}" class="accountMembersWidget__list-item row" ng-repeat="accountMember in accountMembers | orderBy:['LastName','FirstName']">
+            <div id="dvAccountMember{{$index}}" class="col-md-6" title="{{accountMember.FirstName  +  ((accountMember.PreferredName!=null && accountMember.PreferredName!='')? ' (' + accountMember.PreferredName +')' :'') + ((accountMember.MiddleName!=null && accountMember.MiddleName!='' ) ? ' ' + accountMember.MiddleName +'.':'' ) + ' ' + accountMember.LastName + ((accountMember.SuffixName!=null && accountMember.SuffixName!='') ? ', ' + accountMember.SuffixName :'') }} {{ (accountMember.IsResponsiblePerson ? '(RP)':'' | i18n) }}">
+                <a id="lnkAccountMember{{$index}}" class="accountMembersWidget__link btn btn-link" ng-class="{'disabled-link': patientId == accountMember.PatientId || ! accountMember.IsActiveAccountMember}" ng-disabled="patientId == accountMember.PatientId || ! accountMember.IsActiveAccountMember" ng-click="validateAccountMember(accountMember)">
+                    <span id="lblAccountMemberName{{$index}}" class="accountMembersWidget__name">
+                        {{accountMember.FirstName  +  ((accountMember.PreferredName!=null && accountMember.PreferredName!='')? ' (' + accountMember.PreferredName +')' :'') + ((accountMember.MiddleName!=null && accountMember.MiddleName!='' ) ? ' ' + accountMember.MiddleName +'.':'' ) + ' ' + accountMember.LastName + ((accountMember.SuffixName!=null && accountMember.SuffixName!='') ? ', ' + accountMember.SuffixName :'') }}
+                        <span id="lblAccountMemberIsRP{{$index}}" class="accountMembersWidget__rp">
+                            {{ accountMember.IsResponsiblePerson?'(RP)':'' | i18n }}
+                        </span>
+                    </span>
+                </a>
+            </div>
+            <div id="lblTransfer{{$index}}" class="col-md-3" ng-click="transfer(accountMember.PatientId)">
+                <a> Transfer</a>
+            </div>
+            <div id="lblAccountMemberDOB{{$index}}" class="accountMembersWidget__date  col-md-3" >
+                <a ng-class="{'disabled-link': patientId == accountMember.PatientId || ! accountMember.IsActiveAccountMember}" ng-disabled="patientId == accountMember.PatientId || ! accountMember.IsActiveAccountMember" ng-href="{{ ((patientId != accountMember.PatientId && accountMember.IsActiveAccountMember)? '#/Patient/'+ accountMember.PatientId +'/Overview' :'')}}" check-auth-z="soar-per-perdem-view">  {{ accountMember.DateOfBirth | toShortDisplayDate }}</a>
+            </div>
+        </li>
+    </ul>
+    <no-results id="lstAccountMembersLoading" loading="loadingAccountMembers==true" loading-messag="' '" ng-hide="loadingAccountMembers==false"></no-results>
+    <div class="clearfix">&nbsp;</div>
+</div>

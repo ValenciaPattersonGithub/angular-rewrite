@@ -1,0 +1,68 @@
+.perioKeypad {
+    padding: 0px;
+
+    .perioKeypad__inputElement {
+        flex: 1 1 33%;
+        margin: @brand-padding_sm / 2;
+
+        &:first-of-type {
+            @media screen and (min-width: 1367px) {
+                margin-left: 0;
+            }
+        }
+
+        &:last-of-type {
+            @media screen and (min-width: 1367px) {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .row {
+        display: flex;
+        margin: 0px;
+
+
+        button,
+        .periokeypad__spacer {
+            .perioKeypad__inputElement;
+        }
+
+        .btn {
+            padding: 0px;
+            height: 20px;
+            line-height: 20px;
+            width: 45px;
+            margin: 0px 6px 5px 6px;
+            text-transform: capitalize;
+            font-size: 12px;
+        }        
+    }
+
+    .row:nth-child(5) {
+        display: flex;
+        margin: 0px;
+
+
+        button,
+        .periokeypad__spacer {
+            .perioKeypad__inputElement;
+        }
+
+        .btn {
+            padding: 0px;
+            height: 20px;
+            line-height: 20px;
+            width: 45px;
+            margin: 0px 6px 0px 6px;
+            text-transform: capitalize;
+            font-size: 12px;
+        }
+
+        @media screen and (max-width: 1366px) {
+            .btn {
+                font-size: @brand-font_xs;                
+            }
+        }
+    }
+}

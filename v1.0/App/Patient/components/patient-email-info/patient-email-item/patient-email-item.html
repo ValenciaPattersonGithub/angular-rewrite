@@ -1,0 +1,64 @@
+﻿<div class="emailInfoItem row" ng-form="frmEmailInfo">
+    <!-- Owner -->
+    <div class="col-xs-3">
+        <label class="emailInfoLabel emailInfoItem__wrap" title="{{email.PatientInfo.FirstName}} {{email.PatientInfo.LastName}}">
+            {{email.PatientInfo.FirstName}} {{email.PatientInfo.LastName}}
+        </label>
+    </div>
+
+    <!-- Email -->
+    <div class="col-xs-4" ng-class="{'has-error':email.invalidEmail && email.edited || email.duplicateEmail}">
+        <input id="inpEmail{{emailId}}"
+               class="form-input form-control"
+               tabindex="{{ emailTabindex }}"               
+               type="email"
+               name="patientEmail{{emailId}}"
+               placeholder="{{ 'Email' | i18n }}"               
+               ng-disabled="disableInput"
+               ng-model="emailString"
+               ng-show="editingMode && !email.AccountEmailId"
+               valid-email maxlength="256" />        
+        <span ng-show="email.invalidEmail  && email.edited && !email.duplicateEmail">This field requires a valid email address</span>
+
+        <label class="emailInfoLabel  emailInfoItem__provider-desc" title="{{ email.Email }}" id="lblEmailNumber{{emailId}}" ng-show="!editingMode || email.AccountEmailId">
+            {{ email.Email }}
+        </label>
+
+        <label id="lblUniqueEmailRequired{{emailId}}" class="help-block" ng-show="email.duplicateEmail">
+            {{ 'Email must be unique.' | i18n }}
+        </label>
+
+    </div>
+        
+    <!-- Is Primary -->
+    <div class="col-xs-1">
+        <input type="radio" name="emailIsPrimary" ng-click="isPrimaryClick($event)" ng-checked="email.IsPrimary" style="margin-left: 20px; margin-top: 10px;">
+    </div>
+    <!-- ReminderOK -->
+    <div class="col-xs-4">
+        <div class="onoffswitch pull-left">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="emailReminderSwitch{{emailId}}" ng-model="email.ReminderOK">
+            <label class="onoffswitch-label" for="emailReminderSwitch{{emailId}}" style="margin-bottom:0px;"></label>
+        </div>
+        <!--<label class="switch switch-mail-reminders pull-left">
+            <input name="mailReminders" type="checkbox" ng-model="email.ReminderOK">
+            <span class="slider round"></span>
+        </label>-->
+
+        <div ng-if="!editingMode">
+            <button id="btnDelete{{emailId}}" class="form-btn-remove pull-right far fa-trash-alt" icon="fa-trash-alt" ng-show="showRemoveOption && !showRemoveMsg" ng-click="removePrompt()"></button>
+            <button id="btnEdit{{emailId}}" class="form-btn-remove pull-right" icon="fa-edit" ng-show="!email.AccountEmailId" ng-click="enableEdit(emailId)"></button>
+        </div>
+
+        <div class="pull-right" ng-if="editingMode && !email.AccountEmailId">
+            <button id="btnCancel{{emailId}}" class="btn btn-default" ng-click="disableEdit(false)">Cancel</button>
+            <button id="btnSave{{emailId}}" class="btn btn-primary" ng-click="disableEdit(true)" ng-disabled="email.invalidEmail || email.duplicateEmail">Save</button>
+        </div>
+    </div>    
+    <div class="emailInfoItem__prompt" ng-show="showRemoveOption && showRemoveMsg">
+        <span>{{ getDeleteMessage() | i18n }}</span>
+        <button class="btn btn-link btn-xs" id="btnCancelRemoveEmail{{emailId}}" ng-click="cancelRemove()">{{ 'Cancel' | i18n }}</button>
+        <button class="btn btn-primary btn-xs" id="btnConfirmRemoveEmail{{emailId}}" ng-click="confirmRemove()">{{ 'Confirm' | i18n }}</button>
+    </div>
+</div>
+

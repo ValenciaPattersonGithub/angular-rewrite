@@ -1,0 +1,121 @@
+﻿.idealDays {
+    width: 95%;
+    .standardHeader;
+
+
+    &__title {
+        h1 {
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_horizontal;
+            padding-bottom: @brand-padding_horizontal;
+        }
+    }
+
+    .fuseGrid {
+        max-width: none;
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+
+    .panel-body {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding-top: 0px;
+        border-bottom: none;
+    }
+
+    .panel-default > .panel-heading {
+        background-color: @brand-color_white;
+        color: @brand-color_black;
+
+        .panel-title {
+            color: @brand-color_black;
+        }
+    }
+
+
+    .cell {
+        .concatString;
+    }
+
+    &__actions {
+        .containerStandard;
+        float: right;
+        padding-bottom: @brand-padding_horizontal;
+        margin-top: 16px;
+
+        .btn {
+            transform: translateY(-50%);
+            margin-left: 5px;
+            float: right;
+            position: relative;
+            padding-bottom: @brand-padding_sm;
+        }
+    }
+
+    &__grid {
+        .containerStandard;
+        padding-top: 0;
+        min-height: 350px;
+        max-height: 350px;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        .body {
+            display: block;
+            padding-left: 16px;
+        }
+
+        .header {
+        }
+    }
+
+    &__content {
+        max-height: 500px;
+        overflow: auto;
+    }
+
+    &__footer {
+        .containerStandard;
+        .clearfix;
+        padding-right: @brand-padding_sm;
+    }
+}
+
+
+
+    /*&__list {
+        .containerStandard;
+
+        .searchIcon {
+            padding-top: 10px;
+            margin-left: -60px;
+        }
+
+        .noResults {
+            position: absolute;
+            height: 100px;
+            width: 100px;
+            top: 50%;
+            left: 50%;
+            background-size: 100%;
+            text-align: center;
+
+            i.loading {
+                font-size: 50px;
+            }
+        }
+    }*/
+
+    
+
+    /*.cell {
+        padding: 4px;
+    }
+}
+
+.sortCursor {
+    cursor: pointer !important;
+}*/

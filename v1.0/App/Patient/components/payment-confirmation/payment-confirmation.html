@@ -1,0 +1,99 @@
+﻿<div id="idPaymentConfirmationModal">
+    <div class="modal-header">
+        <button type="button" class="close font-32" ng-click="cancelModal();" style="color:#5bc0de; opacity:1">&times;</button>
+        <h3 class="modal-title">Encounters checked out for: </h3>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline">
+                    <li ng-repeat="patient in patientNames">
+                        <a href="#" class="payment-confirmation-name-header">{{ patient.PatientName | i18n }}<span class="glyphicon glyphicon-ok-circle"></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <!--NEGATIVE ADJUSTMENT-->
+            <div class="row" ng-if="isNegatveAdjustmentApplied">
+                <div class="col-md-12">
+                    <span class="font-24">{{ 'Negative adjustments applied' | i18n }}</span>
+                </div>
+            </div>
+            <div class="row col-md-12">&nbsp;</div>
+            <div class="row" ng-if="isNegatveAdjustmentApplied">
+                <div class="col-md-12">
+                    <span class="font-20 font-weight-bold">{{negativeAdjustmentAmount | currency}} </span>
+                    <span class="font-20 word-wrap">{{ negativeAdjustmentDescription }}</span>
+                </div>
+            </div>
+            <div class="row col-md-12" ng-if="isNegatveAdjustmentApplied">____________________</div>
+            <div class="row" ng-if="isNegatveAdjustmentApplied">
+                <div class="col-md-12">
+                    <span class="font-20 font-weight-bold">{{negativeAdjustmentAmount | currency}}</span>
+                    <span class="font-20 word-wrap">Total</span>
+                </div>
+            </div>
+            <!--/NEGATIVE ADJUSTMENT-->
+            <!--PAYMENT-->
+            <div class="row" ng-if="isPaymentApplied">
+                <div class="col-md-12">
+                    <span class="font-24">{{ 'Payments applied' | i18n }}</span>
+                </div>
+            </div>
+            <div class="row" ng-if="!isPaymentApplied">
+                <div class="col-md-12">
+                    <span class="font-24">{{ '$0.00 Payments applied' | i18n }}</span>
+                </div>
+            </div>
+            <div class="row col-md-12">&nbsp;</div>
+            <div class="row" ng-if="isPaymentApplied">
+                <div class="col-md-12" ng-repeat="appliedPayment in paymentsApplied">
+                    <span class="font-20 font-weight-bold">{{appliedPayment.AppliedAmount | currency}} </span>
+                    <span id="lblPaymentCheckDescription" class="font-20 word-wrap">{{ appliedPayment.Description }}</span>
+                </div>
+            </div>
+            <div class="row col-md-12" ng-if="isPaymentApplied">____________________</div>
+            <div class="row" ng-if="isPaymentApplied">
+                <div class="col-md-12">
+                    <span class="font-20 font-weight-bold">{{getPaymentsAppliedTotal() | currency}} </span>
+                    <span class="font-20 word-wrap">Total</span>
+                </div>
+            </div>
+            <div class="row col-md-12">&nbsp;</div>
+            <!--/PAYMENT-->
+
+            <div class="row printInvoice col-md-10" style="padding-left: 4%;">
+                <div class="row printCheckBox pull-left">
+                    <input type="checkbox" class="" id="" ng-model="userSetting.PrintInvoice" ng-change="printToggle()" checked="{{userSetting.PrintInvoice}}" />
+                    <span id="lblPrintCheckout" class="">{{ 'Print Invoice' | i18n }}</span>
+                </div>
+            </div>
+            <div class="row printInvoice col-md-10">&nbsp;</div>
+            <div class="row printOptions">
+                <div class="col-md-6">
+                    <input id="lblPrevBal" type="checkbox" ng-model="incPrevBal" ng-disabled="!userSetting.PrintInvoice" />
+                    <span class="modal-title">{{ 'Include Other Balance' | i18n }}</span>
+                </div>
+                <div class="col-md-6">
+                    <input id="lblFurtureAppts" type="checkbox" ng-model="incFutureAppts" ng-disabled="!userSetting.PrintInvoice" />
+                    <span class="modal-title">{{ 'Include future appointments' | i18n }}</span>
+                </div>
+                <div class="row notes col-md-12">&nbsp;</div>
+                <div class="row notes col-md-12" style="padding-left: 5%;">
+                    <span class="modal-title">{{ 'Include a note' | i18n }}</span>
+                    <textarea class="form-control" id="printNotes" maxlength="500" ng-model="printNotes" ng-disabled="!userSetting.PrintInvoice" rows="3" cols="3"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <button id="btnCancel" ng-click="closeModal();" class="btn btn-info pull-right">{{ 'Continue' | i18n }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

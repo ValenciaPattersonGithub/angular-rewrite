@@ -1,0 +1,8 @@
+<div class="soarWidget hygieneRetentionWidget">
+    <div class="panel-heading soarWidget__header">
+        <label class="widget-handle w_row">{{data?.Title| translate}}</label>
+    </div>
+    <div class="soarWidget__body" *ngIf="hygieneRetentionData">
+        <simple-half-donut [simpleHalfDonutFiltersTypes]="hygieneRetentionFilterTypes" [simpleHalfDonutChartData]="hygieneRetentionData" isHygieneRetention="true"></simple-half-donut>        
+     </div>
+</div>

@@ -1,0 +1,73 @@
+﻿
+
+
+
+
+
+<table class="surfChart">
+    <tr>
+        <td></td>
+        <td></td>
+        <td>
+            <button id="B5" ng-click="selectSurface('B5');selectSurface('F5')"
+                    ng-disabled="selectedTeeth.length==0 || disableSelection"
+                    ng-class="{active: (hasSelectedSurfaces('B5')||hasSelectedSurfaces('F5'))}"
+                    class="surfChart__ctrl">
+                {{'Buccal/Facl V' | i18n}}
+            </button>
+        </td>
+        <td></td>
+        <td></td>
+    </tr><tr>
+        <td></td>
+        <td></td>
+        <td ><button id="B" ng-click="selectSurface('B');selectSurface('F');"
+                     ng-disabled="selectedTeeth.length==0 || disableSelection"
+                     ng-class="{active: (hasSelectedSurfaces('B') || hasSelectedSurfaces('F'))}"
+                     class="surfChart__ctrl">{{'Buccal/Facl'| i18n}}</button></td>
+
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><button id="M" ng-click="selectSurface('M')"
+                    ng-disabled="selectedTeeth.length==0 || disableSelection"
+                    ng-class="{active: hasSelectedSurfaces('M')}"
+                    class="surfChart__ctrl">{{'Mesial'| i18n}}</button></td>
+
+        <td><button id="OI" ng-click="selectSurface('O');selectSurface('I');"
+                    ng-disabled="selectedTeeth.length==0 || disableSelection"
+                    ng-class="{active: (hasSelectedSurfaces('O')||hasSelectedSurfaces('I'))}"
+                    class="surfChart__ctrl">{{'Occl/Incsl'| i18n}}</button></td>
+
+        <td><button id="D" ng-click="selectSurface('D')"
+                    ng-disabled="selectedTeeth.length==0 || disableSelection"
+                    ng-class="{active: hasSelectedSurfaces('D')}"
+                    class="surfChart__ctrl">{{'Distal'| i18n}}</button></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td><button id="L" ng-click="selectSurface('L')"
+                    ng-disabled="selectedTeeth.length==0 || disableSelection"
+                    ng-class="{active: hasSelectedSurfaces('L')}"
+                    class="surfChart__ctrl">{{'Lingual'| i18n}}</button></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td><button id="L5" ng-click="selectSurface('L5')"
+                    ng-disabled="selectedTeeth.length==0 || disableSelection"
+                    ng-class="{active: hasSelectedSurfaces('L5')}"
+                    class="surfChart__ctrl">{{'Lingual V'| i18n}}</button></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+<label id="lblSurfacesRequired" class="help-text pull-right" ng-show="showSurfaceMessage">
+    {{ '*Surfaces required.' | i18n }}
+</label>

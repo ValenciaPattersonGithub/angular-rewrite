@@ -1,0 +1,45 @@
+@import "variables";
+
+.identifiers-header {
+    display: grid;
+    grid-template: 1fr / 50% 50%;
+    grid-template-areas: "title actionbuttons";
+    &-title {
+        font-family: $global-font-family;
+        font-size: 16px;
+        color: $patient-registration-title-color;
+        font-weight: bold;
+        grid-area: title;
+    }
+    &-actionButtons {
+        grid-area: actionbuttons;
+        justify-self: end;
+    }
+}
+.identifiers-detail-container {
+    padding: 15px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 5px;
+    hr {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border-top: 1px solid #2b144e;
+    }
+}
+.identifiersDetailContent {
+    display: grid;
+    margin-bottom: 20px;
+    position: relative;
+    grid-template: 1fr / 100%;
+    // 100% = Column
+    grid-template-areas:
+        'identifiersDetails';
+
+    &-identifiers {
+        grid-area: identifiersDetails / 1;
+    }
+    &-label {
+        font-size: 14px;
+        font-weight: 600;
+    }
+}

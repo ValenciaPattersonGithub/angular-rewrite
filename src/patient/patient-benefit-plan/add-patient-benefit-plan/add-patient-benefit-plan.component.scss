@@ -1,0 +1,369 @@
+@import "variables";
+
+.add-patient-benefit-plan {      
+    .form-group {
+        margin-top: 15px;
+        margin-bottom: 0px;
+        >div {
+            margin-bottom: 0px;
+        }
+    }          
+    &__red-border {
+        border: 1px solid $alert-red
+    }
+
+    &__policy-number {        
+        font-size: $global-h2-size;
+        border-bottom: 1px solid $text-black;
+        padding-bottom: 15px;
+        
+        &-close-icon {
+            float: right;
+            color: $dropdown-hover-color;
+        }
+    }    
+    .one-column {
+        display: grid;
+        grid-template-columns: 12fr 2%;
+    }
+    .two-column {
+        display: grid;
+        grid-template-columns: 5fr 5fr ;
+    }
+    &__card-container {
+        margin: 15px;
+    }
+    & .label {
+        font-size:$global-body-font-size !important;
+    }
+    & .control-label {
+        margin-bottom: 5px;
+    }
+    
+    .autocomplete-option-container {
+        display:flex;
+        flex-wrap: wrap; 
+        max-width:100%;
+        padding: 10px; 
+        font-size: 14px; 
+        border-width: 1px; 
+        border-style: solid; 
+        border-color: $border-grey;        
+    }
+    .autocomplete-option-container__search-result {
+        flex: 1 1 50%;
+        padding-right: 10px; 
+        border-right: 1px solid #ddd;
+        position: relative;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        white-space: normal; 
+        word-wrap: break-word;
+    }
+    .autocomplete-option-container__search-result-secondary {
+        flex: 1 1 50%;
+        padding-left:10px;
+        position: relative;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+    // this is necessary to prevent the autocomplete from expanding past the modal boundaries
+    &__autocomplete-override {
+        ::ng-deep {
+            .autocomplete-drawer {
+                max-width: 600px;
+            }
+        }
+    }
+    .autocomplete-option-container__alert {
+        flex: 1 1 100%;
+        padding: 10px 10px 0 0; 
+        color:$alert-red; 
+        cursor:not-allowed;
+    }
+    
+    .option-disabled {
+        color: $disabled-grey;
+        background-color: $polar-white;
+        ::ng-deep {
+            .autocomplete-option-container {
+                cursor:not-allowed;
+            }
+        }
+    }
+}
+// overrides necessary to use share components and conform to design
+.person-search-wrapper-override {
+    ::ng-deep {
+        .responsiblePersonWrapper-dropdown {            
+                min-width: none;            
+                position:inherit;            
+        }
+    }
+}
+// specific error handling scss for input
+.apbp-input-wrapper-override {
+    font-size:$global-body-font-size;
+    display: grid;
+    grid-template: auto auto / 1fr min-content;
+    grid-template-areas:
+        'label label'
+        'input error';
+    grid-gap: 0px 5px;
+
+    &.label-left {
+        grid-template: auto / min-content 1fr min-content;
+        grid-template-areas:
+            'label input error';
+    }
+
+    &.label-right {
+        grid-template: auto / min-content 1fr min-content;
+        grid-template-areas:
+            'input error label';
+    }
+}
+.apbp-input {
+    grid-area: input;
+    height: 30px;
+    padding: 0px 8px;
+    border: 1px solid $border-grey;
+    border-radius: 5px;
+    background-color: $polar-white;
+    font-family: $global-font-family;
+    font-size: 14px;
+    color: $text-black;
+    outline: none;
+
+    &.error {
+        border: 1px solid $error-color
+    }
+
+    &.disabled {
+        background-color: $disabled-grey;
+        cursor: not-allowed;
+    }
+}
+
+.apbp-input-error {
+    grid-area: error;
+    display: flex;
+    align-items: center;
+
+    .error-icon {
+        color: $error-color;
+    }
+}
+
+
+// specific error handling scss error
+.apbp-error-wrapper {
+    font-size:$global-body-font-size;
+    display: grid;
+    grid-template: auto auto / 1fr min-content;
+    grid-template-areas:
+        'control error';
+    // grid-gap: 3px 5px;
+}
+
+.apbp-error-control {
+    grid-area: control;    
+}
+.apbp-control-error {
+    grid-area: error;
+    display: flex;
+    align-items: center;
+
+    .error-icon-20 {
+        margin-top:20px;
+        color: $error-color;
+    }
+    .error-icon {
+        color: $error-color;
+    }
+}
+.apbp-control-error-20 {
+    grid-area: error;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+
+    .error-icon-20 {
+        margin-top:20px;
+        color: $error-color;
+    }
+    .error-icon {
+        color: $error-color;
+    }
+}
+
+// override styling on rp 
+.rp-error-wrapper {
+    ::ng-deep { 
+        .rp-error-control {        
+            box-shadow:none;
+        }
+        .rp-error-icon {        
+            margin-left: 0px;
+        }
+    }
+}
+
+
+// app-date-picker overrides
+.date-picker-override {
+    ::ng-deep { 
+        .fui-datepicker-control {
+            width: 100%;
+        }
+        .fui-datepicker-wrapper {
+            grid-gap: 0px 0px;
+            margin-top: 5px
+        }
+        .fui-datepicker-label {            
+            .label {
+                display: inline-block;
+                font-size:$global-body-font-size;
+                margin-bottom: 6px;
+            }
+        }          
+        .k-datepicker {
+            height: 30px;
+        }
+
+        .k-input { 
+            height: 28px;
+        }
+    }
+}
+
+.app-select-override {    
+    ::ng-deep {
+        .fui-select-container {
+            width: 100% !important;
+        }
+        .fui-select {
+            height: 30px !important;
+            outline: none;
+            &.haserror {
+                border: 1px solid $alert-red;
+            }
+        }
+        .fui-select-label {            
+            .label {
+                font-size:$global-body-font-size;
+                color:$text-black;
+                margin-bottom: 5px;
+            }
+        }          
+    }
+}
+
+
+.autoSearchWrapper {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: minmax(min-content, max-content);
+}
+
+.rp-error-control {
+    border: 1px solid $error-color;
+    box-shadow: 0 0 0 1px $error-color;
+}
+.rp-error-icon {
+    float: left;
+    margin-left: 10px;
+    margin-top: 8px;
+    color: $error-color;
+}
+.no-plans-option {
+    font-size: 12px;
+    color: $disabled-grey;
+    text-align: center;
+    cursor: not-allowed;
+    background-color: $polar-white;
+    &.active {
+        color: $disabled-grey;
+        background-color: $polar-white;
+    }
+    &:hover {
+        color: $disabled-grey;
+        background-color: $polar-white;
+    }
+}
+  
+.add-policy-option {    
+    text-decoration: none solid $placeholder-grey;
+    text-align: left;
+    grid-row: 11;
+    grid-column-start: 1;
+    grid-column-end: auto;    
+    display: grid;
+    grid-template-columns: 30% 10% 60%;
+    width: 98%;
+    &-icon {
+        color: $dropdown-hover-color;
+        grid-column: 2;
+        grid-row:1;
+        float: right;
+    }
+    &-icon-add {
+        color: $background-color;
+        grid-column: 2;
+        grid-row:1;
+        float: right;
+    }
+    &-icon-label {
+        color: $dropdown-hover-color;
+        grid-column: 3;
+        grid-row:1;
+        float: right;
+           
+    }
+}
+
+.add-policy-option-label {
+    font-size: $global-body-font-size;
+    color: $dropdown-hover-color;
+    font-weight: 600 !important;
+    text-align: left;    
+}
+
+.add-policy-option-container {
+    display:flex; 
+    max-width:100%;    
+    font-size: 14px;    
+    border-width: 1px; 
+    border-style: solid; 
+    border-color: $border-grey;
+    height: 46px;
+    vertical-align: center;        
+}
+
+.add-policy-option-container-no-result { 
+    flex: 1; 
+    padding:10px;   
+    text-decoration: none solid $placeholder-grey;
+    text-align: center;
+    color: $disabled-grey;
+    text-align: center;   
+    background-color: $polar-white;
+    &.active {
+        color: $disabled-grey;
+        background-color: $polar-white;
+    }
+    &:hover {
+        color: $disabled-grey;
+        background-color: $polar-white;
+    }
+}
+
+.btn {
+    padding-left: 0px !important;
+    padding-right: 24px;
+}
+.selectedPerson {
+    padding-right:12px;
+}

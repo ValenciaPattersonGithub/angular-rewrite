@@ -1,0 +1,42 @@
+<div [ngClass]="'fade-in'" class="locMgmt">
+    <form name="frmLocationLanding" role="form" action="javascript:;" novalidate>
+    <div class="rowFull">
+        <div class="locMgmt__header">
+            <!--Breadcrumbs-->
+           
+            <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+
+            <div class="locMgmt__title">
+                <h1>
+                    {{ 'Locations' | translate }}
+                </h1>
+            </div>                   
+             <div class="locMgmt__actions">                
+                <button id="btnEditLocation" checkRoleAccess="soar-biz-bizloc-edit" (click)="onEditBtnClicked()" *ngIf="!isAdding && !isEditing" class="btn btn-default btn-margin-right">{{ 'Edit Location' | translate }}</button>
+                <button id="btnAddLocation" checkRoleAccess="soar-biz-bizloc-add" *ngIf="!isAdding && !isEditing" (click)="onAddBtnClicked()" class="btn btn-primary" icon="fa-plus">{{ 'Add a Location' | translate }}</button>
+                <button id="btnCancel" (click)="onCancelBtnClicked()" *ngIf="isAdding || isEditing" class="btn btn-default btn-margin-right">{{ 'Cancel' | translate }}</button>
+                <button id="btnSaveLocation" (click)="onSaveBtnClicked()" *ngIf="isAdding || isEditing" class="btn btn-primary">{{ 'Save' | translate }}</button>
+            </div>
+        </div>
+        <div class="section-divider"></div>
+    </div>
+    <div class="rowFull">
+      <div class="locMgmt__body">
+        <location-search [selectedLocation]="selectedLocation"
+        [locations]="locations"
+        [hasChanges]="dataForCrudOperation?.DataHasChanged"
+        (selectedLocationChange)="selectedLocation = $event"></location-search>  
+      
+        <location-crud [selectedLocation]="selectedLocation" [locations]="locations"       
+        (saveFuncChange)="saveLocation=$event" 
+        (editFuncChange)="editLocation=$event" 
+        (addFuncChange)="addLocation=$event" 
+        (cancelFuncChange)="cancelAddEdit=$event"
+        [cancelConfirmed]="onCancelConfirm"
+        [saveSuccessful]="onSaveSuccess"
+        [loadingLocations]="loadingLocations" [hasChanges]="dataForCrudOperation?.DataHasChanged"></location-crud>
+      </div>
+     </div> 
+    </form>
+</div>
+

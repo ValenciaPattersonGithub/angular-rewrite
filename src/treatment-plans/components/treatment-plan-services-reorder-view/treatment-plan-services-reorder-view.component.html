@@ -1,0 +1,154 @@
+﻿<div class="txPlanReorderServices" cdkDropListGroup>
+    <div *ngFor="let stage of planStages">
+        <div class="txPlanReorder__grid">
+            <div class="fuseGrid container">
+                <div class="stageText">
+                    {{'Stage'}} {{ stage.stageno }}
+                </div>
+                <table class="fuseGrid fuseTable container txPlanPart__grid"
+                       *ngIf="stage.services"
+                       cdkDropList
+                       [cdkDropListData]="stage.services"
+                       (cdkDropListDropped)="onDrop($event)">
+                    <tr class="header treatment-plan-service-row">
+                        <th class="no-wrap-column grid-column-drag-area noselect"></th>
+                        <th class="grid-column-desc noselect">
+                            {{'Description'}}
+                        </th>
+                        <th class="grid-column-teeth noselect">
+                            {{'Tooth'}}
+                        </th>
+                        <th class="grid-column-surface noselect">
+                            {{'Surface'}}
+                        </th>
+                        <th class="no-wrap-column grid-column-status noselect">
+                            {{'Status'}}
+                        </th>
+                        <th class="grid-column-location noselect">
+                            {{'Location'}}
+                        </th>
+                        <th class="grid-column-provider noselect">
+                            {{'Provider'}}<br />{{'(Services)'}}
+                        </th>
+                        <!--<th class="grid-column-provider noselect" *ngIf="!drawerState">
+                            {{'Provider'}}<br />{{'(Claims)'}}
+                        </th>-->
+                        <th class="text-align-right no-wrap-column grid-column-money noselect">
+                            {{'Fee'}}
+                        </th>
+                        <th class="text-align-right optional-no-wrap grid-column-money noselect" *ngIf="!drawerState">
+                            <!--{{'Allowed'}}<br />{{'Amount' }}-->
+                        </th>
+                        <th class="text-align-right optional-no-wrap grid-column-money noselect" *ngIf="!drawerState">
+                            {{'Est'}}<br />{{'Ins Adj'}}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money noselect">
+                            {{'Charges'}}
+                        </th>
+                        <th class="text-align-right optional-no-wrap grid-column-money noselect" *ngIf="!drawerState">
+                            {{'Est'}}<br />{{'Insurance'}}
+                        </th>
+                        <th class="text-align-right optional-no-wrap grid-column-money noselect">
+                            {{'Est Pat'}}<br />{{'Balance'}}
+                        </th>
+                    </tr>
+                    <tr class="body treatment-plan-service-row"
+                        *ngFor="let tps of stage.services"
+                        cdkDrag>
+                        <td *cdkDragPreview>
+                            <table class="previewReorder">
+                                <tr>
+                                    <td>
+                                        <div class="drag-svg drag-area">
+                                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+                                                <g>
+                                                    <rect fill="none" height="24" width="24" />
+                                                </g>
+                                                <g>
+                                                    <g>
+                                                        <g>
+                                                            <path d="M20,9H4v2h16V9z M4,15h16v-2H4V15z" />
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                    </td>
+                                    <td class="description">
+                                        {{ tps.ServiceTransaction.Description | truncateText: 100 }}
+                                    </td>
+                                    <td class="preview-text">
+                                        <div>Tooth</div>
+                                        <div class="preview-highlight">{{tps.ServiceTransaction.Tooth ? tps.ServiceTransaction.Tooth : '...'}}</div>
+                                    </td>
+                                    <td class="preview-text">
+                                        <div>Surface</div>
+                                        <div class="preview-highlight">{{tps.ServiceTransaction.$$Area ? tps.ServiceTransaction.$$Area : '...'}}</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td colspan="13" class="customReorder-placeholder" *cdkDragPlaceholder></td>
+                        <td class="text-left no-wrap-column tx-row grid-column-drag-area" cdkDragHandle>
+                            <div class="drag-svg">
+                                <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+                                    <g>
+                                        <rect fill="none" height="24" width="24" />
+                                    </g>
+                                    <g>
+                                        <g>
+                                            <g>
+                                                <path d="M20,9H4v2h16V9z M4,15h16v-2H4V15z" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </div>
+                        </td>
+                        <td class="tx-row text-table-column noselect">
+                            {{ tps.ServiceTransaction.Description | truncateText: 100 }}
+                        </td>
+                        <td class="tx-row text-table-column noselect">
+                            {{tps.ServiceTransaction.Tooth != 0 ? tps.ServiceTransaction.Tooth : ''}}
+                        </td>
+                        <td class="tx-row text-table-column noselect">
+                            {{ tps.ServiceTransaction.$$Area }}
+                        </td>
+                        <td class="no-wrap-column tx-row noselect">
+                            {{ tps.ServiceTransaction.$$statusName  === 'Referred Completed' ? 'Ref Completed' : tps.ServiceTransaction.$$statusName | truncateText:8:'...'}}
+                        </td>
+                        <td class="tx-row text-table-column noselect">
+                            {{ tps.ServiceTransaction.DisplayName }}
+                        </td>
+                        <td class="tx-row text-table-column noselect">
+                            {{ tps.ServiceTransaction.ProviderFullName | truncateText: 50 }}
+                        </td>
+
+                        <!--<td class="tx-row text-table-column noselect" *ngIf="!drawerState">
+                            {{ tps.ServiceTransaction.ProviderOnClaimsFullName | truncateText: 50 }}
+                        </td>-->
+                        <td class="text-align-right no-wrap-column tx-row noselect">
+
+                            {{ tps.ServiceTransaction.Fee | currency: 'USD'}}
+                        </td>
+                        <td class="text-align-right no-wrap-column tx-row noselect" *ngIf="!drawerState">
+                            <!--{{ tps.ServiceTransaction.AllowedAmount | currency: 'USD' }}-->
+                        </td>
+                        <td class="text-align-right no-wrap-column tx-row noselect" *ngIf="!drawerState">
+                            {{ tps.ServiceTransaction.$$AdjEst | currency: 'USD'}}
+                        </td>
+                        <td class="text-align-right no-wrap-column tx-row noselect">
+                            {{ tps.ServiceTransaction.Amount | currency: 'USD'}}
+                        </td>
+                        <td class="text-align-right no-wrap-column tx-row noselect" *ngIf="!drawerState">
+                            {{ tps.ServiceTransaction.$$EstInsurance | currency: 'USD'}}
+                        </td>
+                        <td class="text-align-right no-wrap-column tx-row noselect">
+                            {{ tps.ServiceTransaction.$$PatientPortion | currency: 'USD'}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

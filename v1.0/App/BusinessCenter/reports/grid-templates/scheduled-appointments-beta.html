@@ -1,0 +1,103 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Appointments.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Appointments.length > 0 && !showFilterMessage" >
+        <table>
+            <thead>
+                <tr></tr>
+            </thead>
+            <tbody ng-repeat="appt in data.Appointments" ng-class-odd="'stripOdd'" ng-class-Even="'stripEven'">
+                <tr>
+                    <th class="col-sm-12 cell reportGrid__label" colspan="12">{{ appt.Date | date: 'MM/dd/yyyy' }}</th>
+                </tr>
+                <tr>
+                    <th class="col-sm-2 cell" colspan="12"><b>{{'Location' | i18n}}{{':' | i18n}}</b>{{ appt.Location }}</th>
+                </tr>
+                <tr>
+                    <th class="col-sm-2 cell reportGrid__label" colspan="2">{{'Patient Information' | i18n}}</th>
+                    <th class="col-sm-3 cell reportGrid__label" colspan="3">{{'Policy Holder' | i18n}}</th>
+                    <th class="col-sm-1 cell reportGrid__label">{{'PH DOB' | i18n}}</th>
+                    <th class="col-sm-1 cell reportGrid__label">{{'PH ID' | i18n}}</th>
+                    <th class="col-sm-2 cell reportGrid__label" colspan="2">{{'Plan, Plan Number' | i18n}}</th>
+                    <th class="col-sm-1 cell reportGrid__label">{{'Priority' | i18n}}</th>
+                    <th class="col-sm-2 cell reportGrid__label" colspan="2">{{'Carrier,&nbsp;Phone&nbsp;Number' | i18n}}</th>
+                </tr>
+                <tr>
+                    <td colspan="2" class="col-sm-2 cell">{{'Patient' | i18n}}{{':' | i18n}} {{appt.Patient}}</td>
+                    <td ng-if="appt.Plans.length > 0" colspan="3" class="col-sm-3 cell">{{appt.Plans[0].PolicyHolder}}</td>
+                    <td ng-if="appt.Plans.length > 0" class="col-sm-1 cell">{{appt.Plans[0].PolicyHolderBirthDate | date:'MM/dd/yyyy' }}</td>
+                    <td ng-if="appt.Plans.length > 0" class="col-sm-1 cell">{{appt.Plans[0].PolicyHolderId}}</td>
+                    <td ng-if="appt.Plans.length > 0" colspan="2" class="col-sm-2 cell">{{appt.Plans[0].Plan}}{{appt.Plans[0].Plan?',':'' | i18n}} {{appt.Plans[0].PlanNumber}}</td>
+                    <td ng-if="appt.Plans.length > 0" class="col-sm-1 cell">{{appt.Plans[0].Priority}}</td>
+                    <td ng-if="appt.Plans.length > 0" colspan="2" class="col-sm-2 cell">{{appt.Plans[0].Carrier}}{{appt.Plans[0].Carrier?',':'' | i18n}} {{appt.Plans[0].PhoneNumber | tel}}</td>
+                    <td ng-if="appt.Plans.length == 0" colspan="10" class="col-sm-10 cell"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="col-sm-2 cell">{{'DOB' | i18n}}{{':' | i18n}} {{appt.DateOfBirth | date: 'MM/dd/yyyy'}}</td>
+                    <td ng-if="appt.Plans.length > 1" colspan="3" class="col-sm-3 cell">{{appt.Plans[1].PolicyHolder}}</td>
+                    <td ng-if="appt.Plans.length > 1" class="col-sm-1 cell">{{appt.Plans[1].PolicyHolderBirthDate | date:'MM/dd/yyyy' }}</td>
+                    <td ng-if="appt.Plans.length > 1" class="col-sm-1 cell">{{appt.Plans[1].PolicyHolderId}}</td>
+                    <td ng-if="appt.Plans.length > 1" colspan="2" class="col-sm-2 cell">{{appt.Plans[1].Plan}}{{appt.Plans[1].Plan?',':'' | i18n}} {{appt.Plans[1].PlanNumber}}</td>
+                    <td ng-if="appt.Plans.length > 1" class="col-sm-1 cell">{{appt.Plans[1].Priority}}</td>
+                    <td ng-if="appt.Plans.length > 1" colspan="2" class="col-sm-2 cell">{{appt.Plans[1].Carrier}}{{appt.Plans[1].Carrier?',':''| i18n}} {{appt.Plans[1].PhoneNumber | tel}}</td>
+                    <td ng-if="appt.Plans.length <= 1" colspan="10" class="col-sm-10 cell"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="col-sm-2 cell">{{'Phone Number' | i18n}}{{':' | i18n}} {{appt.PhoneNumber | tel}}</td>
+                    <td ng-if="appt.Plans.length > 2" colspan="3" class="col-sm-3 cell">{{appt.Plans[2].PolicyHolder}}</td>
+                    <td ng-if="appt.Plans.length > 2" class="col-sm-1 cell">{{appt.Plans[2].PolicyHolderBirthDate | date:'MM/dd/yyyy' }}</td>
+                    <td ng-if="appt.Plans.length > 2" class="col-sm-1 cell">{{appt.Plans[2].PolicyHolderId}}</td>
+                    <td ng-if="appt.Plans.length > 2" colspan="2" class="col-sm-2 cell">{{appt.Plans[2].Plan}}{{appt.Plans[2].Plan?',':''| i18n}} {{appt.Plans[2].PlanNumber}}</td>
+                    <td ng-if="appt.Plans.length > 2" class="col-sm-1 cell">{{appt.Plans[2].Priority}}</td>
+                    <td ng-if="appt.Plans.length > 2" colspan="2" class="col-sm-2 cell">{{appt.Plans[2].Carrier}}{{appt.Plans[2].Carrier?',':'' | i18n}} {{appt.Plans[2].PhoneNumber | tel}}</td>
+                    <td ng-if="appt.Plans.length <= 2" colspan="10" class="col-sm-10 cell"></td>
+                </tr>
+                <tr ng-repeat="plan in appt.Plans | startFrom: 3">
+                    <td colspan="2" class="col-sm-2 cell"></td>
+                    <td colspan="3" class="col-sm-3 cell">{{plan.PolicyHolder}}</td>
+                    <td class="col-sm-1 cell">{{plan.PolicyHolderBirthDate | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-1 cell">{{plan.PolicyHolderId}}</td>
+                    <td colspan="2" class="col-sm-2 cell">{{plan.Plan}}{{plan.Plan?',':'' | i18n}} {{plan.PlanNumber}}</td>
+                    <td class="col-sm-1 cell">{{plan.Priority}}</td>
+                    <td colspan="2" class="col-sm-2 cell">{{plan.Carrier}}{{plan.Carrier?',':'' | i18n}} {{plan.PhoneNumber | tel}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="col-sm-3 cell"><b>{{'Time' | i18n}}{{':' | i18n}}</b> {{appt.StartTime}} {{'to' | i18n}} {{appt.EndTime}}</td>
+                    <td colspan="4" class="col-sm-4 cell"><b>{{'Duration' | i18n}}{{':' | i18n}}</b> {{appt.Duration}}</td>
+                    <td colspan="2" class="col-sm-2 cell"><b>{{'Room' | i18n}}{{':' | i18n}}</b> {{appt.Room}}</td>
+                    <td colspan="3" class="col-sm-3 cell"><b>{{'Appt Type' | i18n}}{{':' | i18n}}</b> {{appt.AppointmentType}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="col-sm-2 cell reportGrid__label">{{'Provider' | i18n}}</td>
+                    <td colspan="5" class="col-sm-5 cell reportGrid__label">{{'Service + Description' | i18n}}</td>
+                    <td class="col-sm-1 cell reportGrid__label">{{'Tooth' | i18n}}</td>
+                    <td class="col-sm-1 cell reportGrid__label">{{'Area' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{'Charge' | i18n}}</td>
+                    <td colspan="2" class="col-sm-2 cell"></td>
+                </tr>
+                <tr ng-repeat="code in appt.Codes">
+                    <td colspan="2" class="col-sm-2 cell">{{code.Provider}}</td>
+                    <td colspan="5" class="col-sm-5 cell">{{code.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{code.Tooth}}</td>
+                    <td class="col-sm-1 cell">{{code.Area}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.Charge | currency}}</td>
+                    <td colspan="2" class="col-sm-2 cell"></td>
+                </tr>
+                <tr>
+                    <td colspan="12" class="col-sm-12 cell reportGrid__label">{{'Appt Notes' | i18n}}</td>
+                </tr>
+                <tr>
+                    <td colspan="12" class="col-sm-12 cell">{{appt.Note}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven">
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="12">
+                        {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

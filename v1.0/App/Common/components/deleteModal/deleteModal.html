@@ -1,0 +1,9 @@
+﻿<div class="modal-header"><h4 id="lblWarningModalHeader">{{ 'Remove' | i18n }}</h4></div>
+<div class="modal-body"><label id="lblWarningModalMessage" ng-show="item.Allowed">{{ item.Message | i18n }} {{ 'Are you sure you want to delete the {0} \'{1}\'?' | i18n:[item.Type, item.Name] }}</label></div>
+<div class="modal-body"><label id="lblWarningModalMessage" ng-show="!item.Allowed">{{ 'This {0} {1} and cannot be deleted' | i18n:[item.Type, item.Name] }}</label></div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button id="btnCancelYes" ng-click="confirmDiscard();" class="btn btn-primary">{{ item.Allowed ? 'Yes' : 'Ok' | i18n }}</button>
+        <button id="btnCancelNo" ng-click="cancelDiscard();" class="btn form-btn-cancel-new" ng-show="item.Allowed">{{ 'No' | i18n }}</button>
+    </div>
+</div>

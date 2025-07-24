@@ -1,0 +1,10 @@
+<div class="row page-navigation">
+    <ul class="pmtTypes__breadcrumb">
+        <li *ngFor="let breadcrumb of navigationData; let last = last">
+            <span id="lastBreadCrumbName" *ngIf="last">{{breadcrumb.name}}</span>
+            <span id="breadCrumbName{{$index}}" *ngIf="!last">
+                <a href="{{breadcrumb.path}}" (click) = "changPath(breadcrumb.name)">{{breadcrumb.name}}</a>
+            </span>
+        </li>
+    </ul>
+</div>

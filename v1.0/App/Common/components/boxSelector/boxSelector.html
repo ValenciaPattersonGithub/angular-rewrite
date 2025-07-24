@@ -1,0 +1,8 @@
+﻿<div class="boxSelector">
+    <a ng-repeat="item in items" id="{{ bsItemId }}{{ $index }}" ng-click="selectItem(item, bsItemId + $index)" class="boxSelector__item">
+        <box-selector-item item="item" template-url="{{ bsItemUrl }}"></box-selector-item>
+    </a>
+    <a ng-show="canAdd && items.length < 6"  id="{{ bsItemId }}Add" ng-click="onAddClick()" class="boxSelector__item">
+        <box-selector-item template-url="{{ bsItemAddUrl }}"></box-selector-item>
+    </a>
+</div>

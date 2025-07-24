@@ -1,0 +1,185 @@
+﻿.actAppt {
+    z-index: 1;
+    position: fixed;
+    bottom: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display: inline-block;
+    width: 96%;
+    height: 1px;
+    max-width: 1600px;
+    overflow: visible;
+
+    &.active {
+
+        [class*="__tabContainer"] {
+            max-height: 1000px;
+            opacity: 1;
+            height: 500px;
+        }
+
+        [class*="__titleTab"] {
+
+            &:before {
+                transform: rotate(180deg);
+            }
+        }
+
+        .nav-tabs > li {
+            display: inline-block;
+        }
+    }
+
+
+    .nav-tabs > li {
+        display: none;
+        float: right;
+
+        &:first-child {
+            display: inline-block;
+            float: left;
+
+            > a {
+                &:first-child {
+                    border-color: @brand-color_darker-gray;
+
+                    &:hover {
+                        border-color: darken(@brand-color_darker-gray, 10);
+                    }
+                }
+            }
+        }
+
+        &.active {
+            > a {
+                color: @brand-color_link;
+                background-color: @brand-color_white;
+            }
+        }
+
+        > a {
+            color: @brand-color_white;
+            background-color: @brand-color_dark-gray;
+
+            &:hover {
+                color: @brand-color_white;
+                background-color: darken(@brand-color_dark-gray, 10);
+                border-color: transparent;
+            }
+        }
+    }
+
+    &__container {
+        .make-xs-column(9);
+        position: absolute;
+        bottom: 0;
+        background-color: @brand-color_white;
+        border-top: 2px solid lightgrey;
+        border-left: 1px solid lightgrey;
+        border-right: 1px solid lightgrey;
+
+        .nav-tabs {
+            z-index: 1000;
+            position: absolute;
+            top: -40px;
+        }
+        
+        .lnkResponsiblePersonNav{
+            color: #E43122;
+        }
+        span.lnkResponsiblePersonNav{
+            color: #A94442;
+        }
+
+    }
+
+    &__buttonRow {
+        margin: 5px;
+    }
+
+    &__hideButton {
+        width: 20%;
+        float: left;
+        line-height: 40px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid @brand-color_light-gray;
+    }
+
+    &__titleTab {
+        .clearfix;
+        display: block;
+        margin: -@brand-margin_sm -@brand-margin_md; //to cover the original link for click event
+        padding: @brand-margin_sm @brand-margin_md;
+        color: @brand-color_white;
+        background-color: @brand-color_darker-gray;
+        transition: @brand-transition;
+        cursor: pointer;
+
+        &:hover,
+        &:focus {
+            color: @brand-color_white;
+            background-color: darken(@brand-color_darker-gray, 10);
+        }
+
+        &:before {
+            display: inline-block;
+            margin-right: @brand-margin_sm;
+            font-family: 'Font Awesome 5 Pro';
+            content: '\f077';
+            line-height: 0;
+            font-size: 18px;
+        }
+    }
+
+    &__tabContainer {
+        .clearfix;
+        width: 100%;
+        max-height: 0; // Control height based on .actAppt active state
+        opacity: 0;
+        background-color: @brand-color_white;
+        transition: @brand-transition;
+    }
+
+    &__tabContent {
+        padding: 10px @brand-padding_sm;
+        max-height: 360px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    &__services {
+        width: 100%;
+    }
+
+    &__apptNotes {
+        width: 100%;
+    }
+
+    &__finishAppt {
+        width: 100%;
+        padding-top: 15px;
+        text-align: right;
+    }
+
+    &__cancel {
+        padding-left: 20px;
+        padding-right: 10px;
+    }
+
+    &__apptNts {
+        font-weight: 500;
+    }
+
+    &__apptNotesInput {
+        margin-top: 5px;
+        .form-input;
+        height: 100px;
+    }
+
+    &__fullRow {
+        .clearfix;
+        width: 100%;
+    }
+
+    
+}

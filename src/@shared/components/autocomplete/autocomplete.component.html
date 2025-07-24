@@ -1,0 +1,48 @@
+<div class="autocomplete">
+    <form autocomplete="off">
+        <div class="autocomplete-error-wrapper">
+            <div class="autocomplete-error-control">
+                <input 
+                    #autocompleteInput 
+                    type="text" 
+                    role="searchbox" 
+                    [id]="id" 
+                    [formControl]="autocompleteControl"
+                    [placeholder]="placeholderText"
+                    [attr.disabled]="disabled ? true : null"
+                    [ngClass]="[hasError ? 'error' : '']" 
+                    [maxlength]="maxLength" 
+                    [attr.aria-label]="ariaLabel || null"
+                    (keyup.enter)="selectActiveOption()" 
+                    (keydown.arrowup)="setActiveOptionUp()"
+                    (keydown.arrowdown)="setActiveOptionDown()" 
+                />
+                <label [attr.for]="id" class="autocomplete-icons"  [ngClass]="[hasError ? 'error' : '']" >
+                    <svg-icon 
+                        name="searchIcon" 
+                        iconHeight="18" 
+                        iconWidth="18" 
+                        [hidden]="isFiltered"
+                    ></svg-icon>
+                    <svg-icon 
+                        name="closeIcon" 
+                        iconHeight="18" 
+                        iconWidth="18" 
+                        [hidden]="!isFiltered"
+                        (click)="clearSearch($event)" 
+                        class="icon-remove"
+                    ></svg-icon>
+                </label>
+                <div class="autocomplete-drawer" [hidden]="isHidden" (click)="this.onDrawerClick()">
+                    <ng-content></ng-content>
+                </div>
+            </div>
+            <div *ngIf="hasError===true" class="autocomplete-control-error" [tooltip]="errorTooltipMessage" 
+                 placement="top-error" delay="500">
+                <svg-icon [id]="inpErrorIcon" class="error-icon" name="tooltipIcon" 
+                    iconHeight="15px" iconWidth="15px" >
+                </svg-icon>
+            </div>
+        </div>
+    </form>
+</div>

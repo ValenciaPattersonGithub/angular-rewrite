@@ -1,0 +1,54 @@
+﻿<div>
+    <div class="modal-content ">
+        <div class="transferAccount-modal">
+            <div class="modal-header">
+                <button class="prevCare__secClose" icon="fa-times" ng-click="cancel()"></button>
+                <h4 class="modal-title">{{'Patient Transfer' | i18n }}</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="transferAccount-modal__section1">
+                    <div class="form-row">
+                        <div class="form-group form-col-10">
+                            <label class="control-label"> Patient</label>
+                            <button class="btn btn-success btn-md" disabled style="opacity: 1;">
+                                {{ patientName | i18n}}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group form-col-6">
+                            <label class="control-label"> Action</label>
+                            <soar-select-list id="cbmActions"
+                                              text-field="name"
+                                              value-field="id"
+                                              option-list="actionItems"
+                                              ng-model="selectedActionItem">
+
+                            </soar-select-list>
+                            <!--<select id="cbm" kendo-combo-box>
+                                <option ng-repeat="option in actionItems" value="{{option.id}}">{{option.name}}</option>
+                            </select>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="transferAccount-modal__section2">
+                    <div class="form-row">
+                        <label class="control-label">{{'Account' | i18n}}</label>
+                        <div class="form-group form-col-12">
+                            <p>
+                                A new account will be created and {{patientName | i18n}} will be the Responsible Party. All clinical and account history will be transferred to this new account.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSave" ng-click="transfer()">Apply</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

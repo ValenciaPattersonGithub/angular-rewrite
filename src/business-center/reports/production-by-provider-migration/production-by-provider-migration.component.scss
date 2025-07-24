@@ -1,0 +1,41 @@
+.claim {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 0.05fr
+} 
+ .grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+
+        margin-right: 7px;
+
+        &.claim {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+            &.locationInactive {
+                top:80px;
+            }
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+            padding-left: 0%;
+        }
+      }
+  }
+.pl-5 {
+    padding-left: 5px;
+}
+
+.flex-box {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+.orange {
+    color: #FF9516;
+}

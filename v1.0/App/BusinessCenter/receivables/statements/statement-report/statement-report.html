@@ -1,0 +1,114 @@
+﻿<div class="statement-report">
+    <div class="row" ng-repeat="report in reports">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 header">{{ ::('Statement Batch Report' | i18n) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Processing Start Time' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ (report.Report.ProcessingStartTime | toShortDisplayDateLocal) + ' ' + (report.Report.ProcessingStartTime | toDisplayTimeUtc) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Processing Complete Time' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ (report.Report.ProcessingCompleteTime | toShortDisplayDateLocal) + ' ' + (report.Report.ProcessingCompleteTime | toDisplayTimeUtc) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Location' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.LocationName }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Statement Batch File Name' | i18n) }}</div>
+                <div class="col-sm-3">{{ report.Report.Job}}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Total Records Received' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.TotalRecordsReceived }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Total Records Printed' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.TotalRecordsPrinted }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Total Records Suppressed' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.TotalRecordsSuppressed }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Printed Standardized Address' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.PrintedStandardizedAddress }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Printed Non-Standard Address' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.PrintedNonStandardAddress }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Printed Move Updates' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.PrintedMoveUpdates }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Supressed Non-Standard Address' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.SuppressedNonStandardAddress }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Supressed Non-Forwardable' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.SuppressedNonForwardable }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Supressed Global Suppression List' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.SuppressedGlobalSuppressionList }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Supressed Duplicate' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.SuppressedDuplicate }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ ::('Supressed Other Rules' | i18n) + ':' }}</div>
+                <div class="col-sm-3">{{ report.Report.SuppressedOtherRules }}</div>
+            </div>
+            <br />
+            <br />
+            <div class="row" ng-if="report.Alerts && report.Alerts.length > 0">
+                <div class="col-sm-12 header">{{ ::('Statement Alerts' | i18n) }}</div>
+            </div>
+            <div class="row" ng-repeat="alert in report.Alerts">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">{{ ::('Alert ' | i18n) + ($index + 1) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">{{ ::('Statement Account ID' | i18n) + ':' }}</div>
+                        <div class="col-sm-3">{{ alert.StatementAccountId }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">{{ ::('Alert Type' | i18n) + ':' }}</div>
+                        <div class="col-sm-3">{{ alert.AlertType | statementReportAlertType }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">{{ ::('Processed' | i18n) + ':' }}</div>
+                        <div class="col-sm-3">{{ alert.Processed | statementReportProcessed }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">{{ ::('Error Description' | i18n) + ':' }}</div>
+                        <div class="col-sm-3">{{ alert.StandardizationErrorDescription }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">{{ ::('Name' | i18n) + ':' }}</div>
+                        <div class="col-sm-3">{{ alert.StandardizedName }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">{{ ::('Address Line 1' | i18n) + ':' }}</div>
+                        <div class="col-sm-3">{{ alert.StandarizedAddress1 }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">{{ ::('Address Line 2' | i18n) + ':' }}</div>
+                        <div class="col-sm-3">{{ alert.StandarizedAddress2 }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">{{ ::('City, State, Zip' | i18n) + ':' }}</div>
+                        <div class="col-sm-3">{{ ::(alert | statementReportAlertCityStateZip) }}</div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

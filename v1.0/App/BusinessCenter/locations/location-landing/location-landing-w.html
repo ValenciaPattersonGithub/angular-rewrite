@@ -1,0 +1,6 @@
+﻿    <ng-container ng-if="migrationFeatureFlagsLoaded && useConverted">
+        <location-landing-ng></location-landing-ng>
+    </ng-container>
+    <ng-container ng-if="migrationFeatureFlagsLoaded && (!useConverted)">
+        <location-landing-template-original></location-landing-template-original>
+    </ng-container>

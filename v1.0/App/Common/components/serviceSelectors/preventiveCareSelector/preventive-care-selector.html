@@ -1,0 +1,31 @@
+﻿<div ng-class="{'prevCareAppointment':serviceFilter == 'appointment', 'prevCareTxPlan': serviceFilter == 'txplan','prevCareEncounter': (serviceFilter == 'encounter' || serviceFilter == 'encounter-refactored')}" ng-if="flyout">
+    <div>
+        <div class="prHeader">
+            <div>
+                <label class="control-label font-24">Add Services from Preventive Care to {{displayMessage}}</label>
+               </div>
+            <div class="prClose">
+                <button id="sp-close" class="btn btn-link" ng-click="hideFilters()"><i class="fa fa-times"></i></button>
+            </div>
+        </div>        
+        <div class="grid prBody" ng-init="showPreventiveService=true">
+            
+            <kendo-grid id="prevCareApptGridInner" k-options="mainGridOptions" k-height="gridHeight">
+                <div k-detail-template>
+                    <div id="prevCareApptGridInnerDetail#:data.Order#" kendo-grid k-options="detailGridOptions(dataItem)"></div>
+                </div>
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+
+<div ng-if="!flyout">
+    <div class="prevCareRunningApt">
+        <label class="control-label font-24">Add Services from Preventive Care to {{displayMessage}}</label>
+        <kendo-grid id="prevCareApptGridInner" k-options="mainGridOptions" k-height="gridHeight">
+            <div k-detail-template>
+                <div id="prevCareApptGridInnerDetail#:data.Order#" kendo-grid k-options="detailGridOptionsSmall(dataItem)"></div>
+            </div>
+        </kendo-grid>
+    </div>
+</div>

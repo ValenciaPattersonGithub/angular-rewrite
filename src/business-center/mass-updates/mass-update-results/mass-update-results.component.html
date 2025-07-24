@@ -1,0 +1,64 @@
+<!-- <top-navigation [menuType]="'Business'"></top-navigation>
+
+<div class="card-container mass-update-res-container">
+    <div class="row">
+        <span class="mass-update-res-header-info col-lg-10">Mass Patient Transfer (Results)</span>
+        <div class="close-button-container">
+            <app-button (onClick)="close()" id="btn_massupdateResultsClose" buttonLabel="Close" variation="primary"> </app-button>
+        </div>
+    </div>
+    <div class="sub-header-container"  *ngIf="batchInfo">
+        <span><b>Location: </b>{{batchInfo.LocationString}} |<b> From: </b>{{batchInfo.FromProvider}} |<b> To: </b>{{batchInfo.ToProvider}} |
+            <b> Provider Type: </b>{{batchInfo.ProviderType}} |<b> Inactive Patients: </b>{{batchInfo.InActivePatient}}</span>
+    </div>
+    <hr class="massupdate-hr">
+    <div class="row mass-update-result-details-container" *ngIf="batchInfo">
+        <div class="col-lg-2">
+            <div class="mass-update-res-sub-header-info">Successful Transfers</div>
+            <span style="font-size: 18px;">{{batchInfo.SuccessCount}}</span>  <a (click)="export(2)" [class.disabled]="batchInfo.SuccessCount==0"> Export</a>
+        </div>
+
+        <div class="col-lg-2">
+            <div class="mass-update-res-sub-header-info">Failed Transfers</div>
+            <span style="font-size: 18px;">{{batchInfo.FailedCount}}</span>  <a (click)="export(3)" [class.disabled]="batchInfo.FailedCount==0"> Export</a>
+        </div>
+    </div>
+    <div class="sub-header-container"  *ngIf="!batchInfo">
+       <h4>Processing...</h4>
+    </div>
+</div> -->
+
+<div *ngIf="recentRecords && recentRecords.length>0">
+    <div>
+        <h2 class="mass-updateresults-header-info">Recent Transfers</h2>
+    </div>
+    <hr class="massupdateresults-hr">
+    <div>
+        <div class="massupdatesresultheader grid header">
+            <div class="massupdatecol1">{{ 'Location' | translate }}</div>
+            <div class="massupdatecol2">{{ 'Provider Type' | translate }}</div>
+            <div class="massupdatecol2">{{ 'From Provider' | translate }}</div>
+            <div class="massupdatecol1">{{ 'To Provider' | translate }}</div>
+            <div class="massupdatecol1">{{ 'Inactive Patients' | translate }}</div>
+        </div>
+        <div class="massupdatesresultProcessing grid" *ngIf="isProcessing">
+            <loader-component></loader-component>
+            <div>
+                <span><b>Processing new results...</b></span>
+            </div>
+        </div>
+        <div *ngFor="let itm of recentRecords">
+            <div class="massupdatesresultsubHeader">
+                <span><b>Run Date: </b>{{itm.RunDate | date: 'MM/dd/yy'}} |<b> By: </b>{{ itm.RunBy }} |<b> Failed: </b><a (click)="export(3,itm.MassUpdateId)"> 
+                    {{itm.FailedCount}} Export</a> |<b> Successful: </b><a (click)="export(2,itm.MassUpdateId)"> {{itm.SuccessCount}} Export</a></span>
+            </div>
+            <div class="massupdatesresultitem grid item itembackGround">
+                <div class="massupdatecol1">{{ itm.LocationString | translate }}</div>
+                <div class="massupdatecol2">{{ itm.ProviderType | translate }}</div>
+                <div class="massupdatecol2">{{ itm.FromProvider | translate }}</div>
+                <div class="massupdatecol1">{{ itm.ToProvider | translate }}</div>
+                <div class="massupdatecol1">{{ itm.InActivePatient?'Yes':'No' | translate }}</div>
+            </div>
+        </div>
+    </div>
+</div>

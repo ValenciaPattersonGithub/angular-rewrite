@@ -1,0 +1,145 @@
+@import 'src/stylings/variables.scss';
+
+.date-range-picker {
+    .error-msg-margin {
+        margin: 6px 0px 0px 8px;
+        color: $alert-red;
+    }
+
+    .date-range-selector-popup-ng {
+        position: absolute;
+        z-index: 999;
+        border-radius: 5px;
+        background-color: $polar-white;
+        background-size: cover;
+        box-shadow: 0px 5px 10px rgba(112, 144, 176, 0.3);
+        padding: 10px;
+    }
+
+    .date-range-fix-width {
+        width: 26rem;
+    }
+
+    .date-range-full-width {
+        width: 96%;
+        min-width: 200px;
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+
+    .date-range-selector-popup-input {
+        width: 100%;
+    }
+
+    .m-tb-15 {
+        margin-top: 0px;
+        margin-bottom: 15px;
+    }
+
+    .mr-1 {
+        margin-right: 10px;
+    }
+
+    .main-container {
+        display: table;
+        width: 100%;
+    }
+
+    .div-1 {
+        display: table-cell;
+        width: 45%;
+        height: 62px;
+        vertical-align: top;
+    }
+
+    .div-2 {
+        display: table-cell;
+        width: 10%;
+        vertical-align: middle;
+    }
+
+    .to-label {
+        width: 17px;
+        height: 19px;
+        font-family: Open Sans;
+        font-size: 14px;
+        font-weight: 400;
+        color: $text-black;
+        text-decoration: none solid rgb(51, 51, 51);
+        line-height: 18px;
+        display: table;
+        margin: auto;
+    }
+
+    ::ng-deep {
+        .k-picker-wrap {
+            background: $polar-white;
+            border: 1px solid $border-grey;
+            border-radius: 4px;
+        }
+
+        .k-picker-wrap .k-input {
+            font-family: Open Sans;
+            font-size: 1.2rem;
+            color: $placeholder-grey;
+        }
+
+        .k-dateinput.k-widget {
+            padding: 2px;
+        }
+
+    }
+
+    .invalidDate {
+        margin-top: 3em;
+    }
+}
+
+
+
+.date-range-picker-control {
+    .date-selector-input-group {
+        width: 100%;
+
+        .date-selector-input {
+            height: 30px;
+            width: 100%;
+            padding: 0px;
+            border: 1px solid #A9A9A9;
+            background-color: $polar-white;
+            background-size: cover;
+            font-family: Open Sans;
+            font-size: 14px;
+            color: $text-black;
+            text-decoration: none solid rgb(153, 153, 153);
+            font-weight: 700;            
+        }
+
+        .dropdown-menu {
+            width: auto;
+            min-width: 254px;
+        }
+
+        .input-group-btn {
+            width: 0;
+
+            .date-selector-btn {
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: translate(0, -50%);
+                font-size: 16px;
+                border: none;
+                background: transparent;
+
+                @media all and (-ms-high-contrast: none),
+                (-ms-high-contrast: active) {
+                    /* IE10+ CSS styles go here */
+
+                    transform: translate(0, 0);
+                }
+            }
+        }
+
+    }
+}

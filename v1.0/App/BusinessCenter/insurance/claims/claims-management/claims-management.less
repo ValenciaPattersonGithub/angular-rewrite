@@ -1,0 +1,250 @@
+﻿.claimsMgmt {
+
+    &__container {
+        .containerStandard;
+        padding: 0;
+    }
+
+    &__multiselect {
+        margin-top: 4px;
+        display: inline-block;
+        min-width: 200px;
+        position: absolute;
+
+        .k-multiselect-wrap {
+            height: 35px;
+        }
+    }
+
+    &__table {
+        .highlighted {
+            background-color: @gray-lighter;
+        }
+
+        #tdSelection {
+            text-align: center;
+        }
+
+        .checkboxColumn {
+            width: 1%;
+        }
+
+        .submittedColumn {
+            width: 10%;
+        }
+
+        .nameColumn {
+            width: 11%;
+        }
+
+        .nameColumn2 {
+            width: 21%;
+        }
+
+        .typeColumn {
+            width: 6%;
+        }
+
+        .providerColumn {
+            width: 9%;
+        }
+
+        .priorityColumn {
+            width: 6%;
+        }
+
+        .carrierColumn {
+            width: 9%;
+        }
+
+        .serviceDateColumn {
+            width: 11%;
+        }
+
+        .subMethodColumn {
+            width: 11%;
+        }
+
+        .feesColumn {
+            width: 7%;
+        }
+
+        .statusColumn {
+            width: 8%;
+        }
+
+        .extrasColumn {
+            width: 6%;
+        }
+
+        .gridRow {
+            border-bottom: 1px solid #E3E5E5;
+            vertical-align: middle;
+            padding: 4px;
+        }
+
+        .pred {
+            color: #009900;
+        }
+
+        [id^="btnPatientName"] {
+            padding: 0;
+            border: 0;
+        }
+    }
+
+    &__header {
+        .clearfix;
+        padding-top: @brand-padding_md;
+
+        &Sort {
+            margin-left: 10px;
+        }
+
+        > row > gridItem {
+
+            > a {
+                .btn;
+            }
+
+            > a, > span {
+                .btn-link;
+                text-align: left;
+                width: 100%;
+                padding: 6px 12px 6px 0;
+            }
+
+            > span {
+                display: inline-block;
+                text-align: left;
+                width: 100%;
+                padding: 6px 12px 6px 0;
+            }
+
+            .active, a:focus, a:active {
+                color: black;
+            }
+        }
+
+        &.keepTop {
+            position: fixed;
+            background-color: white;
+            width: 96%;
+            z-index: 1001;
+            max-width: 1600px;
+        }
+    }
+
+    .open > .dropdown-menu {
+        z-index: 999999;
+    }
+
+    &__filters {
+        .make-xs-column(12);
+        .make-md-column(12);
+
+        .soarSelectList {
+            margin-right: @brand-margin_sm; //This should be _sm, but there's some weird invisible margin thing.
+        }
+
+        padding-left: 4px;
+        padding-right: 0px;
+    }
+
+    &__filterCol {
+        width: 15%;
+        float: left;
+        position: relative;
+        min-height: 1px;
+        padding-left: 0px;
+        padding-right: 4px;
+    }
+
+    &__searchBox {
+        width: 30%;
+        float: left;
+        min-height: 1px;
+        padding-left: 0px;
+        padding-right: 4px;
+    }
+
+    &__searchBoxAll {
+        width: 30%;
+        float: left;
+        min-height: 1px;
+        padding-left: 0px;
+        padding-right: 4px;
+        clear: left;
+    }
+
+    &__actions {
+        .make-xs-column(12);
+        .make-md-column(4);
+        text-align: right;
+    }
+
+    &__action {
+        display: inline-block;
+        margin-right: @brand-margin_sm;
+    }
+
+    &__more {
+        display: inline-block;
+        position: relative;
+    }
+
+    &__moreList {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 99999;
+        padding: 10px;
+        background-color: #FFFFFF;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+
+        .btn {
+            display: block;
+        }
+
+        &.active {
+            display: inline-block;
+        }
+    }
+
+    &__content {
+        padding: @brand-padding_md;
+    }
+
+    &__optionsList {
+        z-index: 99999;
+    }
+
+    &__options {
+        overflow: visible !important;
+
+        &Btn {
+            .pull-right;
+            .btn;
+            .btn-link;
+
+            > span {
+                font-size: 22px;
+            }
+        }
+
+        &List {
+            top: 30px;
+        }
+    }
+
+    &__searchIcon {
+        padding-top: 9px;
+    }
+}
+.back-to-top{
+    position: fixed;
+    bottom: 50px;
+    right: 40px;
+    z-index: 10;
+}

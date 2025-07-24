@@ -1,0 +1,223 @@
+﻿<div ng-class="'fade-in'">
+	<form name="frmAppointmentTypesCrud" role="form" action="javascript:;" novalidate>
+		<div class="modal-header">
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="lblAppointmentTypeHeader" class="modal-title-responsive">
+						{{ editMode ? 'Edit Appointment Type' : 'Add Appointment Type' | i18n }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body">
+			<!-- appointment type name -->
+			<div class="row">
+				<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+					<label id="lblAppointmentTypeName" class="form-label-newer" for="inpAppointmentTypeName">{{::('Name' | i18n) }} *</label>
+				</div>
+				<div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+					<div ng-class="{error: !appointmentType.Valid && frmAppointmentTypesCrud.inpAppointmentTypeName.$error.required}">
+					    <input id="inpAppointmentTypeName"
+					           class="form-input required valid"
+					           placeholder="{{ ::('Name' | i18n) }}"
+					           ng-model="appointmentType.Data.Name"
+					           name="inpAppointmentTypeName"
+					           maxlength="50"
+					           tabindex="-1"
+					           type="text"
+					           set-focus
+					           required/>
+					    <div class="error">
+					        <label id="lblAppointmentTypeNameRequired" class="help-text" ng-show="!appointmentType.Valid && frmAppointmentTypesCrud.inpAppointmentTypeName.$error.required">
+					            {{ ::('This field is required.' | i18n) }}
+					        </label>
+					    </div>
+                        <div class="error">
+                            <label id="lblUniqueName" class="help-text" ng-show="appointmentTypeNameIsDuplicate && frmAppointmentTypesCrud.inpAppointmentTypeName.$error.uniqueName">
+                                {{ ::('An appointment type with this name already exists.' | i18n) }}
+                            </label>
+                        </div>
+                    </div>
+				</div>
+			</div>
+
+			<div class="clearfix">&nbsp;</div>
+			
+			<!-- performed by -->
+			<div class="row">
+				<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+					<label id="lblAppointmentTypePerformedBy" class="form-label-newer" for="inpAppointmentTypePerformedBy">{{ ::('Performed By' | i18n) }}</label>
+				</div>
+			    <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+                    <div>
+                        <soar-select-list id="inpAppointmentTypePerformedBy"
+                                          name="inpAppointmentTypePerformedBy"
+                                          placeholder="{{ ::('Provider' | i18n) }}"
+                                          text-field="Name"
+                                          value-field="Id"
+                                          option-list="providerTypes"
+                                          ng-model="appointmentType.Data.PerformedByProviderTypeId"
+                                          sb-change="checkIsProviderTypeValid"></soar-select-list>
+                    </div>
+			    </div>
+			</div>
+			
+			<!-- duration -->
+			<div class="row">
+				<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+					<div class="clearfix hidden-xs">&nbsp;</div>
+					<div class="row padding-top-16">
+						<div class="col-xs-12">
+		                    <label id="lblDuration" class="form-label-newer">{{ ::('Duration' | i18n) }}</label>
+						</div>
+					</div>
+				</div>
+			    <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+			        <div class="row">
+			            <div class="col-xs-12 col-sm-5 col-lg-5">
+			                <div class="row">
+			                    <div class="col-xs-12">
+			                        <span id="lblMinutes" class="form-label-newer pull-left">{{ ::('Minutes' | i18n) }}</span>
+			                    </div>
+			                </div>
+			                <div class="clearfix hidden-xs">&nbsp;</div>
+			                <div class="row">
+			                    <div class="col-xs-12">
+			                        <select kendo-drop-down-list
+			                                id="inpAppointmentTypeMinutes"
+			                                name="inpAppointmentTypeMinutes"
+			                                k-data-source="minutes"
+			                                ng-model="appointmentTypeMinutes"
+			                                k-change="appointmentTypeDurationChanged"></select>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+                    <div ng-show="appointmentType.Data.DefaultDuration > 60">
+                        <label id="lblDurationHoursMinutes" class="form-label">
+                            (Hours:Minutes) {{ getDurationString(appointmentTypeMinutes) }}
+                        </label>
+                    </div>
+			    </div>
+			</div>
+			<div class="clearfix">&nbsp;</div>
+
+		    <!-- usual amount-->
+		    <div class="row">
+		        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+		            <div class="row">
+		                <div class="col-xs-12">
+		                    <label id="lblUsualAmount" class="form-label-newer">{{ ::('Usual Amount' | i18n) }}</label>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="col-xs-12 col-sm-7 col-md-5 col-lg-2">
+		            <div class="row">
+		                <div class="col-xs-12">
+		                    <div ng-class="{'error': !appointmentType.Valid && (appointmentType.Data.UsualAmount < 0 || appointmentType.Data.UsualAmount > 999999.99)}">
+		                        <input id="inpUsualAmount"
+		                               class="form-input valid text-align-right"
+		                               placeholder="{{ :('0' | currency) }}"
+		                               ng-model="appointmentType.Data.UsualAmount"
+		                               name="inpUsualAmount"
+		                               model-format="currency"
+		                               maxlength="12"
+		                               tabindex="-1"
+		                               type="text"/>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                </div>
+		        <div class="row">
+                    <div class="col-xs-12 col-sm-7 col-md-5 col-lg-2">
+                        <div class="error" ng-show="!appointmentType.Valid && (appointmentType.Data.UsualAmount < 0 || appointmentType.Data.UsualAmount > 999999.99)">
+                            <span class="help-text no-wrap" id="lblUsualAmountError">{{ ::('Amount must be less than $999,999.99.' | i18n) }}</span>
+                        </div>
+                    </div>
+		        </div>
+		    </div>
+            <div class="clearfix">&nbsp;</div>
+
+		    <!-- appointment colors -->
+			<div class="row">
+				<div class="col-xs-12 col-sm-3 col-md-2">
+					<label id="lblColors" class="form-label-newer">{{ ::('Colors' | i18n) }}</label>
+				</div>
+				<div class="col-xs-12 col-sm-9 col-md-10">
+				    <div class="row">
+				        <div class="col-xs-12 col-sm-5 col-lg-4">
+				            <div class="row">
+				                <div class="col-xs-12">
+				                    <span id="lblAppointmentTypeColor" class="form-label-newer pull-left">{{ ::('Appointment' | i18n) }}</span>
+				                </div>
+				            </div>
+				            <div class="clearfix hidden-xs">&nbsp;</div>
+				            <div class="row">
+				                <div class="col-xs-12">
+				                    <div class="row">
+				                        <div class="col-xs-12">
+				                            <div id="inpAppointmentTypeColorSimple" kendo-color-palette ng-model="appointmentType.Data.AppointmentTypeColor"></div>
+				                        </div>
+				                    </div>
+				                    <div class="row">
+				                        <div class="col-xs-12">
+				                            <a id="btnEditAppointmentColor" class="soar-link" ng-click="toggleAdvancedAppointmentTypeColorPicker()">{{ editingAppointmentColor ? 'Less': 'More' | i18n }}</a>
+				                        </div>
+				                    </div>
+				                    <div class="row" ng-show="editingAppointmentColor">
+				                        <div class="col-xs-12">
+				                            <div id="inpAppointmentTypeColorAdvanced" kendo-flat-color-picker ng-model="appointmentType.Data.AppointmentTypeColor" k-buttons="false" k-preview="false" k-input="false"></div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="col-xs-12 col-sm-5 col-lg-4">
+				            <div class="row">
+				                <div class="col-xs-12">
+				                    <span id="lblFontColor" class="form-label-newer pull-left">{{ ::('Font' | i18n) }}</span>
+				                </div>
+				            </div>
+				            <div class="clearfix hidden-xs">&nbsp;</div>
+				            <div class="row">
+				                <div class="col-xs-12">
+				                    <div class="row">
+				                        <div class="col-xs-12">
+				                            <div id="inpFontColorSimple" kendo-color-palette ng-model="appointmentType.Data.FontColor"></div>
+				                        </div>
+				                    </div>
+				                    <div class="row">
+				                        <div class="col-xs-12">
+				                            <a id="btnEditFontColor" class="soar-link" ng-click="toggleAdvancedFontColorPicker()">{{ editingFontColor ? 'Less': 'More' | i18n }}</a>
+				                        </div>
+				                    </div>
+				                    <div class="row" ng-show="editingFontColor">
+				                        <div class="col-xs-12">
+				                            <div id="inpFontColorAdvanced" kendo-flat-color-picker ng-model="appointmentType.Data.FontColor" k-buttons="false" k-preview="false" k-input="false"></div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+					<div class="row">
+						<div class="col-xs-12">
+							<span id="lblPreviewText" class="form-label-newer border-solid-black padding-8 pull-left" ng-style="{'background-color': appointmentType.Data.AppointmentTypeColor, color: appointmentType.Data.FontColor}">
+								<span class="font-16">{{ ::('Preview Text' | i18n) }}</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="apptTypesCrud">
+				<div class="apptTypesCrud__btn">
+                    <button id="btnCancel" ng-click="cancelChanges();" ng-disabled="appointmentType.Saving" class="btn btn-link">{{ ::('Cancel' | i18n) }}</button>
+                    <button id="btnSave" check-auth-z="{{ editMode ? 'soar-sch-sapttp-edit' : 'soar-sch-sapttp-add' }}" ng-click="saveAppointmentType();" ng-disabled="appointmentType.Saving" class="btn btn-primary">{{ ::('Save' | i18n) }}</button>
+				</div>
+		</div>
+	</form>
+</div>

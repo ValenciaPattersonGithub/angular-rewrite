@@ -1,0 +1,35 @@
+.treatmentplanperformancereport {
+    grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+}
+
+.treatmentplanperformancereportHeader {
+    grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    background: transparent;
+}
+
+.treatmentplanperformancereportFooter {
+    grid-template-columns: 11fr 2fr 1fr 1fr 1fr;
+    background: transparent;
+}
+
+.grid {
+    display: grid;
+
+    &.header {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.treatmentplanperformancereport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+
+        > div {
+            padding: 5px;
+            align-items: center;
+            margin-left: -5px;
+        }
+    }
+}

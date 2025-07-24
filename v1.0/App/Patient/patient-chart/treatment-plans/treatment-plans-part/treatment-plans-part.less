@@ -1,0 +1,386 @@
+﻿.txPlanPart {
+    &__header {
+        .clearfix;
+    }
+
+    &__stageSelectAllCheckbox {
+        font-weight: 400;
+    }
+
+    &__toggle {
+        .btn;
+        .btn-link;
+        font-size: 1.2em;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    &__partTotals {
+        margin-right: @brand-margin_sm;
+    }
+
+    &__partFooter {
+        text-align: right;
+    }
+
+    &__remove {
+        .btn;
+        .btn-link;
+        font-size: 1.2em;
+        margin: -@brand-margin_xs @brand-margin_sm 0px 0px;
+        padding: 0;
+    }
+
+    &__menuactions {
+        display: none;
+        position: absolute;
+        right: 30px;
+        z-index: 999;
+        padding: 10px;
+        min-width: 100px;
+        background-color: @brand-color_white;
+        border: 1px solid @brand-color_darker-gray;
+        box-shadow: @brand-shadow_default;
+
+        &.active {
+            display: inline-block;
+        }
+
+        &.orientTop {
+            top: auto;
+            bottom: 40px;
+        }
+
+        .btn {
+            font-size: 1em;
+            display: block;
+
+            &[disabled] {
+                color: @brand-color_link-disabled;
+            }
+        }
+    }
+
+    &__details {
+        display: inline-block;
+        margin-top: 15px;
+
+        .btn-group {
+            .btn-default {
+                padding-top: @brand-padding_xs;
+                padding-bottom: @brand-padding_xs;
+
+                .fa-ellipsis-h {
+                    transform: translate(0,2px);
+                }
+            }
+
+            .dropdown-menu {
+                .fa {
+                    margin-right: @brand-margin_sm;
+                }
+            }
+        }
+
+        > span:not(:last-child), > button:not(:last-child) {
+            border-right: 1px solid @brand-color_dark-gray;
+        }
+    }
+
+    &__title {
+        display: inline-block;
+        padding: 6px;
+        font-weight: 700;
+
+        &.lg {
+            font-size: 2em;
+        }
+    }
+
+    .tp_CaldColor {
+        color: #2899b6;
+        cursor: pointer;
+    }
+
+    &__appt {
+        .btn-primary {
+            padding-top: @brand-padding_xs;
+            padding-bottom: @brand-padding_xs;
+
+            .fa {
+                margin-right: @brand-margin_sm;
+            }
+        }
+    }
+
+    &__edit {
+        .btn;
+        .btn-link;
+        font-size: 1.2em;
+        margin: -@brand-margin_xs 0px 0px @brand-margin_xs;
+        padding: 0;
+    }
+
+    &__actions {
+        display: inline-block;
+        float: right;
+        text-align: right;
+    }
+
+    &__delete,
+    &__moveUp,
+    &__moveDown {
+        .btn;
+        .btn-link;
+    }
+
+    &__listHead {
+        .clearfix;
+        padding: 0 12px 6px 12px;
+        background-color: @brand-color_white;
+        border-bottom: 1px solid @brand-color_gray;
+
+        .desc,
+        .tooth,
+        .area,
+        .provider,
+        .fee {
+            display: inline-block;
+            box-sizing: border-box;
+            padding-right: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transform: translateY(6px);
+        }
+
+        .desc {
+            width: 50%;
+            text-align: left;
+        }
+
+        .tooth,
+        .area {
+            width: 10%;
+        }
+
+        .provider {
+            width: 15%;
+        }
+    }
+
+    &__body {
+        position: relative;
+
+        .ellipsisMenu {
+            position: absolute;
+            right: 0;
+            transform: translateY(-50%);
+        }
+    }
+
+    &__options {
+        .btn;
+        .btn-default;
+        transform: translateY(60%);
+        margin-bottom: @brand-margin_lg;
+    }
+
+    &__footer {
+        .clearfix;
+        padding: 10px;
+
+        .btn {
+            float: left;
+            margin-right: @brand-margin_sm;
+        }
+    }
+
+    &__totals {
+        position: relative;
+        width: 50%;
+        float: right;
+        margin-top: @brand-margin_sm;
+    }
+
+    &__totalItem {
+        text-align: right;
+    }
+
+    &__grid {
+        padding-left: 0;
+
+        .fa-check-circle {
+            color: @current-color;
+            margin-right: @brand-margin_xs;
+        }
+    }
+
+    &__insInfo {
+        cursor: pointer;
+        margin-left: @brand-margin_sm;
+    }
+
+    &__plannedSvcDesc {
+        float: left;
+        width: 85%;
+    }
+
+    .utilCheckbox {
+        line-height: 1px;
+    }
+
+    .utilCheckbox__ctrl {
+        padding: 0;
+    }
+
+    .utilCheckbox__label {
+        overflow: inherit;
+        color: #2DABCB;
+
+        &.active::before {
+            content: '\f00c';
+            margin-right: 0;
+            color: white;
+            background-color: #2DABCB;
+            font-size: 1em;
+            padding: 1px;
+            border-radius: 2px;
+        }
+    }
+
+    &__addServicesBtn {
+        padding: 6px;
+        vertical-align: baseline;
+    }
+}
+
+.txPlanPart .stage-text-tile-display {
+    margin-top: 0px;
+}
+
+.txPlanPart .description-column-tile-display {
+    width: 120px;
+}
+
+.txPlanPart .normal-column-tile-display {
+    width: 55px;
+}
+
+.txPlanPart .button-column-tile-display {
+    width: 30px;
+}
+
+.txPlanPart .treatment-plan-service-row th {
+    height: 50px;
+    vertical-align: bottom;
+}
+
+.txPlanPart .treatment-plan-service-row .tx-row {
+    height: 50px;
+    vertical-align: middle;
+}
+
+.txPlanPart .treatment-plan-service-footer-row td{
+    height: 50px;
+    font-weight: 700;
+}
+
+.txPlanPart .grid-column-checkbox {
+    width: 50px;
+}
+.txPlanPart .grid-column-desc {
+    min-width: 120px;
+}
+
+.txPlanPart .grid-column-teeth {
+    width: 50px;
+}
+
+.txPlanPart .grid-column-surface {
+    width: 65px;
+}
+
+.txPlanPart .grid-column-status {
+    width: 85px;
+}
+
+.txPlanPart .grid-column-provider {
+    width: 132px;
+}
+
+.txPlanPart .grid-column-location {
+    width: 95px;
+}
+
+.txPlanPart .grid-column-money {
+    width: 85px;
+    min-width: 85px;
+}
+
+.txPlanPart .grid-column-tooltip {
+    padding-left: 0px;
+    width: 15px;
+}
+
+.txPlanPart .grid-column-icons {
+    width: 26px;
+}
+
+.txPlanPart .grid-column-options {
+    width: 34px;
+}
+
+.txPlanPart .delete-stage-btn {
+    margin-bottom: 8px;
+}
+
+.txPlanPart .text-table-column {
+    word-break: break-word;
+}
+
+.txPlanPart .check-box-spacing .utilCheckbox__label {
+    padding-top: 4px;
+}
+
+.txPlanTooltip {
+    width: 100%;
+    display: table;
+
+    &__title {
+        width: 50%;
+        display: table-cell;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    &__content {
+        display: table-cell;
+        text-align: left;
+    }
+
+    &__row {
+        display: table-row;
+    }
+}
+
+.stage-select-all-checkbox {
+    font-weight: 400;
+}
+
+
+/* Tooltip fix for firefox */
+@-moz-document url-prefix() {
+    .tooltipWidth .tooltip-inner {
+        width: 150%;
+        text-wrap: none;
+    }
+}
+/* need to figure out if we want to do this or not. Might make sense for larger monitors.*/
+/*@media all and (min-width: 1800px) {
+    .txPlanPart {
+        .optional-no-wrap {
+            white-space: nowrap;
+        }
+    }
+}*/

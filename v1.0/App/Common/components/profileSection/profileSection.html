@@ -1,0 +1,51 @@
+﻿<!-- ***************************************
+// This file is obsolete, has been migrated to Angular and is only here for reference
+// Please see src\@shared\components\profile-section\profile-section.component.html for the new version
+// ***************************************
+ -->
+
+<!-- <div class="profile-section">
+    <div class="panel" ng-class="{inactive: inactive}" ng-if="layout==1">
+        <div class="panel-heading">
+            <div class="panel-title" >
+                <h4>{{ sectionTitle | i18n  }} <span>{{count | i18n}}</span> </h4>
+             </div>
+             <div class="panel-btn">
+                <span id="imgTabIconRight" ng-if="showNoAccountIcon" class="glyphicon margin-right-5 error glyphicon-exclamation-sign"></span>
+                <span ng-repeat="action in actions">
+                <a ng-if="action.Path > ''" id="{{ baseId }}Link{{$index}}" ng-href="{{ action.Path }}" class="btn btn-default" ng-disabled="inactive" check-auth-z="{{action.amfa}}">
+                    {{ action.Text | i18n  }}
+                </a>
+                <button ng-if="!action.Path > '' && action.Function" id="{{ baseId }}Link{{$index}}" ng-click="action.Function()" class="btn btn-default" ng-disabled="inactive || action.Inactive===true" title="{{action.toolTip | i18n}}" check-auth-z="{{action.amfa}}">
+                    {{ action.Text | i18n  }}
+                </button>
+                </span>
+             </div>
+            </div>
+        <div class="panel-body">
+            <div ng-transclude>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="panel padding-top-10" ng-class="{inactive: inactive}" ng-if="layout==2">
+        <div class="">
+            <div class="panel-btn padding-bottom-8">
+                <span id="imgTabIconRight" ng-if="showNoAccountIcon" class="glyphicon margin-right-5 error glyphicon-exclamation-sign"></span>
+                <span ng-repeat="action in actions">
+                    <a ng-if="action.Path > ''" id="{{ baseId }}Link{{$index}}" ng-href="{{ action.Path }}" class="btn btn-primary" ng-disabled="inactive" check-auth-z="{{action.amfa}}">
+                        {{ action.Text | i18n  }}
+                    </a>
+                    <button ng-if="!action.Path > '' && action.Function" id="{{ baseId }}Link{{$index}}" ng-click="action.Function()" class="btn btn-primary" ng-disabled="inactive || action.Inactive===true" title="{{action.toolTip | i18n}}" check-auth-z="{{action.amfa}}">
+                        {{ action.Text | i18n  }}
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div ng-transclude>
+            </div>
+        </div>
+    </div>
+</div> -->

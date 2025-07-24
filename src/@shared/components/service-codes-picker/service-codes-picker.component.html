@@ -1,0 +1,127 @@
+﻿<div id="modalSelectServiceCode" class="srcvCodePicker">
+    <!--Service Codes-->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label font-24">{{ 'Service Codes' | translate }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Input Box-->
+    <div class="col-md-9">
+        <div class="form-group">
+            <div class="inner-addon right-addon">
+                <input class="form-input border-solid color-dodgerblue"
+                       id="searchBoxServiceCodes"
+                       placeholder="{{'Search service code, CDT code, descriptions, fee...'| translate}}"
+                       type="text"
+                       [(ngModel)]="searchServiceCodesKeyword"
+                       (ngModelChange)="onsearchServiceCodesKeywordChange()" />
+                <span class="glyphicon glyphicon-search col-xs-1"></span>
+            </div>
+
+        </div>
+    </div>
+    <div class="serv-code-picker">
+        <!--Table Header-->
+        <div class="col-md-12 serv-table-header">
+            <table id="tableServiceCodes" class="table table-striped border-solid-black table-hover">
+                <thead>
+                    <tr class="blue">
+                        <td id="tdSelect" class="serv-button">
+                            <div class="pull-left">
+                                <button id="lblAddServiceCodes" class="btn btn-primary" (click)="onSelectedCodes()">{{ '+ Add Services' | translate }}</button>
+                            </div>
+                        </td>
+                        <td id="tdServiceCode" class="serv-field serv-code">
+                            <div id="columnServiceCode" class="color-dodgerblue cursor-pointer row" (click)="changeSortingForGrid('Code')">
+                                <div class="col-md-11">{{'Service Code' | translate}}</div>
+                                <column-sort [sortField]="orderBy.field" [col]="'Code'" [asc]="orderBy.asc"></column-sort>
+                            </div>
+                        </td>
+                        <td id="tdCdtCode" class="serv-field serv-cdt">
+                            <div id="columnCdtCode" class="color-dodgerblue cursor-pointer row" (click)="changeSortingForGrid('CdtCodeName')">
+                                <div class="col-md-11">{{'CDT Code' | translate}}</div>
+                                <column-sort [sortField]="orderBy.field" [col]="'CdtCodeName'" [asc]="orderBy.asc"></column-sort>
+                            </div>
+                        </td>
+                        <td id="tdDescription" class="serv-field serv-desc">
+                            <div id="columnDescription" class="color-dodgerblue cursor-pointer row" (click)="changeSortingForGrid('Description')">
+                                <div class="col-md-11">{{'Description' | translate}}</div>
+                                <column-sort [sortField]="orderBy.field" [col]="'Description'" [asc]="orderBy.asc"></column-sort>
+                            </div>
+                        </td>
+                        <td id="tdServiceType" class="serv-field serv-type">
+                            <div id="columnServiceType" class="color-dodgerblue cursor-pointer row" (click)="changeSortingForGrid('ServiceTypeDescription')">
+                                <div class="col-md-11">{{'Service Type' | translate}}</div>
+                                <column-sort [sortField]="orderBy.field" [col]="'ServiceTypeDescription'" [asc]="orderBy.asc"></column-sort>
+                            </div>
+                        </td>
+                        <td id="tdMasterFee" class="serv-field serv-fee">
+                            <div id="columnMasterFee" class="color-dodgerblue cursor-pointer row" (click)="changeSortingForGrid('Fee')">
+                                <div class="col-md-9">{{'Fee' | translate}}</div>
+                                <column-sort [sortField]="orderBy.field" [col]="'Fee'" [asc]="orderBy.asc"></column-sort>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!--Table-->
+        <div class="scroll-y-400 col-md-12">
+            <table *ngIf="filteredServiceCodes?.length" id="tableServiceCodes" class="table table-striped border-solid-black table-hover">
+                <tbody>
+                    <tr *ngFor="let serviceCode of filteredServiceCodes | orderBy: {sortColumnName: orderBy.field, sortDirection: orderBy.asc}; index as i">
+                        <td id="tdActionButtons{{i}}" class="serv-button">
+                            <div>
+                                <div *ngIf="!serviceCode.IsActive" class="serviceCodeIconDiv">
+                                    <div  class="icon-hovertip active-icon">
+                                        <i class="fa fa-exclamation-triangle inactive-service-warning" aria-hidden="true"></i>
+                                        <span class="icon-hovertiptext">Inactive as of {{serviceCode.InactivationDate|date:'MM/dd/yyyy'}}</span>
+                                    </div>
+                                </div>
+                                <button id="quickAdd{{i}}" [disabled]="quickAddStatus()" (click)="quickAddService(serviceCode)" class="btn btn-link ng-binding width-70-percent">+ quick add</button>
+                                <input class="width-15-percent serv-checkbox" id="chkServiceCode{{i}}" type="checkbox" (change)="selectedService($event, serviceCode)" />
+                                
+                            </div>
+                        </td>
+                        <td id="tdCode{{i}}" class="serv-field serv-code preserve-white-space overflow-hidden media-middle"
+                            [title]="serviceCode.Code"
+                            [innerHTML]="serviceCode?.Code | boldTextIfContains: searchServiceCodesKeyword">
+                        </td>
+                        <td id="tdCdtCodeName{{i}}" class="serv-field serv-cdt overflow-hidden"
+                            [title]="serviceCode.CdtCodeName"
+                            [innerHTML]="serviceCode?.CdtCodeName | boldTextIfContains: searchServiceCodesKeyword">
+                        </td>
+                        <td id="tdDescription{{i}}" class="serv-field serv-desc preserve-white-space overflow-hidden"
+                            [title]="serviceCode.Description"
+                            [innerHTML]="serviceCode?.Description | boldTextIfContains: searchServiceCodesKeyword| truncateText: 65">
+                        </td>
+                        <td id="tdServiceTypeDescription{{i}}"
+                            class="serv-field serv-type preserve-white-space overflow-hidden"
+                            [title]="serviceCode.ServiceTypeDescription"
+                            [innerHTML]="serviceCode?.ServiceTypeDescription  | boldTextIfContains: searchServiceCodesKeyword| truncateText: 35">
+                        </td>
+                        <td id="tdFee{{i}}"
+                            class="serv-field serv-fee overflow-hidden"
+                            [title]="serviceCode.$$locationFee | currency"
+                            [innerHTML]="serviceCode?.$$locationFee | currency">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--Error Message For No Results-->
+        <div class="row">
+            <div class="col-md-12">
+                <div *ngIf="serviceCodes?.length==0 || filteredServiceCodes?.length==0" id="noresult">
+                    <no-results [loadingMessage]="loadingMessageNoResults" [loading]="loadingServices"
+                                [filtering]="filteringServices" [filteringMessage]="filteringMessageNoResults"></no-results>
+                </div>
+            </div>
+        </div>
+     
+    </div>
+</div>

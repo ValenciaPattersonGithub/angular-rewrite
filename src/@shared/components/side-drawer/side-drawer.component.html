@@ -1,0 +1,7 @@
+<div [ngClass]="['side-drawer', isOpen ? 'open' : '', 'side-drawer-anchor-' + anchor, isPartialAxis ? 'partial' : '']"
+     [style.height]="heightStyle" 
+     [style.width]="widthStyle" 
+     [style.margin]="marginStyle"
+     role="dialog">
+    <ng-content></ng-content>
+</div>

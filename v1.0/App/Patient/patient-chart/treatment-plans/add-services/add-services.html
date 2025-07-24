@@ -1,0 +1,71 @@
+﻿<div class="addTxPlanServices">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4>{{ title }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="addTxPlanServices__content panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!--proposed service -->
+                    <span class="font-18">{{ 'Add Services From:' | i18n }} </span>
+                    <button id="proposedServiceBtn" class="btn btn-default"
+                            ng-click="showProposedFlyout()"
+                            check-auth-z="soar-clin-cplan-edit"
+                            ng-show="!isNewTreatmentPlan">
+                        <span>{{ 'Proposed' | i18n }}</span>
+                        <i id="iDefaultMessage" ng-show="dataLoadingProposed.loading" class="fa fa-spinner fa-spin loading"></i>
+                    </button>
+                    <button id="txplanbtn" class="btn btn-default" 
+                            ng-click="showTxPlansFlyout()" 
+                            check-auth-z="soar-sch-apt-svcs" 
+                            ng-show="isEncounterServices">
+                        <span>{{ ::('Treatment Plans'|i18n) }}</span>
+                    </button>
+                    <!--preventive service-->
+                    <button id="prevcareBtn" class="btn btn-default"
+                            ng-click="showPreventiveFlyout()"
+                            check-auth-z="soar-clin-cplan-edit">
+                        <!--TODO!! Due date must be localized-->
+                        <span>{{ 'Preventive Care' | i18n }} {{(preventiveDate.dueDate) ? preventiveDate.dueDate : '(Due NA)' | date : "(Due MM/dd/yyyy)" }}</span>
+                        <i id="iDefaultMessage" ng-show="dataLoadingPreventive.loading" class="fa fa-spinner fa-spin loading"></i>
+                    </button>
+                    <!--new service-->
+                    <button id="newServiceBtn" class="btn btn-default ng-binding"
+                            ng-click="showServiceFlyout()"
+                            check-auth-z="soar-clin-cplan-edit">
+                        <span>{{ 'New' | i18n }}</span>
+                        <i ng-show="dataLoadingNewService.loading" class="fa fa-spinner fa-spin loading"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row" ng-if="modalRendered" ng-cloak>
+                <proposed-selector patient="patient" flyout="true" service-filter="{{serviceFilter}}" add-selected-services="addProposedServices" loading-check="dataLoadingProposed" services-added="servicesAdded" services-on-plan="proposedServicesOnPlan"></proposed-selector>
+                <treatment-selector id="txEstInsNotPassed" ng-if="patient!=null && !passInTxEstIns" include-est-ins="false" chosen-location="locationChosen" patient="patient" flyout="true" service-filter="{{serviceFilter}}" add-selected-services="addTxPlanServices" services-added="servicesAdded" loading-check="dataLoadingTreatment" ></treatment-selector>
+                <treatment-selector id="txEstInsPassed" ng-if="patient!=null && passInTxEstIns" include-est-ins="true" chosen-location="locationChosen" patient="patient" flyout="true" service-filter="{{serviceFilter}}" add-selected-services="addTxPlanServicesWithEstIns" services-added="servicesAdded" loading-check="dataLoadingTreatment"></treatment-selector>
+                <service-selector-refactor patient="patient" flyout="true" service-filter="{{serviceFilter}}" add-selected-services="addNewServices" loading-check="dataLoadingNewService" service-codes="services"></service-selector-refactor>
+                <!--preventive care services directive note appointment service filter determines correct sizing of grid-->
+                <preventive-care-selector data="preventiveCareServices" flyout="true" service-filter="{{serviceFilter}}" add-selected-services="addPreventiveServices" loading-check="dataLoadingPreventive" due-date="preventiveDate"></preventive-care-selector>
+
+            </div>
+        </div>
+    </div>
+    <div class="addTxPlanServices__footer">
+        <div class="addTxPlanServices__btn">
+            <button class="btn btn-primary" type="button" ng-click="close()">{{ 'Close' | i18n }}</button>
+        </div>
+    </div>
+    <!--Layout for kendo window charting controls-->
+    <div class="chartingControls__activeLayout">
+        <div kendo-window="toothCtrls"
+             k-title="'Tooth Controls'"
+             k-visible="false"
+             k-on-open="toothCtrlsOpen = true"
+             k-on-close="toothCtrlsOpen = false"
+             id="toothCtrlsWindowTxPlan">
+        </div>
+    </div>
+</div>

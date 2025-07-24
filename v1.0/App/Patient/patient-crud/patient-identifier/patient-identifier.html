@@ -1,0 +1,17 @@
+﻿<div id="AdditionalIdentifierSection" class="patientIdentifier" ng-show="!loading" ng-form="frmAdditionalIdentifier">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-6" ng-repeat="item in person.patientIdentifierDtos  | orderBy : 'Description'">
+                <label for="{{item}}" style="margin-right:2px">
+                    {{item.Description | i18n}}
+                </label>
+              
+                <input ng-if="!item.IsSpecifiedList" type="text" maxlength="100" class="form-control" id="{{MasterPatientIdentifierId}}"
+                    placeholder="{{item.Description | i18n }}" ng-model="item.Value">
+                <soar-select-list ng-if="item.IsSpecifiedList" id="lstSpecifiedList" name="lstSpecifiedList" class-name="form-control" text-field="Text"
+                    value-field="Value" option-list="item.SpecifiedListValuesDropdown" ng-model="item.Value" placeholder="{{ 'Select Identifier' | i18n }}"></soar-select-list>
+                    <div class="clearfix">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+</div>

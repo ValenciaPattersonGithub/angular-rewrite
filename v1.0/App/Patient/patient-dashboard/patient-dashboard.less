@@ -1,0 +1,106 @@
+﻿// #region Dashboard Header 
+.dashboard {
+    padding: 15px 40px 0 20px;
+}
+
+.dashboard-header {
+    border: 1px solid @dashboard-header-border-color;
+    height: @dashboard-header-height;
+    overflow-y: hidden;
+}
+
+.dashboard-header-info {
+    padding: 5px 10px 5px 10px;
+    height: @dashboard-header-height;
+}
+
+.dashboard-header-info-name {
+    font-size: 18px;
+    margin: 0;
+}
+
+.dashboard-header-media-icon {
+    width: 100px;
+    margin-right: 5px;
+
+    > i {
+        font-size: 90px;
+    }
+
+    > button {
+        border: 1px solid @gray;
+        background: @gray-lighter;
+        font-weight: bold;
+    }
+}
+
+.dashboard-header-media-body {
+    padding: 0 0 0 5px;
+    font-size: 12px;
+
+    > p {
+        margin: 0;
+    }
+}
+
+.dashboard-header-alerts {
+    border-left: 1px solid @gray-lighter;
+    border-right: 1px solid @gray-lighter;
+    height: @dashboard-header-height;
+}
+
+.dashboard-header-alerts-header {
+    padding: 5px 10px 5px 10px;
+    border-bottom: 1px solid @gray-lighter;
+
+    > label {
+        margin: 0;
+    }
+}
+
+.dashboard-header-alerts-body {
+    
+    > ul {
+        height: @dashboard-header-body-ul-height;
+        padding: 0;
+        overflow-y: scroll;   
+        margin-bottom: 5px;    
+
+        > li {
+            list-style: none;
+            border-bottom: 1px solid @gray-lighter;
+            padding: 5px;
+            font-size: 12px;
+        }
+    }
+}
+
+.dashboard-header-alerts-item-expire {
+    width: 64px;
+    font-size: 10px;
+}
+
+.dashboard-header-alerts-button {
+    position: relative;
+    width: 97%;
+    margin: 0 0 4px 5px;
+    padding: 0;
+    border-radius: 0;
+    background: @gray-dark;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+
+    &:hover {
+        background: @gray-lighter;
+        color: @gray-dark;
+    }
+}
+
+.dashboard-header-contacts-address {
+    > p {
+        margin: 0;
+    }
+}
+
+// #endregion

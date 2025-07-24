@@ -1,0 +1,73 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.FeeSchedules.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.IsBenefitPlanIncluded && data.FeeSchedules.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-3 cell">{{'Fee Schedule' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Benefit Plan' | i18n}}</th>
+                    <th class="col-sm-3 cell">{{'Patient Name' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Patient Code' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Location' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="feeschedule in data.FeeSchedules" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-3 cell">{{feeschedule.FeeScheduleName}}</td>
+                    <td class="col-sm-2 cell">{{feeschedule.BenefitPlans[0].BenefitPlanName}}</td>
+                    <td class="col-sm-3 cell">{{feeschedule.BenefitPlans[0].Patients[0].PatientName}}</td>
+                    <td class="col-sm-2 cell">{{feeschedule.BenefitPlans[0].Patients[0].PatientCode}}</td>
+                    <td class="col-sm-2 cell">{{feeschedule.BenefitPlans[0].Patients[0].PreferredLocationName}}</td>
+                </tr>
+                <tr ng-repeat="patient in feeschedule.BenefitPlans[0].Patients | startFrom : 1">
+                    <td class="col-sm-5 cell" colspan="2"></td>
+                    <td class="col-sm-3 cell">{{patient.PatientName}}</td>
+                    <td class="col-sm-2 cell">{{patient.PatientCode}}</td>
+                    <td class="col-sm-2 cell">{{patient.PreferredLocationName}}</td>
+                </tr>
+                <tr ng-repeat-start="benefitPlan in feeschedule.BenefitPlans| startFrom : 1">
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-2 cell">{{benefitPlan.BenefitPlanName}}</td>
+                    <td class="col-sm-3 cell">{{benefitPlan.Patients[0].PatientName}}</td>
+                    <td class="col-sm-2 cell">{{benefitPlan.Patients[0].PatientCode}}</td>
+                    <td class="col-sm-2 cell">{{benefitPlan.Patients[0].PreferredLocationName}}</td>
+                </tr>
+                <tr ng-repeat-end ng-repeat="pat in benefitPlan.Patients | startFrom : 1">
+                    <td class="col-sm-5 cell" colspan="2"></td>
+                    <td class="col-sm-3 cell">{{pat.PatientName}}</td>
+                    <td class="col-sm-2 cell">{{pat.PatientCode}}</td>
+                    <td class="col-sm-2 cell">{{pat.PreferredLocationName}}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="!data.IsBenefitPlanIncluded && data.FeeSchedules.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-3 cell">{{'Fee Schedule' | i18n}}</th>
+                    <th class="col-sm-3 cell">{{'Patient Name' | i18n}}</th>
+                    <th class="col-sm-3 cell">{{'Patient Code' | i18n}}</th>
+                    <th class="col-sm-3 cell">{{'Location' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="feeschedule in data.FeeSchedules" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-3 cell">{{feeschedule.FeeScheduleName}}</td>
+                    <td class="col-sm-3 cell">{{feeschedule.Patients[0].PatientName}}</td>
+                    <td class="col-sm-3 cell">{{feeschedule.Patients[0].PatientCode}}</td>
+                    <td class="col-sm-3 cell">{{feeschedule.Patients[0].PreferredLocationName}}</td>
+                </tr>
+                <tr ng-repeat="patient in feeschedule.Patients | startFrom : 1">
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-3 cell">{{patient.PatientName}}</td>
+                    <td class="col-sm-3 cell">{{patient.PatientCode}}</td>
+                    <td class="col-sm-3 cell">{{patient.PreferredLocationName}}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

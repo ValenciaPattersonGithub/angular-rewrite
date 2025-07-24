@@ -1,0 +1,35 @@
+<!-- This makes the selector hoverable -->
+<div *ngIf="!isClickable" id="dropdown" class="dropdown" (mouseover)="setOpenStatus(true)" (mouseleave)="setOpenStatus(false)">
+    <button id="btnDropDown" (blur)="setOpenStatus(false)" (click)="clickDropDown($event)">
+        <span id="selectedIcon" class="selectedIcon"><i class="fas {{selectedIcon}}"></i></span>
+        <span id="selectedDescription" class="selectedDescription">{{selectedValue}}</span>
+        <span id="expandIcon" *ngIf="selectedValue !== 'Schedule'"><svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="visible" preserveAspectRatio="none" viewBox="0 0 20 15" width="18" height="18"><g><path xmlns:default="http://www.w3.org/2000/svg" d="M7 10l5 5 5-5z" style="fill: rgb(45, 171, 203);" vector-effect="non-scaling-stroke" /></g></svg></span>
+    </button>
+    <div id="dropdownListBox" class="dropdownListBox" *ngIf="isOpen">
+        <div [ngClass]="{'active': selectedValue === statusListValue.description,'noClick': statusListValue.disabled == true}" (mousedown)="clickSelectItem(statusListValue,$event)" *ngFor="let statusListValue of statusListModel let i=index" id="dropdownListItems" [(ngModel)]="statusListModel" ngDefaultControl>
+            <span id="listItemData" class="listItemData">
+                <span id="icon" *ngIf="statusListValue.description !== 'Schedule' && statusListValue.description !== 'Unschedule' && statusListValue.description !== 'Add to Clipboard'" class="icon iconCircle"><i class="fa {{statusListValue.icon}} ml3"></i></span>
+                <span id="description" class="description">{{statusListValue.description}}</span>
+            </span>
+            <div *ngIf="statusListValue.description == 'Confirmed' || statusListValue.description == 'Start Appointment'" class="groupSeperator"></div>
+        </div>
+    </div>
+</div>
+
+<!-- This makes the selector clickable -->
+<div *ngIf="isClickable" id="dropdown" class="dropdown">
+    <button id="btnDropDown" (blur)="setOpenStatus(false)" (click)="btnClick()">
+        <span id="selectedIcon" class="selectedIcon"><i class="fas {{selectedIcon}}"></i></span>
+        <span id="selectedDescription" class="selectedDescription">{{selectedValue}}</span>
+        <span id="expandIcon" *ngIf="selectedValue !== 'Schedule'"><svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="visible" preserveAspectRatio="none" viewBox="0 0 20 15" width="18" height="18"><g><path xmlns:default="http://www.w3.org/2000/svg" d="M7 10l5 5 5-5z" style="fill: rgb(45, 171, 203);" vector-effect="non-scaling-stroke" /></g></svg></span>
+    </button>
+    <div id="dropdownListBox" class="dropdownListBox" *ngIf="isOpen">
+        <div [ngClass]="{'active': selectedValue === statusListValue.description,'noClick': statusListValue.disabled == true}" (mousedown)="clickSelectItem(statusListValue,$event)" *ngFor="let statusListValue of statusListModel let i=index" id="dropdownListItems" [(ngModel)]="statusListModel" ngDefaultControl>
+            <span id="listItemData" class="listItemData">
+                <span id="icon" *ngIf="statusListValue.description !== 'Schedule' && statusListValue.description !== 'Unschedule' && statusListValue.description !== 'Add to Clipboard'" class="icon iconCircle"><i class="fa {{statusListValue.icon}} ml3"></i></span>
+                <span id="description" class="description">{{statusListValue.description}}</span>
+            </span>
+            <div *ngIf="statusListValue.description == 'Confirmed' || statusListValue.description == 'Start Appointment'" class="groupSeperator"></div>
+        </div>
+    </div>
+</div>

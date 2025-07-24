@@ -1,0 +1,189 @@
+﻿// #region Alerts
+.alerts-container {
+    height: 200px;
+    width: 100%;
+    background: @gray-lightest;
+    border-left: 1px solid @gray-lighter;
+    border-right: 1px solid @gray-lighter;
+    border-bottom: 1px solid @gray-lighter;
+    padding: 10px 30px 10px 30px;
+    overflow: hidden;
+}
+
+.alerts-item {
+    float: left;
+    margin-right: 5px;
+    height: 180px;
+    width: 300px;
+    background: #fff;
+    border: 1px solid @gray-lighter;    
+}
+
+.alerts-item-symbol {
+    top: 4px;
+    position: relative;
+    font-size: 40px;
+}
+
+.alerts-item-small {
+    margin: .5em 0;
+
+    > div {
+        clear: left;
+        font-size: 20px;
+        width: 20px;
+        margin-right: 5px;
+    }
+}
+
+.alerts-item-remove {
+    font-size: 24px;
+}
+
+.alert-remove-message {
+    border-radius: 2px;
+    background-color: #eeeeee;
+	border: thin solid;
+    padding: 10px;
+}
+
+
+.alerts-item-top {
+    height: 50px;
+    width: 100%;
+    padding-right: 5px;
+    padding-left: 10px;
+}
+
+.alerts-item-mid {
+    height: 50px;
+    width: 100%;
+    padding: 0 20px 0 20px;
+    text-align: left;
+
+    > p {
+        margin: 0;
+    }
+}
+
+.alerts-item-bot {
+    height: 80px;
+    width: 100%;
+    text-align: left;
+}
+
+.alerts-item-desc {
+    border: 1px solid @gray-lighter;
+    background: @gray-lightest;
+    margin: 0 10px 0 10px;
+    padding: 0 5px 0 5px;
+    height: 70px;
+    text-align: left;
+    overflow-y: scroll;
+}
+
+.alerts-header-subject {
+    font-size: 18px; 
+
+    > i {
+        font-size: 20px;
+        position: relative;
+        top: 2px;
+    }
+}
+
+.alerts-master-container {
+    border: 1px solid @gray;
+    height: 350px;
+    background: @gray-lightest;
+    padding: 20px;
+}
+
+.alerts-dropdown-btn {
+    width: 100%;
+
+    > button {
+        width: 100%;
+        text-align: left;
+        white-space: normal;
+
+        > .caret {
+            float: right;
+            margin-top: 7px;
+        }
+    }        
+}
+
+.alerts-dropdown {
+    background-color: #fff;
+    padding: 10px 15px 10px 10px;
+    font-size: 14px;
+    width: 100%;
+    border: 1px solid @form-dropdown-border-color;
+    box-shadow: inset 0 1px 0 @form-box-color;
+}
+
+.alerts-dropdown-menu {
+    width: 100%;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0;
+}
+
+.alerts-custom-container {
+    border: 1px solid @gray;
+    background: @gray-lighter;
+    padding: 20px;
+}
+
+.alerts-input-container {
+    > input {
+        width: 100%;
+        padding: 5px;
+    }
+    
+    > i {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+}
+
+.alerts-textarea {
+    width: 100%;
+    height: 100px;
+    resize: none;
+}
+
+.alerts-btn {
+    height: 35px;
+    width: 100%;
+    margin-right: 10px;
+    color: #fff;
+    border: transparent;
+}
+
+.alerts-btn-save {
+    background: @gray;
+}
+
+.alerts-btn-cancel {
+    background: @gray-light;
+}
+
+.alerts-date-label {
+    position: relative;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+// #endregion

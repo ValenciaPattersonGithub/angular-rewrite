@@ -1,0 +1,191 @@
+@import 'variables';
+
+.patientLookup {
+    width: 100%;
+
+    .app-modal {
+        height: 100%;
+        display: grid;
+        grid-template: 40px 1fr auto / auto;
+        grid-template-areas: 'header' 'content' 'footer';
+    }
+
+    .app-modal-header {
+        grid-area: header;
+        font-size: $app-modal-header-font-size;
+        font-weight: $app-modal-header-font-weight;
+        font-family: $global-font-family;
+        border-bottom: $app-modal-header-border;
+        display: flex;
+        align-items: center;
+        padding-left: 15px;
+    }
+
+    .app-modal-body {
+        grid-area: content;
+        padding: 15px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .app-modal-footer {
+        grid-area: footer;
+        padding: 15px;
+        border-top: $app-modal-header-border;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .app-modal-bold-text {
+        font-weight: bold;
+    }
+
+    .app-modal-text {
+        font-weight: normal;
+    }
+
+    .options-container {
+        width: 100%;
+    }
+
+    .form-search-input-ctrls {
+        margin-bottom:15px;
+        > i {
+            position: absolute;
+            right: 20px;
+            top: 65px;
+            z-index: 1001;
+            font-size: 20px;
+        }
+
+        > input {
+            width: 100%;
+        }
+    }
+
+    .patientLookupGrid {
+        width: 100%;
+        margin: auto;        
+        min-height:440px;
+        max-height: 440px;
+        overflow-y: auto;
+        /*div {
+                background-color: yellow;
+            }*/
+
+        .actionBar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 0 10px 10px;
+        }
+
+        .patientLookupItemRow {
+            display: flex;
+            height: 40px;
+            justify-content: flex-start;
+            border-right: 1px solid $grid-separator-color;
+            border-left: 1px solid $grid-separator-color;
+            border-bottom: 1px solid $grid-separator-color;
+            line-height: 40px;
+            font-size: $grid-header-fontSize;
+
+            &.header {
+                border-top: 1px solid $grid-separator-color
+            }
+
+            .patientLookupGridHeader {
+                color: $action-blue;
+                font-size: $grid-header-fontSize;
+                font-weight: bold;
+            }
+
+            .patients, .genders, .ids, .addresss, .ages {
+                padding: 0px 10px;
+            }
+
+            .patients, .genders, .ids, .addresss {
+                border-right: 1px solid $grid-separator-color
+            }
+
+            .patients {
+                width: 625px;
+
+                .patientLookupGridHeaderFilterWrapper {
+                    position: relative;
+                    float: right;
+
+                    .neutral {
+                        position: absolute;
+                        top: 14px;
+                        right: 0px;
+                        display: inline-block;
+
+                        &.ascending {
+                            top: 7.5px;
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
+            }
+
+            .genders {
+                width: 75px;
+
+                .patientsPickerWrapper {
+                    padding: 7.5px 0px;
+                }
+            }
+
+            .ids {
+                width:75px;
+
+                .patientsPickerPreview {
+                    height: 30px;
+                    width: 30px;
+                    background-color: pink;
+                    margin: 5px;
+                }
+            }
+
+            .addresss {
+                width: 300px;
+
+                .patientsPickerWrapper {
+                    padding: 7.5px 0px;
+                }
+            }
+
+            .ages {
+                width: 75px;
+
+                .reset {
+                    color: $action-blue;
+                    cursor: pointer;
+
+                    &.disabled {
+                        color: $disabled-grey;
+                        cursor: no-drop;
+                    }
+                }
+            }
+
+            .even {
+                background-color: $page-content-grid-even-background;
+            }
+
+            .odd {
+                background-color: $page-content-grid-odd-background;
+            }
+        }
+
+        .selectedPatient {
+            color: $text-black;
+            background-color: $text-selection;
+        }
+
+        .listItem:hover {
+            color: $text-black;
+            background-color: $text-selection;
+        }
+    }
+}

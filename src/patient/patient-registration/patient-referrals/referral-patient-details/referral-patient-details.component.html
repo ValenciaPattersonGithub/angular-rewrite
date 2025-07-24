@@ -1,0 +1,99 @@
+<div class="add-referral-container" data-qa="add-referral-container">
+    <div class="popup_heading">
+        {{ title | translate }}
+    </div>
+    <hr class="patient-referral-crud-hr main-hr-spacing" data-qa="referral-type-crud-hr">
+    <div class="row">
+        <div class="patient-profile" data-qa="patient-profile">
+            <div class="patient-profile-initialsname-wrapper-badgeinitial" id="pd-initial">
+                <div class="initialBadge" id="pd-initialBadge">
+                    <div class="patientPhotoCover" *ngIf="profileDetails['hasImage']">
+                        <img class="patientPhoto" [src]="profileDetails['imageUrl']">
+                    </div>
+                    <div class="patientInitialsContainer" *ngIf="!profileDetails['imageUrl']">
+                        <span> {{profileDetails['patientInitials']}} </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="patient-profile-name row" data-qa="patient-profile-name">
+                {{profileDetails['patientName'] | translate}}
+            </div>
+            <div class="patient-profile-dob row" data-qa="patient-profile-dob">
+                <span>
+                    {{ 'D.O.B ' | translate }} {{ profileDetails['dateOfBirth'] | date:'MM/dd/yyyy'}}
+                </span>
+                <span class="patient-profile-age">
+                    {{ 'Age '|translate}} {{ profileDetails['dateOfBirth'] | age:profileDetails['dateOfBirth'] }}
+                </span>
+            </div>
+            <div class="patient-profile-details">
+                <div class="patient-profile-phone-label row">
+                    <label class="patient-profile-phone-details-value">{{'Phone' | translate }}<span
+                            *ngIf="profileDetails['isMobile']">{{ '(M) (Primary)' | translate }}</span>:</label>
+                    <label class="patient-profile-details-spacing">{{'Work Phone:' | translate }}</label>
+                </div>
+                <div class="patient-profile-phone-label row">
+                    <span class="patient-profile-phone-details-value" data-qa="patient-profile-phone">
+                        {{ profileDetails['phone'] | phoneNumber}}
+                    </span>
+                    <span data-qa="patient-profile-workphone">{{ profileDetails['workphone'] | phoneNumber}}</span>
+                </div>
+                <div class="patient-profile-label row">
+                    <label class="patient-profile-other-label">{{'Email:'|translate}}</label>
+                </div>
+                <div class="patient-profile-email-value row" data-qa="patient-profile-email">
+                    {{ profileDetails['email'] | translate}}
+                </div>
+                <hr class="patient-referral-crud-hr other-hr-spacing">
+                <div class="patient-profile-label row">
+                    <label class="patient-profile-details-value">{{'Gender:'|translate}}</label>
+                    <label> {{'Signature on File:'|translate}} </label>
+                </div>
+                <div class="patient-profile-label-value row">
+                    <span class="patient-profile-details-value" data-qa="patient-profile-gender">
+                        {{ profileDetails['gender'] | translate}}
+                    </span>
+                    <span class="patient-profile-details-spacing" data-qa="patient-profile-sign">
+                        {{ profileDetails['signatureOnFile'] | translate}}
+                    </span>
+                </div>
+                <div class="patient-profile-label row">
+                    <label class="patient-profile-details-value">{{'Responsible Party:'|translate}}</label>
+                    <label class="patient-profile-details-spacing">{{ 'Status:'|translate}} </label>
+                </div>
+                <div class="patient-profile-label-value row">
+                    <span class="patient-profile-details-value" data-qa="patient-profile-resparty">
+                        {{ profileDetails['responsibleParty'] | translate}}
+                    </span>
+                    <span class="patient-profile-details-spacing" data-qa="patient-profile-status">
+                        {{profileDetails['status'] | translate}}
+                    </span>
+                </div>
+                <div class="patient-profile-label">
+                    <label class="patient-profile-details-value">
+                        {{'Height & Weight:'|translate}}
+                    </label>
+                </div>
+                <div class="patient-profile-email-value row">
+                    <span data-qa="patient-profile-height-weight">
+                        {{ profileDetails['height'] | translate}} | {{ profileDetails['weight'] | translate}}lbs
+                    </span>
+                </div>
+                <hr class="patient-referral-crud-hr other-hr-spacing">
+                <div class="patient-profile-label">
+                    <label class="patient-profile-other-label">{{ 'Alerts:'|translate}}</label>
+                </div>
+                <div kendoTooltip position="top" tooltipClass="app-tooltip" data-qa="patient-profile-alerts"
+                    class="row patient-profile-label-value-alerts" id="alerts"
+                    title="{{ profileDetails['alerts']?.length > 60 ? profileDetails['alerts']  : '' | translate }}">
+                    {{ profileDetails['alerts']?.length>60 ?(profileDetails['alerts']|
+                    truncateText:60):profileDetails['alerts'] }}
+                </div>
+            </div>
+        </div>
+        <div class="referral-form-container">            
+            <patient-referral-crud></patient-referral-crud>
+        </div>
+    </div>
+</div>

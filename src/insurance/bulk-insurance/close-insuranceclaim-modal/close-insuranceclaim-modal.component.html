@@ -1,0 +1,147 @@
+<div class="closeClaimModal">
+    <div class="modal-header">
+            <div class="row">
+            <div class="col-xs-12">
+                    <h1>
+                    {{'Close Claim'| translate}}
+                    </h1>
+            </div>
+            </div>
+    </div>
+
+    <div class="closeClaim__body">
+            <div class="closeClaim__patientName" [hidden]="isFromInsurancePayment">
+            {{'Patient ' + patientName | translate}}
+            </div>
+            <div class="closeClaim__patientName" [hidden]="!isFromInsurancePayment">
+            {{claimInformationSummary}}
+            </div>
+                <div class="col-sm-12 row two-col mb">
+                        <div class="col-sm-6 border-right">
+                                <i id="idBalanceSpinner" *ngIf="!showEstInsurance" class="fa fa-spinner fa-spin loading"></i>
+                                <div class="closeClaim__formAgg" *ngIf="showEstInsurance" data-qa="--close-claim-est-ins">
+                                        <div class="form-inline col-sm-12">
+                                                <div class="header col-sm-12">Location Fee</div>
+                                                <div class="col-sm-12">
+                                                    <currency-input data-qa="close-claim-inp-est-total" id="inpEstimatedTotal" [(amount)]="totalEstimatedInsurance" [isDisabled]="'true'" ></currency-input>
+                                                </div>
+
+                                        </div>
+                                        <div class="form-inline col-sm-12 mb">
+                                                <div class="header col-sm-12">Total Paid</div>
+                                                <div class="col-sm-12">
+                                                    <currency-input data-qa="close-claim-inp-total-paid" id="inpLessTotalPaid" [(amount)]="estInsurancePaid" [isDisabled]="'true'" ></currency-input>
+                                                </div>
+                                        </div>
+                               
+                                         
+                                        <div class="form-inline col-sm-12 border-topgrey" >
+                                                <div class="header col-sm-12 mt">Unpaid Est. Ins.</div>
+                                                <div class="value col-sm-12">
+                                                    <currency-input data-qa="close-claim-inp-total-unpaid" id="totalUnpaidAmount" [(amount)]="totalUnpaidAmount" [isDisabled]="'true'" ></currency-input>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="col-sm-6 m-0">
+                                <div>
+                                     <app-check-box data-qa="close-claim-asgn-srv-curr-bal" [value]="updateAgingDates" [label]="'Assign services to current balance'" (checkChanged)="toggleAgingDates()"></app-check-box>
+                                </div>
+                                <div [hidden]="isFromInsurancePayment">
+                                        <app-check-box data-qa="close-claim-no-ins-pymnt" [value]="noInsurancePayment" [label]="'No insurance payment'" (checkChanged)="toggleInsurancePayment()"></app-check-box>
+                                </div>
+                                <div  [hidden]="!hideCancel">
+                                     <app-check-box data-qa="close-claim-recreate-claim" [value]="recreateClaimSelected" [label]="'Recreate Claim'" (checkChanged)="toggleRecreateClaimSelected()"></app-check-box>
+                                </div>
+
+                                <div>
+                                    <form [formGroup]="frm">
+                                        <div class="mt" *ngIf="recreateClaimSelected">
+                                            <label> {{ 'Would you like to:' | translate }} </label>
+                                            <app-radio-button data-qa="close-claim-rad-est-ins-opt1" id="inpEstimateInsuranceOption1" (change)="getEstimateInsuranceOption(true)" class="rgb" label="Estimate Insurance Based on Current Benefits" [value]="true" [checked]="this.estimateInsuranceOption===true" formControlName="radioOptions">
+                                            </app-radio-button>
+                                            <br>
+                                            <app-radio-button data-qa="close-claim-rad-est-ins-opt2" id="inpEstimateInsuranceOption2" (change)="getEstimateInsuranceOption(false)" class="rgb" label="Do Not Estimate Insurance" [value]="false" [checked]="this.estimateInsuranceOption===false" formControlName="radioOptions">
+                                            </app-radio-button>
+                                        </div>
+                                    </form>
+                                </div>
+                             
+                                <div>
+                                    <form [formGroup]="frm">
+                                            <div class="mt" *ngIf="!recreateClaimSelected">
+                                            <app-radio-button data-qa="close-claim-rad-claim-action-opt1" id="rc1" (change)="getClaimActionsOption('1')"  class="rgb" label="Apply amount unpaid back to the account" [value]="'1'" [checked]="this.claimActionsValue==='1'" formControlName="radioOptions" >
+                                            </app-radio-button>
+                                            <br>
+                                            <app-radio-button data-qa="close-claim-rad-claim-action-opt2" id="rc2" (change)="getClaimActionsOption('2')"  class="rgb" label="Apply a negative adjustment to the account" [value]="'2'" [checked]="this.claimActionsValue==='2'" formControlName="radioOptions">
+                                            </app-radio-button>
+                                            </div>
+                                    </form>
+                                </div> 
+
+                            
+                                
+                        </div>
+                        
+                </div>
+            <div class="row">
+            <div class="form-group col-sm-5">
+                <div class="header col-sm-12">Update Individual Deductible Remaining</div>
+                <div class="value col-sm-12">
+                        <currency-input data-qa="close-claim-ind-deduct-rem" id="indvDeductibleRemaining" 
+                        (amountChange)="validateIndvDeductible($event)" #indv allowNoValue="true"
+                        (amount)="amounts.individualDeductibleRemainingtemp" [amount]="0" [emitOnBlur]="true"
+                        [isDisabled]="patientBenefitPlansDto && patientBenefitPlansDto.length === 0" >
+                        </currency-input>
+                </div>
+
+            </div>
+            <div class="form-group col-sm-5">
+                <div class="header col-sm-12">Update Family Deductible Remaining</div>
+                <div class="value col-sm-12">
+                         <currency-input  data-qa="close-claim-fam-deduct-rem" id="familyDeductibleRemaining" (amountChange)="validateFamDeductible($event)" allowNoValue="true"
+                         (amount)="amounts.familyDeductibleRemainingtemp" [amount]="0" [emitOnBlur]="true"
+                         [isDisabled]="patientBenefitPlansDto && patientBenefitPlansDto.length === 0" >
+                        </currency-input>
+                </div>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-12">
+                    <span *ngIf="(patientBenefitPlan && individualDeductibleRemaining > patientBenefitPlan[0].PolicyHolderBenefitPlanDto.BenefitPlanDto.IndividualDeductible)" class="error help-text">{{'Individual Deductible Remaining may not be greater than the Individual Deductible of ' | translate}} {{patientBenefitPlan[0].PolicyHolderBenefitPlanDto.BenefitPlanDto.IndividualDeductible | currency}}</span>
+                    <span *ngIf="(patientBenefitPlan && familyDeductibleRemaining > patientBenefitPlan[0].PolicyHolderBenefitPlanDto.BenefitPlanDto.FamilyDeductible)" class="error help-text">{{'Family Deductible Remaining may not be greater than the Family Deductible of ' | translate}} {{patientBenefitPlan[0].PolicyHolderBenefitPlanDto.BenefitPlanDto.FamilyDeductible | currency}}</span>
+            </div>
+            </div>
+            
+            <div class="row">       
+            <div class="col-xs-12">
+                    <label for="inpClosingClaims">{{ 'Notes' | translate }}</label>
+                    <textarea  data-qa="close-claim-note" unique-id="closeClaimNotes" name="reason" rows="4" [(ngModel)]="note" maxlength="500"></textarea>
+            </div>
+    
+            </div>
+            <br/>
+            <div class="row">
+            <div class="col-sm-12">
+                    <div [hidden]="hideAppliedPaymentWarning" class="closeClaim__redColor">
+                    <span class="glyphicon glyphicon-warning-sign"></span><label>{{'This transaction has a payment or negative adjustment applied to it, deleting it will result in an unapplied amount.'|translate }}</label>
+                    </div>
+            </div>            
+            <div class="col-sm-12 error" *ngIf="showCloseClaimErrorMessage===true">
+                <div>
+                    <label class="error">{{'This claim failed to close successfully. '|translate }}</label>
+                </div>
+                <div>
+                    <label class="error">{{'Once the bulk payment is complete, please view and close this claim from the patient\'s
+                        account.'|translate }}</label>
+                </div>
+            </div>            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-link"  data-qa="close-claim-continue-btn" *ngIf="showContinueButton===true" [disabled]="closing" id="btnContinue" name="btnContinue" (click)="cancel()">{{'Continue' | translate}}</button>        
+        <button class="btn btn-link"  data-qa="close-claim-cancel-btn" *ngIf="!hideCancel" [disabled]="closing" id="btnClosePopUp" name="btnClosePopUp" (click)="cancel()">{{'Cancel' | translate}}</button>
+        <button class="btn btn-primary"  data-qa="close-claim-close-btn" (click)="closeClaim()" id="btnCloseClaim" name="btnCloseClaim" [disabled]="closing" *ngIf="showEstInsurance">{{closeClaimButtonName}}</button>
+    </div>
+</div>
+        

@@ -1,0 +1,141 @@
+@import 'variables';
+@import 'toolTip.scss';
+
+.patient-transaction-print {
+    margin: auto;
+    padding-top: 15px;
+
+    width: 96%;    
+    background-color: $polar-white;
+    background-size: cover;
+    font-family: $global-font-family;
+    font-size: 12px;
+
+    >table {  
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .center-content {
+        text-align: center;
+    }
+
+    .patient-header {
+        padding: 4px;
+        >td {            
+            padding: 4px;
+            align-items: center;
+            margin-left: 3px;
+        }
+    }
+
+    
+
+    .pull-right {
+        float: right;
+    }
+
+    .grid {
+        
+        
+        &.header {
+            border: 1px solid $grid-separator-color;
+            color: $action-blue;
+            font-weight: bold;
+            margin-top:10px;
+            >th {
+                border-right: 1px solid $grid-separator-color;
+                padding: 4px;
+                align-items: center;
+                margin-left: 3px;
+            }
+            >td {
+                border-right: 1px solid $grid-separator-color;
+                padding: 4px;
+                align-items: center;
+                margin-left: 3px;
+                display: flex;
+               
+                &:last-child {
+                    border: 0;
+                }
+
+                &:not(:last-child):hover {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &.item {
+            color: $label-black;
+            border: 1px solid $grid-separator-color;
+            border-top: 0;
+
+            .margin-right {
+                text-align: end;
+            }
+
+            >td {
+                border-right: 1px solid $grid-separator-color;
+                padding: 10px; 
+                &:last-child {
+                    border: 0;
+                }
+
+                &.click:hover,
+                &:last-child:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .odd {
+        background: $bg-grey;
+    }
+
+    .even {
+        background: $polar-white;
+    }
+
+    .printingTxnHistory {
+        margin-top: 15px;
+        text-align: left;
+        vertical-align: middle;
+        > ul {
+            list-style-type:none
+        }        
+
+        
+    }
+    .footer {
+        margin-top: 15px;
+        font-size: 75% !important;
+    }  
+
+
+    @media print {
+        .grid { 
+            font-size: 8px;
+        }
+        
+        .grid {            
+            &.item{                 
+                >td{
+                    text-overflow: clip !important;
+                    padding: 10px 5px 10px; 
+                }
+            } 
+        }
+              
+        .row {
+            height: auto !important;
+        }
+
+        .footer {            
+            // position: fixed;
+            // bottom: 0;
+        }  
+             
+    }
+}

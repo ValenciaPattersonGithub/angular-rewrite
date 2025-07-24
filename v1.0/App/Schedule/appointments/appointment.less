@@ -1,0 +1,390 @@
+﻿// #region Appointments
+
+.appointmentEdit {
+    &__modalHeader {
+        .modal-header;
+        border: none;
+        padding: 8px 10px 0 10px;
+
+        &__headerRow {
+            padding: 0 15px 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        &__contentSection {
+            flex-grow: 1;
+
+            &__patient {
+                padding-left: 15px;
+            }
+        }
+
+        &__cancelSection {
+            flex-shrink: 0;
+            margin: 0 0 0 10px;
+        }
+
+        &__statusNote {
+            float: right;
+            width: 300px;
+            margin: 0 10px 0 10px;
+        }
+    }
+
+    &__modalBody {
+        overflow: auto;
+        max-height: 550px;
+
+        &__patientInfo {
+            width: 100%;
+        }
+
+        &__email {
+            padding: 0;
+            display: block;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .apptCrud__tabs {
+            position: absolute;
+            z-index: 1000;
+            min-height: 500px;
+            overflow: hidden;
+            max-width: 0;
+            padding: 0;
+            opacity: 0;
+            background-color: @brand-color_white;
+            box-shadow: @brand-shadow_default;
+            transition: @brand-transition;
+
+            &.active {
+                max-width: 1000px;
+                overflow: unset;
+                opacity: 1;
+            }
+        }
+
+    }
+
+    &__modalfooter {
+        .clearfix;
+
+        .btn {
+            float: right;
+            margin-left: @brand-margin_sm;
+        }
+    }
+}
+
+.appointment-estimates {
+    margin-right: 34px;
+}
+
+.appointment-estimates-amount {
+    min-width: 50px;
+    text-align: right;
+    display: inline-block;
+}
+
+.appointment-modal-header {
+    padding: 15px 30px 15px 30px;
+    border-bottom: none;
+    font-size: 24px;
+}
+
+.appointment-status {
+    /*padding: 15px 30px 15px 30px;*/
+    border-bottom: none;
+}
+
+.appointment-modal-footer {
+	.clearfix;
+    padding: @brand-padding_md @brand-padding_xl;
+	
+	.btn {
+		float: right;
+		margin-left: @brand-margin_sm;
+	}
+}
+
+.responsibleParty-modal-footer {
+	.clearfix;
+    padding: @brand-padding_md @brand-padding_xl;
+	
+	.btn {
+		float: right;
+		margin-left: @brand-margin_sm;
+	}
+}
+
+.appointment-provider-preview {
+    display: block;
+    width: 150px;
+    height: 100px;
+    color: white;
+    text-align: center;
+}
+
+.appointment-preview-text {
+    position: relative;
+    top: 42px;
+}
+
+.appointment-service-header {
+    margin-left: 6px;
+}
+
+.appointment-service-code-desc {
+    height: 30px;
+}
+
+.appointment-service-code {
+    min-width: 70px;
+    display: inline-block;
+    padding: 12px;
+}
+
+.appointment-service-input {
+    padding: 8px 0 0 0;
+    text-align: center;
+
+    > input {
+    padding: 1px 5px 1px 5px;
+    }
+    > .service-fee {
+        width: 65px;
+        text-align: right;
+    }
+
+    > .service-tooth {
+        width: 60%;   
+        text-transform: uppercase;       
+    }
+
+    > .service-surface {
+        width: 60%;
+        text-transform: uppercase;
+    } 
+    /*> .input-capitalize {   
+            text-transform: uppercase;
+        }*/
+}
+
+.appointment-service-item {
+    margin-left: 6px;
+    font-size: 12px;
+
+    > div {
+        
+        > span, 
+        > button,
+        > div > button,
+        > div > span {
+            height: 40px;
+        }
+
+        > span {
+            //padding: 12px;
+        }
+    }
+}
+
+.appointment-type-table-preview-box {
+    padding: 2px 4px;
+}
+
+.patient-flags-list {
+      list-style: none;
+      padding: 0;
+}
+
+.provider-appointment-container {
+    max-height: 300px; 
+    overflow: auto; 
+    overflow-x: hidden;
+}
+
+.provider-appointment-item {
+    padding-top: 10px; 
+    padding-bottom: 10px;
+}
+
+// #endregion
+
+// #region Appointment Overview
+
+.appointment-overview-container {
+    padding: 30px;
+}
+
+.appointment-patient-info {
+    > div {
+        margin-bottom: 3px;
+    }
+
+    span {
+        margin-right: 5px;
+    }
+}
+
+.appointment-overview-status {
+    position: absolute;
+    width: 152px;
+    top: 0;
+    right: 55px;
+}
+
+.appointment-overview-alerts {
+    height: 75px;
+    overflow: auto;
+}
+
+.appointment-overview-notes {
+    height: 50px;
+    overflow: auto;
+
+    > span {
+        word-wrap: break-word;
+        white-space: normal;
+    }
+}
+
+.appointment-service-info {
+    padding: 6px 10px 0 10px;
+}
+
+.appointment-alerts-info {
+    background: @appt-alert-bg;
+    margin-bottom: 6px;
+    padding: 4px 10px 2px 10px;
+    font-size: 16px;
+    font-weight: bold;
+
+    > #alertSymbol {
+        min-width: 16px;
+    }
+}
+
+.appointment-start-time-error {
+    left: 87px;
+    position: relative;
+}
+
+.appointment-overview-btn-group {
+    position: absolute;
+    bottom: 0;
+    padding: 0 0 25px 0;
+    width: 460px;
+
+    > button .btn-default {
+        padding: 5px 55px 5px 55px;
+    }
+}
+
+.appointment-status-icon {
+    padding-right: 5px;
+    min-width: 20px;
+}
+
+.appointment-status-line {
+    position: relative;
+    background: @brand-color_dark-gray;
+    height: 1px;
+    width: 100%;
+}
+
+.appointment-type-circle {
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+// #endregion
+
+
+.status-note {
+	justify-content: flex-end !important;
+}
+
+.appointment-unscheduled {
+    position: absolute;
+    right: 480px;
+    top: 103px;
+    background: @brand-color_white;
+    border: 1px solid @brand-color_dark-gray;
+    box-shadow: 4px 4px 10px #888888;
+    width: 480px;
+    padding: 24px 0 0 0;
+    z-index: 999;
+
+    > .panel {
+        margin-bottom: 0;
+    }
+    
+
+    .appointment-unscheduled-header {
+
+        > h4 {
+            margin-right: 5px;
+        }
+
+        > .dropdown {
+            z-index: 1001;
+
+            > ul {
+                width: 256px;
+            }
+
+            > button {
+                font-size: 20px;    
+            }
+        }        
+    }
+
+    #btnAddUnscheduled {
+        font-size: 18px;
+    }
+
+    .unscheduled-group {
+        margin: 0;
+        max-height: 260px;
+        overflow: auto;
+        border: @brand-border;
+    }
+
+    .appointment-clipboard {
+        max-height: 605px;
+    }
+
+    .unscheduled-group-item {
+        min-height: 80px;
+        position: relative;
+        display: block;
+        padding: @brand-padding_sm @brand-padding_md;
+        margin-bottom: 0;
+        background-color: @brand-color_white;
+        border-top: none;
+        border-right: none;
+        border-bottom: @brand-border;
+        border-left: none;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        appointment-unscheduled-item > div > div > label {
+            margin-bottom: 0;
+        }
+    }
+
+    &__dropdown {
+        > span {
+            width: 100%;
+        }
+    }
+}

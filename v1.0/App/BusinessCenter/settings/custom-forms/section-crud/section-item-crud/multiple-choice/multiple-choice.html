@@ -1,0 +1,63 @@
+﻿<ng-form name="questionMultipleChoiceForm" novalidate>
+
+    <div class="col-md-6">
+        <div class="container-fluid">
+            <div class="row" id="questionTextMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}">
+                {{ 'Question Text' |i18n }}:<span class="bold padding5 size-h4">*</span>
+            </div>
+            <div class="row">
+                <input ng-class="{'red-border': (questionMultipleChoiceForm.questionMultipleChoiceText.$invalid  && customForm.SectionValidationFlag) || (questionMultipleChoiceForm.questionMultipleChoiceText.$invalid  && $index == customForm.SectionCopyValidationFlag )}" name="questionMultipleChoiceText" id="questionMultipleChoiceText{{sectionIndex}}_{{sectionItemIndex}}" class="col-md-10" type="text" ng-model="sectionItem.FormBankItem.ItemText" maxlength="250" required />
+            </div>
+            <div class="row error" ng-if="(questionMultipleChoiceForm.questionMultipleChoiceText.$invalid  && customForm.SectionValidationFlag) || (questionMultipleChoiceForm.questionMultipleChoiceText.$invalid  && $index == customForm.SectionCopyValidationFlag )">
+                <span id="requiredMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required' | i18n }}</span>
+            </div>
+            <div class="row">
+                <div class="form-checkbox">
+                    <input type="checkbox" ng-value="true" ng-model="sectionItem.IsRequired" id="questionMultipleChoiceCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="lblQuestionMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionMultipleChoiceCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This question is required' | i18n }}.</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-checkbox">
+                    <input type="checkbox" ng-value="true" ng-model="sectionItem.MultiSelectAllow" id="questionMultipleChoiceAllowMultipleAnsCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="lblQuestionMultipleChoiceAllowMultipleAns{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionMultipleChoiceAllowMultipleAnsCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'Allow multiple answers' | i18n }}.</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8" id="multipleChoiceOptionHeader{{sectionIndex}}_{{sectionItemIndex}}">{{ 'Select Option' |i18n }}</div>
+            </div>
+            <div id="questionMultipleChoiceSelectValue{{sectionIndex}}_{{sectionItemIndex}}">
+                <div id="multipleChoiceOption{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}" class="row margin-bottom15" ng-repeat="option in sectionItem.ItemOptions">
+                    <!--Are you sure message for list question option delete-->
+                    <div class="col-md-11" ng-show="confirmOptionRemoveIndex == $index">
+                        <div class="media-body master-list-warning-msg" id="multipleChoiceOptionDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}">
+                            <are-you-sure message="{{ 'Are you sure you want to delete this answer option?' | i18n }}" if-yes="removeMultipleChoiceOption(sectionIndex,sectionItemIndex)" if-no="cancelRemoveMultipleChoiceOption()"></are-you-sure>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <ng-form name="questionMultipleChoiceSelectValue">
+                            <input name="questionMultipleChoiceSelectValues" type="text" id="questionMultipleChoiceOptionText{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}" ng-model="option.BankItemOption.OptionText" class="col-md-7" maxlength="100" placeholder="Enter Answer Text" required />
+                            &nbsp;
+                            <a check-auth-z="soar-biz-bcform-delete" id="lnkMultipleChoiceOptionDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}" class="cursor-pointer" ng-click="confirmRemoveMultipleChoiceOption(option,$index)" title="Remove" ng-show="sectionItem.ItemOptions.length > 1">
+                                <i class=" glyphicon glyphicon-trash">
+                                </i>
+                            </a>
+                        </ng-form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <button id="btnAddAnotherOption{{sectionIndex}}_{{sectionItemIndex}}" check-auth-z="soar-biz-bcform-add" type="button" class="button" ng-click="addNewMultipleChoiceOption(sectionIndex,sectionItemIndex)">{{ 'Add another option' | i18n }}</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</ng-form>

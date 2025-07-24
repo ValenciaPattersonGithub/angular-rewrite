@@ -1,0 +1,386 @@
+﻿.transaction-history-refactor {
+    .width-2-percent {
+        width: 2%
+    }
+
+    .width-4-percent {
+        width: 4%
+    }
+
+    .width-5-percent {
+        width: 5%
+    }
+
+    .width-6-percent {
+        width: 6%
+    }
+
+    .width-7-percent {
+        width: 7%
+    }
+
+    .width-8-percent {
+        width: 8%
+    }
+
+    .width-9-percent {
+        width: 9%
+    }
+
+    .width-10-percent {
+        width: 10%
+    }
+
+    .width-11-percent {
+        width: 11%
+    }
+
+    .width-12-percent {
+        width: 12%
+    }
+
+    .width-23-percent {
+        width: 23%
+    }
+
+    .width-26-percent {
+        width: 26%
+    }
+
+    .width-28-percent {
+        width: 28%
+    }
+
+    .width-30-percent {
+        width: 30%
+    }
+
+    .history-header {
+        font-weight: bold;
+        border-top: solid 2px @brand-color_light-gray;
+        border-left: solid 2px @brand-color_light-gray;
+        border-right: solid 2px @brand-color_light-gray;
+        display: flex;
+
+        .utilCheckbox__ctrl {
+            padding: 0px 0px;
+            font-weight: normal;
+        }
+
+        .col-xs-1 {
+            border-left: solid 1px @brand-color_light-gray;
+            border-right: solid 1px @brand-color_light-gray;
+            padding: 4px;
+        }
+        /* The fixHeader class is added to the header with JS when it reaches its scroll position */
+        &.fixedHeader {
+            position: fixed;
+            top: 0;
+            padding-top: 100px;
+            width: 85.9%;
+            background-color: #FAFAFA;
+            z-index: 100;
+
+            .col-xs-1 {
+                border-top: solid 2px @brand-color_light-gray;
+                border-bottom: solid 1px @brand-color_light-gray;
+            }
+        }
+    }
+
+    .history-body {
+        display: flex;
+
+        .col-xs-1 {
+            border-left: solid 1px @brand-color_light-gray;
+            border-right: solid 1px @brand-color_light-gray;
+            padding: 4px;
+        }
+    }
+
+    .disabled {
+        &:hover {
+            cursor: not-allowed !important;
+        }
+
+        &:active {
+            pointer-events: none;
+        }
+    }
+
+    .history-body.row {
+        border: solid 1px lightgray;
+        margin-bottom: -1px;
+        background-color: @brand-application_bg;
+
+        &:nth-child(even) {
+            background-color: @brand-color_white;
+
+            &:hover {
+                background-color: @brand-color_light-gray;
+            }
+        }
+    }
+
+    .deposited {
+        color: @brand-color_green;
+        padding: 2px;
+        padding-top: 4px;
+    }
+
+    .padding-right-2 {
+        padding-right: 2px;
+    }
+
+    .padding-top-4 {
+        padding-top: 4px;
+    }
+
+    .padding-horizontal-2 {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .tooltip-inner {
+        max-width: 1000px !important;
+    }
+
+    .wordbreak {
+        word-break: break-word;
+    }
+
+    unapplied-menu {
+        i.fa-question-circle {
+            color: #c7254e;
+        }
+
+        div.unappliedMenu {
+            a {
+                padding: 0;
+            }
+        }
+    }
+
+    .split-payment {
+        color: #6A7575;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .sortable {
+        cursor: pointer;
+
+        span {
+            float: right;
+            margin-top: 4px;
+        }
+    }
+
+    #showMoreSection {
+        display: flex;
+        padding: 10px;
+        width: 100%;
+        justify-content: center;
+
+        #showMoreButton {
+            border-radius: 15px;
+            text-align: center;
+            padding: 5px;
+            width: 20%;
+            box-shadow: none;
+        }
+    }
+
+    #btnPatientPageScrollTop {
+        position: fixed;
+        bottom: 41px;
+        right: 17px;
+    }
+
+    .backToTop {
+        display: none;
+
+        &.showBackToTop {
+            display: block;
+        }
+    }
+
+    .spinner {
+        width: 20%;
+        text-align: center;
+    }
+
+    .printingTxnHistory {
+        display: none;
+    }
+
+    .selectorCount {
+        float: none;
+    }
+
+    checkbox * {
+        display: inline;
+    }
+
+    .account-note-display-color{
+        color: @brand-color_font-regular;
+    } 
+    .document-display-color{
+        color: @brand-color_font-dark;
+    }
+
+    @media print {
+        font-size: 9px;
+        display: block;
+
+        .history-body.row {
+            border-right: none;
+            border-left: none;
+            min-height: 100%;
+            height: auto;
+
+            &:nth-child(even) {
+                background-color: @table-bg-hover !important;
+            }
+        }
+
+        div[id^='dateColumn'] {
+            width: 7% !important;
+        }
+
+        div[id^='patientColumn'] {
+            width: 10% !important;
+        }
+
+        div[id^='providerColumn'] {
+            width: 6% !important;
+        }
+
+        div[id^='locationColumn'] {
+            width: 11% !important;
+        }
+
+        div[id^='typeColumn'] {
+            width: 8% !important;
+        }
+
+        div[id^='descriptionColumn'] {
+            width: 26% !important;
+        }
+
+        div[id^='toothColumn'] {
+            width: 7% !important;
+        }
+
+        div[id^='areaColumn'] {
+            width: 5% !important;
+        }
+
+        div[id^='estInsColumn'] {
+            width: 6% !important;
+            text-align: right !important;
+        }
+
+        div[id^='amountColumn'] {
+            width: 7% !important;
+            text-align: right !important;
+        }
+
+        div[id^='balanceColumn'] {
+            width: 7% !important;
+            text-align: right !important;
+        }
+
+        div[id^='ellipsisMenuColumn'] {
+            display: none !important;
+            width: 0% !important;
+        }
+
+        .row {
+            height: auto !important;
+            page-break-inside: avoid;
+        }
+
+        .fa-sort, .fa-sort-up, .fa-sort-down {
+            display: none !important;
+        }
+
+        #accountFilterBar {
+            .history-header {
+                height: auto !important;
+            }
+
+            display: none !important;
+        }
+
+        .printingTxnHistory {
+            text-align: center;
+            vertical-align: middle;
+
+            .printingTxnHistory__title {
+                font-size: 2em !important;
+            }
+
+            .printingTxnHistory__headerInfo {
+                font-size: 1em !important;
+            }
+
+            .printingTxnHistory__footer {
+                font-size: 75% !important;
+                page-break-after: avoid;
+            }
+        }
+
+        .printingTxnHistory__topHeaderLeft {
+            box-sizing: border-box;
+            text-align: left !important;
+            font-size: 8px;
+            font-weight: normal;
+        }
+
+        .printingTxnHistory__topHeaderRight {
+            box-sizing: border-box;
+            text-align: right !important;
+            font-size: 8px;
+            font-weight: normal;
+        }
+    }
+
+    @media print and (orientation: portrait) {
+        #accountFilterBar {
+            .history-header {
+                width: 8.5in !important;
+            }
+        }
+
+        .row {
+            width: 8.5in !important;
+        }
+    }
+
+    @media print and (orientation: landscape) {
+        #accountFilterBar {
+            .history-header {
+                width: 11in !important;
+            }
+        }
+
+        .row {
+            width: 11in !important;
+        }
+    }
+}
+
+body.noScroll {
+    overflow: hidden;
+}
+
+@media all and (max-width: 1680px) {
+	.transaction-history-refactor {
+		.history-header {
+			&.fixedHeader {
+				width: 95.2%;
+			}
+		}
+	}
+}

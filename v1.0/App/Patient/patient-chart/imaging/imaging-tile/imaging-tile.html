@@ -1,0 +1,19 @@
+﻿<div class="imagingTile">
+    <div class="imagingTile__detailsBox" ng-click="showExamIfValid(imageExam)">
+        <div class="timelineTile" ng-class="{timelineTileBorder : true}">
+            <div class="timelineTile__row">
+                <div class="timelineTile__iconContainer">
+                    <img class="timelineTile__icon" ng-src="{{ 'Images/TimelineFilterIcons/images.svg' }}" />
+                </div>
+                <div class="timelineTile__content">
+                    <span id="lblExamDescription{{tileIndex}}" class="imagingTile__desc" title="{{ imageExam.Description }}">
+                        {{ imageDescription | truncate:30 }}
+                    </span>
+                    <span id="lblExamImageCount{{tileIndex}}" class="imagingTile_count" title="{{ imageCountMessage }}">
+                        {{ imageCountMessage }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

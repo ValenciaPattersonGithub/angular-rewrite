@@ -1,0 +1,82 @@
+﻿<div class="rspParty">
+    <!-- Responsible Person Type -->
+    <div class="row">
+        <div ng-class="{'col-xs-6': showHeader, 'col-xs-4': !showHeader}">
+            <label ng-show="showHeader" id="lblResponsiblePerson" class="">{{'Responsible Person' | i18n }} </label>
+        </div>
+        <div class="col-xs-4">
+            <label ng-show="showHeader" class="signature-label" id="patientSignature">{{'Signature on File'| i18n }} </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div ng-class="{'col-xs-6': showHeader, 'col-xs-4': !showHeader}">
+            <radiogroup unique-id="inpRespParty"
+                        value="patient.ResponsiblePersonType"
+                        options="responsiblePersonOptions"
+                        labels="responsiblePersonLabels"
+                        change-function="responsiblePersonTypeChange()">
+            </radiogroup>
+        </div>
+        <div class="col-xs-4">
+            <checkbox checkbox-id="patientSignature" checkbox-value="patient.IsSignatureOnFile" change-function="patientSignatureChange()" checkbox-label="'Yes'"></checkbox>
+        </div>
+    </div>
+    <typeahead id="personTypeAhead"
+               class="typeahead soar-typeahead typeaheadResults"
+               ng-show="showSearchRp"
+               clear-content="clearResponsiblePerson()"
+               show-clear-button="!disableParty && patient.IsResponsiblePersonEditable"
+               scroll-view="true"
+               disable-input="disableResponsiblePerson"
+               appearance="form-input"
+               cancel="cancelSearch()"
+               search="search(term)"
+               select="selectResult(item)"
+               items="searchResults"
+               term="searchTerm"
+               loading="searchIsQueryingServer"
+               placeholder="{{ 'Search...'|i18n }}"
+               tab-index="0">
+        <ul id="lstPerson" soar-infinite-scroll="search(searchString, true)">
+            <li ng-repeat="person in searchResults" typeahead-item="person" ng-animate="'animate'" ng-hide="false">
+                <div class="row">
+                    <div class="col-sm-5 col-md-5" ng-show="true">
+                        <span id="lblFirstName{{ $index }}" ng-bind-html="person.FirstName | boldTextSearchCriteria:searchString "></span> <span id="lblMiddleName{{ $index }}" ng-bind-html="person.MiddleName | boldTextSearchCriteria:searchString "></span> <span id="lblLastName{{ $index }}" ng-bind-html="person.LastName | boldTextSearchCriteria:searchString "></span> <span id="lblSuffix{{ $index }}" ng-bind-html="person.Suffix | boldTextSearchCriteria:searchString "></span>
+                        <!--<span ng-show="person.PreferredName" id="lblPreferredName{{ $index }}" ng-bind-html="'('+person.PreferredName+')' | boldTextSearchCriteria:searchString "></span>-->
+
+                    </div>
+                    <div class="col-sm-3 col-md-3" ng-show="true">
+                        ID: <span ng-show="person.PatientCode" id="lblPatientCode{{ $index }}" ng-bind-html="person.PatientCode"></span>
+                    </div>
+
+                    <div class="col-sm-4 col-md-4" ng-show="true">
+                        DoB: <span ng-show="person.DateOfBirth" id="lblDateOfBirth{{ $index }}" ng-bind-html="person.DateOfBirth | toShortDisplayDate| boldTextSearchCriteriaDate:searchString  "></span>
+                        <!--<div class="row" ng-repeat="phoneInfo in person.PatientPhoneInformationDtos | limitTo:1">
+                            <div>
+                                <span id="lblPhoneNumber{{ $index }}" ng-bind-html="phoneInfo.PhoneNumber | boldTextSearchCriteriaPhone:searchString | tel "></span>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </li>
+            <li ng-show="noSearchResults && searchResults.length==0">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span class="text-muted" id="lblResultMessage">
+                            {{ 'No responsible person match the search criteria.'|i18n }}
+                        </span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </typeahead>
+    <div class="row has-error padding-left-20 padding-right-20" ng-show="showError">
+        <label id="lblResponsibleRequired" class="help-block">{{ 'Please enter valid responsible person.' | i18n }}</label>
+    </div>
+    <div class="row has-error padding-left-20 padding-right-20">
+        <label class="control-label">{{rpMessage}}</label>
+    </div>
+</div>
+
+

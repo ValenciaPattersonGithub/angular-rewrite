@@ -1,0 +1,72 @@
+<div class="date-range-selector" *ngIf="!hideDateControl">
+    <div class="date-range-picker-control">
+        <form [formGroup]="formGroup">
+            <p class="input-group no-margin-bottom date-selector-input-group">
+                <input class="date-selector-input" type="text" name="dateRangePicker" [placeholder]="showPlaceholder ? 'MM/DD/YYYY' : ''"
+                       formControlName="dateRange" readonly (click)="closePopUp()" />
+                <span class="input-group-btn">
+                    <button type="button" class="date-selector-btn" (click)="toggle()">
+                        <i class="far fa-calendar-alt"></i>
+                    </button>
+                </span>
+            </p>
+        </form>
+    </div>
+    <app-popover *ngIf="showPopOver" [tooltipPosition]="tooltipPosition" [templateReference]="datePickerPopOver">
+    </app-popover>
+</div>
+
+<div class="date-range-selector" *ngIf="hideDateControl">
+    <app-popover *ngIf="showPopOver" [tooltipPosition]="tooltipPosition" [templateReference]="datePickerPopOver">
+    </app-popover>
+</div>
+
+<ng-template #datePickerPopOver>
+    <div class="popover-width date-range-picker">
+        <div class="date-range-selector-popup-ng"
+            [ngClass]="{'date-range-fix-width': popUpFixWidth, 'date-range-full-width': !popUpFixWidth }">
+            <form [formGroup]="frmDateRangePicker" role="form">
+                <div class="date-range-selector-popup__content">
+                    <div class="main-container">
+                        <div class="div-1">
+                            <app-date-selector #startDate formGroupName="startDate" class="pull-right" [formControl]="startDateControl" 
+                                               [label]="startDateLabel" [value]="frmDateRangePicker?.controls?.startDate?.value"
+                                               [minDate]="minStartDate" [maxDate]="maxStartDate" [fixwidth]="false"
+                                               (dateChanged)="onDateChange($event,'startDate')" (isValid)="isChildFormIsValid($event)"
+                                               [defaultEmpty]="true"
+                                               [enableIncompleteDateValidation]="enableIncompleteDateValidation"></app-date-selector>
+                            <div *ngIf="showErrorMessages && frmDateRangePicker?.get('startDate')?.hasError('required')"
+                                 class="error">
+                                <span class="help-text">{{'Required Date' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="div-2">
+                            <span class="to-label"> {{'To'| translate }} </span>
+                        </div>
+                        <div class="div-1">
+                            <app-date-selector #endDate class="pull-right" formGroupName="endDate" [formControl]="endDateControl" 
+                                [label]="EndDateLabel" [value]="frmDateRangePicker?.controls?.endDate?.value"
+                                [minDate]="minEndDate" [maxDate]="maxEndDate" [fixwidth]="false"
+                                (dateChanged)="onDateChange($event,'endDate')" (isValid)="isChildFormIsValid($event)"
+                                [defaultEmpty]="true"
+                                [enableIncompleteDateValidation]="enableIncompleteDateValidation"></app-date-selector>
+                            <div *ngIf="frmDateRangePicker?.get('endDate')?.hasError('required') && showErrorMessages"
+                                class="error">
+                                <span class="help-text">{{'Required Date' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="m-tb-15">
+                    <div class="row btnAlign">
+                        <div class="col-sm-12 text-right">
+                            <app-button class="mr-1" buttonLabel="{{clearBtnLabel|translate }}" variation="secondary"
+                                (onClick)="clear()"></app-button>
+                            <app-button (onClick)="apply()" buttonLabel="{{applyBtnLabel| translate }}"
+                                variation="primary"></app-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

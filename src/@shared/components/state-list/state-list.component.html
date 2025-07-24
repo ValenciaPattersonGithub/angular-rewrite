@@ -1,0 +1,8 @@
+<div class="stateList">
+    <kendo-dropdownlist [id]="stateListId" [name]="stateListId" [data]="stateList" [textField]="'Name'"
+        [valueField]="'Abbreviation'" [(ngModel)]="stateSource" (valueChange)="onStateChanged($event)"
+        [popupSettings]="{ animate:false }" [tabIndex]="tabindex"
+        [defaultItem]="{ Name: 'Select State', StateId: null }"
+        [disabled]="disableInput">
+    </kendo-dropdownlist>
+</div>

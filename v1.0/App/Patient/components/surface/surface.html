@@ -1,0 +1,71 @@
+﻿<div class="btn-group surfInput">
+    <i class="far fa-edit" ng-click="openSelectedSurface()" ng-disabled="selectedTooth === ''"></i>
+    <div class="surfInput__list" ng-show="isSurfaceEditing" id="surfaceSelector"> <!--tabindex="-1" ng-blur="closeSelectedSurface()">-->
+        <i class="fa fa-times pull-right" ng-click="closeSelectedSurface()"></i>
+        <button id="btnM"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('M')"
+                ng-class="{active: hasSelectedSurfaces('M')}">
+            {{'M'| i18n}}
+        </button>
+        <button id="btnO"
+                ng-show="ToothType == 0"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('O')"
+                ng-class="{active: hasSelectedSurfaces('O')}">
+            {{'O/I'| i18n}}
+        </button>
+        <button id="btnI"
+                ng-show="ToothType == 1"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('I')"
+                ng-class="{active: hasSelectedSurfaces('I')}">
+            {{'O/I'| i18n}}
+        </button>
+        <button id="btnD"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('D')"
+                ng-class="{active: hasSelectedSurfaces('D')}">
+            {{'D'| i18n}}
+        </button>
+        <button id="btnB" ng-show="ToothType == 0"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('B')"
+                ng-class="{active: hasSelectedSurfaces('B')}">
+            {{'B'| i18n}}
+        </button>
+        <button id="btnF"
+                ng-show="ToothType == 1"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('F')"
+                ng-class="{active: hasSelectedSurfaces('F')}">
+            {{'F'| i18n}}
+        </button>
+        <button id="btnL"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('L')"
+                ng-class="{active: hasSelectedSurfaces('L')}">
+            {{'L'| i18n}}
+        </button>
+        <button id="btnB5"
+                ng-show="ToothType == 0"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('B5')"
+                ng-class="{active: hasSelectedSurfaces('B5')}">
+            {{'B/F5'| i18n}}
+        </button>
+        <button id="btnF5"
+                ng-show="ToothType == 1"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('F5')"
+                ng-class="{active: hasSelectedSurfaces('F5')}">
+            {{'B/F5'| i18n}}
+        </button>
+        <button id="btnL5"
+                class="surfInput__ctrl"
+                ng-click="selectSurface('L5')"
+                ng-class="{active: hasSelectedSurfaces('L5')}">
+            {{'L5'| i18n}}
+        </button>
+    </div>
+</div>

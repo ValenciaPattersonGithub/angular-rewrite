@@ -1,0 +1,89 @@
+<div class="noteTempList" [formGroup]="noteTempListForm">
+    <div class="noteTempList__header" *ngIf="showHeader">
+        <div class="noteTempList__newNoteTemplate">
+            <button id="addNoteTemplate" class="btn btn-primary mr-5" [disabled]="editMode||isAddCategory||noteCategories?.length === 0" checkRoleAccess="soar-clin-nottmp-add" (click)="addCopyTemplate()" icon="fa-plus">{{ 'Add a Template' | translate }}</button>
+            <button id="addCategory" class="btn btn-primary" [disabled]="editMode||isAddCategory||editCategory" checkRoleAccess="soar-clin-nottmp-edit" (click)="createEmptyCategory()" icon="fa-plus">{{ 'Add a Category' | translate }}</button>
+        </div>
+        <div class="noteTempList__search">
+            <search-bar-autocomplete [placeholder]="placeholder"
+                                     [showSuggestion]="!showSuggestion"
+                                     [valueF]="'Name'"
+                                     (filterValueChange)="search($event)">
+            </search-bar-autocomplete>
+        </div>
+    </div>
+    <div class="noteTempList__body">
+        <div class="noteTempCat" *ngIf="isAddCategory">
+            <div class="noteTempCat__header">
+                <input id="inpNoteCategoryName" class="noteTempCat__input" formControlName="inpNoteCategoryName" placeholder="{{ 'Note Category'| translate }}" maxlength="100" required />
+                <button id="btnAddCategory" class="noteTempCat__save" checkRoleAccess="soar-clin-nottmp-add" (click)="addNoteCategory()">{{ 'Save' | translate }}</button>
+                <button id="btnCancelAddCategory" class="noteTempCat__cancel" checkRoleAccess="soar-clin-nottmp-add" (click)="cancelNoteCategory()">{{ 'Cancel' | translate }}</button>
+                <div class="noteTempCat__alert" *ngIf="!formIsValid">
+                    <span *ngIf="duplicateNoteCategory === false">{{ 'This field is required.' | translate }}</span>
+                    <span *ngIf="duplicateNoteCategory === true">{{ 'A Note category with this name already exists.' | translate }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="noteTempCat" *ngFor="let noteCategory of noteCategories;index as $index">
+            <div class="noteTempCat__header" *ngIf="noteCategory?.$$Visible === true">
+                <a class="noteTempCat__toggle col-xs-8 col-sm-8 col-md-9" *ngIf="!noteCategory?.$$editing" (click)="expandNoteCategory(noteCategory)" [ngClass]="{noActions: !showMenu}">
+                    <i class="fa fa-chevron-right" [ngClass]="{active: noteCategory?.ntExpand||searchTerm?.value}"></i>
+                    <span class="noteTempCat__title" title="{{ noteCategory?.CategoryName }}">{{ noteCategory?.CategoryName }}</span>
+                    <span class="noteTempCat__tempCount">({{ noteCategory?.Templates?.length || 0 }})</span>
+                </a>
+
+                <span class="noteTempCat__toggleActions col-xs-4 col-sm-4 col-md-3" *ngIf="!noteCategory?.$$editing">
+                    <a id="lnkToggleCategoryEdit" kendoTooltip
+                       position="top"
+                       tooltipClass="app-tooltip"
+                       title="Edit" class="fas fa-pencil-alt" (click)="toggleCategoryEdit(noteCategory, $index)" [ngClass]="{'disabled' : editMode}" checkRoleAccess="soar-clin-nottmp-edit"></a>
+                    &nbsp;
+                    <a id="lnkDeleteCategory" kendoTooltip
+                       position="top"
+                       tooltipClass="app-tooltip"
+                       title="Delete" class="fa fa-times" (click)="deleteNoteCategory(noteCategory)" [ngClass]="{'disabled' : editMode || noteCategory?.$$hasTemplates}" checkRoleAccess="soar-clin-nottmp-delete"></a>
+                </span>
+                <div class="noteTempCat__editCat" *ngIf="noteCategory?.$$editing && showMenu">
+                    <input id="inpEditNoteCategoryName" class="noteTempCat__input" formControlName="inpEditNoteCategoryName_{{$index}}" placeholder="{{ 'Note Category'| translate }}" maxlength="100" />
+                    <button id="btnEditCategory" class="noteTempCat__save" (click)="updateNoteCategory(noteCategory)" [disabled]="!noteCategory?.CategoryName">{{ 'Save' | translate }}</button>
+                    <button id="btnCancelEditCategory" class="noteTempCat__cancel" (click)="cancelUpdateCategory(noteCategory)">{{ 'Cancel' | translate }}</button>
+                    <div class="noteTempCat__alert" *ngIf="noteCategory?.duplicateNoteCategory">
+                        <span>{{ 'A Note category with this name already exists.' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="noteCategory?.$$Visible" class="noteTempCat__body" [ngClass]="{active: noteCategory?.ntExpand||searchTerm?.value}">
+                <div *ngFor="let noteTemplate of noteCategory?.Templates">
+                    <a id="lnkLoadNoteTemplate" class="noteTempCat__item col-xs-8 col-sm-8 col-md-8" (click)="editNoteTemplate(noteTemplate, false)" [ngClass]="{active: isSelectedNoteTemplate(noteTemplate), noActions: !showMenu}">
+                        {{ noteTemplate?.TemplateName }}
+                    </a>
+                    <div class="noteTempCat__itemActions col-xs-4 col-sm-4 col-md-4" [ngClass]="{active: isSelectedNoteTemplate(noteTemplate)}" *ngIf="showMenu">
+                        <a id="lnkCopyNoteTemplate" class="fas fa-copy" (click)="addCopyTemplate(noteTemplate)" [ngClass]="{'disabled' : editMode}" kendoTooltip
+                           position="top"
+                           tooltipClass="app-tooltip"
+                           title="Copy" checkRoleAccess="soar-clin-nottmp-add"></a>
+                        &nbsp;
+                        <a id="lnkEditNoteTemplate" kendoTooltip
+                           position="top"
+                           tooltipClass="app-tooltip"
+                           title="Edit" class="fas fa-pencil-alt" (click)="editNoteTemplate(noteTemplate,true)" [ngClass]="{'disabled' : editMode}" checkRoleAccess="soar-clin-nottmp-edit"></a>
+                        &nbsp;
+                        <a id="lnkDeleteNoteTemplate" kendoTooltip
+                           position="top"
+                           tooltipClass="app-tooltip"
+                           title="Delete" class="fa fa-times" (click)="deleteNoteTemplate(noteTemplate)" [ngClass]="{'disabled' : editMode}" checkRoleAccess="soar-clin-nottmp-delete"></a>
+                    </div>
+                </div>
+                <div class="noteTempCat__item" *ngIf="!loadingTemplates && noteCategory?.$$hasTemplates === false && searchMode === false">
+                    <div [innerHtml]="loadingMessageNoTemplateResults"></div>
+                </div>
+            </div>
+        </div>
+        <div class="noteTempList__msg" *ngIf="noteCategories?.length === 0">
+            <no-results [loadingMessage]='loadingMessageNoCategoryResults' [loading]="loadingCategories"></no-results>
+        </div>
+        <div class="noteTempCat__item" *ngIf="!loadingTemplates && noteTemplates?.length === 0 && searchMode === true">
+            <div [innerHtml]="loadingMessageNoTemplateResults"></div>
+        </div>
+    </div>
+</div>

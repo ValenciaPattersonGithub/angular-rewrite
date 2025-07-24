@@ -1,0 +1,19 @@
+<div class="fui-datepicker-wrapper"
+     [ngClass]="{'label-left' : labelDirection=='left'}">
+    <app-label class="fui-datepicker-label"
+               [label]="label"
+               [fieldId]="id"></app-label>
+    <div class="fui-datepicker-control">
+        <kendo-datepicker class="kendoCustomStyle"
+                          format="MM/dd/yyyy"
+                          [formatPlaceholder]="placeholder"
+                          [min]="minDate"
+                          [id]="id"
+                          [max]="maxDate"
+                          [(value)]="value"
+                          (valueChange)="onDateChange($event)"
+                          ngDefaultControl
+                          [ngClass]="{'k-error': !isValidDate}">
+        </kendo-datepicker>
+    </div>
+</div>

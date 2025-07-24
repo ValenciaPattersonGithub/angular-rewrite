@@ -1,0 +1,25 @@
+<ng-template #templateRef>
+    <div class="accountStatementBillingMessageCrud">
+        <h4>{{ (((isEdit ? 'Edit' : 'Add') + ' a Billing Statement Message')  | translate) }}</h4>
+        <div class="body form-group">
+            <div class="row">
+                <label class="control-label" for="name">{{ ('Name' | translate) }}</label>
+                <input class="form-control" [ngClass]="{'error-border': showErrors && !messageData.Name}" type="text" (change)="checkDups()" [(ngModel)]="messageData.Name" maxlength="60" />
+                <label class="control-label error" *ngIf="isDuplicate">{{ ('A billing statement message with this name already exists' | translate) }}</label>
+            </div>
+            <div class="row">
+                <label class="control-label" for="message">{{ ('Message' | translate) }}</label>
+                <textarea rows="5" [ngClass]="{'error-border': showErrors && !messageData.Message}" class="form-control" [(ngModel)]="messageData.Message" maxlength="180"></textarea>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="row text-align-right">
+                <app-button id="btn_secondary" class="margin-right-10" buttonLabel="Cancel" (onClick)="close()" variation="secondary"></app-button>
+                <app-button id="btn_primary" buttonLabel="Save" (onClick)="save()" variation="primary">
+                </app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<div kendoDialogContainer></div>
+

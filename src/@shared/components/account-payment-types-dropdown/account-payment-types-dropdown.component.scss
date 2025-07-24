@@ -1,0 +1,19 @@
+@import 'variables';
+@import 'toolTip.scss';
+.default-select {
+    min-width: 130px;
+    height: 25px;
+    padding: 0px 8px;
+    border: 1px solid #c8c8c8;
+    border-radius: 5px;    
+    text-decoration: none solid rgb(85, 85, 85);
+    &:focus {      
+      box-shadow: 0 0 0 2px #dadada, 0 0 0 4px $light-action-blue !important;
+    }    
+    &.disabled, &.disabled:hover {
+      color: $disabled-grey;
+      background-color: $polar-white;
+      border: 1px solid $disabled-grey;
+      cursor: not-allowed;
+    }  
+}

@@ -1,0 +1,82 @@
+﻿<profile-section [base-id]="'newCommunication'" [section-title]="'{{ title | i18n }}'">
+    <ng-container layout1>
+        <div class="new-communication-body" draggable-modal>
+            <form name="frmNewCommunication" class="newCommunicationModal">
+                <div>
+                    <div class="new-communication-column">
+                        <div><label class="control-label">{{'Communication Type' | i18n}}</label></div>
+                        <div>
+                            <soar-select-list id="cbCommType"
+                                            name="cbCommType"
+                                            text-field="name"
+                                            value-field="id"
+                                            option-list="dataComType"
+                                            ng-model="dto.CommunicationType"
+                                            sb-change="onCommunicationTypeChange"></soar-select-list>
+
+                        </div>
+                    </div>
+
+                    <div class="new-communication-column">
+                        <div><label class="control-label">{{'Reason' | i18n}}</label></div>
+                        <div>
+                            <soar-select-list id="cbReasonUSMail"
+                                            name="cbReasonUSMail"
+                                            text-field="name"
+                                            value-field="id"
+                                            option-list="dataReasonUSMail"
+                                            ng-model="dto.Reason"
+                                            sb-change="getTemplatesByGroup"></soar-select-list>
+
+                        </div>
+                    </div>
+                    <div class="new-communication-column">
+                        <div ng-hide="isOtherToDo || isPhone || isNotUsMail">
+                            <div><label class="control-label">{{'Template' | i18n}}</label></div>
+                            <div>
+                                <select id="cbTemplateUSMail"
+                                        ng-model="TemplateUSMail"
+                                        k-options="templateComboOptions" kendo-combo-box
+                                        ng-change="onSelectedTemplateChanged()"></select>
+
+
+
+                            </div>
+                        </div>
+                        <div ng-hide="!isOtherToDo">
+                            <div><label class="control-label">{{'Due Date' | i18n}}</label></div>
+                            <div class="follow-up-date-selector-container">
+                                <date-selector input-id="inpFollowUp" placeholder="MM/DD/YYYY" format="MM/dd/yyyy" min-date="minDate" date-var="dto.DueDate" valid="valid "></date-selector>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="width:100px" class="new-communication-column">
+                        <div></div>
+                        <div class="commRadio">
+                            <div ng-hide="!isOtherToDo">&nbsp;</div>
+                            <div ng-hide="isOtherToDo">
+                                <div>
+                                    <input type="radio" name="communicationStatus" id="communicationStatusId"
+                                        ng-model="dto.Status" ng-value="1" ng-disabled="false" />{{ ((!isOtherToDo && CommunicationTypeId == 3)) ? 'Called' : 'Sent' | i18n }}
+                                </div>
+                                <input type="radio" ng-disabled="!previewDisabled" name="communicationStatus" id="communicationStatusId"
+                                    ng-model="dto.Status" ng-value="2" />{{ 'Received' | i18n }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="new-communication-note-div">
+                    <textarea placeholder="Notes" type="text" rows="3" ng-model="dto.Notes" ng-change="checkNote()" class="new-communication-note form-input"></textarea>
+                </div>
+
+                <div ng-show="isLetterTemplate" class="btn-save-newCommunication">
+                    <div ng-show="hasTemplate"><button ng-click="previewLetterTemplate()" ng-disabled="previewDisabled" class="btn btn-primary">{{lblButton}}</button></div>
+                    <div ng-show="isPhone || !hasTemplate"><button ng-click="saveCommunication()" ng-disabled="emptyNote" class="btn btn-primary">Save</button></div>
+                </div>
+                <div ng-show="!isLetterTemplate" class="btn-save-newCommunication"><button ng-click="saveCommunication()" ng-disabled="emptyNote" class="btn btn-primary">Save</button></div>
+            </form>
+        </div>
+    </ng-container> 
+</profile-section>

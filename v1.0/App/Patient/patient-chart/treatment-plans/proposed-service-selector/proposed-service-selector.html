@@ -1,0 +1,94 @@
+﻿<div class="patTxSrvSlct">
+    <div class="patTxSrvSlct__header">
+        <button ng-click="close()" class="patTxSrvSlct__close">
+            <i class="fa fa-times fa-2x" uib-tooltip="{{ ::('Close' | i18n) }}" tooltip-append-to-body="true"></i>
+        </button>
+        <div ng-if="newTreatmentPlan">
+            <h2 class="patTxSrvSlct__title">{{ ::('Create a Treatment Plan' | i18n) }}</h2>
+            <div class="patTxSrvSlct__txPlanNameContainer" ng-class="{'error' : !newTreatmentPlan.TreatmentPlanHeader.TreatmentPlanName && saveAttempted}">
+                <input id="txPlanUpdateName"
+                       class="patTxSrvSlct__txPlanNameInput"
+                       ng-model="newTreatmentPlan.TreatmentPlanHeader.TreatmentPlanName"
+                       type="text"
+                       maxlength="64"
+                       placeholder="{{ ::('Treatment Plan Name' | i18n) }}"
+                       set-focus />
+                <div class="help-text" ng-show="!newTreatmentPlan.TreatmentPlanHeader.TreatmentPlanName && saveAttempted">
+                    {{ 'This field is required.' | i18n }}
+                </div>
+            </div>
+            <h3 class="patTxSrvSlct__title">{{ ::('Proposed Services' | i18n) }}</h3>
+        </div>
+        <div ng-if="!newTreatmentPlan">
+            <h2 class="patTxSrvSlct__title">{{ ::('Proposed Services' | i18n) }}</h2>
+        </div>
+        <div class="patTxSrvSlct__actions">
+            <button class="patTxSrvSlct__bckTx" ng-click="backToService()" icon="fa-arrow-left" ng-if="viewSettings.txPlanActiveId">{{ ::('Back to Tx Plan' | i18n) }}</button>
+            <button class="patTxSrvSlct__addSrv" icon="fa-magic" title="{{addProposedServiceTitle | i18n }}" ng-disabled="patientInfo.IsActive===false" ng-click="addNewService()">{{ ::('Add a New Service' | i18n) }}</button>
+        </div>
+    </div>
+    <div class="patTxSrvSlct__list">
+        <div class="patTxSrvSlct__listHead">
+            <div class="add"><button class="btn btn-primary" ng-disabled>{{ ::('Add'|i18n) }}</button></div>
+            <div class="current"><button class="patTxSrvSlct__itemCheck" ng-disabled><i class="fa fa-check"></i></button></div>
+            <div class="desc">{{ ::('Description'|i18n) }}</div>
+            <div class="tooth">{{ ::('Tooth'|i18n) }}</div>
+            <div class="area">{{' ::(Area'|i18n) }}</div>
+            <div class="provider">{{ ::('Provider'|i18n) }}</div>
+            <div class="fee">{{ ::('Fee'|i18n) }}</div>
+        </div>
+        <div class="patTxSrvSlct__listBody">
+            <div class="patTxSrvSlct__listItem" ng-repeat="ps in proposedServices" ng-class="{'disabled': !ps.$$locationService || !patientLocationMatch}"
+                 uib-tooltip-template="'locationErrorTooltip.html'" tooltip-class="tooltipWidth" tooltip-append-to-body="true" tooltip-placement="top" tooltip-enable="!patientLocationMatch">
+                <div class="patTxSrvSlct__addOpts">
+                    <button id="txSrvSlctAdd" class="btn btn-primary" ng-click="showActions(ps)" ng-blur="ps.ActionsVisible = false" ng-disabled="ps.$hasBeenAddedToThisTxPlan">{{ 'Add to' | i18n }} <i class="fa fa-caret-down"></i></button>
+                    <div class="patTxSrvSlct__menuactions" ng-class="{active : ps.ActionsVisible}">
+                        <button id="txSrvSlctAdd" ng-repeat="planStage in planStages"
+                                ng-hide="servCount<=1" class="btn btn-link" check-auth-z="soar-clin-cplan-edit" ng-mousedown="move(ps,planStage.stageno)">
+                            {{ :'Move to Stage {0}' | i18n:[$index+1] }}
+                        </button>
+                        <button id="txSrvSlctAdd1" ng-if="!_.isEmpty(planStages)" class="btn btn-link" ng-disabled="actions[1].Disabled"
+                                ng-mousedown="addToNewStage(ps, false);">
+                            {{ ::('New Stage'|i18n) }}
+                        </button>
+                        <button id="txSrvSlctAdd2" ng-if="_.isEmpty(planStages)" class="btn btn-link" ng-disabled="actions[1].Disabled"
+                                ng-mousedown="addToNewStage(ps, true);">
+                            {{ ::('Move to Stage 1'|i18n) }}
+                        </button>
+                    </div>
+                </div>
+                <div class="current">
+                    <button class="patTxSrvSlct__itemCheck" ng-class="{active: ps.$hasBeenAddedToATxPlan}" ng-attr-title="{{ getTitle(ps.$hasBeenAddedToATxPlan) }}"><i class="fa fa-check"></i></button>
+                </div>
+                <div class="desc" title="{{ps.Description}}">
+                    {{ps.Description}}
+                </div>
+                <div class="tooth">
+                    {{ps.Tooth | convertToothRangeToQuadrantOrArchCode}}
+                </div>
+                <div class="area">
+                    {{ps.SurfaceSummaryInfo}}{{ps.RootSummaryInfo}}
+                </div>
+                <div class="provider">
+                    {{ps.UserCode}}
+                </div>
+                <div class="fee">
+                    {{ps.Fee | currency}}
+                </div>
+                <button class="patTxSrvSlct__itemActions"><i class="fa fa-ellipsis-v"></i></button>
+            </div>
+        </div>
+        <div class="patTxSrvSlct__footer">
+            <button class="patTxSrvSlct__finish" id="patTxSrvSlctFinish" ng-click="backToService()" ng-if="viewSettings.txPlanActiveId">{{ ::('Finish' | i18n) }}</button>
+        </div>
+    </div>
+</div>
+    <!--tooltip template - Location Error -->
+<script type="text/ng-template" id="locationErrorTooltip.html">
+    <div class="locationErrorMessage">
+        <p>
+            {{::'Your current location does not match this patient\'s primary or alternate locations.' | i18n }}
+            <br />{{::'Please update your current location to the patient\'s primary or any alternate locations to complete this action.' | i18n }}
+        </p>
+    </div>
+</script>

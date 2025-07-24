@@ -1,0 +1,137 @@
+<div class="locMgmt fade-in">
+	<form name="frmLocationLanding">
+		<div class="rowFull white">
+			<div class="locMgmt__header">
+				<!--Breadcrumbs-->
+				<app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation> 
+
+				<div class="locMgmt__title">
+					<h1>
+						Practice Information
+					</h1>
+				</div>
+				<!-- While migrating this component Anglers have not migrated code related to these functionalities as discussed with Denise-->
+				<!--<div class="pracMgmt__actions">
+					<a ng-if="false" id="btnEdit" ng-click="edit()" check-auth-z="soar-biz-biz-edit" ng-hide="isEditing" class="btn btn-default" href="">{{ 'Edit Practice' | i18n }}</a>
+					<a id="btnCancel" ng-click="cancel()" ng-show="isEditing" class="btn btn-default" href="">{{ 'Cancel' | i18n }}</a>
+					<a id="btnSave" ng-click="save()" check-auth-z="soar-biz-biz-edit" ng-show="isEditing" class="btn btn-primary" href="">{{ 'Save' | i18n }}</a>
+				</div>-->
+			</div>
+			<div class="section-divider"></div>
+		</div>
+		<div class="rowFull white">
+			<div class="locMgmt__body">
+				<div class="col-sm-4">
+					<div class="row">
+						<div>
+							<label class="ng-binding">{{'Practice Name' | translate }}</label>
+							<span class="pracName__content ng-binding">{{practiceDto?.PracticeName}}</span>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+
+						<div>
+							<label class="ng-binding">{{'Practice ID' | translate }}</label>
+							<span class="pracCustNum__content ng-binding">{{practiceDto?.PracticeId}}</span>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+						    
+						<div>
+							<label class="ng-binding">{{'Address' | translate }}</label>
+							<span id="pracAddrLine1" class="pracAddr__content ng-binding" *ngIf="practiceDto?.AddressLine1?.length > 0">{{practiceDto.AddressLine1}} {{practiceDto.AddressLine2}}</span>
+							<span id="pracAddrLine3" class="pracAddr__content ng-binding" *ngIf="practiceDto?.City?.length > 0">{{practiceDto.City}}, {{practiceDto.State}} {{practiceDto.ZipCode}}</span>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="ng-binding">
+							<label class="ng-binding">{{'Phone & Fax' | translate }}</label>
+							<span class="pracPhones__content ng-binding"*ngIf="practiceDto?.PrimaryPhone?.length > 0">{{practiceDto.PrimaryPhone}} ({{'primary' | translate }})</span>
+							<span class="pracPhones__content ng-binding" *ngIf="practiceDto?.SecondaryPhone?.length > 0">{{practiceDto.SecondaryPhone}} ({{'secondary' | translate }})</span>
+							<span class="pracPhones__content ng-binding" *ngIf="practiceDto?.Fax?.length > 0">{{practiceDto.Fax}} ({{'fax' | translate}})</span>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+
+						<div class="ng-binding">
+							<label class="ng-binding">{{'Main Contact' | translate }}</label>
+							<span class="pracContact__content ng-binding" *ngIf="practiceDto?.MainContact?.length > 0">{{practiceDto.MainContact}}</span>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+
+						<div class="ng-binding">
+							<label class="ng-binding">{{'Time Zone' | translate }}</label>
+							<span class="pracPhones__content ng-binding" *ngIf="practiceDto?.Timezone?.length > 0">{{practiceDto.Timezone}}</span>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+
+						<div class="ng-binding" *ngIf="showUltToggle">
+							<label class="ng-binding">{{'Allow Restricted Logins by Day and Time' | translate }}</label>
+							<app-toggle [id]="'toggleModeSelect'"
+							    title="{{ultEditTooltip}}"
+								class="pracPhones__content ng-binding toggleModeClass"
+								[isDisabled]="savingUlt || !canEdit"
+								[isChecked]="ultSetting.settingValue==='true'"
+								(toggled)="toggleRestrictedUserLogin($event)">
+							</app-toggle>
+							<p *ngIf="this.ultSetting.settingValue==='true'">
+								<b>PLEASE READ</b><br>
+								Enabling this feature will allow you to set when your team members will have access to Fuse. Until you set up access for your team members in the <b>Restrict Day and Time Access</b> panel on their team member settings page, they will still have 24/7 access to Fuse.<br><br>
+								Your team members will be provided a message 15 minutes prior to session expiration and then a final message at 2 minutes. At the end of session time, the team member will <b>no longer be able to access Fuse for that day.</b>
+							</p>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+						
+						<div class="ng-binding" data-test="pracMFASettings" *ngIf="showMFASettings">
+							<label class="ng-binding">{{'Activate Two-Factor Authentication' | translate }}</label>
+							<p>
+								Two-Factor Authentication (2FA) adds an extra layer of security to user accounts by requiring a one-time
+								password (OTP) in addition to the regular login credentials.
+							</p>
+							<app-toggle [id]="'toggleMFASetting'" title="{{mfaSettingTooltip}}"
+								class="pracMFASettings__content ng-binding toggleModeClass" [isDisabled]="savingMFASetting"
+								[isChecked]="(mfaSettings$ | async).mfaEnabled" (toggled)="toggleMFASetting($event)">
+							</app-toggle>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+						
+						<div class="ng-binding" data-test="pracMFAPreferredMethod" *ngIf="showMFASettings && (mfaSettings$ | async).mfaEnabled">
+							<label class="ng-binding">{{'Select a Preferred Method of Authentication' | translate }}</label>
+							<p>
+								Select "Phone (SMS or Call)" or "Authenticator App" to apply a singular two-factor authentication method for all users
+								under
+								the practice. Select "Either Phone or Authenticator" to give users the option to pick a method of their choosing during
+								enrolment.
+							</p>
+							<div>
+								<label class="practRadio">
+									<input type="radio" name="mfaType" [value]="'none'" (change)="onMFAPreferredChange($event)"
+										[checked]="(mfaSettings$ | async).preferredMFAMethod === 'none'" [disabled]="savingMFASetting || !canEdit">
+									{{'Either Phone or Authenticator' | translate }}
+								</label>
+							</div>
+							<div>
+								<label class="practRadio">
+									<input type="radio" name="mfaType" [value]="'phone'" (change)="onMFAPreferredChange($event)"
+										[checked]="(mfaSettings$ | async).preferredMFAMethod === 'phone'" [disabled]="savingMFASetting || !canEdit">
+									{{'Phone (SMS or Call)' | translate }}
+								</label>
+							</div>
+
+							<div>
+								<label class="practRadio">
+									<input type="radio" name="mfaType" [value]="'authenticator'" (change)="onMFAPreferredChange($event)"
+										[checked]="(mfaSettings$ | async).preferredMFAMethod === 'authenticator'"
+										[disabled]="savingMFASetting || !canEdit">
+									{{'Authenticator App' | translate }}
+								</label>
+							</div>
+							<div class="clearfix">&nbsp;</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

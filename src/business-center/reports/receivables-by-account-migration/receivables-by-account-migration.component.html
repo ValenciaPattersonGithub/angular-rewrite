@@ -1,0 +1,121 @@
+<div *ngIf="isDataLoaded && reportData && reportData.length > 0 " class="no-outline">
+    <div class="receivablesbyaccountreport grid header">
+        <div class="col-sm-3-migration">{{ 'Responsible Party' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ '0-30 Days' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ '31-60 Days' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ '61-90 Days' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ '> 90 Days' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'In Collections' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Total Account Balance' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Estimated Insurance' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Estimated Insurance Adjustments' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Patient Portion' | translate }}</div>
+    </div>
+    <div class="receivablesbyaccountreportgroupHeader groupheader" style="padding-right: 0.5%;" *ngIf="!data.isSummaryView">
+        <div class="col-sm-12-migration text-center" id="headerLocationDiv"><h4>{{ ofcLocation }}</h4></div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="40" tabindex="0" (scrolledIndexChange)="nextItem($event)">
+            <div *cdkVirtualFor="let record of reportData; index as i" class="{{record.Class}} receivables-datarow">
+                <input type="hidden" value="{{record.Location}}" id="receviablesbyAccountLocation{{i}}" />
+                <div class="receivablesbyaccountreportgroupHeader" *ngIf="(i > 0 && record.IsLocationHeader == true) || data.isSummaryView"  id="divLocation{{i}}">
+                    <div class="col-sm-12-migration text-center" id="subHeaderLocationDiv{{i}}"><h4>{{ record.Location }}</h4></div>
+                </div>
+                <div class="receivablesbyaccountreport grid item" id="divMainInfo{{i}}" *ngIf="!data.isSummaryView && record.IsRow == true">
+                    <div class="col-sm-3-migration">{{record.ResponsibleParty  | translate }}</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.ThirtyDays >= 0">{{ record.ThirtyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.ThirtyDays < 0">({{ record.ThirtyDays * -1 | currency}})</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.SixtyDays >= 0">{{ record.SixtyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.SixtyDays < 0">({{ record.SixtyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.NinetyDays >= 0">{{ record.NinetyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.NinetyDays < 0">({{ record.NinetyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.MoreThanNinetyDays >= 0">{{ record.MoreThanNinetyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.MoreThanNinetyDays < 0">({{ record.MoreThanNinetyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.InCollection >= 0">{{ record.InCollection | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.InCollection < 0">({{ record.InCollection * -1 | currency}})</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.TotalAccountBalance >= 0">{{ record.TotalAccountBalance | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.TotalAccountBalance < 0">({{ record.TotalAccountBalance * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.TotalEstInsurance >= 0">{{ record.TotalEstInsurance | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.TotalEstInsurance < 0">({{ record.TotalEstInsurance * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.TotalEstInsuranceAdjustment >= 0">{{ record.TotalEstInsuranceAdjustment | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.TotalEstInsuranceAdjustment < 0">({{ record.TotalEstInsuranceAdjustment * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="record.TotalPatientPortion >= 0">{{ record.TotalPatientPortion | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="record.TotalPatientPortion < 0">({{ record.TotalPatientPortion * -1 | currency }})</div>
+                </div>
+
+                <div class="receivablesbyaccountreport grid item" id="locationTotalDiv{{i}}" *ngIf="record.IsLocationTotal == true">
+                    <div class="col-sm-3-migration reportGrid__label"  *ngIf="!data.isSummaryView && record.IsLocationTotal == true">{{record.Location  | translate }} {{'Totals' | translate}}:</div>
+                    <div class="col-sm-3-migration" *ngIf="data.isSummaryView && record.IsLocationTotal == true"></div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.ThirtyDays >= 0">{{ record.ThirtyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.ThirtyDays < 0">({{ record.ThirtyDays * -1 | currency}})</div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.SixtyDays >= 0">{{ record.SixtyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.SixtyDays < 0">({{ record.SixtyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.NinetyDays >= 0">{{ record.NinetyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.NinetyDays < 0">({{ record.NinetyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.MoreThanNinetyDays >= 0">{{ record.MoreThanNinetyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.MoreThanNinetyDays < 0">({{ record.MoreThanNinetyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.InCollection >= 0">{{ record.InCollection | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.InCollection < 0">({{ record.InCollection * -1 | currency}})</div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.TotalAccountBalance >= 0">{{ record.TotalAccountBalance | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.TotalAccountBalance < 0">({{ record.TotalAccountBalance * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.TotalEstInsurance >= 0">{{ record.TotalEstInsurance | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.TotalEstInsurance < 0">({{ record.TotalEstInsurance * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.TotalEstInsuranceAdjustment >= 0">{{ record.TotalEstInsuranceAdjustment | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.TotalEstInsuranceAdjustment < 0">({{ record.TotalEstInsuranceAdjustment * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.TotalPatientPortion >= 0">{{ record.TotalPatientPortion | currency }}</div>
+                    <div class="col-sm-1-migration text-right" [ngClass]= "{'reportGrid__label': !data.isSummaryView }" *ngIf="record.TotalPatientPortion < 0">({{ record.TotalPatientPortion * -1 | currency }})</div>
+                </div>
+
+                <div class="receivablesbyaccountreport grid item" *ngIf=" record.IsReportTotals == true">
+                    <div class="col-sm-3-migration reportGrid__label reportGrid__footer" >{{'Report Totals' | translate}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.ThirtyDays >= 0">{{ record.ThirtyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.ThirtyDays < 0">({{ record.ThirtyDays * -1 | currency}})</div>
+
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.SixtyDays >= 0">{{ record.SixtyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.SixtyDays < 0">({{ record.SixtyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.NinetyDays >= 0">{{ record.NinetyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.NinetyDays < 0">({{ record.NinetyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.MoreThanNinetyDays >= 0">{{ record.MoreThanNinetyDays | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.MoreThanNinetyDays < 0">({{ record.MoreThanNinetyDays * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.InCollection >= 0">{{ record.InCollection | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.InCollection < 0">({{ record.InCollection * -1 | currency}})</div>
+
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.TotalAccountBalance >= 0">{{ record.TotalAccountBalance | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.TotalAccountBalance < 0">({{ record.TotalAccountBalance * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.TotalEstInsurance >= 0">{{ record.TotalEstInsurance | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.TotalEstInsurance < 0">({{ record.TotalEstInsurance * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.TotalEstInsuranceAdjustment >= 0">{{ record.TotalEstInsuranceAdjustment | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.TotalEstInsuranceAdjustment < 0">({{ record.TotalEstInsuranceAdjustment * -1 | currency }})</div>
+
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.TotalPatientPortion >= 0">{{ record.TotalPatientPortion | currency }}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label reportGrid__footer" *ngIf="record.TotalPatientPortion < 0">({{ record.TotalPatientPortion * -1 | currency }})</div>
+                </div>
+                
+            </div>
+        </cdk-virtual-scroll-viewport>
+
+    </ng-container>
+</div>

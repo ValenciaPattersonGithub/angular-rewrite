@@ -1,0 +1,114 @@
+﻿
+<div class="text-align-center text-muted" *ngIf="loader" style="z-index: 2;position: absolute; left: 0px; top: 0px; right: 0px; bottom:0px; text-align: center;">
+    <i id="iDefaultMessage" class="fa fa-spinner fa-spin fa-2x loading"></i>
+</div>
+<div class="selectItem" *ngIf="widgetData.ItemId!=30">
+    <hr id="widgetDdlAbvLineBar" class="line-bar">
+    <select-options (chageOption)="callFromParent($event)" [widgetId]="widgetData.ItemId" [hidden]="widgetData.ItemId ===29"></select-options>
+    <hr id="widgetDdlblwLineBar" class="line-bar m-t-10" [hidden]="widgetData.ItemId ===29">
+</div>
+<div class="selectItem referrals-filter-list" *ngIf="widgetData.ItemId===30">
+    <hr id="widgetDdlAbvLineBar" class="line-bar">
+    <kendo-dropdownlist [tabIndex]="10"
+                        [data]="dataFilterOptions"
+                        [textField]="'text'"
+                        [valueField]="'value'"
+                        [valuePrimitive]="true"
+                        [defaultItem]="defaultFilter"
+                        [(ngModel)]="optionVal"
+                        name="dateRange"
+                        (valueChange)="onDataFilterChange($event)"
+                        ngDefaultControl #datedropdown>
+        <ng-template kendoDropDownListItemTemplate
+                     let-dataItem>
+            <span (click)="onSelectItem(dataItem)" [style.width.%]="100">{{ dataItem?.text }}</span>
+        </ng-template>
+        <ng-template kendoDropDownListValueTemplate
+                     let-dataItem>
+            {{ getCustomPlaceHolder(dataItem?.text) }}
+        </ng-template>
+    </kendo-dropdownlist>
+    <hr id="widgetDdlblwLineBar" class="line-bar m-t-10" [hidden]="showDateRange">
+</div>
+<div class="date-range-container" *ngIf="widgetData.ItemId===30 && showDateRange">
+    <div class="div-1">
+        <app-date-picker [value]="fromDate" [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" 
+                         name="fromDate" id="fromDate" [label]="'Start Date'"
+                         (dateChanged)="onDateFilterChange('fromDate',$event)"></app-date-picker>
+    </div>
+    <div class="div-1">
+        <app-date-picker [value]="toDate" [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"
+                         name="toDate" id="toDate" [label]="'End Date'"
+                         (dateChanged)="onDateFilterChange('toDate',$event)"></app-date-picker>
+
+    </div>
+    <div class="botton-container">
+        <hr class="m-tb-15 line-bar">
+        <div class="text-right">
+            <app-button class="clear-button-container" buttonLabel="{{'Clear'|translate }}" variation="secondary"
+                        (onClick)="clear()"></app-button>
+            <app-button (onClick)="onApplyFilter()" buttonLabel="{{'Search'| translate }}"
+                        variation="primary"></app-button>
+        </div>
+    </div>
+</div>
+<div id="claimsTotalArea" class="claims-total-area" *ngIf="totalValue !== 0 && widgetData.ItemId === 14">
+    <span id="claimsTotalVal" class="claims-total-val totalColor">{{claimsTotal | currency}}</span>
+    <span id="claimsTotal" class="claims-total"> {{claimsLabel}}</span>
+</div>
+<div id="statementTotalArea" class="statement-days" *ngIf="widgetData.ItemId === 29">
+    <span id="statementHeading" class="claims-total-val claims-total">Activity from Last <b>30</b> Days</span>
+</div>
+
+
+<div id="noDataArea" *ngIf="widgetData.ItemId!= 30 || (widgetData.ItemId== 30 && !showDateRange)"  [ngClass]="{'no-total-sub' : widgetData.ItemId === 14 && (totalValue === 0 || !totalValue), 'no-total-un' : widgetData.ItemId === 26,  'no-total-pre' : widgetData.ItemId === 27,'no-total-ref':widgetData.ItemId === 30 && !showDateRange}">
+    <span></span>
+</div>
+<div attr.id="Kendochart-{{widgetData.ItemId}}" class="KendochartHeight" *ngIf="!showDateRange">
+    <kendo-chart #chart (seriesClick)="drildown($event);">
+        <kendo-chart-title></kendo-chart-title>
+        <kendo-chart-area [height]="120" [margin]="{top:15, bottom:0,left:-15,right:0}">
+        </kendo-chart-area>
+        <kendo-chart-axis-defaults [line]="{visible:false}" [majorGridLines]="{ visible : false}">
+        </kendo-chart-axis-defaults>
+
+        <kendo-chart-category-axis>
+            <kendo-chart-category-axis-item>
+            </kendo-chart-category-axis-item>
+        </kendo-chart-category-axis>
+
+        <kendo-chart-value-axis>
+            <kendo-chart-value-axis-item [line]="{visible:false}" labels="false">
+            </kendo-chart-value-axis-item>
+        </kendo-chart-value-axis>
+
+
+
+        <kendo-chart-series>
+            <kendo-chart-series-item *ngFor="let item of detailSeries" [data]="item.items" field="roundedvalue"
+                                     categoryField="" [color]="color" type="column" [gap]="widgetGap" [spacing]="widgetSpacing" [labels]="{ visible: false}"
+                                     [border]="{width:0}" [visible]="seriesVisible">
+                >
+                <div *ngIf="totalValue !== 0">
+                    <kendo-chart-series-item-labels [content]="labelContent" format="{0:C}" color="#33333" font="12px 'Open Sans', sans-serif"
+                                                    [margin]="-1">
+                    </kendo-chart-series-item-labels>
+
+                    <kendo-chart-series-item-tooltip>
+                        <ng-template let-value="Value" let-dataItem="dataItem">
+                            {{dataItem.Count}}
+                            <p>{{ dataItem.Value | currency}}</p>
+                        </ng-template>
+                    </kendo-chart-series-item-tooltip>
+                </div>
+            </kendo-chart-series-item>
+        </kendo-chart-series>
+
+    </kendo-chart>
+    <div class="no-data" *ngIf="!totalValue || (widgetData.ItemId===30 && totalValue === 0 && !showDateRange)">
+        No Data
+    </div>
+</div>
+
+<bar-solid-area [chart]="chart" [widgetData]="widgetData" [totalValue]="totalValue"  *ngIf="shouldDisplayChart()"></bar-solid-area>
+

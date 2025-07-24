@@ -1,0 +1,71 @@
+﻿<div ng-show="deleteSectionItemIndex == sectionItemIndex">
+    <div id="sectionItemDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}" class="media-body master-list-warning-msg">
+        <are-you-sure message="{{ 'Are you sure you want to {0}' | i18n:['delete this section item?'] }}" if-yes="deleteSectionItem()" if-no="cancelDeleteSectionItemConfirmBox()"></are-you-sure>
+    </div>
+</div>
+<div class="panel-group section-item-panel">
+    <div class="panel panel-default">
+        <div class="formContainer">
+            <div class="col-md-4">
+                <b id="formItemTypeHeader{{sectionIndex}}_{{sectionItemIndex}}"> {{sectionItem.FormItemTypeName}}</b>
+            </div>
+            <div class="col-md-offset-8">
+                <i id="btnMoveUpSectionItem{{sectionIndex}}_{{sectionItemIndex}}" class="fa fa-arrow-up fa-2x noteTemplate__icon" uib-tooltip="Move Up" ng-class="{'disabled': $first}" ng-click="moveSectionItemUp(sectionIndex,sectionItemIndex)"></i>
+                <i id="btnMoveDownSectionItem{{sectionIndex}}_{{sectionItemIndex}}" class="fa fa-arrow-down fa-2x noteTemplate__icon" uib-tooltip="Move Down" ng-class="{'disabled': $last}" ng-click="moveSectionItemDown(sectionIndex,sectionItemIndex)"></i>
+                <i id="btnCopySectionItem{{sectionIndex}}_{{sectionItemIndex}}" class="fas fa-copy fa-2x noteTemplate__icon" uib-tooltip="Copy" ng-click="copySectionItem(sectionIndex,sectionItemIndex)"></i>
+                <i id="btnConfirmDeleteSectionItem{{sectionIndex}}_{{sectionItemIndex}}" class="fa fas fa-trash-alt fa-2x noteTemplate__icon" uib-tooltip="Delete" ng-click="confirmDeleteSectionItem(sectionItemIndex)"></i>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="formContainer">
+            <!--Questions with Yes/No True/False-->
+            <div id="questionYesNoTrueFalse{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 2 || sectionItem.FormItemType === 8}}" ng-show="sectionItem.FormItemType === 2 || sectionItem.FormItemType === 8">
+                <question-yes-no-true-false></question-yes-no-true-false>               
+            </div>
+            <!--Questions with Comments/Essay-->
+            <div id="questionCommentEssay{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 7}}" ng-show="sectionItem.FormItemType === 7">
+                <question-comment-essay></question-comment-essay>
+            </div>
+            <!--Questions with Multiple Choice-->
+            <div id="questionMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}" show-focus="{{sectionItem.FormItemType === 3}}" class="row" ng-show="sectionItem.FormItemType === 3">
+                <question-multiple-choice></question-multiple-choice>
+                <h5>&nbsp;</h5>
+            </div>
+
+            <!--Questions with Signature Box-->
+            <div id="questionSignatureBox{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 4}}" ng-show="sectionItem.FormItemType === 4">
+                <question-signature-box></question-signature-box>
+            </div>
+
+            <!--Questions with Date of Completion-->
+            <div id="questionDateStamp{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 5}}" ng-show="sectionItem.FormItemType === 5">
+                <question-date-stamp></question-date-stamp>
+            </div>
+
+            <!--Questions with Emergency Stamp-->
+            <div id="questionEmergencyContact{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 6}}" ng-show="sectionItem.FormItemType === 6">
+                <question-emegency-contact></question-emegency-contact>
+            </div>
+
+            <!--Question with Demographic Question/Answer -->
+            <div id="questionDemographic{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 1}}" ng-show="sectionItem.FormItemType === 1">
+                <question-demographic></question-demographic>
+            </div>
+            <!--Questions with Adlib-->
+            <div id="questionAdlib{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 9}}" ng-show="sectionItem.FormItemType === 9">
+                <question-adlib></question-adlib>                
+            </div>
+
+            <!--Questions with Link Tooth-->
+            <div id="questionLinkTooth{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 10}}" ng-show="sectionItem.FormItemType === 10">
+                <question-link-tooth></question-link-tooth>
+            </div>            
+            <!--Questions with Text Field-->
+            <div id="questionTextField{{sectionIndex}}_{{sectionItemIndex}}" class="row" show-focus="{{sectionItem.FormItemType === 11}}" ng-show="sectionItem.FormItemType === 11">
+                <custom-text-field></custom-text-field>
+            </div>
+            
+        </div>
+    </div>
+</div>

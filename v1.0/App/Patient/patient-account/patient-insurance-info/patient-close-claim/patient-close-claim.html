@@ -1,0 +1,44 @@
+﻿<div class="patient-close-claim">
+    <div class="modal-header"><h4 id="lblWarningModalHeader">{{ item.Title | i18n }}</h4></div>
+    <div class="modal-body confModalWithInc__modalBody">
+        <label id="lblWarningModalUpperMessage">{{ item.UpperMessage }}</label>
+        <div ng-show="item.Data && item.Data.length > 0">
+            <div>Dependents: </div>
+            <div ng-repeat="dependent in item.Data">{{dependent.PersonLiteDto.FirstName}} {{dependent.PersonLiteDto.LastName}}</div>
+        </div>
+        <label id="lblWarningModalLowerMessage">{{ item.LowerMessage }}</label>
+    </div>
+    <div class="peopleMgmt__body fuseGrid" ng-show="item.Claims && item.Claims.length > 0">
+        <div class="row header">
+            <div class="col-sm-2">{{ ::('Patient Name' | i18n) }}</div>
+            <div class="col-sm-2">{{ ::('Date of Service(s)' | i18n) }}</div>
+            <div class="col-sm-1">{{ ::('Priority' | i18n) }}</div>
+            <div class="col-sm-3">{{ ::('Status' | i18n) }}</div>
+            <div class="col-sm-1">{{ ::('Total Fee' | i18n) }}</div>
+            <div class="col-sm-2">{{ ::('Service Codes' | i18n) }}</div>
+            <div class="col-sm-1">{{ ::('Close' | i18n) }}</div>
+            <div class="col-sm-1">{{ ::('Keep Open' | i18n) }}</div>
+        </div>
+        <hr />
+        <div class="row body" ng-repeat="claim in item.Claims | orderBy: 'PatientBenefitPlanPriority'">
+            <div class="col-sm-2">{{claim.PatientName}}</div>
+            <div class="col-sm-2">{{claim.ClaimDate}}</div>
+            <div class="col-sm-1">{{claim.PatientBenefitPlanPriority | priorityLabel}}</div>
+            <div class="col-sm-3">{{claim.Status | statusDefinition}}</div>
+            <div class="col-sm-1">{{claim.TotalFees | currency}}</div>
+            <div class="col-sm-2">{{claim.Codes}}</div>
+            <div class="col-sm-1">
+                <input type="radio" name="claim{{claim.ClaimId}}" ng-disabled="claim.Status === 4 || claim.Status === 9" ng-value="true" ng-model="claim.Close" />
+            </div>
+            <div class="col-sm-1">
+                <input type="radio" name="claim{{claim.ClaimId}}" ng-disabled="claim.Status === 4 || claim.Status === 9" ng-value="false" ng-model="claim.Close" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right">
+            <button id="btnCancelNo" ng-show="item.Button2Text?true:false" ng-click="close();" class="btn btn-link">{{ 'Cancel' | i18n }}</button>
+            <button id="btnOK" ng-click="collectClosing();" class="btn btn-primary">{{ 'Continue' | i18n }}</button>
+        </div>
+    </div>
+</div>

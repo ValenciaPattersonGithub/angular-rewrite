@@ -1,0 +1,62 @@
+<div class="profile-section">
+    <ng-container *ngIf="layout===1">
+        <div class="panel" [class.inactive]="inactive">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>
+                        <ng-container>{{sectionTitle | translate}} </ng-container>
+                        <ng-container>{{count | translate}}</ng-container>
+                    </h4>
+                </div>
+                <div class="panel-btn">
+                    <span id="imgTabIconRight" *ngIf="showNoAccountIcon"
+                        class="glyphicon margin-right-5 error glyphicon-exclamation-sign"></span>
+                    <span *ngFor="let action of actions; index as i" >
+                        <a *ngIf="(action.Path > '')" 
+                            id="{{ baseId }}Link{{i}}" (click)="redirectTo(action.Path, action.Text)"
+                            class="btn btn-default" [class.inactive]="inactive" attr.check-auth-z="{{action.amfa}}">
+                            {{action.Text | translate}}
+                        </a>
+                        <button *ngIf="!action.Path && action.Function" id="{{ baseId }}Link{{i}}"
+                            (click)="action.Function()" class="btn btn-default"
+                            [disabled]="inactive || action.Inactive===true" title="{{action.toolTip | translate}}"
+                            attr.check-auth-z="{{action.amfa}}">
+                            {{action.Text | translate}}
+                        </button>
+                    </span>
+
+                </div>
+            </div>
+            <div class="panel-body">
+                <ng-content select="[layout1]"></ng-content>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="layout===2">
+        <div class="panel padding-top-10">
+            <div class="">
+                <div class="panel-btn padding-bottom-8">
+                    <span id="imgTabIconRight" *ngIf="showNoAccountIcon"
+                        class="glyphicon margin-right-5 error glyphicon-exclamation-sign"></span>
+                    <span *ngFor="let action of actions; index as i">
+                        <a *ngIf="action.Path > ''" id="{{ baseId }}Link{{i}}" href="{{ action.Path }}"
+                            class="btn btn-primary" [class.inactive]="inactive" attr.check-auth-z="{{action.amfa}}">
+                            {{action.Text | translate}}
+                        </a>
+                        <button *ngIf="!action.Path && action.Function" id="{{ baseId }}Link{{i}}"
+                            (click)="action.Function()" class="btn btn-primary"
+                            [disabled]="inactive || action.Inactive===true" title="{{action.toolTip | translate}}"
+                            attr.check-auth-z="{{action.amfa}}">
+                            {{action.Text | translate}}
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="panel-body">
+                <ng-content select="[layout2]"></ng-content>
+            </div>
+        </div>
+    </ng-container>
+
+</div>

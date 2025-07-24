@@ -1,0 +1,95 @@
+﻿<div class="rowFull white">
+    <form name="svcFeeRollback">
+        <!--header-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>{{'Service Fee Rollback' | i18n}}</h4>
+                </div>
+            </div>
+            <div class="panel-body">{{'These fees have been updated since originally proposed.  Select services below to rollback. '|i18n}}</div>
+        </div>
+
+
+
+        <div class="svcFeeRollback__body">
+            <div class="svcFeeRollback__list">
+                <div class="clearfix"></div>
+                <div class="fuseGrid container pull-left">
+                    <div class="row header">
+                        <div id="gridHeaderCbx" class="col-sm-1 cell">
+
+                        </div>
+                        <div id="gridHeaderCreatedDate" class="col-sm-2 cell sortCursor"
+                             ng-click="changeSortingForGrid('CreatedDate')">
+                            {{'Date Proposed'|i18n}}
+                            <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'CreatedDate'"></span>
+                        </div>
+                        <div id="gridHeaderServiceCode" class="col-sm-1 cell sortCursor"
+                             ng-click="changeSortingForGrid('Code')">
+                            {{'Service Code'|i18n}}
+                            <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'Code'"></span>
+                        </div>
+                        <div id="gridHeaderCdtCodeName" class="col-sm-1 cell sortCursor"
+                             ng-click="changeSortingForGrid('CdtCodeName')">
+                            {{'CDT Code'|i18n}}
+                            <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'CdtCodeName'"></span>
+                        </div>
+                        <div id="gridHeaderDescription" class="col-sm-3 cell">
+                            {{'Description'|i18n}}
+                        </div>
+                        <div id="gridHeaderPriorFee" class="col-sm-2 cell pull-left">
+                            {{'Original Fee'|i18n}}
+                        </div>
+                        <div id="gridHeaderCurrentFee" class="col-sm-2 cell">
+                            {{'New Fee'|i18n}}
+                        </div>
+
+
+                    </div>                    
+                        <div class="row body" ng-repeat="svc in servicesToRollback | orderBy:orderBy.field:!orderBy.asc ">
+                            <div id="gridRowCbx_{{$index}}" class="col-sm-1 cell" >
+                                <checkbox change-function="rollBackFee(svc)" checkbox-value="svc.$$RollbackFee" checkbox-hidden="false"></checkbox>
+                            </div>
+                            <div id="gridRowCreatedDate_{{$index}}" class="col-sm-2 cell ">                                
+                                {{svc.CreatedDate | toDisplayDate}}
+                            </div>
+                            <div id="gridRowCode_{{$index}}" class="col-sm-1 cell " ng-bind-html="svc.$$ServiceCode.Code">
+                            </div>
+                            <div id="gridRowCdtCodeName_{{$index}}" class="col-sm-1 cell" ng-bind-html="svc.$$CdtCode">                                
+                            </div>
+                            <div id="gridRowDescription_{{$index}}" class="col-sm-3 cell truncate" ng-bind-html="svc.$$ServiceCode.Description ">
+                            </div>
+                            <div id="gridRowPriorFee_{{$index}}" class="col-sm-2 cell" >
+                                {{svc.PriorFee | currency}}
+                            </div>
+                            <div id="gridRowFee_{{$index}}" class="col-sm-2 cell" >
+                                {{svc.Fee | currency}}
+                            </div>
+                        </div>                    
+                </div>
+                <!--actions-->
+                <div class="clearfix"></div>
+                <div class="svcFeeRollback__footer ">
+                    <div class="svcFeeRollback__actions">
+                        <button id="btnSaveFeeList"
+                                class="btn btn-primary pull-right"
+                                ng-click="rollBackFees()"
+                                check-auth-z="soar-acct-actsrv-edit"
+                                ng-disabled="saving || dataHasChanged===false">
+                            {{ 'Rollback' |i18n }}
+                        </button>
+                        <button id="btnCancelFeeList"
+                                class="btn btn-default pull-right"
+                                ng-click="cancelListChanges()"
+                                ng-disabled="saving ">
+                            {{ 'Cancel' |i18n }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

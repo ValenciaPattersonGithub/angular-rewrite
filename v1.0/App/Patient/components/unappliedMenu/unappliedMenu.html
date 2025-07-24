@@ -1,0 +1,17 @@
+﻿<div class="btn-group" ng-if="unappliedTransactions.length>0">
+    <button data-toggle="{{(showUnappliedDetail == false) ? 'dropdown' : ''}}" class="btn btn-link dropdown-toggle" ng-if="showUnappliedTotal">
+        <i class="fa fa-question-circle"></i>
+        <span id="labelTotalUnappliedAmount">{{getTotalUnappliedAmount() | formatCurrencyWithParensIfNeg }}{{' Unapplied' | i18n:[] }}</span>
+    </button>
+    <a data-toggle="{{(showUnappliedDetail == false) ? 'dropdown' : ''}}" class="btn-link dropdown-toggle" ng-if="!showUnappliedTotal">
+        <i class="fa fa-question-circle"></i>
+    </a>
+    <ul class="pull-right dropdown-menu unappliedMenu__list" ng-if="showUnappliedDetail == false">
+        <li ng-repeat="creditTransactionDto in unappliedTransactions" class="unappliedMenu__list-item">
+            <span ng-if="creditTransactionDto.TransactionTypeId==2">{{ creditTransactionDto.UnassignedAmount | formatCurrencyWithParensIfNeg }} {{'Unapplied {0}' | i18n:['Account Payment']}}</span>
+            <span ng-if="creditTransactionDto.TransactionTypeId==3">{{ creditTransactionDto.UnassignedAmount | formatCurrencyWithParensIfNeg }} {{'Unapplied {0}' | i18n:['Insurance Payment']}}</span>
+            <span ng-if="creditTransactionDto.TransactionTypeId==4">{{ creditTransactionDto.UnassignedAmount | formatCurrencyWithParensIfNeg }} {{'Unapplied {0}' | i18n:['Negative Adjustment']}}</span>
+        </li>
+        <li><a id="applyNow" check-auth-z="soar-acct-aapmt-add,soar-acct-cdtadj-add" ng-click="openAdjustmentModal(creditTransactionDto)" class="unappliedMenu__ctrl btn-link">{{ 'Apply Now' | i18n }}</a></li>
+    </ul>
+</div>

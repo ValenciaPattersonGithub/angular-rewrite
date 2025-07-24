@@ -1,0 +1,66 @@
+﻿<div class="toothChartInput">
+    <input class="toothChartInput__form" 
+           type="text" 
+           ng-model="selectedTeeth" 
+           ng-focus="tChartToggle($event)" />
+    
+    <div class="toothChartInput__content" ng-class="{active: tChartPopoverActive, orientTop: orientV}">
+        <div class="toothChartInput__row">
+            <button class="toothChartInput__close" ng-click="tChartToggle($event)"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="toothChartInput__row">
+            <div class="toothChartInput__perm">
+                <div class="toothChartInput__permTop">
+                    <button id="{{tooth.USNumber}}"
+                            class="toothChartInput__toothCtrl"
+                            ng-click="selectTooth(tooth)"
+                            ng-class="{active: tooth.Selected}"
+                            ng-disabled="disableSelection"
+                            ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Upper', Description: 'Permanent'}">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+                <div class="toothChartInput__permBtm">
+                    <button id="{{tooth.USNumber}}"
+                            class="toothChartInput__toothCtrl"
+                            ng-click="selectTooth(tooth)"
+                            ng-class="{active: tooth.Selected}"
+                            ng-disabled="disableSelection"
+                            ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Lower', Description: 'Permanent'} | orderBy : 'USNumber' : true">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="toothChartInput__row">
+            <div class="toothChartInput__regions">
+                
+            </div>
+            <div class="toothChartInput__prim">
+                <div class="toothChartInput__primTop">
+                    <button id="{{tooth.USNumber}}"
+                            class="toothChartInput__toothCtrl"
+                            ng-click="selectTooth(tooth)"
+                            ng-class="{active: tooth.Selected}"
+                            ng-disabled="disableSelection"
+                            ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Upper', Description: 'Primary'}">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+                <div class="toothChartInput__primBtm">
+                    <button id="{{tooth.USNumber}}"
+                            class="toothChartInput__toothCtrl"
+                            ng-click="selectTooth(tooth)"
+                            ng-class="{active: tooth.Selected}"
+                            ng-disabled="disableSelection"
+                            ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Lower', Description: 'Primary'} | orderBy : 'USNumber' : true">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+            </div>
+            <div class="toothChartInput__regions">
+                
+            </div>
+        </div>
+    </div>
+</div>

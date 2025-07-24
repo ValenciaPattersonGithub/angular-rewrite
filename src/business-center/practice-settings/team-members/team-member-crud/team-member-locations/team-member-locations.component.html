@@ -1,0 +1,246 @@
+<div id="userLocationsSetup" class="userLocationsSetup panel panel-default">
+    <form [formGroup]="frmUserLocations" name="frmUserLocations" role="form">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                {{ 'Locations, Providers, and Roles' | translate }}
+            </h4>
+            <span class="panel-btn pull-right">
+                <button id="btnViewRoles" (click)="viewRoles()" class="btn btn-default">{{ 'View Roles' | translate
+                    }}</button>
+                <button id="btnCompareRoles" (click)="compareRoles()" class="btn btn-default" target="_blank">{{
+                    'Compare Roles' | translate }}</button>
+            </span>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 ">
+                    <label>{{'Team Member Type'| translate}}</label>
+                    <div>
+                        <span>{{'Select \"Assign Roles by Location\" if you wish to only assign locations and security
+                            roles for this team member. Selecting \"Practice Admin\Executive Dentist\" will give this
+                            team member access to ALL locations and they can perform any action.' | translate}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- TODO get correct amfas -->
+            <div class="row">
+                <div class="col-xs-12 padding-10">
+                    <span class=" padding-10">
+                        <input id="radioAssignRolesByLocation" type="radio" formControlName="IsPracticeAdmin"
+                            checkRoleAccess="plapi-user-usrrol-create"
+                            [disabled]="loggedInUserHasPracticeAccess==false || loading == true"
+                            (change)="changeRoleAssignment(false)" value="false">
+                        {{ 'Assign Role(s) by Location' | translate }}
+                    </span>
+                    <span class="padding-10">
+                        <input id="radioAssignRolesByPractice" type="radio" formControlName="IsPracticeAdmin"
+                            checkRoleAccess="plapi-user-usrrol-create"
+                            [disabled]="loggedInUserHasPracticeAccess==false || loading == true"
+                            (change)="changeRoleAssignment(true)" value="true">
+                        {{ 'Practice Admin/Exec. Dentist' | translate }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 padding-10">
+                    <div class="col-xs-6">
+                        <button id="btnAddUserLocationSetup" class="btn btn-default" (click)="addUserLocationSetup()"
+                            [disabled]="loading|| availableLocations?.length == 0 "
+                            checkRoleAccess="plapi-user-usrrol-create" #btnAddUserLocationSetup>
+                            {{ 'Add Location' | translate }}</button>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <div class="col-xs-8 text-right">
+                            <label>{{'User Access' | translate}}</label>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="onoffswitch pull-right">
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                    id="inactivateSwitch" [disabled]="loading == true" formControlName="IsActive"
+                                    (change)="toggleUserAccess()" [checked]="user?.IsActive">
+                                <label class="onoffswitch-label" for="inactivateSwitch"
+                                    style="margin-bottom:0px;"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <div class="col-xs-3" *ngIf="currentStatus!=user?.IsActive">
+                            <label class="control-label float-right">{{ 'Reason*' | translate }} </label>
+                        </div>
+                        <div class="col-xs-9" *ngIf="currentStatus!=user?.IsActive"
+                            [ngClass]="{error: toggleTrue && (user?.StatusChangeNote == null || user?.StatusChangeNote?.length == 0) && !frmUserLocations?.get('StatusChangeNote')?.valid}">
+                            <input type="text" formControlName="StatusChangeNote" class="form-input"
+                                name="statusChangeNote" id="statusChangeNote" (change)="changeReasonNote()"
+                             #StatusChangeNote    placeholder="{{ reasonPlaceHolder | translate }}" required />
+                            <span id="errStatusNote" class="text-danger"
+                                *ngIf="!user?.StatusChangeNote && frmUserLocations?.get('StatusChangeNote')?.errors?.required">
+                                {{ 'Reason for status change required.' | translate }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- grid for current locations setup -->
+            <hr>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="fuseGrid container pull-left">
+                        <div class="row header">
+                            <div class="col-sm-2 cell">
+                                <div>{{ 'Location' | translate }}</div>
+                            </div>
+                            <div class="col-sm-1 cell">
+                                <div>{{ 'Provider Type' | translate }}</div>
+                            </div>
+                            <div class="col-sm-2 cell">
+                                <div>{{ 'Security Roles' | translate }}</div>
+                            </div>
+                            <div class="col-sm-2 cell">
+                                <div>{{ 'Employment Status' | translate }}</div>
+                            </div>
+                            <div class="col-sm-1 cell">
+                                <div>{{ 'Provider (Claims)' | translate }}</div>
+                            </div>
+                            <div class="col-sm-1 cell center ">
+                                <div>{{ 'Active' | translate }}</div>
+                            </div>
+                            <div class="col-sm-1 cell">{{'Provider Color'| translate}}
+                            </div>
+                            <div class="col-sm-1 cell">
+                            </div>
+                        </div>
+                        <div class="row body"
+                            *ngFor="let userLocationSetup of filteredUserLocationSetups | orderBy: {sortColumnName: '$$Location?.NameLine1', sortDirection: 1}; let i = index">
+
+                            <div class="col-sm-2 cell" id="userLocationSetupLocationName{{i}}"
+                                title="{{ userLocationSetup?.$$Location?.NameLine1 }}" kendoTooltip position="top"
+                                tooltipClass="app-tooltip">
+                                {{ userLocationSetup?.$$Location?.NameLine1 | truncateText: 64 }}
+                            </div>
+                            <div class="col-sm-1 cell" id="userLocationSetupProviderTypeName{{i}}"
+                                title="{{ userLocationSetup?.$$ProviderTypeName }}" kendoTooltip position="top"
+                                tooltipClass="app-tooltip">
+                                {{ userLocationSetup?.$$ProviderTypeName }}
+                            </div>
+                            <!-- practice roles -->
+                            <div class="col-sm-2 cell" *ngIf="user?.$$isPracticeAdmin">
+                                <div *ngIf="user?.IsActive" class="display-grid">
+                                    <app-chips variation="primary" [chipsText]="practiceRole?.RoleName" class="mb-3px"
+                                        [tooltip]="practiceRole?.RoleName" [showIcon]="false"
+                                        *ngFor="let practiceRole of getRxRoleFilter();">
+                                    </app-chips>
+                                </div>
+                            </div>
+                            <!-- or location Roles -->
+                            <div class="col-sm-2 cell" *ngIf="!user?.$$isPracticeAdmin">
+                                <div *ngIf="user?.IsActive" class="display-grid">
+                                    <app-chips variation="primary" [chipsText]="locationRole?.RoleName" class="mb-3px"
+                                        [tooltip]="locationRole?.RoleName" [showIcon]="false"
+                                        *ngFor="let locationRole of deletedRolesFilter(userLocationSetup?.$$UserLocationRoles);">
+                                    </app-chips>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-2 cell">
+                                <span id="userLocationSetupProviderTypeId{{i}}"
+                                    *ngIf="userLocationSetup?.ProviderTypeId !== notAProvider"
+                                    title="{{ userLocationSetup?.$$ProviderQualifierTypeName }}" kendoTooltip
+                                    position="top" tooltipClass="app-tooltip">
+                                    {{ userLocationSetup?.$$ProviderQualifierTypeName }}</span>
+                            </div>
+                            <div class="col-sm-1 cell">
+                                <span id="userLocationSetupProviderOnClaims{{i}}"
+                                    *ngIf="userLocationSetup?.ProviderTypeId !== notAProvider"
+                                    title="{{userLocationSetup?.$$ProviderOnClaims }}" kendoTooltip position="top"
+                                    tooltipClass="app-tooltip">
+                                    {{ userLocationSetup?.$$ProviderOnClaims | truncateText: 64}}</span>
+                            </div>
+                            <div class="col-sm-1 cell-active">
+                                <app-check-box id="" *ngIf="userLocationSetup?.ProviderTypeId !== 4"
+                                    [value]="userLocationSetup?.IsActive" [isDisabled]="true"
+                                    [checked]="userLocationSetup?.IsActive">
+                                </app-check-box>
+                            </div>
+                            <div class="col-sm-1">
+                                <span id="lblProviderColorPreview{{i}}" *ngIf="userLocationSetup?.ProviderTypeId !== 4"
+                                    class="userLocationsSetup__providerColor"
+                                    [ngStyle]="{'background-color': userLocationSetup?.Color}">
+                                </span>
+                            </div>
+
+                            <!-- todo handle the disabled property ? , auth, delete, edit, tooltip -->
+                            <div class="col-sm-1 cell margin-left-15">
+                                <!--delete button-->
+                                <!--should be disabled if this user doesn't have plapi-user-usrrol-delete for this location determined by permittedLocations-->
+                                <!-- the current user can only delete this location if they have permission to do so for this location 
+                                and the provider does not have provider hours or appointments for this location-->
+                                <button id="btnDeleteUserLocationSetup{{i}}"
+                                    [disabled]="userLocationSetup?.$$CanRemoveLocation===false "
+                                    class="btn btn-default btn-link pull-right cursor-pointer"
+                                    checkRoleAccess="soar-biz-bizusr-delete" [ngClass]="{ disabled: false }"
+                                    (click)="removeUserLocationSetup(userLocationSetup)"
+                                    title="{{'Remove User Location Setup'| translate}}">
+                                    <i class="far fa-trash-alt fa-lg"></i>
+                                </button>
+                                &nbsp;
+                                <!--edit button-->
+                                <!--should be disabled if this user doesn't have plapi-user-usrrol-create for this location-->
+                                <!-- the current user can only edit this location if they have permission to do so for this location determined by permittedLocations-->
+                                <button id="btnEditUserLocationSetup{{i}}"
+                                    [disabled]="userLocationSetup?.$$CanEditLocation===false"
+                                    class="btn btn-default btn-link pull-left cursor-pointer"
+                                    [ngClass]="{ disabled: false }" checkRoleAccess="plapi-user-usrrol-create"
+                                    (click)="editUserLocationSetup(userLocationSetup)"
+                                    title="{{'Edit User Location Setup' | translate}}">
+                                    <i class="far fa-edit fa-lg"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-12 error" *ngIf="userLocationSetup?.$$CanRemoveLocation===false">
+                                <div id="">{{'This provider cannot be changed because he/she has scheduled hours and/or
+                                    scheduled appointments.' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Validation -->
+            <div class="userRoles__validationErrors">
+                <div id="divNoUserLocationMessage" class="col-md-12 error padding-top-10"
+                    *ngIf="userLocationsErrors?.NoUserLocationsError ==true">
+                    {{'Your team member must have at least one location and one role before saving.' | translate}}
+                </div>
+
+                <div id="divPracticeRolesChangedMessage" class="col-md-12 padding-top-10 warning"
+                    *ngIf="displayPracticeRolesChangedMessage">
+                    {{'This team member will need to sign out of Fuse and log back in for any added or removed roles to
+                    take effect.' | translate}}
+                </div>
+
+                <div id="divEachLocationMustHaveRoles" class="col-md-12 error padding-top-10"
+                    *ngIf="showMissingRolesMessage">
+                    {{ 'Your team member must have at least one role assigned per location.' | translate }}
+                </div>
+
+                <div id="divNeedLicenseForStates" class="col-md-12 padding-top-10 warning"
+                    *ngIf="needLicenseStates?.length > 0">
+                    {{'Please add a State License for' | translate}} {{needLicenseStates}}
+                </div>
+
+                <div id="divMustHaveOneAdmin" class="col-md-12 error padding-top-10" *ngIf="practiceOnlyHasOneAdmin">
+                    {{'Your Practice must have at least one team member assigned as Practice Admin/Exec. Dentist. Please
+                    assign this role to another active user before removing this role from your profile.' | translate}}
+                </div>
+            </div>
+
+            <!-- Team member location setup crud component registered here -->
+            <team-member-location-setup [providerTypes]="providerTypes" [userLocationSetups]="userLocationSetups"
+                (addUserLocationSetupCallback)="addUserLocationSetupToList($event)"
+                [user]="user"></team-member-location-setup>
+        </div>
+    </form>
+</div>
+<view-compare-roles></view-compare-roles>

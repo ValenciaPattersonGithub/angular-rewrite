@@ -1,0 +1,180 @@
+<div *ngIf="isDataLoaded && reportView == 'detailed'" class="no-outline">
+    <div class="referralsourcesproductivityDetailedreport grid header">
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Location' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Referral In' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Categories' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Patient' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Referral Date' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'First Visit' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Range Selected' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'This Month Productivity' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom rpt-brd-last">{{ 'This Year Productivity' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="10" tabindex="0">
+            <div *cdkVirtualFor="let referralsources of reportData; index as i" class="{{referralsources.Class}}">                
+                <div class="referralsourcesproductivityDetailedreport grid"
+                    *ngIf="referralsources.IsReferralSourceHeader == true">
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.Location }}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferredPatient}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferralSource}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.Patient}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferralDate}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ referralsources.FirstVisit | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.RangeSelected | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.ThisMonth | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom rpt-brd-last text-right">{{ referralsources.ThisYear | currency}}</div>
+                </div>
+                <div class="referralsourcesproductivityDetailedreport grid"
+                    *ngIf="referralsources.IsReferralSourceHeader == false">
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferredPatient}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferralSource}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.Patient}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferralDate}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ referralsources.FirstVisit | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.RangeSelected | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.ThisMonth | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom rpt-brd-last text-right">{{ referralsources.ThisYear | currency}}</div>
+                </div>
+                <div class="referralsourcesproductivityDetailedreport grid item" id="divMainInfo2{{i}}"
+                    *ngIf="referralsources.IsReportTotals == true" style="font-weight: bold;">
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom">Total for {{referralsources.ReferralNameForTotal}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.RangeSelectedTotal | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.ThisMonthTotal | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom rpt-brd-last text-right">{{ referralsources.ThisYearTotal | currency}}</div>
+                </div>
+                <div class="referralsourcesproductivityDetailedreport grid item" id="divMainInfo2{{i}}"
+                    *ngIf="referralsources.IsLocationReportTotals == true && (referralsources.ShowTotals == true || asyncBlobId != '')" style="font-weight: bold;">
+                    <div class="col-sm-2-migration rpt-cell-custom">Total for {{referralsources.LocationName}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.RangeSelectedLocationTotal | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.ThisMonthLocationTotal | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom rpt-brd-last text-right">{{ referralsources.ThisYearLocationTotal | currency}}</div>
+                </div>
+                <div class="referralsourcesproductivityDetailedreport grid item" id="divMainInfo21{{i}}"
+                    *ngIf="referralsources.IsFinalReportTotals == true" style="font-weight: bold;">
+                    <div class="col-sm-2-migration rpt-cell-custom ref-grid-report-total">Report Total</div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right ref-grid-report-total">{{ referralsources.ReportTotalRangeSelected | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right ref-grid-report-total">{{ referralsources.ReportTotalThisMonth | currency}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom rpt-brd-last text-right ref-grid-report-total">{{ referralsources.ReportTotalThisYear | currency}}</div>
+                </div>
+            </div>
+
+        </cdk-virtual-scroll-viewport>
+        <!-- <div class="pgr-pager" *ngIf="numberOfPages > 0">
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(1)">&lt;</span>
+            <span *ngFor="let page of pagesArray; let i = index"
+                [ngClass]="{ 'pgr-active-page-nm': currentPageNumber === i + 1, 'pgr-page-nm': currentPageNumber !== i + 1}"
+                (click)="onPageChange(i + 1)">{{i + 1}}</span>
+
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(numberOfPages)">&gt;</span>
+        </div> -->
+
+        <div class="pgr-pager" *ngIf="numberOfPages > 0">
+            <!-- First and Previous buttons -->
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(1)" [ngClass]="{'disabled': isFirstPage()}">&laquo;</span>
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(currentPageNumber - 1)" [ngClass]="{'disabled': isFirstPage()}">&lt;</span>
+        
+            <!-- Show first page if not included in the range -->
+            <span *ngIf="pagesArray[0] > 1" (click)="onPageChange(1)">1</span>
+            <span *ngIf="showFirstEllipsis()">...</span>
+        
+            <!-- Page numbers range -->
+            <span *ngFor="let page of pagesArray"
+                  [ngClass]="{ 'pgr-active-page-nm': currentPageNumber === page, 'pgr-page-nm': currentPageNumber !== page }"
+                  (click)="onPageChange(page)">
+                {{page}}
+            </span>
+        
+            <!-- Show last page if not included in the range -->
+            <span *ngIf="showLastEllipsis()">...</span>
+            <span *ngIf="pagesArray[pagesArray.length - 1] < numberOfPages" (click)="onPageChange(numberOfPages)">{{numberOfPages}}</span>
+        
+            <!-- Next and Last buttons -->
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(currentPageNumber + 1)" [ngClass]="{'disabled': isLastPage()}">&gt;</span>
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(numberOfPages)" [ngClass]="{'disabled': isLastPage()}">&raquo;</span>
+        </div>
+    </ng-container>
+</div>
+
+<div *ngIf="isDataLoaded && reportView == 'summary'" class="no-outline">
+    <div class="referralsourcesproductivityreport grid header">
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Location' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Rank' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Referral In Categories' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Referral Source' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ '# Patient Referred' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Productivity' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom rpt-brd-last">{{ 'Avg. Productivity' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="10" tabindex="0"
+            >
+            <div *cdkVirtualFor="let referralsources of reportData; index as i" class="{{referralsources.Class}}">         
+                <div class="referralsourcesproductivityreport grid"
+                    *ngIf="referralsources.IsReferralSourceHeader == true">
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.Location }}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ referralsources.Rank}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferralSource}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferralSourceName}}</div>                    
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.NumberReferred}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom text-right">{{ referralsources.Productivity | currency}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last text-right">{{ referralsources.AverageProductivity | currency}}</div>
+                </div>
+                <div class="referralsourcesproductivityreport grid item" id="divMainInfo1{{i}}"
+                    *ngIf="referralsources.IsReferralSourceHeader == false && referralsources.IsReportTotals == false">
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ referralsources.Rank}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferralSource}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ referralsources.ReferralSourceName}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.NumberReferred}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom text-right">{{ referralsources.Productivity | currency}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last text-right">{{ referralsources.AverageProductivity | currency}}</div>
+                </div>
+                <div class="referralsourcesproductivityreport grid item" id="divMainInfo2{{i}}"
+                    *ngIf="referralsources.IsReportTotals == true && (referralsources.ShowTotals == true || asyncBlobId != '')" style="font-weight: bold;">
+                    <div class="col-sm-2-migration rpt-cell-custom">Total for {{referralsources.LocationName}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right">{{ referralsources.NumberReferredTotal}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom text-right">{{ referralsources.ProductivityTotal | currency}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last text-right">{{ referralsources.AverageProductivityTotal | currency}}</div>
+                </div>
+                <div class="referralsourcesproductivityreport grid item" id="divMainInfo2{{i}}"
+                    *ngIf="referralsources.IsFinalReportTotals == true" style="font-weight: bold;">
+                    <div class="col-sm-2-migration rpt-cell-custom ref-grid-report-total">Report Total</div>
+                    <div class="col-sm-1-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-2-migration rpt-cell-custom"></div>
+                    <div class="col-sm-1-migration rpt-cell-custom text-right ref-grid-report-total">{{ referralsources.ReportTotalNumberReferred}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom text-right ref-grid-report-total">{{ referralsources.ReportTotalProductivity | currency}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last text-right ref-grid-report-total">{{ referralsources.ReportTotalAverageProductivity | currency}}</div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+        <div class="pgr-pager" *ngIf="numberOfPages > 0">
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(1)">&lt;</span>
+            <span *ngFor="let page of pagesArray; let i = index"
+                [ngClass]="{ 'pgr-active-page-nm': currentPageNumber === i + 1, 'pgr-page-nm': currentPageNumber !== i + 1}"
+                (click)="onPageChange(i + 1)">{{i + 1}}</span>
+
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(numberOfPages)">&gt;</span>
+        </div>
+    </ng-container>
+</div>

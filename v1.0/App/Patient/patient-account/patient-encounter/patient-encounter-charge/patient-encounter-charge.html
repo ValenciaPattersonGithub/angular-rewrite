@@ -1,0 +1,115 @@
+﻿
+<div class="patEncChg">
+    <span class="fa fa-edit"
+          uib-popover-template="'chargepopup.html'"
+          popover-placement="left"
+          popover-append-to-body="true"
+          popover-is-open="isOpen"
+          popover-trigger="'none'"
+          ng-click="toggle()">
+
+    </span>
+    <script type="text/ng-template" id="chargepopup.html">
+        <div class="patEncChg">
+            <div class="header">                
+                <!--<span class="fa fa-lg fa-info-circle"></span>
+                <div class="pull-right">{{serviceTransaction.Code}}</div>-->
+                <span class="pull-left"><i class="fa fa-info-circle fa-lg soar-link icon-button"></i><label>{{serviceTransaction.Code}}</label></span>
+                <button id="btnXCancel" class="btn btn-link fa fa-times pull-right" ng-click="toggle()"></button>
+                <div class="clearfix"></div>
+                <hr class="dotted" />
+            </div>
+            <div class="body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        Fee
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="input-icon">
+                            <input id="idEditChargeFeeAmt" type="text" class="form-input text-align-right input-sm" maxlength="12" model-format="currency" placeholder="{{ '0' | currency }}" ng-model="inputData.Fee" ng-blur="verifyMaxAmount()">
+                        </div>
+                    </div>
+                </div>
+                <hr class="no-line" />
+                <div class="row">
+                    <div class="col-xs-6">
+                        Discount
+                    </div>
+                    <div class="col-xs-6">
+                        <label id="idEditChargeDiscountAmt" class="text-align-right pull-right">- {{inputData.Discount | currency }}</label>
+                    </div>
+                </div>
+                <hr class="no-line" />
+                <div class="row">
+                    <div class="col-xs-6">
+                        Tax
+                    </div>
+                    <div class="col-xs-6">
+                        <label id="idEditChargeTaxAmt" class="text-align-right pull-right">+ {{inputData.Tax | currency }}</label>
+                    </div>
+                </div>
+                <hr class="dotted" />
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h4>Total Charge</h4>
+                    </div>
+                    <div id="idEditChargeTotalAmt" class="col-xs-6 text-align-right">
+                        <h4>{{inputData.Amount | currency}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="pull-right">
+                    <button id="btn-update" class="btn btn-sm btn-primary" ng-disabled="saveValid()" ng-click="saveChanges()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </script>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

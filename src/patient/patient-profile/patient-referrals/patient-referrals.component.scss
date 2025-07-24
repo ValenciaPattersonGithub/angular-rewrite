@@ -1,0 +1,241 @@
+@import "variables";
+
+.referrals-header {
+    display: grid;
+    grid-template: 1fr / 50% 50%;
+    grid-template-areas: "title actionbuttons";
+
+    &-title {
+        font-family: $global-font-family;
+        font-size: 16px;
+        color: $patient-registration-title-color;
+        font-weight: bold;
+        grid-area: title;
+    }
+
+    &-actionButtons {
+        grid-area: actionbuttons;
+        justify-self: end;
+    }
+}
+
+.referrals-detail-container {
+    padding: 15px;
+    border: 1px solid #DDDDDD;
+    border-radius: 5px;
+
+    hr {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border-top: 1px solid #2b144e;
+    }
+}
+
+.referralsDetailContent {
+    display: grid;
+    // row-gap: 20px;
+    position: relative;
+    grid-template: 1fr / 100%;
+    grid-template-areas:
+        "ReferralType"
+        "ReferralSource";
+    // 100% = 1st Column
+    // ReferralType = 1st Row
+    // ReferralSource = 2nd Row
+    border-right: 0.8px solid #DDDDDD;
+
+    &-referral-type {
+        grid-area: ReferralType / 1;
+    }
+
+    &-referral-source {
+        grid-area: ReferralSource / 1;
+    }
+}
+
+::ng-deep {
+    .label {
+        font-size: 14px !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-content {
+        overflow-y: auto !important;
+        height: auto !important;
+        margin-bottom: 0px;
+    }
+
+    .k-grid-header {
+        padding: 0px !important;
+    }
+
+    .k-grid-content {
+        overflow-x: hidden;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-header .k-grid-header-wrap .k-header {
+        padding-left: 10px !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-content tr td {
+        padding-left: 10px !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-content tr:hover {
+        background-color: inherit !important;
+    }
+
+    a.menuLink {
+        border-bottom: 1px solid $dropdown-border-color;
+    }
+
+    .dropdown-menu li a:last-child {
+        border-bottom: none !important;
+    }
+
+    .dropdown-menu {
+        padding: 0px 0px !important;
+        font-family: $global-font-family;
+        font-size: 12px;
+        position: absolute;
+        right: 20px !important;
+        margin-top: -25px !important;
+    }
+
+    .dropdown-menu > li > a:hover {
+        background-color: $action-blue !important;
+        color: $dropdown-text-color !important;
+    }
+
+    .dropdown-menu > li > a:focus {
+        background-color: $action-blue !important;
+        color: $dropdown-text-color !important;
+        position: absolute;
+    }
+
+    .icon-right {
+        top: calc(40% - 6px);
+        float: right;
+    }
+
+    .sort-icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 7px;
+    }
+
+    .confirmationMessage > p {
+        padding-left: 10px !important;
+        font-size: 14px;
+    }
+
+    .popup_heading {
+        padding: 0px 0px 0px 10px !important;
+    }
+
+    .head-bold {
+        font-weight: bold;
+    }
+
+    .k-window-content,
+    .k-prompt-container {
+        overflow: hidden;
+    }
+
+    .k-dialog .k-content {
+        padding: 0px !important;
+        width: 100%;
+    }
+
+    .btn-width {
+        width: 100px !important;
+        max-width: 100px !important;
+        height: 25px !important;
+    }
+
+    .disableMenu {
+        color: $disabled-grey;
+    }
+
+    .toolTipText {
+        background-color: $Tooltip-backrground-color;
+        color: $Tooltip-text-color;
+        text-align: left;
+        padding: 5px 5px 5px 5px;
+        position: absolute;
+        z-index: 1;
+        width: 200px;
+        display: none;
+    }
+
+    .noContent {
+        height: 200px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999999;
+        font-weight: bold;
+    }
+
+    .noContentLink {
+        color: #2dabcb;
+        font-weight: bold;
+        margin-left: 5px;
+    }
+
+    #div-patientReferralsList-noContent app-button button {
+        font-weight: 700 !important;
+        color: #2dabcb;
+        padding-left: 0px;
+        border: none !important;
+        background-color: #ffffff !important;
+    }
+
+    #div-patientReferralsList-noContent app-button button:disabled {
+        font-weight: 700 !important;
+        padding-left: 0px;
+        border: none !important;
+        background-color: #ffffff !important;
+        color: #cccccc
+    }
+
+    #div-patientReferralsList-noContent app-button {
+        border: none !important;
+        background-color: #ffffff !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-header .k-grid-header-wrap .k-header .k-link {
+        color: #2dabcb !important;
+    }
+
+    .delete-dialog-top {
+        top: 35% !important;
+        min-height: auto !important;
+        width: 25% !important;
+        left: 34%;
+    }
+
+    .confirmationMessage {
+        .top-hr{
+            margin-top: 0px;
+        }
+
+        .bottom-hr{
+            margin-bottom: 0px;
+        }
+    }
+
+    app-patient-referrals {
+        kendo-dialog {
+            .k-window {
+                top: 10%;
+                margin: 0px auto;
+                min-height: unset;
+            }
+
+            .k-dialog-buttongroup {
+                padding: 15px 5px 5px 0px;
+            }
+        }
+    }
+}

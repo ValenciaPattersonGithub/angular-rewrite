@@ -1,0 +1,75 @@
+﻿<profile-section [base-id]="'Appointments'" [section-title]="'Past Appointments'" [count]="listCount" ng-init="initialize();">
+    <ng-container layout1>
+        <div class="pastAppt">
+            <div class="patientAppt__alert" ng-show="pastAppointments.length === 0">
+                <no-results loading="appointmentLoading" loading-message='patientAppointmentText.noPastAppointments'></no-results>
+            </div>
+            <div class="patientAppt__content" ng-hide="appointments.length == 0">
+                <table class="patientAppt__table">
+                    <thead></thead>
+                    <tbody>
+                        <tr ng-repeat="appointment in pastAppointments">                        
+                            <td class="" ng-show="accountView">
+                                <div id="lblPastAppt{{$index}}" title="{{ appointment.$$FirstName }}">{{ appointment.$$FirstName | truncate:30  }}</div>
+                            </td>
+                            <!-- if Complete, show date / route to appointment otherwise show unscheduled appointment-->
+                            <td class="">                           
+                                <a class="btn btn-link"
+                                ng-if="appointment.PastAppointmentTypeId === 3"
+                                id="btnGoToPastAppointment{{$index}}"
+                                ng-click="selectPastAppointment(appointment)"
+                                check-auth-z="soar-sch-sptapt-view">
+                                    <span ng-if="appointment.LocationEndTime && appointment.LocationTimeZoneAbbreviation">
+                                        {{ appointment.LocationStartTime | date: appointment.StartTimeFormat }} - {{ appointment.LocationEndTime | date: 'h:mm a' }} ({{ appointment.LocationTimeZoneAbbreviation }})
+                                    </span>
+                                    <span ng-if="!appointment.LocationEndTime || !appointment.LocationTimeZoneAbbreviation">
+                                        {{ appointment.LocationStartTime | toDisplayDate }}
+                                    </span>
+                                </a>
+                                <!--  -->
+                                <a class="btn btn-link disabled"
+                                ng-if="appointment.PastAppointmentTypeId !== 3">
+                                    <span ng-if="appointment.LocationEndTime && appointment.LocationTimeZoneAbbreviation">
+                                        {{ appointment.LocationStartTime | date: appointment.StartTimeFormat }} - {{ appointment.LocationEndTime | date: 'h:mm a' }} ({{ appointment.LocationTimeZoneAbbreviation }})
+                                    </span>
+                                    <span ng-if="!appointment.LocationEndTime || !appointment.LocationTimeZoneAbbreviation">
+                                        {{ appointment.LocationStartTime | toDisplayDate }}
+                                    </span>
+                                </a>
+                            </td>
+                            <td class="type">
+                                <button id="btnEditPastAppointment{{$index}}" class="btn btn-link" check-auth-z="soar-sch-sptapt-edit">
+                                    <span id="lblPastAppointmentType{$index}Preview" 
+                                        class="border-solid-black appointment-type-table-preview-box pull-left" 
+                                        ng-style="{'background-color': appointment.$$AppointmentType.AppointmentTypeColor, color: appointment.$$AppointmentType.FontColor}">
+                                        <span>{{ appointment.$$AppointmentType.Name }}</span>
+                                    </span>
+                                </button>
+                            </td>
+                            <td class="provider">
+                                <span id="lblProviderName{{$index}}" >{{ appointment.$$ProviderName }}</span>
+                            </td> 
+                            <td class="state">
+                                <div >
+                                    <span id="lblState{{$index}}">{{ appointment.$$State }}</span>
+                                </div>
+                            </td>
+                            <td class="state">
+                                <span id="lblDeleted{{$index}}">{{ appointment.IsDeleted ? '(' + ('Deleted' | i18n) + ')' : '' }}</span>
+                            </td>
+                            <td class="status">
+                                <a check-auth-z="soar-sch-sptapt-edit" 
+                                class="btn btn-link" 
+                                ng-href="#/Schedule/?open={{ appointment.AppointmentId }}&unscheduled=true" 
+                                ng-if="appointment.$$CanSchedule===true">{{ 'Schedule' | i18n }}</a>
+                            </td>
+                            <td class='type'>                            
+                                <span ng-if="appointment.Note.length" class="far fa-lg fa-sticky-note" ng-click="openNoteModal(appointment.Note)" title="{{ 'View Status Note' | i18n }}"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-container> 
+</profile-section>

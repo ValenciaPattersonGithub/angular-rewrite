@@ -1,0 +1,56 @@
+<div id="deleteConfirmPanel{{sectionIndex}}" *ngIf="deleteSectionIndex == sectionIndex">
+    <div id="sectionDeleteMessageContainer{{sectionIndex}}" class="media-body master-list-warning-msg">
+        <are-you-sure [appendId]="0" [isFocusSet]="false" [message]="'Are you sure you want to delete this section?' | translate" (ifYes)="deleteSection(sectionIndex)" (ifNo)="cancelDeleteSection()"></are-you-sure>
+    </div>
+</div>
+<div id="sectionEditPanel{{sectionIndex}}" *ngIf="sectionIndex==customForm?.IndexOfSectionInEditMode">
+    <div class="angular-accordion-container margin-bottom20">
+        <div class="angular-accordion-pane ng-scope">
+            <div id="sectionAccordionHeader{{sectionIndex}}" [ngClass]="{ 'angular-disabled-pane': disabled }" class="angular-accordion-header ng-scope">
+                <section-header [section]="section" [formType]="formType" [sectionIndex]="sectionIndex" [first]="first" [last]="last" [parentForm]="parentForm"></section-header>
+            </div>
+            <div id="sectionAccordionBody{{sectionIndex}}" *ngIf="section?.FormSectionItems?.length > 0 && IsExpanded" class="angular-accordion-pane-content section-accordion-bg ng-scope">
+                <section-item-crud [section]="section" [formType]="formType" [sectionIndex]="sectionIndex" [sectionItemIndex]="sectionItemIndex"  [parentForm]="parentForm"></section-item-crud>
+            </div>
+            <div id="sectionAccordionFooter{{sectionIndex}}" *ngIf="expanded && showFooterPage" [ngClass]="{ 'angular-disabled-pane': disabled }" class="angular-accordion-footer ng-scope">
+                <section-footer [formType]="formType" [section]="section" [sectionIndex]="sectionIndex" [showFooterPage]="showFooterPage"></section-footer>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="sectionPreviewPanel{{sectionIndex}}" *ngIf="sectionIndex!=customForm?.IndexOfSectionInEditMode">
+    <div class="panel-group">
+        <div class="panel panel-default no-border">
+            <div *ngIf="section">
+                <form class="sectionPreview section-preview-show-border" id="{{ 'frmSectionPreview' + sectionIndex }}">
+                    <div [ngClass]="{'container-fluid' : !section.isMHF}">
+                        <div class="row" *ngIf="canEditForm">
+                            <div class="col-md-offset-11 col-md-1">
+                                <button [disabled]="!canEditForm || !hasEditAccess"
+                                    class="btn btn-default" id="{{ 'btnEdit_SEC_' + sectionIndex }}" type="button"
+                                    (click)="editSection(sectionIndex)"><i
+                                        class="glyphicon glyphicon-pencil"></i><br />{{ 'Edit' | translate }}</button>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <h4 class="col-md-12 sectionPreview__title"
+                                [ngClass]="{'margin-top' : section.isMHF}" id="title{{sectionIndex}}">{{
+                                    section.Title }}</h4>
+                            </div>
+                            <div class="section-items"
+                                [ngClass]="{ oneColumn: section.oneColumn, threeColumn: section.threeColumn}">
+
+                                <div *ngFor="let sectionItem of section?.FormSectionItems;index as sectionItemIndex; ">
+                                    <section-preview [sectionItem]="sectionItem" [editItem]="false" [sectionIndex]="sectionIndex"  [sectionItemIndex]="sectionItemIndex"
+                                        [inputIsDisabled]="inputIsDisabled" [parentForm]="parentForm"></section-preview>
+                                </div>
+                                <hr class="sectionPreview__headerRow" *ngIf="!section.last && section.isMHF" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

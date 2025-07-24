@@ -1,0 +1,35 @@
+﻿<div ng-class="'fade-in'">
+    <div class="userLanding">
+        <form name="frmUserLanding" role="form" action="javascript:;" novalidate>
+            <div class="rowFull white">
+                <div class="userLanding__header">
+                    <!--Breadcrumbs-->
+                    <ul class="locIdentifier__breadcrumb">
+                        <li ng-repeat="breadcrumb in dataForCrudOperation.BreadCrumbs">
+                            <ng-switch on="$last">
+                                <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+                                <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePageState(breadcrumb)"><a>{{breadcrumb.name | i18n }}</a></span>
+                            </ng-switch>
+                        </li>
+                    </ul>                
+
+                    <div class="userLanding__title">
+                        <h1>{{ 'Team Members' | i18n }}</h1>
+                    </div>
+
+                    <div class="userLanding__actions">
+                        <a href="#/BusinessCenter/Users/Create/" class="btn btn-primary" icon="fa-user-plus" check-auth-z="soar-biz-bizusr-add" id="btnAddUser">{{ 'Add {0}' | i18n:['a Team Member'] }}</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rowFull">
+                <div class="userLanding__search">
+                    <user-search></user-search>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+

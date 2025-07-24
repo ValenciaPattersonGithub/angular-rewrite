@@ -1,0 +1,35 @@
+﻿/** lonely dropdowns that aren't part of soar-select-list */
+.k-dropdown {
+    background: transparent;
+    .clearfix;
+    > .k-dropdown-wrap {
+        box-sizing: border-box;
+        border-radius: @brand-form_border--radius;
+        height: 38px;
+        > .k-input {
+            height: auto;
+            padding: 6px 0 6px 2px;
+            .k-state-default {
+                .concatString;
+            }
+
+            &:before {
+                content: none;
+            }
+        }
+        .k-select {
+            border-color: transparent;
+        }
+    }
+
+    }    
+
+.k-multiselect-wrap li {
+    padding: .1em .4em;
+}
+
+.k-multiselect-wrap {
+    .k-i-close, .k-i-loading {
+        display:none;
+    }
+}

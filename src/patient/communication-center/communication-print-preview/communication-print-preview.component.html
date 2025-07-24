@@ -1,0 +1,15 @@
+<div class="print-container" *ngIf="previewData">
+    <div class="print-header-container">
+        <div class="time-stamp">{{previewData.ToDayDate}}</div>
+        <div class="practice-name">{{previewData.PracticeName}}</div>
+        <div class="patient-code">{{previewData.PatientCode}}</div>
+    </div>
+    <div class="print-title-container">
+        <div class="title">{{previewData.Title}}</div>
+        <div class="sub-title">{{previewData.SubTitle}}</div>
+    </div>
+    <div class="communication-container" *ngFor="let communication of previewData.Communications">
+        <communication-center-previewpane [communicationModel]="communication" [printPreview]="true">
+        </communication-center-previewpane>
+    </div>
+</div>

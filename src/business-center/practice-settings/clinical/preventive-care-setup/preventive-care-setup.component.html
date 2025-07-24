@@ -1,0 +1,211 @@
+<div class="prevCare">
+    <div class="rowFull white">
+        <div class="prevCare__header">
+            <!--Breadcrumbs-->
+            <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+            <!--header-->
+            <div class="prevCare__title">
+                <h1>{{ 'Preventive Care' | translate }}</h1>
+                <h5>{{'This will update the schedule of services that patients should receive' | translate }}</h5>
+            </div>
+
+            <div class="prevCare__actions">
+                <!-- Will probably need an 'add' feature later' -->
+            </div>
+        </div>
+    </div>
+    <div class="prevCare__body">
+        <div class="prevCare__secondary" [ngClass]="{'active': activePrevCareItem}">
+            <button class="prevCare__secClose" icon="fa-times" (click)="closeServiceRow()"></button>
+            <h4>
+                {{ 'Add Services to '+ selectedPreventiveCareServiceName | translate }}
+            </h4>
+            <div class="preventiveNewGrid">
+                <!--Input Box-->
+                <div class="col-md-12 row">
+                    <div class="form-group">
+                        <div class="inner-addon right-addon">
+                            <div class="col-xs-8 serviceCodeSearchBoxContainer">
+                                <input class="searchInput form-control border-solid-black col-xs-8"
+                                    id="searchBoxServiceCodes" placeholder="{{'Search for a service... '|translate}}"
+                                    type="text" [(ngModel)]="searchServiceCodesKeyword"
+                                    (ngModelChange)="onSearchServiceCodesKeywordChange()" />
+                                <span class="searchIcon glyphicon glyphicon-search"></span>
+                            </div>
+                            <div class="float-right col-xs-4 serviceCodeTypeContainer pr-0">
+                                <soar-select-list *ngIf="!loadingServiceTypesList" id="filterList" name="filterList"
+                                    [placeHolder]="'All Service Types'" [textField]="'Description'"
+                                    [valueField]="'ServiceTypeId'"
+                                    (selectedItemValueChange)="selectServiceTypeFilter($event)"
+                                    [optionList]="serviceTypesList" [selectedItemValue]="selectedServiceType">
+                                </soar-select-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 row">
+                    <div class="float-right serviceCodeInactiveSelectorContainer">
+                        <app-check-box [label]="'Show Inactive'" [checked]="showInactive"
+                            id="showInactiveServiceSelector" (checkChanged)="toggleShowInactive($event)">
+                        </app-check-box>
+                    </div>
+                </div>
+                <!--Table Header-->
+                <div class="">
+                    <div class="col-md-12 serviceCodeHeader">
+                        <table id="tableServiceCodes"
+                            class="table table-striped border-solid-black table-hover serviceCodeTable">
+                            <thead>
+                                <tr class="blue">
+                                    <td class="selectBtn">
+                                        <div class="pull-left">
+                                            <button id="lblAddServiceCodes" class="btn btn-primary"
+                                                [disabled]="!disableQuickAdd() || disableInput" (click)="addServiceCodesToPrev(null)">{{
+                                                '+ Add Services'
+                                                |translate }}</button>
+                                        </div>
+                                    </td>
+                                    <td id="tdServiceCode" class="servCode">
+                                        <div id="columnServiceCode" class="color-dodgerblue cursor-pointer row"
+                                            (click)="onServiceCodesListSorting('Code')">
+                                            <div class="col-md-12">{{'Service Code' | translate}}</div>
+                                        </div>
+                                    </td>
+                                    <td id="tdCdtCode" class="cdtCode">
+                                        <div id="columnCdtCode" class="color-dodgerblue cursor-pointer row"
+                                            (click)="onServiceCodesListSorting('CdtCodeName')">
+                                            <div class="col-md-12">{{'CDT Code' | translate}}</div>
+                                        </div>
+                                    </td>
+                                    <td id="tdDescription" class="description">
+                                        <div id="columnDescription" class="color-dodgerblue cursor-pointer row"
+                                            (click)="onServiceCodesListSorting('Description')">
+                                            <div class="col-md-12">{{'Description' | translate}}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!--Table Body-->
+                <div class="servicesBody">
+                    <div class="servicesTable col-md-12">
+                        <!--Table-->
+                        <table *ngIf="filteredServiceCodesList?.length" id="tableServiceCodes"
+                            class="table table-striped border-solid-black table-hover">
+                            <tbody>
+                                <tr *ngFor="let serviceCode of filteredServiceCodesList; let i = index">
+                                    <td id="tdActionButtons{{i}}" class="selectBtn">
+                                        <div>
+                                            <button id="quickAdd{{i}}" [disabled]="serviceCode.isChecked || disableInput"
+                                                (click)="addServiceCodesToPrev(serviceCode)"
+                                                class="qkBtn btn btn-link ng-binding width-70-percent">+ quick
+                                                add</button>
+                                            <input id="chkServiceCode{{i}}" class="width-20-percent qkCheck"
+                                                type="checkbox" [(ngModel)]="serviceCode.isChecked" />
+                                            <i *ngIf="!serviceCode?.IsActive"
+                                                title="{{serviceCode?.InactivationDate ? 'Inactive as of ' + (serviceCode?.InactivationDate|date:'MM/dd/yyyy') : ('This service is inactive')}}"
+                                                class="fa fa-exclamation-triangle inactive-service-warning"></i>
+                                        </div>
+                                    </td>
+                                    <td id="tdCode{{i}}" class="servCode" [title]="serviceCode?.Code"
+                                        [innerHTML]="serviceCode?.Code | boldTextIfContains: searchServiceCodesKeyword">
+                                    </td>
+                                    <td id="tdCode{{i}}" class="servCode" [title]="serviceCode?.CdtCodeName"
+                                        [innerHTML]="serviceCode?.CdtCodeName | boldTextIfContains: searchServiceCodesKeyword">
+                                    </td>
+                                    <td id="tdDescription{{i}}" class="description" [title]="serviceCode?.Description"
+                                        [innerHTML]="serviceCode?.Description | boldTextIfContains: searchServiceCodesKeyword| truncateText: 30">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--service code list-->
+                    <div class="rowFull white" *ngIf="dataForCrudOperation?.ShowServiceCodesList == false">
+                        <div id="serviceCodeCrudWindow" class="serviceCodeCrudWindow">
+                            <service-code-crud [data]="dataForCrudOperation">
+                            </service-code-crud>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="prevCare__primary">
+            <kendo-grid #preventiveGrid [data]="preventiveCareServicesList" (cellClick)="cellClickHandler($event)">
+                <kendo-grid-column title="Service Codes" [width]="24">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <button class="btn btn-link" icon="fa-plus" *ngIf="authAccessServiceCode?.Create"
+                            (click)="expandServiceRow(dataItem,rowIndex)"></button>
+                        <button class="btn btn-link" icon="fa-plus" *ngIf="!authAccessServiceCode?.Create"
+                            title="{{expandBtnTitleBtn}}" [disabled]="true"></button>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Description" title="Type of Service" [width]="25">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem?.Description}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Frequency" [editable]="true" editor="numeric" title="Frequency(# of months)"
+                    [width]="35">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem?.Frequency}}
+                    </ng-template>
+                    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-column="column"
+                        let-formGroup="formGroup">
+                        <input #input class="k-textbox" [(ngModel)]="dataItem.Frequency"
+                               (ngModelChange)="getFrequencyValidation(dataItem)" (focusout)="onChangeFrequency(dataItem)" 
+                               [disabled]="disableInput">
+                        <div class="k-tooltip-validation" *ngIf="frequencyValidationMessage">
+                            <span class="k-icon k-i-warning"></span>
+                            {{ 'Invalid, The frequency range is from 0 to 120.' | translate }}
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column title="Sets due date for next appointment" [width]="50">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <input *ngIf="dataItem?.IsAllowedToBeTrumpService" type="radio" name="useFrequencyToSetDueDate"
+                            [checked]="dataItem?.UseFrequencyToSetDueDate" [disabled]="disableInput" (change)="setDueDateToFrequency(dataItem)"
+                            kendoRadioButton />
+                    </ng-template>
+                </kendo-grid-column>
+                <ng-template kendoGridDetailTemplate let-dataItem>
+                    <!--loading spinner-->
+                    <no-results *ngIf="loadingPreventiveCareLinkedServiceCodes"
+                        [loading]="loadingPreventiveCareLinkedServiceCodes" [message]="''"></no-results>
+                    <div k-detail-template
+                        *ngIf="!loadingPreventiveCareLinkedServiceCodes && preventiveCareLinkedServiceCodeList">
+                        <kendo-grid [data]="preventiveCareLinkedServiceCodeList">
+                            <kendo-grid-column field="Code" title="Code" [style.width.%]="30">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    {{dataItem?.Code}}
+                                    <i *ngIf="!dataItem?.IsActive"
+                                        class="fa fa-exclamation-triangle inactive-service-warning"
+                                        title="{{dataItem?.InactivationDate ? 'Inactive as of ' + (dataItem?.InactivationDate|date:'MM/dd/yyyy') : ('This service is inactive')}}"
+                                        placement="right" delay="500"></i>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="Description" title="Description" [style.width.%]="60">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <div kendoTooltip [title]="dataItem?.Description" position="top" tooltipClass="app-tooltip">
+                                        {{dataItem?.Description | truncateText: 30}}
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [style.width.%]="10">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <button class="btn btn-link delete-btn" icon="fa-times-circle"
+                                        checkRoleAccess="{{ !hasDeleteServiceCodeAccess }}"
+                                        (click)="removeSrvcCode($event, dataItem)" [disabled]="disableInput"></button>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <ng-template kendoGridNoRecordsTemplate>
+                            </ng-template>
+                        </kendo-grid>
+                    </div>
+                </ng-template>
+            </kendo-grid>
+        </div>
+    </div>
+</div>

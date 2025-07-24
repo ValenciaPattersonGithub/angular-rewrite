@@ -1,0 +1,57 @@
+﻿<div class="insuranceItem" ng-class="{'insuranceItem__errorBox': item.alreadyAttached}">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-6">
+                    <span class="insuranceItem__desc text-nowrap">{{ 'Benefit Plan Priority' | i18n }}:</span>
+                </div>
+                <div class="col-xs-6">
+                    <label>{{ item.PriorityName }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <span class="insuranceItem__desc">{{ 'Benefit Plan Name' | i18n }}:</span>
+                </div>
+                <div class="col-xs-6">
+                    <label>{{ item.Name }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <span class="insuranceItem__desc">{{ 'Carrier Name' | i18n }}:</span>
+                </div>
+                <div class="col-xs-6">
+                    <label>{{ item.CarrierName }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <span class="insuranceItem__desc text-nowrap">{{ 'Policy Holder Name' | i18n }}:</span>
+                </div>
+                <div class="col-xs-6">
+                    <label>{{ item.PolicyHolderName }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <span class="insuranceItem__desc">{{ 'Policy Holder DOB' | i18n }}:</span>
+                </div>
+                <div class="col-xs-6">
+                    <label>{{ item.PolicyHolderDOB }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <span class="insuranceItem__desc">{{ 'Policy Holder ID' | i18n }}:</span>
+                </div>
+                <div class="col-xs-6">
+                    <label>{{ item.PolicyHolderStringId }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12" ng-if="item.alreadyAttached">
+            <span class="insuranceItem__errorText">{{ 'This plan may not be selected it is already attached.' | i18n }}</span>
+        </div>
+    </div>
+</div>

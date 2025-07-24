@@ -1,0 +1,18 @@
+﻿<ul id="lst{{ baseId }}" class="list-unstyled">
+	<li ng-repeat="person in list">
+		<div class="row">
+			<div class="col-xs-12 padding-bottom-4">
+				<span id="lbl{{ baseId }}{{$index}}" ng-if="currentPersonId == person.PatientId" class="italic">
+					{{ person.FirstName }} {{ person.LastName }}
+				</span>
+				<a id="btn{{ baseId }}{{$index}}" check-auth-z="soar-per-perdem-view" class="btn btn-link padding-none" ng-if="currentPersonId != person.PatientId" ng-href="#/Patient/{{person.PatientId}}/Overview">
+					{{ person.FirstName }} {{ person.LastName }}
+				</a>
+				<b ng-show="person.ResponsibleParty">({{ 'RP' | i18n }})</b>
+				<span id="lbl{{ baseId }}{{$index}}DateOfBirth" class="pull-right">
+					{{ person.DateOfBirth | toShortDisplayDateUtc }}
+				</span>
+			</div>
+		</div>
+	</li>
+</ul>

@@ -1,0 +1,8 @@
+<div id="medicalHistorySection{{$index}}" ng-repeat="(sectionIndex, section) in medicalHistoryFormSections">
+    <div ng-if="!viewOnly" style="background-color:#ffffff" id="sectionPreviewPanel{{sectionIndex}}" class="medical-history-section">
+        <section-preview-directive></section-preview-directive>
+    </div>
+    <div id="medicalHistorySection{{$index}}" ng-if="viewOnly">
+        <section-reader-directive></section-reader-directive>
+    </div>
+</div>

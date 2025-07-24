@@ -1,0 +1,9 @@
+﻿<div class="secondaryNavigation secondaryNavigation__tab" ng-init="initialize()">
+    <a href="{{tab.Url}}" target="{{tab.Target}}" ng-repeat="tab in tabs" ng-if="!tab.Hidden" class="secondaryNavigation__nav-item" ng-model="selectedTab" ng-click="SelectTab(tab)"
+       ng-class="{'active': tab.Selected, 'disabled': tab.Disabled, first: $index == 0, last: $index + 1 == viewOptions.length }">
+        <div class="secondaryNavigation__navIcons">
+            <span id="imgTabIconLeft" class="{{tab.IconClass}}" aria-hidden="true"></span> 
+        </div>
+            {{ tab.Title }}
+    </a>
+</div>

@@ -1,0 +1,44 @@
+<div class="app-modal md-modal">
+    <div id="app-modal-header" class="app-modal-header">
+        {{header}}
+    </div>
+    <div class="app-modal-body">
+        <div class="add-patient-benefit-plans" *ngIf="newPatientBenefitPlans.length > 0">
+            <ng-container *ngFor="let patientBenefitPlan of newPatientBenefitPlans ; let $ndx = index">               
+                <add-patient-benefit-plan 
+                    [(patientBenefitPlan)]="newPatientBenefitPlans[$ndx]" 
+                    [(policyHolderBenefitPlan)]="newPolicyHolderBenefitPlan" 
+                    [filteredBenefitPlans]="filteredBenefitPlans"
+                    [policyHolderList]="policyHolderList"
+                    [patient]="patient"
+                    [policyHolders]="policyHolders"
+                    (addPolicyHolderPolicy)="addPolicyHolderPolicy($event)"
+                    (removePolicyHolderPolicy)="removePolicyHolderPolicy()"
+                    (notifyValidState)="notifyValidState($event)"
+                    [checkValidation]="validateForms"
+                    [(currentPatientBenefitPlans)]="currentPatientBenefitPlans" 
+                    [activeBenefitPlans]="activeBenefitPlans">
+                </add-patient-benefit-plan>
+            </ng-container>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="add-policy" *ngIf="newPatientBenefitPlans.length < plansAllowed">
+            <svg-icon class="add-policy-icon" name="ovalSolidIcon" iconHeight="20px"  (click)="saveAndAddPolicy($event)"
+                iconWidth="20px" role="button">
+            </svg-icon>
+            <svg-icon class="add-policy-icon-add" name="addIcon" iconHeight="20px"  (click)="saveAndAddPolicy($event)"
+                iconWidth="20px" role="button">
+            </svg-icon>
+            <div class="add-policy-label-option" id="saveAndAddPolicy"  (click)="saveAndAddPolicy($event)">
+                <label class="add-policy-label"> {{ 'Save and Add New Policy' | translate }} </label>
+            </div>
+        </div>
+
+        <app-button id="btnAddInsuranceCancel" buttonLabel="{{data.cancel}}" *ngIf="data.cancel" variation="secondary"
+            [isDisabled]="saving" (onClick)="cancel($event)" ></app-button>
+        <app-button id="btnAddInsuranceSave" buttonLabel="{{data.confirm }}" variation="primary"
+            [isDisabled]="saving" attr.check-auth-z="{{'soar-per-pbplan-add'}}"
+            (onClick)="save($event)"></app-button>
+    </div>
+</div>

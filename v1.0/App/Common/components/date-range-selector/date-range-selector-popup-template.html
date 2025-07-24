@@ -1,0 +1,24 @@
+﻿<div ng-show="visible" class="date-range-selector-popup" ng-style="position">
+    <div class="date-range-selector-popup__content" tabindex="-1" ng-blur="onBlur($event)" ng-mouseleave="onMouseLeave($event)">
+        <div class="row">
+            <div class="col-xs-6">
+                <label>From:</label>
+                <date-selector date-var="dateFromValue" format="MM/dd/yyyy" valid="isValid1"></date-selector>
+            </div>
+            <div class="col-xs-6">
+                <label>To:</label>
+                <date-selector date-var="dateToValue" format="MM/dd/yyyy" valid="isValid2"></date-selector>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-offset-2 col-xs-4">
+                <label> </label>
+                <button class="btn btn-link btn-block" type="button" ng-click="clear($event)">Clear</button>
+            </div>
+            <div class="col-xs-6">
+                <label> </label>
+                <button class="btn btn-block btn-primary" type="button" ng-click="apply($event)">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>

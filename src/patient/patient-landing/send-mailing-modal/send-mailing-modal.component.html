@@ -1,0 +1,76 @@
+<div [formGroup]="mailingForm" class="sendMailingModal">
+    <div class="modal-header">
+        <button class="prevCare__secClose" icon="fa-times" (click)="close()"></button>
+        <h4 class="modal-title">{{'Send ' + mailingTitle + ' Mailing'   | translate }}</h4>
+    </div>
+
+    <div class="text-side-section">
+        <div class="form-row">
+            <div class="form-group">
+                <input type="radio" id="inpPrintBulk" checked="checked">
+                <span class="margin-left">{{'All ' + activeGridDataCount + ' People in list' | translate}}</span>
+            </div>
+ 
+        </div>
+         <div class="form-row communicationType">
+             <div class="form-group form-col-6">
+                 <label class="control-label"> {{ 'Communication Type' | translate }}</label>
+                 <soar-select-list formControlName="communicationTypeId" id="inpCommunicationtype"
+                                   name="inpCommunicationtype"
+                                   [placeHolder]="'Select Type'"
+                                   [valueField]="'Id'"
+                                   [textField]="'Name'"
+                                   [optionList]="communicationType"
+                                   [popupSettings]="popupSettings"
+                                   (selectedItemValueChange)="communicationTypeIdChanged($event)"
+                                   >
+                 </soar-select-list>
+             </div>
+         </div>
+     
+         <div class="form-row" *ngIf="commTypeId =='1' || commTypeId == '4'">
+             <div class="form-group form-col-6">
+                 <label class="control-label"> {{ 'Template' | translate }}</label>
+                 <soar-select-list formControlName="communicationTemplateId" id="inpTemplateSrc" #lstCommTemplate
+                                   name="inpTemplateSrc"
+                                   [placeHolder]="'Select Template'"
+                                   [valueField]="'CommunicationTemplateId'"
+                                   [textField]="'TemplateName'"
+                                   [optionList]="templateSource"
+                                   [popupSettings]="popupSettings"
+                                   (selectedItemValueChange)="templateIdChanged($event)"
+                                   [sbTab]="1">
+                 </soar-select-list>
+             </div>
+         </div>
+ 
+         <br />
+         <input id="lblPrevBal" type="checkbox" formControlName="isPrintMailingLabel" (change)="setPrintMailing()"/>
+         <span class="modal-title margin-left">{{ 'Print Mailing Labels' | translate }}</span>
+         <div *ngIf="checked">
+             <br />
+             <div>{{ 'For best results when printing mailing labels, ensure your printer setting are:' | translate }}</div>
+             <br />
+             <div>{{ '- Portrait Mode' | translate }}</div>
+             <div>{{ '- Paper size = Letter' | translate }}</div>
+             <div>{{ '- Margins = None ' | translate }}</div>
+             <div>{{ ' - Zoom = 100% ' | translate }}</div>
+         </div>
+     </div>
+
+     <div class="preview-side-section">
+        <div class="preview-container-section">
+            <div class="preview-content-section">
+               {{ 'Preview' | translate }}
+            </div>
+        </div>
+    </div>
+
+    <div class="clear-fix-section"></div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="close()">{{ 'Cancel' | translate }}</button>
+        <button type="button" class="btn btn-primary" [disabled]="(disabled && !checked)" (click)="confirm()">{{ 'Confirm and Print' | translate }}</button>
+    </div>
+
+</div>

@@ -1,0 +1,147 @@
+<div class="encounterMenu">
+    <div *ngIf="isPendingEncounterGrid">
+        <button id="btnCheckout{{encounterIndex}}" class="btn btn-primary" [disabled]="disableCheckoutAllButton"
+            (click)="checkoutActionFunction()" *ngIf="!hideCheckoutAllButton">{{ 'Check out All Encounters' | translate
+            }}</button>
+    </div>
+    <div id="btnGroup{{encounterIndex}}" class="btn-group" *ngIf="!isPendingEncounterGrid">
+        <button id="btnActionMenu{{encounterIndex}}" data-toggle="dropdown" class="btn btn-link dropdown-toggle"
+            (click)="toggleMenu()">
+            <i *ngIf="!encounter.showDetail" class="fa fa-ellipsis-v"></i>
+            <span *ngIf="encounter.showDetail">{{'Hide details' | translate}}</span>
+        </button>
+        <ul class="pull-right dropdown-menu dropdown-menu-accounttab col-md-12" *ngIf="!encounter.showDetail">
+            <li>
+                <div class="row" *ngIf="showViewDetailButton">
+                    <span id="lnkEncounterMenuViewDetails" class="margin-left-5 col-md-12" (click)="expandEncounter()">{{
+                        'View details' | translate }}</span>
+                </div>
+                <div class="row"
+                    *ngIf="(encounter.TransactionTypeId == 2 || encounter.TransactionTypeId == 3) && encounter.IsDeposited">
+                    <span id="lnkEncounterMenuViewInvoice" class="margin-left-5 col-md-12" title="{{ !hasViewDepositAccess ? noaccessTooltipText : ''}}"
+                        attr.check-auth-z="soar-biz-dep-view" [ngClass]="{'disableSpan': !encounter.IsDeposited || !hasViewDepositAccess}"
+                        (click)="!encounter.IsDeposited ? $event.stopPropagation() : viewDeposit(encounter)">{{ 'View deposit' | translate }}
+                    </span>
+                </div>
+                <div class="row"
+                    *ngIf="encounter.EncounterId > 0 || encounter.ObjectType === 'EncounterBo' || encounter.TransactionTypeId === 1">
+                    <span id="lnkEncounterMenuViewInvoice" class="margin-left-5 col-md-12" 
+                     [ngClass]="{'disableSpan': !hasPrintInvoiceAccess}" title="{{ !hasPrintInvoiceAccess ? noaccessTooltipText : ''}}"
+                        attr.check-auth-z="soar-acct-inv-print" (click)="viewInvoice()">{{'View Original Invoice' | translate }}
+                    </span>
+                </div>
+                <div class="row"
+                    *ngIf="encounter.IsAccountStatementNote || encounter.ObjectType === 'AccountStatement'">
+                    <span id="lnkEncounterMenuViewStatement" class="margin-left-5 col-md-12" (click)="viewStatement()">{{
+                        'View statement' | translate }}</span>
+                </div>
+                <div class="row" *ngIf="showDeleteButton">
+                    <span id="lnkEncounterMenuDelete" class="margin-left-5 col-md-12"
+                          title="{{ !encounter.IsServiceLocationMatch && !disableDeleteMessage
+                            ? 'Your current location does not match this service transaction\'s location.' 
+                            : !hasDeleteEncounterAccess ? noaccessTooltipText : '' | translate }}"
+                          [ngClass]="{'disableSpan': disableDeleteButton || !hasDeleteEncounterAccess}"
+                          (click)="disableDeleteButton || !hasDeleteEncounterAccess ? $event.stopPropagation() : deleteEncounter()"
+                          [tooltip]="disableDeleteButton || !hasDeleteEncounterAccess && disableDeleteMessage && disableDeleteMessage.length>0? disableDeleteMessage: ''"
+                          placement="left"
+                          delay="500"
+                          attr.check-auth-z="{{getDeleteButtonAmfa()}}">
+                        {{ 'Delete' | translate }}
+                    </span>
+                </div>
+                <div class="row" *ngIf="showViewClaimButton">
+                    <patient-encounter-claims id="encounterClaimsMenu{{encounterIndex}}" [encounter]="encounter"
+                        [refreshPageDataForGrid]="refreshPageDataForGrid" [encounterClaimsList]="encounterClaimsObj">
+                    </patient-encounter-claims>
+                </div>
+                <div class="row" *ngIf="showViewEditClaimNoteButton">
+                    <span id="lnkEncounterMenuEditClaimNote" class="margin-left-5 col-md-12" (click)="openClaimNotes()"
+                    [ngClass]="{'disableSpan': !hasViewClaimAccess}" title="{{ !hasViewClaimAccess ? noaccessTooltipText : ''}}"
+                        attr.check-auth-z="soar-ins-iclaim-view">{{ 'View/Edit Note' | translate }}</span>
+                </div>
+                <div class="row" *ngIf="showEditButton" >
+                    <span id="lnkTransactionsMenuEdit" class="margin-left-5 col-md-12"
+                          [ngClass]="{'disableSpan': disableEditButton || !hasEditEncounterAccess}"
+                          [tooltip]="disableEditMessage && disableEditMessage.length>0? disableEditMessage : ''"
+                          placement="left"
+                          delay="500"
+                          (click)="disableEditButton || !hasEditEncounterAccess ? $event.stopPropagation() : editTransaction()"
+                          attr.check-auth-z="{{getEditButtonAmfa()}}"
+                          title="{{ !hasEditEncounterAccess ? noaccessTooltipText : ''}}">
+                        <span>
+                            {{ (encounter.ObjectType === 'Document' || encounter.$$document ? 'Edit Document' : 'Edit transaction') | translate }}
+                        </span>
+                    </span>
+                </div>
+                <div class="row" *ngIf="showEditEncounterButton">
+                    <span id="lnkEncounterMenuEdit"
+                          class="margin-left-5 col-md-12"
+                          [tooltip]="'All services for this encounter are attached to a claim that is InProcess and it cannot be edited'"
+                          placement="left"
+                          delay="500"
+                          [ngClass]="{'disableSpan': disableEditEncounterButton || !hasEditEncounterAccess1}"
+                          (click)="disableEditEncounterButton || !hasEditEncounterAccess1 ? $event.stopPropagation() : editTransaction()"
+                          attr.check-auth-z="soar-acct-enctr-edit"
+                          title="{{ !hasEditEncounterAccess1 ? noaccessTooltipText : ''}}">
+                        {{ 'Edit encounter' | translate }}
+                    </span>
+                </div>
+                <div class="row" *ngIf="showApplyPaymentButton">
+                    <span id="lnkEncounterMenuPayment" class="margin-left-5 col-md-12" (click)="applyPayment()"
+                    [ngClass]="{'disableSpan': !hasApplyPaymentAccess}"  title="{{ !hasApplyPaymentAccess ? noaccessTooltipText : ''}}"
+                        attr.check-auth-z="soar-acct-aapmt-add">{{ 'Apply a payment' | translate }}</span>
+                </div>
+                <div class="row" *ngIf="showApplyAdjustmentButton">
+                    <span id="lnkEncounterMenuAdjustment" class="margin-left-5 col-md-12" (click)="applyAdjustment()"
+                    [ngClass]="{'disableSpan': !hasApplyAdjAccess}" title="{{ !hasApplyAdjAccess ? noaccessTooltipText : ''}}"
+                    attr.check-auth-z="soar-acct-cdtadj-add">{{ 'Apply adjustment' | translate }}</span>
+                </div>
+                <div class="row"
+                    *ngIf="showChangePaymentOrAdjustmentOption && (encounter.TransactionTypeId == 2 || encounter.TransactionTypeId ==4)">
+                    <span id="lnkChangeHowPaymentIsApplied" class="margin-left-5 col-md-12"
+                    [ngClass]="{'disableSpan': !hasCdtAdjAccess}" title="{{ !hasCdtAdjAccess ? noaccessTooltipText : ''}}"
+                    (click)="changePaymentOrAdjustment()" attr.check-auth-z="soar-acct-cdtadj-edit">{{
+                        distributionMenuText }}</span>
+                </div>
+
+                <div class="row" *ngIf="showViewCompleteEncounterButton">
+                    <span id="lnkEncounterMenuViewCompleteEncounter"
+                          class="margin-left-5 col-md-12"
+                          [ngClass]="{ 'disableSpan': encounter.IsAssociatedEncounters}"
+                          [tooltip]="encounter.IsAssociatedEncounters? 'Use the View Details link as this credit transaction is split': ''"
+                          placement="left"
+                          delay="500"
+                          (click)="disableDeleteButton ? $event.stopPropagation() : viewEncounter()">
+                        {{ 'View Complete Encounter' | translate }}
+                    </span>
+                </div>
+                <div class="row" *ngIf="encounter.TransactionTypeId == 2">
+                    <span id="lnkPrintReceipt" class="margin-left-5 col-md-12" (click)="printReceipt()">{{ 'Print Receipt'
+                        | translate }}</span>
+                </div>
+                <div class="row" *ngIf="showCreateClaimButton">
+                    <span id="lnkEncounterMenuCreateClaim"
+                          class="margin-left-5 col-md-12"
+                          [ngClass]="{'disableSpan': disableCreateClaimButton || !hasEditClaimAccess}"
+                          [tooltip]="disableMessage && disableMessage.length>0? disableMessage: ''"
+                          placement="left"
+                          delay="500"
+                          (click)="disableCreateClaimButton || !hasEditClaimAccess ? $event.stopPropogation() : createClaimAction()"
+                          attr.check-auth-z="soar-ins-iclaim-edit"
+                          title="{{ !hasEditClaimAccess ? noaccessTooltipText : ''}}">
+                        {{ 'Create Claim' | translate }}
+                    </span>
+                </div>
+                <div class="row" *ngIf="encounter.IsPredeterminationResponseNote">
+                    <span id="lnkViewCarrierResponse" class="margin-left-5 col-md-12" (click)="viewCarrierResponse()"
+                    [ngClass]="{'disableSpan': !hasViewClaimAccess}" title="{{ !hasViewClaimAccess ? noaccessTooltipText : ''}}"
+                    attr.check-auth-z="soar-ins-iclaim-view">{{ 'View Carrier Response' | translate }}</span>
+                </div>
+                <div class="row" *ngIf="showViewEobButton">
+                    <span id="lnkViewEob" class="margin-left-5 col-md-12" (click)="viewEob()">{{ 'View EOB' | translate
+                        }}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

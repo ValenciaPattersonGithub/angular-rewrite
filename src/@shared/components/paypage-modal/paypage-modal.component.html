@@ -1,0 +1,21 @@
+<div *ngIf="isVisible" class="modal-overlay">
+    <div class="modal-content">
+      <button
+        class="modal-close-button"
+        (click)="closeModal()"
+        id="btnCloseModal"
+        aria-label="Close"
+      >
+        <svg-icon name="closeIcon" iconHeight="25px" iconWidth="15px"></svg-icon>
+      </button>
+      <div class="modal-loader-overlay" *ngIf="isLoading">
+        <loader-component></loader-component>
+      </div>
+      <iframe
+        #iframeElement
+        (load)="onIframeLoad()"
+        [src]="iframeSrc"
+        class="paypage"
+      ></iframe>
+    </div>
+  </div>

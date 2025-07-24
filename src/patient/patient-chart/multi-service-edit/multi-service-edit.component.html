@@ -1,0 +1,92 @@
+<div class="app-modal">
+    <!--Header-->
+    <div class="app-modal-header">
+        Editing {{data.serviceList.length}} Selected {{data.serviceList.length == 1 ? 'Service' : 'Services'}}
+    </div>
+
+    <!--Body-->
+    <div class="app-modal-body">
+        <div class="bodyItem">
+            <div [ngClass]="{'locationRequiredError': isProviderRequired && newLocation == 0 && allServicesAtSameLocation == false}">
+                <app-select label="Location"
+                            size="medium"
+                            [listItems]="locationDropdownList"
+                            [(value)]="newLocation"
+                            (selectionChange)="locationChanged($event)"
+                            [hasError]="isProviderRequired && newLocation == 0 && allServicesAtSameLocation == false">
+
+                </app-select>
+            </div>
+
+            <div *ngIf="isProviderRequired && serviceProvider == null && newLocation == 0 && allServicesAtSameLocation == false" class="locationErrorMessage">
+                Location is required
+            </div>
+        </div>
+        <div class="bodyItem">
+            <app-label label="Provider"></app-label>
+            <div [ngClass]="{'providerUserIdError': isProviderRequired && serviceProvider == null && (newLocation != 0 || allServicesAtSameLocation)}"
+                 title="{{disableProviderList ? 'Please select a location.' : ''}}">
+                <provider-selector id="multiServiceEditProvider"
+                                   defaultItemText="No Provider Change"
+                                   [isDisabled]="disableProviderList"
+                                   [filterByLocationId]="filterLocationId"
+                                   [(selectedProvider)]="serviceProvider"
+                                   [providerTypeIds]="[1,2,3,5]"
+                                   [patientInfo]="patientInfo"
+                                   (providerChanged)="providerChanged($event)">
+                </provider-selector>
+            </div>
+            <div *ngIf="isProviderRequired && serviceProvider == null && (newLocation != 0 || allServicesAtSameLocation)" class="providerErrorMessage">
+                Provider is required
+            </div>
+        </div>
+        <div class="bodyItem">
+            <currency-input [(amount)]="fee"
+                            [isDisabled]="disableFee"
+                            (amountChange)="feeChanged($event)"
+                            (amountChanging)="feeIsChanging()"
+                            [allowNoValue]="true"
+                            label="Fee"
+                            labelDirection="top">
+            </currency-input>
+        </div>
+        <div class="bodyItem">
+            <app-select size="medium"
+                        label="Status"
+                        [listItems]="statusList"
+                        [(value)]="status"
+                        (selectionChange)="statusChanged($event)">
+
+            </app-select>
+        </div>
+        <div class="bodyItem">
+            <div [ngClass]="{'invalidDate': isDateInvalid}">
+                <app-date-picker id="multiServiceEditDatePicker" label="Date" [value]="date"
+                                 [minDate]="minDate"
+                                 [maxDate]="maxDate"
+                                 (dateChanged)="dateChanged($event)">
+                </app-date-picker>
+            </div>
+        </div>
+
+    </div>
+
+    <!--Footer-->
+    <div class="app-modal-footer">
+        <app-button id="btnMultiServiceEditCancel"
+                    class=""
+                    variation="secondary"
+                    (onClick)="cancel()"
+                    buttonLabel="Cancel"
+                    [isDisabled]="false">
+        </app-button>
+        <app-button id="btnMultiServiceEditSave"
+                    class=""
+                    variation="primary"
+                    (onClick)="save()"
+                    buttonLabel="Save"
+                    [isDisabled]="!canSave">
+        </app-button>
+    </div>
+
+</div>

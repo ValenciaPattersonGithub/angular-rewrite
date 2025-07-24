@@ -1,0 +1,86 @@
+﻿<div ng-controller="ChartButtonLayoutController">
+    <div class="chartBtnLayout">
+        <div class="chartBtnLayout__title">
+            <h1>{{ 'Create/Edit Chart Button Layout' | i18n }}</h1>
+        </div>
+        <div class="chartBtnLayout__topActions">
+            <soar-select-list id="layout"
+                              name="layout"
+                              placeholder="{{ 'Layout A' | i18n }}"
+                              option-list="options"
+                              text-field="layoutName"
+                              value-field="FullName"
+                              ng-model="selectedLayout"
+                              disabled-input="disabled"
+                              sb-blur="selectOnBlure()"
+                              sb-required=""></soar-select-list>
+            <button type="button" class="btn btn-primary" icon="fa-plus">{{ 'New layout' | i18n }}</button>
+            <button type="button" class="btn btn-default">{{ 'Delete Layout' | i18n }}</button>
+           
+        </div>
+        <div class="chartBtnLayout__tabs">
+            <!--Services Tab-->
+            <uib-tabset 
+                    active="tabDataActiveTab" >
+            <uib-tab
+                    tabindex="tabData.services.index"
+                    disabled="tabData.services.disabled"
+                    heading="{{ 'Services' | i18n }}" > 
+            <!--Services Content-->
+                <div class="chartBtnLayout__tabsContent">
+                    <div class="chartBtnLayout__tabFilters">
+                            <soar-select-list id="srvcType"
+                                              name="srvcType"
+                                              placeholder="{{ 'Diagnostic' | i18n }}"
+                                              option-list="options"
+                                              text-field="svcTypeName"
+                                              value-field="FullName"
+                                              ng-model="selectedSvcType"
+                                              disabled-input="disabled"
+                                              sb-blur="selectOnBlure()"
+                                              sb-required=""></soar-select-list>
+                        <div class="form-group">
+                            <input class="form-control" type="search" placeholder="Search" />
+                          <!-- <span class="fa fa-search form-control-feedback"></span>   Not working properly in tabbed container   --> 
+                        </div>
+                    </div>
+                    <!--Kendo Sortable List-->
+                    <div id="container">
+                        <div id="favList" class="clearfix"></div>
+                        <div id="listView"></div>
+                        <div class="sortableList">
+                            <div id="favorites" class="fifty">{{ 'Drag items to create your layout' | i18n }}</div>
+                            <div id="trash" class="fifty">{{ 'Drag items to delete from layout' | i18n }}</div>
+                        </div>
+                    <!--   <div id="pager" class="k-pager-wrap"></div>   -->    
+                    </div>
+                </div>
+                </uib-tab>
+                <!--Swift Code Tab-->
+            <uib-tab
+                     tabindex="tabData.swiftcodes.index"
+                     disabled="tabData.swiftcodes.disabled"
+                     heading="{{ 'Swift Codes' | i18n }}">
+            <!--Swift Code Content-->
+                <div class="chartBtnLayout__tabsContent">
+                    Swift Code Content placeholder
+                </div>
+            </uib-tab>
+            <!--Conditions Tab-->
+            <uib-tab
+                     tabindex="tabData.conditions.index"
+                     disabled="tabData.conditions.disabled"
+                     heading="{{ 'Conditions' | i18n }}" >
+            <!--Conditions Content-->
+                <div class="chartBtnLayout__tabsContent">                
+                    Conditions Content placeholder
+                </div>
+            </uib-tab>
+            </uib-tabset>
+        </div>
+        <div class="chartBtnLayout__footerActions">
+            <button type="button" class="btn btn-default">{{ 'Cancel' | i18n }}</button>
+            <button type="button" class="btn btn-primary">{{ 'Save' | i18n }}</button>
+        </div>
+    </div>
+</div>

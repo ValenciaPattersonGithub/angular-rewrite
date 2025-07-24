@@ -1,0 +1,104 @@
+﻿.tag-container {
+    background-color: @btn-primary-bg;
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
+    font-size: 12px;
+    height: 28px;
+    padding: 4px 6px;
+    float: left;
+    margin: 0 6px 6px 0;
+    color: #fff;
+
+    &__icon {
+        color: #fff;
+        border-color: #fff;
+        cursor: pointer;
+    }
+
+    &__iconSecondary {
+        color: @brand-color_link;
+        border-color: @brand-color_link;
+        cursor: pointer;
+    }
+
+    &__secondary {
+        background-color: #fff;
+        color: @brand-color_link;
+        border: 1px solid @brand-color_link;
+    }
+}
+
+.tag-remove-button {
+    background-color: @white;
+    border: none;
+    border-radius: 90px;
+    color: @bg-light;
+    display: inline-block;
+    font-size: .9em;
+    font-weight: bold;
+    height: 18px;
+    width: 18px;
+    padding: 0;
+}
+
+.tag {
+    padding: 5px 10px;
+    font-size: 10px;
+    margin-right: 2px;
+    font-size: small;
+    display: inline-block;
+}
+
+.tag .remove-button {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.pad-right-15 {
+    padding-right:15px;
+}
+
+.pad-left-15 {
+    padding-left: 15px;
+    padding-right: 2px;
+}
+
+.btn-hovertip {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-hovertip .btn-hovertiptext {
+    visibility: hidden;
+    width: 180px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: -90%;
+    margin-left: -60px;
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+.btn-hovertip .btn-hovertiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.btn-hovertip:hover .btn-hovertiptext {
+    visibility: visible;
+    opacity: 1;
+}
+

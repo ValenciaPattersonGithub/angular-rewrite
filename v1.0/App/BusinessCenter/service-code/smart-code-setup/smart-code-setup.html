@@ -1,0 +1,81 @@
+﻿<div class="smartCodeSetup">
+    <div class="panel smartCodeSetup__content">
+        <div class="panel-heading">
+            <span class="panel-title">{{ '{0} Setup' | i18n:['Smart Code'] }}</span>
+            <span class="close fas fa-times pull-right" ng-click="close()"></span>
+        </div>
+        <div class="panel-body">
+            <div class="smartCodeSetup__setupOptions">
+                <div class="radio">
+                    <label>
+                        <input type="radio"
+                               name="optradio"
+                               ng-model="radioButtonModel"
+                               value="false"
+                               ng-checked="!radioButtonModel == true || radioButtonModel == 'false'"
+                               ng-change="toggle()">
+                        {{ label }}
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio"
+                               name="optradio"
+                               ng-model="radioButtonModel"
+                               value="true"
+                               ng-checked="radioButtonModel == true || radioButtonModel == 'true'"
+                               ng-change="toggle()">
+                        {{ label2 }}
+                    </label>
+                </div>
+            </div>
+            <hr /> <!-- This is to break up the sections -->
+            <div class="smartCodeSetup__setupOptions">
+                <div class="" ng-if="serviceCode.AffectedAreaId == 5 && (radioButtonModel == 'true' || radioButtonModel == true)">
+                    <!-- Range of Teeth -->
+                    <checkbox checkbox-id="rangeOfTeeth" checkbox-value="serviceCode.UseSmartCodes" checkbox-label="'Use Smart Code for Upper and Lower Teeth' | i18n" change-function="">&nbsp;</checkbox>
+                </div>
+            </div>
+            <div class="smartCodeSetup__surfaceSetup col-md-6" 
+                 ng-repeat="codeSelector in  [].constructor(codesByArea.count) track by $index" 
+                 ng-if="validateOptions()">
+                <div class="form-group">
+                    <div class="inner-addon right-addon">
+                        <div class="serviceCodeSearchBoxContainer" ng-class="{'error':hasErrors === true && searchData.searchTerms[$index].$$invalidCode}">
+                            <span class="smartCodeSetup__label" ng-if="!codesByArea.RoT.length">{{$index +1}}<span ng-if="$index == 4">+</span> {{codesByArea.label}}</span>
+                            <span class="smartCodeSetup__label" ng-if="codesByArea.RoT.length">{{codesByArea.RoT[$index]}}</span>
+                            <typeahead id="serviceCodeFilter{{$index}}" 
+                                       class="soar-typeahead" 
+                                       placeholder="{{'Search for a service...'| i18n}}" 
+                                       items="filteredServiceCodes" 
+                                       loading="" 
+                                       term="searchData.searchTerms[$index].term" 
+                                       search="filterServiceCodes(term)" 
+                                       clear-content="clear($index)" 
+                                       select="selectResult(item, $index)">
+                                <ul ng-show="filteredServiceCodes.length > 0">
+                                    <li typeahead-item="code" ng-repeat="code in filteredServiceCodes" class="results">
+                                        <div class="row">
+                                            <div class="col-xs-9">
+                                                <span id="">{{code.Code}}</span>
+                                            </div>  
+                                        </div>
+                                    </li>
+                                </ul>
+                            </typeahead>
+                            <span id="lblInvalidCode[$index]" class="help-text" ng-show="hasErrors === true && searchData.searchTerms[$index].$$invalidCode">
+                                {{ searchData.searchTerms[$index].$$validationMessage |i18n }}
+                            </span>                  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="smartCodeSetup__footer col-md-12">
+                <div class="smartCodeSetup__btns pull-right">
+                    <button id="btnCancel" class="btn btn-default" ng-click="cancel()">{{ 'Cancel' |i18n }}</button>
+                    <button id="btnSave" class="btn btn-primary" ng-click="close()">{{ 'Ok' |i18n }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

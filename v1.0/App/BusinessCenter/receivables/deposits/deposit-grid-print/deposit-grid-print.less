@@ -1,0 +1,94 @@
+﻿.depositPrint{      
+      max-width: 90%;
+      margin-left: 5%;
+      font-family: @global-font-family;
+      font-size: 12px;  
+           
+      table {           
+          border-collapse: collapse; 
+          text-align: left;
+          width: 100%;        
+      }
+      thead > tr:nth-child(2) > th:nth-child(2) > div{
+          padding-left: 87px;
+      }
+
+      thead > tr:nth-child(2) > th{
+          height: 30px;
+          max-width: 10px;
+      }
+      thead > tr > th {  
+          word-break: break-all;
+      }
+      
+      tbody > tr > td {  
+          word-break: break-all;
+      }
+
+     tbody > tr > td:nth-child(5) {
+          max-width: 15px;
+          white-space: nowrap;
+     }
+
+
+      tbody > tr:nth-child(even) {
+          background-color:#eee;
+      }
+     
+      .borderBottom { 
+           background-color: #fff !important; 
+          border-bottom: #6A7575; 
+          border-bottom-style: solid; 
+          border-bottom-width: medium;
+          height: 20px;
+      }
+      .borderTop { 
+          background-color: #fff !important; 
+          border-top: #6A7575; 
+          border-top-style: solid; 
+          border-bottom-width: medium;
+          height: 20px;
+      }    
+      .header { 
+          font-size: 18px; 
+          font-weight: bold; 
+          padding-right: 10px;        
+      }
+      .subHeader { 
+          font-size: 16px; 
+          padding-right: 10px
+      }
+      .subTotal {
+          background-color: #fff !important; 
+          font-weight: bold;
+          
+      }
+      .total{          
+          font-size: 18px;          
+      }
+      .previewOnly {  
+           margin-top: 10px;   
+           margin-bottom: 20px;    
+           display: block;      
+      } 
+      .topMargin { display: none;}
+      .printOnly{
+           top: 10px;
+           position: fixed;         
+           display: none;
+      }
+      @media print {           
+          .topMargin { display: block}     
+          .previewOnly { display: none;} 
+          .printOnly{ display: block}            
+           tbody > tr:nth-child(even):not(.subTotal) {
+                background-color:#eee !important;
+               -webkit-print-color-adjust: exact;
+               }
+           
+        }
+       
+     
+      }
+     
+ 

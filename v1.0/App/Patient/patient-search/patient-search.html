@@ -1,0 +1,49 @@
+﻿<div ng-class="'fade-in'">
+    <form name="frmGlobalSearch" role="form" action="javascript:;" novalidate>
+        <div class="globalSearch">
+            <div class="rowFull white">
+                <div class="globalSearch__header">
+                    <div class="globalSearch__title">
+                        <h2>
+                            <span class="font-weight-bold">{{resultCount}}</span>
+                            <span class="font-weight-normal">{{' results for ' | i18n}} {{searchString}}</span>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="rowFull">
+                <div class="globalSearch__body">
+                    <ul class="globalSearch__list" soar-infinite-scroll="search(searchString, true)">
+                        <li ng-hide="searchResults.length > 0">
+                            <no-results loading="searchIsQueryingServer"></no-results>
+                        </li>
+                        <li class="globalSearch__list-item" ng-animate="'animate'" ng-repeat="person in searchResults | limitTo:limit | orderBy: ['LastName', 'FirstName', 'MiddleName']">
+                            <div class="globalSearch__id">{{$index + 1}}</div>
+                            <div class="globalSearch__img">
+                                <span class="fa-stack fa-lg" id="{{baseId}}personIcon{{$index}}">
+                                    <i class="fa fa-user fa-stack-2x"></i>
+                                    <i class="fa fa-user fa-stack-1x"></i>
+                                </span>
+                            </div>
+                            <div class="globalSearch__details">
+                                <a id="btnPerson{{$index}}Link" tabindex="2" ng-click="[saveMostRecent(person.PatientId), navToPatientProfile(person)]">
+                                    <span id="btnPerson{{$index}}FullName" ng-bind-html="person | getPatientNameAsPerBestPractice | boldTextSearchCriteria:searchString"></span>
+                                </a>
+                                <span id="lblPerson{{$index}}FullContactInfo">
+                                    <span id="lblPerson{{$index}}PatientCode" ng-bind-html="person.PatientCode | boldTextSearchCriteria:searchString"></span>
+                                    <span id="lblPerson{{$index}}DOB" ng-class="{'globalSearch__prepend-spaces' : person.DateOfBirth}" ng-bind-html="person.DateOfBirth | toShortDisplayDateUtc| boldTextSearchCriteriaDate:searchString">
+                                    </span>
+                                </span>
+                            </div>
+                        </li>
+                        <li class="globalSearch__list-item" ng-show="limitResults && resultCount > limit">
+                            <div class="globalSearch__details">
+                                <span id="{{baseId}}viewAll" class="btn btn-link text-muted center-block" ng-click="viewAll();">{{viewAllMessage | i18n}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

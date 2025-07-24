@@ -1,0 +1,90 @@
+@import "variables";
+
+.addtionalIdentifiers {
+    font-family: $global-font-family;
+    &-container {
+        padding: 15px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 5px;
+        hr {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-top: 1px solid #2b144e;
+        }
+    }
+    &-header {
+        display: grid;
+        grid-template-columns: 80% 3% 17%;
+        // 80% = 1st Column
+        // 3% = 2nd Column
+        // 17% = 3rd Column
+    }
+    &-title {
+        height: 16px;
+        font-size: 16px;
+        color: $text-black;
+        text-decoration: none solid $text-black;
+        line-height: 16px;
+        font-weight: bold;
+        grid-column: 1;
+    }
+    &-label {
+        font-size: 14px;
+        color: $label-color;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    &-input {
+        height: 30px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 4px;
+        width: 100%;
+        padding: 0px 8px;
+        outline: none;
+        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box; /* Firefox, other Gecko */
+        box-sizing: border-box; /* Opera/IE 8+ */
+    }
+    &-textarea {
+        height: 194px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 4px;
+        width: 97%;
+        padding: 0px 8px;
+        outline: none;
+    }
+    &-errorIcon {
+        float: left;
+        margin-left: 10px;
+        margin-top: 8px;
+        color: $error-color;
+    }
+    &-selectlist {
+        height: 30px;
+        width: 100%;
+        padding: 0px 5px;
+        text-align: left;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        border: 1px solid $patient-registration-border-color;
+        background-color: $page-search-input-background;
+        color: $text-black;
+        outline: none;
+        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box; /* Firefox, other Gecko */
+        box-sizing: border-box; /* Opera/IE 8+ */
+    }
+    &-selectlist:focus {
+        box-shadow: 0 0 0 1px $dropdown-hover-color;
+    }
+    &-content {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+
+        & > div {
+            margin-bottom: 20px;
+        }
+    }
+}

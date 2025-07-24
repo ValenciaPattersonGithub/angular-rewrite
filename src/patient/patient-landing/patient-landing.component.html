@@ -1,0 +1,122 @@
+<!-- Export Pop- Up Modal -->
+<div class="exportPopUpModal">
+    <ng-container #container></ng-container>
+</div>
+<!-- Send Mailing Pop-Up Modal -->
+<div class="sendMailingPopUpModal">
+    <ng-container #mailingContainer></ng-container>
+</div>
+
+<div class="patient-landing">
+    <div *ngIf="isAppointmentViewVisible" class="appointment-view-full-screen">
+          <!-- ToDo  - Once appointment view created we have to replace below app-uib-modal with appoitnment view-->
+          <app-uib-modal [isVisible]="isAppointmentViewVisible" [controllerName]="controllerName"
+          [templateUrlPath]="templateUrlPath"></app-uib-modal>
+    </div>
+    <!-- need a second window to handle clicking on unscheduled appointments in view opening a new view while closing the existing one -->
+    <div *ngIf="isSecondaryAppointmentViewVisible" class="appointment-view-full-screen">
+         <!-- ToDo  - Once appointment view created we have to replace below app-uib-modal with appoitnment view-->
+         <app-uib-modal [isVisible]="isSecondaryAppointmentViewVisible" [controllerName]="controllerName"
+         [templateUrlPath]="templateUrlPath"></app-uib-modal>
+    </div>
+
+    <div class="peopleMgmt">
+        <div class="rowFull">
+            <div class="peopleMgmt__header">
+                <div class="peopleMgmt__title">
+                    <h1>{{ 'Patient Management' | translate }}</h1>
+                </div>
+                <!--Dropdown filter for Location-->
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <soar-select-list-with-grouping id="inpLocationPatientLanding" [textField]="'NameLine1'"
+                            [valueField]="'LocationId'" [placeHolder]="defaultItem"
+                            [selectedItemValue]="selectedLocation" [optionList]="locationsDDL"
+                            [popupSettings]="popupSettings" [sbTab]="10" [errorLable]="true"
+                            (selectedItemValueChange)="selectedLocationChanged($event)">
+                        </soar-select-list-with-grouping>
+                    </div>
+                </div>
+
+                <hr />
+
+                <!--Button to Add a person-->
+                <div class="peopleMgmt__actions padding-top-0">
+                    <div class="peopleMgmt__actions-link padding-top-0">
+                        <a tabindex="2" (click)="addAPerson()" class="btn btn-primary" icon="fa-user-plus"
+                            id="btnAddPerson" checkRoleAccess="soar-per-perdem-add">{{ 'Add a Person' | translate }}</a>
+                    </div>
+                    <div class="peopleMgmt__actions-link padding-top-0" *ngIf="PatientWorkFlowEnabled">
+                        <a tabindex="2" (click)="addAFamily()" class="btn btn-primary" icon="fa-user-plus"
+                            id="btnAddFamilyPerson" checkRoleAccess="soar-per-perdem-add">{{ 'Add a Family' | translate
+                            }}</a>
+                    </div>                    
+                </div>
+
+                <!-- patient Badge -->
+                <badge *ngIf="tabList?.length" [activeFltrTab]="activeFltrTab" [tabList]="tabList"
+                    [countWithLoading]="patientCount" (selectedBadge)='onBadgeChanged($event)'>
+                </badge>
+
+
+                <div class="peopleMgmt__actions-link">
+                    <button class="btn soar-link icon-button font-14" icon="fa-filter" (click)="hideDiv()">{{
+                        slideOutText | translate }}</button>
+                    <button tabindex="4" [disabled]="disableMailing || disablePrint" class="btn btn-primary" [ngClass]="{notActive: (disablePrint)}"
+                        id="btnSendmailing" (click)="printMailinglabels()">{{'Send Mailing' | translate }}</button>
+
+                    <button tabindex="5" class="peopleMgmt__actions-link__transparent pull-right"
+                        [ngClass]="{notActive: (disablePrint)}" (click)="exportCSV()">
+                        <i class="far fa-share-square fa-2x"></i>
+                    </button>
+                    <button tabindex="6" [disabled]="disablePrint" class="peopleMgmt__actions-link__transparent pull-right"
+                        [ngClass]="{notActive: (disablePrint)}" (click)="printGrid()">
+                        <i class="fa fa-print fa-2x"></i>
+                    </button>
+                    <span class="peopleMgmt__toggleCommunication pull-right" *ngIf="activeFltrTab != activeFilterTab.otherToDo">
+                        <label>{{ 'View unread communications only' | translate }}</label>
+                        <button (click)="filterUnreadCommunication()" [disabled]="loading">
+                            <i class="fa fa-2x fa-toggle-on active" *ngIf="isUnreadCommunication"></i>
+                            <i class="fa fa-2x fa-toggle-on fa-rotate-180 inactive"
+                                *ngIf="!isUnreadCommunication"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="peopleMgmt__header">
+        <div class="col-md-3" id="divSlideoutmenu" [ngClass]="{'slideout_menu': hideMenu}">
+            <patient-slideout [activeFltrTab]="activeFltrTab" [activeGridData]="activeGridData"
+                [allBadgeFilterCriteria]="allBadgeFilterCriteria"
+                [selectedLocation]="selectedLocation" (closePatientSlideout)="onClose()"
+                (filterCriteria)="filterGrid($event)" (resetFilterCriteria)="resetFilterCriteria()"></patient-slideout>
+        </div>
+
+        <div class="col-md-9 padding-left-0" [ngStyle]="{'width': grdWidth}">
+            <patient-grid [gridData]="patientData" [columns]="
+                    activeFltrTab == activeFilterTab['AllPatients'] ? commonColumns : 
+                    activeFltrTab == activeFilterTab.PreventiveCare ? preventiveColumns : 
+                    activeFltrTab == activeFilterTab.TreatmentPlans ? treatmentPlansColumns :
+                    activeFltrTab == activeFilterTab.Appointments ? appointmentColumns :
+                    activeFltrTab == activeFilterTab.otherToDo ? otherToDoColumns : []" 
+                [navToPatientProfile]="navToPatientProfile" [toCreateAppointment]="createAppointment"
+                [openAppointmentPopup]="navToAppointment"
+                [showApptToolTip]="showAppointmentTooltip" [openCommunicationModal]="openModal" [isMouseUp]="isMouseUp"
+                [keepShow]="keepShow" [getTxClass]="getClass" [showTreatmentPlanToolTip]="displayTxPlans"
+                [hideTreatmentPlan]="hideTxPlans" [txPlansHover]="txPlansHover" [navigateTxPlan]="navToPatientTxPlan"
+                (onApplyDateRangeFilter)="applyDateRangeFilter($event)" [loading]="loading"
+                (onApplyNumericRangeFilter)="applyNumericRangeFilter($event)" (onAppointmentStatusFilter)="applyAppointmentStatusFilter($event)"
+                (onTextValuefilter)="applyTextValueFilter($event)" [activeFltrTab]="activeFltrTab"
+                [totalRecords]="totalCount" [gridFilterDate]="allBadgeFilterCriteria"
+                (onGetSortedData)="getSortedData($event)">
+            </patient-grid>
+        </div>
+    </div>
+
+    <div class="peopleMgmt__actions-link">
+        <a tabindex="2" id="btnPatientPageScrollTop" class="btn btn-primary" icon="fa-arrow-circle-up"
+            (click)="scrollToTop()">{{'Top' | translate}}</a>
+    </div>
+</div>

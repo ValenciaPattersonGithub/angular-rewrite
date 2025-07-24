@@ -1,0 +1,30 @@
+﻿<div class="list-container">
+    <div ng-if="ShowOptions" ng-class="{'slide-animation': forward, 'slide-backward-animation': !forward}">
+        <div ng-repeat="option in menuOptions" class="list-option" ng-click="SelectOptionIndex($index);">
+            {{ option.Name | i18n }}
+            <i class="fa fa-angle-right fa-2x pull-right"> </i>
+        </div>
+    </div>
+    <div ng-repeat="option in menuOptions">
+        <div ng-if="optionIndex == $index && itemIndex < 0" ng-class="{'slide-animation': forward, 'slide-backward-animation': !forward}">
+            <!-- List Option Container -->
+            <div class="list-option-container">
+                <!-- List Option Header -->
+                <div class="list-option-header">
+                    {{ menuOptions[optionIndex].Name | i18n }}
+                    <i class="fa fa-reply pull-right" ng-click="goBack()"></i>
+                </div>
+
+                <!-- List Option Items -->
+                <div ng-repeat="item in menuOptions[optionIndex].Items" class="list-option-item" ng-click="SelectItemIndex($index);">
+                    <label>{{ item.Name | i18n }}</label>
+                    <i class="fa fa-angle-right fa-2x pull-right"> </i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="itemIndex > -1" ng-class="{'slide-animation': forward, 'slide-backward-animation': !forward}">        <!-- List Option Header -->
+
+        <list-panel list-panel-url="menuOptions[optionIndex].Items[itemIndex].templateUrl" back-func="goBackOptions()"></list-panel>
+    </div>
+</div>

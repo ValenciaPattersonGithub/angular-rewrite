@@ -1,0 +1,55 @@
+<div class="merge-duplicates-dialog"> 
+    <div class="dialog-header">
+        <span class="text-left">{{ title | translate  }}</span>
+    </div>           
+    <div class="dialog-content">
+        <div class="dialog-sub-header">
+            <span class="text-left">{{ 'Please select which person you would like to make the primary account, all other accounts will be considered duplicates of that patient.' | translate  }}</span>
+        </div>
+        <div>
+            <table class="table table-striped table-bordered ">
+                <thead>
+                    <tr>
+                        <th id="thCheckbox" class=""> 
+                        </th>                        
+                        <th id="thPatientCode">{{'ID' | translate }}
+                        </th>          
+                        <th id="thName">{{'Name' | translate }}
+                        </th>
+                        <th id="thDateOfBirth">{{'Date of Birth'| translate  }}
+                            
+                        </th>                    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accountMember of accountMembers ; index as i">
+                        <td id="tdAccountMemberIsSelected{{i}}" class="">
+                            <div class="">
+                                <input type="radio" (change)="toggleSelected(accountMember)"  [checked]="accountMember.IsPrimaryDuplicate"/>                            
+                            </div>
+                        </td>                        
+                        <td title={{accountMember.PatientCode}} id="tdAccountMemberPatientCode{{i}}">{{accountMember.PatientCode}}</td>                 
+                        <td title="{{ accountMember.Name }}" id="tdAccountMemberName{{i}}">{{accountMember.Name | truncateText:30 }}</td>
+                        <td title="{{accountMember.DateOfBirthDisplay}}" id="tdAccountMemberDateOfBirthDisplay{{i}}">{{accountMember.DateOfBirthDisplay}}</td>                    
+                    </tr>
+                </tbody>
+            </table> 
+        </div> 
+        <div class="form-row">
+            <div class="message">
+                <span class="error">{{validationMessage | translate }}</span>
+            </div>
+        </div> 
+    </div>    
+    <div class="dialog-footer"> 
+        <div class="btn_toolbar">
+            <button id="btnCancel" class="btn default_button" (click)="cancelDialog()" type="button">{{'Cancel'| translate}}</button>
+            <button id="btnSavePrimaryDuplicate" class="btn primary_button" type="button"
+                (click)="savePrimaryDuplicate()"
+                [disabled]="isValid===false">
+                {{'Save'| translate}}
+            </button>
+        </div>
+    </div>
+</div> 
+ 

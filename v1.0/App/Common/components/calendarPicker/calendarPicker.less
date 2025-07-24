@@ -1,0 +1,189 @@
+﻿
+.calendar-table {
+    display: table;
+    border-collapse: collapse;
+    color: black;
+}
+
+.calendar-table .calendar-table-row {
+    display: table-row;
+}
+
+.calendar-table .calendar-table-cell {
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.calendar-picker-dropdown-btn {
+    z-index: 999;
+}
+
+.calendar-picker {
+    padding-left: 0;
+    padding-top: 0;
+}
+
+.calendar-picker-body {
+    //margin-top: 35px;
+    margin-left: 8px;
+    position: absolute;
+    left: 0px;
+    top: 350px;
+    background: white;
+    width: 254px;
+    min-width: 254px;
+    z-index: 101;
+    border: 2px solid #c5c5c5;
+    border-radius: 8px 8px 8px 8px;
+}
+
+.calendar-table-header, .calendar-table-nav {
+    width: 252px;
+    border-bottom: 2px solid #c5c5c5;
+}
+
+.calendar-picker table {
+    width: 252px;
+    z-index: 1000;
+    table-layout: fixed;
+}
+
+.calendar-picker-body .uib-title {
+    font-size: 18px;
+}
+
+.calendar-picker-body .btn-default {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.calendar-picker-icon .btn {
+    padding: 4px 0 0 10px;
+}
+
+.calendar-picker .date-picker {
+    z-index: 1000;
+}
+
+.calendar-picker-nav-arrow-btn {
+    font-size: @font-size-normal;
+    background-color: transparent;
+    border: none;
+
+    > i {
+        font-size: em(14px);
+        position: relative;
+    }
+}
+
+
+.calendar-picker-nav-icon-btn {
+    height: 25px;
+    font-size: em(10px);
+    background-color: white;
+    border: 1px solid @link-color;
+    border-radius: 2px !important;
+    padding-top: 2px;
+    padding-left: 9px;
+
+    > i {
+        font-size: em(16px);
+        position: relative;
+        top: 2px;
+    }
+}
+
+.calendar-picker-no-blur {
+    width: auto;
+    /*
+        Don't delete/remove this class. It is used for
+        the calendar picker blur event.
+    */
+}
+
+.calendar-picker-today-btn-container {
+    padding-left: 15px;
+    padding-right: 10px;
+}
+
+.calendar-picker-today-btn {
+    padding-top: 6px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.calendar-table-days .calendar-table-cell:first-child {
+    padding-left: 11px;
+}
+.calendar-table-days {
+    font-weight: bold;
+    color: darkgray;
+    text-align: center;
+}
+
+.calendar-table-nav-row {
+    position: relative;
+    height: 35px;
+}
+
+.calendar-table-days .calendar-table-cell {
+    padding-left: 24px;
+    font-size: em(18px);
+}
+
+.calendar-table-months .calendar-table-cell:first-child {
+    padding-left: 20px;
+}
+
+.calendar-table-months .calendar-table-cell {
+    padding-left: 15px;
+    padding-top: 5px;
+    font-weight: bold;
+
+    > label {
+        font-size: em(12px);
+        cursor: pointer;
+        color: #2DABCB;
+
+        &[disabled] {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+    }
+}
+
+.calendar-picker-header {
+    vertical-align: middle;
+}
+
+.calendar-picker-header-title {
+    text-align: center;
+    vertical-align: middle;
+    width: 186px;
+}
+
+.calendar-picker-nav {
+    clear: both;
+    float: left;
+}
+.calendar-picker-body{
+    .btn-default{
+        color: black;
+        border-color: transparent;
+        &:hover{
+            color: @brand-color_white;
+            background-color: @brand-navigation_primary_color_gray;
+        }
+        &.active {
+            color: @brand-color_white;
+        }
+    }
+    .btn-info{
+        &.active{
+            color: @brand-color_white;
+        }
+    }
+}

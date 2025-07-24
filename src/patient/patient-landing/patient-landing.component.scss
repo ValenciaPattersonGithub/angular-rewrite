@@ -1,0 +1,55 @@
+.patient-landing {
+    .peopleMgmt__actions {
+        display: flex;
+        
+        .peopleMgmt__actions-link{
+            width: inherit;
+            margin: inherit;
+            margin-right: 10px;           
+        }
+    }
+
+    ::ng-deep .items-templateList {
+        font-size: 14px;
+    }
+
+    ::ng-deep .items-templateListHeader {
+        .k-outer-group-header strong {
+            font-weight: inherit;
+        }
+    }
+
+    .slideout_menu {
+        display: none;
+    }
+
+    //Added when content will go outside of page it will automatically add scrollbar to view content
+    //Required to display date range in last communucation column for other to do grid
+    @media (min-width: 1280px) {
+        .col-md-9 {
+            transform: translate(10px, 10px);
+        }
+    }
+
+    #btnPatientPageScroll {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        font-family: 'Open Sans', sans-serif;
+    }
+}
+
+.exportPopUpModal {
+    ::ng-deep .k-dialog .k-content {
+        height: 100%;       
+    }
+}
+
+.sendMailingPopUpModal {
+     ::ng-deep { // ng-deep is required to override kendo popup modal css
+        .k-window {
+            left: 25%; 
+            overflow-y: auto;        
+        }
+     }
+}

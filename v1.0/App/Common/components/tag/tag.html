@@ -1,0 +1,22 @@
+﻿<div class="tag-container" ng-class="{'tag-container__secondary': !isPrimary}" style="max-width:100%; height:100%;">
+	<div class="flex">
+		<div class="flex flex-center flex-shrink-1 flex-grow-0">
+            <div ng-if="!limitTo">
+                <div ng-if="!truncate" id="lbl{{baseId}}" class="flex-shrink-1" ng-class="{ 'padding-right-16': !hideRemove }">{{title}}</div>
+                <div ng-if="truncate" id="lbl{{baseId}}" class="flex-shrink-1" ng-class="{ 'padding-right-16': !hideRemove }">
+                    <label title="{{title}}">{{title | truncate : 40}}</label>
+                    <strong ng-show="title.length > 40">...</strong>
+                </div>
+            </div>
+            <div id="lbl{{baseId}}" ng-if="limitTo" class="flex-shrink-1" ng-class="{ 'padding-right-16': !hideRemove }">
+                <label title="{{title}}">{{title | limitTo : numLimit}}</label>
+                <strong ng-show="title.length > {{numLimit}}">...</strong>
+            </div>
+            <div ng-if="isLocationInactive" class="pad-right-15 btn-hovertip" ng-class="{ 'pad-left-15': hideRemove }">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                <span class="btn-hovertiptext">Location Inactive {{deactivationTimeUtc}}</span>
+            </div>
+			<i id="btn{{baseId}}Remove" ng-class="{'tag-container__iconSecondary': !isPrimary, 'tag-container__icon': isPrimary}" class="fa fa-times-circle" ng-if="!hideRemove" ng-click="removeFunction()"></i>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,130 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="treatmentplanperformancereport grid header">
+        <div class="col-sm-2-migration">Patient </div>
+        <div class="col-sm-1-migration">Date Proposed </div>
+        <div class="col-sm-1-migration">Treatment Plan </div>
+        <div class="col-sm-1-migration">Tx Plan Status </div>
+        <div class="col-sm-2-migration">Recommended? </div>
+        <div class="col-sm-1-migration">Stage </div>
+        <div class="col-sm-2-migration">Description </div>
+        <div class="col-sm-1-migration">Tooth-Area </div>
+        <div class="col-sm-1-migration">Location </div>
+        <div class="col-sm-1-migration">Service Code Status </div>
+        <div class="col-sm-1-migration">Provider </div>
+        <div class="col-sm-1-migration text-right">Fee </div>
+        <div class="col-sm-1-migration text-right">Allowed Amount </div>
+        <div class="col-sm-1-migration text-right">Appt Date</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0">
+            <div *cdkVirtualFor="let transaction of reportData; index as i" class="{{transaction.Class}}">
+                <div class="treatmentplanperformancereport grid item">
+                    <div class="col-sm-3-migration">{{ transaction.Patient }}</div>
+                    <div class="col-sm-1-migration" *ngIf="transaction.StageChanged">{{ transaction.DateProposed | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-1-migration" *ngIf="!transaction.StageChanged"></div>
+                    <div class="col-sm-1-migration" *ngIf="transaction.StageChanged">{{ transaction.TreatmentPlan }}</div>
+                    <div class="col-sm-1-migration" *ngIf="!transaction.StageChanged"></div>
+                    <div class="col-sm-1-migration" *ngIf="transaction.StageChanged">{{ transaction.TreatmentPlanStatus }}</div>
+                    <div class="col-sm-1-migration" *ngIf="!transaction.StageChanged"></div>
+                    <div class="col-sm-2-migration" *ngIf="transaction.StageChanged">{{ transaction.Recommended }}</div>
+                    <div class="col-sm-2-migration" *ngIf="!transaction.StageChanged"></div>
+                    <div class="col-sm-1-migration" *ngIf="transaction.StageChanged">{{ transaction.Stage }}</div>
+                    <div class="col-sm-1-migration" *ngIf="!transaction.StageChanged"></div>
+                    <div class="col-sm-2-migration">{{ transaction.ServiceDescription }}</div>
+                    <div class="col-sm-1-migration">{{ transaction.ServiceToothArea }}</div>
+                    <div class="col-sm-1-migration">{{ transaction.ServiceLocation }}</div>
+                    <div class="col-sm-1-migration">{{ transaction.ServiceCodeStatus }}</div>
+                    <div class="col-sm-1-migration">{{ transaction.ServiceProvider }}</div>
+                    <div class="col-sm-1-migration text-right">{{ transaction.ServiceFee| currency }}</div>
+                    <div class="col-sm-1-migration text-right">{{ transaction.ServiceAllowedAmount| currency }}</div>
+                    <div class="col-sm-1-migration text-right">{{ transaction.ServiceAppointmentDate | date: 'MM/dd/yyyy'  }}</div>
+                </div>
+                <div class="treatmentplanperformancereportFooter grid" *ngIf="transaction.IsTotalProposed == true || transaction.IsFinalTotalProposed == true">
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsFinalTotalProposed == true">Report Totals</div>
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsTotalProposed == true "></div>
+                    <div class="col-sm-4-migration reportGrid__label">Total Proposed</div>
+                    <div class="col-sm-3-migration text-right">
+                        {{transaction.TotalProposed | currency}}
+                    </div>
+                    <div class="col-sm-3-migration text-right">{{transaction.TotalAllowedAmtProposed | currency}} </div>
+                </div>
+                <div class="treatmentplanperformancereportFooter grid" *ngIf="transaction.IsTotalAccepted == true || transaction.IsFinalTotalAccepted == true">
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsFinalTotalAccepted == true"></div>
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsTotalAccepted == true "></div>
+                    <div class="col-sm-4-migration reportGrid__label">Total Accepted</div>
+                    <div class="col-sm-3-migration text-right"
+                         *ngIf="transaction.TotalAccepted >= 0">
+                        {{transaction.TotalAccepted | currency}}
+                    </div>
+                    <div class="col-sm-3-migration text-right"> {{transaction.TotalAllowedAmtAccepted | currency}}</div>
+                </div>
+                <div class="treatmentplanperformancereportFooter grid" *ngIf="transaction.IsTotalCompleted == true || transaction.IsFinalTotalCompleted == true">
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsTotalCompleted == true"></div>
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsFinalTotalCompleted == true "></div>
+                    <div class="col-sm-4-migration reportGrid__label">Total Completed</div>
+                    <div class="col-sm-3-migration text-right"
+                         *ngIf="transaction.TotalCompleted >= 0">
+                        {{transaction.TotalCompleted | currency}}
+                    </div>
+                    <div class="col-sm-3-migration text-right">{{transaction.TotalAllowedAmtCompleted | currency}}</div>
+                </div>
+                <div class="treatmentplanperformancereportFooter grid" *ngIf="transaction.IsTotalPresented == true || transaction.IsFinalTotalPresented == true">
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsTotalPresented == true"></div>
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsFinalTotalPresented == true "></div>
+                    <div class="col-sm-4-migration reportGrid__label">Total Presented</div>
+                    <div class="col-sm-3-migration text-right"
+                         *ngIf="transaction.TotalPresented >= 0">
+                        {{transaction.TotalPresented | currency}}
+                    </div>
+                    <div class="col-sm-3-migration text-right">{{transaction.TotalAllowedAmtProposed | currency}}</div>
+                </div>
+                <div class="treatmentplanperformancereportFooter grid" *ngIf="transaction.IsTotalReferred == true || transaction.IsFinalTotalReferred == true">
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsTotalReferred == true"></div>
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsFinalTotalReferred == true "></div>
+                    <div class="col-sm-4-migration reportGrid__label">Total Referred</div>
+                    <div class="col-sm-3-migration text-right"
+                         *ngIf="transaction.TotalReferred >= 0">
+                        {{transaction.TotalReferred | currency}}
+                    </div>
+                    <div class="col-sm-3-migration text-right">{{transaction.TotalAllowedAmtReferred | currency}}</div>
+                </div>
+                <div class="treatmentplanperformancereportFooter grid" *ngIf="transaction.IsTotalReferredCompleted == true || transaction.IsFinalTotalReferredCompleted == true">
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsTotalReferredCompleted == true"></div>
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsFinalTotalReferredCompleted == true "></div>
+                    <div class="col-sm-4-migration reportGrid__label">Total Referred Completed</div>
+                    <div class="col-sm-3-migration text-right"
+                         *ngIf="transaction.TotalReferredCompleted >= 0">
+                        {{transaction.TotalReferredCompleted | currency}}
+                    </div>
+                    <div class="col-sm-3-migration text-right" >{{transaction.TotalAllowedAmtReferredCompleted | currency}}</div>
+                </div>
+                <div class="treatmentplanperformancereportFooter grid" *ngIf="transaction.IsTotalRejected == true || transaction.IsFinalTotalRejected == true">
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsTotalRejected == true"></div>
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsFinalTotalRejected == true "></div>
+                    <div class="col-sm-4-migration reportGrid__label">Total Rejected</div>
+                    <div class="col-sm-3-migration text-right"
+                         *ngIf="transaction.TotalRejected >= 0">
+                        {{transaction.TotalRejected | currency}}
+                    </div>
+                    <div class="col-sm-3-migration text-right" *ngIf="transaction.TotalAllowedAmtRejected >= 0">{{transaction.TotalAllowedAmtRejected | currency}}</div>
+                </div>
+                <div class="treatmentplanperformancereportFooter grid" *ngIf="transaction.IsFinalTotalRecommended == true">
+                    <div class="col-sm-4-migration reportGrid__label text-right"></div>
+                    <div class="col-sm-4-migration reportGrid__label text-right" *ngIf="transaction.IsFinalTotalRecommended == true ">Total Recommended</div>
+                    <div class="col-sm-4-migration reportGrid__label">Total Recommended</div>
+                    <div class="col-sm-3-migration text-right"
+                         *ngIf="transaction.TotalRecommended >= 0">
+                        {{transaction.TotalRecommended | currency}}
+                        <div class="col-sm-1-migration text-right"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+    <div>
+        <div class="col-sm-12-migration text-center" colspan="12">The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright &#169; American Dental Association (ADA). All rights reserved.</div>
+    </div>
+
+</div>

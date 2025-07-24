@@ -1,0 +1,34 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Patients.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Patients.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-2 cell">{{ 'Patient Name' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Patient Code' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Location Name' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Last Visit Date' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Additional Identifier' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Value' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="patient in data.Patients" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-2 cell">{{ patient.PatientName }}</td>
+                    <td class="col-sm-1 cell">{{ patient.PatientCode }}</td>
+                    <td class="col-sm-2 cell">{{ patient.LocationName }}</td>
+                    <td class="col-sm-2 cell">{{ patient.LastVisitDate| date : 'M/d/yyyy' }}</td>
+                    <td class="col-sm-3 cell">{{ patient.AdditionalIdentifiers[0].AdditionalIdentifierName }}</td>
+                    <td class="col-sm-1 cell">{{ patient.AdditionalIdentifiers[0].AdditionalIdentifierValue }}</td>
+                </tr>
+                <tr ng-repeat="identifier in patient.AdditionalIdentifiers | startFrom : 1">
+                    <td class="col-sm-7 cell" colspan="4"></td>
+                    <td class="col-sm-3 cell">{{ identifier.AdditionalIdentifierName }}</td>
+                    <td class="col-sm-2 cell">{{ identifier.AdditionalIdentifierValue }}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

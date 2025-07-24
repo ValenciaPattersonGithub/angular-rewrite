@@ -1,0 +1,53 @@
+<div>
+    <div class="panel-heading collapseExpand">
+        <a data-toggle="collapse" attr.data-target="#{{filterId}}" class="soar-link font-weight-bold padding-2">
+            <i class="indicator fa fa-chevron-up"></i>
+            {{searchFilterModel?.Name}}
+        </a>
+    </div>
+
+    <div class="filter-option panel-collapse collapse reports-slideout" attr.id="{{filterId}}">
+        <ul attr.id="{{data[0]?.Field}}">
+            <li *ngIf="includeAll">
+                <input type="radio" attr.id="{{data[0]?.Value}}" class="rprtsFilters"
+                    attr.name="{{data[0]?.Field}}" attr.data-field="{{data[0]?.Field}}" attr.data-key="{{data[0].Key}}"
+                    [checked]="data[0].Checked" (click)="toggleRadio(data[0].Value)" />{{data[0].Value}}
+                </li>
+            <li>
+                <input type="radio" *ngIf="includeAll" attr.id="{{data[1].Value}}" class="rprtsFilters searchBox"
+                    attr.name="{{data[1]?.Field}}" attr.data-field="{{data[1]?.Field}}" attr.data-key="{{data[1].Key}}"
+                    [checked]="data[1].Checked" (click)="toggleRadio(data[1].Value)" />
+                <div [ngClass]="searchClass">
+                    <input class="form-control border-solid-black" id="SearchBox"
+                        attr.placeholder="{{searchFilterModel?.Placeholder}}" type="text" [(ngModel)]="searchKeywords"
+                        (keyup)="searchKeyCode();"
+                        name="searchKeywords" 
+                        ngDefaultControl
+                        [disabled]="data[0].Checked && includeAll" />
+                </div>
+                <div>
+                    <!-- search results -->
+                    <div class="col-sm-12">
+                        <div class="form-search-container background-white" *ngIf="matchingItems?.length > 0">
+                            <div class="row"
+                                *ngFor="let item of matchingItems; let i = index;let isOdd=odd; let isEven=even"
+                                [class.item-zebra-dark]="isOdd" [class.item-zebra-light]="isEven"
+                                (click)="selectItem(item)">
+                                <div class="col-sm-11">
+                                    <div class="media referred-media">
+                                        <i class="pull-left far fa-image fa-3x referred-media-icon"></i>
+                                        <div class="media-body referred-media-body">
+                                            <div *ngFor="let column of searchFilterModel.DisplayColumns">
+                                                <p><span attr.id="column{{i}}" [innerHtml]="item[column]"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

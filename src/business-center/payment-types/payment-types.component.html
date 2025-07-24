@@ -1,0 +1,64 @@
+<ng-container #container></ng-container>
+<div class="container">
+	<app-page-header [pageHeader]="'Manage Payment Types'"></app-page-header>
+	<hr>
+	<app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+	<div class="page_box">
+		<div class="row">
+			<div class="col-sm-6">
+				<p class="text-left page_sub_title">Payment Types</p>
+			</div>
+			<div class="col-sm-6">
+				<div class="float-right serach_button">
+					<div class="form-group">
+						<div class="input-group">
+							<input class="form-control"
+								autocomplete="off"
+								title="Search description, prompt or currency type"
+								type="search"
+								placeholder="Search description, prompt or currency type"
+								[(ngModel)]="searchText"
+								id="search-input">
+							<span class="input-group-append search_icon">
+								<div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+							</span>
+						</div>
+						<button class="search_button"
+							[ngClass]="{'disabled' : (!hasCreateAccess)}"
+							title="{{!hasCreateAccess? 'You do not have permission to view this information.' : ''}}"
+							(click)="addPaymentType()">Add Payment Type</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="tab-wrap">
+				<kendo-tabstrip (tabSelect)="onTabSelect($event)">
+					<kendo-tabstrip-tab [title]="'Account Payment Types'"
+						[selected]="true">
+						<ng-template kendoTabContent>
+							<app-payment-types-list [hasDeleteAccess]="hasDeleteAccess"
+								[containerRef]="containerRef"
+								[hasEditAccess]="hasEditAccess"
+								[selectedTab]="selectedTab"
+								[paymentTypes]="accountPaymentTypes$ | async"
+								[filteredPaymentTypes]="accountPaymentTypes"
+								[searchText]="searchText"></app-payment-types-list>
+						</ng-template>
+					</kendo-tabstrip-tab>
+					<kendo-tabstrip-tab [title]="'Insurance Payment Types'">
+						<ng-template kendoTabContent>
+							<app-payment-types-list [hasDeleteAccess]="hasDeleteAccess"
+								[hasEditAccess]="hasEditAccess"
+								[selectedTab]="selectedTab"
+								[containerRef]="containerRef"
+								[paymentTypes]="insurancePaymentTypes$ | async"
+								[filteredPaymentTypes]="insurancePaymentTypes"
+								[searchText]="searchText"></app-payment-types-list>
+						</ng-template>
+					</kendo-tabstrip-tab>
+				</kendo-tabstrip>
+			</div>
+		</div>
+	</div>
+</div>

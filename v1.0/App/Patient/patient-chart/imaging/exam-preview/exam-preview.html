@@ -1,0 +1,37 @@
+﻿<div class="imagingExamPreview">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4>{{ title }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="imagingExamPreview__content panel panel-default">
+        <div class="panel-body" ng-if="imagesLoaded">
+            <div class="imagingExamPreview__series" ng-repeat="series in exam.Series">
+                <div>
+                    <div class="imagingExamPreview__image" ng-repeat="image in series.Images" ng-if="noImagesAvailableError===false">
+                        <img class="imagingExamPreview__image__img" ng-src="{{getThumbnailUrl(image)}}" />
+                    </div>                    
+                </div>
+            </div>            
+            <div ng-if="noImagesAvailableError===true" >
+                <span class="warning" >{{ 'Cannot show preview images, please try again.' | i18n }}</span>
+            </div>
+        </div>
+        
+        <div class="panel-body" ng-if="!imagesLoaded">
+            <no-results loading="!imagesLoaded"></no-results>
+        </div>
+    </div>
+    <div class="imagingExamPreview__footer">
+        <div class="imagingExamPreview__btn">
+            <button class="btn btn-link" 
+                ng-class="{'disabled': imagingProviderNotAvailable === true}"
+                uib-tooltip="{{ imagingProviderMessage }}" 
+                ng-click="showExamInImaging()" >{{ 'View in Imaging' | i18n }}
+            </button>
+            <button class="btn btn-primary" type="button" ng-click="close()">{{ 'Close' | i18n }}</button>
+        </div>
+    </div>
+</div>

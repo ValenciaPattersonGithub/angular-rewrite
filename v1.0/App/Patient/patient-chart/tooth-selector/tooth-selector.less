@@ -1,0 +1,233 @@
+﻿// Tooth Chart
+.toothChart {
+    .clearfix;
+    &__title {
+        text-align: center;
+        h3 {
+            margin: 0;
+        }
+    }
+    &__toothCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin-right: 2px;
+        margin-bottom: 2px;
+        padding: 0;
+        border-radius: 100%;
+        box-shadow: none;
+        outline: none;
+    }
+    &__regionCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin: 0 2px 5px 0;
+        padding: 0;
+    }
+    &__perm {
+        .make-xs-column(12);
+        .clearfix;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    &__prim {
+        .make-xs-column(8);
+        .clearfix;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    &__regions {
+        .make-xs-column(2);
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}
+
+.toothChartWidget {
+    display: inline-block;
+    position: relative;
+
+    &__toggle {
+        .btn;
+        .btn-default;
+    }
+    &__apply {        
+        .btn;
+        .btn-primary;    
+    }
+    &__close {
+        .btn;
+        .btn-link;        
+        padding-top: 10px;
+        padding-right: 5;
+    }
+    &__content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        min-width: 420px;
+        transform: translateX(-50%);
+        background-color: @brand-color_white;
+        box-shadow: @brand-shadow_default;
+
+        &.active {
+            display: inline-block;
+        }
+    }
+
+    &__toothCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 2px;
+        margin-bottom: 2px;
+        padding: 0;
+        border-radius: 100%;
+        box-shadow: none;
+        outline: none;
+        font-size: 10px;
+    }
+    &__regionCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin: 0 2px 5px 0;
+        padding: 0;
+        font-size: 10px;
+    }
+    &__row {
+        .clearfix;
+        margin: @brand-margin_sm 0;
+    }
+    &__perm {
+        .make-xs-column(12);
+        .clearfix;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    &__prim {
+        .make-xs-column(7);
+        .clearfix;
+        padding: 0;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    &__regions {
+        .make-xs-column(2.5);
+        .clearfix;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    &__actions {
+        padding: 0 @brand-padding_md @brand-padding_md;
+        text-align: right;
+    }
+ }
+
+.toothChartInput {
+    display: inline-block;
+    position: relative;
+
+    &__form {
+        .form-control;
+    }
+    &__apply {        
+        .btn;
+        .btn-primary;    
+    }
+    &__close {
+        .btn;
+        .btn-link;        
+        float: right;
+        margin-top: 0;
+        color: @brand-color_red;
+    }
+    &__content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 420px;
+        background-color: @brand-color_white;
+        box-shadow: @brand-shadow_default;
+
+        &.active {
+            display: inline-block;
+        }
+         &.orientTop {
+            top: auto;
+            bottom: 40px;
+        }
+    }
+
+    &__toothCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 2px;
+        margin-bottom: 2px;
+        padding: 0;
+        border-radius: 100%;
+        box-shadow: none;
+        outline: none;
+        font-size: 10px;
+    }
+    &__regionCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin: 0 2px 5px 0;
+        padding: 0;
+        font-size: 10px;
+    }
+    &__row {
+        .clearfix;
+        margin: @brand-margin_sm 0;
+    }
+    &__perm {
+        .make-xs-column(12);
+        .clearfix;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    &__prim {
+        .make-xs-column(7);
+        .clearfix;
+        padding: 0;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    &__regions {
+        .make-xs-column(2.5);
+        .clearfix;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    &__actions {
+        padding: 0 @brand-padding_md @brand-padding_md;
+        text-align: right;
+    }
+ }

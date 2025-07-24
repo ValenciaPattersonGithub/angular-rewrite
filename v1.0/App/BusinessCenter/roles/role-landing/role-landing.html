@@ -1,0 +1,35 @@
+﻿<!-- <business-nav></business-nav> -->
+<div class="rlLndng">
+    <div class="rowFull white">
+        <div class="rlLndng__header">
+            <ul class="rlLndng__breadcrumb">
+                <li>
+                    <a id="lnkPrctSetng" href="#/BusinessCenter/PracticeSettings/">{{ 'Practice Settings' | i18n }}</a>
+                </li>
+                <li ng-if="SourceRoute != null && SourceName != null">
+                    <a id="lnkSrc" href="{{SourceRoute}}">{{ SourceName | i18n }}</a>
+                </li>
+                <li>
+                    <span>{{ 'Role Details' | i18n }}</span>
+                </li>
+            </ul>
+            <div class="rlLndng__title">
+                <h1>{{ 'Viewing details for' | i18n }}</h1>
+            </div>
+            <div class="rlLndng__dropDown">
+                <button id="btnRoleType" class="rlLndng__btn dropdownNav__toggle" data-toggle="dropdown" role="button">
+                    <span id="slctdRl" class="rlLndng__select dropdownNav__target">{{selectedRoleName}}</span>
+                </button>
+                <input id="roleSelected" class="dropdownNav__val" type="hidden" ng-model="selectedRoleId"/>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="option in roleList">
+                        <a id="roleOption{{$index}}" check-auth-z="{{ !hasAccess }}" ng-click="roleOptionClicked(option)">{{option.RoleName}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="rlLndng__body">
+        <role-Details role-id="selectedRoleId"></role-Details>
+    </div>
+</div>

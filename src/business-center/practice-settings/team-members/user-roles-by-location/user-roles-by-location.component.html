@@ -1,0 +1,179 @@
+<div class="assignRoles">
+    <form name="frmUserRolesByLocation" role="form" novalidate>
+        <div class="practiceSettings">
+            <div class="rowFull white">
+                <div class="practiceSettings__header">
+                    <!--breakcrumb-->
+                    <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                    <!--header-->
+                    <div class="practiceSettings__title">
+                        <h1>{{ 'Roles for Team Members at ' | translate }}{{currentLocation?.name}}</h1>
+                    </div>
+                </div>
+            </div>
+            <!--team members area-->
+            <div class="practiceSettings__body">
+                <div class="practiceSettings__list">
+                    <div class="form-group">
+                        <!--filters and search-->
+                        <div class="row">
+                            <div class="practiceSettings__actions">
+                                <div class="col-md-1  pull-left rolesFilter">
+                                    <!-- roles filter -->
+                                    <app-multiselect 
+                                        [placeholder]="'Select Roles'" 
+                                        [listItems]="rolesList"
+                                        [id]="'RoleId'" 
+                                        (modelChange)="getSelectedList($event)">
+                                    </app-multiselect>
+                                </div>
+                                
+                                <!--locations filter-->
+                                <div class="col-md-2">
+                                    <kendo-dropdownlist 
+                                        [data]="currentUserLocations" 
+                                        [textField]="'NameLine1'"
+                                        [valueField]="'LocationId'"
+                                        [defaultItem]="{ LocationId: null, NameLine1: 'Select Location' }"
+                                        [valuePrimitive]="true" [value]="selectedCurrentLocation"
+                                        (valueChange)="selectedLocationChange($event)">
+                                    </kendo-dropdownlist>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <a id="btnViewRoles" (click)="viewRoles()" class="btn btn-default pull-left">{{'View Roles' | translate }}</a>
+                                    <a id="btnCompareRoles" (click)="compareRoles()" class="btn btn-default pull-left">{{ 'Compare Roles' | translate }}</a>
+                                </div>
+
+                                <div class="col-md-2"></div>
+
+                                <!--search by contains user name-->
+                                <div class="col-sm-4 pull-right">
+                                    <div class="col-xs-12">
+                                        <input class="form-control border-solid-black" 
+                                               id="inpSearchName" 
+                                               placeholder="{{'Search by name...'|translate}}" 
+                                               type="text"
+                                               name="inputSearchName" 
+                                               [(ngModel)]="searchNamesKeyword"
+                                               (ngModelChange)=" onSearch($event)" />
+                                    </div>
+                                    <div class="col-xs-1 searchIcon"><span class="glyphicon glyphicon-search"></span></div>
+                                </div>
+
+                            </div>
+
+                            <div><no-results *ngIf="loading" [loading]="loading"></no-results></div>
+                        </div>
+                    </div>
+                    <div class="pull-left">
+                        <!--fuse grid-->
+                        <div class="fuseGrid container pull-right">
+                            <!--grid row headers-->
+                            <div class="row header">
+                                <div class="col-sm-1"></div>
+                                <div id="gridHeaderTeamMemberName" class="col-sm-2 cell sortCursor"(click)="changeSortingForGrid('LastName')">
+                                    {{'Team Member'|translate}}
+                                    <span class="fa fas fa-lg pull-right" [ngClass]="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" *ngIf="orderBy?.field == 'LastName'"></span>
+                                </div>
+                                <div id="gridHeaderSelectRoles" class="col-sm-2 cell"></div>
+                                <div class="col-sm-1"></div>
+                                <div id="gridHeaderRoles" class="col-sm-6 cell ">{{'Security Roles'|translate}}</div>
+                            </div>
+
+                            <!--List of team members filtered by selected location-->
+                            <div class="row body" *ngFor="let teamMember of users | orderBy:orderBy.field:!orderBy.asc">
+                                <ng-container *ngIf="teamMemberRoleByLocationFilter(teamMember)">
+                                    <!--team member name TODO truncate-->
+                                    <div class='col-xs-1 cell'></div>
+
+                                    <div class="col-sm-2 cell">
+                                        <a href="{{teamMemberUrl}}{{teamMember.UserId}}?fromAssignRoles=true">{{teamMember?.displayName}}</a>
+                                    </div>
+
+                                    <div class='col-xs-1 cell'></div>
+
+                                    <div class="col-sm-2 pull-left gridRoles">
+                                        <div>
+                                            <ng-container *ngFor="let userLocation of teamMember?.$$UserLocations">
+                                                <span class="padding-top-4 padding-bottom-4" checkRoleAccess="plapi-user-usrrol-create">
+                                                    <kendo-dropdownlist *ngIf="locationsFilter(userLocation)"
+                                                        id="roleSelect" 
+                                                        name="sectionSelect" 
+                                                        [data]="roles"
+                                                        [textField]="'RoleName'" 
+                                                        [valueField]="'RoleId'"
+                                                        [(value)]="userLocation.$$SelectedRole"
+                                                        [defaultItem]="{ RoleName: 'Select role to add'}"
+                                                        [itemDisabled]="isItemDisabled"
+                                                        [disabled]="!authAccess.Create || teamMember?.$$UserPracticeRoles?.length > 0"
+                                                        (valueChange)="addLocationRole($event, userLocation)">
+                                                    </kendo-dropdownlist>
+                                                </span>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1"></div>
+
+                                    <!--display roles by location-->
+                                    <div class="col-sm-6 cell">
+                                        <!--practice roles-->
+                                        <ng-container *ngFor="let practiceRole of teamMember?.$$UserPracticeRoles">
+                                            <app-chips *ngIf="rxRoleFilter(practiceRole)"
+                                                class="pull-left" 
+                                                variation="primary" 
+                                                [chipsText]="practiceRole.RoleName"
+                                                placement="top-error" 
+                                                delay="500">
+                                            </app-chips>
+                                        </ng-container>
+
+                                        <!--location roles-->
+                                        <div *ngFor="let userLocation of teamMember?.$$UserLocations | search1:{'LocationId': selectedLocations[0]?.LocationId?.toString()}"
+                                              [ngClass]="{'error': !formIsValid && userLocation?.$$NoRoleError}">
+                                            <ng-container *ngFor="let locationRole of userLocation?.$$UserLocationRoles">
+                                                <app-chips *ngIf = "deletedRolesFilter(locationRole)"
+                                                    class="pull-left" 
+                                                    variation="primary"
+                                                    [chipsText]="locationRole.RoleName" 
+                                                    placement="top-error" 
+                                                    delay="500"
+                                                    [ngClass]="{'practiceSettings__noPermission' : !authAccess.Delete}"
+                                                    (removeChips)="removeLocationRole(locationRole, userLocation)"
+                                                    showIcon="true">
+                                                </app-chips>
+                                            </ng-container>
+                                            <label class="help-text" *ngIf="!formIsValid && userLocation?.$$NoRoleError">
+                                                {{'Your team member must have at least one role assigned per location' | translate }}
+                                            </label>                                            
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="practiceSettings__footer">
+                            <div class="practiceSettings__actions">
+                                <button id="btnSave" 
+                                    class="btn btn-primary" 
+                                    (click)="saveRolesByLocation()"
+                                    checkRoleAccess="plapi-user-usrrol-create"
+                                    [disabled]="savingRoles || loadingUsers || dataHasChanged===false ">{{ 'Save' |translate }}
+                                </button>
+
+                                <button id="btnCancel" 
+                                    class="btn btn-default" 
+                                    (click)="cancelListChanges()"
+                                    [disabled]="savingRoles || loadingUsers">{{ 'Cancel' |translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<view-compare-roles></view-compare-roles>

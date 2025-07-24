@@ -1,0 +1,27 @@
+<div class="container" *ngIf="showFooterPage">
+    <div class="row">
+        <div id="sectionIsVisible{{sectionIndex}}" class="col-md-2">
+            {{ 'Visible' | translate}}:            
+            <app-check-box id="inpSectionIsVisible{{sectionIndex}}" [value]="section?.IsVisible"
+                [isDisabled]="false"
+                [checked]="section?.IsVisible" (checkChanged)="toggleIsVisible(section)">
+            </app-check-box>
+        </div>
+
+        <div id="sectionShowTitle{{sectionIndex}}" class="col-md-2">
+            {{ 'Show Title' | translate }}:            
+            <app-check-box id="inpSectionShowTitle{{sectionIndex}}" [value]="section?.ShowTitle"
+                [isDisabled]="false"
+                [checked]="section?.ShowTitle" (checkChanged)="toggleShowTitle(section)">
+            </app-check-box>
+        </div>
+
+        <div id="sectionShowBorder{{sectionIndex}}" class="col-md-2">
+            {{ 'Show Border' | translate }}:            
+            <app-check-box id="inpSectionShowBorder{{sectionIndex}}" [value]="section?.ShowBorder"
+                [isDisabled]="false"
+                [checked]="section?.ShowBorder" (checkChanged)="toggleShowBorder(section)">
+            </app-check-box>
+        </div>
+    </div>
+</div>

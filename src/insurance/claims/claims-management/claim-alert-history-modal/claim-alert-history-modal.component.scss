@@ -1,0 +1,130 @@
+@import "variables";
+
+.claim-alert-history-modal {
+    &__card-container {
+        margin: 15px;
+        background-color: $white;
+        border-radius: 5px;
+        box-shadow: $global-drop-shadow;
+        padding: 15px;
+        max-width: 1000px;
+        font-size: 12px;        
+    }
+    & .label {
+        font-size:$global-body-font-size !important;
+    }
+    & .control-label {
+        margin-bottom: 0;
+    }
+
+    .claim-alerts-history-grid {
+        font-size: $global-table-font-size;
+        max-height: 500px;
+        overflow: auto;        
+
+        > div {
+            display: grid;
+            grid-template-columns: 1fr 5fr;
+            border: 1px solid $grid-separator-color;
+            grid-gap: 0px;
+            &:last-child {
+                border: 0;
+            }
+
+            > div {
+                padding: 10px;
+                border-right: 1px solid #eeeeee;
+            }
+
+            &:not(:first-child) {
+                border-top: 0px;
+            }
+        }
+    }
+
+    
+    .claim-alerts-history-grid-header {
+        font-weight: bold;
+        align-items: center;  
+        position: sticky;
+        top: 0;
+
+        > div {
+            background-color: $polar-white;
+        }
+    }
+
+    // modal       
+    .md-modal {
+        min-width: 500px;
+        min-height: 200px;
+    }
+
+    .app-modal {
+        display: grid;
+        grid-template: 40px 1fr auto / auto;
+        grid-template-areas:
+            'header' 'content' 'footer';
+        margin: 15px 15px 15px 15px;
+        font-family: $global-font-family;   
+        border-radius: 5px;
+        background-color: #ffffff;
+        background-size: cover;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .app-modal-header {
+        padding: 15px;
+        grid-area: header;
+        font-size: $app-modal-header-font-size;
+        font-weight: $app-modal-header-font-weight;
+        font-family: $global-font-family;
+        border-bottom: $app-modal-header-border;
+        display: flex;
+        align-items: center;
+        padding-left: 15px;
+    }
+
+    .app-modal-body {
+        grid-area: content;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+
+        .bodyItem {
+            margin-bottom: 10px;
+            width: 240px;
+            position: relative;
+        }
+
+        .fui-select-container {
+            width: 240px;
+        }
+
+        .bodyItem:last-child {
+            margin-bottom: 0px;
+        }
+    }
+
+    .app-modal-footer {
+        grid-area: footer;
+        padding: 15px;
+        border-top: $app-modal-header-border;
+        display: flex;
+        justify-content: flex-end;
+
+        app-button{
+            margin-left:10px;
+        }
+    }
+
+    .app-modal-bold-text {
+        font-weight: bold;
+    }
+
+    .app-modal-text {
+        font-weight: normal;
+    }
+}
+    
+    

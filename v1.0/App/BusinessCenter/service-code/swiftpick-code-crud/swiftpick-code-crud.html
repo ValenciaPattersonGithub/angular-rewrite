@@ -1,0 +1,244 @@
+﻿<div ng-class="'fade-in'">
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>
+                    {{ editMode ? 'Edit {0}' : 'Add {0}' | i18n:['a Swift Code'] }}
+                    <span class="pull-right">
+                        <a ng-click="cancelOnClick()"><span class="fa fa-times"></span></a>
+                    </span>
+                </h1>
+               
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form name="$parent.addSwiftPickCodeForm" role="form" action="javascript:;" novalidate>
+        <!-- Swift Pick Code -->
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 ">
+                <label id="lblSwiftPickCode" class="form-label-newer col-md-12 padding-right-0 text-align-right" for="inpSwiftPickCode">{{'Swift Code' | i18n }} *</label>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+                <div ng-class="{error: !serviceCode.Valid && $parent.addSwiftPickCodeForm.inpSwiftPickCode.$error.required}">
+                    <input id="inpSwiftPickCode"
+                           class="form-input required valid"
+                           placeholder="{{ 'Swift Code' | i18n }}"
+                           ng-model="serviceCode.Data.Code"
+                           name="inpSwiftPickCode"
+                           maxlength="8"
+                           type="text"
+                           ng-disabled="!serviceCode.Data.IsActive"
+                           set-focus
+                           required ng-blur="checkUniqueServiceCode()" ng-change="serviceCodeOnChange()"
+                           ng-keydown="inputKeyDown($event)"/>
+                    <div class="error">
+                        <label id="lblswiftPickCodeRequired" class="help-text" ng-show="!serviceCode.Valid && $parent.addSwiftPickCodeForm.inpSwiftPickCode.$error.required">
+                            {{ 'This field is required.' | i18n }}
+                        </label>
+                    </div>
+                    <div class="error">
+                        <label id="lblUniqueCode" class="help-text" ng-show="serviceCode.IsDuplicate && serviceCode.Data.Code">
+                            {{ uniqueSwiftPickCodeServerMessage }}
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">&nbsp;</div>
+
+        <!-- Display As -->
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                <label id="lblDisplayAs" class="form-label-newer" for="inpDisplayAs">{{'Display As' | i18n }}</label>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+                <div>
+                    <input id="inpDisplayAs"
+                           class="form-input"
+                           placeholder="{{ 'Display As' | i18n }}"
+                           ng-model="serviceCode.Data.DisplayAs"
+                           name="inpDisplayAs"
+                           maxlength="16"
+                           ng-disabled="!serviceCode.Data.IsActive"
+                           type="text"
+                           ng-keydown="inputKeyDown($event)"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">&nbsp;</div>
+
+        <!-- Description -->
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                <label id="lblDescription" class="form-label-newer" for="inpDescription">{{'Description' | i18n }} *</label>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+                <div ng-class="{error: !serviceCode.Valid && $parent.addSwiftPickCodeForm.inpDescription.$error.required}">
+                    <input id="inpDescription"
+                           class="form-input required valid"
+                           placeholder="{{ 'Description' | i18n }}"
+                           ng-model="serviceCode.Data.Description"
+                           name="inpDescription"
+                           maxlength="256"
+                           ng-disabled="!serviceCode.Data.IsActive"
+                           type="text"
+                           required
+                           ng-keydown="inputKeyDown($event)"/>
+                    <div class="error">
+                        <label id="lblDescriptionRequired" class="help-text" ng-show="!serviceCode.Valid && $parent.addSwiftPickCodeForm.inpDescription.$error.required">
+                            {{ 'This field is required.' | i18n }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">&nbsp;</div>
+
+        <!-- Active -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-5">
+                <checkbox auth-z="soar-biz-bsvccd-dswift" checkbox-id="inpActive" checkbox-value="serviceCode.Data.IsActive" checkbox-label="'Active'" change-function="swiftPickCodeIsActiveOnChange()" checkbox-disabled="displayActiveStatusConfirmation"></checkbox>
+                <div ng-show="displayActiveStatusConfirmation">
+                    <are-you-sure message="{{'Are you sure you want to {0}' | i18n:['inactivate the swift code?'] }}" if-yes="okStatusConfirmation()" if-no="cancelStatusConfirmation()"></are-you-sure>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="clearfix">&nbsp;</div>
+
+        <!-- Service Codes -->
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                <label id="lblServiceCodes" class="form-label-newer col-md-12 padding-right-0 text-align-right" for="serviceCodeTypeAhead">{{'Service Codes' | i18n }} *</label>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-4 col-lg-5">
+                <div ng-class="{error: !serviceCode.Valid && serviceCode.Data.SwiftPickServiceCodes.length<=0}">
+                    <typeahead disable-input="!serviceCode.Data.IsActive" class="typeahead soar-typeahead typeaheadResults" id="serviceCodeTypeAhead" cancel="cancelSearch()" appearance="form-input" search="search(term)" select="selectResult(item)" items="searchResults" term="searchTerm" loading="searchIsQueryingServer" placeholder="{{ 'Search by service code, CDT Code, description, fee...'|i18n }}" tab-index="0">
+                        <ul id="lstServiceCodes" soar-infinite-scroll="search(searchString, true)">
+                            <li ng-repeat="serviceCode in searchResults" typeahead-item="serviceCode" ng-animate="'animate'" ng-hide="false">
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <span id="lblServiceCode{{ $index }}">{{ serviceCode.Code }}</span>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <span id="lblCDTCode{{ $index }}">
+                                            {{ serviceCode.CdtCodeName  }}
+                                        </span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span id="lblDescription{{ $index }}">
+                                            {{ serviceCode.Description | truncate:25 }}
+                                        </span>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <span id="lblFeen{{ $index }}">
+                                            {{ serviceCode.$$locationFee | currency }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li ng-show="noSearchResults">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span class="text-muted" id="noResultMessage">
+                                            <no-results loading-message="'No service codes match the search criteria.'" loading="searchIsQueryingServer"></no-results>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </typeahead>
+                    <div class="error">
+                        <label id="atleastOneServiceMessage" class="help-text" ng-show="!serviceCode.Valid && serviceCode.Data.SwiftPickServiceCodes.length<=0">
+                            {{'At least one service code is required.'| i18n}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-3">
+                <button ng-disabled="!serviceCode.Data.IsActive" id="btnServiceCodeSelectFromList" check-auth-z="soar-biz-bsvccd-spcasc" ng-click="showServiceCodesPicker()" class="btn btn-link" type="button">{{ 'Select {0}' | i18n:['from full list'] }}</button>
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="row">
+            <div class="col-md-12 swiftPickScrollable-div"><!--uses scrollable-div, but cancels out height in favor of max height-->
+                <table id="tableServiceCodes" class="table table-striped table-bordered table-hover table-width-fix">
+                    <thead>
+                        <tr class="blue">
+                            <td id="tdServiceCodeId" class="width-15-percent">
+                                <div id="lblServiceCodeColumn">
+                                    <div class="col-md-12">
+                                        {{'Service Code' | i18n}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td id="tdCdtCodeId" class="width-15-percent">
+                                <div id="lblCDTCodeColumn">
+                                    <div class="col-md-12">
+                                        {{'CDT Code' | i18n}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td id="tdDescriptionId" class="width-45-percent">
+                                <div id="lblDescriptionColumn">
+                                    <div class="col-md-12">
+                                        {{'Description' | i18n}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td id="tdMasterFeesId" class="width-10-percent text-align-right">
+                                <div id="lblFeeColumn">
+                                    <div class="col-md-12">
+                                        {{'Fee' | i18n}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td id="tdDeleteServiceCode" class="width-5-percent">
+                                <div id="columnSelectAllId">
+                                    &nbsp;
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="currentServiceCode in serviceCode.Data.SwiftPickServiceCodes | orderBy:'Code' track by $index">
+                            <td id="tdCodeValueId" class="preserve-white-space overflow-hidden padding-left-25" title="{{currentServiceCode.Code}}">{{currentServiceCode.Code}}</td>
+                            <td id="tdCdtCodeNameValueId" class="overflow-hidden padding-left-25" title="{{currentServiceCode.CdtCodeName}}">{{currentServiceCode.CdtCodeName}}</td>
+                            <td id="tdDescriptionValueId" class="preserve-white-space overflow-hidden padding-left-25" title="{{currentServiceCode.Description}}">{{currentServiceCode.Description | truncate:65}}</td>
+                            <td id="tdFeeValueId" class="text-align-right overflow-hidden" title="{{currentServiceCode.$$locationFee| currency}}">
+                                {{currentServiceCode.$$locationFee | currency }}
+                            </td>
+                            <td id="tdActionButtonsId">
+                                <div id="btnRemoveServiceCode{$index}" class="cursor-pointer pull-left padding-left-20" ng-click="removeServiceCode(currentServiceCode)">
+                                    <i class="fa fa-times fa-lg"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr ng-show="serviceCode.Data.SwiftPickServiceCodes.length < 1 || serviceCode.Data.SwiftPickServiceCodes == undefined">
+                            <td id="tdDefaultMessage" colspan="5" class="text-align-center">{{'No service codes have been added yet.' | i18n}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <div class="col-md-offset-10 col-md-2"><b>{{'Total'| i18n}}: {{ serviceCode.Data.SwiftPickServiceCodes | sumFilter | currency }} </b></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="swiftPickFooter col-md-12">
+                <div class="swiftPickFooter__btn">
+                    <button id="btnCancel" ng-click="cancelOnClick();" ng-disabled="serviceCode.Saving" class="btn btn-default">{{ 'Cancel' | i18n }}</button>
+                    <button id="btnSave" ng-click="saveSwiftPickCode();" ng-disabled="serviceCode.Saving || !dataHasChanged" class="btn btn-primary">{{ 'Save' | i18n }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</div>

@@ -1,0 +1,48 @@
+<form class="k-form k-form-md" [formGroup]="form">
+    <div class="statements-container">
+        <kendo-formfield>
+            <kendo-label [for]="location">
+                Select Location
+            </kendo-label>
+            <kendo-dropdownlist 
+                #location
+                formControlName="location"
+                data-qa="nse-location-selection-dropdown"
+                textField="name"
+                valueField="id"
+                [data]="filteredLocations"
+                (valueChange)="locationChange($event)"
+                [filterable]="true"
+                (filterChange)="filterChange($event)"
+                [loading]="loading"></kendo-dropdownlist>
+            <kendo-formerror>Required</kendo-formerror>
+        </kendo-formfield>
+        <kendo-formfield>
+            <kendo-label [for]="startDate">
+                Select Start Date
+            </kendo-label>
+            <kendo-datepicker
+                #startDate
+                formControlName="startDate"
+                data-qa="nse-start-date-datepicker"
+                calendarType="classic"
+                [min]="minDate"
+                [disabledDates]="futureDates"
+                (valueChange)="startDateChange($event)"></kendo-datepicker>
+            <kendo-formerror>{{ form.controls['startDate'].errors?.disabledDate ? 'Invalid Date' : 'Required' }}</kendo-formerror>
+        </kendo-formfield>
+        <kendo-formfield>
+            <kendo-label [for]="dueDate">
+                Select Due Date
+            </kendo-label>
+            <kendo-datepicker
+                #dueDate
+                formControlName="dueDate"
+                data-qa="nse-due-date-datepicker"
+                calendarType="classic"
+                [min]="minDate"
+                (valueChange)="dueDateChange($event)"></kendo-datepicker>
+            <kendo-formerror>{{ form.controls['dueDate'].errors?.disabledDate ? 'Invalid Date' : 'Required' }}</kendo-formerror>
+        </kendo-formfield>
+    </div>
+</form>

@@ -1,0 +1,51 @@
+﻿<div class="patNoteTile" ng-class="{ active : noteIsActive, timelineViewBorder:timelineView}"
+     ng-form="frmNoteTile"
+     ng-click="expandTile()">    
+
+    <div class="patNoteTile__details" ng-class="{ timelineDetails : timelineView }">
+
+        <div class="timelineTile" ng-class="{timelineTileBorder : timelineView, clinicalNoteItem: !timelineView}">
+            <div class="timelineTile__row">
+                <div ng-if="timelineView" class="timelineTile__iconContainer">
+                    <img class="timelineTile__icon" ng-src="{{ 'Images/TimelineFilterIcons/notes.svg' }}" />
+                </div>
+                <div ng-if="!timelineView" class="timelineTile__iconContainer">
+                    <a href="" class="patNoteTile__expand" ng-click="previewNote($event)" 
+                       tooltip-append-to-body="true" 
+                       uib-tooltip="{{'Preview'|i18n}}">
+                       <i class="fa fa-binoculars"></i>
+                    </a>
+                </div>
+
+                <div class="timelineTile__content">
+                    <div ng-class="{error:!validNote && !frmNoteTile.inpNoteTitle.$valid}">
+
+                        <a href="" id="btnNoteExpand" class="patNoteTile__title" ng-disabled="tileExpanded || noteDisabled"
+                           ng-class="{disabled : noteDisabled}">
+                            {{ note.NoteTitle | i18n }}<span id="btnNoteDate" ng-if="!timelineView"> - {{
+                                note.$$OriginalCreatedDate.toLowerCase().endsWith('z') ? note.$$OriginalCreatedDate : note.$$OriginalCreatedDate + "Z" | toShortDisplayDate 
+                            }}</span>
+                        </a>                        
+                        <a href="" class="patNoteTile__edit" ng-disabled="noteDisabled" ng-if="!timelineView && note.NoteTypeId !== 5" uib-tooltip="{{ 'Edit {0}' | i18n:['Note'] }}" ng-click="editNote($event)" ng-class="{disabled : noteDisabled}"
+                           check-auth-z="soar-clin-cnotes-edit"><i class="fas fa-edit"></i></a>
+                    </div>
+                    
+                    <span id="btnNoteExpiration" ng-if="note.AutomaticLockTime && !timelineView" class="patNoteTile__timer">
+                        {{'Locks on ' | i18n}}
+                        {{note.AutomaticLockTime  + "Z"  | toDisplayDate }}{{' at' | i18n}} {{note.AutomaticLockTime  + "Z"  | date:'h:mm a' }}
+                    </span>
+                    <span id="btnNoteUser" class="patNoteTile__provider">{{note.$$providerLabel|i18n}}{{note.$$DisplayNameAndDesignation}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="patNoteTile__body" ng-class="{ active: tileExpanded}" ng-if="!timelineView">
+        
+        <div id="btnNoteView" ng-if="note.StatusTypeId !== 3" class="patNoteTile__text" ng-class="{active: tileExpanded }" ng-bind-html="note.Note | displayNote "></div>
+        <div id="btnNoteView" ng-if="note.StatusTypeId === 3" class="patNoteTile__text" ng-class="{active: tileExpanded }" ng-bind-html="note.Note | displayDeletedNote "></div>
+
+        <a id="noteTileCollapse" class="patNoteTile__close" ng-if="tileExpanded " ng-click="checkTileExpand($event)"><i class="fa fa-caret-up"></i></a>
+    </div>
+
+</div>

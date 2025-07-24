@@ -1,0 +1,55 @@
+.print-container {
+    visibility: hidden;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: minmax(min-content, max-content);
+    row-gap: 15px;
+}
+.print-header-container {
+    display: grid;
+    grid-row: 1;
+    grid-template-columns: 20% 60% 10%;
+    justify-items: center;
+    font-weight: bold;
+}
+.time-stamp {
+    grid-column: 1;
+    font-size: 12px;
+}
+.practice-name {
+    grid-column: 2;
+    font-size: 12px;
+}
+.patient-code {
+    grid-column: 3;
+    font-size: 12px;
+}
+.print-title-container {
+    grid-row: 2;
+    justify-items: center;
+    display: grid;
+    font-weight: bold;
+    row-gap: 10px;
+}
+.title {
+    grid-row: 1;
+    font-size: 16px;
+}
+.sub-title {
+    grid-row: 2;
+    font-size: 14px;
+}
+::ng-deep .top-header {
+    visibility: hidden;
+}
+@media print {
+    .print-container {
+        visibility: visible;
+    }
+    .communication-container {
+        visibility: visible;
+        margin-left: 70px;
+        margin-right: 70px;
+        background-color: lightgray;
+    }
+}

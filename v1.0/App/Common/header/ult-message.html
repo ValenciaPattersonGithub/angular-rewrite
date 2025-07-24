@@ -1,0 +1,18 @@
+﻿<div ng-controller="UltMessageController">
+    <div ng-if="ultMessage">
+        <div class="ultMessageBackdrop">
+        </div>
+        <div class="ultMessageWrapper">
+            <div class="ultMessageHeader">Unauthorized due to login times restriction</div>
+            <div class="ultMessageBody">
+                <label>You are unable to complete this action due to your Restrict Day and Time Access settings.</label>
+                <label>Please contact your Practice Administrator.</label>
+                <label>{{ultMessage}}</label>
+            </div>
+            <div class="ultMessageFooter">
+                <button id="btnUltLogout" ng-click="logoutFromUlt()" class="btn btn-primary">Logout</button>
+            </div>
+        </div>
+
+    </div>
+</div>

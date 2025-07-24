@@ -1,0 +1,57 @@
+@import "variables";
+@import '/src/patient/communication-center/communication-center-variables';
+
+.appointment-wrapper {
+  display: grid;
+  grid-template-columns: 100%;
+  margin: 0px 15px 0 15px;
+  border-bottom: 1px solid $communication-center-preview-border-color;
+  overflow:visible;
+  grid-auto-rows: minmax(min-content, max-content);
+}
+.appointment-createicon {
+  grid-column: 2/2;
+  grid-row: 1;
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  border: 1px solid $communication-center-preview-border-color;
+  cursor: pointer;
+}
+.appointment-span-svg {
+  margin-left: 3px;
+}
+.appointment-title-wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 5px;
+  margin: 15px 15px 0px 15px;
+}
+.appointment-title {
+  grid-column: 1/2;
+  grid-row: 1;
+}
+.appointment-main-title {
+  font-family: $communication-card-font-family;
+  font-size: 16px;
+  color: $communication-center-heading-color;
+  text-decoration: none solid rgb(51, 51, 51);
+}
+
+.appointment-row {
+  grid-column: 1;
+}
+
+.appointment-card-wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-auto-rows: minmax(min-content, max-content);
+}
+.appointment-no-records {
+  font-family: $communication-card-font-family;
+  font-size: $communication-center-heading-font-size;
+  color: $communication-center-no-record-color;
+  text-align: center;
+  top: 50%;
+  position: sticky;
+}

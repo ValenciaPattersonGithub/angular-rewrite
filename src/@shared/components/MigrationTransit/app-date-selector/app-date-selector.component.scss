@@ -1,0 +1,149 @@
+@import "variables";
+
+.fui-datepicker-wrapper {
+    display: grid;
+    grid-template: auto auto / auto;
+    grid-gap: 3px 5px;
+    font-family: $datepicker-font-family;
+
+    &.label-left {
+        grid-template: auto / min-content auto;
+    }
+
+    .fui-datepicker-label {
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+    }
+
+    .fui-datepicker-control {
+        width: 120px;
+    }
+
+    .full-width {
+        width: 100%;
+    }
+
+    .kendoCustomStyle {
+        color: $datepicker-label-color;
+        font-size: $datepicker-font-size;
+        width: 100%;
+        height: 25px;
+    }
+
+    ::ng-deep {
+        .kendoCustomStyle .k-widget.k-dateinput {
+            width: 100%;
+            color: $datepicker-label-color;
+            font-size: $datepicker-font-size;
+            font-family: $global-font-family;
+            box-shadow: none;
+        }
+
+        .k-error {
+            border: 1px solid #cc0000;
+            padding-bottom: 1px;
+
+            &.k-datepicker {
+                border-radius: 4px;
+            }
+        }
+
+        .k-select {
+            margin-right: 2px;
+        }
+
+        .k-picker-wrap {
+            border-radius: 4px;
+            border: 1px solid $border-grey;
+        }
+
+        .k-dateinput .k-dateinput-wrap {
+            color: $datepicker-label-color;
+            font-size: $datepicker-font-size;
+        }
+
+        .k-calendar-container.k-group {
+            font-size: $datepicker-font-size;
+        }
+
+        .k-datepicker .k-picker-wrap:hover .k-select {
+            background-color: $white;
+            background-image: none;
+            color: $text-black;
+        }
+
+        .k-datepicker .k-picker-wrap:hover {
+            background-color: $white;
+            background-image: none;
+            color: $text-black;
+        }
+
+        .k-picker-wrap .k-select {
+            background-color: $white;
+            background-image: none;
+            color: $text-black;
+            border: none;
+        }
+
+        .k-picker-wrap .k-input {
+            box-shadow: none;
+            padding: 0; //override kendo
+            padding-left: 8px;
+            height: 23px;
+            border-radius: 5px; //override kendoUI
+        }
+
+        .k-button {
+            background: none;
+            border: none;
+        }
+    }
+
+    .collapseExpand a[aria-expanded="true"] {
+        .fa-chevron-up:before {
+            content: "\f078";
+        }
+    }
+
+    ::ng-deep .k-calendar-container .k-calendar {
+        font-family: $global-font-family;
+    }
+
+    // Override Kendo text selection default
+    ::ng-deep .k-picker-wrap {
+        .k-input::selection {
+            color: $text-black;
+            background-color: $text-selection;
+        }
+    }
+
+    ::ng-deep .k-calendar .k-content .k-state-selected .k-link,
+    ::ng-deep .k-calendar .k-content .k-state-selected.k-today .k-link {
+        border-color: $action-blue;
+        color: $polar-white;
+        background-color: $action-blue;
+    }
+
+    ::ng-deep .k-calendar .k-content .k-state-selected:hover .k-link {
+        border-color: $action-blue;
+        color: $polar-white;
+        background-color: $action-blue;
+    }
+
+    ::ng-deep .k-calendar .k-content .k-today {
+        color: $action-blue;
+
+        & .k-link {
+            color: inherit;
+            box-shadow: none;
+        }
+    }
+
+    ::ng-deep .k-calendar .k-footer .k-nav-today:hover,
+    ::ng-deep .k-calendar .k-footer .k-nav-today:focus,
+    ::ng-deep .k-calendar .k-calendar-header .k-today:hover,
+    ::ng-deep .k-calendar .k-calendar-header .k-today:focus {
+        color: $light-action-blue;
+    }
+}

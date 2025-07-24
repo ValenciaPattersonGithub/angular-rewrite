@@ -1,0 +1,165 @@
+﻿<!-- To Do - Remove this file when doing cleanup of payment-types -->
+<!-- <business-nav></business-nav>
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+  <div class="pmtTypes">
+    <form name="frmPaymentTypes" role="form" novalidate>
+      <div class="rowFull white">
+        <div class="pmtTypes__header">
+          <ul class="pmtTypes__breadcrumb">
+            <li ng-repeat="breadcrumb in dataForCrudOperation.BreadCrumbs">
+              <ng-switch on="$last">
+                <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+                <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePageState(breadcrumb)"><a href="">{{breadcrumb.name | i18n }}</a></span>
+              </ng-switch>
+            </li>
+          </ul>
+          <div class="pmtTypes__title">
+            <h1>{{ 'Payment Types' | i18n }}</h1>
+          </div>
+          <div class="pmtTypes__actions">
+            <button id="btnCreate" class="btn btn-primary" icon="fa-plus" check-auth-z="{{createAuthAbbreviation}}" ng-click="createPaymentType()" ng-disabled="creatingPaymentType || editingPaymentType">{{ 'Add {0}' | i18n:['Payment Type'] }}</button>
+          </div>
+        </div>
+      </div>
+      <div class="rowFull white">
+        <div class="pmtTypes__header">
+          <div class="row">
+            <div class="col-xs-4">
+              <input class="form-control border-solid-black" id="inpSearch" placeholder="{{'Search description, prompt, currency type...'|i18n}}" type="text" ng-model="searchText" ng-disabled="creatingPaymentType || editingPaymentType" />
+            </div>
+            <div class="col-xs-1 searchIcon">
+              <span class="glyphicon glyphicon-search"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gridConfirm pmtTypes__gridConfirm" ng-show="attemptingToDelete">
+        <div class="gridConfirm__msg">{{deleteMessage}}</div>
+        <div class="gridConfirm__actions">
+          <button id="btnCancel" class="btn btn-primary" ng-if="typeToDelete.IsUsedInCreditTransactions" ng-click="cancelDelete()">{{'Ok' | i18n}}</button>
+          <button id="btnCancel" class="btn btn-default" ng-if="!typeToDelete.IsUsedInCreditTransactions" ng-click="cancelDelete()">{{'Cancel' | i18n}}</button>
+          <button id="btnDelete" class="btn btn-primary" ng-if="!typeToDelete.IsUsedInCreditTransactions" ng-click="delete()">{{'Delete' | i18n}}</button>
+        </div>
+      </div>
+      <div class="pmtTypes__body">
+        <div class="pmtTypes__list">
+          <div class="fuseGrid container pull-left">
+            <div class="row header">
+              <div class="col-sm-5 cell">{{ 'Description' | i18n }} <span ng-show="creatingPaymentType || editingPaymentType">*</span></div>
+              <div class="col-sm-3 cell">{{ 'Prompt' |i18n}}</div>
+              <div class="col-sm-1 cell">{{ 'Active' |i18n}}</div>
+              <div class="col-sm-2 cell">{{ 'Currency Type' |i18n}} <span ng-show="creatingPaymentType || editingPaymentType">*</span></div>
+              <div class="col-sm-1 cell"></div>
+            </div>
+            <div class="row pmtTypes__editableRow" ng-show="creatingPaymentType">
+              <div class="col-sm-5 cell">
+                <input id="inpDescriptionCreate" class="form-input" placeholder="{{ 'Description' | i18n }}" ng-model="newPaymentType.Description" ng-change="checkForDuplicates(newPaymentType, true)" maxlength="64" />
+                <span ng-if="descriptionIsDuplicate" class="error"> {{ 'A {0} with this description already exists.' | i18n:['Payment Type'] }} </span>
+              </div>
+              <div class="col-sm-3 cell">
+                <input id="inpPromptCreate" class="form-input" placeholder="{{ 'Prompt' | i18n }}" ng-model="newPaymentType.Prompt" maxlength="20" />
+              </div>
+              <div class="col-sm-1 cell pmtTypes__isActiveEdit">
+                <checkbox checkbox-id="chkIsActiveCreate" checkbox-value="newPaymentType.IsActive" checkbox-label="'Active'"></checkbox>
+              </div>
+              <div class="col-sm-2 cell">
+                <soar-select-list id="lstCurrencyTypeCreate" placeholder="{{'Select Currency Type' | i18n}}" text-field="Name" value-field="Id" option-list="currencyTypes" ng-model="newPaymentType.CurrencyTypeId"> </soar-select-list>
+              </div>
+              <div class="col-sm-1 cell text-center">
+                <div class="pmtTypes__actionColumn">
+                  <button id="btnCancelCreate" class="icon-button" ng-click="cancelCreate()">
+                    <i class="fa fa-times fa-lg"></i>
+                  </button>
+                  <button
+                    id="btnCreate"
+                    class="icon-button"
+                    ng-click="create()"
+                    ng-disabled="!newPaymentType.Description || !newPaymentType.CurrencyTypeId || descriptionIsDuplicate"
+                    ng-class="{'disabled' : !newPaymentType.Description || !newPaymentType.CurrencyTypeId || descriptionIsDuplicate}"
+                  >
+                    <i class="fa fa-check fa-lg"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="type in paymentTypes | filter:search" ng-class="{'pmtTypes__editableRow' : type.$$Editing, 'body' : !type.$$Editing}">
+              <div class="col-sm-5 cell">
+                <span ng-if="!type.$$Editing" ng-bind-html="type.Description  | highlightTextIfContains:searchText:64"></span>
+                <input ng-if="type.$$Editing" id="inpDescriptionEdit{{$index}}" class="form-input" placeholder="{{ 'Description' | i18n }}" ng-model="type.Description" ng-change="checkForDuplicates(type, false)" ng-disabled="type.IsUsedInCreditTransactions" maxlength="64" />
+                <span ng-if="type.$$Editing && type.IsUsedInCreditTransactions" class="error"> {{ 'This payment type has been used in previous transactions and can only be activated/inactivated.' | i18n }} </span>
+                <span ng-if="type.$$Editing && descriptionIsDuplicate" class="error"> {{ 'A {0} with this description already exists.' | i18n:['Payment Type'] }} </span>
+              </div>
+              <div class="col-sm-3 cell">
+                <span ng-if="!type.$$Editing" ng-bind-html="type.Prompt  | highlightTextIfContains:searchText:20"></span>
+                <input ng-if="type.$$Editing" id="inpPromptEdit{{$index}}" class="form-input" placeholder="{{ 'Prompt' | i18n }}" ng-model="type.Prompt" ng-disabled="type.IsUsedInCreditTransactions" maxlength="20" />
+              </div>
+              <div class="col-sm-1 cell pmtTypes__isActiveEdit">
+                <span ng-if="!type.$$Editing">{{type.IsActive ? 'Active' : 'Inactive'}}</span>
+                <checkbox ng-if="type.$$Editing" checkbox-id="chkIsActiveEdit{{$index}}" checkbox-value="type.IsActive" checkbox-label="'Active'"></checkbox>
+              </div>
+              <div class="col-sm-2 cell">
+                <span ng-if="!type.$$Editing" ng-bind-html="type.CurrencyTypeName  | highlightTextIfContains:searchText:11"></span>
+                <soar-select-list
+                  ng-if="type.$$Editing"
+                  id="lstCurrencyTypeEdit{{$index}}"
+                  placeholder="{{'Select Currency Type' | i18n}}"
+                  text-field="Name"
+                  value-field="Id"
+                  option-list="currencyTypes"
+                  ng-model="type.CurrencyTypeId"
+                  disable-input="type.IsUsedInCreditTransactions"
+                >
+                </soar-select-list>
+              </div>
+              <div class="col-sm-1 cell text-center">
+                 view mode -->
+                <!-- <div ng-if="!type.$$Editing">
+                  <button
+                    id="btnEditRow{{$index}}"
+                    class="icon-button"
+                    uib-tooltip="{{(type.IsSystemType) ? 'System required items cannot be edited or deleted.' : '' | i18n}}"
+                    tooltip-append-to-body="true"
+                    check-auth-z="{{editAuthAbbreviation}}"
+                    ng-click="editRow(type)"
+                    ng-disabled="creatingPaymentType || editingPaymentType"
+                    ng-class="{'disabled' : creatingPaymentType || editingPaymentType || type.IsSystemType}"
+                  >
+                    <i class="fas fa-pencil-alt fa-lg"></i>
+                  </button>
+                  <button
+                    id="btnDelete{{$index}}"
+                    class="icon-button"
+                    uib-tooltip="{{(type.IsSystemType) ? 'System required items cannot be edited or deleted.' : '' | i18n}}"
+                    tooltip-append-to-body="true"
+                    check-auth-z="{{deleteAuthAbbreviation}}"
+                    ng-click="deleteRow($event, type)"
+                    ng-disabled="creatingPaymentType || editingPaymentType"
+                    ng-class="{'disabled' : creatingPaymentType || editingPaymentType || type.IsSystemType}"
+                  >
+                    <i class="fas fa-trash-alt fa-lg"></i>
+                  </button>
+                </div> -->
+                <!-- edit mode -->
+                <!-- <div class="pmtTypes__actionColumn" ng-if="type.$$Editing">
+                  <button id="btnCancelEdit{{$index}}" class="icon-button" check-auth-z="{{editAuthAbbreviation}}" ng-click="cancelEdit()">
+                    <i class="fa fa-times fa-lg"></i>
+                  </button>
+                  <button
+                    id="btnEdit{{$index}}"
+                    class="icon-button"
+                    check-auth-z="{{editAuthAbbreviation}}"
+                    ng-click="edit(type)"
+                    ng-disabled="!type.Description || !type.CurrencyTypeId || descriptionIsDuplicate"
+                    ng-class="{'disabled' : !type.Description || !type.CurrencyTypeId || descriptionIsDuplicate}"
+                  >
+                    <i class="fa fa-check fa-lg"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div> -->
+<!-- </div>  -->

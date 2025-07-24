@@ -1,0 +1,498 @@
+﻿// this is basically a copy of the treatment plans crud less file
+// we probably won't use most of this but will need to evaluate to see how much we use
+// use to make appearance consistent with crud layout
+.txPlanReorder {
+    font-family: @global-font-family;
+    clear: both;
+    position: relative;
+    padding: 15px;
+
+    &__disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    &__header {
+        .clearfix;
+        position: relative;
+    }
+
+    &__grid {
+        padding-left: 0;
+
+        .fa-check-circle {
+            color: @current-color;
+            margin-right: @brand-margin_xs;
+        }
+    }
+
+    &__nav {
+        .clearfix;
+        margin-bottom: 10px;
+    }
+
+    &__navPrimary {
+        display: inline-block;
+        width: 100%;
+    }
+
+    &__headerNav {
+        display: grid;
+        grid-template: auto / 1fr auto auto auto auto;
+        width: 100%;
+
+        input {
+            height: 25px;
+            padding: 0px 8px;
+            margin-right: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+            background-color: #ffffff;
+            background-size: cover;
+            font-family: @global-font-family;
+            font-weight: 700;
+            font-size: 16px;
+            color: #555555;
+            text-decoration: none solid rgb(85, 85, 85);
+        }
+
+        .btn {
+            background-color: transparent;
+            padding: 0;
+
+            i {
+                color: @brand-color_font-dark;
+            }
+
+            i:hover {
+                color: @brand-navigation_primary_color_gray;
+            }
+        }
+    }
+
+    &__headerInfo {
+        font-size: 12px;
+    }
+
+
+
+    .txDetailLabel {
+        font-weight: 700;
+    }
+
+
+    &__title {
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: @brand-font_xl;
+        max-width: 100%;
+    }
+
+
+    &__titleEdit {
+        padding: 0 @brand-padding_sm;
+        width: 100%;
+    }
+
+    &__edit {
+        display: inline-block;
+        transform: translateY(3px);
+        background-color: transparent;
+        padding: 0 @brand-padding_sm;
+        position: absolute;
+    }
+
+    .tp_CaldColor {
+        color: #2899b6;
+        cursor: pointer;
+    }
+
+    &__navSecondary {
+        max-width: 100%;
+    }
+
+    &__navSecondaryGroup {
+        position: relative;
+
+        &:not(:last-of-type) {
+            border-right: 1px solid @brand-color_dark-gray;
+            padding-right: @brand-padding_lg;
+        }
+
+        .btn {
+            background-color: transparent;
+
+            i {
+                color: @brand-color_font-dark;
+            }
+
+            i:hover {
+                color: @brand-navigation_primary_color_gray;
+            }
+        }
+
+        .btn.attachDropdown {
+            padding: 0;
+        }
+    }
+
+    &__navDropdown {
+        left: -60px;
+    }
+
+    &__navIcon {
+        padding: @brand-padding_sm;
+
+        &:first-of-type {
+            padding-left: 0;
+        }
+
+        &:last-of-type {
+            padding-right: 0;
+        }
+    }
+
+    &__dropdown {
+        width: 200px;
+    }
+
+    &__actions {
+        position: relative;
+
+        .fa-chevron-down {
+            transform: translateX(6px);
+        }
+    }
+
+    &__status {
+        position: absolute;
+        left: 0;
+        transform: translateY(8px);
+    }
+
+    &__details {
+        display: inline-block;
+        margin-bottom: @brand-margin_xs;
+
+        .btn-group {
+            .btn-default {
+                padding-top: @brand-padding_xs;
+                padding-bottom: @brand-padding_xs;
+
+                .fa-ellipsis-h {
+                    transform: translate(0,2px);
+                }
+            }
+
+            .dropdown-menu {
+                .fa {
+                    margin-right: @brand-margin_sm;
+                }
+            }
+        }
+
+        > span:not(:last-child), > button:not(:last-child) {
+            border-right: 1px solid @brand-color_dark-gray;
+        }
+    }
+
+    &__actions {
+        margin-bottom: @brand-margin_md;
+
+        .btn {
+            margin-bottom: @brand-margin_sm;
+        }
+    }
+
+    &__body {
+        overflow-x: hidden;
+    }
+
+    &__txPart {
+        border-bottom: 1px solid @brand-color_dark-gray;
+
+        .txSrvTile {
+            border-bottom: 1px solid @brand-color_dark-gray;
+        }
+    }
+
+
+    &__footer {
+        .clearfix;
+        margin-top: @brand-margin_sm;
+    }
+
+    &__notes {
+        .make-xs-column(6);
+        padding-left: 5px;
+
+        .txplanNote {
+            background-color: @brand-color_white;
+        }
+    }
+
+    &__delete {
+        .btn-link {
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+
+    &__totals {
+        .make-xs-column(6);
+        padding-right: 0;
+        padding-left: 15%;
+    }
+
+    &__total {
+        display: block;
+        font-weight: @brand-font_heavy;
+    }
+
+    &__statusDropdown {
+        min-width: 130px;
+    }
+
+    &__statusLabel {
+        padding: 5px 5px 0 0;
+        display: inline-block;
+        font-weight: 400;
+        float: left;
+    }
+
+    &__viewDocument {
+        float: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 85%;
+        padding-right: 0;
+    }
+
+    &__deleteDocument {
+        cursor: pointer;
+        width: 15%;
+    }
+
+    &__slider {
+        cursor: pointer;
+        display: inline-block;
+        font-weight: @brand-font_heavy;
+
+        > i {
+            vertical-align: middle;
+        }
+
+        i.active {
+            color: @toggle-switch-color;
+        }
+
+        i.inactive {
+            color: lightgrey;
+        }
+
+        > span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+
+    .tooltip-wrap {
+        white-space: pre-line;
+    }
+}
+
+.predOpt {
+    .clearfix;
+    position: relative;
+    border: 1px solid #DADCDC;
+    border-radius: @borderRadius3;
+
+    &__header {
+        padding: @brand-padding_xs @brand-padding_sm;
+        background-color: @panel-heading-bg;
+        background-color: #DADCDC;
+    }
+
+    &__title {
+        padding: @brand-padding_xs;
+        font-weight: @brand-font_heavy;
+        color: #3c3d3d;
+    }
+
+    &__body {
+        background-color: @brand-color_white;
+        padding: @brand-padding_sm;
+    }
+}
+
+.txPlanReport {
+    .clearfix;
+    width: 100%;
+    position: relative;
+    padding: @brand-padding_lg;
+    background-color0: @brand-color_gray;
+
+    &__preferred {
+        width: 50px;
+        height: 50px;
+    }
+
+    &__footer {
+        .clearfix;
+        padding: 10px;
+
+        .btn {
+            float: left;
+            margin-right: @brand-margin_sm;
+        }
+    }
+
+    &__totals {
+        position: relative;
+        width: 50%;
+        float: right;
+    }
+
+    &__totalItem {
+        text-align: right;
+    }
+
+    &__table {
+        .table;
+        .soarTblSort;
+        border: 1px solid @brand-tbl_border-color;
+    }
+
+    &__header {
+
+        > tr {
+            background-color: @brand-color_white;
+            border-bottom: 1px solid @brand-tbl_border-color;
+
+            > td {
+                position: relative;
+                padding: 10px 6px;
+                vertical-align: middle !important;
+                text-align: left;
+                font-size: 0.9em;
+                cursor: pointer;
+                font-weight: 100;
+
+                &:first-child {
+                    padding-left: 10px;
+                }
+
+                &.action {
+                    &:after {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+    &__body {
+
+        > tr {
+            background-color: @brand-color_white;
+            border-bottom: 1px solid @brand-tbl_border-color;
+
+            > td {
+                position: relative;
+                padding: 10px 6px;
+                vertical-align: middle !important;
+                text-align: left;
+                font-size: 0.9em;
+                font-weight: 100;
+
+                > span {
+                    display: inline-block;
+                    position: absolute;
+                    width: 90%;
+                    margin-top: -9px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                &.descriptionCol {
+                    padding-left: 10px;
+                    width: 40%;
+                    min-width: 200px;
+                }
+
+                &.toothCol,
+                &.areaCol,
+                &.estInsCol,
+                &.patientPortionCol,
+                &.feeCol,
+                &.adjCol {
+                    width: 10%;
+                    min-width: 78px;
+                }
+
+                &.providerCol {
+                    width: 10%;
+                    min-width: 78px;
+                }
+            }
+        }
+    }
+}
+
+.txPlanTooltip {
+    width: 100%;
+    display: table;
+
+    &__title {
+        width: 50%;
+        display: table-cell;
+        text-align: left;
+        padding-right: 10px;
+    }
+
+    &__content {
+        display: table-cell;
+        text-align: left;
+    }
+
+    &__row {
+        display: table-row;
+    }
+}
+
+// trying to mimic the new styles for buttons while we transition
+.tx-plan-button {
+    box-sizing: border-box;
+    height: 25px;
+    min-width: 100px;
+    border-radius: 5px;
+    font-family: @global-font-family;
+    font-size: 12px;
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+    border: none;
+}
+
+.tx-plan-primary {
+    color: #FFFFFF;
+    background-color: #22a9cb;
+}
+
+.tx-plan-primary:hover {
+    background-color: #27bfe6;
+}
+
+.tx-plan-secondary {
+    color: #2dabcb;
+    background-color: #fafafa;
+    border: 1px solid #2dabcb;
+}
+
+.tx-plan-secondary:hover {
+    color: #27bfe6;
+    border-color: #27bfe6;
+}

@@ -1,0 +1,101 @@
+﻿<div class="carrierCrud" ng-controller="CarrierLandingController" ng-init="initialize()">
+    <div class="rowFull white">
+        <div class="carrierCrud__header">
+            <ul class="carrierCrud__breadcrumb">
+                <li><a href="#/BusinessCenter/Insurance">{{ 'Insurance' | i18n }}</a></li>
+                <li><a href="#/BusinessCenter/Insurance/Carriers">{{ 'Carriers' | i18n }}</a></li>
+                <li>
+                    <a class="text-muted">
+                        <span>{{ carrierName }}</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="section-divider"></div>
+        </div>
+        <div class="carrierLanding__infoMain row">
+            <div class="carrierLanding__carrierPatientBenefit col-xs-8">
+                <!--TODO This div starts the left side of the page-->
+                <uib-tabset active="carrierActiveTab">
+                    <uib-tab heading="{{ carrierName }} {{ 'Plans' }} ({{ benefitPlansData.length }})"
+                             index="carrierTabs.plans.index"
+                             select="carrierTabsToggle(carrierTabs.plans.index)"
+                             disable="carrierTabs.plans.disabled">
+                        <div class="carrierLanding__grid" ng-show="hasViewAccess">
+                            <div class="carrierLanding__actions">
+                                <div class="form-group">
+                                    <div class="carrierLanding__actions__search col-sm-4">
+                                        <div class="form-group has-feedback">
+                                            <input class="form-input border-solid-black" id="inpSearchServiceCodes"
+                                                   placeholder="{{'Search for Plans' | i18n }}" type="text" ng-change="filterPlans(searchTerm)" ng-model="searchTerm" ng-trim="false" />
+                                            <span id="lblFeedback" class="glyphicon glyphicon-search form-control-feedback"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carrierLanding__actions__addPlan">
+                                    <a id="btnAddPlan" class="btn btn-default ng-binding" check-auth-z="soar-ins-ibplan-add" href="#/BusinessCenter/Insurance/Plans/Create?carrierId={{ carrierId }}">{{ 'Add a {0}' | i18n:['Plan'] }}</a>
+                                </div>
+                            </div>
+                            <kendo-grid id="BenefitPlans"
+                                        k-options="benefitPlanOptions">
+                            </kendo-grid>
+                        </div>
+                    </uib-tab>
+                    <uib-tab heading="{{ 'Fee Schedules' | i18n }} ({{ feeScheduleData.length }})"
+                             index="carrierTabs.feeSchedules.index"
+                             select="carrierTabsToggle(carrierTabs.feeSchedules.index)"
+                             disable="carrierTabs.feeSchedules.disabled">
+                        <div class="carrierLanding__grid" ng-show="hasViewAccess">
+                            <kendo-grid id="FeeSchedule"
+                                        k-options="feeScheduleOptions"
+                                        k-rebind="feeScheduleOptions">
+                            </kendo-grid>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+            <div class="col-xs-4">
+                <div class="margin-top-15">
+                    <button class="btn btn-default fa fa-print float-right" check-auth-z="soar-ins-ibcomp-edit" ng-click="printCarrierPlans()"></button>
+                </div>
+                <div class="carrierLanding__carrierInfo">
+                    <div class="carrierCrud__title">
+                        <h1 class="carrierCrud__headerName">
+                            <span class="carrierLanding__titleC">{{ carrierName }}</span>
+                        </h1>
+                    </div>
+                    <div class="carrierLanding__sections">
+                        <div class="carrierLanding__payerId">
+                            <span><span class="carrierLanding__titleC">Payer ID:</span> {{ carrierPayerId }}</span>
+                        </div>
+                    </div>
+                    <div class="carrierLanding__sections">
+                        <span class="carrierLanding__titleC">Address</span>
+                        <div class="carrierLanding__carrierSectionDivider"></div>
+                        <span>{{ carrierAddress1 }}<br /></span>
+                        <span ng-show="address2 == true">{{ carrierAddress2 }}<br /></span>
+                        <span>{{ carrierCity }}, {{ carrierState }} {{ carrierZipCode }}<span ng-show="website == true"><br /></span></span>
+                        <span ng-show="websiteHttps == true || websiteHttp == true"><a target="_blank" rel="noreferrer" href="{{carrierWebsite}}">{{ carrierWebsite }}</a></span>
+                        <span ng-show="websiteHttps == false && websiteHttp == false"><a target="_blank" rel="noreferrer" href="http://{{carrierWebsite}}">{{ carrierWebsite }}</a></span>
+                    </div>
+                    <div class="carrierLanding__sections">
+                        <span class="carrierLanding__titleC">Phone & Email</span>
+                        <div class="carrierLanding__carrierSectionDivider"></div>
+                        <span ng-show="phone1 == true"><span ng-bind-html="carrierPhoneMain | tel"></span> (main)<span ng-show="fax == true || email == true || phone2 == true"><br /></span></span>
+                        <span ng-show="phone2 == true"><span ng-bind-html="carrierPhoneDirect | tel"></span> (direct)<span ng-show="fax == true || email == true"><br /></span></span>
+                        <span ng-show="fax == true"><span ng-bind-html="carrierFax | tel"></span> (fax)<span ng-show="email == true"><br /></span></span>
+                        <span ng-show="email == true"><a target="_top" href="mailto:{{carrierEmail}}">{{ carrierEmail }}</a></span>
+                    </div>
+                    <div class="carrierLanding__sections">
+                        <span class="carrierLanding__titleC">Notes</span>
+                        <div class="carrierLanding__carrierSectionDivider"></div>
+                        <p>
+                            <span ng-show="notes == true">{{ carrierNotes }}</span>
+                            <span ng-hide="notes == true">No available notes at this time.</span>
+                        </p>
+                    </div>
+                    <a id="btnCarrierEdit" class="btn btn-default ng-binding" check-auth-z="soar-ins-ibcomp-edit" href="#/BusinessCenter/Insurance/Carriers/Edit?guid={{ carrierId }}">Edit Carrier<!--{{ 'Edit Company Info' | i18n }}--></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

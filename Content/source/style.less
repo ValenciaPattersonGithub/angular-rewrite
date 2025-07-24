@@ -1,0 +1,108 @@
+﻿/* 
+    Project Fuse
+    For Workflow information, visit http://thelink.com
+*/
+
+
+// Fonts
+
+//@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700,800&display=swap);
+
+// Comment reason: Local files commented out to allow for time to fix console errors
+// ticket 475215
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(../public/fonts/OpenSans-Light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../public/fonts/OpenSans-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../public/fonts/OpenSans-Medium.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../public/fonts/OpenSans-SemiBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../public/fonts/OpenSans-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(../public/fonts/OpenSans-ExtraBold.ttf) format('truetype');
+}
+
+// *************************************
+//   Frameworks
+// *************************************
+
+// Bootstrap
+@import 'includes/bootstrap/3.3.6/bootstrap.less';
+
+// KendoUI
+@import 'includes/kendo/web/kendo.common.less';
+@import 'includes/kendo/web/kendo.common-bootstrap.less';
+@import 'includes/kendo/web/kendo.bootstrap.less';
+
+// Font Awesome
+@import 'includes/fontawesome/font-awesome.less';
+
+// Cusotm Mixins
+@import 'includes/soar/soar-mixins.less';
+
+
+
+// *************************************
+//   Variables
+// *************************************
+
+// Bootstrap Variable Overrides
+@import 'var/bootstrap-var.less';
+
+// FontAwesome Variables
+@import 'var/fa-var.less';
+
+// KendoUI Variables
+@import 'var/kendo-var.less';
+
+// Fuse Global Variables
+@import 'var/soar-var.less';
+
+// Fuse Tablet Variables
+@import 'var/tablet-var.less';
+
+
+
+// *************************************
+//   Component and Layout Styles
+// *************************************
+
+@import 'soar/soar.less';
+
+// *************************************
+//   App Views
+// *************************************
+
+@import '../../v1.0/App/app.less';
+

@@ -1,0 +1,70 @@
+﻿.editPanel {
+    .clearfix;
+    margin-bottom: @brand-margin_lg;
+    &.inactive {
+        opacity: .4;
+    }
+
+    &__header {
+        display: table;
+        width: 100%;
+        border-top-left-radius: @brand-scaff_radius-small;
+        border-top-right-radius: @brand-scaff_radius-small;
+        background-color: @brand-color_primary;
+    }
+    &__title {
+        display: table-cell;
+        
+        padding-left: @brand-padding_sm;
+        vertical-align: middle;
+        color: @brand-color_white;
+    }
+	&__separator {
+        padding-left: @brand-padding_xs;
+		padding-right: @brand-padding_xs;
+        vertical-align: middle;
+        color: @brand-color_white;
+    }
+    &__actions {
+        display: table-cell;
+        padding-right: @brand-padding_sm;
+        vertical-align: middle;
+        text-align: right;
+
+        .btn-link {
+            color: @brand-color_link-light;
+
+            &:hover {
+                color: @brand-color_link-light-hover
+            }
+        }
+    }
+    &__save {
+
+    }
+    &__edit {
+
+    }
+    &__save-alert {
+        .btn {
+            padding: 6px;
+        }
+    }
+    &__save-message {
+        color: @brand-color_lighter-gray;
+    }
+    &__fieldset {
+        .make-sm-column(12);
+        padding-top: @brand-padding_md;
+        padding-bottom: @brand-padding_md;
+        padding-right: @brand-padding_md;
+        padding-left: @brand-padding_md;
+        background-color: @brand-color_white;
+    }
+
+    &__body {
+        .word-wrap {
+            display: block;
+        }
+    }
+}

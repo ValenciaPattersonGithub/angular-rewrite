@@ -1,0 +1,67 @@
+﻿<div class="modal-header appointment-status">
+    <label class="modal-title-responsive">{{ display.title | i18n }}</label>
+
+    <div class="clearfix">&nbsp;</div>
+
+	<div class="row" ng-hide="display.ShowAppointmentInfo == false">
+		<div class="col-xs-12">
+			<strong id="lbl{{display.id}}DOB{{$index}}">
+				{{ display.appointment.Patient.FirstName }}{{ display.appointment.Patient.PreferredName ? ' (' + display.appointment.Patient.PreferredName + ')' : '' }}{{ display.appointment.Patient.MiddleName ? ' ' + display.appointment.Patient.MiddleName + '.' : '' }} {{ display.appointment.Patient.LastName }}{{ display.appointment.Patient.Suffix ? ', ' + display.appointment.Patient.Suffix : '' }}
+			</strong>
+			<!--<strong ng-show="display.appointment.Patient.DateOfBirth">|</strong>
+			<strong id="lbl{{display.id}}DOB{{$index}}" ng-show="display.appointment.Patient.DateOfBirth">
+				{{ display.appointment.Patient.DateOfBirth | toShortDisplayDate }} ({{ 'age' | i18n }} {{ display.appointment.Patient.DateOfBirth | age }})
+			</strong>-->
+		</div>
+		<div class="col-xs-12">
+			<span id="lbl{{display.id}}AppointmentTime{{$index}}" ng-show="display.appointment.StartTime != null && display.appointment.EndTime != null">{{ display.appointment.StartTime | date: display.appointment.StartTimeFormat }} - {{ display.appointment.EndTime | date: 'h:mm a' }} ({{ display.appointment.EndTime.getTime() - display.appointment.StartTime.getTime() | minutes }} {{ 'minutes' | i18n }})</span>
+		</div>
+		<div class="col-xs-12">
+			<span id="lbl{{display.id}}AppointmentType{{$index}}">{{ display.appointment.AppointmentType ? display.appointment.AppointmentType.Name : noAppointmentType }}</span>
+		</div>
+		<div class="col-xs-12">
+			<span id="lbl{{display.id}}Room{{$index}}">{{ display.appointment.Room.Name }}</span>
+            <span ng-if="display.appointment.Room.Name > '' && display.appointment.Location.NameAbbreviation > ''">, </span>
+			<span id="lbl{{display.id}}Location{{$index}}">{{ display.appointment.Location.NameAbbreviation }}</span>
+		</div>
+		<div class="col-xs-12">
+			<span id="lbl{{display.id}}ProviderName{{$index}}">{{ display.appointment.Provider.Name }}</span>
+		</div>
+	</div>
+
+	<div class="clearfix" ng-hide="display.ShowAppointmentInfo == false">&nbsp;</div>
+    <div class="row" ng-show="display.ShowReason">
+        <div class="col-xs-2">
+            <strong>{{ 'Reason' | i18n }} *</strong>
+        </div>
+        <div class="col-xs-10">
+            <radiogroup unique-id="display.reason.id" value="deletedReason" options="display.reason.options" labels="display.reason.labels"></radiogroup>
+        </div>
+    </div>
+
+    <div class="row" ng-show="display.showDeleteCheckbox">
+        <div class="clearfix">&nbsp;</div>
+        <div class="col-xs-10">
+            <checkbox auth-z="soar-sch-sptapt-delete" checkbox-id="lblDeleteAppointmentCheckbox" checkbox-value="checkBoxAction" checkbox-label="'Delete appointment from patient\'s file'"></checkbox>
+        </div>
+    </div>
+
+    <div ng-show="display.hasStatusNote">
+        <div class="clearfix">&nbsp;</div>
+        <div class="row">
+            <div class="col-xs-12">
+                <button class="btn btn-link" ng-click="addNote = true;" ng-show="addNote == false && (display.appointment.StatusNote.length == 0 || display.appointment.StatusNote == null)" id="btn{{display.id}}Note">+ {{ 'Add a {0}' | i18n:['Status Note'] }}</button>
+                <textarea ng-model="display.appointment.StatusNote" ng-show="addNote == true || display.appointment.StatusNote.length > 0" maxlength="500" id="inp{{display.id}}Note"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer appointment-modal-footer">
+    <div>
+        <button id="btnRescheduleNow" ng-click="rescheduleNow();" class="btn btn-primary">{{ 'Reschedule Now' | i18n }}</button>
+        <button id="btnRescheduleLater" ng-click="rescheduleLater();" class="btn btn-default">{{ 'Reschedule Later' | i18n }}</button>
+        <button id="btnDelete" ng-click="deleteAppointment();" class="btn btn-default">{{ 'Delete Appointment' | i18n }}</button>
+        <button id="btnCancel" ng-click="cancelChanges();" class="btn btn-default">{{ 'Cancel' | i18n }}</button>
+    </div>
+    <div class="clearfix"></div>
+</div>

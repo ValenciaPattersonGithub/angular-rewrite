@@ -1,0 +1,232 @@
+@import 'variables';
+*{box-sizing:border-box;}
+
+    ::ng-deep.appointment-backdrop ~.cdk-overlay-connected-position-bounding-box{
+     .cdk-overlay-pane {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 0px !important;
+            left: 0px !important;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5) !important; /*dim the background behind the modal*/
+        }
+    }
+ 
+.fam-modal {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-areas: "header" "content" "footer";
+    margin: 0;
+    border: 1px solid #999;
+    border-radius: 4px;
+    outline: 0;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: $global-drop-shadow;
+    width:80vw;
+    height:70vh;
+    min-height:1px;
+}
+
+.fam-modal-body {
+    grid-area: content;
+    border-top: $app-modal-header-border;
+    border-bottom: $app-modal-header-border;
+    overflow-y: auto;
+}
+
+.fam-modal-header {
+    font-size: $app-modal-header-font-size;
+    font-weight: $app-modal-header-font-weight;
+    font-family: $global-font-family;
+    color:$text-black;
+    height:18px;
+}
+
+.search-message {
+    display: flex;
+    justify-content: flex-start;
+    font-size:12px;
+    color:#555555;
+}
+
+.search-box {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.searchPadding{
+    padding-top:15px;
+    padding-left:15px;
+    padding-right:15px;
+    width:100%;
+    min-width: 880px;
+}
+
+.fam-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    grid-area:footer;
+}
+
+.fam-modal-bold-text {
+    font-weight: bold;
+}
+
+.fam-modal-text {
+    font-weight: normal;
+}
+
+.btnFlexContainer {
+    padding:15px;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+}
+
+.containerPadding{
+    padding:15px;
+}
+
+.closeModal {
+    cursor: pointer;
+    color: $action-blue;
+    
+
+    &:hover {
+        color: $light-action-blue;
+    }
+}
+
+// delete service svg styles
+.delete-svg {
+    vertical-align: middle;
+}
+
+.delete-svg svg {
+    fill: $action-blue;
+}
+
+.delete-svg:hover svg {
+    fill: $light-action-blue;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding:15px;
+}
+
+.fam-btn {
+    margin-left: 10px;
+}
+
+table, th, td {
+    border: 1px solid $border-grey;
+    font-size: 12px;
+    color: $text-black;
+}
+
+tr:nth-child(even) {
+    background-color: $bg-grey;
+}
+
+tr:nth-child(odd) {
+    background-color: $polar-white;
+}
+
+th {
+    //color: $action-blue;
+    color: $text-black;
+    font-weight:700;
+}
+
+th, td {
+   text-align: left !important;//have to put !important because typography.less is forcing some column text to the right
+}
+
+td.alignRight {
+    text-align: right !important;//override above global override
+}
+
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*table tbody {
+    height: 300px;
+    overflow-y: scroll;
+    display: block;
+}
+
+table thead {
+    display: block;
+}*/
+
+label {
+    position: relative;
+}
+
+label:before {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill-rule='evenodd'%3E%3Cpath d='M16.036 18.455l2.404-2.405 5.586 5.587-2.404 2.404zM8.5 2C12.1 2 15 4.9 15 8.5S12.1 15 8.5 15 2 12.1 2 8.5 4.9 2 8.5 2zm0-2C3.8 0 0 3.8 0 8.5S3.8 17 8.5 17 17 13.2 17 8.5 13.2 0 8.5 0zM15 16a1 1 0 1 1 2 0 1 1 0 1 1-2 0'%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+input {
+    width: 400px;
+    border-radius: 5px;
+    border: 1px solid $border-grey;
+    padding-left:5px;
+}
+
+.patientName{
+    min-width:125px;
+}
+
+/* overrides for fields we have not made controls for yet */
+// These styles are directly imported and require the classes fui-select-container and fui-select to work
+@import '../@shared/components/form-controls/select-list/select-list.component';
+
+.fam-modal .field {
+    height: 25px;
+    border: 1px solid $border-grey;
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    font-size: 12px;
+    color: $text-black;
+    text-decoration: none solid $text-black;
+    width: 220px;
+}
+
+::ng-deep .error-tooltip-container-left {
+    transform: translate(-105%, -80%) !important;
+    right: auto !important;
+    top: auto !important;
+}
+
+::ng-deep .error-tooltip-container-right {
+    left: auto !important;
+    top: auto !important;
+}
+

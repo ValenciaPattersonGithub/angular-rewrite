@@ -1,0 +1,76 @@
+﻿<!-- <business-nav></business-nav> -->
+<div class="noteTemp" ng-form="frmNoteTemplate">
+    <div class="noteTemp__header">
+        <div class="noteTemp__nav">
+            <div class="noteTemp__nav">
+                <span><a id="lnkPracticeSettings" href="#/BusinessCenter/PracticeSettings">{{ 'Practice Settings' | i18n }}</a></span> > <span>{{ 'Clinical Note Templates' | i18n }}</span>
+            </div>
+        </div>
+        <h3>{{ 'Clinical Note Templates' | i18n }}</h3>
+    </div>
+    <div class="noteTemp__body">
+        <div class="noteTemp__secondary">
+            <note-templates-list selected-template="selectedTemplate"
+                                 note-templates="noteTemplates"
+                                 edit-mode="editMode"
+                                 existing-template-active="existingTemplateActive"
+                                 show-header="true"
+                                 show-menu="true"
+                                 new-category-name="newCategoryName"
+                                 note-categories="noteCategories">
+            </note-templates-list>
+        </div>
+        <div class="noteTemp__primary">
+            <div class="noteTempEditor">
+                <div class="noteTempEditor__body">
+                    <div class="col-sm-12">
+                        <div class="col-sm-10 row">
+                            <h4>{{ 'Note Template Builder' | i18n }}</h4>
+                        </div>
+                        <div class="col-sm-2 row noteTempEditor__actions">
+                            <button id="btnNoteTempEditorCancel" class="btn btn-default" ng-click="cancelEdit()" ng-disabled="!selectedTemplate.Template">{{ 'Cancel' | i18n }}</button>
+                            <button id="btnNoteTempEditorSave" class="btn btn-primary" check-auth-z='soar-clin-nottmp-add' ng-click="saveTemplate()" ng-disabled="!selectedTemplate.Template.TemplateName || !isValidCustomForm || !selectedTemplate.Template.CategoryId || !hasChanges().EitherChanged || isSaving ">{{ 'Save' | i18n }}</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-5 row">
+                            <h4 ng-if="!editMode">{{ selectedTemplate.Template.TemplateName }}</h4>
+                            <div class="form-group" ng-if="editMode">
+                                <label class="control-label">{{ 'Template Name' | i18n }}</label> *
+                                <input id="inpTemplateName"
+                                       class="form-control"
+                                       placeholder="{{ 'Template Name' | i18n }}"
+                                       ng-model="selectedTemplate.Template.TemplateName"
+                                       capitalize-first-with-override
+                                       maxlength="100"
+                                       set-focus />
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <h4 ng-if="!editMode">{{ selectedTemplate.Template.$$CategoryName }}</h4>
+                            <div class="form-group" ng-if="editMode">
+                                <label class="control-label">{{ 'Category' | i18n }}</label> *
+                                <soar-select-list id="slctTemplateCategory"
+                                                  class="form-control noteTempEditor__category"
+                                                  placeholder="{{ 'Select Category' | i18n }}"
+                                                  text-field="CategoryName"
+                                                  value-field="CategoryId"
+                                                  option-list="noteCategories"
+                                                  ng-model="selectedTemplate.Template.CategoryId">
+                                </soar-select-list>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" ng-hide="!editMode">
+                        <button id="btnAddSection" class="btn btn-default" ng-click="addSection()" ng-disabled="!canAddSection">{{ 'Add a {0}' | i18n:['Section'] }}</button>
+                    </div>
+                    <div class="col-sm-12">
+                        <div id="sectionAccordion" close-others="oneAtATime">
+                            <angular-accordion custom-form="selectedTemplate.TemplateBodyCustomForm" inputIsDisabled="true" show-footer-page="false" form-type="note" can-edit-form="editMode"></angular-accordion>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

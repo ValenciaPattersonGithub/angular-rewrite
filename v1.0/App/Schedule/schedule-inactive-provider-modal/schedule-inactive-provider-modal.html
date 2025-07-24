@@ -1,0 +1,11 @@
+<div class="schedule-inactive-provider-modal">
+    <div class="modal-header"><h4 id="lblWarningModalHeader">{{ ::('Inactive Provider' | i18n) }}</h4></div>
+    <div class="modal-body">
+        <label id="lblWarningModalMessage" class="schedule-inactive-provider-modal__Message">{{ ::('This provider has been deactivated and can not have any new appointments scheduled for them. Please choose a different provider.' | i18n) }}</label>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right">
+            <button id="btnOK" ng-click="close();" class="btn btn-primary">{{ ::('Ok' | i18n) }}</button>
+        </div>
+    </div>
+</div>

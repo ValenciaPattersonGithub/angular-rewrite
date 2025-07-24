@@ -1,0 +1,44 @@
+<mat-tab-group #personTabs [selectedIndex]="selectedTab.value" (selectedIndexChange)="onTabChange($event)">
+  <mat-tab *ngFor="let tab of tabs; let index = index">
+    <ng-template mat-tab-label> {{ tab.title }}</ng-template>
+    <ng-template matTabContent>
+      <div class="patient-profile-landing-container">
+        <div class="profile-section patient-profile-landing-profile-section">
+          <app-patient-card *ngIf="tab.patientInfo" [patientProfile]="tab.patientInfo"></app-patient-card>
+        </div>
+        <div class="patient-profile-landing-content-section">
+          <div class="profile-container">
+            <div id="accountMemberDetails" class="profile-section profile-account-member-details">
+              <app-patient-account-members [featureName]="'PatientProfile'" (accoumentMemberListFillEvent)="onAccountMemberFill($event)"></app-patient-account-members>
+            </div>
+            <div id="contactDetails" class="profile-section profile-contact-details">
+              <app-patient-contact-details *ngIf="tab.patientInfo" [patientProfile]="tab.patientInfo" [isTabView]="isTabView"> </app-patient-contact-details>
+            </div>
+            <div class="profile-section profile-insurance-details">
+              <app-patient-insurance *ngIf="tab.patientInfo" [patientProfile]="tab.patientInfo"></app-patient-insurance>
+            </div>
+            <div class="profile-section profile-preference-details">
+              <app-patient-preferences *ngIf="tab.patientInfo" [patientProfile]="tab.patientInfo" [isTabView]="isTabView"></app-patient-preferences>
+            </div>
+            <div class="profile-section profile-dental-record-details">
+              <app-patient-dental-records *ngIf="tab.patientInfo" [patientProfile]="tab.patientInfo" [isTabView]="isTabView"> </app-patient-dental-records>
+            </div>
+            <div class="profile-section profile-document-details">
+              <app-patient-documents *ngIf="tab.patientInfo" [patientProfile]="tab.patientInfo"></app-patient-documents>
+            </div>
+            <div class="profile-section profile-referral-details" *ngIf="!hideReferral">
+              <app-patient-referrals *ngIf="tab.patientInfo" [patientProfile]="tab.patientInfo" [isTabView]="isTabView"></app-patient-referrals>
+            </div>
+            <div class="profile-section profile-additional-identifiers-details">
+              <app-patient-additional-identifiers *ngIf="tab.patientInfo" [patientProfile]="tab.patientInfo" [isTabView]="isTabView"></app-patient-additional-identifiers>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+<ng-template #noResponisblePersonContent>
+  <span class="assign-responsible-person" (click)="updatePerson()">Assign Responsible Person Now</span>
+</ng-template>

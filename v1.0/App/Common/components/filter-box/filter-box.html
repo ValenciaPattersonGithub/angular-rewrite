@@ -1,0 +1,22 @@
+﻿<div class="slidePanel">
+    <div class="slidePanel__filteringMask" ng-if="filtering === true"></div>
+    <div class="slidePanel__box">
+        <div class="slidePanel__header">
+            <div class="slidePanel__title">
+                <h4>{{ 'Filter Name' || i18n }} <button id="sp-clear" class="btn btn-link" ng-click="clearFilters()">clear</button></h4>
+            </div>
+            <div class="slidePanel__filteringMessage" ng-show="filtering === true">
+                <i class="fa fa-spinner fa-spin loading"></i>
+                {{ 'Applying filters...' || i18n }}
+            </div>
+            <div class="slidePanel__close">
+                <button id="sp-close" class="btn btn-link" ng-click="hideFilters()"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="slidePanel__body">
+            <div class="enctrHist__fltr">
+                <ng-include src="filterTemplate"></ng-include>
+            </div>
+        </div>
+    </div>
+</div>

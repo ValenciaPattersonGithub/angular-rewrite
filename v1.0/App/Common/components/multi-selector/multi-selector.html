@@ -1,0 +1,36 @@
+﻿<div id="multi-selector" class="multi-selector">
+    <div class="dropdown" ng-class="{'open': open }">
+        <button id="btn{{id}}ToggleMultiSelect" class="btn multi-selector__button" type="button" aria-expanded="false" ng-class="{ 'border-bottom-none': open }" ng-click="open = !open" ng-disabled="msDisabled" ng-blur="onButtonBlur($event)">
+            <span class="multi-selector__button__text" ng-if="placeholder && placeholder != 'undefined' && placeholder.length > 0">{{ placeholder | i18n }}</span>
+            <span class="multi-selector__button__text" ng-if="!placeholder || placeholder == 'undefined' || placeholder.length == 0">Select {{ type | i18n }}</span>
+            <span class="fa fa-caret-down"></span>
+        </button>
+        <ul ng-if="isGroupedByLocationStatus" class="dropdown-menu multi-selector__ddWidth" aria-labelledby="btn{{id}}ToggleMultiSelect">
+            <li ng-repeat="item in list | filter: {LocationStatus: 'All Status'}">
+                <input type="checkbox" id="inp{{id}}MultiSelectItem{{$index}}" class="multi-selector__item" ng-blur="onBlur($event)" ng-model="item.Selected">
+                <span class="multi-selector__item">{{ item[displayField] }}</span>
+            </li>
+            <div ng-if="hasLocations(list, 'Active')" class="multi-selector__active" ng-class="{'multi-selector__with-border-top': hasLocations(list, 'All Status')}"><span class="multi-selector__status-header">Active</span></div>
+            <li ng-repeat="item in list | filter: {LocationStatus: 'Active'}" ng-if="item.LocationStatus === 'Active'">
+                <input type="checkbox" id="inp{{id}}MultiSelectItem{{$index}}"  class="multi-selector__item"  ng-blur="onBlur($event)" ng-model="item.Selected">
+                <span class="multi-selector__item" >{{ item[displayField] }}</span>
+            </li>
+            <div ng-if="hasLocations(list, 'Pending Inactive')" class="multi-selector__not-active"><span class="multi-selector__status-header">Pending Inactive</span></div>
+            <li ng-repeat="item in list | orderBy: 'DeactivationTimeUtc' | filter: {LocationStatus: 'Pending Inactive'}">
+                <input type="checkbox" id="inp{{id}}MultiSelectItem{{$index}}" class="multi-selector__item" ng-blur="onBlur($event)" ng-model="item.Selected">
+                <span class="multi-selector__item">{{ item[displayField] + item.InactiveDate}}</span>
+            </li>
+            <div ng-if="hasLocations(list, 'Inactive')" class="multi-selector__not-active"><span class="multi-selector__status-header">Inactive</span></div>
+            <li ng-repeat="item in list | orderBy: '-DeactivationTimeUtc' | filter: {LocationStatus: 'Inactive'}" ng-if="item.LocationStatus === 'Inactive'">
+                <input type="checkbox" id="inp{{id}}MultiSelectItem{{$index}}" class="multi-selector__item" ng-blur="onBlur($event)" ng-model="item.Selected">
+                <span style="margin-right:6px" class="multi-selector__item">{{ item[displayField]  + item.InactiveDate}}</span>
+            </li>
+        </ul>
+        <ul ng-if="!isGroupedByLocationStatus" class="dropdown-menu multi-selector__ddWidth" aria-labelledby="btn{{id}}ToggleMultiSelect">
+            <li ng-repeat="item in list track by $index">
+                <input type="checkbox" id="inp{{id}}MultiSelectItem{{$index}}" class="multi-selector__item" ng-blur="onBlur($event)" ng-model="item.Selected">
+                <span class="multi-selector__item">{{ item[displayField] }}</span>
+            </li>
+        </ul>
+    </div>
+</div>

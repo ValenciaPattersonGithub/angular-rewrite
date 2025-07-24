@@ -1,0 +1,43 @@
+<div class="accountNoteMenu">
+    <div id="btnGroup{{gridIndex}}" class="btn-group">
+        <button id="btnActionMenu{{gridIndex}}" data-toggle="dropdown" class="btn btn-link dropdown-toggle">
+            <i class="fa fa-ellipsis-v"></i>
+        </button>
+        <ul class="pull-right dropdown-menu dropdown-menu-accounttab col-md-12">
+            <li>
+                <div class="row">
+                    <span id="lnkViewNote" attr.check-auth-z="soar-per-acnote-view" class="margin-left-5 col-md-12"
+                        title="{{ !hasAccountNoteViewAccess ? noaccessTooltipText : ''}}"  [ngClass]="{'disableSpan': !hasAccountNoteViewAccess}"
+                        *ngIf="accountNotesRow.NoteType && accountNotesRow.NoteType !== 3 && accountNotesRow.NoteType !== 5"
+                        (click)="viewAccountNote(receivable)">{{ 'View' | translate }}</span>
+                </div>
+                <div class="row">
+                    <span id="lnkEditNote" attr.check-auth-z="soar-per-acnote-edit" class="margin-left-5 col-md-12"
+                        title="{{ !hasAccountNoteEditAccess ? noaccessTooltipText : ''}}"
+                        *ngIf="accountNotesRow.NoteType && accountNotesRow.NoteType === 1 && !accountNotesRow.IsDeleted"
+                        [ngClass]="{'disableSpan': !hasAccountNoteEditAccess}"
+                        (click)="accountNotesRow.Type === 'In Collections Note' 
+                        || accountNotesRow.TransactionType === 'In Collections Note' ? $event.stopPropagation() : editAccountNote(receivable)">{{ 'Edit' | translate }}
+                    </span>
+                </div>
+                <div class="row">
+                    <span id="lnkDeleteNote" attr.check-auth-z="soar-per-acnote-delete" class="margin-left-5 col-md-12"
+                        *ngIf="accountNotesRow.NoteType && accountNotesRow.NoteType === 1 && !accountNotesRow.IsDeleted"
+                        title="{{ !hasAccountNoteDeleteAccess ? noaccessTooltipText : ''}}" [ngClass]="{'disableSpan': !hasAccountNoteDeleteAccess}"
+                        (click)="accountNotesRow.Type === 'In Collections Note' || accountNotesRow.TransactionType === 'In Collections Note' ? $event.stopPropagation() : deleteAccountNote(receivable)">{{
+                        'Delete' | translate }}</span>
+                </div>
+                <div class="row" *ngIf="showViewEobButton">
+                    <span id="lnkViewEob" attr.check-auth-z="soar-acct-aipmt-view" class="margin-left-5 col-md-12"
+                    title="{{ !hasViewEOBAccess ? noaccessTooltipText : ''}}" [ngClass]="{'disableSpan': !hasViewEOBAccess}"
+                        (click)="viewEob()">{{ 'View EOB' | translate }}</span>
+                </div>
+                <div class="row" *ngIf="showViewEligibilityButton">
+                    <span id="lnkViewRte" attr.check-auth-z="soar-ins-rte-view" class="margin-left-5 col-md-12"
+                    title="{{ !hasViewRTEAccess ? noaccessTooltipText : ''}}" [ngClass]="{'disableSpan': !hasViewRTEAccess}"
+                    (click)="viewRte()">{{ 'View RTE' | translate }}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

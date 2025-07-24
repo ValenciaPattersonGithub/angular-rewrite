@@ -1,0 +1,373 @@
+<form [formGroup]="addReferral" #addReferralForm="ngForm" data-qa="referral-form">
+    <div [ngClass]="{
+        'panel-body': true,
+        'custom-css-from-patient-page': fromAddPatientProfile
+      }">
+        <div class="row">
+            <div *ngIf="fromAddPatientProfile === false"
+                class="form-group form-group-spacing referral-form-container-ref-directions"
+                data-qa="referral-directions-form-group">
+                <label class="control-label lbl-padding">
+                    {{'Referral Directions' | translate }}<span>*</span>
+                </label>
+                <app-select id="referralDirections" data-qa="referral-directions-select"
+                    [listItems]="referralDirections" [value]="referralDirectionId" [label]=""
+                    (selectionChange)="onChangeReferralDirection($event,false)" [size]="'auto'"
+                    formControlName="referralDirection"></app-select>
+            </div>
+            <div class="form-group form-group-spacing referral-form-container-ref-categories" *ngIf="showRefCategories">
+                <label class="control-label lbl-padding"
+                    [ngStyle]="{'color': (!isReferralCategoryValid && (addReferral.controls['referralCategory'].dirty)) ? 'red' : 'inherit' }">
+                    {{'Referral Categories' | translate }}<span *ngIf="fromAddPatientProfile === false">*</span>
+                </label>
+                <app-select id="referralCategories" [placeholder]="'Select Referral Affiliate'"
+                    [listItems]="referralCategories" [value]="referralCategoryId" [label]=""
+                    (selectionChange)="onChangeReferralCategory($event,false)" formControlName="referralCategory"
+                    [size]="'auto'">
+                </app-select>
+                <span class="validation-error-msg"
+                    *ngIf="!isReferralCategoryValid && addReferral.controls['referralCategory'].dirty">
+                    {{ 'Error: Referral Category is required' | translate }}
+                </span>
+            </div>
+            <div class="form-group form-group-spacing referring-from-container" *ngIf="showReferringFrom">
+                <label class="control-label lbl-padding"
+                    [ngStyle]="{'color': (!fromAddPatientProfile && !isReferringFromValid && (addReferral.controls['referringFrom'].dirty)) ? 'red' : 'inherit' }">
+                    {{'Referring From' | translate }}<span>*</span>
+                </label>
+                <search-bar-autocomplete [list]="providerList" [placeholder]="'Search for Provider or Practice'" [ngClass]="{ 'ac-value-selected': selectedReferringFrom, 'ref-error-control': (fromAddPatientProfile && !isReferringFromValid && addReferral.controls['referringFrom'].dirty) }"
+                    [inputValueBind]="selectedReferringFrom" [valueF]="'text'" [template]="providerSearchTemplate"
+                    (selectedValueChange)="onChangeReferringProvider($event,false)" formControlName="referringFrom"
+                    (filterValueChange)="providerFilterChanged($event)">
+                </search-bar-autocomplete>
+                <svg-icon *ngIf="fromAddPatientProfile && !isReferringFromValid && addReferral.controls['referringFrom'].dirty" [attr.id]="'providerErrorIcon'" class="error-icon" name="tooltipIcon" iconHeight="15px"
+                    tooltip="Referring Provider is required" placement="top-error" delay="500"
+                    iconWidth="15px"></svg-icon>
+                <span class="validation-error-msg"
+                    *ngIf="!fromAddPatientProfile && !isReferringFromValid && addReferral.controls['referringFrom'].dirty">
+                    {{ 'Error: Referring Provider is required' | translate }}
+                </span>
+            </div>
+            <div class="form-group form-group-spacing referral-form-container-providers" *ngIf="showProviders">
+                <label class="control-label lbl-padding"
+                    [ngStyle]="{'color': (!isProviderValid && (addReferral.controls['provider'].dirty)) ? 'red' : 'inherit' }">
+                    {{'Providers' | translate }}<span>*</span>
+                </label>
+                <provider-selector-with-grouping #providerSelector [inputId]="'lstActiveProvider'"
+                    [showInactiveProviders]="false" [setPreferred]="false" [activeProvidersOnly]="true"
+                    [mainDivClassName]="'providerSelector'" [filterByLocationId]="locationId"
+                    [defaultItemText]="'Search for Provider'" [selectedProvider]="selectedProvider"
+                    [className]="'providerWidth'" (selectedProviderChange)="onProviderChange($event)"
+                    [providerTypeIds]="providerTypes">
+                </provider-selector-with-grouping>
+                <span class="validation-error-msg" *ngIf="!isProviderValid && addReferral.controls['provider'].dirty">
+                    {{ 'Error: Provider is required' | translate }}
+                </span>
+            </div>
+            <div class="form-group form-group-spacing referral-form-container-referringTo"
+                data-qa="referral-categories-form-group" *ngIf="showReferringTo">
+                <label class="control-label lbl-padding"
+                    [ngStyle]="{'color': (isReferringToProviderValid==false && (addReferral.controls['referringTo'].dirty)) ? 'red' : 'inherit' }">
+                    {{ 'Referring To' | translate }}<span>*</span>
+                </label>
+                <search-bar-autocomplete [inputValueBind]="selectedProviderAffiliateName" [list]="filteredProviderList"
+                    [placeholder]="providerSearchPlaceholder" [template]="providerSearchTemplate"
+                    [isDisabled]="disablePatientSearch" [valueF]="'text'" [showSuggestion]="showSuggestion"
+                    (filterValueChange)="filterProviders($event)" (onLinkButtonClick)="onSearchItemClick($event,false)"
+                    (selectedValueChange)="onProviderSelected($event)">
+                </search-bar-autocomplete>
+                <span class="validation-error-msg"
+                    *ngIf="isReferringToProviderValid==false && addReferral.controls['referringTo'].dirty">
+                    {{ 'Error: Referring To is required' | translate }}
+                </span>
+            </div>
+        </div>
+        <div *ngIf="showPracticeInformation">
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding lbl-bold">{{'Practice Name' | translate}}</label>
+                    <span class="col-md-12 col-no-padding">{{selectedReferringFromProvOtherDetails?.practiceName
+                        }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding lbl-bold"> {{'Address' | translate }}</label>
+                    <span class="col-md-12 col-no-padding">
+                        {{selectedReferringFromProvOtherDetails?.address1 }}
+                    </span>
+                    <span class="col-md-12 col-no-padding">
+                        {{selectedReferringFromProvOtherDetails?.address2 }}
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding lbl-bold"> {{'Email' | translate }}</label>
+                    <span class="col-md-12 col-no-padding">{{selectedReferringFromProvOtherDetails?.email
+                        }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding lbl-bold"> {{'Phone' | translate }}</label>
+                    <span class="col-md-12 col-no-padding">{{selectedReferringFromProvOtherDetails?.phone |
+                        phoneNumber }}</span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="showOtherForm">
+            <div 
+            [ngClass]="{
+                'form-group form-group-spacing': true,
+                'source-name-container': !fromAddPatientProfile,
+                'source-name-container-add-patient': fromAddPatientProfile
+              }"
+              >
+                <label class="control-label lbl-padding"
+                    [ngStyle]="{'color': (!fromAddPatientProfile && !isSourceNameValid && (addReferral.controls['sourceName'].dirty)) ? 'red' : 'inherit' }">
+                    {{'Source Name' | translate }}<span>*</span>
+                </label>
+                <app-select id="sourceName" [placeholder]="'Select Options'" [listItems]="sourceNames"
+                    [value]="sourceNameId" [label]="" [size]="'auto'" formControlName="sourceName" [ngClass]="{'ref-error-control': (!isSourceNameValid && addReferral.controls['sourceName'].dirty && fromAddPatientProfile)}"
+                    (selectionChange)="onChangeSourceName($event)">
+                </app-select>
+                <svg-icon *ngIf="!isSourceNameValid && addReferral.controls['sourceName'].dirty && fromAddPatientProfile" [attr.id]="'sourceNameErrorIcon'" class="error-icon" name="tooltipIcon" iconHeight="15px" tooltip="Source Name is required" placement="top-error" delay="500" iconWidth="15px"></svg-icon>
+                <span class="validation-error-msg"
+                    *ngIf="!isSourceNameValid && addReferral.controls['sourceName'].dirty && !fromAddPatientProfile">
+                    {{ 'Error: Source Name is required' | translate }}
+                </span>
+            </div>
+            <div *ngIf="showAddReferralSource" class="form-group add-source-container">
+                <label class="control-label lbl-padding">{{'Add a New Source*' | translate }}</label>
+                <input type="text" placeholder="Referral Source" [ngClass]="{
+                    'form-control input-text large': true,
+                    'error-control': (!isNewSourceNameValid && addReferral.controls['referralSource'].dirty && fromAddPatientProfile)                    
+                  }"
+                    data-qa="referral-source-input" formControlName="referralSource">
+                <svg-icon *ngIf="!isNewSourceNameValid && addReferral.controls['referralSource'].dirty && fromAddPatientProfile" [attr.id]="'newSourceNameErrorIcon'" class="error-icon" name="tooltipIcon" iconHeight="15px" tooltip="New Source Name is required" placement="top-error" delay="500" iconWidth="15px"></svg-icon>
+                <span class="validation-error-msg"
+                    *ngIf="!isNewSourceNameValid && addReferral.controls['referralSource'].dirty && !fromAddPatientProfile">
+                    {{ 'Error: New Source Name is required' | translate }}
+                </span>
+            </div>
+            <div *ngIf="showCampaignName" class="form-group">
+                <label class="control-label lbl-padding">{{'Campaign Name' | translate }}</label>
+                <input type="text" class="form-control input-text large" placeholder="Campaign Name"
+                    data-qa="campaignName-input" formControlName="campaignName">
+            </div>
+        </div>
+        <div class="row" *ngIf="showPatientSearch">
+            <div class="form-group existing-patient-container">
+                <label class="control-label lbl-padding"
+                    [ngStyle]="{'color':(showPatientListForm || (!showPatientListForm && !showPatientForm)) && (!fromAddPatientProfile && !isOldPatientNameValid && (addReferral.controls['patient'].dirty)) ? 'red' : 'inherit' }">
+                    {{'Patient Name' | translate }}<span>*</span>
+                </label>
+                <div class="kendo-autocomplete patient-name-container">
+                    <search-bar-autocomplete [inputValueBind]="selectedPatientName" [list]="patientList"
+                        [ngClass]="{ 'ac-value-selected': selectedPatientFromNewPatient, 'ref-error-control': ((showPatientListForm || (!showPatientListForm && !showPatientForm)) && fromAddPatientProfile !&& !isOldPatientNameValid && addReferral.controls['patient'].dirty) }"
+                        [placeholder]="patientSearchPlaceholder" [template]="patientSearchTemplate"
+                        [isDisabled]="disablePatientSearch" [valueF]="'fullName'" [showSuggestion]="showSuggestion"
+                        (filterValueChange)="filterPatients($event)"
+                        (onLinkButtonClick)="onSearchItemClick($event,false)" formControlName="patient"
+                        (selectedValueChange)="onPatientSelected($event)">
+                    </search-bar-autocomplete>
+                    <svg-icon *ngIf="(showPatientListForm || (!showPatientListForm && !showPatientForm)) && fromAddPatientProfile !&& !isOldPatientNameValid && addReferral.controls['patient'].dirty" [attr.id]="'patientNameErrorIcon'" 
+                    class="error-icon" name="tooltipIcon" iconHeight="15px" tooltip="Patient Name is required" placement="top-error" delay="500" iconWidth="15px"></svg-icon>
+                    <span class="validation-error-msg"
+                        *ngIf="(showPatientListForm || (!showPatientListForm && !showPatientForm)) && !fromAddPatientProfile !&& !isOldPatientNameValid && addReferral.controls['patient'].dirty">
+                        {{ 'Error: Patient Name is required' | translate }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="showPatientListForm">
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding lbl-bold">{{'Patient Full Name' | translate }}</label>
+                    <span class="col-md-12 col-no-padding">{{ selectedPatientFromNewPatient?.fullName
+                        }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding lbl-bold">{{'Address' | translate}}</label>
+                    <span class="col-md-12 col-no-padding">{{ selectedPatientFromNewPatient?.address
+                        }}</span>
+                    <span class="col-md-12 col-no-padding">{{ selectedPatientFromNewPatient?.address1
+                        }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding lbl-bold">{{'Email' | translate }}</label>
+                    <span class="col-md-12 col-no-padding">{{ selectedPatientFromNewPatient?.email }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding lbl-bold">{{'Phone' | translate }}</label>
+                    <span class="col-md-12 col-no-padding">{{ selectedPatientFromNewPatient?.phone |
+                        phoneNumber}}</span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="showPatientForm">
+            <div class="row">
+                <div class="form-group add-firstName-container">
+                    <label class="control-label lbl-padding"
+                        [ngStyle]="{'color': (!fromAddPatientProfile && !isFirstNameValid && (addReferral.controls['firstName'].dirty)) ? 'red' : 'inherit' }">
+                        {{'First Name' | translate }}<span>*</span>
+
+                    </label>
+                    <input type="text" placeholder="First Name" [ngClass]="{
+                        'form-control input-text small col-left': true,
+                        'error-control': (fromAddPatientProfile && !isFirstNameValid && addReferral.controls['firstName'].dirty)                    
+                      }"
+                        data-qa="first-name-input" formControlName="firstName" (input)="OnFirstNameChange($event)">
+                    <span class="validation-error-msg"
+                        *ngIf="!fromAddPatientProfile && !isFirstNameValid && addReferral.controls['firstName'].dirty">
+                        {{ 'Error: First Name is required' | translate }}
+                    </span>
+                </div>
+                <div class="form-group add-lastName-container">
+                    <label class="control-label lbl-padding"
+                    [ngClass]="{
+                        'control-label lbl-padding': true,
+                        'margin-left-pp': fromAddPatientProfile
+                      }"
+                        [ngStyle]="{'color': (!fromAddPatientProfile && !isLastNameValid && (addReferral.controls['lastName'].dirty)) ? 'red' : 'inherit' }">
+                        {{ 'Last Name' | translate }}<span>*</span>
+                    </label>
+                    <input type="text" 
+                    [ngClass]="{
+                        'form-control input-text small col-right': true,
+                        'margin-left-pp': fromAddPatientProfile,
+                        'error-control': (fromAddPatientProfile && !isLastNameValid && addReferral.controls['lastName'].dirty)      
+                      }"
+                       placeholder="Last Name"
+                        data-qa="last-name-input" formControlName="lastName" (input)="OnLastNameChange($event)">
+                    <span class="validation-error-msg"
+                        *ngIf="!fromAddPatientProfile && !isLastNameValid && addReferral.controls['lastName'].dirty">
+                        {{ 'Error: Last Name is required' | translate }}
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding"
+                        [ngStyle]="{'color': ((isEmailEntered && !isEmailValid) && (addReferral.controls['email'].dirty)) ? 'red' : 'inherit' }">
+                        {{'Email' | translate }}
+                    </label>
+                    <input type="text" class="form-control input-text large col-left" placeholder="Email" data-qa="email-input"
+                        formControlName="email" (input)="OnEmailChange($event)">
+                    <span class="validation-error-msg"
+                        *ngIf="(isEmailEntered && !isEmailValid) && addReferral.controls['email'].dirty">
+                        {{ 'Error: Please enter valid email address' | translate }}
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label lbl-padding"
+                        [ngStyle]="{'color': ((isPhoneEntered && !isPhoneValid) && (addReferral.controls['phone'].dirty)) ? 'red' : 'inherit' }">
+                        {{'Phone' | translate }}
+                    </label>
+                    <input type="text" class="form-control input-text large col-left" placeholder="Phone" OnlyNumber
+                        NumberType="phone" maxlength="13" data-qa="phone-input"
+                        [value]="addReferral.controls['phone']?.value | phoneNumber" formControlName="phone"
+                        mask="(000) 000-0000" autocomplete="off" (input)="OnPhoneChange($event)">
+                    <span class="validation-error-msg"
+                        *ngIf="(isPhoneEntered && !isPhoneValid) && addReferral.controls['phone'].dirty">
+                        {{ 'Error: Phone number requires full 10 digit number' | translate }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="showTxPlan">
+            <div class="form-group">
+                <label class="control-label lbl-padding">
+                    {{'Tx Plan' | translate }}
+                </label>
+                <app-select id="plan" [listItems]="plans" [placeholder]="'Select Plan'" [value]="planId" [label]=""
+                    (selectionChange)="onChangeTxPlan($event)" formControlName="txPlan" [size]="'auto'"
+                    data-qa="plan-select">
+                </app-select>
+            </div>
+            <div class="form-group referral-form-container-print-tx">
+                <app-check-box id="printTxPlan" [label]="'Print Tx Plan'" (checkChanged)="onChangePrintTxPlan($event)"
+                    [checked]="addReferral.controls['chkPrintTxPlan'].value"
+                    [isDisabled]="planId == null || planId == undefined || planId == ''">
+                </app-check-box>
+            </div>
+        </div>
+        <div class="row tx-service-div" *ngIf="showTxPlan && txPlanServicesList && txPlanServicesList.length > 0">
+            <table class="fuseGrid fuseTable container tableTX">
+                <tr class="header">
+                    <th width="50%">{{'Description' | translate }}</th>
+                    <th width="10%">{{'Tooth' | translate }}</th>
+                    <th width="20%">{{'Area' | translate }}</th>
+                    <th width="20%">{{'Location' | translate }}</th>
+                </tr>
+                <tr class="body" *ngFor="let ser of txPlanServicesList">
+                    <td>{{ser.Description}}</td>
+                    <td>{{ser.Tooth}}</td>
+                    <td>{{ser.Area}}</td>
+                    <td>{{ser.Location}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="row" *ngIf="showTxPlan">
+            <div class="form-group">
+                <label class="control-label lbl-padding">
+                    {{'Next Appointment' | translate }}
+                </label>
+                <input type="text" class="form-control input-text next-appointment-control"
+                    [value]="nextAppointment ? (nextAppointment | date: 'MM/dd/yyyy') : '-'" disabled />
+            </div>
+            <div class="form-group return-date-margin">
+                <label class="control-label lbl-padding">
+                    {{'Expected Return Date' | translate }}
+                </label>
+                <app-date-picker [(value)]="returnDate" class="return-date-control" formControlName="returnDate">
+                </app-date-picker>
+            </div>
+            <div class="form-group return-date-margin">
+                <label class="control-label lbl-padding">
+                    {{'Actual Return Date' | translate }}
+                </label>
+                <app-date-picker [(value)]="actualReturnDate" class="return-date-control"
+                    formControlName="actualReturnDate">
+                </app-date-picker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group text-area-container">
+                <app-textarea fieldId="notes" placeholderText="Type Here" (keyup)="onKeyUp($event)" [isBold]="true"
+                    alphaNumericWithSpecialCharacters [allowEnter]="false" label="Notes" length="2000"
+                    formControlName="notes" [defaultValue]="addReferral.controls.notes.value" ngDefaultControl
+                    data-qa="notes-textarea">
+                </app-textarea>
+                <span class="pull-right remainingTextContainer">{{remainingText}}/2000</span>
+            </div>
+        </div>
+    </div>
+    <div class="add_referral_footer" *ngIf="!fromAddPatientProfile">
+        <span class="lbl_reequired">*<span class="required_text">{{'Required Fields' | translate
+                }}</span></span>
+        <div class="btn-toolbar">
+            <button class="btn btn-default" (click)="cancelReferral()" type="button">{{'Cancel' | translate
+                }}</button>
+            <button class="btn btn-default" type="button" (click)="saveReferral(true)">{{'Save & Print' |
+                translate }}</button>
+            <button class="btn btn-primary fuse_button fuse_submit_button" [disabled]="processing" type="submit"
+                data-qa="submit-button" (click)="saveReferral(false)">
+                {{'Save' | translate }}
+            </button>
+            <svg-icon class="saver-referral-tooltipIcon" (mouseout)="showTooltip=false" name="tooltipIcon"
+                iconHeight="15px" iconWidth="15px"
+                tooltip=" This will save a record in the patient profile, and communication center. This will also print a copy you can hand the patient. Also available in print from the communication center."
+                placement="top" delay="500"></svg-icon>
+        </div>
+    </div>
+</form>

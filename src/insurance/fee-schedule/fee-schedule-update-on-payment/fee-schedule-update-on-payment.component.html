@@ -1,0 +1,98 @@
+
+<div class="app-modal md-modal">
+    <div id="app-modal-header" class="app-modal-header">
+        {{data.header}}
+    </div>
+    <div class="app-modal-body">
+        <div class="fee-schedule-update-on-payment" >
+            <div class="scrollable-container">
+            <ng-container >
+           
+                <kendo-grid data-qa="feeScheduleUpdate-grid" [kendoGridBinding]="feeScheduleGroupDetailUpdateDtos" [sortable]="true" 
+                    [data]="feeScheduleGroupDetailUpdateDtos" class="fee-schedule-update-grid" (sortChange)="onSortChange($event)" >
+
+                    <kendo-grid-column title="" width="50px" >
+                        <ng-template kendoGridHeaderTemplate>
+                            <input
+                                type="checkbox"
+                                id="selectAll"
+                                [(ngModel)]="selectAll"
+                                (change)="toggleSelectAll(selectAll)"
+                            />
+                        </ng-template>
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <input type="checkbox" [(ngModel)]="dataItem.IsSelected" (change)="onCheckboxChange($event, dataItem)" />
+                        </ng-template>
+                    </kendo-grid-column>
+                    
+                    <kendo-grid-column field="serviceCode" title="Service Code">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span title="{{ dataItem.ServiceCodeDisplayAs }}" data-qa="allowedAmountUpdateData-servicecode">{{
+                                (dataItem.ServiceCodeDisplayAs | truncateText: 40) 
+                            }}</span>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column field="feeSchedule" title="Fee Schedule">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span title="{{ dataItem.FeeScheduleName }}" data-qa="allowedAmountUpdateData-feeschedulename">{{
+                                (dataItem.FeeScheduleName | truncateText: 40) 
+                            }}</span>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column field="numberOfLocations" width="250px">
+                        <ng-template kendoGridHeaderTemplate>
+                            Number Of Locations                           
+                            <span data-qa="allowedAmountUpdateData-numberoflocations-info" aria-label="Hover over the location numbers to view their names."
+                                title="Hover over the location numbers to view their names.">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="7.5" stroke="#005AD9"/>
+                                    <g>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="-2 -2 12 12" fill="none">
+                                            <path d="M5 9.5H6.5V11H5V9.5ZM6 1C8.675 1.11 9.84 3.81 8.25 5.835C7.835 6.335 7.165 6.665 6.835 7.085C6.5 7.5 6.5 8 6.5 8.5H5C5 7.665 5 6.96 5.335 6.46C5.665 5.96 6.335 5.665 6.75 5.335C7.96 4.215 7.66 2.63 6 2.5C5.60218 2.5 5.22064 2.65804 4.93934 2.93934C4.65804 3.22064 4.5 3.60217 4.5 4H3C3 3.20435 3.31607 2.44129 3.87868 1.87868C4.44129 1.31607 5.20435 1 6 1Z" fill="#005AD9"/>
+                                        </svg>
+                                    </g>
+                                </svg>
+                            </span>
+                        </ng-template>
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span title="{{ getLocationNames(dataItem.Locations) }}"
+                            data-qa="allowedAmountUpdateData-numberoflocations">{{
+                                dataItem.Locations.length
+                            }}</span>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column field="currentAmount" title="Current Amount">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span title="{{ dataItem.CurrentAmount }}" data-qa="allowedAmountUpdateData-currentamount">{{
+                                dataItem.CurrentAmount | currency
+                            }}</span>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column field="payerName" title="New Amount">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <span title="{{ dataItem.UpdatedAmount }}" data-qa="allowedAmountUpdateData-newamount">{{
+                                dataItem.UpdatedAmount | currency
+                            }}</span>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                                     
+                </kendo-grid>
+            </ng-container>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="add-policy" >
+           
+        </div>
+            <app-button id="btnAddInsuranceCancel" buttonLabel="{{data.cancel}}" *ngIf="data.cancel" variation="secondary"
+                [isDisabled]="saving" (onClick)="closeModal($event)" ></app-button>
+            <app-button id="btnAddInsuranceSave" buttonLabel="{{data.confirm }}" variation="primary"
+                [isDisabled]="disableSaveButton" attr.check-auth-z="{{'soar-ins-ifsch-edit'}}"
+                (onClick)="processUpdates($event)"></app-button>
+    </div>
+</div>

@@ -1,0 +1,1416 @@
+﻿<!-- // TODO - need to remove this later
+    <div ng-class="'fade-in'">
+    <div ng-form="frmLocationCrud" name="frmLocationCrud" role="form" action="javascript:;" ng-submit="saveFunc(frmLocationCrud)" novalidate>
+        <div class="locCrud">
+            <div class="col-xs-12 locCrud__header-container">
+                <div class="locCrud__header">
+                    <div class="locCrud__title">
+                        <h3>
+                            <span ng-show="editMode && location.LocationId == null">{{ 'Add {0}' | i18n:['a Location'] }}</span>
+                            <span id="idLocationHeader" ng-show="location.LocationId" ng-bind="location.NameLine1"></span><span class="text-muted" ng-show="location.NameLine2"> | </span><span ng-bind="location.NameLine2"></span>
+                        </h3>
+                    </div>
+
+                    <div class="locCrud__actions">
+                        <span ng-show="selectedLocation.LocationId">
+                            <a href="" class="text-muted">{{ 'View {0}' | i18n:['Schedule'] }}</a>
+                            <span>|</span>
+                            <a ng-show="selectedLocation.LocationId" check-auth-z="soar-biz-bizusr-view" href="#/BusinessCenter/Users/?locationId={{ selectedLocation.LocationId }}">{{ 'View {0}' | i18n:['Team Members'] }}{{ userCount > 0 ? '(' + userCount + ')' : '' }}</a>
+                            <span>|</span>
+                            <a ng-show="selectedLocation.LocationId" check-auth-z="soar-biz-bizusr-add" href="#/BusinessCenter/Users/Create/?locationId={{ selectedLocation.LocationId }}">{{ 'Add a {0}' | i18n:['Team Member'] }}</a>
+                        </span>
+
+                        <a id="btnSave" ng-show="!editMode && selectedLocation.LocationId" ng-click="editLocation();" tabindex="10">
+                            {{ 'Edit' | i18n }}
+                        </a>
+                        <span ng-show="editMode">
+                            <a id="btnSave" ng-show="editMode" ng-click="saveLocation();" ng-disabled="savingLocation || !hasAccessForRelevantOperation() || !dataHasChanged || !formIsValid" tabindex="10">
+                                {{ 'Save' | i18n }}
+                            </a>
+                            <span ng-show="editMode">|</span>
+                            <a id="btnCancel" ng-show="editMode" ng-click="cancelChanges();" ng-disabled="savingLocation" tabindex="-1">
+                                {{ 'Cancel' | i18n }}
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="!editMode">
+                <div id="workArea" class="container-fluid">
+                    <div ng-show="location.LocationId" class="m-bottom-5 m-top-8 col-xs-12 pad-left-right-0">
+                        <div class="col-xs-12 col-md-5 col-lg-8 error help-text" ng-show="invalidDataForRx">
+                            {{ ::'Your practice location has been saved, however, it appears that we were unable to activate this location for electronic prescriptions. Please verify your location has a valid primary phone, fax, and zip code and save again.' | i18n }}
+                        </div>
+                        <div class="col-xs-6 col-md-3 col-lg-2 text-center" ng-class="{ 'col-md-offset-5 col-lg-offset-8': !invalidDataForRx }">
+                            {{ isActiveLoc ? '' : ('Date' | i18n) + ': ' + (selectedLocation.DeactivationTimeUtc | date : 'MM/dd/yyyy') }}
+                        </div>
+                        <div class="col-xs-3 col-md-2 col-lg-1 text-right">
+                            {{ isActiveLoc ? ('Active' | i18n) : ('Inactive' | i18n) }}:
+                        </div>
+                        <div class="col-xs-3 col-md-2 col-lg-1">
+                            <div class="onoffswitch pull-right" disabled>
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="inactivateSwitch" disabled ng-model="isActiveLoc">
+                                <label class="onoffswitch-label" for="inactivateSwitch" style="margin-bottom: 0; cursor: not-allowed;"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Location & Contact Info' | i18n }}
+                            </label>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12">{{'Location Name' | i18n }}</label>
+                                        <span class="col-xs-12 truncate" id="lblName" title="{{ selectedLocation.NameLine1 }} {{ selectedLocation.NameLine2 }}"> {{ selectedLocation.NameLine1 }} <span class="text-muted" ng-show="selectedLocation.NameLine2">|</span> {{ selectedLocation.NameLine2 }} </span>
+                                        <span class="col-xs-12" id="lblNameAbbreviation"> {{ selectedLocation.NameAbbreviation }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Location Id' | i18n }}</label>
+                                        <span class="col-xs-12 truncate" id="lblLocationId" title="{{ selectedLocation.LocationId }}"> {{ selectedLocation.LocationId }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Email' | i18n }}</label>
+                                        <span class="col-xs-12 truncate" id="lblEmail" title="{{ selectedLocation.Email }}"> {{ selectedLocation.Email }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Website' | i18n }}</label>
+                                        <span class="col-xs-12 truncate" id="lblWebsite" title="{{ selectedLocation.Website }}"> {{ selectedLocation.Website }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12">{{'Address' | i18n }}</label>
+                                        <span class="col-xs-12 truncate" id="lblAddress1" title="{{ selectedLocation.AddressLine1 }}"> {{ selectedLocation.AddressLine1 }} </span>
+                                        <span class="col-xs-12 truncate" id="lblAddress2" title="{{ selectedLocation.AddressLine2 }}"> {{ selectedLocation.AddressLine2 }} </span>
+                                        <span class="col-xs-12 truncate" title="{{ selectedLocation.City }}{{selectedLocation.City && selectedLocation.State ? ', ' : ' '}}{{ selectedLocation.State }} {{ selectedLocation.ZipCode | zipCode }}" id="lblCity">
+                                            {{ selectedLocation.City }}{{selectedLocation.City && selectedLocation.State ? ', ' : ' '}}{{ selectedLocation.State }} {{ selectedLocation.ZipCode | zipCode }}
+                                        </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Phone & Fax' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblPrimaryPhone" ng-show="selectedLocation.PrimaryPhone.length > 0"> {{ selectedLocation.PrimaryPhone | tel }} ({{ 'primary' | i18n }}) </span>
+                                        <span class="col-xs-12" id="lblSecondaryPhone" ng-show="selectedLocation.SecondaryPhone.length > 0"> {{ selectedLocation.SecondaryPhone | tel }} ({{ 'secondary' | i18n }}) </span>
+                                        <span class="col-xs-12" id="lblFax" ng-show="selectedLocation.Fax.length > 0"> {{ selectedLocation.Fax | tel }} ({{ 'fax' | i18n }})</span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Time Zone' | i18n }}</label>
+                                        <span class="col-sm-12" id="lblTimeZone" ng-show="selectedLocation.Timezone.length > 0">{{ displayTimezone }}</span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="col-xs-12 col-sm-12">
+                                <label class="panel-title">
+                                    {{ 'Images' | i18n }}
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12">{{ 'Location {0}' | i18n:['Image'] }}</label>
+
+                                        <div class="col-xs-12">
+                                            <div class="locCrud__noImg">
+                                                <div>
+                                                    <span class="text-muted">{{ 'No file selected' | i18n }}</span>
+                                                </div>
+                                            </div>
+                                            <img id="imgLocationImage" class="locCrud__img" src="Images/Smiley.png" ng-hide="true" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12">{{ 'Location {0}' | i18n:['Logo'] }}</label>
+
+                                        <div class="col-xs-12">
+                                            <div class="locCrud__noImg">
+                                                <div>
+                                                    <span class="text-muted">{{ 'No file selected' | i18n }}</span>
+                                                </div>
+                                            </div>
+                                            <img id="imgLocationImage" class="locCrud__img" src="Images/Smiley.png" ng-hide="true" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Schedule' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-xs-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5><label class="col-xs-12">{{ 'Schedules' | i18n }} </label></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-xs-6" ng-if="hasTreatmentRoomsViewAccess">
+                                <div class="row">
+                                    <div class="col-xs-12" ng-if="selectedLocation.Rooms.length <= 6">
+                                        <h5><label class="col-xs-12">{{ 'Treatment Rooms' | i18n }} ({{ selectedLocation.Rooms.length }})</label></h5>
+                                        <div class="col-xs-6">
+                                            <span id="lblRoom" class="col-xs-12 locCrud__room" ng-repeat="room in selectedLocation.Rooms | orderBy:'Name':asc">{{ room.Name }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12" ng-if="selectedLocation.Rooms.length > 6">
+                                        <h5><label class="col-xs-12">{{ 'Treatment Rooms' | i18n }} ({{ selectedLocation.Rooms.length }})</label></h5>
+                                        <div class="col-xs-6">
+                                            <span id="lblRoom" class="col-xs-12 locCrud__room" ng-repeat="room in selectedLocation.Rooms | orderBy:'Name':asc" ng-show="selectedLocation.Rooms.length < 6 || (selectedLocation.Rooms.length > 6 && $index <= selectedLocation.Rooms.length / 2)">{{ room.Name }}</span>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <span id="lblRoom" class="col-xs-12 locCrud__room" ng-repeat="room in selectedLocation.Rooms | orderBy:'Name':asc" ng-show="(selectedLocation.Rooms.length > 6 && $index > selectedLocation.Rooms.length / 2)">{{ room.Name }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Identification Numbers' | i18n }}
+                            </label>
+                        </div>
+
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5><label class="col-xs-12">{{ 'Federal' | i18n }}</label></h5>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Tax ID' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblTaxId"> {{ selectedLocation.TaxId }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Billing Entity NPI (Type 2)' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblBillingEntityNPI"> {{ selectedLocation.TypeTwoNpi }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Taxonomy Code/Specialty' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblTaxonomyId" ng-if="selectedLocation.TaxonomyId">{{ displayTaxonomyCodeByField(selectedLocation.TaxonomyId, 'Code') }} / {{ displayTaxonomyCodeByField(selectedLocation.TaxonomyId, 'Category') }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5><label class="col-xs-12">{{ 'State' | i18n }}</label></h5>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Billing Entity License' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblBillingEntityLicense"> {{ selectedLocation.LicenseNumber }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel" ng-if="hasAdditionalIdentifierViewAccess">
+                        <div class="panel-heading" ng-show="selectedLocation.AdditionalIdentifiers.length > 0">
+                            <label class="panel-title">
+                                {{ 'Additional Identifiers' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div ng-repeat="additionalIdentifier in selectedLocation.AdditionalIdentifiers">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <label class="col-xs-12 col-sm-4 control-label locCrud__additionalIdentifier">{{ additionalIdentifier.Description}}</label>
+                                            <span class="col-xs-12" id="lblAdditionalIdentifierValue"> {{ additionalIdentifier.Value }} </span>
+                                            <div class="clearfix">&nbsp;</div>
+                                            <div class="clearfix">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Financial Settings' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+
+                                        <fee-list-location edit-mode="editMode" location="selectedLocation" form-is-valid="formIsValid"></fee-list-location>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Provider {0}' | i18n:['Tax Rate'] }}</label>
+                                        <span class="col-xs-12" id="lblProviderTaxRate"> {{ selectedLocation.ProviderTaxRate / 100 | percentage }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Sales & Use Tax Rate' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblSalesAndUseTaxRate"> {{ selectedLocation.SalesAndUseTaxRate / 100 | percentage }} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+
+                                        <label class="col-xs-12">{{'Default Finance Charge' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblDefaultFinanceCharge"> {{ selectedLocation.DefaultFinanceCharge }}<span ng-if="selectedLocation.DefaultFinanceCharge || selectedLocation.DefaultFinanceCharge == 0 ">%</span></span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Accounts overdue by' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblAccountsOverdue"> {{ selectedLocation.AccountsOverDue}} <span ng-if="selectedLocation.AccountsOverDue">days</span></span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Minimum Finance Charge' | i18n }}</label>
+                                        <span class="col-xs-12" id="lblMinimumFinanceCharge"> {{ selectedLocation.MinimumFinanceCharge | currency}} </span>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <label class="col-xs-12">{{'Billing Remittance Site' | i18n }}</label>
+                                        <span class="col-xs-12">{{'This determines what address to use on the "Remit Payment To" address on your billing statements and Invoices' | i18n }}</span>
+                                        <span class="col-xs-12 locationFields">
+                                            <input type="radio" name="billingRemittanceSiteOptionsView" id="billingRemittanceSiteOptionThisLocationView" ng-model="selectedLocation.RemitAddressSource" ng-value="0" ng-disabled="true" />{{ 'Use this location as its own billing remittance site' | i18n }}
+                                        </span>
+                                        <span class="col-xs-12 locationFields">
+                                            <input type="radio" name="billingRemittanceSiteOptionsView" id="billingRemittanceSiteOptionDifferentLocationView" ng-model="selectedLocation.RemitAddressSource" ng-value="1" ng-disabled="true" />{{ 'Use a different location as the billing remittance site' | i18n }}
+                                        </span>
+                                        <span class="col-xs-12 locationFields">
+                                            <soar-select-list id="billingRemittanceSiteLocationsView" class="locCrud__dropdown" name="inpBillingRemittanceSiteLocations" ng-show="selectedLocation.RemitAddressSource == 1" sb-tab="10" placeholder="{{'Locations' | i18n}}"
+                                                              disable-input="true" text-field="NameLine1" value-field="LocationId" option-list="locations" ng-model="selectedLocation.RemitOtherLocationId"></soar-select-list>
+                                        </span>
+                                        <span class="col-xs-12 locationFields">
+                                            <input type="radio" name="billingRemittanceSiteOptionsView" id="billingRemittanceSiteOptionDifferentAddressView" ng-model="selectedLocation.RemitAddressSource" ng-value="2" ng-disabled="true" />{{ 'Use a different address as the billing remittance site' | i18n }}
+                                        </span>
+                                        <div ng-if="selectedLocation.RemitAddressSource == 2" class="col-xs-12  panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <label id="lblRemitToNameLine1View" class="col-xs-12 " for="inpRemitToNameLine1View">{{'Name Line 1' | i18n }}</label>
+                                                    <input id="inpRemitToNameLine1View" class="form-control required valid col-xs-12" ng-model="selectedLocation.RemitToNameLine1" ng-disabled="true" name="inpRemitToNameLine1" maxlength="128" tabindex="10" type="text" />
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <label id="lblRemitToNameLine2View" class="col-xs-12 " for="inpRemitToNameLine2View">{{'Name Line 2' | i18n }}</label>
+                                                    <input id="inpRemitToNameLine2View" class="form-control valid col-xs-12" ng-model="selectedLocation.RemitToNameLine2" ng-disabled="true" name="inpRemitToNameLine2View" maxlength="128" tabindex="10" type="text" />
+                                                </div>
+                                                <div class="col-xs-12">
+                                                    <label class="col-xs-12 " for="inpRemitAddressLine1View">{{ 'Address Line 1' | i18n }}</label>
+                                                    <div>
+                                                        <input id="inpRemitAddressLine1View" class="form-control required valid col-xs-12" placeholder="{{ 'Address Line 2' | i18n }}" ng-model="selectedLocation.RemitToAddressLine1" ng-disabled="true" name="inpRemitToAddressLine1" maxlength="128" tabindex="10" type="text" ng-required="{{selectedLocation.RemitAddressSource == 2}}" alpha-numeric />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12">
+                                                    <label class="col-xs-12 " for="inpRemitToAddressLine2View">{{ 'Address Line 2' | i18n }}</label>
+                                                    <input id="inpRemitToAddressLine2View" class="form-control" ng-model="selectedLocation.RemitToAddressLine2" ng-disabled="true" name="inpRemitToAddressLine2View" maxlength="128" tabindex="10" type="text" alpha-numeric />
+                                                </div>
+
+                                                <div class="col-xs-12">
+                                                    <div class="col-xs-4 no-padding">
+                                                        <label class="col-xs-12 " for="inpRemitToCityView">{{ 'City' | i18n }}</label>
+                                                        <div class="col-xs-12 no-padding">
+                                                            <div>
+                                                                <input id="inpRemitToCityView" class="form-control" ng-model="selectedLocation.RemitToCity" capitalize-first-with-override name="inpRemitToCityView" maxlength="64" tabindex="10" type="text" ng-disabled="true" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-4">
+                                                        <label class="col-xs-12 text-nowrap" for="inpRemitToStateView">{{ 'State' | i18n }}</label>
+                                                        <div class="col-xs-3 no-padding">
+                                                            <state-list state-list-id="inpRemitToStateView" name="inpRemitToStateView" disable-input="true" source="selectedLocation.RemitToState" class="required valid locCrud__state-select-list" tabindex="10"></state-list>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-4">
+                                                        <label class="col-xs-12 text-nowrap" for="inpRemitToZipCodeView">{{ 'ZIP Code' | i18n }}</label>
+                                                        <div>
+                                                            <input id="inpRemitToZipCodeView" class="form-control required valid" ng-model="selectedLocation.RemitToZipCode" name="inpRemitToZipCodeView" maxlength="10"
+                                                                   minlength="5" tabindex="10" type="text" ng-disabled="true" zip-field="selectedLocation.RemitToZipCode" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 no-padding">
+                                                        <label id="lblRemitToPrimaryPhoneView" class="col-xs-12" for="inpRemitToPrimaryPhoneView">{{ 'Phone Number' }}</label>
+                                                        <div class="col-xs-4 no-padding">
+                                                            <div>
+                                                                <input id="inpRemitToPrimaryPhoneView" class="form-control" ui-mask="{{ '(999) 999-9999'|i18n }}" ng-model="selectedLocation.RemitToPrimaryPhone"
+                                                                       name="inpRemitToPrimaryPhoneView" limit-to="14" tabindex="10" type="text" ng-disabled="true" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <label class="col-xs-12">{{ 'Insurance Remittance Site' | i18n }}</label>
+                                        <span class="col-xs-12">{{'This determines what address to use as the "Billing Dentist/Entity Info" on your insurance claims' | i18n }}</span>
+                                        <span class="col-xs-12 locationFields">
+                                            <input type="radio" name="billingInsuranceRemittanceSiteOptionsView" id="billingInsuranceRemittanceSiteOptionThisLocationView" ng-model="selectedLocation.InsuranceRemittanceAddressSource" ng-value="0" ng-disabled="true" />{{ 'Use this location as its own insurance remittance site' | i18n }}
+                                        </span>
+                                        <span class="col-xs-12 locationFields">
+                                            <input type="radio" name="billingInsuranceRemittanceSiteOptionsView" id="billingInsuranceRemittanceSiteOptionDifferentLocationView" ng-model="selectedLocation.InsuranceRemittanceAddressSource" ng-value="1" ng-disabled="true" />{{ 'Use a different location as the insurance remittance site' | i18n }}
+                                        </span>
+                                        <span class="col-xs-12 locationFields">
+                                            <soar-select-list id="billingInsuranceRemittanceSiteLocationsView" class="locCrud__dropdown" name="inpBillingInsuranceRemittanceSiteLocations" ng-show="selectedLocation.InsuranceRemittanceAddressSource == 1" sb-tab="10" placeholder="{{'Locations' | i18n}}"
+                                                              disable-input="true" text-field="NameLine1" value-field="LocationId" option-list="locations" ng-model="selectedLocation.InsuranceRemittanceOtherLocationId "></soar-select-list>
+                                        </span>
+                                        <span class="col-xs-12 locationFields">
+                                            <input type="radio" name="billingInsuranceRemittanceSiteOptionsView" id="billingInsuranceRemittanceSiteOptionDifferentAddressView" ng-model="selectedLocation.InsuranceRemittanceAddressSource" ng-value="2" ng-disabled="true" />{{ 'Use a different address as the insurance remittance site' | i18n }}
+                                        </span>
+                                        <div ng-if="selectedLocation.InsuranceRemittanceAddressSource == 2" class="col-xs-12  panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <label id="lblRemitInsToNameLine1View" class="col-xs-12 " for="inpRemitInsToNameLine1View">{{'Name Line 1' | i18n }}</label>
+                                                    <input id="inpRemitInsToNameLine1View" class="form-control required valid col-xs-12" ng-model="selectedLocation.InsuranceRemittanceNameLine1 " ng-disabled="true" name="inpRemitInsToNameLine1" maxlength="128" tabindex="10" type="text" />
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <label id="lblRemitInsToNameLine2View" class="col-xs-12 " for="inpRemitInsToNameLine2View">{{'Name Line 2' | i18n }}</label>
+                                                    <input id="inpRemitInsToNameLine2View" class="form-control valid col-xs-12" ng-model="selectedLocation.InsuranceRemittanceNameLine2 " ng-disabled="true" name="inpRemitInsToNameLine2View" maxlength="128" tabindex="10" type="text" />
+                                                </div>
+                                                <div class="col-xs-12">
+                                                    <label class="col-xs-12 " for="inpRemitInsAddressLine1View">{{ 'Address Line 1' | i18n }}</label>
+                                                    <div>
+                                                        <input id="inpRemitInsAddressLine1View" class="form-control required valid col-xs-12" placeholder="{{ 'Address Line 2' | i18n }}" ng-model="selectedLocation.InsuranceRemittanceAddressLine1 " ng-disabled="true" name="inpRemitInsToAddressLine1" maxlength="128" tabindex="10" type="text" ng-required="{{selectedLocation.InsuranceRemittanceAddressSource  == 2}}" alpha-numeric />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12">
+                                                    <label class="col-xs-12 " for="inpRemitInsToAddressLine2View">{{ 'Address Line 2' | i18n }}</label>
+                                                    <input id="inpRemitInsToAddressLine2View" class="form-control" ng-model="selectedLocation.InsuranceRemittanceAddressLine2 " ng-disabled="true" name="inpRemitInsToAddressLine2View" maxlength="128" tabindex="10" type="text" alpha-numeric />
+                                                </div>
+
+                                                <div class="col-xs-12">
+                                                    <div class="col-xs-4 no-padding">
+                                                        <label class="col-xs-12 " for="inpRemitInsToCityView">{{ 'City' | i18n }}</label>
+                                                        <div class="col-xs-12 no-padding">
+                                                            <div>
+                                                                <input id="inpRemitInsToCityView" class="form-control" ng-model="selectedLocation.InsuranceRemittanceCity " capitalize-first-with-override name="inpRemitInsToCityView" maxlength="64" tabindex="10" type="text" ng-disabled="true" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-4">
+                                                        <label class="col-xs-12 text-nowrap" for="inpRemitInsToStateView">{{ 'State' | i18n }}</label>
+                                                        <div class="col-xs-3 no-padding">
+                                                            <state-list state-list-id="inpRemitInsToStateView" name="inpRemitInsToStateView" disable-input="true" source="selectedLocation.InsuranceRemittanceState " class="required valid locCrud__state-select-list" tabindex="10"></state-list>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-4">
+                                                        <label class="col-xs-12 text-nowrap" for="inpRemitInsToZipCodeView">{{ 'ZIP Code' | i18n }}</label>
+                                                        <div>
+                                                            <input id="inpRemitInsToZipCodeView" class="form-control required valid" ng-model="selectedLocation.InsuranceRemittanceZipCode " name="inpRemitInsToZipCodeView" maxlength="10"
+                                                                   minlength="5" tabindex="10" type="text" ng-disabled="true" zip-field="selectedLocation.InsuranceRemittanceZipCode " />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 no-padding">
+                                                        <div class="col-xs-6 no-padding">
+                                                            <label id="lblRemitInsToPrimaryPhoneView" class="col-xs-12" for="inpRemitInsToPrimaryPhoneView">{{ 'Phone Number' }}</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div>
+                                                                    <input id="inpRemitInsToPrimaryPhoneView" class="form-control" ui-mask="{{ '(999) 999-9999'|i18n }}" ng-model="selectedLocation.InsuranceRemittancePrimaryPhone "
+                                                                           name="inpRemitInsToPrimaryPhoneView" limit-to="14" tabindex="10" type="text" ng-disabled="true" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <label id="lblRemitInsTaxId" class="col-xs-12" for="inpRemitInsTaxId">{{ 'Tax ID' }}</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div>
+                                                                    <input id="inpRemitInsTaxId" class="form-control" ng-model="selectedLocation.InsuranceRemittanceTaxId "
+                                                                           name="inpRemitInsTaxId" ui-mask="{{ '99-9999999'}}" numeric-only limit-to="10" mask-placeholder="__-_______" tabindex="10" type="text" ng-disabled="true" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 no-padding">
+                                                        <div class="col-xs-6 no-padding">
+                                                            <label id="lblRemitInsBillingEntityNPI" class="col-xs-12" for="inpRemitInsBillingEntityNPI">{{ 'Billing Entity NPI (Type 2)' }}</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div>
+                                                                    <input id="inpRemitInsBillingEntityNPI" class="form-control" ng-model="selectedLocation.InsuranceRemittanceTypeTwoNpi "
+                                                                           name="inpRemitInsBillingEntityNPI" maxlength="10" placeholder="{{ 'Billing Entity NPI (Type 2)' }}"
+                                                                           numeric-only ng-minlength="10" tabindex="10" type="text" ng-disabled="true" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <label id="lblRemitInsLicenseNumber" class="col-xs-12" for="inpRemitInsLicenseNumber">{{ 'Billing Entity License' }}</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div>
+                                                                    <input id="inpRemitInsLicenseNumber" class="form-control" ng-model="selectedLocation.InsuranceRemittanceLicenseNumber "
+                                                                           name="inpRemitInsLicenseNumber" maxlength="32" placeholder="{{ 'Billing Entity License' }}" tabindex="10" type="text" ng-disabled="true" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="clearfix">&nbsp;</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" ng-show="isEstatementsEnabled">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="clearfix">&nbsp;</div><div class="clearfix">&nbsp;</div>
+                                             
+                                            <checkbox class="col-xs-6" checkbox-Disabled="true" checkbox-label="'Enable Credit Card/Debit Card Processing'" checkbox-id="inpEnableCreditDebitCardProcessing" checkbox-value="selectedLocation.IsPaymentGatewayEnabled"></checkbox>
+                                            <div class="clearfix">&nbsp;</div><div class="clearfix">&nbsp;</div>
+
+                                            <label class="col-xs-12">{{'Account Token' | i18n }}</label>
+                                            <span class="col-xs-12 locationFields" id="lblMerchantId"> {{ selectedLocation.MerchantId | i18n }}</span>
+                                            <div class="clearfix">&nbsp;</div>
+
+                                            <label class="col-xs-12">{{'Billing eStatement Credit Card Options' | i18n }}</label>
+                                            <span class="col-xs-12 locationFields"> {{ 'Options will be reflected on eStatements ONLY' | i18n }}</span>
+                                            <div class="clearfix">&nbsp;</div>
+
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" name="creditCardOptionsSelect" ng-disabled="true" id="creditCardOptionsSelectShow" ng-model="selectedLocation.DisplayCardsOnEstatement" data-ng-value="true" />{{ 'Display what cards you accept' | i18n }}
+                                            </span>
+                                            <div ng-show="selectedLocation.DisplayCardsOnEstatement">
+                                                <span class="col-xs-12 error" ng-show="selectedLocation.DisplayCardsOnEstatement &&
+                                                              !selectedLocation.AcceptMasterCardOnEstatement &&
+                                                              !selectedLocation.AcceptDiscoverOnEstatement &&
+                                                              !selectedLocation.AcceptVisaOnEstatement &&
+                                                              !selectedLocation.AcceptAmericanExpressOnEstatement">
+                                                    <span class="help-text">{{'Select a card type to continue' | i18n}}</span>
+                                                </span>
+                                                <div class="clearfix">&nbsp;</div>
+
+                                                <checkbox class="col-xs-6" checkbox-Disabled="true" checkbox-label="'Mastercard'" checkbox-id="inpAcceptMasterCardOnEstatement" checkbox-value="selectedLocation.AcceptMasterCardOnEstatement"></checkbox>
+                                                <checkbox class="col-xs-6" checkbox-Disabled="true" checkbox-label="'Discover'" checkbox-id="inpAcceptDiscoverOnEstatement" checkbox-value="selectedLocation.AcceptDiscoverOnEstatement"></checkbox>
+                                                <div class="clearfix">&nbsp;</div>
+
+                                                <checkbox class="col-xs-6" checkbox-Disabled="true" checkbox-label="'Visa'" checkbox-id="inpAcceptVisaOnEstatement" checkbox-value="selectedLocation.AcceptVisaOnEstatement" ></checkbox>
+                                                <checkbox class="col-xs-6" checkbox-Disabled="true" checkbox-label="'American Express'" checkbox-id="inpAcceptAmericanExpressOnEstatement" checkbox-value="selectedLocation.AcceptAmericanExpressOnEstatement"></checkbox>
+                                                <div class="clearfix">&nbsp;</div>
+
+                                                <checkbox class="col-xs-12" checkbox-Disabled="true" checkbox-label="'Include a CVV CODE'" checkbox-id="inpIncludeCvvCodeOnEstatement" checkbox-value="selectedLocation.IncludeCvvCodeOnEstatement"></checkbox>
+                                                <div class="clearfix">&nbsp;</div>
+                                            </div>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" name="creditCardOptionsSelect" ng-disabled="true" id="creditCardOptionsSelectHide" ng-model="selectedLocation.DisplayCardsOnEstatement" data-ng-value="false" />{{ 'Remove credit card options and instruct recipient to call office for credit card payment' | i18n}}
+                                            </span>
+                                            <div class="clearfix">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div ng-show="editMode">
+                <div id="workArea">
+
+                    <div ng-show="location.LocationId" class="m-bottom-5 m-top-8 col-xs-12 pad-left-right-0">
+                        <div class="col-xs-2" ng-show="isActiveLoc"></div>
+                        <div class="text-right col-xs-2 pad-left-right-0 col-xs-offset-7">
+                            <label class="height-25">
+                                {{ isActiveLoc ? ('Active' | i18n) : ('Inactive Date' | i18n) }}
+                            </label>
+                        </div>
+
+                        <div class="col-xs-2" ng-show="!isActiveLoc && canUpdateInactivation">
+                            <date-selector min-date="nowDate" placeholder="MM/DD/YYYY" date-var="defaultDate" valid="valid" format="MM/dd/yyyy"></date-selector>
+                            <label class="req-msg" ng-show="!defaultDate">
+                                {{::'This field is required.' | i18n}}
+                            </label>
+                        </div>
+
+                        <div class="col-xs-2" ng-show="!isActiveLoc && !canUpdateInactivation">
+                            <date-selector placeholder="MM/DD/YYYY" date-var="selectedLocation.DeactivationTimeUtc" valid="valid" format="MM/dd/yyyy" disable-date-input="false"></date-selector>
+                        </div>
+
+                        <div class="col-xs-1 pad-left-right-0">
+                            <div class="onoffswitch pull-right">
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="inactivateSwitchUpdate" ng-model="isActiveLoc">
+                                <label class="onoffswitch-label" for="inactivateSwitchUpdate" style="margin-bottom:0;"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Location & Contact Info' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label id="lblLocationName1" class="col-xs-12 col-sm-4 control-label" for="inpLocationName1">{{'Name Line 1' | i18n }} *</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div ng-class="{error: (!formIsValid && frmLocationCrud.inpLocationName1.$error.required) || !locationNameIsUnique }">
+                                                    <input id="inpLocationName1" class="form-control required valid" placeholder="{{ 'Name Line 1' | i18n }}" ng-model="selectedLocation.NameLine1" capitalize-first-with-override name="inpLocationName1" maxlength="100" tabindex="10" type="text" set-focus required ng-blur="checkForUniqueLocationName()" />
+                                                    <label id="lblLocationName1Required" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpLocationName1.$error.required">
+                                                        {{ 'This field is required.' | i18n }}
+                                                    </label>
+                                                    <label id="lblLocationName1IsUnique" class="help-text" ng-show="!locationNameIsUnique">
+                                                        {{ uniqueLocationServerMessage }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <label id="lblLocationName2" class="col-xs-12 col-sm-4 control-label" for="inpLocationName2">{{'Name Line 2' | i18n }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpLocationName2" class="form-control" placeholder="{{ 'Name Line 2' | i18n }}" ng-model="selectedLocation.NameLine2" capitalize-first-with-override name="inpLocationName2" maxlength="100" tabindex="10" type="text" />
+                                                </div>
+                                            </div>
+
+                                            <label id="lblDisplayNameAbbreviatedAs" class="col-xs-12 col-sm-4 control-label" for="inpDisplayNameAbbreviatedAs">{{'Display As' | i18n }} *</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div ng-class="{error: (!formIsValid && frmLocationCrud.inpDisplayNameAbbreviatedAs.$error.required) || !displayNameIsUnique}">
+                                                    <input id="inpDisplayNameAbbreviatedAs" class="form-control required valid" placeholder="{{ 'Display As' | i18n }}" ng-model="selectedLocation.NameAbbreviation" capitalize-first-with-override name="inpDisplayNameAbbreviatedAs" maxlength="20" tabindex="10" type="text" required ng-blur="checkForUniqueDisplayName()" />
+                                                    <label id="lblDisplayNameAbbreviatedAsRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpDisplayNameAbbreviatedAs.$error.required">
+                                                        {{ 'This field is required.' | i18n }}
+                                                    </label>
+                                                    <label id="lblDisplayNameAbbreviatedIsUnique" class="help-text" ng-show="!displayNameIsUnique">
+                                                        {{ uniqueDisplayNameServerMessage }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <label id="lblPrimaryEmail" class="col-xs-12 col-sm-4 control-label" for="inpPrimaryEmail">{{ 'Primary {0}' | i18n:['Email'] }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div ng-class="{error: !formIsValid && (!frmLocationCrud.inpPrimaryEmail.$valid)}">
+                                                    <input id="inpPrimaryEmail" class="form-control required valid" placeholder="{{ 'Primary {0}' | i18n:['Email'] }}" ng-model="selectedLocation.Email"
+                                                           name="inpPrimaryEmail" maxlength="256" tabindex="10" type="text" valid-email />
+                                                    <label id="lblPrimaryEmailInvalid" class="help-text " ng-show="!formIsValid && !frmLocationCrud.inpPrimaryEmail.$error.required && !frmLocationCrud.inpPrimaryEmail.$valid">
+                                                        {{ 'This field requires a valid email address.' | i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <label id="lblWebsite" class="col-xs-12 col-sm-4 control-label" for="inpWebsite">{{'Website' | i18n }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpWebsite" class="form-control valid" placeholder="{{ 'Website' | i18n }}" ng-model="selectedLocation.Website" name="inpWebsite" maxlength="500" tabindex="10" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">&nbsp;</div>
+
+                                            <label id="lblPrimaryPhone" class="col-xs-12 col-sm-4 control-label" for="inpPrimaryPhone">{{ 'Primary {0}' | i18n:['Phone'] }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpPrimaryPhone" class="form-control" placeholder="{{ 'Primary {0}' | i18n:['Phone'] }}"
+                                                           ui-mask="{{ '(999) 999-9999'|i18n }}" ng-model="selectedLocation.PrimaryPhone"
+                                                           name="inpPrimaryPhone" limit-to="14" tabindex="10" type="text" />
+                                                </div>
+                                            </div>
+
+                                            <label id="lblSecondaryPhone" class="col-xs-12 col-sm-4 control-label" for="inpSecondaryPhone">{{'Secondary {0}' | i18n:['Phone'] }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpSecondaryPhone" class="form-control" placeholder="{{ 'Secondary {0}' | i18n:['Phone'] }}"
+                                                           ui-mask="{{ '(999) 999-9999' | i18n }}"
+                                                           ng-model="selectedLocation.SecondaryPhone" name="inpSecondaryPhone" limit-to="14" tabindex="10" type="text" />
+                                                </div>
+                                            </div>
+
+                                            <label id="lblFax" class="col-xs-12 col-sm-4 control-label" for="inpFax">{{'Fax' | i18n }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpFax" class="form-input" placeholder="{{ 'Fax' | i18n }}" ui-mask="{{ '(999) 999-9999' | i18n }}" ng-model="selectedLocation.Fax"
+                                                           name="inpFax" limit-to="14" tabindex="10" type="text" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+
+                                            <label class="col-sm-4 control-label" for="inpAddressLine1">{{ 'Address' | i18n }} *</label>
+                                            <div class="col-sm-8">
+                                                <div ng-class="{error: !formIsValid && frmLocationCrud.inpAddressLine1.$error.required}">
+                                                    <input id="inpAddressLine1" class="form-control required valid" placeholder="{{ 'Street address' | i18n }}" ng-model="selectedLocation.AddressLine1" name="inpAddressLine1" maxlength="128" tabindex="10" type="text" required alpha-numeric-ext />
+                                                    <label id="lblAddressLineRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpAddressLine1.$error.required">
+                                                        {{ 'This field is required.' | i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-offset-4 col-sm-8">
+                                                <input id="inpAddressLine2" class="form-control" placeholder="{{ 'Address 2' | i18n }}" ng-model="selectedLocation.AddressLine2" name="inpAddressLine2" maxlength="128" tabindex="10" type="text" alpha-numeric-ext />
+                                            </div>
+
+                                            <label class="col-sm-4 control-label" for="inpCity">{{ 'City' | i18n }} *</label>
+                                            <div class="col-sm-8">
+                                                <div ng-class="{error: !formIsValid && frmLocationCrud.inpCity.$error.required}">
+                                                    <input id="inpCity" class="form-control" placeholder="{{ 'Enter city' | i18n }}" ng-model="selectedLocation.City" capitalize-first-with-override name="inpCity" maxlength="64" tabindex="10" type="text" required alpha-only ng-paste="validatePaste()" />
+                                                    <label id="lblCityRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpCity.$error.required">
+                                                        {{ 'This field is required.' | i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <label class="col-sm-4 control-label" for="inpState">{{ 'State' | i18n }} *</label>
+                                            <div class="col-sm-8">
+                                                <div ng-class="{error: !formIsValid && !selectedLocation.State}">
+                                                    <state-list state-list-id="inpState" source="selectedLocation.State" class="required valid" tabindex="10"></state-list>                                                    
+                                                    <label id="lblStateRequired" class="help-text " ng-show="!formIsValid && !selectedLocation.State">
+                                                        {{ 'This field is required.' | i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <label class="col-sm-4 control-label" for="inpZip">{{ 'ZIP Code' | i18n }} *</label>
+                                            <div class="col-sm-8">
+
+                                                <div ng-class="{error: !formIsValid && (frmLocationCrud.inpZip.$error.required || !frmLocationCrud.inpZip.$valid)}">
+                                                    <input id="inpZip" class="form-control required valid" placeholder="{{ 'Enter ZIP code' | i18n }}" ng-model="selectedLocation.ZipCode" name="inpZip" maxlength="10"
+                                                           minlength="5" tabindex="10" type="text" required zip-field="selectedLocation.ZipCode" />
+                                                    <label id="lblZipRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpZip.$error.required">
+                                                        {{ 'This field is required.' | i18n }}
+                                                    </label>
+                                                    <label id="lblZipInvalid" class="help-text " ng-show="!formIsValid && !frmLocationCrud.inpZip.$error.required && !frmLocationCrud.inpZip.$valid">
+                                                        {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <label class="col-sm-4 control-label">{{ 'Time Zone' | i18n }} *</label>
+                                            <div class="col-sm-8 locCrud__control-label">
+                                                <div ng-class="{error: !formIsValid && !selectedLocation.Timezone}">
+                                                    <soar-select-list id="inpTimezone"
+                                                                      placeholder="{{ 'Select {0}' | i18n:['Time Zone'] }}"
+                                                                      text-field="Display"
+                                                                      value-field="Value"
+                                                                      option-list="timeZones"
+                                                                      ng-model="selectedLocation.Timezone"
+                                                                      disable-input="false"
+                                                                      class="locCrud__dropdown required valid"
+                                                                      sb-required="true"></soar-select-list>
+                                                </div>
+                                                <div class="error">
+                                                    <label id="lblTimezoneInvalid" class="help-text" ng-if="!formIsValid && !selectedLocation.Timezone">
+                                                        {{ 'This field is required' | i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">&nbsp;</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Images' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12 col-sm-offset-2 col-sm-10">{{ 'Location {0}' | i18n:['Image'] }}</label>
+
+                                        <div class="col-xs-12 col-sm-offset-2 col-sm-10">
+                                            <div class="locCrud__noImg">
+                                                <div>
+                                                    <span class="text-muted">{{ 'No file selected' | i18n }}</span>
+                                                </div>
+                                            </div>
+                                            <img id="imgLocationImage" class="locCrud__img" src="Images/Smiley.png" ng-hide="true" />
+                                        </div>
+
+                                        <a id="btnLocationImage" class="col-xs-12 col-sm-offset-2 col-sm-10" tabindex="10">{{ 'Upload' | i18n }}</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12 col-sm-offset-2 col-sm-10">{{ 'Location {0}' | i18n:['Logo'] }}</label>
+
+                                        <div class="col-xs-12 col-sm-offset-2 col-sm-10">
+                                            <div class="locCrud__noImg">
+                                                <div>
+                                                    <span class="text-muted">{{ 'No file selected' | i18n }}</span>
+                                                </div>
+                                            </div>
+                                            <img id="imgLocationImage" class="locCrud__img" src="Images/Smiley.png" ng-hide="true" />
+                                        </div>
+
+                                        <a id="btnLocationImage" class="col-xs-12 col-sm-offset-2 col-sm-10" tabindex="10">{{ 'Upload' | i18n }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Schedule' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-xs-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <h5><label class="col-xs-12">{{ 'Schedules' | i18n }} </label></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-xs-6" ng-if="hasTreatmentRoomsViewAccess">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <h5><label class="col-xs-12">{{ 'Treatment Rooms' | i18n }}</label></h5>
+
+                                            <div class="col-xs-12" ng-repeat="room in filteredRooms = (selectedLocation.Rooms | filter:{ ObjectState: '!Delete' }) track by $index">
+                                                <label id="lblRoom" class="col-xs-12 col-sm-4 control-label" for="inpRoom{{$index}}">{{'Room' | i18n }}</label>
+
+                                                <div class="col-xs-11 col-sm-7" uib-tooltip="{{ room.$hasAppointments == true ? 'This {0} cannot be removed because it has provider scheduled open time and/or scheduled appointments.' : '' | i18n:['room']  }}">
+                                                    <div ng-class="{'error': room.$duplicate == true || (selectedLocation.Rooms.$valid == false && (room.Name == null || room.Name == '')) }">
+                                                        <input id="inpRoom{{$index}}" name="inpRoom{{$index}}" placeholder="{{ 'Name' | i18n}}" ng-model="room.Name" ng-change="roomOnChange(room, $index)" class="form-control" maxlength="50" tabindex="10" />
+                                                        <label id="errRoomDupe" class="help-text" ng-show="room.$duplicate == true">{{ 'A {0} with this name already exists.' | i18n:['room'] }}</label>
+                                                        <label id="errRoomRequired" class="help-text" ng-show="(selectedLocation.Rooms.$valid == false && (room.Name == null || room.Name == ''))">{{ 'This field is required.' | i18n }}</label>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <button id="btnDeleteRoom" ng-disabled="room.$hasAppointments == true" class="btn btn-link pull-left help-text" ng-click="deleteRoom(room, $index)">
+                                                        <span class="fa fa-times"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <button id="btnAddRoom" class="btn btn-link" ng-click="addRoom()" tabindex="10">+ {{ filteredRooms.length > 0 ? 'Add another {0}' : 'Add a {0}' | i18n:['room'] }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Identification Numbers' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <h5><label class="col-xs-12">{{ 'Federal Identification' | i18n }}</label></h5>
+
+                                            <label id="lblTaxID" class="col-xs-12 col-sm-4 control-label" for="inpTaxID">{{'Tax ID' | i18n }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpTaxID" class="form-control" placeholder="{{ 'Tax ID' | i18n }}" ui-mask="{{ '99-9999999' }}" ng-model="selectedLocation.TaxId" name="inpTaxID" tabindex="10"
+                                                           type="text" numeric-only limit-to="10" />
+                                                </div>
+                                            </div>
+
+                                            <label id="lblBillingEntityNPI" class="col-xs-12 col-sm-4 control-label locCrud__type2" for="inpBillingEntityNPI">{{'Billing Entity NPI (Type 2)' | i18n }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div ng-class="{error: !formIsValid && frmLocationCrud.inpBillingEntityNPI.$error.minlength}">
+                                                    <input id="inpBillingEntityNPI" class="form-control" placeholder="{{ 'Billing Entity NPI (Type 2)' | i18n }}" ng-model="selectedLocation.TypeTwoNpi" name="inpBillingEntityNPI"
+                                                           maxlength="10" tabindex="10" type="text" numeric-only ng-minlength="10" />
+                                                    <label id="lblBillingEntityNPIMinLength" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpBillingEntityNPI.$error.minlength">
+                                                        {{ 'This field requires a minimum of 10 characters.' | i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <label id="lblTaxonomyCodeSpeciality" class="col-xs-12 col-sm-4 control-label locCrud__taxonomyCode" for="inpTaxonomyCodeSpeciality">{{'Taxonomy Code/Specialty' | i18n }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <soar-select-list id="inpTaxonomyCodeSpeciality" class="locCrud__dropdown" name="inpTaxonomyCodeSpeciality" sb-tab="10" placeholder="{{'Taxonomy code/specialty' | i18n}}"
+                                                                      text-field="Category" value-field="TaxonomyCodeId" list-template="taxonomyDropdownTemplate" option-list="taxonomyCodesSpecialties.values"
+                                                                      ng-model="selectedLocation.TaxonomyId" sb-blur="taxonomyIdBlur(selectedLocation.TaxonomyId)"></soar-select-list>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <h5><label class="col-xs-12">{{ 'State Identification' | i18n }}</label></h5>
+
+                                            <label id="lblBillingEntityLicense" class="col-xs-12 col-sm-4 control-label" for="inpBillingEntityLicense">{{'Billing Entity License' | i18n }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpBillingEntityLicense" class="form-control" placeholder="{{ 'Billing Entity License' | i18n }}" ng-model="selectedLocation.LicenseNumber"
+                                                           name="inpBillingEntityLicense" maxlength="32" tabindex="10" type="text" alpha-numeric />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel" ng-if="hasAdditionalIdentifierEditAccess" ng-show="selectedLocation.AdditionalIdentifiers.length > 0">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Additional Identifiers' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <div ng-repeat="locationIdentifiers in selectedLocation.AdditionalIdentifiers" class="locationFields">
+                                                <div class="row">
+                                                    <label class="col-xs-12 col-sm-4 control-label locCrud__additionalIdentifier">{{ locationIdentifiers.Description }}</label>
+                                                    <div class="col-xs-12 col-sm-8 locCrud__additionalIdentifier">
+                                                        <input type="text" class="form-control" name="val" ng-model="locationIdentifiers.Value" placeholder="{{ locationIdentifiers.Description }}" maxlength="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Financial Settings' | i18n }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <fee-list-location edit-mode="editMode" location="selectedLocation"></fee-list-location>
+                                                <div class="clearfix">&nbsp;</div>
+
+                                                <label id="lblProviderTaxRate" class="col-xs-12 col-sm-4 control-label" for="inpProviderTaxRate">{{'Provider {0}' | i18n:['Tax Rate'] }}</label>
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <div ng-class="{error: !formIsValid && !frmLocationCrud.inpProviderTaxRate.$valid}">
+                                                        <div class="input-group" ng-class="{error: !formIsValid && !frmLocationCrud.inpProviderTaxRate.$valid}">
+                                                            <input id="inpProviderTaxRate" class="form-control" placeholder="{{ 'Provider {0}' | i18n:['Tax Rate'] }}" ng-model="selectedLocation.ProviderTaxRate"
+                                                                   name="inpProviderTaxRate" maxlength="6" tabindex="10" type="text" tax-rate />
+                                                            <span class="input-group-addon">%</span>
+                                                        </div>
+                                                        <label id="lblProviderTaxRateInvalid" class="help-text " ng-show="!formIsValid && !frmLocationCrud.inpProviderTaxRate.$valid">
+                                                            {{ 'Must be between 0 to 99.999.' | i18n }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+
+                                                <label id="lblSalesAndUseTaxRate" class="col-xs-12 col-sm-4 control-label" for="inpSalesAndUseTaxRate">{{'Sales & Use Tax Rate' | i18n }}</label>
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <div ng-class="{error: !formIsValid && !frmLocationCrud.inpSalesAndUseTaxRate.$valid}" class="error">
+                                                        <div ng-class="{error: !formIsValid && !frmLocationCrud.inpSalesAndUseTaxRate.$valid}" class="input-group">
+                                                            <input id="inpSalesAndUseTaxRate" class="form-control" placeholder="{{ 'Sales and use tax rate' | i18n }}" ng-model="selectedLocation.SalesAndUseTaxRate"
+                                                                   name="inpSalesAndUseTaxRate" maxlength="6" tabindex="10" type="text" tax-rate />
+                                                            <span class="input-group-addon">%</span>
+                                                        </div>
+                                                        <label id="lblSalesAndUseTaxRateInvalid" class="help-text" ng-show="!formIsValid && !frmLocationCrud.inpSalesAndUseTaxRate.$valid">
+                                                            {{ 'Must be between 0 to 99.999.' | i18n }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <div class="col-xs-12 col-sm-8 float-right">
+                                                    <div ng-class="{error: !formIsValid && !frmLocationCrud.inpEnableCreditDebitCardProcessing.$valid}">
+                                                        <div ng-class="{error: !formIsValid && !frmLocationCrud.inpEnableCreditDebitCardProcessing.$valid}" class="input-group">
+                                                             <checkbox change-function="paymentGatewayChanged()" checkbox-id="inpEnableCreditDebitCardProcessing" checkbox-label="'Enable Credit Card/Debit Card Processing'" checkbox-value="selectedLocation.IsPaymentGatewayEnabled"></checkbox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-horizontal">
+
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label id="lblDefaultFinanceCharge" class="col-xs-12 col-sm-4 control-label" for="inpDefaultFinanceCharge">{{'Default Finance Charge' | i18n }}</label>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div ng-class="{error: !formIsValid && !frmLocationCrud.inpDefaultFinanceCharge.$valid}" class="error">
+                                                <div ng-class="{error: !formIsValid && !frmLocationCrud.inpDefaultFinanceCharge.$valid}" class="input-group">
+                                                    <input id="inpDefaultFinanceCharge" class="form-control" placeholder="{{ 'Default Finance Charge' | i18n }}" ng-model="selectedLocation.DefaultFinanceCharge"
+                                                           ng-change="setAccountsOverDue(selectedLocation)" name="inpDefaultFinanceCharge" maxlength="5" tabindex="10" type="text" tax-rate tax-rate-pattern="defaultFinanceChargePattern" max-decimal-length="2" />
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
+                                                <label id="lblDefaultFinanceChargeInvalid" class="help-text" ng-show="((selectedLocation.DefaultFinanceCharge !== null) && (selectedLocation.DefaultFinanceCharge !== '') && (selectedLocation.DefaultFinanceCharge <= 0 || selectedLocation.DefaultFinanceCharge > 99.99))">
+                                                    {{ 'Default Finance Charge should be greater than 0.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label id="lblMerchantId" class="col-xs-12 col-sm-4 control-label" for="inpMerchantId">{{'Account Token' | i18n }}</label>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div ng-class="{error: !formIsValid && frmLocationCrud.inpMerchantId.$error.required}" class="error">
+                                                <div ng-class="{error: !formIsValid && frmLocationCrud.inpMerchantId.$error.required}">
+                                                    <input id="inpMerchantId" class="form-control" placeholder="{{ 'Account Token' | i18n }}" ng-model="selectedLocation.MerchantId" ng-required="selectedLocation.IsPaymentGatewayEnabled == true"
+                                                           ng-change="setAccountsOverDue(selectedLocation)" ng-disabled="!selectedLocation.IsPaymentGatewayEnabled" name="inpMerchantId" maxlength="256" tabindex="10" type="text" alpha-Numeric />
+                                                </div>
+                                                <label id="lblMerchantIdRequired" class="help-text" ng-show="!formIsValid && frmLocationCrud.inpMerchantId.$error.required">
+                                                    {{ 'This field is required' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div ng-show="isEstatementsEnabled">
+                                            <label class="col-xs-12 col-sm-4 control-label">{{'Billing eStatement Credit Card Options' | i18n }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <span class="col-xs-12 estatementLabel locationFields"> {{ 'Options will be reflected on eStatements ONLY' | i18n }}</span>
+                                                <div class="clearfix">&nbsp;</div>
+
+                                                <span class="col-xs-12 locationFields">
+                                                    <input type="radio" name="creditCardOptionsSelectEdit" id="creditCardOptionsSelectShowEdit" ng-model="selectedLocation.DisplayCardsOnEstatement" data-ng-value="true" ng-change="displayCardsOnEstatementChange(true)" />{{ 'Display what cards you accept' | i18n }}
+                                                </span>
+                                                <div ng-show="selectedLocation.DisplayCardsOnEstatement">
+                                                    <span class="col-xs-12 error" ng-show="selectedLocation.DisplayCardsOnEstatement &&
+                                                              !selectedLocation.AcceptMasterCardOnEstatement &&
+                                                              !selectedLocation.AcceptDiscoverOnEstatement &&
+                                                              !selectedLocation.AcceptVisaOnEstatement &&
+                                                              !selectedLocation.AcceptAmericanExpressOnEstatement">
+                                                        <span class="help-text">{{'Select a card type to continue' | i18n}}</span>
+                                                    </span>
+                                                    <div class="clearfix">&nbsp;</div>
+
+                                                    <checkbox class="col-xs-6" checkbox-Disabled="!selectedLocation.DisplayCardsOnEstatement" checkbox-label="'Mastercard'" checkbox-id="inpAcceptMasterCardOnEstatement" checkbox-value="selectedLocation.AcceptMasterCardOnEstatement"></checkbox>
+                                                    <checkbox class="col-xs-6" checkbox-Disabled="!selectedLocation.DisplayCardsOnEstatement" checkbox-label="'Discover'" checkbox-id="inpAcceptDiscoverOnEstatement" checkbox-value="selectedLocation.AcceptDiscoverOnEstatement"></checkbox>
+                                                    <div class="clearfix">&nbsp;</div>
+
+                                                    <checkbox class="col-xs-6" checkbox-Disabled="!selectedLocation.DisplayCardsOnEstatement" checkbox-label="'Visa'" checkbox-id="inpAcceptVisaOnEstatement" checkbox-value="selectedLocation.AcceptVisaOnEstatement"></checkbox>
+                                                    <checkbox class="col-xs-6" checkbox-Disabled="!selectedLocation.DisplayCardsOnEstatement" checkbox-label="'American Express'" checkbox-id="inpAcceptAmericanExpressOnEstatement" checkbox-value="selectedLocation.AcceptAmericanExpressOnEstatement"></checkbox>
+                                                    <div class="clearfix">&nbsp;</div>
+
+                                                    <span ng-show="selectedLocation | anyCardTypeSelected"><checkbox class="col-xs-12" checkbox-Disabled="!selectedLocation.DisplayCardsOnEstatement" checkbox-label="'Include a CVV CODE'" checkbox-id="inpIncludeCvvCodeOnEstatement" checkbox-value="selectedLocation.IncludeCvvCodeOnEstatement"></checkbox></span>
+                                                    <div class="clearfix">&nbsp;</div>
+                                                </div>
+                                                <span class="col-xs-12 locationFields">
+                                                    <input type="radio" name="creditCardOptionsSelectEdit" id="creditCardOptionsSelectHideEdit" ng-model="selectedLocation.DisplayCardsOnEstatement" data-ng-value="false" ng-change="displayCardsOnEstatementChange(false)" />{{ 'Remove credit card options and instruct recipient to call office for credit card payment' | i18n}}
+                                                </span>
+                                                <div class="clearfix">&nbsp;</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row form-horizontal">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label id="lblMinimumFinanceCharge" class="col-xs-12 col-sm-4 control-label locCrud__type2" for="inpMinimumFinanceCharge">{{'Minimum Finance Charge' | i18n }}</label>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div ng-class="{error: !formIsValid && !frmLocationCrud.inpMinimumFinanceCharge.$valid}" class="error">
+                                                <div ng-class="{error: !formIsValid && !frmLocationCrud.inpMinimumFinanceCharge.$valid}">
+                                                    <input id="inpMinimumFinanceCharge" class="form-control" placeholder="{{ '$0.00' }}" ng-model="selectedLocation.MinimumFinanceCharge" model-format="currency"
+                                                           name="inpMinimumFinanceCharge" maxlength="12" tabindex="10" type="text" />
+                                                </div>
+                                                <label id="lblMinimumFinanceChargeInvalid" class="help-text" ng-show="((selectedLocation.MinimumFinanceCharge !== null) && (selectedLocation.MinimumFinanceCharge !== '') && (selectedLocation.MinimumFinanceCharge <= 0 || selectedLocation.MinimumFinanceCharge > 999999.99))">
+                                                    {{ 'Minimum Finance Charge should be greater than 0.' | i18n }}
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6" ng-if="enableAccountsOverDueList">
+                                    <div class="form-group">
+                                        <label id="lblAccountsOverDue" class="col-xs-12 col-sm-4 control-label" for="inpAccountsOverdueBy">{{'Accounts overdue by' | i18n }}</label>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div ng-class="{error: !formIsValid && frmLocationCrud.inpAccountsOverdueBy.$error.required}">
+                                                <div ng-class="{error: !formIsValid && frmLocationCrud.inpAccountsOverdueBy.$error.required}">
+                                                    <soar-select-list id="inpAccountsOverdueBy" class="locCrud__dropdown" name="inpAccountsOverdueBy" sb-tab="10" placeholder="{{'Accounts overdue by:' | i18n}}"
+                                                                      disable-input="!enableAccountsOverDue" text-field="Id" value-field="Value" option-list="accountsOverdueValues" ng-model="selectedLocation.AccountsOverDue"></soar-select-list>
+                                                </div>
+                                                <div class="error">
+                                                    <label id="lblAccountsOverDueInvalid" class="help-text" ng-if="selectedLocation.DefaultFinanceCharge && !selectedLocation.AccountsOverDue">
+                                                        {{ 'This field is required' | i18n }}
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-horizontal">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <h5><label class="col-xs-12">{{ 'Billing Remittance Site' | i18n }}</label></h5>
+                                            <span class="col-xs-12">{{'This determines what address to use on the "Remit Payment To" address on your billing statements and Invoices' | i18n }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" name="billingRemittanceSiteOptions" id="billingRemittanceSiteOptionThisLocation" ng-model="selectedLocation.RemitAddressSource" ng-value="0" ng-change="remitAddressSourceChanged()" />{{ 'Use this location as its own billing remittance site' | i18n }}
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" name="billingRemittanceSiteOptions" id="billingRemittanceSiteOptionDifferentLocation" ng-model="selectedLocation.RemitAddressSource" ng-value="1" ng-change="remitAddressSourceChanged()" />{{ 'Use a different location as the billing remittance site' | i18n }}
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <soar-select-list id="billingRemittanceSiteLocations" class="locCrud__dropdown" name="inpBillingRemittanceSiteLocations" ng-show="selectedLocation.RemitAddressSource == 1" sb-tab="10" placeholder="{{'Locations' | i18n}}"
+                                                                  sb-Required="{{selectedLocation.RemitAddressSource == '1' ? 'required' : ''}}" text-field="NameLine1" value-field="LocationId" option-list="locations" ng-model="selectedLocation.RemitOtherLocationId"></soar-select-list>
+                                                <label id="lblBillingRemittanceSiteLocationsRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpBillingRemittanceSiteLocations.$error.required && selectedLocation.RemitAddressSource == 1">
+                                                    {{ 'This field is required.' | i18n }}
+                                                </label>
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" name="billingRemittanceSiteOptions" id="billingRemittanceSiteOptionDifferentAddress" ng-model="selectedLocation.RemitAddressSource" ng-value="2" ng-change="remitAddressSourceChanged()" />{{ 'Use a different address as the billing remittance site' | i18n }}
+                                            </span>
+                                            <div ng-if="selectedLocation.RemitAddressSource == 2" class="col-xs-12  panel panel-default">
+                                                <div class="panel-body">
+                                                    <div class="col-xs-12 col-sm-8">
+                                                        <label id="lblRemitToNameLine1" class="col-xs-12 " for="inpRemitToNameLine1">{{'Name Line 1' | i18n }} *</label>
+                                                        <div ng-class="{error: !formIsValid && frmLocationCrud.inpRemitToNameLine1.$error.required}">
+                                                            <input id="inpRemitToNameLine1" class="form-control required valid col-xs-12" placeholder="{{ 'Name Line 1' | i18n }}" ng-model="selectedLocation.RemitToNameLine1" capitalize-first-with-override name="inpRemitToNameLine1" maxlength="100" tabindex="10" type="text" set-focus required />
+                                                            <label id="lblRemitToNameLine1Required" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpRemitToNameLine1.$error.required">
+                                                                {{ 'This field is required.' | i18n }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-8">
+                                                        <label id="lblRemitToNameLine2" class="col-xs-12 " for="inpRemitToNameLine2">{{'Name Line 2' | i18n }}</label>
+                                                        <input id="inpRemitToNameLine2" class="form-control valid col-xs-12" placeholder="{{ 'Name Line 2' | i18n }}" ng-model="selectedLocation.RemitToNameLine2" capitalize-first-with-override name="inpRemitToNameLine2" maxlength="100" tabindex="10" type="text" set-focus />
+                                                    </div>
+                                                    
+                                                    <div class="col-xs-12">
+                                                        <label class="col-xs-12 " for="inpRemitToAddressLine1">{{ 'Address Line 1' | i18n }} *</label>
+                                                        <div ng-class="{error: !formIsValid && frmLocationCrud.inpRemitToAddressLine1.$error.required}">
+                                                            <input id="inpRemitToAddressLine1" class="form-control required valid col-xs-12" placeholder="{{ 'Address Line 2' | i18n }}" ng-model="selectedLocation.RemitToAddressLine1" name="inpRemitToAddressLine1" maxlength="128" tabindex="10" type="text" required alpha-numeric-ext />
+                                                            <label id="lblRemitToAddressLine1Required" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpRemitToAddressLine1.$error.required">
+                                                                {{ 'This field is required.' | i18n }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <label class="col-xs-12 " for="inpRemitToAddressLine2">{{ 'Address Line 2' | i18n }}</label>
+                                                        <input id="inpRemitToAddressLine2" class="form-control" placeholder="{{ 'Address Line 2' | i18n }}" ng-model="selectedLocation.RemitToAddressLine2" name="inpRemitToAddressLine2" maxlength="128" tabindex="10" type="text" alpha-numeric-ext />
+                                                    </div>
+
+                                                    <div class="col-xs-12">
+                                                        
+                                                        <div class="col-xs-4 no-padding">
+                                                            <label class="col-xs-12 " for="inpRemitToCity">{{ 'City' | i18n }} *</label>
+                                                            <div ng-class="{error: !formIsValid && frmLocationCrud.inpRemitToCity.$error.required}" class="col-xs-12 no-padding">
+                                                                <input id="inpRemitToCity" class="form-control" placeholder="{{ 'City' | i18n }}" ng-model="selectedLocation.RemitToCity" capitalize-first-with-override name="inpRemitToCity" maxlength="64" tabindex="10" type="text" required alpha-only ng-paste="validatePaste()" />
+                                                                <label id="lblRemitToCityRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpRemitToCity.$error.required">
+                                                                    {{ 'This field is required.' | i18n }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        
+                                                        <div class="col-xs-4">
+                                                            <label class="col-xs-12 text-nowrap" for="inpRemitToState">{{ 'State' | i18n }} *</label>
+                                                            <div ng-class="{error: !formIsValid && !selectedLocation.RemitToState}" class="col-xs-3 no-padding">
+                                                                <state-list state-list-id="inpRemitToState" name="inpRemitToState" source="selectedLocation.RemitToState" class="required valid locCrud__state-select-list" tabindex="10"></state-list>                                                                
+                                                                <label id="lblRemitToStateRequired" class="help-text " ng-show="!formIsValid && !selectedLocation.RemitToState">
+                                                                    {{ 'This field is required.' | i18n }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        
+                                                        <div class="col-xs-4">
+                                                            <label class="col-xs-12 text-nowrap" for="inpRemitToZipCode">{{ 'ZIP Code' | i18n }} *</label>
+                                                            <div ng-class="{error: !formIsValid && (!frmLocationCrud.inpRemitToZipCode.$valid || !frmLocationCrud.inpRemitToZipCode.$valid)}">
+                                                                <input id="inpRemitToZipCode" class="form-control required valid" placeholder="{{ 'ZIP code' | i18n }}" ng-model="selectedLocation.RemitToZipCode" name="inpRemitToZipCode" maxlength="10"
+                                                                       minlength="5" tabindex="10" type="text" required zip-field="selectedLocation.RemitToZipCode" />
+                                                                <label id="lblRemitToZipCodeRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpRemitToZipCode.$error.required">
+                                                                    {{ 'This field is required.' | i18n }}
+                                                                </label>
+                                                                <label id="lblRemitToZipCodeInvalid" class="help-text " ng-show="!formIsValid && !frmLocationCrud.inpRemitToZipCode.$error.required && !frmLocationCrud.inpRemitToZipCode.$valid">
+                                                                    {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-xs-12">
+                                                        <label id="lblRemitToPrimaryPhone" class="col-xs-12" for="inpRemitToPrimaryPhone">{{ 'Phone Number' }}</label>
+                                                        <div class="col-xs-4 no-padding">
+                                                            <div ng-class="{error: !formIsValid && !frmLocationCrud.inpRemitToPrimaryPhone.$valid}">
+                                                                <input id="inpRemitToPrimaryPhone" class="form-control" placeholder="{{ 'Phone Number' }}"
+                                                                       ui-mask="{{ '(999) 999-9999'|i18n }}" ng-model="selectedLocation.RemitToPrimaryPhone"
+                                                                       name="inpRemitToPrimaryPhone" limit-to="14" tabindex="10" type="text" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-horizontal">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <h5><label class="col-xs-12">{{ 'Insurance Remittance Site' | i18n }}</label></h5>
+                                            <span class="col-xs-12">{{'This determines what address to use as the "Billing Dentist/Entity Info" on your insurance claims' | i18n }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" name="billingInsuranceRemittanceSiteOptions" id="billingInsuranceRemittanceSiteOptionThisLocation" ng-model="selectedLocation.InsuranceRemittanceAddressSource " ng-value="0" ng-change="remittanceInsuranceSourceChanged()" />{{ 'Use this location as its own insurance remittance site' | i18n }}
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" name="billingInsuranceRemittanceSiteOptions" id="billingInsuranceRemittanceSiteOptionDifferentLocation" ng-model="selectedLocation.InsuranceRemittanceAddressSource " ng-value="1" ng-change="remittanceInsuranceSourceChanged()" />{{ 'Use a different location as the insurance remittance site' | i18n }}
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <soar-select-list id="billingInsuranceRemittanceSiteLocations" class="locCrud__dropdown" name="inpBillingInsuranceRemittanceSiteLocations" ng-show="selectedLocation.InsuranceRemittanceAddressSource  == 1" sb-tab="10" placeholder="{{'Locations' | i18n}}"
+                                                                  sb-Required="{{selectedLocation.InsuranceRemittanceAddressSource  == '1' ? 'required' : ''}}" text-field="NameLine1" value-field="LocationId" option-list="locations" ng-model="selectedLocation.InsuranceRemittanceOtherLocationId "></soar-select-list>
+                                                <label id="lblBillingInsuranceRemittanceSiteLocationsRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpBillingInsuranceRemittanceSiteLocations.$error.required && selectedLocation.InsuranceRemittanceAddressSource  == 1">
+                                                    {{ 'This field is required.' | i18n }}
+                                                </label>
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" name="billingInsuranceRemittanceSiteOptions" id="billingInsuranceRemittanceSiteOptionDifferentAddress" ng-model="selectedLocation.InsuranceRemittanceAddressSource " ng-value="2" ng-change="remittanceInsuranceSourceChanged()" />{{ 'Use a different address as the insurance remittance site' | i18n }}
+                                            </span>
+                                            <div ng-if="selectedLocation.InsuranceRemittanceAddressSource  == 2" class="col-xs-12  panel panel-default">
+                                                <div class="panel-body">
+                                                   
+                                                    <div class="col-xs-12 col-sm-8">
+                                                        <label id="lblRemitInsToNameLine1" class="col-xs-12 " for="inpRemitInsToNameLine1">{{'Name Line 1' | i18n }} *</label>
+                                                        <div ng-class="{error: !formIsValid && frmLocationCrud.inpRemitInsToNameLine1.$error.required}">
+                                                            <input id="inpRemitInsToNameLine1" class="form-control required valid col-xs-12" placeholder="{{ 'Name Line 1' | i18n }}" ng-model="selectedLocation.InsuranceRemittanceNameLine1 " capitalize-first-with-override name="inpRemitInsToNameLine1" maxlength="100" tabindex="10" type="text" set-focus required />
+                                                            <label id="lblRemitInsToNameLine1Required" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpRemitInsToNameLine1.$error.required">
+                                                                {{ 'This field is required.' | i18n }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-8">
+                                                        <label id="lblRemitInsToNameLine2" class="col-xs-12 " for="inpRemitInsToNameLine2">{{'Name Line 2' | i18n }}</label>
+                                                        <input id="inpRemitInsToNameLine2" class="form-control valid col-xs-12" placeholder="{{ 'Name Line 2' | i18n }}" ng-model="selectedLocation.InsuranceRemittanceNameLine2 " capitalize-first-with-override name="inpRemitInsToNameLine2" maxlength="100" tabindex="10" type="text" set-focus />
+                                                    </div>
+                                                    
+                                                    <div class="col-xs-12">
+                                                        <label class="col-xs-12 " for="inpRemitInsToAddressLine1">{{ 'Address Line 1' | i18n }} *</label>
+                                                        <div ng-class="{error: !formIsValid && frmLocationCrud.inpRemitInsToAddressLine1.$error.required}">
+                                                            <input id="inpRemitInsToAddressLine1" class="form-control required valid col-xs-12" placeholder="{{ 'Address Line 2' | i18n }}" ng-model="selectedLocation.InsuranceRemittanceAddressLine1 " name="inpRemitInsToAddressLine1" maxlength="128" tabindex="10" type="text" required alpha-numeric-ext />
+                                                            <label id="lblRemitInsToAddressLine1Required" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpRemitInsToAddressLine1.$error.required">
+                                                                {{ 'This field is required.' | i18n }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <label class="col-xs-12 " for="inpRemitInsToAddressLine2">{{ 'Address Line 2' | i18n }}</label>
+                                                        <input id="inpRemitInsToAddressLine2" class="form-control" placeholder="{{ 'Address Line 2' | i18n }}" ng-model="selectedLocation.InsuranceRemittanceAddressLine2 " name="inpRemitInsToAddressLine2" maxlength="128" tabindex="10" type="text" alpha-numeric-ext />
+                                                    </div>
+
+                                                    <div class="col-xs-12">
+                                                        
+                                                        <div class="col-xs-4 no-padding">
+                                                            <label class="col-xs-12 " for="inpRemitInsToCity">{{ 'City' | i18n }} *</label>
+                                                            <div ng-class="{error: !formIsValid && frmLocationCrud.inpRemitInsToCity.$error.required}" class="col-xs-12 no-padding">
+                                                                <input id="inpRemitInsToCity" class="form-control" placeholder="{{ 'City' | i18n }}" ng-model="selectedLocation.InsuranceRemittanceCity " capitalize-first-with-override name="inpRemitInsToCity" maxlength="64" tabindex="10" type="text" required alpha-only ng-paste="validatePaste()" />
+                                                                <label id="lblRemitinsToCityRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpRemitInsToCity.$error.required">
+                                                                    {{ 'This field is required.' | i18n }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        
+                                                        <div class="col-xs-4">
+                                                            <label class="col-xs-12 text-nowrap" for="inpRemitInsToState">{{ 'State' | i18n }} *</label>
+                                                            <div ng-class="{error: !formIsValid && !selectedLocation.InsuranceRemittanceState}" class="col-xs-3 no-padding">
+                                                                <state-list state-list-id="inpRemitInsToState" name="inpRemitInsToState" source="selectedLocation.InsuranceRemittanceState" class="required valid locCrud__state-select-list" tabindex="10"></state-list>                                                                
+                                                                <label id="lblRemitInsToStateRequired" class="help-text " ng-show="!formIsValid && !selectedLocation.InsuranceRemittanceState">
+                                                                    {{ 'This field is required.' | i18n }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        
+                                                        <div class="col-xs-4">
+                                                            <label class="col-xs-12 text-nowrap" for="inpRemitInsToZipCode">{{ 'ZIP Code' | i18n }} *</label>
+                                                            <div ng-class="{error: !formIsValid && (!frmLocationCrud.inpRemitInsToZipCode.$valid || !frmLocationCrud.inpRemitInsToZipCode.$valid)}">
+                                                                <input id="inpRemitInsToZipCode" class="form-control required valid" placeholder="{{ 'ZIP code' | i18n }}" ng-model="selectedLocation.InsuranceRemittanceZipCode " name="inpRemitInsToZipCode" maxlength="10"
+                                                                       minlength="5" tabindex="10" type="text" required zip-field="selectedLocation.InsuranceRemittanceZipCode " />
+                                                                <label id="lblRemitInsToZipCodeRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpRemitInsToZipCode.$error.required">
+                                                                    {{ 'This field is required.' | i18n }}
+                                                                </label>
+                                                                <label id="lblRemitInsToZipCodeInvalid" class="help-text " ng-show="!formIsValid && !frmLocationCrud.inpRemitInsToZipCode.$error.required && !frmLocationCrud.inpRemitInsToZipCode.$valid">
+                                                                    {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-xs-12">
+                                                        <div class="col-xs-6 no-padding">
+                                                            <label id="lblRemitInsToPrimaryPhone" class="col-xs-12" for="inpRemitInsToPrimaryPhone">{{ 'Phone Number' }}</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div ng-class="{error: !formIsValid && !frmLocationCrud.inpRemitInsToPrimaryPhone.$valid}">
+                                                                    <input id="inpRemitInsToPrimaryPhone" class="form-control" placeholder="{{ 'Phone Number' }}"
+                                                                           ui-mask="{{ '(999) 999-9999'|i18n }}" ng-model="selectedLocation.InsuranceRemittancePrimaryPhone "
+                                                                           name="inpRemitInsToPrimaryPhone" limit-to="14" tabindex="10" type="text" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <label id="lblRemitInsTaxId" class="col-xs-12" for="inpEditRemitInsTaxId">{{ 'Tax ID' }} *</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div ng-class="{error: !formIsValid && !frmLocationCrud.inpEditRemitInsTaxId.$valid}">
+                                                                    <input id="inpEditRemitInsTaxId" class="form-control required" placeholder="{{ 'Tax ID' }}"
+                                                                           ng-model="selectedLocation.InsuranceRemittanceTaxId"
+                                                                           name="inpEditRemitInsTaxId" required ui-mask="{{ '99-9999999'}}"
+                                                                           numeric-only limit-to="10" mask-placeholder="__-_______"
+                                                                           tabindex="10" type="text" />
+                                                                    <label id="lblRemitInsToZipCodeRequired" class="help-text " ng-show="!formIsValid && frmLocationCrud.inpEditRemitInsTaxId.$error.required">
+                                                                        {{ 'This field is required.' | i18n }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <div class="col-xs-6 no-padding">
+                                                            <label id="lblRemitInsBillingEntityNPI" class="col-xs-12" for="inpEditRemitInsBillingEntityNPI">{{ 'Billing Entity NPI (Type 2)' }} *</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div ng-class="{error: !formIsValid && !frmLocationCrud.inpEditRemitInsBillingEntityNPI.$valid}">
+                                                                    <input id="inpEditRemitInsBillingEntityNPI" class="form-control required " placeholder="{{ 'Billing Entity NPI (Type 2)' }}"
+                                                                           ng-model="selectedLocation.InsuranceRemittanceTypeTwoNpi "
+                                                                           name="inpEditRemitInsBillingEntityNPI" required maxlength="10"
+                                                                           numeric-only ng-minlength="10" tabindex="10" type="text" />
+                                                                    <label id="lblRemitInsToZipCodeRequired" class="help-text " ng-show="!formIsValid && selectedLocation.InsuranceRemittanceTypeTwoNpi.length !== 10">
+                                                                        {{ 'This field requires 10 characters.' | i18n }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <label id="lblRemitInsLicenseNumber" class="col-xs-12" for="inpEditRemitInsLicenseNumber">{{ 'Billing Entity License' }}</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div ng-class="{error: !formIsValid && !frmLocationCrud.inpEditRemitInsLicenseNumber.$valid}">
+                                                                    <input id="inpEditRemitInsLicenseNumber" class="form-control" placeholder="{{ 'Billing Entity License' }}"
+                                                                           ng-model="selectedLocation.InsuranceRemittanceLicenseNumber"
+                                                                           name="inpEditRemitInsLicenseNumber"  maxlength="32" tabindex="10" type="text" />                                                                   
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

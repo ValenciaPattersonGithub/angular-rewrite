@@ -1,0 +1,47 @@
+<ul class="menu">
+    <li class="menu-one" (mouseover)="communicationHover = true" (mouseout)="communicationHover = false">
+        <a>
+            <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                overflow="visible" preserveAspectRatio="none" viewBox="0 0 24 24" width="20" height="20">
+                <g>
+                    <path xmlns:default="http://www.w3.org/2000/svg"
+                        d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"
+                        style="fill: rgb(45, 171, 203);" vector-effect="non-scaling-stroke" />
+                </g>
+            </svg>
+        </a>
+        <ul class="sub-menu first-sub-menu">
+            <li id="communication-menu-email-link" (click)="navigateToPatientCommunication(CommunicationType.Email)">
+                <a>
+                    {{ 'Email' | translate }}
+                </a>
+            </li>
+            <li id="communication-menu-inperson-link"
+                (click)="navigateToPatientCommunication(CommunicationType.InPerson)">
+                <a>
+                    {{ 'In Person' | translate }}
+                </a>
+            </li>
+            <li id="communication-menu-other-link" (click)="navigateToPatientCommunication(CommunicationType.Other)">
+                <a>
+                    {{ 'Other' | translate }}
+                </a>
+            </li>
+            <li id="communication-menu-phone-link" (click)="navigateToPatientCommunication(CommunicationType.Phone)">
+                <a>
+                    {{ 'Phone' | translate }}
+                </a>
+            </li>
+            <li id="communication-menu-text-link" (click)="navigateToPatientCommunication(CommunicationType.Text)">
+                <a>
+                    {{ 'Text' | translate }}
+                </a>
+            </li>
+            <li id="communication-menu-usmail-link" (click)="navigateToPatientCommunication(CommunicationType.USMail)">
+                <a>
+                    {{ 'US Mail' | translate }}
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

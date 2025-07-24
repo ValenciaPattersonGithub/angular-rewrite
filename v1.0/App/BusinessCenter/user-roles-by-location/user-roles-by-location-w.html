@@ -1,0 +1,6 @@
+﻿<ng-container ng-if="migrationFeatureFlagsLoaded && useConverted">
+    <user-roles-by-location-ng></user-roles-by-location-ng>
+</ng-container>
+<ng-container ng-if="migrationFeatureFlagsLoaded && (!useConverted)">
+    <user-roles-by-location-template-original></user-roles-by-location-template-original>
+</ng-container>

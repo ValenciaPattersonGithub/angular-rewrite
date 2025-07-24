@@ -1,0 +1,10 @@
+﻿<div class="modal-header"><h4 id="lblWarningModalHeader">{{ item.Title ? item.Title : 'Discard' | i18n }}</h4></div>
+<div class="modal-body">
+    <label id="lblWarningModalMessage">{{ item.Message ? item.Message : 'Are you sure you want to {0}' | i18n:['discard these changes?'] }}</label>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button id="btnCancelNo" ng-click="cancelDiscard();" class="btn btn-default">{{ 'No' | i18n }}</button>
+        <button id="btnCancelYes" ng-click="confirmDiscard();" class="btn btn-primary">{{ 'Yes' | i18n }}</button>
+    </div>
+</div>

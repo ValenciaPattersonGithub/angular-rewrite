@@ -1,0 +1,164 @@
+﻿.open-time-search {
+    position: fixed;
+    top: 8%;
+    bottom: 2%;
+    left: 14%;
+    max-width: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    opacity: 0;
+    background-color: @brand-color_white;
+    transition: max-width 0.3s ease;
+    z-index: 1000;
+    box-shadow: 4px 0px 12px rgba(0,0,0,0.5);
+
+    &.open {
+        max-width: 620px;
+        opacity: 1;
+        max-height: 100%;
+        overflow-y: auto;
+    }
+
+    &__box {
+        padding: 0px;
+    }
+
+    &__header {
+        position: relative;
+        width: 900px;
+
+        h4 {
+            margin-top: 0;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+
+    &__filteringMessage {
+        font-weight: bold;
+        position: absolute;
+        right: 200px;
+        top: 7px;
+    }
+
+    &__body {
+        position: relative;
+        width: 100%;
+    }
+
+    &__title {
+        margin-top: 30px;
+        margin-left: 15px;
+    }
+
+    div.slotItem {
+        white-space: nowrap;
+        max-height:70px;
+    }
+}
+
+@media(max-height: 883px) {
+    .open-time-search {
+        overflow-y: scroll !important;
+
+        .hide-btn-container {
+            position: fixed;
+            top: 110px;
+            left: 831px;
+        }
+    }
+}
+
+.date-picker-label {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.jump-months-container {
+    margin-left: 15px;
+    display: inline-block;
+
+    > label {
+        cursor: pointer;
+    }
+}
+
+.opening-label {
+    margin-left: 15px;
+
+    span {
+        margin-left: @brand-margin_md;
+    }
+}
+
+.open-time-search-label {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.open-time-search-control-sm {
+    width: 25%;
+}
+
+.open-time-search-control-lg {
+    width: 85%;
+    display: inline-block;
+}
+
+.openings-container {
+    margin-left: 15px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 400px;
+    max-width: 100%;
+}
+
+.soarSelectList .open-time-search-control-lg {
+    &.k-dropdown {
+        width: 85%;
+    }
+}
+
+.slot {
+    border: 1px solid black;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.slotItem {
+    border-right: solid;
+    border-right-width: 1px;
+    line-height: 35px;
+    background: lightblue;
+    font-size: 11px;
+    font-weight: bold;
+    color: black;
+}
+
+.slotLabel {
+    margin-top: -15px;
+}
+
+.right-content {
+    margin-top: 0px;
+}
+
+.normalize-weight {
+    font-weight: normal;
+}
+
+.duration-label {
+    margin-top: 25px;
+}
+
+.preferred-time-label {
+    margin-top: 15px;
+}
+
+.title-container {
+    width: auto;
+}

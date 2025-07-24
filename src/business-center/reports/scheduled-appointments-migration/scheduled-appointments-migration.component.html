@@ -1,0 +1,88 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="scheduledappointmentreport grid header">
+        <div class="col-sm-2-migration reportGrid__label ml-0">{{'Patient Information' | translate}}</div>
+        <div class="col-sm-3-migration reportGrid__label">{{'Policy Holder' | translate}}</div>
+        <div class="col-sm-1-migration reportGrid__label">{{'PH DOB' | translate}}</div>
+        <div class="col-sm-1-migration reportGrid__label">{{'PH ID' | translate}}</div>
+        <div class="col-sm-2-migration reportGrid__label">{{'Plan, Plan Number' | translate}}</div>
+        <div class="col-sm-1-migration reportGrid__label">{{'Priority' | translate}}</div>
+        <div class="col-sm-2-migration reportGrid__label">{{'Carrier, Phone Number' | translate}}</div>
+    </div>
+    <div class="scheduledappointmentreportHeader groupheader">
+        <div class="col-sm-2-migration reportGrid__label"  id="headerDateDiv">{{ date | date:
+            'MM/dd/yyyy'}}</div>
+        <div class="col-sm-2-migration reportGrid__label" id="headerLocationDiv">{{ 'Location: ' | translate
+            }} {{ ofcLocation }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="40" tabindex="0"
+            (scrolledIndexChange)="nextItem($event)">
+            <div *cdkVirtualFor="let rowdata of reportData; index as i" class="{{rowdata.Class}}">
+                <input type="hidden" value="{{rowdata.Location}}" id="scheduledAppointmentsLocation{{i}}" />
+                <input type="hidden" value="{{rowdata.Date}}" id="scheduledAppointmentsDate{{i}}" />
+                <div class="scheduledappointmentreportHeader" *ngIf="i>0 && rowdata.IsHeader == true">
+                    <div class="col-sm-2-migration reportGrid__label" id="subHeaderDateDiv{{i}}"
+                        *ngIf="rowdata.IsDate == true">
+                        {{ rowdata.Date | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-2-migration reportGrid__label" id="subHeaderLocationDiv{{i}}"
+                        *ngIf="rowdata.IsLocation == true">
+                        {{ 'Location: ' | translate}} {{ rowdata.Location }}
+                    </div>
+                </div>
+                <div class="scheduledappointmentreport grid" *ngIf="rowdata.IsPlan == true">
+                    <div class="col-sm-2-migration" *ngIf="rowdata.IsPatient == true">{{'Patient' | translate}}:
+                        {{rowdata.Patient | translate}}</div>
+                    <div class="col-sm-2-migration" *ngIf="rowdata.IsDOB == true">{{'DOB' | translate}}:
+                        {{rowdata.DateOfBirth | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-2-migration" *ngIf="rowdata.IsPhoneNumber == true">{{'Phone Number' |
+                        translate}}: {{rowdata.ApptPhoneNumber | phoneNumber}}</div>
+                    <div class="col-sm-3-migration">{{rowdata.PolicyHolder | translate}}</div>
+                    <div class="col-sm-1-migration">{{rowdata.PolicyHolderBirthDate | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-1-migration">{{rowdata.PolicyHolderId}}</div>
+                    <div class="col-sm-2-migration">{{rowdata.Plan}}{{rowdata.Plan?',':'' | translate}}
+                        {{rowdata.PlanNumber}}</div>
+                    <div class="col-sm-1-migration">{{rowdata.Priority | translate}}</div>
+                    <div class="col-sm-2-migration">{{rowdata.Carrier}}{{rowdata.Carrier?',':''| translate}}
+                        {{rowdata.PhoneNumber | phoneNumber}}</div>
+                </div>
+
+                <div class="scheduledappointmentreportapptinfo grid" *ngIf="rowdata.IsApptInfo == true">
+                    <div class="col-sm-3-migration"><b>{{'Time' | translate}}{{':' | translate}}</b>
+                        {{rowdata.StartTime}} {{'to' | translate}} {{rowdata.EndTime}}</div>
+                    <div class="col-sm-4-migration"><b>{{'Duration' | translate}}{{':' | translate}}</b>
+                        {{rowdata.Duration}}</div>
+                    <div class="col-sm-2-migration"><b>{{'Room' | translate}}{{':' | translate}}</b> {{rowdata.Room}}
+                    </div>
+                    <div class="col-sm-3-migration"><b>{{'Appt Type' | translate}}{{':' | translate}}</b>
+                        {{rowdata.AppointmentType}}</div>
+                </div>
+                <div class="scheduledappointmentreportprvdrinfo grid" *ngIf="rowdata.IsApptInfo == true">
+                    <div class="col-sm-2-migration reportGrid__label">{{'Provider' | translate}}</div>
+                    <div class="col-sm-5-migration reportGrid__label">{{'Service + Description' | translate}}</div>
+                    <div class="col-sm-1-migration reportGrid__label">{{'Tooth' | translate}}</div>
+                    <div class="col-sm-1-migration reportGrid__label">{{'Area'| translate}}</div>
+                    <div class="col-sm-1-migration reportGrid__label text-right">{{'Charge' | translate}}</div>
+                    <div class="col-sm-2-migration"></div>
+                </div>
+                <div class="scheduledappointmentreportprvdrinfo grid" *ngIf="rowdata.IsCode == true">
+                    <div class="col-sm-2-migration">{{rowdata.Provider}}</div>
+                    <div class="col-sm-5-migration">{{rowdata.ServiceCode}}</div>
+                    <div class="col-sm-1-migration">{{rowdata.Tooth}}</div>
+                    <div class="col-sm-1-migration">{{rowdata.Area}}</div>
+                    <div class="col-sm-1-migration text-right">{{rowdata.Charge | currency}}</div>
+                    <div class="col-sm-2-migration"></div>
+                </div>
+                <div class="scheduledappointmentreportFooter grid" *ngIf="rowdata.IsNote == true">
+                    <div class="col-sm-12-migration reportGrid__label">{{ 'Appt Notes'| translate }} </div>
+                </div>
+                <div class="scheduledappointmentreportFooter grid" *ngIf="rowdata.IsNote == true" id="divMainInfo{{i}}">
+                    <div class="col-sm-12-migration">{{ rowdata.Note }} </div>
+                </div>
+                <div class='col-sm-12 text-center margin-top-footer' *ngIf="i+1 == reportData.length">
+                    {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright ©
+                    American Dental Association (ADA). All rights reserved.' | translate}}
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

@@ -1,0 +1,157 @@
+<form *ngIf="editItem"  [formGroup]="questionMultipleChoiceForm" name="questionMultipleChoiceForm" role="form">
+    <div class="col-md-6">
+        <div class="container-fluid">
+            <div class="row" id="questionTextMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}">
+                {{ 'Question Text' |translate }}:<span class="bold padding5 size-h4">*</span>
+            </div>
+            <div class="row">
+                <input [ngClass]="{'red-border': (questionMultipleChoiceForm?.get('questionMultipleChoiceText')?.invalid  && customForm?.SectionValidationFlag) || (questionMultipleChoiceForm?.get('questionMultipleChoiceText')?.invalid  && sectionItemIndex == customForm?.SectionCopyValidationFlag )}"
+                       name="questionMultipleChoiceText"
+                       formControlName="questionMultipleChoiceText"
+                       id="questionMultipleChoiceText{{sectionIndex}}_{{sectionItemIndex}}"
+                       class="col-md-10" type="text" maxlength="250" required/>
+            </div>
+            <div class="row error" *ngIf="(questionMultipleChoiceForm?.get('questionMultipleChoiceText')?.invalid  && customForm?.SectionValidationFlag) || (questionMultipleChoiceForm?.get('questionMultipleChoiceText')?.invalid  && sectionItemIndex == customForm?.SectionCopyValidationFlag )">
+                <span id="requiredMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required' | translate }}</span>
+            </div>
+            <div class="row">
+                <div class="form-checkbox">
+                    <input type="checkbox"
+                           id="questionMultipleChoiceCKB{{sectionIndex}}_{{sectionItemIndex}}"
+                           formControlName="questionMultipleChoiceCKB">
+                    <label id="lblQuestionMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}"
+                           class="font-weight-normal ng-binding"
+                           for="questionMultipleChoiceCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This question is required' | translate }}.</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-checkbox">
+                    <input type="checkbox" formControlName="questionMultipleChoiceAllowMultipleAnsCKB"
+                           id="questionMultipleChoiceAllowMultipleAnsCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="lblQuestionMultipleChoiceAllowMultipleAns{{sectionIndex}}_{{sectionItemIndex}}"
+                           class="font-weight-normal ng-binding"
+                           for="questionMultipleChoiceAllowMultipleAnsCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'Allow multiple answers' | translate }}.</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8" id="multipleChoiceOptionHeader{{sectionIndex}}_{{sectionItemIndex}}">{{ 'Select Option' |translate }} :<span class="bold padding5 size-h4">*</span></div>
+            </div>
+            <div id="questionMultipleChoiceSelectValue{{sectionIndex}}_{{sectionItemIndex}}">
+                <div id="multipleChoiceOption{{sectionIndex}}_{{sectionItemIndex}}_{{sectionItemIndex}}" class="row margin-bottom15" *ngFor="let option of sectionItem?.ItemOptions;index as $index">
+                    <!--Are you sure message for list question option delete-->
+                    <div class="col-md-11" *ngIf="confirmOptionRemoveIndex == $index">
+                        <div class="media-body master-list-warning-msg" id="multipleChoiceOptionDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}">
+                            <are-you-sure [appendId]="0" [isFocusSet]="false"
+                                          message="{{ 'Are you sure you want to delete this answer option?' | translate }}"
+                                          (ifYes)="removeMultipleChoiceOption(sectionIndex,sectionItemIndex)"
+                                          (ifNo)="cancelRemoveMultipleChoiceOption()">
+                            </are-you-sure>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <input name="questionMultipleChoiceSelectValues" type="text"
+                               id="questionMultipleChoiceOptionText{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                               class="col-md-7" maxlength="100" required
+                               formControlName="questionMultipleChoiceOptionText{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                               placeholder="{{'Enter Answer Text' | translate}}" />
+                        &nbsp;
+                        <a checkRoleAccess="soar-biz-bcform-delete" id="lnkMultipleChoiceOptionDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                           class="cursor-pointer"
+                           (click)="confirmRemoveMultipleChoiceOption(option,$index)" title="Remove" *ngIf="sectionItem?.ItemOptions?.length > 1">
+                            <i class=" glyphicon glyphicon-trash">
+                            </i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <button id="btnAddAnotherOption{{sectionIndex}}_{{sectionItemIndex}}" checkRoleAccess="soar-biz-bcform-add"
+                            type="button" class="button" (click)="addNewMultipleChoiceOption(sectionIndex,sectionItemIndex)">
+                        {{ 'Add another option' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form  *ngIf="sectionItem && !editItem" id="frmListQuestionSectionItem{{sectionIndex}}" class="form-group customForms">
+   
+    <div [ngClass]="{'has-error':hasErrors && sectionItem?.$$InvalidAnswer===true}">
+        <div class="row">
+            <div class="col-md-11">
+                <label id="lblsectionItemText{{sectionIdex}}_{{sectionIdexPreviewIndex}}" class="control-label">
+                    {{ sectionItem?.FormBankItem?.ItemText }} <span id="sectionItemIsRequired{{sectionIdex}}_{{sectionIdexPreviewIndex}}" *ngIf="sectionItem?.IsRequired" class="bold padding5 size-h4">*</span>
+                </label>
+                <skip-prompt [sectionItem]="sectionItem" [inputIsDisabled]="inputIsDisabled" (changeSkipMode)="changeSkip($event)"></skip-prompt>
+            </div>
+        </div>
+        <div *ngFor="let itemOption of sectionItem?.ItemOptions">
+            <!--checkbox for multi select-->
+            <div class="row" *ngIf="sectionItem?.MultiSelectAllow">
+                <div class="col-md-11">
+                    <div id="isAllowMultipleAnswers{{sectionIdex}}_{{sectionIdexPreviewIndex}}" class="checkbox">
+                        <div class="margin-left-20">
+                            <input type="checkbox"
+                                   id="{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_'}}"
+                                   name="{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}"
+                                  
+                                   [disabled]="inputIsDisabled || sectionItem?.$$Skip" />
+                           
+                            <label class="font-weight-normal control-label margin-left-minus16 customForms__customOption"
+                                   id="lbl{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_'}}"
+                                   for="{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_'}}">
+                                <span *ngIf="!itemOption?.BankItemOption?.CustomLabel">{{ itemOption?.BankItemOption?.OptionText }}</span>
+                                <!-- text-auto-grow directive is not migrated as this feature not required in preview mode  -->
+                                <textarea  id="txt{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT1_'}}"
+                                          placeholder="{{'Enter Custom Choice' | translate }}"
+                                         *ngIf="itemOption?.BankItemOption?.CustomLabel"
+                                          maxlength="500"
+                                           [disabled]="inputIsDisabled || sectionItem?.$$Skip"
+                                          type="text"
+                                          ></textarea> 
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--radio button for other-->
+            <div class="row" *ngIf="!sectionItem?.MultiSelectAllow">
+                <div class="col-md-11">
+                    <div id="isAllowMultipleAnswers{{sectionIdex}}_{{sectionIdexPreviewIndex}}" class="radio">
+                        <div class="margin-left-20">
+                            <input type="radio"
+                                   id="{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_' }}"
+                                   name="{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}"
+                                  
+                                   [disabled]="inputIsDisabled || sectionItem?.$$Skip" />
+                        
+                            <label class="font-weight-normal control-label margin-left-minus16 customForms__customOption"
+                                   for="{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_'}}"
+                                   id="lbl{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_'}}">
+                                <span *ngIf="!itemOption?.BankItemOption?.CustomLabel">{{ itemOption?.BankItemOption?.OptionText }}</span>
+                                 <!-- text-auto-grow directive is not migrated as this feature not required in preview mode  -->
+                                <textarea  id="txt{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT1_'}}"
+                                          placeholder="{{'Enter Custom Choice' | translate }}"
+                                          maxlength="500"
+                                          type="text"
+                                          [disabled]="inputIsDisabled || sectionItem?.$$Skip"
+                                          *ngIf="itemOption?.BankItemOption?.CustomLabel"></textarea> 
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--special handling for invalid list question answer-->
+        <label id="lblSectionFormBankItemRequired_{{sectionItemPreviewIndex}}" class="help-block"
+               *ngIf="hasErrors && sectionItem?.$$InvalidAnswer===true">
+            {{ 'This field is required.' | translate }}
+        </label>
+    </div>
+</form>

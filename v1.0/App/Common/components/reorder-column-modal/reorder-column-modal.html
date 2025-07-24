@@ -1,0 +1,30 @@
+﻿<div ng-init="initialize()" class="reorder-column-modal">
+	<div class="modal-header">
+		<span class="modal-title-responsive" id="lblReorderColumns">{{ 'Re-order Columns' | i18n }}</span>
+		<span class="pull-right">
+			<button id="btnClose" class="btn btn-link" ng-click="cancel();">
+				<span class="fa fa-times"></span>
+			</button>
+		</span>
+	</div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<ul class="list-unstyled table-hover reorder-column-modal__list">
+					<li ng-repeat="item in list" id="lblColumn{{$index}}" class="reorder-column-modal__list-item" ng-class="{ 'bg-success': dragIndex == $index, 'bg-info': (dragIndex == -1 && hoverIndex == $index), 'hovering-up': (dragIndex > -1 && hoverIndex == $index && dragIndex > hoverIndex), 'hovering-down': (dragIndex > -1 && hoverIndex == $index && dragIndex < hoverIndex) }" ng ng-mouseenter="mouseEnter($index, $event)" ng-mousedown="mouseDown($index, $event)" ng-mouseup="mouseUp($index, $event)">
+						<!-- class: drag-hint -->
+						<div class="reorder-column-modal__item-content">
+							{{ display != null ? angular.isFunction(display) ? display(item) : item[display] : item }}
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<span class="pull-right">
+            <button id="btnSave" ng-click="save();" class="btn btn-primary form-btn-save-new">{{ 'Save' | i18n }}</button>
+			<button id="btnCancel" ng-click="cancel();" class="btn form-btn-cancel-new">{{ 'Cancel' | i18n }}</button>
+		</span>
+	</div>
+</div>

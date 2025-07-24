@@ -1,0 +1,73 @@
+﻿<div class="perioCompare">
+    <div class="perioCompare__hdr">
+        <div class="col-md-8">
+            <div class="pill-bar">
+                <a ng-repeat="reading in readings"
+                   ng-click="select(reading)"
+                   ng-class="{'active' : reading.Title === selectedExamType}">
+                    {{ reading.Title | i18n }}
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 text-right">
+            <a id="btnEditExams" class="btn btn-default" ng-click="editExams()">{{'Edit {0}' | i18n:['Exams']}}</a>
+            <a id="btnPrint" class="btn btn-default" ng-click="printComparison()">
+                <i class="fa fa-print"></i> {{ 'Print' | i18n }}
+            </a>
+            <a id="btnClose" class="btn btn-primary" ng-click="backToPerioLanding()">{{ 'Close' | i18n}}</a>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="perioCompare__exams" ng-repeat="exam in exams">
+        <!--header-->
+        <div class="col-md-12 perioCompare__row perioCompare__subHdr" ng-if="$first">
+            <div class="perioCompare__col">
+                {{ 'Date' | i18n }}
+            </div>
+            <div class="perioCompare__col text-center" ng-repeat="detail in exam.ExamDetails">
+                {{ detail.ToothId }}
+            </div>
+        </div>
+        <!--row content-->
+        <div class="col-md-12 perioCompare__row">
+            <div class="perioCompare__col">
+                <div class="perioCompare__sideLabel" ng-class="{'singleCompare': exams.length / 4 === 1}" ng-if="$index === labelPos[0]">{{'B'|i18n}}</div>
+                <div class="perioCompare__sideLabel" ng-class="{'singleCompare': exams.length / 4 === 1}" ng-if="$index === labelPos[1]">{{'L'|i18n}}</div>
+                <div class="perioCompare__sideLabel" ng-class="{'singleCompare': exams.length / 4 === 1}" ng-if="$index === labelPos[2]">{{'L'|i18n}}</div>
+                <div class="perioCompare__sideLabel" ng-class="{'singleCompare': exams.length / 4 === 1}" ng-if="$index === labelPos[3]">{{'B'|i18n}}</div>
+                {{ exam.ExamDate + 'Z' | toShortDisplayDate }}
+            </div>
+            <div class="perioCompare__col" ng-repeat="detail in exam.ExamDetails ">
+                <!--Depth Pocket-->
+                <div class="perioCompare__row" ng-if="selectedExamType === 'Pocket Depth'">
+                    <div class="perioCompare__col" ng-repeat="reading in detail.DepthPocket track by $index"
+                         ng-class="{'text-right' : $index === 0, 'text-center' : $index === 1, 'text-left' : $index === 2}">
+                        <span ng-class="{'perioAlertLevel' : reading >= dpAlertLevel}">{{ reading }}</span>
+                    </div>
+                </div>
+                <!--Gingival Margin-->
+                <div class="perioCompare__row" ng-if="selectedExamType === 'Gingival Margin'">
+                    <div class="perioCompare__col" ng-repeat="reading in detail.GingivalMarginPocket track by $index"
+                         ng-class="{'text-right' : $index === 0, 'text-center' : $index === 1, 'text-left' : $index === 2}">
+                        <span ng-class="{'perioAlertLevel' : reading >= gmAlertLevel}">{{ reading }}</span>
+                    </div>
+                </div>
+                <!--M-G Junction-->
+                <div class="perioCompare__row" ng-if="selectedExamType === 'M-G Junction'">
+                    <div class="perioCompare__col" ng-repeat="reading in detail.MgjPocket track by $index"
+                         ng-class="{'text-right' : $index === 0, 'text-center' : $index === 1, 'text-left' : $index === 2}">
+                        <span>{{ reading }}</span>
+                    </div>
+                </div>
+            </div>
+            <span class="perioCompare__quadGap" ng-if="quadrantGap.indexOf($index) > -1"></span>
+        </div>
+        <!--footer-->
+        <div class="col-md-12 perioCompare__row perioCompare__subHdr" ng-if="$last">
+            <div class="perioCompare__col"></div>
+            <div class="perioCompare__col text-center" ng-repeat="tooth in exam.ExamDetails">
+                {{ tooth.ToothId }}
+            </div>
+        </div>
+    </div>
+</div>

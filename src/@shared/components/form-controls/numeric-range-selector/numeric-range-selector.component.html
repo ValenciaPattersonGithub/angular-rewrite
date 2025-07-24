@@ -1,0 +1,56 @@
+<div class="numeric-ranger-picker-width">
+    <form [formGroup]="formGroup">
+        <div class="number-selector">
+            <div class="popover-container">
+                <p class="input-group no-margin-bottom number-selector-input-group" [tabindex]="1">
+                    <input class="number-selector-input" type="text" (click)="toggle(false)" name="numberRangePicker"
+                        formControlName="numberRangePicker" readonly ngDefaultControl />
+                    <span class="input-group-btn" (click)="toggle(true)">
+                        <button kendoButton type="button" class="number-selector-btn icon-button">
+                            <i class="fas fa-filter filerIcon"></i>
+                        </button>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </form>
+    <div class="number-selector" *ngIf="showPopOverNumeric">
+        <ng-container *ngTemplateOutlet="numericRangePopOver"></ng-container>
+    </div>
+</div>
+<ng-template #numericRangePopOver>
+    <div #popover class="popover-width numeric-range-picker">
+        <form [formGroup]="frmNumericRangePicker">
+            <div class="number-selector-popup">
+                <div class="main-container">
+                    <div class="fromToDiv">
+                        <div>
+                            <label>{{ 'From' | translate }}</label>
+                        </div>
+                        <kendo-numerictextbox class="custom-bg-color number-selector-input" formControlName="fromValue"
+                            [placeholder]="placeholderFrom" format="n0" (keydown.enter)="$event.preventDefault()"></kendo-numerictextbox>
+                    </div>
+                    <div class="fromToDiv">
+                        <div>
+                            <label>{{ 'To' | translate }}</label>
+                        </div>
+                        <kendo-numerictextbox class="custom-bg-color number-selector-input" formControlName="toValue"
+                            [placeholder]="placeholderTo" format="n0" (keydown.enter)="$event.preventDefault()"></kendo-numerictextbox>
+                    </div>
+                </div>
+                <div *ngIf="formGroup?.invalid || frmNumericRangePicker?.invalid" class="error">
+                    <span class="text-danger">{{'Invalid range value.' | translate}}</span>
+                </div>
+                <div class="row btnAlign mt-1">
+                    <div class="col-sm-12 text-right">
+                        <app-button class="mr-2" buttonLabel="{{clearBtnLabel|translate }}" variation="secondary"
+                            (onClick)="clear()"></app-button>
+                        <app-button class="mr-2" (onClick)="apply()" buttonLabel="{{applyBtnLabel| translate }}"
+                            variation="primary"></app-button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</ng-template>

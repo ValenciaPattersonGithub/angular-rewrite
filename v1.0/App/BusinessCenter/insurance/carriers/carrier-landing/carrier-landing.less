@@ -1,0 +1,157 @@
+﻿.carrierLanding {
+    padding-top: 10px;
+    .standardHeader;
+    &__carrierPatientBenefit {
+        min-width: 600px;
+        max-width: 70%;
+        float: left;
+        height: 100px;
+
+        .nav-tabs {
+            > li {
+                &.active > a {
+
+                    &, &:hover, &:focus {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+        a {
+            color: #333333;
+        }
+    }
+
+    &__carrierInfo {
+        width: auto;
+        min-width: 300px;
+        float: right;
+        height: auto;
+        margin-top: 30px;
+        word-break: break-word;
+    }
+
+    &__sections {
+        overflow: auto;
+        margin: 16px 0% 16px 0%;
+    }
+
+
+    &__payerId {
+        width: 50%;
+        float: left;
+    }
+
+
+    &__carrierSectionDivider {
+        width: 100%;
+        border-top: 1px solid @gray-lighter;
+        margin: 0px 0% 8px 0%;
+    }
+
+    .section-divider {
+        width: 5%;
+        margin: 0px 0% 8px 0%;
+    }
+
+    &__carrierTitleColor {
+        color: black;
+        font-weight: bold;
+    }
+
+    &__carrierTextColor {
+        color: black;
+    }
+    
+    &__titleC {
+        color: #333333;
+        font-weight: bold;
+    }
+
+    &__infoMain {
+        width: 96%;
+        max-width: 1600px;
+        margin: 0 auto;
+        &.margin-top-8 {
+            margin-top: 8px;
+         }
+    }
+
+    &__grid {
+        .containerStandard;
+        padding-top: 0;
+        padding-bottom: @brand-padding_horizontal;
+
+        margin: 0 0 0 0;
+
+        .truncateText{
+            display: inline-block;
+            float: left;
+            width: 90%;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            -ms-text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+        }
+        .accountPayment {
+            width:120px;
+        }
+
+        .k-grid {
+            .k-grid-header {
+                border: none;
+                background-color: rgb(255,255,255);
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+            .k-grid-content {
+                overflow-y: visible;
+            }
+            .k-grouping-row {       
+                > td {
+                    
+                        > p,
+                        > .k-reset {
+                        display: none;
+                    }
+                }
+                .k-group-custom-header {
+                    display:inline-block;
+                    position: relative;
+                    > table {
+                        .k-reset {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &__tabs {
+        .nav-tabs {
+            > li {
+                &.active > a {
+                    &, &:hover, &:focus {
+                        /*font-weight: bold;*/
+                    }
+                }
+            }
+        }
+    }
+
+    &__actions {
+        margin-bottom: 16px;
+
+        &__search {
+            padding-left: 0px;
+        }
+
+        &__addPlan {
+            text-align: right;
+        }
+    }
+}
+

@@ -1,0 +1,163 @@
+<div class="merge-duplicates">
+    <div class="form-row">
+        <div class="panel">
+            <div class="col-sm-12 title-bar">
+                <div class="col-sm-6">
+                    <p class="text-left page_sub_title">{{'Account Members'| translate  }}</p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="float-right">
+                        <!-- future add account member button -->
+                    </div>
+                </div>
+            </div>
+            <div kendoDialogContainer></div>
+            <div class="">
+                <table id="parent_table" class="table table-bordered table-striped ">
+                    <thead>
+                        <tr>
+                            <th id="thCheckbox" class="cbx-column">                                
+                                <label class="cbxcontainer">
+                                    <input type="checkbox" (change)="toggleAllSelected()"  />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </th>
+                            <th id="thPatientCode" (click)="changeSortingForGrid('PatientCode')">{{'ID' | translate }}
+                                <table-sort [columnName]="'PatientCode'" [listSortedBy]="orderBy.field" [sortDirection]="orderBy.asc"></table-sort>
+                            </th>
+                            <th id="thName" (click)="changeSortingForGrid('IsResponsiblePerson')">{{'RP' | translate }}
+                                <table-sort [columnName]="'IsResponsiblePerson'" [listSortedBy]="orderBy.field" [sortDirection]="orderBy.asc"></table-sort>
+                            </th>
+                            <th id="thName" (click)="changeSortingForGrid('Name')">{{'Name' | translate }}
+                                <table-sort [columnName]="'Name'" [listSortedBy]="orderBy.field" [sortDirection]="orderBy.asc"></table-sort>
+                            </th>
+                            <th id="thDateOfBirth" (click)="changeSortingForGrid('DateOfBirthDisplay')">{{'Date of Birth'| translate  }}
+                                <table-sort [columnName]="'DateOfBirthDisplay'" [listSortedBy]="orderBy.field" [sortDirection]="orderBy.asc"></table-sort>
+                            </th>
+                            <th id="thAddress" (click)="changeSortingForGrid('FullAddress')">{{'Address'| translate  }}
+                                <table-sort [columnName]="'FullAddress'" [listSortedBy]="orderBy.field" [sortDirection]="orderBy.asc"></table-sort>
+                            </th>
+                            <th id="thPhone" (click)="changeSortingForGrid('PhoneNumberFormatted')">{{'Phone'| translate  }}
+                                <table-sort [columnName]="'PhoneNumberFormatted'" [listSortedBy]="orderBy.field" [sortDirection]="orderBy.asc"></table-sort>
+                            </th>
+                            <th id="thEmail" (click)="changeSortingForGrid('EmailAddress')"> {{'Email'| translate  }}
+                                <table-sort [columnName]="'EmailAddress'" [listSortedBy]="orderBy.field" [sortDirection]="orderBy.asc"></table-sort>
+                            </th>
+                            <th id="thStatus" (click)="changeSortingForGrid('StatusName')">{{'Status'| translate  }}
+                                <table-sort [columnName]="'StatusName'" [listSortedBy]="orderBy.field" [sortDirection]="orderBy.asc"></table-sort>
+                            </th>
+                            <!-- <th></th> -->
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        <ng-container *ngFor="let accountMember of primaryAccountMembers ; index as i">
+                            <ng-container>
+                            <tr> 
+                                <td id="tdAccountMemberIsSelected{{i}}" class="cbx-column">
+                                    <label class="cbxcontainer">
+                                        <input type="checkbox" (change)="toggleSelected(accountMember)"  [checked]="accountMember.IsSelected" />
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </td>
+                                <td  id="tdAccountMemberPatientCode{{i}}" (click)="showDuplicates(accountMember)">
+                                    <span *ngIf="accountMember.DuplicatePatients.length > 0 && accountMember.showDuplicates===true">
+                                        <i class="fas fa-sort-up collapse-expand" ></i>
+                                    </span>
+                                    <span *ngIf="accountMember.DuplicatePatients.length > 0 && accountMember.showDuplicates===false">
+                                        <i class="fas fa-sort-down collapse-expand" ></i>
+                                    </span>
+                                    {{accountMember.PatientCode}}</td>
+                                <td id="tdAccountMemberIsResponsiblePerson{{i}}" class="blue-star-column">
+                                    <span class="blue-star">
+                                        <i class="fas fa-star fa-lg" *ngIf="accountMember.IsResponsiblePerson===true"></i>
+                                    </span>
+                                </td>
+                                <td title="{{ accountMember.Name }}" id="tdAccountMemberName{{i}}">{{accountMember.Name | truncateText: 40 }}</td>
+                                <td title="{{ accountMember.DateOfBirthDisplay }}" id="tdAccountMemberDateOfBirthDisplay{{i}}">{{accountMember.DateOfBirthDisplay}}</td>
+                                <td title="{{ accountMember.FullAddress }}" id="tdAccountMemberFullAddress{{i}}">{{accountMember.FullAddress}}</td>
+                                <td title="{{ accountMember.PhoneNumberFormatted }}" id="tdAccountMemberPhoneNumberFormatted{{i}}">{{accountMember.PhoneNumberFormatted}}</td>
+                                <td title="{{ accountMember.EmailAddress  }}" id="tdAccountMemberEmailAddress{{i}}">{{accountMember.EmailAddress | truncateText: 40}}</td>
+                                <td title="{{ accountMember.StatusName }}" id="tdAccountMemberStatusName{{i}}">{{accountMember.StatusName | translate}}</td>
+                            </tr>
+                        </ng-container>
+                            <tr class="child_row" *ngIf="accountMember.DuplicatePatients.length > 0 && accountMember.showDuplicates">
+                                <!-- nested tables -->
+                                <td class="nested-row" colspan="9" >
+                                    <div>
+                                        <table id="child_table" class="table table-bordered table-nested table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <!-- <th></th> -->
+                                                    <th id="thPatientCodeDuplicate" >{{'ID' | translate }}                                                        
+                                                    </th>
+                                                    <th id="thRPDuplicate" >{{'RP' | translate }}                                                        
+                                                    </th>
+                                                    <th id="thNameDuplicate" >{{'Name' | translate }}                                                        
+                                                    </th>
+                                                    <th id="thDateOfBirthDuplicate" >
+                                                        {{'Date of Birth'| translate  }}
+                                                    </th>
+                                                    <th id="thAddressDuplicate" >{{'Address'| translate  }}                                                        
+                                                    </th>
+                                                    <th id="thPhoneDuplicate">{{'Phone'| translate  }}                                                        
+                                                    </th>
+                                                    <th id="thEmailDuplicate"> {{'Email'| translate  }}                                                        
+                                                    </th>
+                                                    <th id="thStatusDuplicate">{{'Status'| translate  }}                                                       
+                                                    </th> 
+                                                    <td class="action">                                   
+                                                    </td>                           
+                                                </tr>
+                                            </thead>
+                                            <tbody >
+                                                <ng-container *ngFor="let duplicatePatient of accountMember.DuplicatePatients ; index as ii">
+                                                <tr>                                                   
+                                                    <td id="tdAccountMemberPatientCode{{ii}}">{{duplicatePatient.PatientCode}}</td>
+                                                    <td id="tdAccountMemberIsResponsiblePerson{{ii}}" class="blue-star-column">
+                                                        <span class="blue-star">
+                                                            <i class="fas fa-star fa-lg" *ngIf="duplicatePatient.IsResponsiblePerson===true"></i>
+                                                        </span>
+                                                    </td>
+                                                    <td title="{{ duplicatePatient.Name }}" id="tdAccountMemberName{{ii}}">{{duplicatePatient.Name | truncateText: 40}}</td>
+                                                    <td title="{{ duplicatePatient.DateOfBirthDisplay }}" id="tdAccountMemberDateOfBirthDisplay{{ii}}">{{duplicatePatient.DateOfBirthDisplay}}</td>
+                                                    <td title="{{ duplicatePatient.FullAddress }}" id="tdAccountMemberFullAddress{{ii}}">{{duplicatePatient.FullAddress}}</td>
+                                                    <td title="{{ duplicatePatient.PhoneNumberFormatted }}" id="tdAccountMemberPhoneNumberFormatted{{ii}}">{{duplicatePatient.PhoneNumberFormatted}}</td>
+                                                    <td title="{{ duplicatePatient.EmailAddress }}" id="tdAccountMemberEmailAddress{{ii}}">{{duplicatePatient.EmailAddress | truncateText: 40}}</td>
+                                                    <td title="{{ duplicatePatient.StatusName }}" id="tdAccountMemberStatusName{{ii}}">{{duplicatePatient.StatusName | translate}}</td>
+                                                    <td class="action">                                                        
+                                                        <div class="btn-group">
+                                                            <button class="btn-link dropdown-toggle padding-right-10" data-toggle="dropdown">
+                                                                <i class="fa fa-ellipsis-v"></i>
+                                                            </button>
+                                                            <ul class="pull-right dropdown-menu menu-item">
+                                                                <li><a id="{{duplicatePatient.PatientId}}_btnAccountRowRemove" (click)="removeRelationship(duplicatePatient)"
+                                                                        class="minus_zindex">{{ 'Remove Duplicate' }}
+                                                                    </a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr> 
+                                                </ng-container>                       
+                                            </tbody>
+                                        </table>                        
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <span>
+                    <button id="btnCombineAsDuplicates" class="default_button" [disabled]="enableCombine===false" (click)="combineAsDuplicate()">{{'Combine as Duplicate' | translate }}
+                    </button>
+                </span>              
+                <span>
+                    <button id="btnSearchForDupliates" class="default_button" [disabled]="patientSearchList.length === 0" (click)="checkForDuplicates()">{{'Check for Duplicates'}}
+                    </button>
+                </span>
+                <div class="form-row" *ngIf="patientSearchList.length && checkingForDuplicates">
+                    <patient-duplicate-search [isPersonalDetail]="false" [patientSearchList]="patientSearchList" (duplicateSelected)="duplicateSelected($event)" [disableClick]="mergeInProgress"></patient-duplicate-search>
+                </div>
+          </div>
+        </div>
+    </div>
+</div>

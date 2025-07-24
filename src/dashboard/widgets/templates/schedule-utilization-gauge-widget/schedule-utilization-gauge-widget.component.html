@@ -1,0 +1,43 @@
+<form [formGroup]="scheduleUtilizationForm">
+    <div class="soarWidget scheduleUtilizationGaugeWidgetComponent">
+        <app-date-range-selector [startDate]="schedUtilFromDate" [endDate]="schedUtilToDate" [hideDateControl]="true"
+            [applyBtnLabel]="'Search'" [clearBtnLabel]="'Clear'" 
+            [hideOnClear]="true" (onApply)="onApplyFilter($event)"
+            (onClear)="onDateFilterChange($event)" [showPopOver]="showPopOver" [requiredBothDates]="false"
+            [popUpFixWidth]="false"[dateRangeValidator]="false"
+            [tooltipPosition]="'dateRangepicker-schduleUtilization'" [hideOnClickOutSide]="false" [isScheduleUtilization]="true"></app-date-range-selector>
+        <div class="panel-heading soarWidget__header">
+            <div class="widget-handle w_row">
+                <label>{{data?.Title | translate}}</label>
+            </div>
+            <div>
+                <div class="schedule-Utilization-filter-list" *ngIf="dataFilterOptions?.length>0">
+                    <kendo-dropdownlist 
+                        formControlName="currentSelectedDataFilter" 
+                        [tabIndex]="10"
+                        [data]="dataFilterOptions" 
+                        [textField]="'text'" 
+                        [valueField]="'value'" 
+                        [valuePrimitive]="true"
+                        [defaultItem]="defaultFilter"
+                         name="selectedItemValue"
+                        (valueChange)="onDataFilterChange($event)"  
+                        ngDefaultControl #datedropdown clickOutside (clickOutside)="clickedOutside(datedropdown)">
+                        <ng-template kendoDropDownListItemTemplate
+                            let-dataItem>
+                            <span (click)="onSelectItem(dataItem)" [style.width.%]="100">{{ dataItem?.text }}</span>
+                        </ng-template>
+                        <ng-template kendoDropDownListValueTemplate
+                            let-dataItem>
+                            {{ getCustomPlaceHolder(dataItem?.text) }}
+                        </ng-template>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="gaugeWidget__body">
+            <gauge [gaugeChartData]="gaugeData" [gaugeChartType]="GaugeChartType?.ScheduleUtilization">
+            </gauge>
+        </div>
+    </div>
+</form>

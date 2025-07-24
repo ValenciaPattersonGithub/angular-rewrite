@@ -1,0 +1,25 @@
+﻿.sectionPreview {
+
+    :invalid {
+        box-shadow: none;
+    }
+
+    :-moz-submit-invalid {
+        box-shadow: none;
+    }
+
+    :-moz-ui-invalid {
+        box-shadow: none;
+    }
+
+    &__title {
+        // not using less var here because i don't want to cause the existing implementations of custom forms to change color
+        background-color: lightgray;
+        padding: @brand-padding_sm;
+    }
+
+    &__headerRow {
+        border-color: @brand-color_gray;
+        margin: 0 0 @brand-margin_sm 0;
+    }
+}

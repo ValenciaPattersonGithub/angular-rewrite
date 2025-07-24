@@ -1,0 +1,6 @@
+<div class="drop">
+    <button (click)="toggle()"><span class="fas fa-ellipsis-v"></span></button>
+    <div class="menu" *ngIf="isOpen" kendoTooltip showAfter="0" position="left" tooltipClass="app-tooltip" [tooltipWidth]="tooltipWidth">
+        <div *ngFor="let option of options" title="{{ option.disabledText }}" (click)="select(option)" [ngClass]="{'disabled': option.disabled}">{{ option.label }}</div>
+    </div>
+</div>

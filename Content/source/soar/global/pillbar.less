@@ -1,0 +1,28 @@
+﻿.pill-bar{
+    margin-top: 10px;
+    padding-bottom: 20px;
+    a{
+        padding: 10px 25px;
+        font-size: 18px;
+        background-color: @brand-navigation_tertiary_bg;
+        font-family: @brand-font;
+        color: @brand-navigation_tertiary_color;
+        border: @brand-navigation_tertiary_border;
+        box-shadow: @brand-navigation_tertiary_box_shadow @brand-naviagtion_tertiary_box_shadow_color;
+        &.active{
+            color: @brand-navigation_tertiary_active_color;
+            background-color: @brand-navigation_tertiary_active_bg;
+            font-weight: 600;
+            padding: 10px 30px;
+        }
+    }
+    *:last-child{
+        border-bottom-right-radius:6px;
+        border-top-right-radius: 6px;
+    }
+    *:first-child{
+        border-bottom-left-radius:6px;
+        border-top-left-radius: 6px;
+    }
+}
+

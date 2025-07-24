@@ -1,0 +1,144 @@
+<div class="panelbar-wrapper">
+    <kendo-panelbar>
+        <kendo-panelbar-item [title]="null" expanded="true" (click)="expandedItem = 'ToDoPending'"
+            [selected]="expandedItem === 'ToDoPending'" [expanded]="expandedItem === 'ToDoPending'">
+            <ng-template class="communication-todo-list-panel" kendoPanelBarItemTitle>
+                <span class="item-title">{{'To-Do List' | translate }}</span>
+                <span *ngIf="inCompleteToDoCount" class="badge">{{inCompleteToDoCount}}</span>
+            </ng-template>
+            <ng-template kendoPanelBarContent>
+                <div class="communication-todo-wrapper">
+                    <div id="comm-incomplete-todo-norecords" class="communication-no-records"
+                        *ngIf="!toDoCommunications.length">
+                        {{ 'There are no records.' | translate }}
+                    </div>
+                    <div class="communication-todo-sub-wrapper"
+                        [ngClass]="{'subWrapperDisable' : todocommunication.IsDisabled }"
+                        *ngFor="let todocommunication of toDoCommunications; let i = index" [attr.data-index]="i">
+                        <div class="communication-todo-item" id="comm-incomplete-todo-subtitle">
+                            <app-check-box id="comm-todo-chkbox"
+                                (checkChanged)="isIncompleteToDoChecked($event, todocommunication)"
+                                label=" {{'To-Do Item' | translate}}">
+                            </app-check-box>
+                        </div>
+                        <div class="communication-todo-addedby" id="comm-incomplete-todo-addedby">
+                            <span id="comm-todo-addedby" class="communication-todo-addedby-text">
+                                <span class="communication-label">{{'Added By:' | translate}}</span>
+                                {{todocommunication.AddedBy}}
+                            </span>
+                        </div>
+                        <div class="communication-todo-editedby" *ngIf="todocommunication.IsModified">
+                            <span id="comm-todo-editedby" class="communication-text"><b>Edited By:
+                                </b>{{todocommunication.EditedBy}}</span>
+                        </div>
+                        <div class="communication-todo-note" id="comm-incomplete-todo-note">
+                            <input type="checkbox" class="communication-notes-chkbox" id="expanded{{i}}">
+                            <p id="comm-todo-note" class="communication-todo-note-text">
+                                <span class="communication-label">{{'Notes:' | translate}}</span>
+                                {{todocommunication.Notes}}
+                            </p>
+                            <label *ngIf="todocommunication.Notes.length > 150" id="comm-todo-more"
+                                class="communication-todo-more" for="expanded{{i}}" role="button"
+                                (click)="labelShowMore($event)">{{showMore}}</label>
+                        </div>
+                        <div id="comm-incomplete-todo-menu" class="communication-todo-menu">
+                            ({{todocommunication.DueDate  ? (todocommunication.DueDate | date:'MM/dd/yyyy') : ('No Due Date' | translate)}})
+                            <div class="btn-group">
+                                <button class="btn-link dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="pull-right dropdown-menu">
+                                    <li>
+                                        <a id="comm-incomplete-todo-editLink" class="menuLink"
+                                            (click)="editInCompleteCommunication(todocommunication, true)">
+                                            {{'Edit' | translate}}
+                                        </a>
+                                        <a id="comm-incomplete-todo-deleteLink" class="menuLink"
+                                            (click)="deleteToDoCommunication(todocommunication)">
+                                            {{'Delete' | translate}}
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </kendo-panelbar-item>
+        <kendo-panelbar-item [title]="null" expanded="true" (click)="expandedItem = 'ToDoComplete'"
+            [selected]="expandedItem === 'ToDoComplete'" [expanded]="expandedItem === 'ToDoComplete'">
+            <ng-template kendoPanelBarItemTitle>
+                <span class="completed-item-title">{{"Completed To-Do's" | translate}}</span>
+            </ng-template>
+            <ng-template kendoPanelBarContent>
+                <div class="communication-completedtodo-wrapper">
+                    <div id="comm-complete-todo-norecords" class="communication-no-records"
+                        *ngIf="!completedToDoCommunications.length">
+                        {{ 'There are no records.' | translate }}
+                    </div>
+                    <div class="communication-completedtodo-sub-wrapper"
+                        *ngFor="let completedToDoCommunication of completedToDoCommunications; let i = index"
+                        [attr.data-index]="i">
+                        <div class="communication-completedtodo-item" id="comm-complete-todo-subtitle">
+                            <app-check-box id="comm-todo-chkbox"
+                                (checkChanged)="isCompletedToDoChecked($event, completedToDoCommunication)"
+                                [checked]="completedToDoCommunication.IsComplete" label=" {{'To-Do Item' | translate}}">
+                            </app-check-box>
+                        </div>
+                        <div class="communication-completedtodo-addedby" id="comm-complete-todo-addedby">
+                            <span id="comm-completedtodo-addedby" class="communication-completedtodo-addedby-text">
+                                <span class="communication-label">{{'Added By:' | translate}}</span>
+                                {{completedToDoCommunication.AddedBy}}
+                            </span>
+                        </div>
+                        <div class="communication-completedtodo-editedby" *ngIf="completedToDoCommunication.IsModified">
+                            <span id="comm-completedtodo-editedby" class="communication-text"><b>Edited By:
+                                </b>{{completedToDoCommunication.EditedBy}}</span>
+                        </div>
+                        <div class="communication-completedtodo-note" id="comm-complete-todo-note">
+                            <input type="checkbox" class="communication-notes-chkbox" id="expanded{{i}}">
+                            <p id="comm-completedtodo-note" class="communication-completedtodo-note-text">
+                                <span class="communication-label">{{'Notes:' | translate}}</span>
+                                {{completedToDoCommunication.Notes}}
+                            </p>
+                            <label *ngIf="completedToDoCommunication.Notes.length > 150" id="comm-todo-more"
+                                class="communication-todo-more" for="expanded{{i}}" role="button"
+                                (click)="labelCompleteShowMore($event)">{{completeShowMore}}</label>
+                        </div>
+                        <div id="comm-completedtodo-duedate" class="communication-completedtodo-duedate">
+                            ({{completedToDoCommunication.DueDate ? (completedToDoCommunication.DueDate | date:'MM/dd/yyyy') : ('No Due Date'  | translate)}})
+                            <div class="btn-group">
+                                <button class="btn-link dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="pull-right dropdown-menu">
+                                    <li>
+                                        <a id="comm-complete-todo-editLink" class="menuLink"
+                                            [ngClass]="{'disabled deleteTooltip' : (completedToDoCommunication.IsComplete)}"
+                                            (click)="editInCompleteCommunication(todocommunication, true)">
+                                            {{'Edit' | translate}}
+                                            <span id="comm-card-deletetooltip"
+                                                *ngIf="completedToDoCommunication.IsComplete">
+                                                {{"Completed To-Do's cannot be edited" | translate}}
+                                            </span>
+                                        </a>
+                                        <a id="comm-complete-todo-deleteLink" class="menuLink"
+                                            [ngClass]="{'disabled deleteTooltip' : (completedToDoCommunication.IsComplete)}">
+                                            {{'Delete' | translate}}
+                                            <span id="comm-card-deletetooltip"
+                                                *ngIf="completedToDoCommunication.IsComplete">
+                                                {{"Completed To-Do's cannot be deleted" | translate}}
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </kendo-panelbar-item>
+    </kendo-panelbar>
+</div>

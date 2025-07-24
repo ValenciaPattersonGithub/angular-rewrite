@@ -1,0 +1,72 @@
+@import 'src/stylings/variables.scss';
+
+.numeric-ranger-picker-width {
+    width: 100%;
+
+    ::ng-deep .number-selector {
+        .number-selector-input .k-numeric-wrap .k-input {
+            background-color: $polar-white;
+        }
+
+        .number-selector-input .k-numeric-wrap .k-select {
+            background-color: #f5f5f5;
+        }
+
+        .number-selector-input .k-numeric-wrap .k-input,
+        .k-selectbox .k-input {
+            height: 24px;
+        }
+
+        .number-selector-input .k-numeric-wrap {
+            border-color: $polar-white;
+        }
+
+        .filerIcon {
+            color: $action-blue;
+        }
+    }
+
+    .number-selector-input {
+        padding: 4px;
+        width: 85%;
+        border: 1px solid #A9A9A9;
+        border-radius: 2px;
+        box-sizing: border-box;
+    }
+
+    .number-selector .number-selector-input-group .number-selector-input {
+        height: 30px;
+        width: 100%;
+    }
+
+    .number-selector-popup {
+        position: absolute;
+        z-index: 1000;
+        width: 250px;
+        background-color: $polar-white;
+        border: 1px solid #6A7575;
+        padding: 4px;
+        box-shadow: -4px 0px 12px rgba(0, 0, 0, 0.5);
+        top: 7rem;
+    }
+
+    .main-container {
+        display: table;
+        width: 100%;
+    }
+
+    .fromToDiv {
+        display: table-cell;
+        width: 45%;
+        height: 62px;
+        vertical-align: top;
+    }
+    
+    .mt-1 {
+        margin-top: 1rem;
+    }
+
+    .mr-2 {
+        margin-right: 2rem;
+    }
+}

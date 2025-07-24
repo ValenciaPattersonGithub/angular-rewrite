@@ -1,0 +1,53 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.ResponsibleParties.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.ResponsibleParties.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-3 cell">{{ 'Responsible Party' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Location' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Provider Total' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Account Total' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="res in data.ResponsibleParties" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-3 cell">{{ res.ResponsibleParty }}</td>
+                    <td class="col-sm-3 cell">{{ res.ProviderLocationTotal[0].Provider }}</td>
+                    <td class="col-sm-2 cell">{{ res.ProviderLocationTotal[0].Location }}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="res.ProviderLocationTotal[0].ProviderTotal >=0">{{ res.ProviderLocationTotal[0].ProviderTotal  | currency }}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="res.ProviderLocationTotal[0].ProviderTotal < 0">({{ res.ProviderLocationTotal[0].ProviderTotal * -1  | currency }})</td>
+                    <td class="col-sm-2 cell text-right" ng-if="res.AccountTotal >=0">{{ res.AccountTotal  | currency }}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="res.AccountTotal < 0">({{ res.AccountTotal * -1 | currency }})</td>
+                </tr>
+                <tr ng-repeat="pro in res.ProviderLocationTotal | startFrom : 1">
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-3 cell">{{ pro.Provider }}</td>
+                    <td class="col-sm-2 cell">{{ pro.Location }}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="pro.ProviderTotal >=0">{{ pro.ProviderTotal  | currency }}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="pro.ProviderTotal <0">({{ pro.ProviderTotal *-1 | currency }})</td>
+
+                    <td class="col-sm-2 cell"></td>
+                </tr>
+            </tbody>
+            <tbody class="reportGrid__row reportGrid__footer stripEven" ng-if="data.ResponsibleParties.length > 0 && !showFilterMessage">
+                <tr>
+                    <td class="col-sm-6 cell" colspan="2"></td>
+                    <td class="col-sm-2 cell reportGrid__countLabel text-left">{{'Report Total' | i18n}}</td>
+                    <td class="col-sm-2 cell reportGrid__countLabel text-right" ng-if="data.ReportProvidersTotals >=0">{{ data.ReportProvidersTotals  | currency }}</td>
+                    <td class="col-sm-2 cell reportGrid__countLabel text-right" ng-if="data.ReportProvidersTotals < 0">({{ data.ReportProvidersTotals *-1 | currency }})</td>
+                    <td class="col-sm-2 cell reportGrid__countLabel text-right" ng-if="data.ReportAccountTotal >=0">{{ data.ReportAccountTotal  | currency }}</td>
+                    <td class="col-sm-2 cell reportGrid__countLabel text-right" ng-if="data.ReportAccountTotal < 0">({{ data.ReportAccountTotal *-1  | currency }})</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-6 cell" colspan="2"></td>
+                    <td class="col-sm-2 cell reportGrid__countLabel text-left">{{'Total Accounts' | i18n}}</td>
+                    <td class="col-sm-2 cell reportGrid__countLabel text-right">{{ data.TotalAccounts }}</td>
+                    <td class="col-sm-2 cell"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

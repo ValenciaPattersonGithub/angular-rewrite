@@ -1,0 +1,19 @@
+﻿<div class="propServCreateUpdate">
+    <div class="toothCtrl__row">
+        <select kendo-multi-select k-options="teethSelectOptions" k-ng-model="activeTeeth"></select>
+    </div>
+    <div class="toothCtrl__row">
+        <surface surface-template="compact" selected-surface="surface" selected-tooth="tooth" is-surface-editing="true"></surface>
+    </div>
+    <div class="toothCtrl__row">
+        <date-selector></date-selector>
+    </div>
+    <div class="toothCtrl__footer">
+        <button class="btn btn-primary">
+            {{ ::('Save' | i18n) }}
+        </button>
+        <button class="btn btn-default">
+            {{ ::('Cancel' | i18n) }}
+        </button>
+    </div>
+</div>

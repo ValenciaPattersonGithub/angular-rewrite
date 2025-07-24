@@ -1,0 +1,343 @@
+﻿
+
+input.table-input {
+    padding: 4px;
+    font-size: @font-size-normal;
+    width: 100%;
+    border-radius: 2px;
+}
+
+.form-toggle {
+    width: @input-min-width;
+    background: @toggle-bg;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    white-space: nowrap;
+
+    label {        
+        padding: 5px 15px 5px 15px;
+        color: @toggle-label-color;
+        cursor: pointer;
+        background: transparent;
+        font-size: @toggle-btn-font-size;
+        font-weight: bold;
+        text-align: center;
+        margin: 0;
+        width: @toggle-button-width;
+
+        &:active {        
+            color: @toggle-btn-color;
+            background: @toggle-btn-bg-color;
+        }
+    }
+
+    label.active {
+        color: @toggle-btn-color;
+        background: @toggle-btn-bg-color;
+    }
+}
+
+.form-dropdown {
+    padding: 10px 15px 10px 10px;
+    font-size: @font-size-normal;
+    width: 100%;
+    border: 1px solid @form-dropdown-border-color;
+    box-shadow: inset 0 1px 0@form-box-color; //inset 0px 1px 2px @gray-dark;
+}
+
+.form-radio-btn-group {   
+    font-weight: bold;   
+    margin-top: 15px;
+
+    input[type=radio] {
+        opacity: 0;
+        width: 0;
+        height: 0; 
+    }
+    
+    label {
+        margin-right: 30px;
+        display: inline-block;  
+        cursor: pointer;  
+        position: relative;  
+        padding-left: 25px;  
+        margin-right: 15px;  
+    }  
+    
+    label:before {  
+        content: "";  
+        display: inline-block;  
+        width: 20px;  
+        height: 20px;  
+        margin-right: 10px;  
+        position: absolute;  
+        left: 0;  
+        bottom: 1px;  
+        background-color: #fff;  
+        border: 2px solid @brand-form_toggle--color;
+    }  
+
+    > label:before {        
+        border-radius: 10px;  
+    }
+    
+    input[type="radio"]:focus + label:before {
+      border: 2px solid #5897fb; 
+    }
+
+    input[type=radio]:checked + label:before {  
+        content: "\2022";  
+        color: @brand-form_toggle--color;
+        font-size: 36px;  
+        text-align: center;  
+        line-height: 18px;  
+    }     
+}
+
+.form-radio-btn {
+    margin-right: 10px;    
+}
+
+.form-checkbox {
+    font-weight: normal;   
+    font-size: @font-size-form-label;
+    margin-top: 10px;
+
+    > input[type=checkbox] {
+        opacity: 0;
+        width: 0;
+        height: 0; 
+    }
+    
+    > label {
+        margin-right: 30px;
+        display: inline-block;  
+        cursor: pointer;  
+        position: relative;  
+        padding-left: 25px;  
+        margin-right: 15px;  
+        font-size: @font-size-form-label; 
+    }  
+    
+    label:before {  
+        content: "";  
+        display: inline-block;  
+        width: 22px;  
+        height: 20px;  
+        margin-right: 10px;  
+        position: absolute;  
+        left: 0;  
+        bottom: 1px;  
+        background-color: #fff;  
+        border: 2px solid @input-type-color;
+    }  
+
+    > label:before {        
+        border-radius: 2px;  
+    }
+
+    input[type="checkbox"]:focus + label:before {
+      border: 2px solid #5897fb; 
+    }
+
+    input[type=checkbox]:checked + label:before {  
+        font-family: 'Font Awesome 5 Pro';
+        content: "\f00c"; 
+        background-color: @input-type-color;
+        color: #fff;  
+        font-size: 14px;  
+        font-weight: normal;
+        font-style: normal;
+        font-variant: normal;
+        text-align: center;  
+        line-height: 16px;  
+    }
+    // disabled checkbox 
+    input[type="checkbox"]:disabled:not(:checked) + label:before,
+    input[type="checkbox"]:disabled:checked + label:before {
+     background-color: #ddd;
+    }
+
+    input[type="checkbox"]:disabled:checked + label:after {
+    color: #999;
+    }
+    
+    input[type="checkbox"]:disabled + label {
+    color: #aaa;
+    }   
+}
+
+.form-search-container {
+    height: 300px;
+    width: 100%;
+    border: 1px solid @input-border-color;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.form-search-input {
+    > i {
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        z-index: 1001;
+        font-size: 20px;
+    }   
+    
+    > input {
+        width: 100%;
+    }    
+}
+
+.form-search-item {
+    margin: 10px 0 5px 0;
+    padding: 5px 10px 5px 10px;
+    height: 80px;
+    cursor: pointer;
+}
+
+.form-textarea {
+    resize: none;
+}
+
+.item-zebra-dark {
+    background: @zebra-dark;
+}
+
+.item-zebra-light {
+    background: @zebra-light;
+}
+
+// re-factor / temporary classes for the locations form to keep from changing the look of 
+// the current patient form
+
+.form-btn-container-new {
+	margin: 40px 0 40px 0;
+}
+
+.form-btn-cancel-new, .form-btn-delete-new {
+	background: none;
+	border-radius: 0;
+	color: @link-color;
+	font-size: @font-size-normal;
+	padding: 5px 25px 5px 25px;
+}
+
+.form-btn-cancel-new-white {
+	background: white;
+	border-radius: 0;
+	color: @link-color;
+	font-size: @font-size-normal;
+	padding: 5px 25px 5px 25px;
+}
+
+.form-image-new {
+	width: 75px;
+	height: 75px;
+}
+
+// re-factor / temporary classes for the locations form to keep from changing the look of 
+// the current patient form
+
+.form-header-new {
+   margin-bottom: 30px;
+   padding: 15px 40px 0 0;
+}
+
+.form-header-newer {
+   padding: 15px 40px 0 15px;
+}
+
+.form-section-header-new {
+    background-color: @form-section-header-color;
+
+    > button {
+        margin: 13px 8px 0 0;
+    }
+}
+
+.form-section-header-newer {
+    background-color: @header-bg;
+    padding: 10px 10px 10px 15px;
+    font-weight: bold;
+
+    > button {
+        margin: 2px 0 0 0;
+    }
+}
+
+.form-sub-section-header-new {
+    margin: 10px 0 0 5%;
+}
+
+.form-section-new {
+    color: @form-section-color;
+    font-size: @section-input-size;
+
+    input {
+        border: 1px solid @border-color;
+        border-radius: 2px;
+        font-size: @font-size-normal;
+        padding: 10px;
+        width: 50%;
+    }
+
+    .k-header {
+        width: 50%;
+    }
+
+    label {
+        font-size: @font-size-form-label;
+    }
+
+    label:first-of-type {
+        margin-right: 10px;
+        width: 25%;
+        text-align: right;
+    }
+
+    margin-bottom: 15px;
+}
+
+.form-btn-container-new {
+    margin: 40px 0 40px 0;
+}
+
+.form-btn-container-newer {
+    margin: 40px 0 40px 5px;
+}
+
+.form-btn-save-new {
+    border-radius: 0;
+    font-weight: bold;
+    padding: 5px 85px 5px 85px;
+}
+
+.form-btn-cancel-new {
+    background: none;
+    border-radius: 0;
+    color: @btn-add-bg;
+    font-size: @font-size-normal;
+    padding: 5px 25px 5px 25px;
+}
+
+.form-image-new {
+	width: 75px;
+	height: 75px;
+}
+
+.form-label-newer {
+    cursor: auto;
+    font-size: @font-size-form-label;
+   
+    @media only screen and (min-width:320px) and (max-width:768px) {
+        text-align: left;
+    }
+
+    @media only screen and (min-width:768px) {
+        float: right;
+        position: relative;
+        top: 12px;
+    }
+}
+// #endregion

@@ -1,0 +1,151 @@
+﻿.patNoteTile {
+    .clearfix;    
+    background-color: @brand-color_white;
+    transition: all 0.5s ease 0s;
+    width: 100%;
+    border-bottom: 1px solid @brand-color_dark-gray; 
+    &.timelineViewBorder {
+           border:none;
+    }
+    &.active {
+        background-color: @brand-color_gray;
+    }     
+    &__details {        
+        
+    }
+
+    &__tileBox {
+        position: relative;
+        margin-bottom: 12px;
+    }
+
+    &__icon {
+        float: right;
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+    }
+
+    &__toggle {
+        .btn;
+        .btn-link;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.4em;
+    }
+
+    &__title {
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    &__edit {
+        margin-left: 6px;
+    }
+
+    &__date,
+    &__provider {
+        display: block;
+    }
+
+    &__timer {
+        color: @brand-color_red;
+        display: block;
+        font-style: italic;
+    }
+
+    &__body {
+        height: auto;
+        max-height: 0;
+        position: relative;
+        display: none;
+        transition: all 0.5s ease;
+
+        &.active {
+            max-height: 1000px;
+            display: block;
+            padding-bottom: 24px;
+        }
+    }
+
+    &__text {
+        max-height: 0;
+        opacity: 0;
+        overflow-wrap: break-word;
+        transition: all 0.3s ease;
+        padding-left: @padding-small-horizontal;
+        > p {
+            display: block;
+            overflow: hidden;
+            max-height: 0px;
+            margin: 0;
+            transition: all 0.3s ease 0.5s;
+        }
+
+        &.active {
+            max-height: 1000px;
+            opacity: 1;
+            overflow: auto;
+
+            > p {
+                overflow: auto;
+                max-height: 100%;
+            }
+        }
+    }
+
+    &__editor {
+        max-height: 0px;
+        opacity: 0;
+        transition: all 0.3s ease;
+
+        &.active {
+            max-height: 1000px;
+            opacity: 1;
+        }
+    }
+
+    &__actions {
+        position: absolute;
+        top: 10px;
+        left: 6px;
+        transform: translateY(50%);
+    }
+
+    &__close {
+        display: block;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+
+        &[disabled] {
+            color: @brand-color_link-disabled;
+        }
+
+        .fa {
+            font-size: 1.4em;
+        }
+    }
+}
+
+.patNoteTileDateBox {
+    margin-left: 5px;
+    margin-top: 5px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: @brand-color_white;
+    border: 2px solid @brand-color_dark-gray;
+    text-align: center;
+    float: left;
+    padding: 7px;
+
+    &__date {
+        font-weight: 500;
+    }
+}

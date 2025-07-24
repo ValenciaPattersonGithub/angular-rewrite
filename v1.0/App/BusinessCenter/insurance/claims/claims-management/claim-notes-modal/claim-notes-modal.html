@@ -1,0 +1,318 @@
+﻿<div class="claimnotes">
+    <div class="modal-header">
+        <h4 id="lblAreYouSureHeader">{{ 'Claim Notes' | i18n }}</h4>
+        <div class="pull-right">
+            <button id="btnClose" ng-click="close()" class="btn btn-link fa fa-times icon-click"></button>
+        </div>
+    </div>
+
+    <div class="col-xs-12 modal-body">
+        <h4 for="closePredNotes">{{ 'Patient Info' | i18n }}</h4>
+        <div class="row claimnotes__box claimnotes__fullBorderBottom">
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12"><label class="control-label">{{'Name' | i18n}}</label></div>
+                    <div class="col-sm-12 patient-info" title="{{patientInfo.name}}">{{patientInfo.name}}</div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-sm-12"><label class="control-label">{{'Date of Birth' | i18n}}</label></div>
+                    <div class="col-sm-12">{{patientInfo.dob | date: 'MM/dd/yyyy'}}</div>
+                </div>
+
+            </div>
+            <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-sm-12"><label class="control-label">{{'Primary Phone' | i18n}}</label></div>
+                    <div class="col-sm-12">{{patientInfo.phone | tel}}</div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+
+                <div class="row">
+                    <div class="col-sm-12"><label class="control-label">{{'Email' | i18n}}</label></div>
+                    <div title="{{patientInfo.email}}" class="col-sm-12 patient-info">{{patientInfo.email}}</div>
+                </div>
+            </div>
+        </div>
+        <button id="addClaimbtn" class="btn btn-primary" ng-click="openAddNoteModal(addNote)" check-auth-z="soar-ins-iclmnt-add">{{'Add Claim Note' | i18n}}</button>
+        <div class="claimnotes__panel_box">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="claimnotes__header">
+                        <a class="accordion center" ng-click="collapse = !collapse" ng-class="{'fa fa-plus': collapse, 'fa fa-minus': !collapse}"></a>
+                        <span class="noteHistory">{{ 'Note History' | i18n }}</span>
+                    </h4>
+                </div>
+            </div>
+            <div class="row" ng-hide="collapse">
+                <div class="col-xs-12">
+                    <div>
+                        <table id="tableClaimNotes" class="table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-1 cell">
+                                        <span>{{ 'Date' | i18n }}</span>
+                                    </th>
+                                    <th class="col-sm-2 cell">
+                                        <span>{{ 'User' | i18n }}</span>
+                                    </th>
+                                    <th class="col-sm-7 cell">
+                                        <span>{{ 'Note' | i18n }}</span>
+                                    </th>
+                                    <th class="col-sm-2 cell" colspan="2"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="note in noteHistories| orderBy: '-CreatedDate'">
+                                    <td class="col-sm-1 cell">
+                                        <span>{{ note.displayDate | date: 'MM/dd/yyyy' }}</span>
+                                    </td>
+                                    <td class="col-sm-2 cell">
+                                        <span>{{ note.User }}</span>
+                                    </td>
+                                    <td class="col-sm-7 cell">
+                                        <span>{{ note.Note }}</span>
+                                    </td>
+                                    <td class="col-sm-1 cell text-align-right">
+                                        <a ng-click="openEditNoteModal(note)" ng-class="{disabled: note.Type === 1 || !authClaimEditAccess()}" check-auth-z="soar-ins-iclmnt-edit"><i class="far fa-edit" aria-hidden="true"></i></a>
+                                    </td>
+                                    <td class="col-sm-1 cell text-align-left">
+                                        <a ng-click="delete(note)" ng-class="{disabled: note.Type === 1 || !authClaimDeleteAccess()}" check-auth-z="soar-ins-iclmnt-delete"><i class="far fa-trash-alt" aria-hidden="true"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="claimnotes__panel_box">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="col-sm-12">
+                        <a class="accordion center" ng-click="collapseBenefit = !collapseBenefit" ng-class="{'fa fa-plus': collapseBenefit, 'fa fa-minus': !collapseBenefit}"></a>
+                        <span class="noteHistory">{{ 'Benefit Plans' | i18n }}</span>
+                    </h4>
+                </div>
+            </div>
+            <div class="row" ng-hide="collapseBenefit">
+                <div class="col-xs-12">
+                    <div class="accordion" id="benefitAccordion">
+                        <div class="card" ng-repeat="plan in benefitPlans | orderBy:'Priority'">
+                            <div class="card-header">
+                                <h5>
+                                    {{SeqName[$index]}}
+                                    <span ng-if="claimSubmissionResult.PatientBenefitPlanPriority==plan.patientBenefitPlanDto.Priority" class="pull-right star"><i class="fas fa-star"></i></span>
+                                    <a ng-if="claimSubmissionResult.PatientBenefitPlanPriority!=plan.patientBenefitPlanDto.Priority" class="pull-right" data-toggle="collapse" data-target="#collapse{{plan.patientBenefitPlanDto.Priority}}" ng-click="plan.patientBenefitPlanDto.toggle = !plan.patientBenefitPlanDto.toggle">
+                                        {{ plan.patientBenefitPlanDto.toggle ? 'View less' : 'View more' | i18n }}
+                                    </a>
+                                    <a ng-if="claimSubmissionResult.PatientBenefitPlanPriority==plan.patientBenefitPlanDto.Priority" class="pull-right" data-toggle="collapse" data-target="#collapse{{plan.patientBenefitPlanDto.Priority}}" ng-click="plan.patientBenefitPlanDto.toggle = !plan.patientBenefitPlanDto.toggle">
+                                        {{ !plan.patientBenefitPlanDto.toggle ? 'View less' : 'View more' | i18n }}
+                                    </a>
+                                </h5>
+                            </div>
+                            <hr />
+                            <div id="collapse{{plan.patientBenefitPlanDto.Priority}}" class="collapse" ng-class="{'in':claimSubmissionResult.PatientBenefitPlanPriority==plan.patientBenefitPlanDto.Priority}" data-parent="#benefitAccordion">
+                                <div class="row padded">
+                                    <div class="col-sm-4">
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Status' | i18n }}{{':' |i18n}}</b>&nbsp;{{claimSubmissionResult.StatusName}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Submitted' | i18n }}{{':' |i18n}}</b>&nbsp;{{claimSubmissionResult.DateSubmitted | date: 'MM/dd/yyyy'}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Policy Holder' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderDetails.LastName+"
+                                                    "+plan.patientBenefitPlanDto.PolicyHolderDetails.FirstName
+                                            }}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Policy Holder DOB' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderDetails.DateOfBirth | date: 'MM/dd/yyyy'}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Insured ID' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderStringId}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Relationship' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.RelationshipToPolicyHolder ? plan.patientBenefitPlanDto.RelationshipToPolicyHolder : 'Self'}}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Carrier' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.CarrierName}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Carrier Phone No' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.PhoneNumbers[0].PhoneNumber | tel}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <div><b>{{ 'Carrier Address' | i18n }}{{':' |i18n}}</b>&nbsp;{{(plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.AddressLine1 == null?'': plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.AddressLine1)}}</div>
+                                            <div ng-if="plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.AddressLine2">{{plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.AddressLine2}}</div>
+                                            <div>
+                                                {{(plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.City == null?'': plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.City + ', ')}}
+                                                {{(plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.State == null?'': plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.State + ' ')}}
+                                                {{(plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode == null?'': plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode | zipCode)}}
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Carrier Website' | i18n }}{{':' |i18n}}</b>&nbsp;<a ng-if="plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.Website" ng-href="{{checkAndUpdateUrlProtocol(plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.Website)}}" ng-attr-target="_blank">{{plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.Website}}</a>
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Payer ID' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.PayerId}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Benefit Plan Name' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.Name}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Plan/Group No' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.PlanGroupNumber}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Plan/Group Name' | i18n }}{{':' |i18n}}</b>&nbsp;{{plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.PlanGroupName}}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+
+                                        <div ng-if="claimSubmissionResult.Type===1" class="col-sm-12 padded">
+                                            <b>{{ 'Estimated Insurance' | i18n }}{{':' |i18n}}</b>&nbsp;{{(plan.EstIns) | currency}}
+                                        </div>
+                                        <div ng-if="claimSubmissionResult.Type===1" class="col-sm-12 padded">
+                                            <b>{{ 'Estimated Adjustment' | i18n }}{{':' |i18n}}</b>&nbsp;{{(plan.EstAdj) | currency}}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Individual Annual Max Remaining' | i18n }}{{':' |i18n}}</b>&nbsp;{{ plan.patientBenefitPlanDto.$individualAnnualMaxRemaining | currency }}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Individual Deductible Remaining' | i18n }}{{':' |i18n}}</b>&nbsp;{{(plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.IndividualDeductible
+                                                    - plan.patientBenefitPlanDto.IndividualDeductibleUsed) | currency
+                                            }}
+                                        </div>
+                                        <div class="col-sm-12 padded">
+                                            <b>{{ 'Family Deductible Remaining' | i18n }}{{':' |i18n}}</b>&nbsp;{{(plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.BenefitPlanDto.FamilyDeductible
+                                                    - plan.patientBenefitPlanDto.PolicyHolderBenefitPlanDto.FamilyDeductibleUsed) | currency
+                                            }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="claimnotes__panel_box claimnotes__serviceBottom">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="claimnotes__header">
+                        <a class="accordion center" ng-click="collapseServices = !collapseServices" ng-class="{'fa fa-plus': collapseServices, 'fa fa-minus': !collapseServices}"></a>
+                        <span class="noteHistory">{{ 'Services On Claim' | i18n }}</span>
+                    </h4>
+                </div>
+            </div>
+            <div class="row" ng-hide="collapseServices">
+                <div class="claimnotes__borderLine"></div>
+                <div class="col-xs-12">
+                    <div class="table claimnotes__tableBottom">
+                        <div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Date' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Location' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Service' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Description' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding text-align-center">
+                                <span><b>{{ 'Tooth' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding text-align-center">
+                                <span><b>{{ 'Area' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Provider (Services)' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Provider (Claims)' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Charge' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Est. Ins.' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Est. Adj.' | i18n }}</b></span>
+                            </div>
+                            <div class="col-sm-1 cell claimnotes__padding">
+                                <span><b>{{ 'Pt Portion' | i18n }}</b></span>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div class="reportGrid__row" ng-repeat="serv in serviceTransactions" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                                <div class="row alternative">
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.ServiceDate | date: 'MM/dd/yyyy' }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.Location }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.CDTCode }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.Description }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding text-align-center">
+                                        <span>{{ serv.Tooth === null ? '-' : serv.Tooth }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding text-align-center">
+                                        <span>{{ serv.Area === '' ? '-' : serv.Area}}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.ServiceProviderName }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.ClaimsProviderName }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.Charge | currency }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.EstIns | currency }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.EstAdj | currency }}</span>
+                                    </div>
+                                    <div class="col-sm-1 cell claimnotes__padding">
+                                        <span>{{ serv.PtPortion | currency }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row alternative reportGrid__row stripEven">
+                                <div class="col-sm-8 cell claimnotes__padding"></div>
+                                <div class="col-sm-1 cell claimnotes__padding">
+                                    <span><b>{{getTotal('Charge') | currency}}</b></span>
+                                </div>
+                                <div class="col-sm-1 cell claimnotes__padding">
+                                    <span><b>{{getTotal('EstIns') | currency}}</b></span>
+                                </div>
+                                <div class="col-sm-1 cell claimnotes__padding">
+                                    <span><b>{{getTotal('EstAdj') | currency}}</b></span>
+                                </div>
+                                <div class="col-sm-1 cell claimnotes__padding">
+                                    <span><b>{{getTotal('PtPortion') | currency}}</b></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer"></div>
+</div>

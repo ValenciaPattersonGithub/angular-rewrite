@@ -1,0 +1,158 @@
+﻿
+<div ng-class="'fade-in'" ng-controller="PatientInsuranceInfoController" ng-init="initialize()" class="patIns">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="patIns__subTitle">
+                <div class="patIns__subTitleClaimInfo" ng-show="unsubmittedClaimsTotalFees != null">
+                    <a check-auth-z="soar-ins-iclaim-view" ng-click="getClaims(PatientClaimInfoOptions.Unsubmitted)">{{ unSubmittedClaims.length |i18n }}  {{'Unsubmitted:' | i18n }}  {{unsubmittedClaimsTotalFees | currency }} </a>
+                    |<a check-auth-z="soar-ins-iclaim-view" ng-click="getClaims(PatientClaimInfoOptions.All)"> {{ 'View All Claims' | i18n }}</a>
+                    |<a check-auth-z="soar-ins-iclaim-view" ng-click="getClaims(PatientClaimInfoOptions.UnsubmittedPreds)"> {{ 'View All Predeterminations' | i18n }}</a>
+                    |<a check-auth-z="soar-doc-docimp-view" ng-click="viewInsDocuments(patient.patientId)"> {{ 'View Insurance Documents' | i18n }}</a>
+                </div>
+
+
+                <button id="btnOpenInsuranceModal" check-auth-z="soar-ins-ibcomp-add" class="btn btn-primary" style="margin-right:0px;" ng-click="openInsuranceModal()" ng-disabled="insuranceInfoTiles.length > 5 || disableAddInsurance===true">{{ 'Add {0}' | i18n:['Insurance'] }}</button>
+                <button id="btnAllowChangePriority" ng-disabled='!IsIndividualAccount' ng-show="IsIndividualAccount && insuranceInfoTiles.length > 1" check-auth-z="soar-ins-ibcomp-add" class="btn btn-default" style="margin-right:0px;" ng-click="allowSetPriority()">{{ resetPriorityLabel | i18n }}</button>
+                <button id="btnAddDocument"
+                        ng-if="showAddDocuments"
+                        class="btn btn-default"
+                        check-auth-z="soar-doc-docimp-add"
+                        ng-click="setUploadDocument()">
+                    {{ 'Add {0}' | i18n:['Document'] }}
+                </button>
+            </div>
+        </div>
+    </div>
+    <no-results loading="loading" loading-message="'No insurance was found'" ng-show="loading || !insuranceInfoTiles.length > 0"></no-results>
+    <div ng-hide="canChangePriority===true">
+        <ul id="notSortable">
+            <li ng-repeat="infoTile in insuranceInfoTiles | orderBy:tileSort track by $index">
+                <info-tile ng-if="infoTile.BenefitPlanName" ng-hide="loading">
+
+                    <div class=" row infoTile__header">
+                        <div class="col-lg-12">
+                            <div class="dropdown">
+                                <button id="btnInsuranceOptions{{$index}}" type="button" data-toggle="dropdown" class="patIns__optionsBtn" aria-haspopup="true" aria-expanded="false" ng-show="IsIndividualAccount">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                </button>
+                                <ul class="dropdown-menu patIns__optionsList pull-right" role="menu" aria-labelledby="btnInsuranceOptions{{$index}}">
+                                    <li>
+                                        <a id="btnInsuranceEdit" check-auth-z="soar-ins-ibcomp-edit" ng-click="openInsuranceModal(infoTile.$patientBenefitPlan)">{{ 'Edit Plan' | i18n }}</a>
+                                        <a id="btnInsuranceDelete" check-auth-z="soar-ins-ibcomp-edit" ng-click="removePlan(infoTile)">{{ 'Remove Plan' | i18n }}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div style="margin-top: 10px;"><span ng-show="!IsIndividualAccount">{{infoTile.MergedPriorityLabel |i18n  }} </span><span ng-show="IsIndividualAccount">{{ infoTile.PriorityLabel |i18n}}</span></div>
+                        </div>
+                        <div>
+                            <div class="col-xs-9">
+                                <div class="infoTile__subTitle">
+                                    <h4><a ng-click="openInsurancePlan(infoTile.BenefitPlanId)" check-auth-z="soar-ins-ibplan-edit">{{ infoTile.SubTitle }}</a></h4>
+                                    <div ng-show="infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.FeeScheduleId">
+                                        <div class="patIns__subTitle"><a ng-click="openFeeSchedule(infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.FeeScheduleId)" check-auth-z="soar-ins-ifsch-view"> {{ 'Fee Schedule' | i18n }}</a></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div>{{infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.AddressLine1}}</div>
+                                <div>{{infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.AddressLine2}}</div>
+                                <div>
+                                    {{infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.City}},
+                                    {{infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.State}},
+                                    {{infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode}}
+                                </div>
+                                <div>{{infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.PhoneNumbers[0].PhoneNumber | tel}}</div>
+                                <div>
+                                    <a ng-if="infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.Website" ng-href="{{checkAndUpdateUrlProtocol(infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.Website)}}" ng-attr-target="_blank">
+                                        {{infoTile.$patientBenefitPlan.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.Website}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="patIns__row infoTile__used" ng-hide="canChangePriority===true">
+                        <div class="infoTile">
+                            <div><span>{{ 'Policy Holder ID' | i18n }}:</span> {{ infoTile.PolicyHolderStringId | i18n }}</div>
+                            <div><span>{{ 'Policy Holder Name' | i18n }}:</span> {{ infoTile.PolicyHolderName | i18n }}</div>
+                            <div><span>{{ 'Policy Holder DOB' | i18n }}:</span> {{ infoTile.PolicyHolderDOB | date:'MM/dd/yyyy' }}</div>
+                            <div ng-show="IsIndividualAccount"><span>{{ 'Relationship' | i18n }}:</span> {{ infoTile.Relationship | i18n }}</div>
+                            <div ng-show="IsIndividualAccount"><span>{{ 'Effective Date' | i18n }}:</span> {{ infoTile.EffectiveDate | date:'MM/dd/yyyy' }}</div>
+                            <div><span>{{ 'Renewal Month' | i18n }}:</span> {{ infoTile.RenewalMonth }}</div>
+                            <div ng-show="showEligibility">
+                                <span
+                                    tooltip-enable="locationEnrolledInRTE === false"
+                                      tooltip-placement="auto"
+                                      uib-tooltip="{{ 'Call Patterson Sales at 800.294.8504 to enroll with RTE' | i18n }}"
+                                      tooltip-append-to-body="true">
+                                    <div class="btn btn-link padding-left-0"
+                                         ng-click="locationEnrolledInRTE && checkEligibility(infoTile.$patientBenefitPlan)"
+                                         ng-disabled="!locationEnrolledInRTE">
+                                        {{ ::('Check Eligibility' | i18n) }}
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="infoTile" ng-show="IsIndividualAccount">
+                            <div class="patIns__title">Individual Annual Max</div>
+                            <div class="patIns__values" ng-if="infoTile.IndividualAnnualMax > 0">
+                                <div>Maximum:<span> {{ infoTile.IndividualAnnualMax | currency }}</span></div>
+                                <div ng-show="infoTile.AdditionalBenefits > 0">+ Additional Benefits: <span>{{ infoTile.AdditionalBenefits | currency }}</span></div>
+                                <div class="infoTile__used">- Used: <span>{{ infoTile.IndividualAnnualMaxUsed > infoTile.IndividualAnnualMax ? infoTile.IndividualAnnualMax : infoTile.IndividualAnnualMaxUsed | currency }}</span></div>
+                                <div>Remaining: <span class="patIns__remain">{{ infoTile.IndividualAnnualMaxRemaining | currency }}</span></div>
+                            </div>
+
+                            <div class="patIns__values" ng-if="!infoTile.IndividualAnnualMax || infoTile.IndividualAnnualMax <= 0">
+                                <div class="patIns__noValue">No Maximum</div>
+                            </div>
+                        </div>
+
+                        <div class="infoTile" ng-show="IsIndividualAccount">
+                            <div class="patIns__title">{{ 'Individual Deductible' | i18n }}</div>
+                            <div class="patIns__values" ng-if="infoTile.IndividualDeductible > 0">
+                                <div><span>{{ infoTile.IndividualDeductible | currency }}</span></div>
+                                <div class="infoTile__used">- {{ 'Used' | i18n }}: <span> {{ infoTile.IndividualDeductibleUsed | currency }}</span></div>
+                                <div>{{ 'Remaining' | i18n }}: <span class="patIns__remain">{{ infoTile.IndividualDeductibleRemaining | currency }}</span></div>
+                            </div>
+                            <div class="patIns__values" ng-if="!infoTile.IndividualDeductible || infoTile.IndividualDeductible <= 0">
+                                <div class="patIns__noValue">{{ 'No Deductible' | i18n }}</div>
+                            </div>
+                        </div>
+                        <div class="infoTile">
+                            <div class="patIns__title">{{ 'Family Deductible' | i18n }} </div>
+                            <div class="patIns__values" ng-if="infoTile.FamilyDeductible > 0">
+                                <div><span>{{ infoTile.FamilyDeductible | currency }}</span></div>
+                                <div class="infoTile__used">- {{ 'Used' | i18n }}: <span>{{ infoTile.FamilyDeductibleUsed | currency }}</span></div>
+                                <div>{{ 'Remaining' | i18n }}: <span class="patIns__remain">{{ infoTile.FamilyDeductibleRemaining | currency }}</span></div>
+                            </div>
+                            <div class="patIns__values" ng-if="!infoTile.FamilyDeductible || infoTile.FamilyDeductible <= 0">
+                                <div class="patIns__noValue">{{ 'No Deductible' | i18n }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </info-tile>
+            </li>
+        </ul>
+    </div>
+
+    <div ng-show="canChangePriority===true">
+        <ul id="sortable" kendo-sortable k-options="sortableOptions" k-placeholder="sortablePlaceholder" k-hint="sortableOptions.hint">
+            <li ng-repeat="infoTile in insuranceInfoTiles | orderBy:tileSort track by $index" ng-class="{'sortable': IsIndividualAccount && insuranceInfoTiles.length > 1 && canChangePriority===true }">
+                <div class="patIns__sortableTileInfo" ng-if="infoTile.BenefitPlanName" ng-hide="loading">
+                    <div class="">
+                        <div style="margin-top: 10px;"><span ng-show="!IsIndividualAccount">{{infoTile.MergedPriorityLabel |i18n  }} </span><span ng-show="IsIndividualAccount">{{ infoTile.PriorityLabel |i18n}}</span></div>
+                        <div class="">
+                            <h4>{{ infoTile.SubTitle }}</h4>
+                        </div>
+                        <div class="" ng-show="canChangePriority===true">
+                            <div><span>{{ 'Policy Holder Name' | i18n }}:</span> {{ infoTile.PolicyHolderName | i18n }}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </li>
+
+        </ul>
+    </div>
+    <document-uploader open-uploader="uploadDocument" document-filter="'Insurance'"></document-uploader>
+</div>

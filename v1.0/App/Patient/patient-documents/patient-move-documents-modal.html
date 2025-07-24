@@ -1,0 +1,253 @@
+<div class="movePatientDocModal" ng-class="{'backdrop':ctrl.loadingFlag}">
+    <div ng-if="ctrl.loadingFlag" class="loadingClass">
+        <i class="fa fa-spinner fa-spin loading"></i>
+    </div>
+
+    <h3 class="movePatientDocument">{{::('Move Patient Documents' | i18n)}}</h3>
+    <div class="topDiv">
+        <div class="shadowDiv">
+            <h4 class="moveFrom textDecor"><b>{{ ::('Move From' | i18n) }}</b></h4>
+            <ul class="clearfix patientDataUL marginBottom">
+                <li class="patientDataLI textDecor nameWidth" ><strong
+                        class="liStrong">{{'Patient Name' | i18n}}</strong>:
+                    <span class="liSpan">
+                         {{ctrl.patientData.pData.FirstName}} {{ ctrl.patientData.pData.MiddleName ?  ctrl.patientData.pData.MiddleName : ''}} {{ctrl.patientData.pData.LastName }} {{ctrl.patientData.pData.Suffix ? ctrl.patientData.pData.Suffix : ''}}
+
+                    </span>
+                </li>
+                <li class="patientDataLI textDecor dobWidth"><strong
+                        class="liStrong">{{'DOB' | i18n}}</strong>:
+                    <span class="liSpan"> {{ctrl.patientData.pData.DateOfBirth | toShortDisplayDateLocal}}</span>
+                </li>
+                <li class="patientDataLI textDecor"><strong class="liStrong">
+                        {{'Patient ID' | i18n}}</strong>:
+                    <span class="liSpan">{{ctrl.patientData.pData.PatientCode}}</span>
+                </li>
+            </ul>
+            <h5 class="allDocumentsHead textDecor"><b>All Documents</b></h5>
+            <div>
+                <div class="displayFex">
+                    <div class="marginBottom cellBorder borderRightNone borderbottomNone" ng-class="{'tabHeading1': documents.length < 7, 'tabHeadingScrl1': documents.length > 6}">
+                        <span  class="selectSpan"
+                            ng-class="{'eableCheckbox': ctrl.disableSall && !Selected.all, 'disableCheckBox': !ctrl.disableSall, 'checkedSel':ctrl.disableSall && Selected.all}">
+                            <input type="checkbox" ng-model="Selected.all"
+                                ng-disabled="ctrl.loadingFlag || !ctrl.disableSall"
+                                ng-change="toggleSelect(Selected.all)">
+                            <span class="checkmark"></span>
+                        </span>
+                        <span class="allDocsHeader textDecor">
+                            <b>{{'Name' | i18n }}</b>
+                            <div class="caretDiv">
+                                <span class="fa fa-caret-up caretUp"
+                                    ng-click="sortDocumentsForModal('Name');"></span>
+                                <span class="fa fa-caret-down caretDown"
+                                    ng-click="sortDocumentsForModal('-Name');"></span>
+
+                            </div>
+                        </span>
+                    </div>
+                    <div class="marginBottom cellBorder borderRightNone textDecor borderbottomNone" ng-class="{'tabHeading2': documents.length < 7, 'tabHeadingScrl2': documents.length > 6}">
+                        <span class="allDocsHeader">
+                            <b>  {{'Group' | i18n }}</b>
+                            <div class="caretDiv">
+                                <span class="fa fa-caret-up caretUp"
+                                    ng-click="sortDocumentsForModal('$$DocumentGroup');"></span>
+                                <span class="fa fa-caret-down caretDown"
+                                    ng-click="sortDocumentsForModal('-$$DocumentGroup');"></span>
+
+                            </div>
+
+                        </span>
+                    </div>
+                    <div class="marginBottom cellBorder borderRightNone borderbottomNone textDecor " ng-class="{'tabHeading3': documents.length < 7, 'tabHeadingScrl3': documents.length > 6}">
+                        <span class="allDocsHeader">
+                            <b>   {{'Type' | i18n }}</b>
+                            <div class="caretDiv">
+                                <span class="fa fa-caret-up caretUp"
+                                    ng-click="sortDocumentsForModal('MimeType');"></span>
+                                <span class="fa fa-caret-down caretDown"
+                                    ng-click="sortDocumentsForModal('-MimeType');"></span>
+                            </div>
+                    </div>
+                    <div class="marginBottom cellBorder borderbottomNone textDecor " ng-class="{'tabHeading4': documents.length < 7, 'tabHeadingScrl4': documents.length > 6}">
+                        <span class="allDocsHeader">
+                        <b>  {{'Date' | i18n }}</b>
+                            <div class="caretDiv1">
+                                <span class="fa fa-caret-up caretUp"
+                                    ng-click="sortDocumentsForModal('DateUploaded');"></span>
+                                <span class="fa fa-caret-down caretDown"
+                                    ng-click="sortDocumentsForModal('-DateUploaded');"></span>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="tabDiv">
+                <div class="tabHeight" ng-class="{'tabScroll': documents.length > 6}">
+                    
+                    <div class="displayFex" 
+                        ng-repeat="document in documents | orderBy:orderBy.field track by $index" class="body gridBody"
+                        uib-tooltip="{{(document.$$DocumentGroup == 'Treatment Plans' || document.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent') ? 'This document cannot be transferred.' : ''}}">
+                        <div class="cellBorder borderLeftNone tabDiv1" ng-class="{'bordertopNone': $index == 0, borderbottomNone: $index > 0, borderbottomNone: documents.length > 1, 'borderbottomNone': documents.length != $index+1}">
+                            <span class="selectSpan"
+                                ng-class="{'disableCheckBox': (document.$$DocumentGroup == 'Treatment Plans' || document.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent') ,'eableCheckbox': (!($$DocumentGroup == 'Treatment Plans' || doc.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent') && !document.selected), 'checkedSel':(!($$DocumentGroup == 'Treatment Plans' || doc.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent') && document.selected) }">
+                                <input type="checkbox" ng-checked="document.selected"
+                                    ng-disabled="document.$$DocumentGroup == 'Treatment Plans' || document.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent' || ctrl.loadingFlag"
+                                    ng-model="document.selected"
+                                    ng-change="toggleSelect(document.selected, document.FileAllocationId)">
+                                <span class="checkmark"></span>
+                            </span>
+                            <span id="btn{{$index}}" title="{{ document.Name }}"
+                            class="fintSize"
+                                ng-class="{'disableRow': (document.$$DocumentGroup == 'Treatment Plans' || document.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent') }">
+                                {{ document.Name | limitTo: 35 }}
+                                <span ng-if="document.Name.length > 35">&hellip;</span>
+                            </span>
+                        </div>
+                        <div class="cellBorder borderLeftNone tabDiv2" ng-class="{'bordertopNone': $index == 0, borderbottomNone: $index > 0, borderbottomNone: documents.length > 1, 'borderbottomNone': documents.length != $index+1}">
+
+                            <span class="fintSize" id="btn{{$index}}" title="{{ document.$$DocumentGroup }}"
+                                ng-class="{'disableRow': (document.$$DocumentGroup == 'Treatment Plans' || document.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent') }">
+                                {{ document.$$DocumentGroup | limitTo: 20 }}
+                                <span ng-if="document.$$DocumentGroup.length > 20">&hellip;
+                                </span>
+                            </span>
+                        </div>
+                        <div class="cellBorder borderLeftNone tabDiv3" ng-class="{'bordertopNone': $index == 0, borderbottomNone: $index > 0, borderbottomNone: documents.length > 1, 'borderbottomNone': documents.length != $index+1}">
+
+                            <span class="fintSize" id="btn{{$index}}" title="{{ document.MimeType }}"
+                                ng-class="{'disableRow': (document.$$DocumentGroup == 'Treatment Plans' || document.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent') }">
+                                {{ document.MimeType | limitTo: 10 }}<span
+                                    ng-if="document.MimeType.length > 10">&hellip;</span>
+                            </span>
+                        </div>
+                        <div class="cellBorder borderLeftNone borderRightNone tabDiv4" title="{{ document.DateUploaded }}"
+                        ng-class="{'bordertopNone': $index == 0, borderbottomNone: $index > 0, borderbottomNone: documents.length > 1, 'borderbottomNone': documents.length != $index+1}">
+                            <span class="fintSize" id="btn{{$index}}" title="{{ document.DateUploaded }}"
+                            ng-class="{'disableRow': (document.$$DocumentGroup == 'Treatment Plans' || document.$$DocumentGroup == 'Medical History' || document.MimeType == 'Digital' || document.$$DocumentGroup == 'Consent') }">
+                                {{ document.DateUploaded | toShortDisplayDateLocal  }}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- second shadow -->
+    <div class="searchDIv" >
+        <div>
+            <div class="boxShadow2">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="form-col-12">
+                            <div class="moveToDiv">
+                                <b> {{ ::('Move To:' | i18n) }}</b></div>
+
+                            <div class="document-edit-patient-search-container displayInline" >
+                                <typeahead id="typeAheadPersonSearch" class="typeahead soar-typeahead typeaheadResults"
+                                    ng-show="true" clear-content="clearResult()" show-clear-button="document.ParentId"
+                                    scroll-view="true" disable-input="disablePersonSearch" appearance="form-input"
+                                    cancel="cancelSearch()" search="search(term)" select="onSelectPatient(item)"
+                                    items="searchResults" term="searchTerm" loading="false"
+                                    placeholder="{{ 'Search...'|i18n }}" >
+                                    <ul id="lstPerson" >
+                                        <li ng-repeat="person in searchResults" typeahead-item="person"
+                                            ng-animate="'animate'" ng-hide="false" class="cursorPointer">
+                                            <div class="row">
+                                                <div class="col-sm-5 col-md-5">
+                                                    <span id="lblFirstName{{ $index }}"
+                                                        ng-bind-html="person.FirstName | boldTextSearchCriteria:searchString "></span>
+                                                    <span id="lblMiddleName{{ $index }}"
+                                                        ng-bind-html="person.MiddleName | boldTextSearchCriteria:searchString "></span>
+                                                    <span id="lblLastName{{ $index }}"
+                                                        ng-bind-html="person.LastName | boldTextSearchCriteria:searchString "></span>
+                                                    <span id="lblSuffix{{ $index }}"
+                                                        ng-bind-html="person.Suffix | boldTextSearchCriteria:searchString "></span>
+                                                </div>
+                                                <div class="col-sm-3 col-md-3" ng-if="person.PatientCode">
+                                                    <span ng-show="person.PatientCode" id="lblPatientCode{{ $index }}"
+                                                        ng-bind-html="person.PatientCode"></span>
+                                                </div>
+                                                <div class="col-sm-4 col-md-4">
+                                                    <span ng-show="person.DateOfBirth" id="lblDateOfBirth{{ $index }}"
+                                                        ng-bind-html="person.DateOfBirth | toShortDisplayDate| boldTextSearchCriteriaDate:searchString  "></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li ng-show="noSearchResults && searchResults.length==0">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <span class="text-muted" id="lblResultMessage">
+                                                        {{ 'No persons match the search criteria.'|i18n }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>    
+                                </typeahead>
+                            </div>
+                            <!-- <i ng-if="ctrl.isQueryingServer" class="fa fa-spinner fa-spin loading"></i> -->
+                            <div class="has-error requiredLeft"
+                                ng-show="!formIsValid && !document.ParentId">
+                                <label id="lblPatientRequired"
+                                    class="help-block">{{ 'This field is required.' | i18n }}</label>
+                            </div>
+                                                       
+
+                            <!-- <div class="row has-error" ng-show="showPatientLocationError===true">
+                                <label id="lblPatientLocationError" class="help-block">
+                                    <p>{{'You are unable to view or schedule this patient as they are not authorized for your location.' | i18n}}
+                                    </p>
+                                    <p>{{'Please contact the administrator from their primary location to add your location as an alternative location.' | i18n}}
+                                    </p>
+                                </label>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-if="selectedPatientObj.patientName" class="divSelected">
+                    <ul class="clearfix patientDataUL">
+                        <li class="patientDataLI nameWidth" ><strong
+                                class="liStrong">{{'Patient Name' | i18n}}</strong>:
+                            <span class="liSpan">{{selectedPatientObj.patientName}}</span>
+                        </li>
+                        <li class="patientDataLI dobWidth" ><strong
+                                class="liStrong">{{'DOB' | i18n}}</strong>:
+                            <span class="liSpan">{{selectedPatientObj.DateOfBirth | toShortDisplayDateLocal}}</span>
+                        </li>
+                        <li class="patientDataLI"><strong class="liStrong">
+                                {{'Patient ID' | i18n}}</strong>:
+                            <span class="liSpan">{{selectedPatientObj.PatientCode}}</span>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="hrLine marginTop">
+
+    <div class="marginTop d-flex flex-wrap">
+        <ul class="d-flex flex-wrap ml-auto searchUl" >
+            <li class="searchLi" ng-click="moveDocuments(documents)">
+                <button
+                    ng-class="{'moveText': !(ctrl.loadingFlag || ctrl.selectedFlag || ctrl.moveFlag), 'moveText1': (ctrl.loadingFlag || ctrl.selectedFlag || ctrl.moveFlag)} "
+                    ng-disabled="ctrl.loadingFlag || ctrl.selectedFlag || ctrl.moveFlag">
+                    {{ctrl.loadingFlag ? 'Moving..' : 'Move'}}
+                    <i id="iDefaultMessage" class="fa fa-spinner fa-spin loading" ng-if="ctrl.loadingFlag"></i>
+                </button>
+            </li>
+            <li class="cancelLI" ng-click="ctrl.cancel();" >
+                <button class="cancelText" ng-disabled="ctrl.loadingFlag">
+                    Cancel
+                </button>
+            </li>
+
+            <div class="clear"></div>
+            <!-- {{ctrl.loadingFlag}} || {{ctrl.selectedFlag}} || {{ctrl.moveFlag}} -->
+        </ul>
+    </div>
+</div>

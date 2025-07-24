@@ -1,0 +1,73 @@
+<div class="add_payment_box">
+  <div class="popup_heading">
+    <h4>{{title}}</h4>
+  </div>
+  <form [formGroup]="addPaymentType"
+    (ngSubmit)="savePaymentType()"
+    class="form-horizontal"
+    #addPaymentTypeForm="ngForm">
+    <div class="panel-body">
+      <div class="col-md-12 ">
+        <div class="form-group">
+          <label class="control-label"
+            for="description">Description <span>*</span></label>
+          <input id="desciption"
+            #description
+            autocomplete="off"
+            formControlName="Description"
+            type="text"
+            (focusout)="isDescriptionAlreadyExists($event)"
+            (mouseleave)="isDescriptionAlreadyExists($event)"
+            [ngClass]="{'form-control': true, 'fuse_input': true, 'validation-required' : isDescriptionExists}"
+            maxlength="64">
+          <span *ngIf="isDescriptionExists"
+            class="required">An {{selectedTabDescription}} payment type with this description already exists.</span>
+
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="control-label"
+            for="currencytype">Currency Type <span>*</span></label>
+          <select id="currencytype"
+            formControlName="CurrencyTypeId"
+            class="form-control fuse_select">
+
+            <option value="0"
+              selected>Select Currency Type</option>
+            <option [value]='currencyType.Id'
+              *ngFor="let currencyType of currencyTypes">{{currencyType.Name}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="control-label"
+            for="prompt">Prompt</label>
+          <input id="prompt"
+            autocomplete="off"
+            type="text"
+            formControlName="Prompt"
+            class="form-control fuse_input"
+            maxlength="20">
+        </div>
+      </div>
+    </div>
+    <div class="add_payment_footer">
+      <span>*<span class="required_text">Required</span></span>
+      <div class="btn-toolbar">
+        <button class="btn btn-default"
+          (click)="CancelAddPaymentType()"
+          type="button">Cancel</button>
+        <button class="btn btn-primary fuse_button fuse_submit_button"
+          type="submit"
+          [disabled]="(isFormModeEdit && addPaymentType.pristine) || ( addPaymentType.invalid || isDescriptionExists)">
+          {{'Save'}}
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>

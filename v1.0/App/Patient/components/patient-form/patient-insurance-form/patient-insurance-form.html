@@ -1,0 +1,97 @@
+﻿<div class="patientInsuranceForm__body">
+    <div class="printBtn"><button class="form-button" onclick="window.print(); window.document.close()">Print</button></div>
+    <!--First Page-->
+    <div class="patientInsuranceForm__page">
+        <div class="page-content">
+            <div class="patientInsuranceForm__page-area">
+                <div class="patientInsuranceForm__font-header">{{field.title}}</div>
+                <div ng-repeat="pane in subHeaders1">
+                    <div class="patientInsuranceForm__font-section">
+                        <div class="patientInsuranceForm__field-name">{{pane}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.carrierName}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.effectiveDate}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.address1}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.address2}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.city}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.state}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.zipCode}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.planName}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.policyHolderId}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.policyHolder}}</div>
+                        <div class="patientInsuranceForm__font-title-normal field">
+                            <div class="patientInsuranceForm__option-square"></div>{{field.self}}<div class="patientInsuranceForm__option-square"></div>{{field.other}}
+                        </div>
+                        <div class="patientInsuranceForm__field-name">{{field.line}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.policyHolderDoB}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.relationshipToPolicyHolder}}</div>
+                        <div class="patientInsuranceForm__font-title-normal field">
+                            <div class="patientInsuranceForm__option-square"></div>{{field.dependentChildCoverage}}
+                        </div>
+                    </div>
+                    <div ng-if="$index !== 2" class="patientInsuranceForm__line-separator"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Second Page-->
+    <div class="patientInsuranceForm__page">
+        <div class="page-content">
+            <div class="patientInsuranceForm__page-area">
+                <div class="patientInsuranceForm__font-header">{{field.title}}</div>
+                <div ng-repeat="pane in subHeaders2">
+                    <div class="patientInsuranceForm__font-section">
+                        <div class="patientInsuranceForm__field-name">{{pane}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.carrierName}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.effectiveDate}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.address1}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.address2}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.city}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.state}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.zipCode}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.planName}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.policyHolderId}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.policyHolder}}</div>
+                        <div class="patientInsuranceForm__font-title-normal field">
+                            <div class="patientInsuranceForm__option-square"></div>{{field.self}}<div class="patientInsuranceForm__option-square"></div>{{field.other}}
+                        </div>
+                        <div class="patientInsuranceForm__field-name">{{field.line}}</div>
+                        <div class="patientInsuranceForm__field-name pad-left-10">{{field.policyHolderDoB}}</div>
+                    </div>
+                    <div class="patientInsuranceForm__font-title-bold">
+                        <div class="patientInsuranceForm__field-name">{{field.relationshipToPolicyHolder}}</div>
+                        <div class="patientInsuranceForm__font-title-normal field">
+                            <div class="patientInsuranceForm__option-square"></div>{{field.dependentChildCoverage}}
+                        </div>
+                    </div>
+                    <div ng-if="$index !== 2" class="patientInsuranceForm__line-separator"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

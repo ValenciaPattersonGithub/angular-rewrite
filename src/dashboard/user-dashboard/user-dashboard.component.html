@@ -1,0 +1,115 @@
+<form [formGroup]="userDashboardForm">
+    <div class="userDashboard">
+        <div *ngIf="isAppointmentViewVisible" class="appointment-view-full-screen">
+            <!-- ToDo  - Once appointment view created we have to replace below app-uib-modal with appoitnment view-->
+            <app-uib-modal [isVisible]="isAppointmentViewVisible" [controllerName]="controllerName"
+                [templateUrlPath]="templateUrlPath"></app-uib-modal>
+        </div>
+        <!-- need a second window to handle clicking on unscheduled appointments in view opening a new view while closing the existing one -->
+        <div *ngIf="isSecondaryAppointmentViewVisible" class="appointment-view-full-screen">
+           <!-- ToDo  - Once appointment view created we have to replace below app-uib-modal with appoitnment view-->
+            <app-uib-modal [isVisible]="isSecondaryAppointmentViewVisible" [controllerName]="controllerName"
+                [templateUrlPath]="templateUrlPath"></app-uib-modal>
+        </div>
+        <div class="rowFull">
+            <div class="userDashboard__header">
+                <div class="userDashboard__title">
+                    <h1>{{ welcomeText }} {{ displayName | translate }}</h1>
+                </div>
+                <strong>{{ dayDateDisplay }}</strong>
+            </div>
+        </div>
+        <div class="userDashboard__body" id="userDashboardBody">
+            <div class="close-dropdown">
+                <!--To overcome the CSS over-riding issue for the soar-select-lists present in this component, added seperate kendo-dropdownlist for this ShowHidden dropdowm-->
+                <kendo-dropdownlist *ngIf="refreshList" id="dashboardSelectList" formControlName="hiddenFilter"
+                    [textField]="'Value'" [valueField]="'Id'" [defaultItem]="defaultItem" [valuePrimitive]="false"
+                    [data]="tempHiddenFilterOptions" [disabled]="false" [tabindex]="10"
+                    (valueChange)="changeFilter($event)" #showHiddenDropdown clickOutside (clickOutside)="clickedOutside(showHiddenDropdown)">
+                    <ng-template kendoDropDownListItemTemplate let-dataItem>
+                        <span class="items-template">{{ dataItem?.Value }}</span>
+                    </ng-template>
+                    <ng-template kendoComboBoxNoDataTemplate>
+                        <span class="items-hiddenTemplate">{{ noHiddenWidgetsText }}</span>
+                    </ng-template>
+                </kendo-dropdownlist>
+                <button type="button" id="btnSaveLayout" class="btn btn-primary pull-right"
+                    [disabled]="saveLayoutDisabled" (click)="saveLayout()">
+                    {{ saveLayoutText }}
+                </button>
+                <a type="button" id="btnDashboard" class="btn btn-default"
+                    *ngIf="locationPath != practiceAtAGlanceURL" [href]="dashboardURL">
+                    {{ viewNewDashboardText }}
+                </a>
+            </div>
+            <!-- Gridster -->
+            <gridster [options]="gridsterOpts" class="gridster">
+                <ul>
+                    <li *ngFor="let item of standardItems">
+                        <gridster-item [item]="item">
+                            <div [ngSwitch]="item?.ItemType">
+                                <div *ngSwitchCase="'widget'">
+                                    <div class="text-align-center text-muted" *ngIf="item?.initMode != isLoaded">
+                                        <i id="iDefaultMessage" class="fa fa-spinner fa-spin fa-2x loading"></i>
+                                    </div>
+                                    <div class="text-align-center text-muted" *ngIf="item?.initMode == isError">
+                                        <a data-toggle="tooltip" data-placement="top" title="{{errorMessage}}">
+                                            <i id="iErrorMessage" class="fa fa-exclamation-circle fa-2x"></i>
+                                        </a>
+                                    </div>
+                                    <div [ngSwitch]="item?.Title">
+                                        <div *ngSwitchCase="DashboardWidgetTitle.GrossProduction">
+                                            <net-gross-production-gauge-widget [data]="item" [type]="'Gross'"
+                                                (loadingComplete)="onLoadingComplete($event)"></net-gross-production-gauge-widget>
+                                        </div>
+                                        <div *ngSwitchCase="DashboardWidgetTitle.NetProduction">
+                                            <net-gross-production-gauge-widget [data]="item" [type]="'Net'"
+                                                (loadingComplete)="onLoadingComplete($event)"></net-gross-production-gauge-widget>
+                                        </div>
+                                        <div *ngSwitchCase="DashboardWidgetTitle.OpenClinicalNotes">
+                                            <open-clinical-notes-widget [data]="item"
+                                                (loadingComplete)="onLoadingComplete($event)"></open-clinical-notes-widget>
+                                        </div>
+                                        <div *ngSwitchCase="DashboardWidgetTitle.InsuranceClaims">
+                                            <insurance-claims-half-donut-widget [data]="item"
+                                                (loadingComplete)="onLoadingComplete($event)"></insurance-claims-half-donut-widget>
+                                        </div>
+                                        <div *ngSwitchCase="DashboardWidgetTitle.PendingClaims">
+                                            <pending-claims-half-donut-widget [data]="item"
+                                                (loadingComplete)="onLoadingComplete($event)"></pending-claims-half-donut-widget>
+                                        </div>
+                                        <div *ngSwitchCase="DashboardWidgetTitle.Receivables">
+                                            <receivables-half-donut-widget [data]="item"
+                                                (loadingComplete)="onLoadingComplete($event)"></receivables-half-donut-widget>
+                                        </div>
+                                        <div *ngSwitchCase="DashboardWidgetTitle.ScheduleUtilization">
+                                            <schedule-utilization-gauge-widget
+                                                (loadingComplete)="onLoadingComplete($event)"
+                                                [data]="item"></schedule-utilization-gauge-widget>
+                                        </div>
+                                        <div *ngSwitchCase="DashboardWidgetTitle.HygieneRetention">
+                                            <hygiene-retention-half-donut-widget [data]="item"
+                                                (loadingComplete)="onLoadingComplete($event)"></hygiene-retention-half-donut-widget>
+                                        </div>
+                                        <div *ngSwitchCase="DashboardWidgetTitle.Appointments">
+                                            <appointments-grid-widget [data]="item"
+                                                (loadingComplete)="onLoadingComplete($event)"></appointments-grid-widget>
+                                        </div>
+                                    </div>
+                                    <button id="btn-close" class="btn btn-link fa fa-times pull-right"
+                                        (click)="hideWidget(item?.ItemId)"></button>
+                                </div>
+                                <div *ngSwitchDefault>
+                                    <div class="widget-handle">
+                                        {{Handle | translate}}
+                                    </div>
+                                    {{ item }}
+                                </div>
+                            </div>
+                        </gridster-item>
+                    </li>
+                </ul>
+            </gridster>
+        </div>
+    </div>
+</form>

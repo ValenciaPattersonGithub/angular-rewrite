@@ -1,0 +1,456 @@
+﻿<form name="form" [formGroup]="formGroup">
+    <div class="txPlanReorder__header">
+        <div class="txPlanReorder__nav">
+            <div class="txPlanReorder__navPrimary">
+                <div class="txPlanReorder__headerNav" [formGroup]="formGroup">
+                    <input id="treatmentPlanName" name="treatmentPlanName" formControlName="treatmentPlanName" type="text" class="txPlanReorder__title" [value]="treatmentPlanName" [ngClass]="{'redBorder':!formGroup.controls.treatmentPlanName.pristine && formGroup.controls.treatmentPlanName.errors}" minlength="1" maxlength="64" />
+                    <app-button id="txPlanReorderServicesOpenDrawer" *ngIf="!drawerState"
+                                buttonLabel="+ Add Services" variation="secondary"
+                                style="margin-right: 10px;"
+                                check-auth-z="soar-clin-cplan-edit"
+                                (onClick)="openServicesDrawer()">
+                    </app-button>
+                    <app-button id="txPlanReorderServicesAddStage"
+                                buttonLabel="+ Add Stage" variation="secondary"
+                                style="margin-right: 10px;"
+                                check-auth-z="soar-clin-cplan-edit"
+                                (onClick)="addStage()">
+                    </app-button>
+                    <app-button id="txPlanReorderServicesCancel"
+                                style="margin-right: 10px;"
+                                check-auth-z="soar-clin-cplan-edit"
+                                buttonLabel="Cancel" variation="secondary"
+                                (onClick)="cancel('button')">
+                    </app-button>
+                    <app-button buttonLabel="Save" type="submit" variation="primary"
+                                id="txPlanReorderServicesSave"
+                                check-auth-z="soar-clin-cplan-edit"
+                                [isDisabled]="isSaveDisabled"
+                                (onClick)="saveOrPromptUser()">
+                    </app-button>
+                </div>
+                <hr style="margin: 10px 0 10px 0;">
+                <div class="txPlanReorder__headerInfo">
+                    <div class="pull-left" id="createdDateDisplay">
+                        <span class="txDetailLabel">{{'Created:' | translate}} </span> {{creationDate | date:'shortDate' }} ({{daysSinceCreation}} {{'days ago' | translate }})
+                        <span style="margin: 0 10px 0 10px;"> | </span>
+                    </div>
+                    <div class="pull-left" id="proposedAtDisplay">
+                        <span class="txDetailLabel"> {{'Proposed at:' | translate}} </span> {{ proposedLocation }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="txPlanEditServices">
+        <div class="stageContainer stage-spacing" *ngFor="let stage of planStages; let stageIndex = index;"
+             [ngClass]="{'empty-stage-container': (stage.services == 0 && isCardBeingDragged), 'drawerOpen': drawerState, 'drawerClosed': !drawerState}">
+
+            <div class="drag-box"
+                 id="{{ 'stage_' + stageIndex}}"
+                 cdkDropList
+                 [cdkDropListData]="stage.services"
+                 [cdkDropListConnectedTo]="dragAreas"
+                 (cdkDropListDropped)="onDrop($event)">
+                <div class="fuseServicesGrid container">
+                    <div class="stageHeaderContainer" style="display:flex;">
+                        <div class="stage-title-container">
+                            <div class="stage-title" id="txPlanReorder_stageNumberDisplay_stage{{stageIndex}}">
+                                {{'Stage'}} {{ stageIndex + 1 }}
+                            </div>
+                        </div>
+                        <div class="delete-stage-container">
+                            <div class="services-count" id="txPlanReorder_serviceNumberDisplay_stage{{stageIndex}}">
+                                <span class="numOfServices" style="font-weight:700; margin-right:1px">{{ stage.services.length}}</span>{{ ' Service(s)' | translate }}
+                            </div>
+
+                            <div id="txPlanReorder_deleteStageButton_stage{{stageIndex}}"
+                                 class="no-print delete-stage-btn" check-auth-z="soar-clin-cplan-edit" (click)="openDeleteStageConfirmationModal(stageIndex)">
+                                <div class="delete-svg noselect">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" /></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr style="margin: 5px 15px 15px 15px;">
+
+                    <div *ngFor="let tps of stage.services; let serviceIndex = index"
+                         cdkDrag
+                         [cdkDragData]="tps"
+                         (cdkDragStarted)="dragStarted($event)"
+                         (cdkDragEnded)="dragEnded($event)"
+                         class="service-area-spacing">
+
+                        <teeth-area-scope [template]="toothAreaScopeTemplate" [service]="tps.ServiceTransaction">
+                            <ng-template #toothAreaScopeTemplate>
+
+                                <div *cdkDragPreview>
+                                    <div>
+
+                                    </div>
+                                    <table class="preview">
+                                        <tr>
+                                            <td>
+                                                <div class="drag-svg drag-area">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+                                                        <g>
+                                                            <rect fill="none" height="24" width="24" />
+                                                        </g>
+                                                        <g>
+                                                            <g>
+                                                                <g>
+                                                                    <path d="M20,9H4v2h16V9z M4,15h16v-2H4V15z" />
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                            </td>
+                                            <td class="description">
+                                                {{ tps.ServiceTransaction.Description | truncateText: 100 }}
+                                            </td>
+                                            <td class="preview-text">
+                                                <div>Tooth</div>
+                                                <div class="preview-highlight">{{tps.ServiceTransaction.Tooth ? tps.ServiceTransaction.Tooth : '...'}}</div>
+                                            </td>
+                                            <td class="preview-text">
+                                                <div>Surface</div>
+                                                <div class="preview-highlight">{{tps.ServiceTransaction.$$Area ? tps.ServiceTransaction.$$Area : '...'}}</div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div *cdkDragPlaceholder>
+                                    <div class="custom-placeholder-spacer"></div>
+                                    <div class="custom-placeholder-original"></div>
+                                </div>
+                                <!-- The ngIf will only allow Services that are not marked for deletion to display -->
+                                <div class="txPlan-pill" *ngIf="tps.ServiceTransaction.ObjectState !== 'Delete'">
+                                    <div class="dragSection">
+                                        <div id="txPlanReorder_dragHandle_stage{{stageIndex}}_service{{serviceIndex}}"
+                                             class="pill-drag-handle text-left no-wrap-column tx-row pill-drag-area" cdkDragHandle>
+                                            <div class="drag-svg">
+                                                <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+                                                    <g>
+                                                        <rect fill="none" height="24" width="24" />
+                                                    </g>
+                                                    <g>
+                                                        <g>
+                                                            <g>
+                                                                <path d="M20,9H4v2h16V9z M4,15h16v-2H4V15z" />
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="descSection">
+                                        <div class="service-description-col"
+                                             [tooltip]="tps.displayState.displayTooltip? tps.ServiceTransaction.ServiceCode + ':' + ' ' + tps.ServiceTransaction.Description : ''"
+                                             placement="top"
+                                             delay="500">
+
+                                            <div id="txPlanReorder_rowIcon_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                 class="iconContainer" *ngIf="tps.displayState.displayCheckmarkIcon || tps.displayState.displayScheduleIcon || tps.displayState.displayCartIcon">
+                                                <!--checkmarkIcon-->
+                                                <svg *ngIf="tps.displayState.displayCheckmarkIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#28A745" width="20px" height="20px"><path d="M0 0h24v24H0z" fill="none" /><path d="M 19.28125 5.28125 L 9 15.5625 L 4.71875 11.28125 L 3.28125 12.71875 L 8.28125 17.71875 L 9 18.40625 L 9.71875 17.71875 L 20.71875 6.71875 Z" /></svg>
+                                                <!--scheduleIcon-->
+                                                <svg *ngIf="tps.displayState.displayScheduleIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F0AB00" width="20px" height="20px"><path d="M0 0h24v24H0z" fill="none" /><path d="M16.53 11.06L15.47 10l-4.88 4.88-2.12-2.12-1.06 1.06L10.59 17l5.94-5.94zM19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" /></svg>
+                                                <!--cartIcon-->
+                                                <svg *ngIf="tps.displayState.displayCartIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2DABCB" width="20px" height="20px"><path d="M0 0h24v24H0z" fill="none" /><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" /></svg>
+
+                                            </div>
+                                            <div class="descContainer" id="txPlanReorder_descriptionDisplay_stage{{stageIndex}}_service{{serviceIndex}}" #refEl (mouseenter)="showTooltip(refEl, stageIndex, serviceIndex)">
+                                                <span class="service-code">{{tps.ServiceTransaction.ServiceCode + ':'}}</span>&nbsp;{{ tps.ServiceTransaction.Description }}
+                                            </div>
+                                        </div>
+                                        <div class="serviceDateContainer" *ngIf="!tps.displayState.displayDatePicker">
+                                            <!--We are hiding these readonly dates until we can resolve the completed on date for services not on an appt-->
+                                            <span class="service-code" *ngIf="tps.displayState.displayText" style="margin-left: 10px">
+                                                <span id="txPlanReorder_displayText_stage{{stageIndex}}_service{{serviceIndex}}">
+                                                    {{tps.displayState.displayText}}
+                                                </span>
+                                            </span>
+                                            <span class="service-code" *ngIf="tps.displayState.displayCheckmarkIcon && tps.ServiceTransaction.$$DateCompleted" style="margin-left: 10px">
+                                                <span style="font-weight: 400" id="txPlanReorder_dateCompletedDisplay_stage{{stageIndex}}_service{{serviceIndex}}">
+                                                    {{tps.ServiceTransaction.$$DateCompleted }}
+                                                </span>
+                                            </span>
+
+                                            <span class="service-code" *ngIf="tps.displayState.displayScheduleIcon && tps.ServiceTransaction.$$DateCompleted" style="margin-left: 10px">
+                                                <span style="font-weight: 400" id="txPlanReorder_dateCompletedDisplay_stage{{stageIndex}}_service{{serviceIndex}}">
+                                                    {{tps.ServiceTransaction.$$DateCompleted }}
+                                                </span>
+                                            </span>
+                                            <span class="service-code" *ngIf="tps.displayState.displayScheduleIcon && !tps.ServiceTransaction.$$DateCompleted" style="margin-left: 10px">
+                                                <span style="font-weight: 400" id="txPlanReorder_scheduleStatusDisplay_stage{{stageIndex}}_service{{serviceIndex}}">
+                                                    {{tps.ServiceTransaction.ScheduledStatus }}
+                                                </span>
+                                            </span>
+                                            <span class="service-code" *ngIf="tps.displayState.displayCartIcon" style="margin-left: 10px">
+                                                <span style="font-weight: 400" id="txPlanReorder_scheduleStatusDisplay_stage{{stageIndex}}_service{{serviceIndex}}">
+                                                    {{tps.ServiceTransaction.$$DateEntered | date:'MM/dd/yyyy'}}
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="serviceDateContainer" *ngIf="tps.displayState.displayDatePicker">
+                                            <app-date-picker id="txPlanReorder_dateSelection_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                             (dateChanged)="dateChange($event, stageIndex, serviceIndex)"
+                                                             [value]="tps.ServiceTransaction.$$DateEntered"
+                                                             label="Date:"
+                                                             labelDirection="left">
+                                            </app-date-picker>
+                                        </div>
+                                    </div>
+                                    <div class="closeBtnSection">
+
+                                        <div id="txPlanReorder_deleteServiceButton_stage{{stageIndex}}_service{{serviceIndex}}"
+                                             class="delete-service"
+                                             (click)="openRemoveServiceConfirmationModal(stageIndex, serviceIndex)">
+                                            <div class="delete-svg noselect">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none" /><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" /></svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tableSection">
+                                        <div class="customGrid fuseTable" [ngClass]="{'gridDrawerClosed': !drawerState}">
+                                            <div class="grid-title noselect">
+                                                {{'Tooth'}}
+                                            </div>
+                                            <div class="grid-title noselect">
+                                                {{'Surface'}}
+                                            </div>
+                                            <div class="grid-title noselect">
+                                                {{'Status'}}
+                                            </div>
+                                            <div class="grid-title noselect">
+                                                {{'Location'}}
+                                            </div>
+                                            <div class="grid-title noselect">
+                                                {{'Provider'}}
+                                            </div>
+                                            <div class="text-align-right grid-title noselect">
+
+                                                {{'Fee'}}
+                                            </div>
+                                            <div class="text-align-right grid-title noselect" *ngIf="!drawerState">
+                                                {{'Allowed Amt' }}
+                                            </div>
+                                            <div class="text-align-right grid-title noselect" *ngIf="!drawerState">
+                                                {{'Est Ins Adj'}}
+                                            </div>
+                                            <div class="text-align-right grid-title noselect">
+                                                {{'Charges'}}
+                                            </div>
+                                            <div class="text-align-right no-wrap-title grid-title noselect" *ngIf="!drawerState">
+                                                {{'Est Insurance'}}
+                                            </div>
+                                            <div class="text-align-right grid-title noselect">
+                                                {{'Est Pat Bal'}}
+                                            </div>
+
+                                            <div class="tx-row text-table-column grid-column-teeth">
+                                                <div class="toothContainer">
+                                                    <div *ngIf="tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId === 1" class="noselect">
+                                                        <div class="toothPlaceholder">
+                                                            <!--this is serving as a temporary placeholder to maintain spacing when there is no tooth input-->
+                                                            {{tps.ServiceTransaction.Tooth? tps.ServiceTransaction.Tooth : '---'}}
+                                                        </div>
+                                                    </div>
+
+                                                    <div *ngIf="!tps.ServiceTransaction.$toothAreaData.serviceCode.UseCodeForRangeOfTeeth && tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId !== 1">
+                                                        <teeth-selector [serviceTransaction]="tps.ServiceTransaction"
+                                                                        (inputModelChange)="toothChange($event, stageIndex, serviceIndex);rootSurfaceChanged()"
+                                                                        [isDisabled]="tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId === 1">
+                                                        </teeth-selector>
+                                                    </div>
+
+                                                    <div *ngIf="tps.ServiceTransaction.$toothAreaData.serviceCode.UseCodeForRangeOfTeeth && tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId !== 1">
+                                                        <rot-teeth-selector [(input)]="tps.ServiceTransaction.Tooth" [(service)]="tps.ServiceTransaction" (inputModelChange)="toothChange($event, stageIndex, serviceIndex);rootSurfaceChanged()">
+                                                        </rot-teeth-selector>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="tx-row text-table-column grid-column-surface">
+                                                <div class="surfaceContainer">
+
+                                                    <div class="surfaceSelect" *ngIf="tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId === 1 || tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId === 5">
+                                                        <div class="surfacePlaceholder">
+                                                            <!--this is serving as a temporary placeholder to maintain spacing when there is no tooth input-->
+                                                            {{ !tps.ServiceTransaction.Roots && !tps.ServiceTransaction.Surface ?  '---' : ''  }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div *ngIf="tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId !== 1 && tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId !== 5">
+
+                                                        <root-surface-selector [id]="'txPlanReorder_surfaceSelection_stage' + stageIndex + '_service' + serviceIndex"
+                                                                               [name]="'area'"
+                                                                               ngDefaultControl
+                                                                               [serviceTransaction]="tps.ServiceTransaction"
+                                                                               (inputModelChange)="rootSurfaceChanged()"
+                                                                               [isDisabled]="tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId === 1 || tps.ServiceTransaction.$toothAreaData.serviceCode.AffectedAreaId === 5">
+                                                        </root-surface-selector>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="tx-row grid-column-status noselect"
+                                                 [ngClass]="{'fui-select-container': tps.displayState.displayStatusDropdown}">
+                                                <!--todo: replace with library component-->
+                                                <select id="txPlanReorder_serviceStatusSelection_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                        [(ngModel)]="tps.ServiceTransaction.ServiceTransactionStatusId"
+                                                        class="field statusSelect fui-select"
+                                                        *ngIf="tps.displayState.displayStatusDropdown"
+                                                        (ngModelChange)="statusChange($event, tps)"
+                                                        [ngModelOptions]="{standalone: true}">
+
+                                                    <option *ngFor="let status of serviceStatuses" [value]="status.Id">
+
+                                                        {{status.Name}}
+                                                    </option>
+                                                </select> <!--//Id - Name (order by name asc) -->
+                                                <span id="txPlanReorder_serviceStatusDisplay_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                      *ngIf="!tps.displayState.displayStatusDropdown" class="statusSelect">
+                                                    {{ tps.ServiceTransaction.$$statusName }}
+                                                </span>
+                                            </div>
+                                            <!--Placeholder for experimenting with new read-only fields based on status-->
+
+                                            <div class="tx-row text-table-column grid-column-location noselect">
+                                                <div class="locationContainer fui-select-container"
+                                                     *ngIf="tps.displayState.displayLocationDropdown">
+                                                    <!--todo: replace with library component-->
+                                                    <select id="txPlanReorder_locationSelection_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                            [(ngModel)]="tps.ServiceTransaction.LocationId"
+                                                            (ngModelChange)="locationChange($event, stageIndex, serviceIndex)"
+                                                            class="field locationSelect fui-select"
+                                                            [ngModelOptions]="{standalone: true}">
+                                                        <ng-container *ngFor="let location of locations">
+                                                            <option *ngIf="location.DeactivationTimeUtc === null || location.LocationId === tps.ServiceTransaction.LocationId" [value]="location.LocationId" [disabled]="location.DeactivationTimeUtc != null">
+                                                                {{location.NameAbbreviation }} 
+                                                            </option>
+                                                        </ng-container>
+                                                    </select>
+                                                </div>
+                                                <span id="txPlanReorder_locationSelection_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                      *ngIf="!tps.displayState.displayLocationDropdown">
+                                                    {{ tps.ServiceTransaction.DisplayName }}
+                                                </span>
+                                            </div>
+                                            <div class="tx-row text-table-column grid-column-provider noselect">
+                                                <div class="providerContainer fui-select-container" *ngIf="tps.displayState.displayProviderDropdown">
+                                                    <!--todo: replace with library component-->
+                                                    <select id="txPlanReorder_providerSelection_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                            [(ngModel)]="tps.ServiceTransaction.ProviderUserId"
+                                                            class="field providerSelect fui-select"
+                                                            [ngModelOptions]="{standalone: true}">
+                                                        <option *ngFor="let provider of tps.displayState.providers" [value]="provider.UserId">
+
+
+                                                            {{provider.FirstName}} {{provider.LastName}}
+                                                        </option>
+                                                    </select> <!--// UserId (FirstName + LastName) -->
+
+                                                </div>
+                                                <span id="txPlanReorder_providerDisplay_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                      *ngIf="!tps.displayState.displayProviderDropdown">
+                                                    {{ tps.ServiceTransaction.ProviderFullName | truncateText: 50 }}
+                                                </span>
+                                            </div>
+                                            <div class="text-align-right tx-row grid-column-edit-money">
+                                                <div *ngIf="tps.displayState.displayFeeDropdown">
+                                                    <currency-input id="txPlanReorder_feeField_stage{{stageIndex}}_service{{serviceIndex}}" [(amount)]="tps.ServiceTransaction.Fee" (checkInputValue)="checkFeeInputIsEmpty($event)" (amountChange)="onFeeChanged($event,stageIndex,serviceIndex)" ></currency-input>
+                                                </div>
+                                                <span id="txPlanReorder_feeDisplay_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                      *ngIf="!tps.displayState.displayFeeDropdown">
+                                                    {{ tps.ServiceTransaction.Fee | currency: 'USD'}}
+                                                </span>
+                                            </div>
+                                            <div id="txPlanReorder_allowedAmountDisplay_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                 class="text-align-right tx-row grid-column-money noselect" *ngIf="!drawerState">
+                                                {{ tps.ServiceTransaction.AllowedAmount | currency: 'USD' }}
+                                            </div>
+                                            <div id="txPlanReorder_estimatedAdjustmentDisplay_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                 class="text-align-right tx-row grid-column-money noselect" *ngIf="!drawerState">
+                                                {{ tps.ServiceTransaction.$$DateCompleted ? '---' : tps.ServiceTransaction.$$AdjEst | currency: 'USD'}}
+                                            </div>
+                                            <div id="txPlanReorder_chargesDisplay_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                 class="text-align-right tx-row grid-column-money noselect">
+                                                {{ tps.ServiceTransaction.Amount | currency: 'USD'}}
+                                            </div>
+                                            <div id="txPlanReorder_estimatedInsuranceDisplay_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                 class="text-align-right tx-row grid-column-money noselect" *ngIf="!drawerState">
+                                                {{ tps.ServiceTransaction.$$DateCompleted ? '---' : tps.ServiceTransaction.$$EstInsurance | currency: 'USD'}}
+                                            </div>
+                                            <div id="txPlanReorder_patientPortionDisplay_stage{{stageIndex}}_service{{serviceIndex}}"
+                                                 class="text-align-right tx-row grid-column-money noselect">
+                                                {{ tps.ServiceTransaction.$$DateCompleted ? '---' : tps.ServiceTransaction.$$PatientPortion | currency: 'USD'}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </ng-template>
+                        </teeth-area-scope>
+                    </div>
+                    <!-- Empty Stage Placeholder  -->
+                    <div class="emptyStageContainer" *ngIf="stage.services == 0">
+
+                        <div class="custom-placeholder-spacer"></div>
+                        <div class="custom-placeholder">
+                            {{'Drag and Drop Services Here' | translate}}
+                            <div class="drag-svg drag-area arrowMargins">
+                                <svg xmlns="http://www.w3.org/2000/svg" style="transform: scale(-1,1);" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+                                    <g>
+                                        <rect fill="none" height="24" width="24" />
+                                    </g>
+                                    <g>
+                                        <g>
+                                            <g>
+                                                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <hr style="margin: 10px 0 10px 0;">
+        <div class="add-stage-button-area">
+            <app-button id="txPlanReorderServicesOpenDrawerBottom" *ngIf="!drawerState"
+                        buttonLabel="+ Add Services" variation="secondary"
+                        style="margin-right: 10px;"
+                        check-auth-z="soar-clin-cplan-edit"
+                        (onClick)="openServicesDrawer()">
+            </app-button>
+            <app-button id="txPlanReorderServicesAddStageBottom"
+                        buttonLabel="+ Add Stage" variation="secondary"
+                        style="margin-right: 10px;"
+                        check-auth-z="soar-clin-cplan-edit"
+                        (onClick)="addStage()">
+            </app-button>
+            <app-button id="txPlanReorderServicesCancelBottom"
+                        style="margin-right: 10px;"
+                        check-auth-z="soar-clin-cplan-edit"
+                        buttonLabel="Cancel" variation="secondary"
+                        (onClick)="cancel('button')">
+            </app-button>
+            <app-button buttonLabel="Save" variation="primary"
+                        id="txPlanReorderServicesSaveBottom"
+                        check-auth-z="soar-clin-cplan-edit"
+                        [isDisabled]="isSaveDisabled"
+                        (onClick)="saveOrPromptUser()">
+            </app-button>
+        </div>
+    </div>
+</form>

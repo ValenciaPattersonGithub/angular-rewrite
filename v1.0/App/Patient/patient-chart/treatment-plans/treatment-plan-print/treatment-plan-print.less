@@ -1,0 +1,247 @@
+﻿@media print {
+	.txPlanPrint {
+		font-size: 8pt;
+		//Setting bottom margin to 0 eliminates a potential extra blank page when printing
+		margin-bottom: 0px !important;
+		padding: 5px;
+	}
+
+    &__noteHeader {
+        padding: 4pt;
+        font-size: 8pt;
+        width: 100%;
+        font-weight: bold;
+    }
+
+    &__note {
+        padding: 4pt;
+        border: solid 1pt @brand-color_gray;
+        background-color: @brand-color_white;
+        min-height: 75pt;
+        height: auto;
+        overflow: visible;
+        display: block;
+        white-space: pre;
+        white-space: pre-wrap;
+    }
+}
+
+.txPlanPrint {
+	margin: 10px;
+	margin-right: 35px;
+    .form-footer {
+        * {
+            float: left;
+        }
+    }
+
+    .txPlanPrint__signatureGroup {
+        page-break-inside: avoid;
+        page-break-after: avoid;
+    }
+
+    &__noteHeader {
+        padding: 4px;
+        font-size: 14px;
+        width: 100%;
+        font-weight: bold;
+    }
+
+    &__note {
+        padding: 4px;
+        border: solid 1px @brand-color_gray;
+        background-color: @brand-color_white;
+        min-height: 100px;
+        height: auto;
+        overflow: visible;
+        display: block;
+        white-space: pre;
+        white-space: pre-wrap;
+		overflow-wrap: break-word;
+    }
+
+    .m-signature-pad--footer {
+        width: 100%;
+        margin-top: @brand-margin_sm;
+
+        button {
+            @media print {
+                display: none;
+            }
+        }
+
+        .description {
+            @media print {
+                display: none;
+            }
+        }
+    }
+}
+
+.txPlanReport {
+	&__header {
+		vertical-align: bottom;
+
+		.rightAlign {
+			text-align: right;/*
+			margin-right: 5px;*/
+
+			@media print {
+				margin-right: 15px;
+			}
+		}
+	}
+
+	&__row {
+		.rightAlign {
+			text-align: right;/*
+			margin-right: 5px;*/
+
+			@media print {
+				/*margin-right: 15px;*/
+			}
+		}
+
+		.adjCol {
+			input {
+				@media print {
+					border: none;
+					display: inline;
+					font-family: inherit;
+					font-size: inherit;
+					padding: 0px;
+					width: auto;
+				}
+			}
+		}
+
+		.insCol {
+			input {
+				@media print {
+					border: none;
+					display: inline;
+					font-family: inherit;
+					font-size: inherit;
+					padding: 0px;
+					width: auto;
+				}
+			}
+		}
+	}
+}
+
+	.txPlanPrint {
+		&__signatureGroup {
+			.no-print {
+				margin-left: 38px;
+				font-weight: bold;
+				font-style: italic;
+
+				@media print {
+					display: none;
+				}
+			}
+		}
+	}
+
+.txPlanPrint .details-table {
+	width: 100%;
+}
+
+.txPlanPrint .row-headers {
+	border-bottom: 1px solid #DADCDC;
+}
+
+.txPlanPrint .row-details {
+	border-bottom: 1px solid #DADCDC;
+}
+
+.txPlanPrint .treatment-plan-service-row th {
+	height: 50px;
+	vertical-align: bottom;
+}
+
+.txPlanPrint .treatment-plan-service-row .tx-row {
+	height: 50px;
+	vertical-align: middle;
+}
+
+.txPlanPrint .treatment-plan-service-footer-row td {
+	height: 50px;
+	font-weight: 700;
+}
+
+.txPlanPrint .grid-column-desc {
+	min-width: 120px;
+}
+
+.txPlanPrint .grid-column-teeth, .txPlanPrint .grid-column-placeholder {
+	width: 50px;
+}
+
+.txPlanPrint .grid-column-surface {
+	width: 65px;
+}
+
+.txPlanPrint .grid-column-status {
+	width: 85px;
+}
+
+.txPlanPrint .grid-column-provider {
+	width: 127px;
+}
+
+.txPlanPrint .grid-column-location {
+	width: 95px;
+}
+
+.txPlanPrint .grid-column-money {
+	width: 80px;
+	min-width: 0px;
+}
+
+.txPlanPrint .text-table-column {
+	word-break: break-word;
+}
+
+.txPlanPrint .align-text-right {
+	text-align: right;
+	width: 75px;
+}
+
+.txPlanPrint .footer {
+	width: 99%;
+	display: flex;
+	margin-top: 10px;
+	margin-right: 0px;
+}
+
+.txPlanPrint .footer .notes {
+	width: 50%;
+}
+
+.txPlanPrint .footer .notes textarea.form-control {
+	height: 90px;
+}
+
+.txPlanPrint .footer .totals {
+	width: 50%;
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 22px;
+}
+
+.txPlanPrint .footer .totals .highlight {
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.txPlanPrint .footer .totals .money-column {
+	width: 110px;
+}
+
+.txPlanPrint .footer {
+    .totals {
+        max-height: 100px;
+    }
+}

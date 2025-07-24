@@ -1,0 +1,17 @@
+﻿<div form name="frmFeeRollbackOptions" class="svcFeeRollbackOptions">
+    <div ng-if="showMessage===true">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="padding-left-15">{{::('Service Fee Rollback'| i18n)}}</span>
+                <a id="sp-close" class="pull-right" ng-click="showMessage=false"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="panel-body">
+                <div class="col-xs-12">
+                    <span style="font-weight:bold">{{ '{0} services have had a fee update since originally proposed.' | i18n : [servicesToRollback] }} </span>
+                </div>
+                <span class="padding-left-15"><a class="" ng-disabled="!serviceCodes" ng-click="rollbackOption()">{{::('Rollback (optional)' | i18n)}}</a></span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+﻿<div class="perioLanding" ng-hide="examStarted">
+    <!--<button id="btnExamStart" name="btnExamStart" check-auth-z="soar-clin-cperio-add" class="perioLanding__add"
+            ng-disabled="examStarted || initializingExam" ng-click="initExam(false);">
+        {{'Start New Exam'|i18n}}
+    </button>-->
+
+    <app-button check-auth-z="soar-clin-cperio-edit"
+                ng-show="hasPerioExams"
+                id="btnExamEdit"
+                class="perioLanding"
+                variation="secondary"
+                (on-click)="initExam(true)"
+                button-label="{{'Edit Perio Exam'|i18n}}"
+                [is-disabled]="examStarted || initializingExam || !examSelected || !hasEditPermissions">
+    </app-button>
+
+    <app-button check-auth-z="soar-clin-cperio-delete"
+                ng-show="currentExamId || hasPerioExams"
+                id="btnExamDelete"
+                class="perioLanding"
+                variation="secondary"
+                (on-click)="deleteExam()"
+                button-label="{{'Delete Perio Exam'|i18n}}"
+                [is-disabled]="initializingExam || !hasPerioExams || !hasDeletePermissions">
+    </app-button>
+
+
+
+    <app-button ng-show="perioExamHeaders && perioExamHeaders.length < 1 && !examStarted"
+                check-auth-z="soar-clin-cperio-add"
+                id="btnExamStart"
+                class="perioLanding"
+                variation="primary"
+                (on-click)="initExam(false)"
+                button-label="{{'Start New Exam'|i18n}}"
+                [is-disabled]="examStarted || initializingExam || !hasSavePermissions">
+
+    </app-button>
+    <button-menu id="perioStartMenu" 
+                 check-auth-z="soar-clin-cperio-add" is-prim-button="true" 
+                 ng-show="perioExamHeaders && perioExamHeaders.length > 0 && !examStarted"
+                 class="perioLanding" button-text="{{'Start New Exam'|i18n}}"
+                 [options]="perioOptionList"
+                 (selected-option)="examOptionClicked($event)"
+                 [is-disabled]="examStarted || initializingExam || !hasSavePermissions">
+
+    </button-menu>
+
+    <!--<button id="btnExamEdit" name="btnExamEdit" check-auth-z="soar-clin-cperio-edit" class="perioLanding__add"
+            ng-show="hasPerioExams" ng-disabled="examStarted || initializingExam || !examSelected" ng-click="initExam(true);">
+        {{'Edit Perio Exam'|i18n}}
+    </button>-->
+    <!--<button id="btnExamDelete" check-auth-z="soar-clin-cperio-delete" class="perioLanding__delete"
+            ng-show="currentExamId || hasPerioExams" ng-disabled="initializingExam || !hasPerioExams"
+            ng-click="deleteExam()">
+        {{'Delete {0}'|i18n:['Perio Exam']}}
+    </button>-->
+</div>

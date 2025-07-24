@@ -1,0 +1,7 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.creditDistributionHistoryReportDto.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid avoidPageBreak" ng-if="data.creditDistributionHistoryReportDto.length > 0 && !showFilterMessage">
+        <credit-distribution-history-report [data]="data" ></credit-distribution-history-report>
+    </div>
+</div>

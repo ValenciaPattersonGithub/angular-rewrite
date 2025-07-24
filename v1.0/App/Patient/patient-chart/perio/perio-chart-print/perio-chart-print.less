@@ -1,0 +1,298 @@
+﻿@media screen {
+    .perioChartPrint {
+        font-size: @brand-font_md;
+        margin: @brand-margin_lg auto;
+        width: 100%;
+
+        body.perioChartPrint {
+            padding: 0;
+            background-color: @white;
+            margin-top: 0;
+        }
+
+        &__verticalLabel {
+            float: left;
+            margin-left: -50px;
+            padding: 0px;
+            position: absolute;
+            -webkit-transform: rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+            text-align: center;
+            width: 60px;
+        }
+
+        &__verticalLabelRight {
+            float: right;
+            margin-left: 99%;
+            padding: 0px;
+            position: absolute;
+            -webkit-transform: rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+            text-align: center;
+            width: 60px;
+        }
+
+        &__header {
+            width: 100%;
+            min-height: 70px;
+            margin-top: 0;
+            font-weight: bold;
+            margin-bottom: @brand-margin_sm;
+        }
+
+        &__archDivider {
+            height: 2px;
+            background-color: @brand-color_darker-gray;
+            margin: @brand-margin_lg 0;
+        }
+
+        &__buccalLingualDivider {
+            height: @brand-margin_md;
+        }
+
+        &__lastInArch {
+            .perioRead {
+                border-bottom: none;
+            }
+        }
+
+        &__chart {
+            .clearfix;
+            margin-bottom: 50px;
+            position: relative;
+
+            &.view {
+                .perioInputs {
+                    .perioInputs__tooth {
+                        .perioInputs__ctrl {
+                            border-color: transparent;
+                            background-color: transparent;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen, print {
+
+
+    .perioChartPrint {
+        .top-header,
+        .feedback-container,
+        .walkme-player {
+            display: none !important;
+        }
+
+        &__empty {
+            padding-top: 25%;
+            text-align: center;
+        }
+
+        .view-container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 0 @brand-margin_sm;
+            background-color: @white;
+        }
+
+        &__footer {
+            text-align: center;
+            width: 100%;
+        }
+    }
+
+    .perioItem {
+        display: inline-block;
+        width: 6.25%;
+
+        &__id {
+            text-align: center;
+        }
+
+        &__input {
+            display: inline-block;
+            width: 26%;
+            height: 20px;
+            margin: 0;
+        }
+    }
+}
+
+/*@media print {*/
+@media print {
+    
+    body.perioChartPrint {
+        padding: 0;
+        background-color: @white;
+        margin-top: 0;
+    }
+
+    .perioChartPrint {
+        font-size: 8pt;
+        margin: 0;
+        padding: 0;
+
+        &__header {
+            width: 100%;
+            min-height: 50pt;
+            margin-top: 0;
+            font-weight: bold;
+            margin-bottom: 3pt;
+        }
+
+        &__verticalLabel {
+            float: left;
+            margin-left: -20pt;
+            padding: 0px;
+            position: absolute;
+            -webkit-transform: rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+            text-align: center;
+            width: 60px;
+        }
+
+        &__verticalLabelRight {
+            float: right;
+            margin-left: 99%;
+            padding: 0px;
+            position: absolute;
+            -webkit-transform: rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+            text-align: center;
+            width: 60px;
+        }
+
+        &__archDivider {
+            height: 2pt;
+            background-color: gray !important;
+            -webkit-print-color-adjust: exact;
+            margin: 8pt;
+        }
+
+        &__buccalLingualDivider {
+            height: 6pt;
+        }
+
+        &__lastInArch {
+            .perioRead {
+                border-bottom: none;
+            }
+        }
+
+        &__chart {
+            .clearfix;
+            margin-bottom: 5pt;
+            position: relative;
+
+            &.view {
+                .perioInputs {
+                    .perioInputs__tooth {
+                        .perioInputs__ctrl {
+                            border-color: transparent;
+                            background-color: transparent;
+                        }
+                    }
+                }
+            }
+        }
+
+        &__graph {
+
+            .perioChart {
+                margin-left: 0%;
+                width: 100%;
+            }
+
+            .perioChart__legend {
+
+                div {
+                    -webkit-print-color-adjust: exact;
+                }
+                /* colors are temporary until we get final colors, do not want to add/update vars until then - sg */
+                div:nth-of-type(1) {
+                    background-color: #009900 !important;
+                }
+
+                div:nth-of-type(2) {
+                    background-color: #0066cc !important;
+                }
+
+                div:nth-of-type(3) {
+                    background-color: #00ff00 !important;
+                }
+
+                div:nth-of-type(4) {
+                    background-color: #ff6600 !important;
+                }
+            }
+
+            @-moz-document url-prefix() {
+
+                .perioChart__legend {
+
+                    div {
+                        overflow: hidden;
+                        position: relative;
+
+                        span {
+                            position: relative;
+                            z-index: 1;
+                        }
+                    }
+                    /* colors are temporary until we get final colors, do not want to add/update vars until then - sg */
+                    div:nth-of-type(1):before {
+                        border: 99999px #009900 solid;
+                    }
+
+                    div:nth-of-type(2):before {
+                        border: 99999px #0066cc solid;
+                    }
+
+                    div:nth-of-type(3):before {
+                        border: 99999px #00ff00 solid;
+                    }
+
+                    div:nth-of-type(4):before {
+                        border: 99999px #ff6600 solid;
+                    }
+
+                    div:before {
+                        bottom: 0;
+                        content: '';
+                        left: 0;
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        z-index: 0;
+                    }
+                }
+            }
+        }
+
+        &__print {
+            display: none;
+        }
+
+        &__practice {
+            margin-top: -25pt;
+        }
+    }
+
+    a:link:after, a:visited:after {
+        content: "";
+    }
+}

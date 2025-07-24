@@ -1,0 +1,25 @@
+﻿<div class="insuranceModal" ng-init="initialize()">
+    <div class="modal-header">
+        <!--<span ng-hide="editing">{{ '{0} doesn\'t have a policy listed to select from.' | i18n:[{skip: patient.$name }]}}</span>-->
+        <h1 ng-hide="editing">{{ 'Add an {0} for {1}' | i18n:['Insurance Policy',{skip: patient.$name }] }}</h1>
+        <h1 ng-show="editing">{{ 'Edit the Insurance Plan for {0}' | i18n:[{skip: patient.$name}] }}</h1>
+    </div>
+    <div class="modal-body">
+        <patient-insurance ng-repeat="insurance in patient.PatientBenefitPlanDtos track by insurance.$trackingId"
+                           insurance="insurance"
+                           responsible-person="patient.ResponsiblePersonId"
+                           person="patient"
+                           available-priorities="availablePriorities"
+                           validate-policy-holder="true"
+                           self-only="insurance.$policyHolderNeedsInsurance"
+                           remove="removeInsurance($index)"                           
+                           index="{{$index}}"></patient-insurance>
+    </div>
+    <div ng-show="patient.PatientBenefitPlanDtos.length < plansAllowed && !editing">
+        <button id="btnAddInsuranceAddMoreCoverage" class="btn btn-link" icon="fa-plus" ng-click="addInsurance()">{{ 'Add More {0} ' | i18n:['Insurance Coverage'] }}</button>
+    </div>
+    <div class="modal-footer">
+        <button id="btnAddInsuranceCancel" class="btn btn-default" ng-disabled="saving" ng-click="cancel()">{{ 'Cancel' | i18n }}</button>
+        <button id="btnAddInsuranceSaveContinue"class="btn btn-primary" check-auth-z="{{editing?'soar-per-pbplan-edit':'soar-per-pbplan-add'}}" ng-click="saveMultiplePlans(patient.PatientBenefitPlanDtos)" ng-disabled="saving || !hasPlans">{{ 'Save & Continue' | i18n }}</button>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+@import "variables";
+@import '/src/patient/communication-center/communication-center-variables';
+ul,
+li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu {
+    padding: 0px;
+    border: 1px solid #c8c8c8;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    fill: $polar-white;
+    stroke-width: 1;
+}
+
+.menu > li.menu-one {
+    display: inline-block;
+    margin: 2px 2px; 
+}
+
+.menu > li button.sub-link {
+    padding: 1px 0px 0px 5px;
+    color: black;
+    width: 100%;
+}
+
+.menu > li button.top-link {
+    padding: 2px 0px 0px 5px;
+    color: black;
+    width: 100%;
+}
+
+.menu > li button {
+    padding: 0px 0px 0px 5px;
+    color: black;
+    width: 100%;
+}
+
+.main-li-head {
+    border: 0px;
+}
+
+.main-li {
+    border-left: 1px solid #c8c8c8;
+}
+
+.main-li-end {
+    border-left: 1px solid #c8c8c8;
+    border-right: 1px solid #c8c8c8;
+}
+
+.sub-menu {
+    position: absolute;
+    display: none;
+    z-index: 500; // I am guessing I do not know what it has to be but it would not show up over other elements until we added this style.
+    background-color: white;
+    -moz-box-shadow: 0 0 10px #bbb;
+    -webkit-box-shadow: 0 0 10px #bbb;
+    box-shadow: 0 0 10px #bbb;
+}
+
+.first-sub-menu {
+    margin-left: -1px;
+}
+
+.sub-menu > li {
+    display: block;
+    cursor: pointer;
+    border-left: 1px solid #c8c8c8;
+    border-right: 1px solid #c8c8c8;
+    border-bottom: 1px solid #c8c8c8;
+    border-top: none;
+    width: 200px;
+    font-family: $communication-card-font-family;
+    font-size: $communication-card-font-size;
+}
+.sub-menu > li a{
+    margin-left: 10px;
+    color: $text-black;
+}
+li:hover .sub-menu {
+    display: block;
+    line-height: 2em;
+}
+.sub-menu > li:hover,
+.sub-menu > li:focus {
+    background-color: $hover-menu-item-background-color !important;
+    color: $polar-white;
+}
+.sub-menu > li:hover a,
+.sub-menu > li:focus a{
+    color: $polar-white;
+}

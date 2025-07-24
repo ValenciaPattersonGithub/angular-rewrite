@@ -1,0 +1,74 @@
+<div class="txPlanPrintOptions">
+    <div class="app-modal">
+        <div id="modal-header" class="app-modal-header">
+            {{ 'Treatment Plan Preview - Print Options' | translate}}
+        </div>
+        <div id="modal-message" class="app-modal-body">
+            <p>
+                {{ 'Select the columns / totals you would like to be visible below.' | translate}}
+            </p>
+
+            <div class="container options-container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="section-header">{{ 'Columns' | translate }}</label>
+
+                        <app-check-box id="cb_select_all"
+                                       label="{{ 'Select/Deselect All' | translate}}"
+                                       [checked]="cbSelectAllChecked"
+                                       (checkChanged)="selectAllChanged($event)">
+                        </app-check-box>
+
+                        <div *ngFor="let printOption of txPlanPrintOptions; let i = index">
+                            <div class="communication-todo-item" id="comm-incomplete-todo-subtitle">
+                                <app-check-box id="print_option_{{i}}"
+                                               label="{{printOption.optionName | translate}}"
+                                               [(checked)]="printOption.checked"
+                                               (checkChanged)="printOptionChanged($event, i)">
+                                </app-check-box>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="section-header">{{ 'Totals' | translate }}</label>
+
+                        <app-check-box id="cb_select_all"
+                                       label="{{ 'Select/Deselect All' | translate}}"
+                                       [checked]="cbSelectAllOptionsChecked"
+                                       (checkChanged)="selectAllOptionsChanged($event)">
+                        </app-check-box>
+
+                        <div *ngFor="let printOption of txPlanOtherOptions; let i = index">
+                            <div class="communication-todo-item" id="comm-incomplete-todo-subtitle">
+                                <app-check-box id="print_option_{{i}}"
+                                               label="{{printOption.optionName | translate}}"
+                                               [(checked)]="printOption.checked"
+                                               (checkChanged)="printOtherOptionChanged($event, i)">
+                                </app-check-box>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+        <div class="app-modal-footer">
+            <app-button id="btnPrintOptionsCancel"
+                        class=""
+                        variation="secondary"
+                        (onClick)="closeModal()"
+                        buttonLabel="Cancel"
+                        [isDisabled]="false"
+                        style="padding-right: 10px;">
+            </app-button>
+            <app-button id="btnPrintOptionsPrint"
+                        class=""
+                        variation="primary"
+                        (onClick)="print()"
+                        buttonLabel="Next"
+                        [isDisabled]="printButtonDisabled">
+            </app-button>
+        </div>
+    </div>
+</div>

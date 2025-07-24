@@ -1,0 +1,138 @@
+
+<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage"
+        ng-repeat="location in data.Locations">
+        <table class="fusePrintGrid pull-left">
+            <thead class="stripOdd">
+                <tr>
+                    <th colspan="10" class="stripEven">
+                        <div class="text-center">
+                            <h4>{{location.LocationName}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="reportGrid__row">
+                    <th class="col-sm-3 cell">
+                        {{ 'Responsible Party' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell  text-right">
+                        {{ '0-30 Days' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell  text-right">
+                        {{ '31-60 Days' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell  text-right">
+                        {{ '61-90 Days' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell  text-right">
+                        {{ '> 90 Days' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell text-right">
+                        {{ 'In Collections' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell text-right">
+                        {{ 'Total Account Balance' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell  text-right">
+                        {{ 'Estimated Insurance' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell  text-right">
+                        {{ 'Estimated Insurance Adjustments' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell  text-right">
+                        {{ 'Patient Portion' | i18n }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="stripOdd" ng-repeat="resParty in location.ResponsibleParties" ng-if="!data.isSummaryView">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-3 cell">
+                        {{resParty.ResponsibleParty}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.ThirtyDays | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.SixtyDays | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.NinetyDays | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.MoreThanNinetyDays | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.InCollection | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.TotalAccountBalance | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.TotalEstInsurance | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.TotalEstInsuranceAdjustment | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{resParty.TotalPatientPortion | getDefaultDecimal | currency}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="stripOdd">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-3 cell  reportGrid__label" ng-if="!data.isSummaryView">
+                        {{location.LocationName}} {{'Totals' | i18n}}:
+                    </td>
+                    <td class="col-sm-3 cell  reportGrid__label" ng-if="data.isSummaryView">                        
+                    </td>
+                    <td class="col-sm-1 cell text-right"  ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.ThirtyDays | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.SixtyDays | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.NinetyDays | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.MoreThanNinetyDays | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.InCollection | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.TotalAccountBalance | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.TotalEstInsurance | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.TotalEstInsuranceAdjustment | getDefaultDecimal | currency}}
+                    </td>
+                    <td class="col-sm-1 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">
+                        {{location.TotalPatientPortion | getDefaultDecimal | currency}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.Locations.length === $index+1">
+                <tr class="reportGrid__row reportGrid__footer">
+                    <td class="col-sm-3 cell  reportGrid__label">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label"> {{data.ThirtyDays | getDefaultDecimal | currency}}</td>
+                    <td class="col-sm-1 cell  text-right reportGrid__label">{{data.SixtyDays | getDefaultDecimal | currency}}</td>
+                    <td class="col-sm-1 cell  text-right reportGrid__label">{{data.NinetyDays | getDefaultDecimal | currency}}</td>
+                    <td class="col-sm-1 cell  text-right reportGrid__label">{{data.MoreThanNinetyDays | getDefaultDecimal | currency}}</td>
+                    <td class="col-sm-1 cell  text-right reportGrid__label">{{data.InCollection | getDefaultDecimal | currency}}</td>
+                    <td class="col-sm-1 cell  text-right reportGrid__label">{{data.TotalAccountBalance | getDefaultDecimal
+                        | currency}}</td>
+                    <td class="col-sm-1 cell  text-right reportGrid__label">{{data.TotalEstInsurance | getDefaultDecimal
+                        | currency}}</td>
+                    <td class="col-sm-1 cell  text-right reportGrid__label">{{data.TotalEstInsuranceAdjustment | getDefaultDecimal | currency}}</td>                    
+                    <td class="col-sm-1 cell  text-right reportGrid__label">{{data.TotalPatientPortion | getDefaultDecimal | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

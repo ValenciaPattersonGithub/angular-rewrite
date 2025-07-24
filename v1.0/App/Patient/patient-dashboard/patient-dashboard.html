@@ -1,0 +1,128 @@
+﻿
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <form name="frmPatientDashboard" role="form" action="javascript:;" novalidate>
+        <div ng-show="!patientId">
+            <div class="dashboard">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-10">
+                                <label class="page-title">{{ 'People Management' | i18n }}</label>
+                            </div>
+                            <div class="col-xs-12 col-md-2">
+                                <button class="btn-primary">+ {{ 'Add {0}' | i18n:['a Person'] }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="patientId">
+            <div class="dashboard">
+                <div class="row">
+                    <div class="col-xs-12 dashboard-header">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-4">
+                                <div class="media dashboard-header-info">
+                                    <div class="pull-left dashboard-header-media-icon">
+                                        <i class="far fa-image fa-3x"> </i>
+                                        <button ng-click="EditPatient()"> {{ 'Edit {0}' | i18n:['Patient'] | uppercase }}</button>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 id="lblName" class="media-heading">
+                                            <!-- hard coded lengths to avoid line breaks from long names. preferred name will not show if last name is a certain length -->
+                                            <!--<strong>{{ patient.LastName.length > 30 ? patient.FirstName[0] + '.' : patient.FirstName }} {{ patient.LastName.length > 30 ? patient.LastName.substring(0, 29) : patient.LastName }} <span ng-show="patient.PreferredName && patient.LastName.length < 24">({{ patient.PreferredName }})</span></strong>-->
+                                            <strong>{{ patient.FirstName }} {{ patient.LastName }} <span ng-show="patient.PreferredName">({{ patient.PreferredName }})</span></strong>
+                                        </h4>
+                                        <div class="dashboard-header-media-body">
+                                            <p>
+                                                <label id="lblPatientCode"> {{ patient.PatientCode }} </label>
+                                            </p>
+                                            <p id="lblPatientStatus">
+                                                <label id="lblIsPatient" ng-show="patient.IsPatient"> {{ 'Patient' | i18n | uppercase }} </label>
+                                                <label id="lblNotAPatient" ng-show="!patient.IsPatient" class="text-muted"> {{ 'Not a Patient' | i18n | uppercase }} </label>
+                                            </p>
+                                            <p>
+                                                <label> {{ 'DOB' | i18n | uppercase }}: </label>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                                <span id="lblDOB">{{ patient.DateOfBirth | toShortDisplayDateUtc }}</span>
+                                            </p>
+                                            <p>
+                                                <label> {{ 'Age' | i18n | uppercase }}: </label>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                                <span id="lblAge" ng-show="patient.DateOfBirth">{{ patient.DateOfBirth | age }}</span>
+                                            </p>
+                                            <p>
+                                                <label> {{ 'Sex' | i18n | uppercase }}: </label>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                                <span id="lblSex">{{ patient.Sex == 'M' ? 'Male' : patient.Sex == 'F' ? 'Female' : '' | i18n | uppercase }}</span>
+                                            </p>
+                                            <!--<p>
+                                                    <label> {{ 'Primary Location' | i18n | uppercase }}: </label>
+                                                    <span id="lblLocation">{{ patient.AddressLine1 }} {{ patient.City }}, {{ patient.State }} {{ patient.ZipCode }}</span>
+                                                </p>-->
+                                            <p>
+                                                <label> {{ 'Telephone' | i18n | uppercase }}: </label>
+                                                <span id="lblTelephone">{{ patient.PrimaryPhoneNumber | tel }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                <div class="dashboard-header-alerts">
+                                    <div class="dashboard-header-alerts-header">
+                                        <label> {{ 'Alerts' | i18n | uppercase }}</label>
+                                        <div class="pull-right">
+                                            <i class="fa fa-cog"></i>
+                                            <label>{{ 'Settings' | i18n | uppercase }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="dashboard-header-alerts-body">
+                                        <ul>
+                                            <li ng-repeat="alert in patientAlertList">
+                                                <div class="media">
+                                                    <strong id="lblAlertExpDate{{$index}}" class="pull-right dashboard-header-alerts-item-expire">{{ alert.ExpirationDate ? 'Expires' : 'Does Not Expire' | i18n | uppercase }} {{ alert.ExpirationDate | toDisplayDateMDYYYY }}</strong>
+                                                    <div class="media-body">
+                                                        <span id="lblAlertDesc{{$index}}">{{alert.Description}}</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <button id="btnAlertAdd" class="btn dashboard-header-alerts-button">{{ 'Add {0}' | i18n:['Alert'] | uppercase }}</button>
+                                        <button id="btnAlertView" class="btn dashboard-header-alerts-button">{{ 'View {0}' | i18n:['Alerts'] | uppercase }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-5">
+                                <uib-tabset justified="true">
+                                    <uib-tab id="tabContactInfo" heading="{{ 'Contact Information' | i18n | uppercase }}">
+                                        <div class="clearfix">&nbsp;</div>
+                                        <div class="row">
+                                            <div class="col-xs-6 dashboard-header-contacts-address">
+                                                <p id="lblContactAddress1">{{ patient.AddressLine1 }}</p>
+                                                <p id="lblContactAddress2">{{ patient.AddressLine2 }}</p>
+                                                <p id="lblContactLocation">{{ patient.City }}{{ patient.City && patient.City != '' ? ',' : ''}} {{ patient.State }} {{ patient.ZipCode | zipCode }}</p>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!--<div class="row" ng-repeat="contact in contactInformation.Contacts">
+                                                        <div class="col-xs-1"></div>
+                                                        <div class="col-xs-3">
+                                                            {{$index+1}}.&#160;<span id="lblContactType{{$index}}" class="text-muted">{{ contact.ContactType }}:</span>
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                            <span id="lblContactInfo{{$index}}">{{ contact.ContactType != 'Email' ? (contact.ContactInfo | tel) : contact.ContactInfo}}</span>
+                                                        </div>
+                                                    </div>-->
+                                            </div>
+                                        </div>
+                                    </uib-tab>
+                                    <uib-tab id="tabPreferredProviders" heading="{{ 'Preferred {0}' | i18n:['Provider(s)'] | uppercase}}">
+
+                                    </uib-tab>
+                                </uib-tabset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

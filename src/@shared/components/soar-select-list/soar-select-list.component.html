@@ -1,0 +1,17 @@
+<div class="soarSelectList">
+    <kendo-dropdownlist [tabIndex]="sbTab"
+                        [data]="itemSource"
+                        [textField]="'text'"
+                        [valueField]="'value'"                         
+                        [valuePrimitive]="true"
+                        [(ngModel)]="selectedItemValue" name="selectedItemValue"
+                        (valueChange)="onSelectionChanged($event)"
+                        [popupSettings]="popupSettings"
+                        [defaultItem]="defaultItem"
+                        [disabled]="disableInput"
+                        [ngClass]="{'disabledCursor':disableInput}"
+                        [required]="required"
+                        (blur)="blur()"
+                        ngDefaultControl #dropDownList clickOutside (clickOutside)="clickedOutside(dropDownList)">
+    </kendo-dropdownlist>
+</div>

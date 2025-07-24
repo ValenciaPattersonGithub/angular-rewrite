@@ -1,0 +1,16 @@
+﻿
+<div>    
+    <!--selectize-->
+    <ui-select ng-model="selectedLocations" 
+               ng-disabled="disableSelect"
+               theme="bootstrap"
+               close-on-select="true"
+               on-select="selectLocations($item)">
+        <ui-select-match placeholder="{{'Select a location' | i18n}}">
+            <span ng-bind="$select.selected.NameLine1 || selectedLocations[0].NameLine1"></span>
+        </ui-select-match>        
+        <ui-select-choices repeat="location in currentUserLocations track by location.LocationId">
+            <span ng-bind="location.NameLine1"></span>
+        </ui-select-choices>
+    </ui-select>
+</div>

@@ -1,0 +1,24 @@
+﻿<div class="patientMedicalHistoryTile">
+    <div class="patientMedicalHistoryTile__detailsBox {{patientMedicalHistoryForm.$$GroupingClass}}"
+         ng-click="checkStatus('view')"
+         ng-class="buttonClass">
+        <div class="timelineTile" ng-class="{timelineTileBorder : true}">
+            <div class="timelineTile__row">
+                <div class="timelineTile__iconContainer">
+                    <img class="timelineTile__icon" ng-src="{{'Images/TimelineFilterIcons/medical.svg'  }}"/>
+                </div>
+                <div class="timelineTile__content">
+                    <div class="patientMedicalHistoryTile__details">
+                        <div class="patientMedicalHistoryTile__description">
+                            <span id="lblRecordDescription{{tileIndex}}" title="Medical History Form">{{ 'Medical History Form -' | i18n }} {{filteredDateTime}}</span>
+                        </div>
+                    </div>
+                    <div ng-hide="!loadingMedicalHistoryForm">
+                        <no-results loading-message="'Loading Medical History Form.'"
+                                    loading="loadingMedicalHistoryForm"></no-results>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

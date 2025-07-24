@@ -1,0 +1,59 @@
+@import "variables";
+
+.icon-button {
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    padding: 5px;
+
+    &:focus {
+        outline: none;
+    }
+
+    &.primary {
+        color: $polar-white;
+        background-color: $action-blue;
+        border: 1px solid $action-blue;
+
+        &:hover {
+            background-color: $light-action-blue;
+        }
+
+        &.selected {
+            color: $action-blue;
+            background-color: $polar-white;
+
+            &:hover {
+                background-color: $polar-white;
+            }
+        }
+    }
+
+    &.secondary {
+        color: $action-blue;
+        background-color: $polar-white;
+        border: 1px solid $action-blue;
+
+        &:hover {
+            color: $light-action-blue;
+            border-color: $light-action-blue;
+        }
+
+        &.selected {
+            color: $polar-white;
+            background-color: $action-blue;
+
+            &:hover {
+                background-color: $light-action-blue;
+            }
+        }
+    }
+
+    &.disabled, &.disabled:hover {
+        color: $disabled-grey;
+        background-color: $polar-white;
+        border: 1px solid $disabled-grey;
+        cursor: not-allowed;
+    }
+}

@@ -1,0 +1,59 @@
+﻿.addTxPlanServices {
+    width: 100%;
+
+    &__heading-main {
+        padding-bottom: @brand-padding_sm;
+        font-size: 24px;
+        font-weight: bold;
+
+        .title {
+            padding: @brand-padding_sm;
+        }
+    }
+
+    &__series {
+        padding: 10px;
+    }
+
+    &__image {
+        display: inline-block;
+        margin: 5px;
+
+        &__img {
+            max-height: 140px;
+        }
+    }
+
+    &__footer {
+        .containerStandard;
+        .clearfix;
+        padding-right: @brand-padding_sm;
+    }
+
+    &__btn {
+        float: right;
+        padding-bottom: @brand-padding_sm;
+    }
+
+    &__content {
+        .proposedSelectorEncounter,
+        .newServiceSelectorTxPlan,
+        .newServiceSelectorEncounter,
+        .prevCareTxPlan,
+        .prevCareAppointment,
+        .prevCareEncounter,
+        .slidePanelLeft {
+            &.open {
+                position: relative;
+                padding-bottom: 0;
+            }
+        }
+
+        .newServiceSelectorTxPlan {
+            .scrollHeight {
+                max-height: 400px;
+                overflow: scroll;
+            }
+        }
+    }
+}

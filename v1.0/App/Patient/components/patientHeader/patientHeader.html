@@ -1,0 +1,126 @@
+﻿<div class="patient2-wrapper">
+    <div ng-if="getChartExistingModeOn" class="chartModeHeader">Chart Existing Mode On</div>
+
+    <registration-header [is-patient-header]="true" [patient-profile]="patient" [use-converted]="false"></registration-header>
+
+    <div class="navigation-container">
+        <patient-secondary-navigation [patient-detail]="patient"></patient-secondary-navigation>
+        <div class="drawer-nav-container" role="navigation" aria-label="Drawer navigation" ng-if="showDrawerNav">
+            <communication-center-header
+                ng-if="(showCommunicationDrawerNav) && showTreatmentPlanServicesDrawerNav === false">
+            </communication-center-header>
+            <a id="timelineDrawer" ng-if="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav === false"
+                class="patientHeader_drawer_nav" ng-click="openDrawer(1)" ng-class="{'active' : drawerChange === 1}"
+                uib-tooltip-template="'timelineTooltipTemplate.html'" tooltip-append-to-body="true"
+                tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                <!-- Timeline -->
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                    <path
+                        d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                </svg>
+            </a>
+            <a id="referralDrawer" ng-if="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav === false && showReferralsDrawerNav === true"
+                class="patientHeader_drawer_nav" ng-click="openDrawer(5)" ng-class="{'active' : drawerChange === 6}"
+                uib-tooltip-template="'referralTooltipTemplate.html'" tooltip-append-to-body="true"
+                tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                <img ng-src="{{ drawerChange === 5 ? 'Images/referrals-menu-active.png' : 'Images/referrals-menu.png' }}" style="width: 39px; height: 40px;" />
+            </a>
+            <a id="chartingDrawer" ng-if="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav === false"
+                class="patientHeader_drawer_nav" ng-click="openDrawer(2)" ng-class="{'active' : drawerChange === 2}"
+                uib-tooltip-template="'chartTooltipTemplate.html'" tooltip-append-to-body="true"
+                tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                <!-- Charting Favorites -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170.13 178" height="20" width="20">
+                    <path
+                        d="M170.25,27.3c-5.56-11.6-13.67-20.92-26.2-25.43a31.35,31.35,0,0,0-18.49-.63c-5.77,1.43-11.47,3.19-17.16,4.91-7.05,2.14-14.08,4.26-21.57,3.92-6-.28-11.6-2-17.27-3.63C62.7,4.41,55.79,2.51,48.89.58c-1-.27-2-.39-3-.58H39.94C37.62.49,35.26.81,33,1.51c-6.25,2-11.27,5.78-15.6,10.6-5.4,6-9.75,12.64-11.84,20.55A50.35,50.35,0,0,0,6.1,59.94c2.9,10,6.4,19.8,9.59,29.7a40.88,40.88,0,0,1,2.11,12.08A204.66,204.66,0,0,0,22.19,144c1.61,7.25,3.59,14.4,7.28,20.89a37.47,37.47,0,0,0,6.1,8.36C43,180.44,54,179.31,60.51,171c3.7-4.74,5.82-10.24,7.57-15.89,2.75-8.89,5.19-17.87,8-26.72a38.44,38.44,0,0,1,4.28-8.49A9.93,9.93,0,0,1,92,115.43c3.25,1.07,5,3.69,6.34,6.54,3,6.2,4.34,12.91,5.91,19.55,1.67,7,3.23,14.1,6.21,20.74,2.21,4.93,5.07,9.44,9.85,12.26,8.63,5.11,20,4.92,27.43-7,4.52-7.22,6.89-15.25,8.65-23.48a185.39,185.39,0,0,0,3.86-37.94,68.58,68.58,0,0,1,4-21.9c2.85-8.42,5.72-16.88,7.93-25.48C174.86,48.16,175.09,37.4,170.25,27.3Z"
+                        transform="translate(-3.94 0)" />
+                </svg>
+            </a>
+            <a id="treatmentPlanDrawer"
+                ng-if="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav === false"
+                class="patientHeader_drawer_nav" ng-click="openDrawer(3)" ng-class="{'active' : drawerChange === 3}"
+                uib-tooltip-template="'treatmentPlansTooltipTemplate.html'" tooltip-append-to-body="true"
+                tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                <!-- Treatment Plans -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 178 178" preserveAspectRatio="none" width="20"
+                    height="20">
+                    <path
+                        d="M90,1a89,89,0,1,0,89,89A89,89,0,0,0,90,1ZM83,57.43v82.28H62.26l0-82.27H33.46l0-18.18h78.75V57.43ZM131.36,150l-11.1-16-11.1,16H90.09l20.8-29.59L91.78,92.82h18.43l10.05,14.3,10-14.3h18.43l-19.11,27.63L150.43,150Z"
+                        transform="translate(-1 -1)" />
+                </svg>
+            </a>
+            <a id="notesDrawer" ng-if="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav === false"
+                class="patientHeader_drawer_nav" ng-click="openDrawer(4)" ng-class="{'active' : drawerChange === 4}"
+                uib-tooltip-template="'notesTooltipTemplate.html'" tooltip-append-to-body="true"
+                tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                <!-- Notes -->
+                <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    overflow="visible" preserveAspectRatio="none" viewBox="0 0 22 22" width="20" height="20">
+                    <g>
+                        <rect display="none" fill="#FFA400" width="22" height="22" vector-effect="non-scaling-stroke" />
+                        <rect id="_x3C_Slice_x3E__109_" display="none" fill="none" width="22" height="22"
+                            vector-effect="non-scaling-stroke" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16,22l6-6h-6V22z M0,0v22h15v-7h7V0H0z"
+                            vector-effect="non-scaling-stroke" />
+                    </g>
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!--tooltip template - timeline-->
+<script type="text/ng-template" id="timelineTooltipTemplate.html">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <span class="pull-left">{{::'Timeline' | i18n}}</span>
+        </div>
+    </div>
+</script>
+
+<!--tooltip template - Chart-->
+<script type="text/ng-template" id="chartTooltipTemplate.html">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <span class="pull-left">{{::'Chart' | i18n}}</span>
+        </div>
+    </div>
+</script>
+
+
+<!--tooltip template - TreatmentPlans-->
+<script type="text/ng-template" id="treatmentPlansTooltipTemplate.html">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <span class="pull-left">{{::'Treatment Plans' | i18n}}</span>
+        </div>
+    </div>
+</script>
+
+<!--tooltip template - Notes-->
+<script type="text/ng-template" id="notesTooltipTemplate.html">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <span class="pull-left">{{::'Notes' | i18n}}</span>
+        </div>
+    </div>
+</script>
+
+<!--tooltip template - Communication-->
+<script type="text/ng-template" id="communicationTooltipTemplate.html">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <span class="pull-left">{{::'Communication' | i18n}}</span>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="referralTooltipTemplate.html">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <span class="pull-left">{{::'Referrals' | i18n}}</span>
+        </div>
+    </div>
+</script>

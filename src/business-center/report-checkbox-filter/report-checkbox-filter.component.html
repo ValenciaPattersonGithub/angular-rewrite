@@ -1,0 +1,122 @@
+<div *ngIf="reportCheckboxFilterModel?.FilterFilterModel">
+    <div class="panel-heading collapseExpand">
+        <a  attr.data-target="#{{reportCheckboxFilterModel?.FilterFilterModel?.FilterId}}"
+            attr.id="{{reportCheckboxFilterModel?.FilterFilterModel?.FilterId}}View"
+            class="soar-link font-weight-bold padding-2" data-toggle="collapse">
+            <i class="indicator fa fa-chevron-up" ></i> {{reportCheckboxFilterModel?.FilterFilterModel?.Name}}
+        </a>
+    </div>
+    <div class="filter-option panel-collapse collapse reports-slideout"
+        id="{{reportCheckboxFilterModel?.FilterFilterModel?.FilterId}}">
+        <ul attr.id="{{reportCheckboxFilterModel?.FilterFilterModel?.data[0]?.Field}}">
+            <ng-container *ngFor="let item of reportCheckboxFilterModel?.FilterFilterModel?.data">
+                <li [hidden]="!item.isVisible">
+                    <input type="checkbox" class="rprtsFilters" [name]="item.Field" [checked]="item?.Checked"
+                        (click)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel.FilterFilterModel)" />{{item.Value}}
+                </li>
+            </ng-container>
+        </ul>
+        <span class="reportPage__showMore" *ngIf="reportCheckboxFilterModel?.FilterFilterModel?.data.length > 5"
+            (click)="showMoreButton(reportCheckboxFilterModel.FilterFilterModel)"
+            type="button">{{showMoreButtonText}}</span>
+    </div>
+</div>
+
+<div>
+    <div class="panel-heading collapseExpand">  
+    <a  attr.data-target="#{{reportCheckboxFilterModel?.FilterId}}" attr.id="{{reportCheckboxFilterModel?.FilterId}}View"
+        class="soar-link font-weight-bold padding-2" data-toggle="collapse">
+        <i class="indicator fa fa-chevron-up"></i> {{reportCheckboxFilterModel?.Name}}
+    </a>
+</div>
+    <div class="filter-option panel-collapse collapse reports-slideout" [attr.id]="reportCheckboxFilterModel?.FilterId">
+        <ul [attr.id]="reportCheckboxFilterModel?.data[0]?.Field"
+            *ngIf="reportCheckboxFilterModel?.Name !== 'Locations' && reportCheckboxFilterModel?.Name !== 'Providers' && reportCheckboxFilterModel?.Name !== 'Team Members' && reportCheckboxFilterModel?.Name !== 'Insurance Payment Types' && reportCheckboxFilterModel?.Name !== 'Referral Affiliates'">
+            <ng-container *ngFor="let item of reportCheckboxFilterModel?.data">
+                <li [hidden]="!item.isVisible">
+                    <input type="checkbox" class="rprtsFilters" [name]="item.Field" [attr.data-field]="item?.Field"
+                        [attr.data-key]="item?.Key" [checked]="item?.Checked"
+                        (change)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel)" />
+                    {{item?.Value}}
+                </li>
+            </ng-container>
+
+        </ul>
+
+        <ul [attr.id]="reportCheckboxFilterModel?.data[0]?.Field"
+            *ngIf="reportCheckboxFilterModel?.Name === 'Providers' || reportCheckboxFilterModel?.Name === 'Team Members' || reportCheckboxFilterModel?.Name === 'Insurance Payment Types' || reportCheckboxFilterModel?.Name === 'Referral Affiliates'"
+            style="padding-left: 0px">
+            <ng-container *ngFor="let item of reportCheckboxFilterModel?.data">
+                <li class="multi-selector__aligned-status" *ngIf="item.Id === emptyGuid" [hidden]="!item.isVisible">
+                    <input type="checkbox" class="rprtsFilters" [name]="item.Field" [attr.data-field]="item.Field"
+                        [attr.data-key]="item.Key" [checked]="item.Checked"
+                        (change)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel)" />
+                    {{item.Value}}
+                </li>
+            </ng-container>
+            <div *ngIf="hasUsersWithGivenActiveState(reportCheckboxFilterModel?.data, true)"
+                class="multi-selector__aligned-status-header multi-selector__with-border-top">{{'Active'  | translate}}</div>
+            <ng-container *ngFor="let item of reportCheckboxFilterModel.data">
+                <li class="multi-selector__aligned-status" [hidden]="!item.isVisible"
+                    *ngIf="item.IsActive && item.Id !== emptyGuid">
+                    <input type="checkbox"
+                        class="rprtsFilters" [name]="item.Field" [attr.data-field]="item.Field"
+                        [attr.data-key]="item.Key" [checked]="item.Checked"
+                        (change)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel)" />
+                    {{item.Value}}
+                </li>
+            </ng-container>
+            <div *ngIf="hasUsersWithGivenActiveState(reportCheckboxFilterModel?.data, false)"
+                class="multi-selector__aligned-status-header multi-selector__with-border-top">{{'Inactive'  | translate}}</div>
+            <ng-container *ngFor="let item of reportCheckboxFilterModel.data">
+                <li class="multi-selector__aligned-status" *ngIf="!item.IsActive" [hidden]="!item.isVisible"><input
+                        type="checkbox" class="rprtsFilters" [name]="item.Field" [attr.data-field]="item.Field"
+                        [attr.data-key]="item.Key" [checked]="item.Checked"
+                        (change)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel)" />{{item.Value}}</li>
+            </ng-container>
+        </ul>
+        <ul [attr.id]="reportCheckboxFilterModel?.data[0]?.Field"
+            *ngIf="reportCheckboxFilterModel?.Name === 'Locations'" style="padding-left: 0px">
+            <ng-container *ngFor="let item of reportCheckboxFilterModel?.data">
+                <li class="multi-selector__aligned-status"
+                    *ngIf="item.LocationStatus === 'All Status'" [hidden]="!item.isVisible">
+                    <input type="checkbox" class="rprtsFilters" [name]="item.Field" [attr.data-field]="item.Field"
+                        [attr.data-key]="item.Key" [checked]="item.Checked"
+                        (change)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel)" />
+                    {{item.Value}}
+                </li>
+            </ng-container>
+            <div *ngIf="hasLocations(reportCheckboxFilterModel?.data, 'Active')"
+                class="multi-selector__aligned-status-header multi-selector__with-border-top">{{'Active'  | translate}}</div>
+            <ng-container *ngFor="let item of reportCheckboxFilterModel.data">
+                <li *ngIf="item.LocationStatus === 'Active'" [hidden]="!item.isVisible" class="multi-selector__aligned-status">
+                    <input type="checkbox" class="rprtsFilters" [name]="item.Field" [attr.data-field]="item.Field"
+                        [attr.data-key]="item.Key" [checked]="item.Checked"
+                        (change)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel)" />
+                    {{item.Value}}
+                </li>
+            </ng-container>
+            <div *ngIf="hasLocations(reportCheckboxFilterModel?.data, 'Pending Inactive')"
+                class="multi-selector__aligned-status-header multi-selector__with-border-top">{{'Pending Inactive'  | translate}}
+            </div>
+            <ng-container *ngFor="let item of reportCheckboxFilterModel?.data">
+                <li *ngIf="item.LocationStatus === 'Pending Inactive'" [hidden]="!item.isVisible"
+                    class="multi-selector__aligned-status"><input type="checkbox" class="rprtsFilters"
+                        [name]="item.Field" [attr.data-field]="item.Field" [attr.data-key]="item.Key"
+                        [checked]="item.Checked"
+                        (change)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel)" />{{item.Value}}</li>
+            </ng-container>
+            <div *ngIf="hasLocations(reportCheckboxFilterModel.data, 'Inactive')"
+                class="multi-selector__aligned-status-header multi-selector__with-border-top">{{'Inactive'  | translate}}</div>
+            <ng-container *ngFor="let item of reportCheckboxFilterModel?.data">
+                <li *ngIf="item.LocationStatus === 'Inactive'" [hidden]="!item.isVisible" class="multi-selector__aligned-status">
+                    <input type="checkbox" class="rprtsFilters" [name]="item.Field" [attr.data-field]="item.Field"
+                        [attr.data-key]="item.Key" [checked]="item.Checked"
+                        (change)="toggleSelect(item.Value, item.Field, reportCheckboxFilterModel)" />{{item.Value}}</li>
+            </ng-container>
+        </ul>
+
+        <span class="reportPage__showMore" *ngIf="reportCheckboxFilterModel?.data.length > 5"
+            (click)="showMoreButton(reportCheckboxFilterModel)" type="button">{{showMoreButtonText}}</span>
+    </div>
+</div>

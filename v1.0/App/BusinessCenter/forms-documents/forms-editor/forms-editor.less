@@ -1,0 +1,175 @@
+﻿.soarFormsEditor {
+    table.k-editor {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+
+        .k-editable-area {
+            padding: 6px;
+        }
+    }
+    .k-tool-group:last-child {
+        float: right;
+    }
+    .k-tool.k-group-start,
+    .k-tool.k-group-end,
+    .k-color-picker,
+    .k-picker-wrap {
+        border-radius: 0;
+    }
+    .k-colorpicker.k-foreColor.k-group-start {
+        margin-right: -22px;
+        font-family: 'Font Awesome 5 Pro';
+
+        &:before {
+            position: relative;
+            z-index: 100;  
+            content: "\f031";
+        }
+    }
+    .k-picker-wrap {
+        padding-right: 1em;
+        border-color: @brand-color_link;
+
+        .k-select {
+            z-index: 999;
+            .k-icon {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-image: none;
+                font-family: 'Font Awesome 5 Pro';
+
+                &:before {
+                    position: relative;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-family: 'Font Awesome 5 Pro';
+                    content: "\f078";
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    .k-button-group {
+        margin-right: 8px;
+        .k-tool {
+            width: 34px;
+            height: 34px;
+            margin: 0;
+            border-color: @brand-color_link;
+            &:first-child {
+                border-right: none;
+            }
+            &:last-child {
+                border-left: none;
+            }
+
+        }
+    }
+    .k-select {
+        border-width: 0;
+        .k-icon {
+            background: none;
+        }
+    }
+    .k-button-group .k-tool-icon,
+    .k-picker-wrap .k-tool-icon {
+        .fa;
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        margin: 0;
+        background-image: none;
+        color: transparent;
+            
+        &:before {
+            display: inline-block;
+            margin-top: 50%;
+            margin-left: 50%;
+            transform: translate(-50%, -50%);
+        }
+            
+            
+        &.k-bold:before {
+            content: @fa-var-bold;
+            color: @brand-color_link;
+                
+        }
+        &.k-italic:before {
+            content: @fa-var-italic;
+            color: @brand-color_link;
+        }
+        &.k-underline:before {
+            content: @fa-var-underline;
+            color: @brand-color_link;
+            transform: translate(-50%, -43%) scaleY(1.15);
+        }
+
+        .k-selected-color {
+            bottom: 4px;
+            left: 6px;
+        }
+    }
+}
+
+.k-button-group {
+    .k-tool {
+        .k-italic,
+        .k-bold,
+        .k-underline {
+            width: 23px !important;
+        }
+    }
+}
+
+#subjectWrapper {
+    height:0px;
+    opacity:0;
+}
+
+///Commented due to bug
+/*
+.k-combobox input,
+#inpTemplateName
+{
+    pointer-events: none;
+}*/
+
+.k-combobox input {
+    pointer-events: none;
+}
+                        
+#inpTemplateName {
+    pointer-events:auto;
+}
+
+#editorOverlay {
+    background-color:white;
+    opacity:0;
+    border:0;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    vertical-align:top;
+    z-index: 10;
+    position: absolute;
+}
+
+.cursor-not-allowed {
+    cursor:not-allowed;
+}
+
+.tool-disabled {
+    opacity: .4 !important;
+}
+
+#editorLocker {
+    width:97.3%;
+    height:30%; 
+    margin-top:80px; 
+    position:absolute; 
+    background-color: #d9d9d9; 
+    opacity:0.1;
+}

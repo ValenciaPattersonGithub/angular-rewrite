@@ -1,0 +1,13 @@
+﻿<div class="form-body">
+	<select id="inpDiscount" class="form-input" ng-model="selectedDiscountType"
+			ng-options="discount as discount.DiscountName for discount in discountTypes | filter: { IsActive: true }">
+		<option value="">{{ 'No {0}' | i18n:['Discount Selected'] | uppercase }}</option>
+	</select>
+
+	<br />
+
+	<a id="btnEditDiscountTypes" check-auth-z="soar-biz-bizdsc-edit" class="btn btn-default" ng-href="/#/BusinessCenter/Settings/Lists/PatientDiscountTypes">
+		<span class="fa fa-cog"></span> 
+		{{ 'Edit Master: Patient Discounts' | i18n }}
+	</a>
+</div>

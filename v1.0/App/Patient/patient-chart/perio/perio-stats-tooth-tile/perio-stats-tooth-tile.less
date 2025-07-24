@@ -1,0 +1,66 @@
+﻿
+.proStatTthTile {
+    background-color: @brand-color_white;
+    transition: all 0.5s ease 0s;
+    width: 100%;    
+
+    &.active {
+        background-color: @brand-color_gray;
+    }
+    &__dtlBox {
+        width: 83%;
+        float: left;
+        padding: 12px;
+        margin-left: 5px;
+        background-color: @brand-color_white;
+        border: 1px solid @brand-color_dark-gray;
+        min-height: 70px;
+    }
+
+    &__tooth {
+        width: 15%;
+        float: left;
+        margin-top: 10px;
+    }
+
+    &__rdngs {
+        width: 20%;
+        float: left;
+    }
+
+    &__lastRdng {
+        width: 24%;
+        float: left;
+    }
+
+    &__num {
+        margin-left: 5px;
+        float: left;
+        min-width:8px;        
+        min-height: 20px;
+    }
+
+    &__name {
+        width: 100%;
+        margin-left: 12px;
+        display: block;
+        font-weight: 500;
+        float: left;
+    }
+
+    &__icon {
+        width: 15%;
+        float: left;
+        margin: 15px 0px 0px 12px;
+    }
+
+    &__tthNum {
+        margin-left: 8px;
+        font-weight: 500;
+    }
+
+
+    &__redColor {
+        color: @brand-color_red;
+    } 
+}

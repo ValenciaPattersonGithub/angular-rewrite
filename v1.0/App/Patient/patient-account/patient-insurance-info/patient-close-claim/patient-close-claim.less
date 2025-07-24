@@ -1,0 +1,24 @@
+﻿.patient-close-claim {
+    padding-left: 10px; 
+    padding-right: 10px; 
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .row.header {
+        font-weight: bold;
+        padding: 0px;
+        width: initial;
+    }
+    .row.header, .row.body {
+        display: flex;
+        flex-direction: row;
+    }
+    .header > [class^="col-"],
+    .header > [class*=" col-"],
+    .body > [class^="col-"],
+    .body > [class*=" col-"] {
+        display: flex;
+        align-items: center;
+    }
+}

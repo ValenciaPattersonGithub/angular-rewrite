@@ -1,0 +1,161 @@
+﻿@import "variables";
+
+.fa {
+    font-weight: 600;
+}
+
+button, .dropdownListBox {
+    font-family: $global-font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: $text-black;
+    width: 200px;
+}
+
+button {
+    border: none;
+    height: 40px;
+    text-align: right;
+    background: $polar-white; //need to uncomment this when it goes onto the page
+}
+
+.dropdownListBox {
+    border: 1px solid #A9A9A9;
+    background: $polar-white;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    opacity: 1;
+    z-index: 100;
+}
+
+.icon {
+    display: inline-block;
+    min-width: 20px;
+    margin: 5px;
+}
+
+.description {
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+.dropdownListBox {
+    cursor: pointer;
+}
+
+.dropdownListBox div:hover {
+    background-color: $light-action-blue;
+    color: white;
+}
+
+.dropdownListBox div:active {
+    background-color: $light-action-blue;
+    color: white;
+}
+
+button:focus {
+    outline: none;
+    border: 1px solid $light-action-blue;
+    box-shadow: 0 0 5px $light-action-blue; //$global-drop-shadow
+}
+
+.selectedDescription {
+    margin-left: 5px;
+    color: $action-blue;
+    white-space: nowrap;
+}
+
+.selectedIcon {
+    color: $action-blue;
+}
+
+.active {
+    background-color: $light-action-blue;
+}
+
+
+.statusButton {
+    border: 1px solid $light-action-blue;
+    height: 38px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.noClick {
+    color: $disabled-grey;
+    cursor: not-allowed;
+    border: 1px solid $disabled-grey;
+
+    & .selectedIcon {
+        color: $disabled-grey;
+    }
+
+    & .selectedDescription {
+        color: $disabled-grey;
+    }
+
+    & svg-icon {
+        color: $disabled-grey;
+    }
+
+    & .description {
+        color: $disabled-grey;
+    }
+}
+
+.iconCircle {
+    background: $light-action-blue;
+    border-radius: 50%;
+    color: $appointment-dropdownlist-color;
+    height: 18px;
+    width: 18px;
+}
+
+.ml3 {
+    margin-left: 4px;
+}
+
+.dropdownListBox div:hover .iconCircle {
+    color: $light-action-blue;
+    background-color: $appointment-dropdownlist-color;
+}
+
+.dropdownListBox div:active .iconCircle {
+    color: $light-action-blue;
+    background-color: $appointment-dropdownlist-color;
+}
+
+.active .iconCircle {
+    color: $light-action-blue;
+    background-color: $appointment-dropdownlist-color;
+}
+
+.groupSeperator {
+    height: 1px !important;
+    background-color: $appointment-status-groupsector-color;
+    padding-top: 1.5px;
+    border-bottom: 1px solid $appointment-status-border-color;
+}
+
+.dropdownListBox div {
+    border-bottom: 1px solid $appointment-status-border-color;
+    color: $appointment-dropdownlist-box-color;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.listItemData {
+    display: inline-block;
+    height: 22px;
+    margin: 5px;
+}
+
+svg-icon {
+    color: $light-action-blue;
+    position:absolute;
+    top:0;
+    right:0;
+    display:inline-block;
+}

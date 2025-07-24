@@ -1,0 +1,36 @@
+﻿<form name="frmTreatmentRoomSave" role="form" novalidate>
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-xs-12 ">
+                <div id="lblTreatmentRoomHeader" class="modal-title-responsive">
+                    {{ editMode ? 'Edit {0}' : 'Add {0}' | i18n:['Treatment Room'] }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12 col-sm-2">
+                <label class="form-label-newer">
+                    {{ 'Name' | i18n }} *
+                </label>
+            </div>
+            <div class="col-xs-12 col-sm-6" ng-class="{'error': hasErrors && (!frmTreatmentRoomSave.inpName.$valid || hasDuplicates)}">
+                <input id="inpName" name="inpName" required set-focus placeholder="{{ 'Name' | i18n}}" ng-model="treatmentRoom.Name" class="form-input" maxlength="50" />
+                <label id="errNameRequired" class="help-text" ng-show="hasErrors && !frmTreatmentRoomSave.inpName.$valid">{{ 'This field is required.' | i18n }}</label>
+                <label id="errNameDupe" class="help-text" ng-show="hasErrors && hasDuplicates">{{ 'A {0} with this name already exists.' | i18n:['treatment room'] }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pull-right">
+                    <button id="btnSave" check-auth-z="{{ editMode ? 'soar-sch-stmtrm-edit' : 'soar-sch-stmtrm-add' }}" ng-click="saveTreatmentRoom();" ng-disabled="saving" class="btn btn-primary form-btn-save-new">{{ 'Save' | i18n }}</button>
+                    <button id="btnCancel" ng-click="cancelChanges();" ng-disabled="saving" class="btn form-btn-cancel-new">{{ 'Cancel' | i18n }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

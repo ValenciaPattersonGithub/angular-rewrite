@@ -1,0 +1,182 @@
+﻿.formsDocuments {
+    .standardHeader;
+    max-width: 100%;
+    width: 100%;
+    &__search {
+        padding-bottom: 10px;
+    }
+
+    &__buttons {
+        text-align: left;
+        padding-left: 0px;
+
+        .btnContainer {
+            padding: 0px 5px 20px 0px;
+        }
+
+        button {
+            width: 100%;
+        }
+    }
+
+    &__title {
+        h1 {
+            display: inline-block;
+            float: left;
+            font-size: 22px !important;
+        }
+    }
+
+    &__filteredOut {
+        visibility: hidden;
+    }
+
+    &__rowHeaderExt {
+        font-weight: normal;
+    }
+
+    &__rowHeaderfont {
+        font-weight: bold;
+    }
+
+    &__hideAccordianNode {
+        display: none;
+    }
+
+    &__toolbar {
+        .make-row();
+        .containerStandard;
+        max-width: 100%;
+        width: 99%;
+        padding: 0 0px 0 5px;
+    }
+
+    &__tabs {
+        .make-xs-column(8);
+
+        .nav-pills > li {
+            padding: 0 @brand-padding_sm 0 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+    }
+
+    &__actions {
+        .make-xs-column(12);
+    }
+
+    &__body {
+        .make-row();
+        .containerStandard;
+        max-width: 100%;
+        width: 99%;
+        padding: 0 5px 0 5px;
+    }
+
+    &__secondary {
+        .make-xs-column(3);
+    }
+
+    &__primary {
+        .make-xs-column(9);
+
+        > .fuseGrid {
+            padding: 0;
+        }
+
+        .utilCheckbox__ctrl {
+            padding: 0;
+        }
+    }
+
+    &__txPlanDelete {
+        margin-left: @brand-padding_md;
+    }
+}
+
+.dirList {
+    padding: @brand-padding_sm;
+    background-color: @brand-color_white;
+    overflow-x: visible;
+    overflow-y: visible;
+
+    .typeahead-list {
+        max-height: 500px;
+    }
+
+    .panel-group {
+        margin-bottom: 0;        
+
+        .panel-default {
+            background-color: transparent;
+            border-color: transparent;
+            box-shadow: none;
+
+            &:last-child {
+                .panel-heading {
+                    margin: 0;
+                }
+            }
+        }
+
+        .panel-heading {
+            padding: 0;
+            margin: 0 0 @brand-padding_sm 0;
+            background-color: transparent;
+            border-color: transparent;
+
+            .panel-title {
+                font-weight: @brand-font_medium;
+            }
+
+            .rootDir {
+                .iconBefore('\f07b', '\f07c');
+
+                &:before {
+                    min-width: 20px; // for width jerk
+                }
+
+                word-wrap: break-word;
+            }
+        }
+
+        .panel-body {
+            padding: 0 0 @brand-padding_sm 0;
+            border-color: transparent !important; // Easier than the other option
+            a.subDir {
+                .iconBefore('\f07b', '\f07c');
+
+                &:before {
+                    min-width: 20px; // for width jerk
+                }
+
+                display: block;
+                box-sizing: border-box;
+                padding-left: @brand-padding_sm;
+            }
+
+            .docGroups {
+                padding-bottom: 0px;
+            }
+
+            a.subDir2 {
+                .iconBefore('\f07b', '\f07c');
+                padding-left: @brand-padding_lg;
+            }
+
+            a.doc {
+                .iconBefore('\f07b', '\f07c');
+
+                &:before {
+                    min-width: 20px; // for width jerk
+                }
+
+                display: block;
+                box-sizing: border-box;
+                padding-left: @brand-padding_lg;
+            }
+        }
+    }
+}

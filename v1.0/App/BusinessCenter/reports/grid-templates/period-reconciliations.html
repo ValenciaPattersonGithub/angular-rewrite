@@ -1,0 +1,207 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <!-- table start -->
+    <div class="stripOdd fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage"
+        ng-repeat="location in data.Locations">
+        <table class="fusePrintGrid pull-left avoidPageBreak">
+            <thead ng-if="location.PostedDates.length > 0">
+                <tr>
+                    <th colspan="12" class="stripEven">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="reportGrid__row header">
+                    <td class="col-sm-12 cell" colspan="12">
+                        <h5>{{'Posted Today' | i18n}}</h5>
+                    </td>
+                </tr>
+
+                <tr class="reportGrid__row header">
+                    <td class="col-sm-1 cell">
+                        {{ 'Date' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Patient' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Team Member' | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell">
+                        {{ 'Type' | i18n }}
+                    </td>
+                    <td class="col-sm-3 cell" colspan="3">
+                        {{ 'Description' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Provider' | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ 'Amount' | i18n }}
+                    </td>
+                </tr>
+            </thead>
+            <tbody ng-repeat="date in location.PostedDates">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-1 cell">{{ date.Date | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].Patient }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].TeamMember }}</td>
+                    <td class="col-sm-1 cell">{{ date.Records[0].Type}}</td>
+                    <td class="col-sm-3 cell" colspan="3">{{ date.Records[0].Description}}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].Provider}}</td>
+                    <td class="col-sm-1 cell text-right">{{ date.Records[0].Amount | currency }}</td>
+
+                </tr>
+                <tr class="reportGrid__row" ng-repeat="record in date.Records | startFrom: 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.Patient }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.TeamMember }}</td>
+                    <td class="col-sm-1 cell">{{ record.Type}}</td>
+                    <td class="col-sm-3 cell" colspan="3">{{ record.Description}}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.Provider}}</td>
+                    <td class="col-sm-1 cell text-right">{{ record.Amount | currency }}</td>
+
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1 && location.EditedDates.length == 0 && location.DeletedDates.length == 0 && location.PostedDates.length != 0" class="appendFooter"></tbody>
+        </table>
+        <table class="fusePrintGrid pull-left avoidPageBreak">
+            <thead ng-class="{'preventPrepend':location.PostedDates.length != 0}" ng-if="location.EditedDates.length > 0">
+                <tr ng-if="location.PostedDates.length == 0">
+                    <th colspan="12" class="stripEven">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="reportGrid__row header">
+                    <td class="col-sm-12 cell" colspan="12">
+                        <h5>{{'Edited Today' | i18n}}</h5>
+                    </td>
+                </tr>
+
+                <tr class="reportGrid__row header">
+                    <td class="col-sm-1 cell">
+                        {{ 'Date' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Patient' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Team Member' | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell">
+                        {{ 'Type' | i18n }}
+                    </td>
+                    <td class="col-sm-3 cell" colspan="3">
+                        {{ 'Description' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Provider' | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ 'Amount' | i18n }}
+                    </td>
+                </tr>
+            </thead>
+            <tbody ng-repeat="date in location.EditedDates">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-1 cell">{{ date.Date | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].Patient }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].TeamMember }}</td>
+                    <td class="col-sm-1 cell">{{ date.Records[0].Type}}</td>
+                    <td class="col-sm-3 cell" colspan="3">{{ date.Records[0].Description}}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].Provider}}</td>
+                    <td class="col-sm-1 cell text-right">{{ date.Records[0].Amount | currency }}</td>
+
+                </tr>
+                <tr class="reportGrid__row" ng-repeat="record in date.Records | startFrom: 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.Patient }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.TeamMember }}</td>
+                    <td class="col-sm-1 cell">{{ record.Type}}</td>
+                    <td class="col-sm-3 cell" colspan="3">{{ record.Description}}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.Provider}}</td>
+                    <td class="col-sm-1 cell text-right">{{ record.Amount | currency }}</td>
+
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1 && location.DeletedDates.length == 0 && location.EditedDates.length != 0" class="appendFooter"></tbody>
+        </table>
+        <table class="fusePrintGrid pull-left avoidPageBreak">
+            <thead ng-class="{'preventPrepend':(location.PostedDates.length != 0 && location.EditedDates.length != 0) || location.EditedDates.length != 0}"
+                ng-if="location.DeletedDates.length > 0">
+                <tr ng-if="(location.PostedDates.length == 0 && location.EditedDates.length == 0) || location.EditedDates.length == 0">
+                    <th colspan="12" class="stripEven">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="reportGrid__row header">
+                    <td class="col-sm-12 cell" colspan="12">
+                        <h5>{{'Deleted Today' | i18n}}</h5>
+                    </td>
+                </tr>
+                <tr class="reportGrid__row header">
+                    <td class="col-sm-1 cell">
+                        {{ 'Date' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Patient' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Team Member' | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell">
+                        {{ 'Type' | i18n }}
+                    </td>
+                    <td class="col-sm-3 cell" colspan="3">
+                        {{ 'Description' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell" colspan="2">
+                        {{ 'Provider' | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ 'Amount' | i18n }}
+                    </td>
+                </tr>
+            </thead>
+            <tbody ng-repeat="date in location.DeletedDates">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-1 cell">{{ date.Date | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].Patient }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].TeamMember }}</td>
+                    <td class="col-sm-1 cell">{{ date.Records[0].Type}}</td>
+                    <td class="col-sm-3 cell" colspan="3">{{ date.Records[0].Description}}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ date.Records[0].Provider}}</td>
+                    <td class="col-sm-1 cell text-right">{{ date.Records[0].Amount | currency }}</td>
+
+                </tr>
+                <tr class="reportGrid__row" ng-repeat="record in date.Records | startFrom: 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.Patient }}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.TeamMember }}</td>
+                    <td class="col-sm-1 cell">{{ record.Type}}</td>
+                    <td class="col-sm-3 cell" colspan="3">{{ record.Description}}</td>
+                    <td class="col-sm-2 cell" colspan="2">{{ record.Provider}}</td>
+                    <td class="col-sm-1 cell text-right">{{ record.Amount | currency }}</td>
+
+                </tr>
+
+            </tbody>
+            <tbody ng-show="data.Locations.length === $index+1">
+                <tr class="stripEven">
+                    <td class="col-sm-12 cell text-align-center" colspan="12">
+                        {{ 'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association
+                        (ADA). All rights reserved.' | i18n }}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1 && location.DeletedDates.length != 0" class="appendFooter"></tbody>
+        </table>
+    </div>
+    <!-- table end -->
+</div>

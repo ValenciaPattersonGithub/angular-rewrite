@@ -1,0 +1,500 @@
+@import 'variables';
+// These kendo files do not contain imports of Kendo, they merely overwrite kendo css
+@import 'toolTip.scss';
+
+.patient-checkout {
+  font-family:$global-font-family !important;
+  font-size: 12px;
+  display: flex;
+  background-color: $bg-grey;
+
+  @media (min-width: 1200px) {
+    .container {
+      width: 100%;
+    }
+    body {
+      height: 100vh;
+    }
+  }
+  .main {
+    flex-grow: 3; 
+    min-width: 810px;   
+  }
+
+  .side {    
+    flex:0 0 368px; 
+  }
+ 
+  .totals-row {    
+    background-color: $bg-grey;
+  }
+
+  .panel {
+    margin:0 20px 20px 20px;      
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+    border-color: $border-light-grey;
+  }
+
+  .panel-heading {
+    padding:15px;
+    background-color: $polar-white;
+    border: none;
+    font-size: 16px;    
+    margin-bottom: 15px;  
+    height: 35px;
+  }
+
+  .panel-body {
+    border: none;
+    background-color: $polar-white;
+    min-height: 200px;
+    border-radius: 0;
+  }
+
+  .panel-break {
+    border-top: 1px solid $page-content-divider-color;
+    padding-top:15px;
+  }
+
+  .panel-footer {
+    padding:15px;
+    border: none;
+    background-color: $polar-white;
+  }
+
+  .panel_header {    
+    border-bottom: 1px solid $page-content-divider-color;  
+    margin-bottom: 15px;  
+    height: 35px;
+  }  
+
+  .panel_heading_title {
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    border-bottom: 1px solid $page-content-divider-color;  
+    color: $page-content-header;
+    line-height: 18px;
+  }
+  
+  .panel_sub_title {       
+    font-size: 16px;
+    color: $text-black;
+    text-decoration: none solid rgb(51, 51, 51);
+    padding-bottom:15px;    
+  }
+
+  .card {
+    background-color: $polar-white;
+    background-size: cover;
+  }
+
+  .card-body {
+     padding:15px;
+  }
+
+  .card-border {    
+    border: 1px solid $border-light-grey;
+  }
+
+  .card-footer {
+    background-color: $bg-grey;
+    background-size: cover;
+    height: 43px;
+    padding: 15px;        
+  }
+
+  .card-header {
+    font-size: 16px;
+    color: $text-black;
+    text-decoration: none solid rgb(51, 51, 51);
+    line-height: 18px;
+  }
+
+  .card-row {
+    height:43px;
+    padding-left:10px;
+  }
+
+  .balance-row {
+    height: 48px;
+    font-size: 14px;
+    color:#faf6f6;
+    background-color: $fuse-purple;
+    text-decoration: none solid rgb(45, 171, 203);
+  }
+
+  .default_button  {    
+    width: 125px;
+    height: 25px;
+    border: 1px solid $action-blue;
+    border-radius: 5px;
+    background-color: $bg-grey;
+    background-size: cover;
+    font-family: $global-font-family;
+    font-size: 12px;
+    color: $action-blue;
+    text-decoration: none solid rgb(45, 171, 203);
+    text-align: center;
+    margin-right: 8px;
+  }
+  button.default_button:disabled,
+    .default_button[disabled]{
+      cursor: not-allowed;         
+      border: 1px solid $disabled-grey;
+      color: $disabled-grey;
+      text-decoration: none solid rgb(204, 204, 204);
+          
+    } 
+    button.default_button:hover,
+    button.default_button:active,
+    button.default_button:focus {
+      border-color: $light-action-blue;
+    }
+  
+
+    .primary_button {
+      background-color: $page-primary-button-background !important;
+      background-image: none;
+      background-position: center center;
+      background-repeat: repeat;
+      background-size: cover;
+      border-radius: 5px;
+      border-width: 0px;
+      border-color: $page-primary-button-background !important;
+      border-style: solid;
+      padding: 0px;
+      width: 125px;
+      height: 25px;
+      color: $Tooltip-text-color;
+      font-size: 12px;
+      text-align: center;
+      font-weight: normal;
+      font-style: normal;
+      text-decoration: none;
+      font-family: $font-family !important;
+      margin-top: -4px;
+    }
+    button.primary_button.disabled {
+      cursor: not-allowed;
+    }
+    button.primary_button:hover,
+    button.primary_button:active,
+    button.primary_button:focus {
+      background-color: $action-blue !important;
+      border:none;
+    }
+  
+  .checkout-note {
+    margin-top:50px;    
+    padding: 10px;
+    background-color: #dadada;
+    background-size: cover;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none solid rgb(0, 0, 0);
+    box-shadow: 10px 11px 5px rgba(0,0,0,0.2);
+  }
+
+  .collapse-expand{
+    font-size: 24px;
+    color: $action-blue;
+    padding-right:5px;
+  }
+
+  .checkout-totals {
+    > tr {
+      background-color: $bg-grey;
+    }
+    
+  }
+
+  .checkout-table {
+    width:100%;    
+    > tbody{
+      > tr {
+        > td {
+          padding:15px;  
+        }
+      }
+    }
+  }
+  
+  .table {
+    margin-top: 15px;
+    border: 1px solid #eeeeee;        
+    // Cells
+    > thead,
+    > tbody,
+    > tfoot {
+      > tr {
+        > th,
+        > td {
+          padding: 10px;
+          line-height: 18px;
+          vertical-align: middle; 
+          color: $text-black;
+          text-decoration: none solid rgb(85, 85, 85);          
+        }
+      }
+    }
+    // Bottom align for column headings
+    > thead > tr > th { 
+      padding: 10px;
+      line-height: 18px;
+      vertical-align: middle; 
+      text-decoration: none solid rgb(45, 171, 203);
+    }
+    // Remove top border from thead by default
+    > caption + thead,
+    > colgroup + thead,
+    > thead:first-child {
+      > tr:first-child {
+        > th,
+        > td {
+          // placeholder
+        }
+      }
+    }    
+    > tbody + tbody {
+      
+    }   
+  }
+
+  .hidden {
+    display:none;
+  }
+
+  .table-hover {
+    > tbody > tr:hover {
+      background-color: #f5f5f5;
+    }
+  }    
+  
+  // Nesting
+  .table {
+    background-color: transparent;
+  }
+    
+  .table-striped {
+    > tbody > tr[data-index="0"]:nth-of-type(odd) {    
+       background-color: #f4f3f5;
+     }
+   }
+
+   .encounter-summary {
+     font-size: 14px;
+     font-weight: bold;
+     background-color: $polar-white;
+     border: none; 
+   }
+   
+  // custom checkbox replicated from reports
+  /* The checkbox container */
+  
+  .cbxcontainer:hover {
+    color: $action-blue;
+  }
+    
+  .cbxcontainer {
+    display: block;
+    position: relative;  
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-family: $font-family;
+    font-size: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    & input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+    & input:checked ~ .checkmark:after {
+    display: block;
+    position: inherit;
+    background:none;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    background: url("data:image/svg+xml,%3Csvg version='1.2' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible' preserveAspectRatio='none' viewBox='0 0 24 24' width='18' height='18'%3E%3Cg%3E%3Cpath xmlns:default='http://www.w3.org/2000/svg' d='M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M10,17l-5-5l1.4-1.4l3.6,3.6 l7.6-7.6L19,8L10,17z' style='fill: rgb(34, 169, 203);' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+    }
+    & input:disabled ~ .checkmark {
+      display: block;
+      position: inherit;
+      background:none;
+      width: 18px;
+      height: 18px;
+      background: url("data:image/svg+xml,%3Csvg version='1.2' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible' preserveAspectRatio='none' viewBox='0 0 24 24' width='18' height='18'%3E%3Cg%3E%3Cpath xmlns:default='http://www.w3.org/2000/svg' d='M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z' style='fill: %23cccccc;' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+      cursor: not-allowed;
+    }
+    & input:checked:disabled ~ .checkmark:after {
+      background:none;
+      position: inherit;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      background: url("data:image/svg+xml,%3Csvg version='1.2' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible' preserveAspectRatio='none' viewBox='0 0 24 24' width='18' height='18'%3E%3Cg%3E%3Cpath xmlns:default='http://www.w3.org/2000/svg' d='M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M10,17l-5-5l1.4-1.4l3.6,3.6 l7.6-7.6L19,8L10,17z' style='fill: %23cccccc;' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+      cursor: not-allowed;
+    }  
+    & .checkmark:after {
+      display: block;
+  
+    } 
+  }
+
+  .checkmark {
+    display: block;
+    width: 18px;
+    height: 18px;
+    margin: -3px 5px 0 0;
+    cursor: pointer;
+    background: url("data:image/svg+xml,%3Csvg version='1.2' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible' preserveAspectRatio='none' viewBox='0 0 24 24' width='18' height='18'%3E%3Cg%3E%3Cpath xmlns:default='http://www.w3.org/2000/svg' d='M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z' style='fill: rgb(34, 169, 203);' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+    float: left;
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .cbx-column  {
+    padding-left: 15px !important;
+    margin-left: 15px;    
+    min-width: 55px;
+    max-width: 60px;
+    width: 40px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-size: cover;    
+    color: #555555;
+    font-weight: 700;
+    text-decoration: none solid rgb(85, 85, 85);
+  }
+
+  .description-col {
+    width: 40%
+  }
+
+  .provider-col {
+    width: 12%;
+    word-break: break-word;
+  }
+
+  // css to prevent currency input from going outside of table cell
+  .currencyInput {
+    width: 120px;
+  }
+
+  .claim-col {
+    min-width: 55px;
+  }
+
+  .date-col {
+    width: 120px;
+  }
+
+  .rotate90 {
+    margin: 0 10px -10px -10px;
+    transform: rotate(270deg);
+  }
+
+  .unapplied-row {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 40px;      
+    background-color: $border-grey;
+    margin-bottom: 15px;
+  }
+
+  .unapplied-row-left { 
+    height: 40px;
+    width: 85%;
+    padding: 10px 0 0 10px;    
+  }
+
+  .unapplied-row-right {       
+    width: 15%; 
+    height: 40px;
+    border: 1px solid $warning-orange;
+    background-color: $warning-orange;
+    background-size: cover;  
+    text-align: center;    
+    color: $polar-white;
+    position: relative;
+  }
+
+  .unapplied-row-right:before {       
+    content: "";
+    position: absolute;
+    width: 0; 
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid $warning-orange;
+    top: 10px;
+    left: -10px;
+  }
+
+  .unassigned-amount-text {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .unassigned-amount-currency {
+    padding-top: 6px; 
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .button-margin {
+     margin-left: 10px;    
+  }
+
+  .show-applied-amount-error-wrapper {
+    position: relative
+  }
+  .errorMessage {
+      position: absolute;
+      right: 100%;
+      background-color: $alert-red;
+      z-index: 1;
+      top: -65%;
+      width:20
+  }
+
+  .has-error {
+    color:$alert-red ;    
+    border:$alert-red 1px solid;
+  }
+
+  // changes for local styling of global components
+  // should be moved to global level
+  ::ng-deep .button {   
+    &:focus {      
+      box-shadow: 0 0 0 2px #dadada, 0 0 0 4px $light-action-blue !important;
+    } 
+  }
+  
+  .col-sm-6 {
+    padding: 0 0 0 0;
+ }
+
+  .disable-section {
+    pointer-events: none;
+    opacity: 0.4;
+  } 
+  
+}
+
+
+
+

@@ -1,0 +1,84 @@
+<div *ngIf="isDataLoaded && reportView == 'detailed'" class="no-outline">
+    <div class="referralaffiliateDetailedreport grid header">
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Location' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Provider' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Referred To' | translate }}
+        </div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Patient' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Referred Services' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Expected Return Date' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Actual Return Date' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Next Appt' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom rpt-brd-last">{{ 'Note' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="10" tabindex="0">
+            <div *cdkVirtualFor="let item of reportData; index as i" class="{{item.Class}}">
+                <div class="referralaffiliateDetailedreport grid">
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ item.Location }}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ item.Provider}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ item.ExternalProvider}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ item.Patient}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">
+                        <div *ngFor="let plan of item.TreatmentPlan" kendoTooltip
+                             position="top"
+                             tooltipClass="app-tooltip"
+                             data-qa="referral-affiliates-txPlan"
+                             title="{{ plan.length > 30 ? plan : '' | translate }}">
+                            {{ plan.length > 30 ? (plan | truncateText:30) : plan }}
+                        </div>
+                    </div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ item.ReturnDate | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ item.ActualReturnDate | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-1-migration rpt-cell-custom">{{ item.NextAppointmentDate | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last" kendoTooltip position="top" tooltipClass="app-tooltip" data-qa="referral-affiliates-note" title="{{ item.Note?.length > 30 ? item.Note : '' | translate }}">
+                        {{ item.Note?.length > 30 ?(item.Note | truncateText:30) : item.Note }}
+                    </div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+        <div class="pgr-pager" *ngIf="numberOfPages > 0">
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(1)">&lt;</span>
+            <span *ngFor="let page of pagesArray; let i = index"
+                [ngClass]="{ 'pgr-active-page-nm': currentPageNumber === i + 1, 'pgr-page-nm': currentPageNumber !== i + 1}"
+                (click)="onPageChange(i + 1)">{{i + 1}}</span>
+
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(numberOfPages)">&gt;</span>
+        </div>
+    </ng-container>
+</div>
+
+<div *ngIf="isDataLoaded && reportView == 'summary'" class="no-outline">
+    <div class="referralaffiliatereport grid header">
+        <div class="col-sm-3-migration ref-grid-header rpt-cell-custom">{{ 'Location' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Provider' | translate }}</div>
+        <div class="col-sm-3-migration ref-grid-header rpt-cell-custom">{{ 'External Provider/Practice' | translate }}
+        </div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom text-right">{{ 'Total # of Returned' | translate
+            }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom rpt-brd-last text-right">{{ 'Total # of Referred
+            out' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="10" tabindex="0">
+            <div *cdkVirtualFor="let item of reportData; index as i" class="{{item.Class}}">
+                <div class="referralaffiliatereport grid">
+                    <div class="col-sm-3-migration rpt-cell-custom">{{ item.Location }}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom">{{ item.Provider}}</div>
+                    <div class="col-sm-3-migration rpt-cell-custom">{{ item.ExternalProvider}}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom text-right">{{ item.TotalNumberOfReturned }}</div>
+                    <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last text-right">{{
+                        item.TotalNumberOfReferredOut }}</div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+        <div class="pgr-pager" *ngIf="numberOfPages > 0">
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(1)">&lt;</span>
+            <span *ngFor="let page of pagesArray; let i = index"
+                [ngClass]="{ 'pgr-active-page-nm': currentPageNumber === i + 1, 'pgr-page-nm': currentPageNumber !== i + 1}"
+                (click)="onPageChange(i + 1)">{{i + 1}}</span>
+
+            <span class="pgr-page-nxt-prev" (click)="onPageChange(numberOfPages)">&gt;</span>
+        </div>
+    </ng-container>
+</div>

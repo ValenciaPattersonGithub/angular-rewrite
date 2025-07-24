@@ -1,0 +1,24 @@
+﻿<form name="frmLocationSearch" role="form" novalidate>
+    <div class="locMgmt__searchContainer">
+        <input type="text" tabindex="2" id="locationFilter" class="locMgmt__search-input" ng-model="filter" placeholder="{{ 'Find Location' | i18n }}" set-focus />
+        <ul class="locMgmt__list">
+            <no-results ng-show="loading" loading="loading" loading-message="'No locations found.'"></no-results>
+            <li class="locMgmt__list-item" ng-repeat="location in locations | filter:searchFilter | orderBy:['NameLine1','NameLine2'] track by $index">
+                <a class="locMgmt__name" id="location{{$index}}" tabindex="2" ng-click="selectLocation(location, 'location'+$index)" check-auth-z="soar-biz-bizloc-view" title="{{ getTitle(location) }}">
+                    <div ng-class="{'active': location.LocationId == selectedLocation.LocationId }">
+                        <span id="btnLocation{{$index}}Name1" ng-bind-html="location.NameLine1 | boldTextIfContains:filter"></span>
+                        <span class="search-item-separator hidden-xs" ng-show="location.NameLine2.length > 0">|</span>
+                        <span id="btnLocation{{$index}}Name2" ng-bind-html="location.NameLine2 | boldTextIfContains:filter"></span>
+                    </div>
+                    
+                </a> 
+                <div ng-if="checkLocationStatus(location)" class="icon-hovertip" ng-class="{'active-icon': location.LocationId == selectedLocation.LocationId }" ng-click="selectLocation(location, 'location'+$index)" check-auth-z="soar-biz-bizloc-view">
+                    <i class="fa fa-exclamation-triangle" ng-class="{'icon-pending-inactive': location.IsPendingInactive }" aria-hidden="true"></i>
+                    <span class="icon-hovertiptext" ng-class="{'loc-pending-inactive': location.IsPendingInactive }">{{location.StatusDisplay}}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</form>
+
+

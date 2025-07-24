@@ -1,0 +1,344 @@
+﻿<div class="clnclTmLn">
+    <div class="clnclTmLn__fltr" ng-hide="!timelineActive">
+        <div class="tmLnFltr">
+            <div class="tmLnFltr__btnRow">
+                <div class="tmLnFltr__btnContainer">
+                    <!-- {{'Search {0}' | i18n:[activeTabName]}} -->
+                    <button id="tmLnCondFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[0].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[0])"
+                            uib-tooltip="{{ ::filterButtons[0].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/conditions.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[0].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnSrvcFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[1].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[1])"
+                            uib-tooltip="{{ ::filterButtons[1].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/services.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[1].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnTxPlanFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[2].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[2])"
+                            uib-tooltip="{{ ::filterButtons[2].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/txplans.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[2].Description "></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnNoteFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[3].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[3])"
+                            uib-tooltip="{{ ::filterButtons[3].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/notes.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[3].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnApptFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[4].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[4])"
+                            uib-tooltip="{{ ::filterButtons[4].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/appointments.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[4].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnPerioFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[5].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[5])"
+                            uib-tooltip="{{ ::filterButtons[5].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/perio.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[5].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnImgFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[6].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[6])"
+                            uib-tooltip="{{ ::filterButtons[6].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/images.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[6].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnMedHxFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[7].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[7])"
+                            uib-tooltip="{{ ::filterButtons[7].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/medical.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[7].Description"></div>
+                </div>
+            </div>
+            <div class="tmLnFltr__btnRow">
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnConsentFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[8].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[8])"
+                            uib-tooltip="{{ ::filterButtons[8].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/document.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[8].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnHIPAAFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[9].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[9])"
+                            uib-tooltip="{{ ::filterButtons[9].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/document.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[9].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnLabFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[10].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[10])"
+                            uib-tooltip="{{ ::filterButtons[10].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/lab.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[10].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnSpecialistFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[11].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[11])"
+                            uib-tooltip="{{ ::filterButtons[11].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/specialist.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[11].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnOthClinFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[12].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[12])"
+                            uib-tooltip="{{ ::filterButtons[12].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/document.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[12].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnAccountFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[13].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[13])"
+                            uib-tooltip="{{ ::filterButtons[13].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/account.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[13].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnInsuranceFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[14].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[14])"
+                            uib-tooltip="{{ ::filterButtons[14].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/insurance.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[14].Description"></div>
+                </div>
+                <div class="tmLnFltr__btnContainer">
+                    <button id="tmLnRxFltrCtrl"
+                            class="tmLnFltr__btn"
+                            ng-class="{active: (filterButtons[15].Active)}"
+                            ng-click="addOrRemoveFilter($event, filterButtons[15])"
+                            uib-tooltip="{{ ::filterButtons[15].DescriptionFull }}"
+                            tooltip-placement="top"
+                            tooltip-append-to-body="true">
+                        <img class="tmLnFltr__btnIcon" ng-src="Images/TimelineFilterIcons/rx.svg" />
+                    </button>
+                    <div class="tmLnFltr__btnTitle" ng-bind="filterButtons[15].Description"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="showTodaysAppts && todaysAppts.length > 0" class="clinTimeline">
+        <div class="clinTimeline__groupTitle">{{ ::'Today\'s Appointments' | i18n }}</div>
+        <div ng-repeat="item in todaysAppts | orderBy:'date'">
+            <patient-appointment-tile patient-appointment="item.record"
+                                      tile-index="$index"
+                                      show-date="{{displayDate($index)}}"
+                                      is-disabled="isAppointmentDisabled">
+            </patient-appointment-tile>
+        </div>
+    </div>
+    <div class="chartingControls__activeLayout">
+        <div kendo-window="docCtrls"
+             k-title="'Blank'"
+             k-visible="false"
+             k-on-open="docCtrlsOpen = true"
+             k-on-close="docCtrlsOpen = false"
+             id="docCtrlsWindow">
+        </div>
+    </div>
+
+    <div class="clnclTmLn__lst" ng-style="{'height': timelineHeight}">
+        <button id="fileUpload" class="clnclTmLn__fileUpload" ng-if="showUpload" ng-click="openFile()">{{ ::'Upload a document..' | i18n }}</button>
+
+        <no-results id="lstClinicalTimelineLoading"
+                    loading="!loadingComplete"
+                    loading-message="' '"
+                    ng-hide="loadingComplete">
+        </no-results>
+        <div class="clinTimeline" ng-if="loadingComplete">
+            <div ng-repeat="(group, records) in filteredTimelineRecords track by $index">
+
+                <div class="clinTimeline__groupTitle" ng-if="isDateVisible(group, records)">{{ group }}</div>
+                <div ng-repeat="item in records">
+                    <patient-condition-tile patient-condition="item.record"
+                                            ng-if="item.recordType === 'Condition' && item.load"
+                                            tile-index="$index"
+                                            show-date="false">
+                    </patient-condition-tile>
+
+                    <patient-service-tile patient-service="item.record"
+                                          ng-if="item.recordType === 'ServiceTransaction' && item.load"
+                                          tile-index="$index"
+                                          show-date="false"
+                                          patient-info="data.patientInfo">
+                    </patient-service-tile>
+
+                    <treatment-plans-tile tx-plan="item.record"
+                                          ng-if="item.recordType === 'TreatmentPlan' && item.load"
+                                          view-settings="viewSettings"
+                                          tile-index="$index"
+                                          show-date="false"
+                                          timeline-view="true">
+                    </treatment-plans-tile>
+
+                    <patient-notes-tile note="item.record"
+                                        ng-if="item.recordType === 'ClinicalNote' && item.load"
+                                        view-settings="viewSettings"
+                                        show-date="false"
+                                        timeline-view="true">
+                    </patient-notes-tile>
+
+                    <patient-rx-tile tile-data="item.record"
+                                     ng-if="item.recordType === 'PatientRx' && item.load"
+                                     show-date="false"
+                                     activate-tab="activateTab"
+                                     timeline-view="true">
+                    </patient-rx-tile>
+
+                    <patient-appointment-tile patient-appointment="item.record"
+                                              ng-if="item.recordType === 'Appointment' && item.load"
+                                              tile-index="$index"
+                                              show-date="false"
+                                              is-disabled="isAppointmentDisabled">
+                    </patient-appointment-tile>
+
+                    <perio-stats-mouth-tile perio-stats-mouth="item.record"
+                                            ng-if="item.recordType === 'PerioStatsMouth' && item.load"
+                                            tile-index="$index"
+                                            show-date="false"
+                                            activate-tab="activateTab">
+                    </perio-stats-mouth-tile>
+
+                    <perio-stats-tooth-tile perio-stats-tooth-exam="item.record"
+                                            ng-if="item.recordType === 'PerioStatsToothExam' && item.load"
+                                            tile-index="$index"
+                                            show-date="false">
+                    </perio-stats-tooth-tile>
+                    <patient-documents-tile patient-document="item"
+                                            ng-if="documentRecordTypes.indexOf(item.recordType) > -1 && item.load"
+                                            tile-index="$index"
+                                            show-date="false">
+                    </patient-documents-tile>
+                    <patient-medical-history-tile patient-medical-history-form="item.record" person-id="personId"
+                                                  ng-if="item.recordType === 'MedicalHx' && canView && item.load"
+                                                  tile-index="$index"
+                                                  view-settings="viewSettings"
+                                                  show-date="false">
+                    </patient-medical-history-tile>
+
+                    <patient-imaging-tile image-exam="item.record"
+                                          ng-if="item.recordType === 'ExternalImageExam' && item.load"
+                                          tile-index="$index"
+                                          preview-exam="examToPreview"
+                                          patient-info="data.patientInfo"
+                                          show-date="false"
+                                          activate-tab="">
+                    </patient-imaging-tile>
+
+                    <patient-imaging-tile image-exam="item.record"
+                                          ng-if="item.recordType === 'ImageExam' && item.load"
+                                          tile-index="$index"
+                                          show-date="false"
+                                          patient-info="data.patientInfo"
+                                          activate-tab="activateTab">
+                    </patient-imaging-tile>
+
+                    <informed-consent-tile informed-consent="item"
+                                           ng-if="item.recordType === 'DigitalConsent' && item.load"
+                                           tile-index="$index"
+                                           show-date="false"
+                                           activate-tab="activateTab">
+                    </informed-consent-tile>
+                </div>
+            </div>
+        </div>
+        <!-- Move to method and include all loading variables in the check -->
+        <div class="clnclTmLn__msgBox" ng-if="loadingComplete && isFilteredTimelineRecordsEmpty() && isTodaysApptsEmpty()">
+            <div id="defaultMsgHere" class="clnclTmLn__msg">{{ ::'No records found' | i18n }}</div>
+        </div>
+    </div>
+    <div>
+        <div class="tmLnFltr__btnContainer showDeleted">
+            <!--show deleted records-->
+            <div class="tmLnFltr__toggleLnk">
+                <span class="btn btn-xs btn-link" ng-click="toggleTimelineActive()">{{ timelineLabel | i18n}} {{::'Filters'|i18n}}</span>
+            </div>
+            <div class="tmLnFltr__toggleLnk">
+                <span class="btn btn-xs btn-link" ng-click="toggleActive()">{{ toggleLabel | i18n}} {{:: 'Deleted' | i18n}}</span>
+            </div>
+        </div>
+    </div>
+</div>

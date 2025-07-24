@@ -1,0 +1,34 @@
+﻿<div class="modal-header">
+    <div class="container">
+        <div class="row">
+            <h1>
+                <span class="glyphicon glyphicon-exclamation-sign large-size" aria-hidden="true"><span id="deleteHeader" class="modal-title">&nbsp;{{ 'Delete' | i18n }}</span></span>
+            </h1>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <h2 id="formDeleteMessage">
+                {{ 'Are you sure you want to delete the unpublished {0} ?' | i18n:[{skip:formName}] }}
+            </h2><br />
+        </div>
+        <div class="row"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <button check-auth-z="soar-biz-bcform-delete" id="btnYes" type="button" class="btn btn-default col-md-12 left" ng-click="confirmDeleteUnpublishedForm()">
+                        <h4 id="yesButtonCaption"> {{ 'Yes' | i18n }}</h4>
+                    </button>
+                </div>
+
+                <div class="col-md-6">
+                    <button id="btnNo" type="button" class="btn btn-default col-md-12 right" ng-click="cancelDeleteUnpublishedForm()">
+                        <h4 id="noButtonCaption"> {{ 'No' | i18n }}</h4>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

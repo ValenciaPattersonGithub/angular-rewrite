@@ -1,0 +1,139 @@
+﻿<div class="icAgreement" ng-if="informedConsentAgreement">
+    <div>
+        <div class="">
+
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <span id="lblDocumentDate">{{ ::informedConsentAgreement.CreatedDate | toShortDisplayDate }} - {{ ::informedConsentAgreement.CreatedDate |toDisplayTime }}</span>
+                    </div>
+                    <div class="col-xs-6 text-right" ></div>
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-6 icAgreement__title">
+                        <div>{{::'Patient' | i18n}} {{::'Informed Consent' | i18n}} {{::'Agreement' | i18n}}</div>                        
+                        <div>{{informedConsentAgreement.PatientName}} ({{informedConsentAgreement.PatientCode}}) ({{informedConsentAgreement.TreatmentPlanName}})  </div>
+
+                    </div>
+                    <div class="col-xs-6 icAgreement__title">
+                        <div class="" ng-if="location">{{::location.NameLine1}} {{::location.NameLine2}}</div>                        
+                        <div>
+                            <span ng-if="location">{{::location.AddressLine1}} </span>
+                            <span ng-if="location">{{::location.AddressLine2}} </span>
+                            <span ng-if="location">{{::location.City}}, </span>
+                            <span ng-if="location">{{::location.State}} </span>
+                            <span ng-if="location">{{::location.ZipCode}}</span>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-6 ">
+                        <a id="printLink" onclick="window.print();" class="no-print">{{ 'Print' | i18n }}</a>
+                        <span class="no-print"> | </span>
+                        <a id="cancelPrintLink" onclick="window.close();" class="no-print">{{ 'Close' | i18n }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+        <div>
+
+            <table class="icAgreement__table">
+                <thead class="icAgreement__header">
+                    <tr>
+                        <th class="descriptionColumn">
+                            {{'Description'|i18n}}
+                        </th>
+                        <th class="defaultColumn">
+                            {{'Th'|i18n}}
+                        </th>
+                        <th class="defaultColumn">
+                            {{'Area'|i18n}}
+                        </th>
+                        <th class="defaultColumn">
+                            {{'Provider'|i18n}}
+                        </th>
+                        <th class="defaultColumn">
+                            {{'Status'|i18n}}
+                        </th>
+                        <th class="defaultColumn">
+                            {{'Fee'|i18n}}
+                        </th>
+                    </tr>
+
+                </thead>
+
+                <tbody class="icAgreement__body">
+                    <tr class="icAgreement__row" ng-repeat="svc in informedConsentAgreement.Services">
+                        <td id="gridRowDescription_{{$index}}" class="descriptionColumn">{{svc.Description}}</td>
+                        <td id="gridRowTooth_{{$index}}" class="defaultColumn">{{svc.Tooth | convertToothRangeToQuadrantOrArchCode}}</td>
+                        <td id="gridRowArea_{{$index}}" class="defaultColumn">{{svc.Area}}</td>
+                        <td id="gridRowProviderCode_{{$index}}" class="defaultColumn">{{svc.ProviderCode}}</td>
+                        <td id="gridRowStatus_{{$index}}" class="defaultColumn">{{svc.Status}}</td>
+                        <td id="gridRowowFee_{{$index}}" class="defaultColumn">{{svc.Fee | currency}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <label class="padding-6">{{ 'Provider' | i18n }} {{ 'Comments' | i18n }}</label>
+                <div class="form-control icAgreement__notes"
+                     id="lblInformedConsentAgreementProviderComments">{{informedConsentAgreement.ProviderComments}}</div>
+            </div>
+        </div>
+        <!--additional notes-->
+        <div class="row">
+            <div class="col-xs-12">
+                <label class="padding-6">{{ 'Additional {0}' | i18n: ['Notes'] }}</label>
+                <div class="form-control icAgreement__notes"
+                     id="lblInformedConsentAgreementNotes">{{ informedConsentAgreement.Notes }}</div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-12">
+                <label id="lblInformedConsentAgreementMessage" class="padding-6">{{ informedConsentAgreement.Message }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="icAgreement__footer">
+        <div class="col-xs-12" ng-if="informedConsentAgreement.PrintUnsigned">
+            <div class="col-xs-6">
+                <input type="text" class="icAgreement__unsignedSignatureArea" readonly />
+            </div>
+            <div class="col-xs-6 pull-right">
+                <input type="text" class="icAgreement__unsignedSignatureArea" readonly />
+            </div>
+        </div>
+        <div class="col-xs-12" ng-if="informedConsentAgreement.PrintUnsigned">
+            <div class="col-xs-6">
+                <label id="lblPatientSignature" class="padding-6">{{ 'Patient'|i18n}} {{'Signature'|i18n}}</label>
+                <label id="lblPatientSignature" class="padding-6 pull-right">{{ todaysDate | toShortDisplayDate }}</label>
+            </div>
+            <div class="col-xs-6 pull-right">
+                <label id="lblWitnessSignature" class="padding-6">{{ 'Witness'|i18n }} {{'Signature'|i18n}}</label>
+                <label id="lblPatientSignature" class="padding-6 pull-right">{{ todaysDate | toShortDisplayDate }}</label>
+            </div>
+        </div>
+        <div class="padding-bottom-12 icAgreement__signatureArea" ng-if="!informedConsentAgreement.PrintUnsigned">
+            <div class="pull-left icAgreement__signature">
+                <signature-display sig-title="patientSignatureTitle" file-allocation-id="informedConsentAgreement.PatientSignatureFileAllocationId"></signature-display>
+            </div>
+            <div class="pull-right icAgreement__signature">
+                <signature-display sig-title="witnessSignatureTitle" file-allocation-id="informedConsentAgreement.WitnessSignatureFileAllocationId"></signature-display>
+            </div>
+
+        </div>
+    </div>
+</div>
+

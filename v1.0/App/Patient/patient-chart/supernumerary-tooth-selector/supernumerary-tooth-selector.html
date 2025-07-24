@@ -1,0 +1,69 @@
+﻿<div  id='supernumeraryToothChart'>
+    <div class="modal-header">
+        <div class="modal-title-responsive">
+            {{'Add/Remove Supernumerary Teeth' | i18n}}
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="supernumeraryToothChart__row">
+            <div class="supernumeraryToothChart__perm">
+                <div class="supernumeraryToothChart__permTop">
+                    <button id="{{tooth.USNumber}}"
+                            class="supernumeraryToothChart__toothCtrl"
+                            title="{{tooth.$$Prompt}}"
+                            ng-class="{active: (tooth.Selected)}"
+                            ng-click="setToothState(tooth);"
+                            ng-disabled="tooth.$$Disable === true"
+                            ng-repeat="tooth in supernumeraryTeeth | filter: {ArchPosition: 'Upper', Description: 'Permanent'}">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+                <div class="supernumeraryToothChart__permBtm">
+                    <button id="{{tooth.USNumber}}"
+                            class="supernumeraryToothChart__toothCtrl"
+                            title="{{tooth.$$Prompt}}"
+                            ng-class="{active: (tooth.Selected)}"
+                            ng-click="setToothState(tooth);"
+                            ng-disabled="tooth.$$Disable === true"
+                            ng-repeat="tooth in supernumeraryTeeth | filter: {ArchPosition: 'Lower', Description: 'Permanent'} | orderBy : 'USNumber' : true">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="supernumeraryToothChart__row">
+            <div class="supernumeraryToothChart__prim">
+                <div class="supernumeraryToothChart__primTop">
+                    <button id="{{tooth.USNumber}}"
+                            class="supernumeraryToothChart__toothCtrl"
+                            title="{{tooth.$$Prompt}}"
+                            ng-class="{active: (tooth.Selected)}"
+                            ng-click="setToothState(tooth);"
+                            ng-disabled="tooth.$$Disable === true || chartedPrimaryTeeth.indexOf(tooth.USNumber) === -1"
+                            ng-repeat="tooth in supernumeraryTeeth | filter: {ArchPosition: 'Upper', Description: 'Primary'}">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+                <div class="supernumeraryToothChart__primBtm">
+                    <button id="{{tooth.USNumber}}"
+                            class="supernumeraryToothChart__toothCtrl"
+                            title="{{tooth.$$Prompt}}"
+                            ng-class="{active: (tooth.Selected)}"
+                            ng-click="setToothState(tooth);"
+                            ng-disabled="tooth.$$Disable === true || chartedPrimaryTeeth.indexOf(tooth.USNumber) === -1"
+                            ng-repeat="tooth in supernumeraryTeeth | filter: {ArchPosition: 'Lower', Description: 'Primary'} | orderBy : 'USNumber' : true">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-link" ng-click="cancel()">
+                {{'Cancel' |i18n }}
+            </button>
+            <button class="btn btn-primary" id='btnSupernumerarySave' ng-disabled="!hasChanges" ng-click="save()">
+                {{'Save' |i18n }}
+            </button>
+    </div>
+</div>

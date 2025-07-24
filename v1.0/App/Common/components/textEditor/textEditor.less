@@ -1,0 +1,111 @@
+﻿.soarTextEditor {
+    table.k-editor {
+            background-color: transparent;
+            border: none;
+            box-shadow: none;
+
+            .k-editable-area {
+                padding: 6px; 
+                height:500px;
+            }
+        }
+        .k-tool-group:last-child {
+            float: right;
+        }
+        .k-tool.k-group-start,
+        .k-tool.k-group-end,
+        .k-color-picker,
+        .k-picker-wrap {
+            border-radius: 0;
+        }
+        .k-colorpicker.k-foreColor.k-group-start {
+            margin-right: -22px;
+            font-family: 'Font Awesome 5 Pro';
+
+            &:before {
+                position: relative;
+                z-index: 100;  
+                content: "\f031";
+            }
+                
+        }
+        .k-picker-wrap {
+            padding-right: 1em;
+            border-color: @brand-color_link;
+
+            .k-select {
+                z-index: 999;
+                .k-icon {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-image: none;
+                    font-family: 'Font Awesome 5 Pro';
+                    text-indent: 0px;
+
+                    &:before {
+                        position: relative;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        font-family: 'Font Awesome 5 Pro';
+                        content: "\f078";
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+        .k-button-group {
+            margin-right: 8px;
+            .k-tool {
+                width: 34px;
+                height: 34px;
+                margin: 0;
+                border-color: @brand-color_link;
+                &:first-child {
+                    border-right: none;
+                }
+                &:last-child {
+                    border-left: none;
+                }
+            }
+        }
+        .k-select {
+            border-width: 0;
+            .k-icon {
+                background: none;
+            }
+        }
+        .k-button-group .k-tool-icon,
+        .k-picker-wrap .k-tool-icon {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            margin: 0;
+            
+            &:before {
+                display: inline-block;
+                margin-top: 50%;
+                margin-left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            
+            
+            &.k-bold:before {
+                color: @brand-color_link;
+                
+            }
+            &.k-italic:before {
+                color: @brand-color_link;
+            }
+            &.k-underline:before {
+               color: @brand-color_link;
+               transform: translate(-50%, -43%) scaleY(1.15);
+            }
+
+            .k-selected-color {
+                bottom: 4px;
+                left: 6px;
+            }
+        }
+}

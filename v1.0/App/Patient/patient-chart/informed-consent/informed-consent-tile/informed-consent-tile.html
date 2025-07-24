@@ -1,0 +1,24 @@
+﻿<div class="docsTile">
+    <div class="docsTile__detailsBox">
+        <div class="timelineTile" ng-class="{timelineTileBorder : true}" ng-click="viewInformedConsent(informedConsent.record)">
+            <div class="timelineTile__row">
+                <div class="timelineTile__iconContainer">
+                    <img class="timelineTile__icon" ng-src="{{ ::informedConsent.$$iconUrl }}" />
+                </div>
+                <div class="timelineTile__content">
+                    <div class="timelineTile__leftContent">
+                        <span id="lblRecordDescription{{::tileIndex}}" class="docsTile__description"
+                              title="{{ ::'Informed Consent' | i18n }}">{{ ::'Informed Consent' | i18n | truncate:30 }}</span>
+
+                        <span id="lblDocumentDescription{{tileIndex}}" class="docsTile__description"
+                              title="{{ ::informedConsent.record.OriginalFileName }}">{{ ::informedConsent.record.OriginalFileName | truncate:30 }}</span>
+                    </div>
+                    <div class="timelineTile__rightContent">
+                        <div class="docsTile__icon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

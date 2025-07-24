@@ -1,0 +1,87 @@
+﻿<!-- <business-nav></business-nav> -->
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="serviceButtons">
+        <form name="frmServiceButtons" role="form" novalidate>
+            <div class="rowFull white">
+                <div class="content__row">
+                    <ul class="serviceButtons__breadcrumb">
+                        <li>
+                            <span><a href="#/BusinessCenter/">{{ 'Practice Settings' | i18n }}</a></span>
+                        </li>
+                        <li>
+                            <span>{{ 'Service Buttons' | i18n }}</span>
+                        </li>
+                    </ul>
+                </div>
+              </div>
+                    <div class="rowFull white">
+                        <div class="serviceButtons__header">
+
+                            <div class="serviceButtons__title">
+                                <h1>{{ 'Service Buttons' | i18n }}</h1>
+                            </div>
+                            <div class="serviceButtons__add">
+                                <button tabindex="2" id="btnAddServiceButton" class="addButton" icon="fa-plus" ng-click="addOrEditServiceButton()" check-auth-z="{{soarAuthServiceButtonAddKey}}">{{ 'Add {0}' | i18n:['Service Button'] }}</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="rowFull gray">
+                        <div class="serviceButtons__search">
+                            <div class="form-inline serviceButtonSearch">
+                                <div class="form-group serviceButtonSearch__control">
+                                    <input tabindex="2" id="filterServiceButtons" class="form-control serviceButtonSearch__input" placeholder="{{'Find {0}...' | i18n:['Service Button']}}" type="text" ng-model="filterBy" set-focus />
+                                    <span class="glyphicon glyphicon-search serviceButtonSearch__icon"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="serviceButtons__body">
+                            <table id="tableServiceButtons" class="serviceButtons__table">
+                                <thead>
+                                    <tr class="blue">
+                                        <td id="tdDescription" colspan="2">
+                                            <div id="columnDescription" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Description')">
+                                                <div class="col-md-4">
+                                                    {{'Description' | i18n}}
+                                                </div>
+                                                <span class="fa fas" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'Description'"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr tabindex="2" ng-show="serviceButtons.length" ng-repeat="serviceButton in filteredServiceButtons = (serviceButtons | orderBy:orderBy.field:!orderBy.asc | filter:serviceButtonsFilter) track by $index ">
+                                        <td id="tdDescription{{$index}}"
+                                            class="serviceButtons__descriptionEntry"
+                                            ng-bind-html="serviceButton.Description | boldTextIfContains:filterBy"></td>
+
+                                        <td class="serviceButtons__actions">
+                                            <a id="btnEditServiceButton{{$index}}"
+                                               class="editIcon"
+                                               ng-click="addOrEditServiceButton(serviceButton)"
+                                               check-auth-z="{{soarAuthServiceButtonEditKey}}">
+                                            </a>
+                                            <a id="btnDeleteServiceButton{{$index}}"
+                                               class="deleteIcon"
+                                               ng-click="deleteServiceButton(serviceButton)"
+                                               check-auth-z="{{soarAuthServiceButtonDeleteKey}}"></a>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="serviceButtons.length === 0 || filteredServiceButtons.length === 0">
+                                        <td id="tdDefaultMsg" colspan="2" class="serviceButtons__noRecordsMessage">
+                                            <no-results loading-message='loadingMessageNoResults'
+                                                        loading="loadingList"
+                                                        filtering="filteringList"
+                                                        filtering-message='filteringMessageNoResults'>
+                                            </no-results>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+        </form>
+    </div>
+</div>
+

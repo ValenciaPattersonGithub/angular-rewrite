@@ -1,0 +1,553 @@
+﻿/* 
+ * Project Soar: Layout / Scaffolding
+*/
+html {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: @brand-application_bg;
+    //WARNING! If you add any of these styles to the html tag
+    //You will break the bootstrap modal functionality:
+    //height:
+    //overflow-x:
+    //overflow-y:
+    //overflow:
+}
+body {
+    //WARNING! If you add any of these styles to the body tag
+    //You will break the bootstrap modal functionality:
+    //height:
+    .clearfix;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: @brand-application_bg;
+    min-height: 100%;
+    margin: 0;
+    padding-top: 62px;
+    // I am removing this style because it is causing an issue with hieght calculations
+    // This is one of the two current things that break height calculations.
+    // If you have a reason to add this back into the solution contact the Arwen team for a discussion first.
+    // As other things will be needed if this style is re-enabled
+    //padding-bottom: 40px;
+    padding-left: 48px;
+    padding-right: 0;
+}
+
+.body-with-alert {
+    padding-top: 87px;
+}
+
+.view-container {
+    .clearfix;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    margin: 0;      
+    background-color: @brand-application_bg;
+
+    @media (max-width:@screen-lg){
+        margin-top:25px;
+    }
+}
+
+#content {
+    .clearfix;
+}
+.rowFull {
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    .clearfix;
+
+    &.white {
+        background-color: @brand-color_white;
+    }
+    &.gray {
+        background-color: @brand-color_light-gray;
+    }
+}
+
+.content {
+    &__row {
+        .containerStandard;
+        .clearfix;
+        background-color: @brand-color_white;
+    }
+    &__column {
+        .make-xs-column(12);
+        .make-md-column(6);
+    }
+}
+
+
+.page-title-responsive {    
+    @media only screen and (min-width: 320px) and (max-width: 768px) {        
+	    font-size: @font-size-page-title-mobile;
+    }
+    
+    @media only screen and (min-width: 768px) {
+	    font-size: @font-size-page-title;
+    }
+
+    float: left;
+    font-weight: bold;
+    //height: 50px;
+    background: #fff;
+}
+//  #content - main container for views
+
+
+
+
+
+.visible-area {
+    max-height: 100vh;
+    max-width: 100vw;
+    overflow: auto;
+    background-color: @brand-color_light-gray;
+
+}
+
+.vertical-scroll {
+    overflow-y: auto;
+}
+
+.page-body {
+    padding: 30px;
+}
+
+
+.margin-left-5 {
+    margin-left: 10px;
+}
+
+.margin-right-5 {
+    margin-right: 10px;
+}
+
+.padding-right-7 {
+    padding-right: 7px;
+}
+
+.height-150 {
+    height: 150px;
+}
+
+.padding-top-1 {
+    padding-top: 1%;
+}
+
+.width-8-percent {
+    width: 8% !important;
+}
+
+
+.width-100-percent {
+    width: 100% !important;
+}
+
+width-45-percent {
+    width: 45% !important;
+}
+.width-140 {
+    width: 140px !important;
+}
+
+.width-40 {
+   width: 40px !important;
+}
+
+.width-926 {
+    width: 926px !important;
+}
+
+.margin-both-side-10 {
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.vertical-align-center{
+    vertical-align: central !important;    
+}
+
+.padding-none {
+	padding: 0px;
+}
+
+.padding-2 {
+	padding: 2px;
+}
+
+.padding-6 {
+	padding: 6px;
+}
+
+.padding-8 {
+	padding: 8px;
+}
+
+.padding-10 {
+	padding: 10px;
+}
+
+.padding-20 {
+	padding: 20px;
+}
+
+.padding-bottom-none {
+	padding-bottom: 0px;
+}
+
+.padding-bottom-4 {
+	padding-bottom: 4px;
+}
+
+.padding-bottom-8 {
+	padding-bottom: 8px;
+}
+
+.padding-bottom-10 {
+	padding-bottom: 10px;
+}
+
+.padding-bottom-12 {
+	padding-bottom: 12px;
+}
+
+.padding-left-35 {
+	padding-left: 35px;
+}
+
+.padding-left-10 {
+	padding-left: 10px !important;
+}
+
+.padding-left-15 {
+	padding-left: 15px !important;
+}
+
+.padding-left-20 {
+    padding-left: 20px;
+}
+
+.padding-left-25 {
+    padding-left: 25px !important;
+}
+.padding-right-0 {
+	padding-right: 0px;
+}
+
+.padding-right-16 {
+    padding-right: 16px;
+}
+
+.padding-right-5 {
+    padding-right: 5px !important;
+}
+.padding-right-10 {
+    padding-right: 10px !important;
+}
+.padding-right-20 {
+    padding-right: 20px;
+}
+
+.padding-right-30 {
+    padding-right: 30px !important;
+}
+
+.padding-right-50 {
+	padding-right: 50px;
+}
+
+.padding-top-none {
+	padding-top: 0px;
+}
+
+.padding-top-2 {
+    padding-top: 2px;
+}
+
+.padding-top-4 {
+	padding-top: 4px;
+}
+
+.padding-top-12 {
+	padding-top: 12px;
+}
+
+.padding-top-10 {
+    padding-top: 10px;
+}
+
+.padding-top-16 {
+	padding-top: 16px;
+}
+.padding-top-20 {
+	padding-top: 20px !important;;
+}
+
+.min-width {
+    //considers padding
+    width: 280px;
+}
+.block {
+	display: block;
+}
+.xs-margin-bottom {
+    @media only screen and (min-width:320px) and (max-width:768px) {
+        margin-bottom: 10px;
+    }
+}
+
+.fill-width {
+	width: 100%;
+}
+
+.fill-height {
+	height: 100%;
+}
+
+.margin-top-minus5 {
+    margin-top: -5px !important;
+}
+
+.margin-top-minus6-percent {
+    margin-top: -6% !important;
+}
+
+.margin-top-minus3-percent {
+    margin-top: -3% !important;
+}
+
+.overflow-hidden {
+    overflow:hidden;
+}
+
+.margin-left-minus16 {
+    margin-left: -16px;
+}
+
+.margin-left-30 {
+    margin-left: 30px;
+}
+
+.margin-left-15 {
+    margin-left: 15px;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
+}
+
+.margin-left-minus20 {
+    margin-left: -20%;
+}
+.margin-top-minus25 {
+    margin-top: -25px;
+}
+.margin-left-minus9 {
+    margin-left: -9%;
+}
+
+.margin-left-minus8 {
+    margin-left: -8%;
+}
+
+.scrollable-div {
+    overflow-x:hidden;
+    overflow-y: auto;
+    height:200px;
+}
+
+.vertical-align-top {
+    vertical-align: top !important;
+}
+
+.max-height-40 {
+    max-height: 40px;
+}
+
+.min-height-40 {
+    min-height: 40px;
+}
+
+
+
+.padding-left-5 {
+    padding-left: 5px !important;
+}
+
+.padding-left-15 {
+    padding-left: 15px !important;
+}
+
+.width-5-percent {
+    width: 5% !important;
+}
+
+.width-09-percent {
+    width: 09% !important;
+}
+
+.width-10-percent {
+    width: 10% !important;
+}
+
+.width-12-percent {
+    width: 12% !important;
+}
+
+.width-13-percent {
+    width: 13% !important;
+}
+
+.width-15-percent {
+    width: 15% !important;
+}
+
+.width-16-percent {
+    width: 16% !important;
+}
+
+.width-17-percent {
+    width: 17% !important;
+}
+
+.width-20-percent {
+    width: 20% !important;
+}
+
+.width-25-percent {
+    width: 25% !important;
+}
+
+.width-30-percent {
+    width: 30% !important;
+}
+
+.width-35-percent {
+    width: 35% !important;
+}
+
+.width-40-percent {
+    width: 40% !important;
+}
+
+.width-45-percent {
+    width: 45% !important;
+}
+
+.width-90-percent {
+    width: 90% !important;
+}
+
+.width-200-percent {
+    width: 200% !important;  
+}
+
+.float-right {
+    float:right;
+}
+
+.float-left {
+    float:left;
+}
+
+.width-360 {
+    width: 360px !important;
+}
+
+.width-70 {
+    width: 70px !important;
+}
+
+.width-40 {
+    width: 40px !important;
+}
+
+.padding-right-10 {
+    padding-right: 10px;
+}
+
+.padding-right-15 {
+    padding-right: 15px;
+}
+
+.margin5-top-bottom {
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+.margin-bottom20 {
+    margin-bottom:20px;
+}
+
+.margin-bottom40 {
+    margin-bottom: 40px;
+}
+
+.margin-top4 {
+    margin-top:4px;
+}
+
+.margin-bottom15 {
+    margin-bottom:15px;
+}
+
+.margin-bottom10 {
+    margin-bottom:10px;
+}
+
+.sidebar-height400 {
+    height:400px;
+}
+
+.sidebar-padding-right30 {
+    padding-right:30px;
+}
+
+.sidebar-padding-left53 {
+    padding-left:53px;
+}
+
+
+.template-margin-left30 {
+    margin-left:30px;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0 !important;
+}
+
+.no-margin-top {
+    margin-top: 0 !important;
+}
+
+.spacer {
+    margin-top: 40px; /* define margin as you see fit */
+}
+
+.scroll-y-400 {
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.modal-header{
+    position:relative;
+    
+    padding-top: @brand-padding_horizontal;
+        h1{
+            font-size: @brand-font_h1;
+        }
+
+     #btnClose{
+        position:absolute;
+        top:5px;
+        right:5px;
+        font-size: @brand-font_xl;
+    }
+}

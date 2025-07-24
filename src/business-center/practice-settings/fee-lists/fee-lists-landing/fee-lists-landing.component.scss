@@ -1,0 +1,60 @@
+    .feeLists__header {
+        width: 96%;
+        margin: 0 auto;
+    }
+
+    //Added for Create and drop down 
+    .feeLists__actions {
+        display: flex;
+    }
+
+    .feeLists__title>h1 {
+        font-size: 26px;
+        margin-top: 8px;
+    } 
+
+    .feeLists__list {
+        width: 96%;
+        margin: 0 auto;
+        padding-top: 1%;
+
+        .noResults {
+            position: absolute;
+            height: 100px;
+            width: 100px;
+            top: 50%;
+            left: 50%;
+            background-size: 100%;
+            text-align: center;
+
+            i.loading {
+                font-size: 50px;
+            }
+        }
+
+        .sortCursor {
+            cursor: pointer !important;
+        }
+    }
+
+    .feeLists__grid {
+        min-height: 400px;
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        .body {
+            display: block;
+            padding-left: 16px;
+        }
+
+        .cell {
+            padding: 4px;
+        }
+    }
+
+    //Added for soar select list design 
+    #selectReport {
+        margin-left: 6px;
+        width: 180px;
+    }

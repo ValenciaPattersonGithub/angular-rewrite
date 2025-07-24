@@ -1,0 +1,10 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{::('Checkout Location' | i18n)}}</h3>
+</div>
+<div class="modal-body">
+    Your current location must be set to  {{locationDisplayName}} to checkout this appointment.
+    If you want to continue to checkout and associate the encounter with your current location, you must first update the appointment location.
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="negative()">{{::('Ok' | i18n)}}</button>
+</div>

@@ -1,0 +1,89 @@
+@import 'variables';
+
+.adjustment-container {
+    background-color: #ffffff;
+    background-size: cover;
+
+    .adjustment-drawer-header {
+        height: 44px;
+        font-family: Open Sans;
+        font-size: 16px;
+        color: #333333;
+        text-decoration: none solid rgb(51, 51, 51);
+        line-height: 18px;
+        display: flex;
+
+        .adjustment-drawer-title {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 15px;
+            width: 216px;
+        }
+
+        .adjustmenticons {
+            ::ng-deep {
+                button {
+                    margin: 5px;
+                }
+            }
+
+            width: 200px;
+            text-align: right;
+            margin: 4px;
+        }
+    }
+
+    .adjustment-hr {
+        margin: 5px 0px 0px 0px;
+    }
+
+    .adjustment-drawer-content {
+        padding: 15px;
+
+        ::ng-deep {
+            label {
+                width: 100px;
+                height: 16px;
+                font-family: Open Sans;
+                font-size: 14px;
+                color: #333333;
+                text-decoration: none solid rgb(51, 51, 51);
+            }
+        }
+
+        textarea {
+            width: 396px;
+            height: 128px;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+            background-color: #ffffff;
+            background-size: cover;
+            font-family: Open Sans;
+            font-size: 14px;
+            color: #333333;
+            text-decoration: none solid rgb(51, 51, 51);
+        }
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+}
+
+.radiocontainer {
+    ::ng-deep {
+        label {
+            margin: 0px 10px 0px 0px;
+        }
+
+        span {
+            font-weight: normal;
+            margin: 1px;
+        }
+    }
+}
+
+span.ng-tooltip-top-error.ng-tooltip-show {
+    z-index: 1040 !important;
+}

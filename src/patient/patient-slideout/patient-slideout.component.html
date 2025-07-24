@@ -1,0 +1,29 @@
+<div class="patientSlideout">
+    <div id="patient-slideout-wrapper">
+        <div class="text-align-right">
+            <button class="btn soar-link icon-button font-14" (click)="hideDiv()">X</button>
+        </div>
+        <div class="margin-left-5">
+            <label [textContent]="'(' + appliedFiltersCount + ') ' + ('Filters Selected' | translate)"></label>
+        </div>        
+        <div>
+            <button (click)="collapsePanel()" class="btn soar-link icon-button font-14" [ngClass]="classExpandCollapse ? 'expand-all' : 'collapse-all'" id="btnExpandCollapse">
+                <span>{{textExpandCollapse}}</span>
+            </button>
+        </div>
+        <div id="filterbox">
+            <div>             
+                <appointment-slideout *ngIf="activeFltrTab==1" [activeFltrTab]="activeFltrTab" [appointmentsFilterCriteria]="allBadgeFilterCriteria?.appointments" [activeGridData]="activeGridData" [selectedLocation]="selectedLocation"></appointment-slideout>            
+                <all-patient-slideout *ngIf="activeFltrTab==2" [activeFltrTab]="activeFltrTab" [allPatientsFilterCriteria]="allBadgeFilterCriteria?.allPatients" [activeGridData]="activeGridData" [selectedLocation]="selectedLocation"></all-patient-slideout>
+                <treatment-plans-slideout *ngIf="activeFltrTab==6" [activeFltrTab]="activeFltrTab" [tratmentPlansFilterCriteria]="allBadgeFilterCriteria?.tratmentPlans" [activeGridData]="activeGridData" [selectedLocation]="selectedLocation"></treatment-plans-slideout>
+                <other-to-do-slideout *ngIf="activeFltrTab==5" [activeFltrTab]="activeFltrTab" [otherToDoFilterCriteria]="allBadgeFilterCriteria?.otherToDo" [activeGridData]="activeGridData" [selectedLocation]="selectedLocation"></other-to-do-slideout>
+                <preventive-care-slideout *ngIf="activeFltrTab==7" [activeFltrTab]="activeFltrTab" [preventiveCareFilterCriteria]="allBadgeFilterCriteria?.preventiveCare" [activeGridData]="activeGridData" [selectedLocation]="selectedLocation"></preventive-care-slideout>
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="text-align-right padding-right-10">
+            <a class="btn btn-primary" (click)="resetFilters()" id="btnReset">{{resetBtn}}</a>
+            <a class="btn btn-primary" (click)="applyFilters()" id="btnApplyFilters">{{applyFiltersBtn}}</a>
+        </div>
+    </div>
+</div> 

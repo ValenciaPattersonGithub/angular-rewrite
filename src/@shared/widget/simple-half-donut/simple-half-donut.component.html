@@ -1,0 +1,23 @@
+<div class="half-donut">
+  <ng-container *ngIf="resetDonut">
+    <kendo-chart #chart [transitions]="animateChart" *ngIf="chartType==simpleDonutText">
+      <kendo-chart-series>
+        <kendo-chart-series-item #series type="donut" [data]="seriesData" categoryField="kind" field="value"
+          [startAngle]="180" [size]="holeSize" [holeSize]="holeSize">
+          <kendo-chart-series-item-labels [content]="labelContent" background="none" color="black"></kendo-chart-series-item-labels>
+        </kendo-chart-series-item>
+      </kendo-chart-series>
+      <kendo-chart-legend [title]="legendTitleHalfDonut" [visible]="true" position="bottom" [padding]="10" [spacing]="spaceBtwLegend"></kendo-chart-legend>
+    </kendo-chart>
+  </ng-container>
+
+  <kendo-chart #chart1 [transitions]="animateChart" *ngIf="chartType==halfDonutText" (seriesClick)="drilldown($event)" (legendItemClick)="drilldown($event)">
+    <kendo-chart-series>
+      <kendo-chart-series-item #series type="donut" [data]="seriesDataHalfDonut" categoryField="kind" field="value" [startAngle]="180" [size]="42" [holeSize]="58">
+        <kendo-chart-series-item-labels [content]="labelContentHalfDonut"
+          background="none" color="black"></kendo-chart-series-item-labels>
+      </kendo-chart-series-item>
+    </kendo-chart-series>
+    <kendo-chart-legend [title]="isReceivables ? legendTitleReceivablesText : legendTitle" [visible]="true" position="bottom" [orientation]="horizontal" [item]="{ visual: visual }" [spacing]="isReceivables && spaceBtwLegendRcvbl"></kendo-chart-legend>
+  </kendo-chart>
+</div>

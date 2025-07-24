@@ -1,0 +1,19 @@
+<div class="cardReaderdModal">
+    <div class="modal-header">
+        <h4><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Select Card Reader</h4>
+    </div>
+    <div class="modal-body">
+
+       <soar-select-list data-qa="card-reader-selector" id="lstCardReaderSelector" name="lstCardReaderSelector" ng-model="selectedCardReader"
+                                                placeholder="{{ 'Select Options' | i18n }}" text-field="DeviceFriendlyName" value-field="PartnerDeviceId"
+                                                option-list="item.cardReaders" sb-change="cardReaderOnChange" sb-required="required">
+       </soar-select-list>
+
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right">
+            <button id="btnCardReaderCancel" ng-click="cancelClick()"   class="btn btn-default">Cancel</button>
+            <button id="btnCardReaderOk" ng-click="okClick()" ng-disabled="!selectedCardReader" class="btn btn-primary">OK</button>
+        </div>
+    </div>
+</div>

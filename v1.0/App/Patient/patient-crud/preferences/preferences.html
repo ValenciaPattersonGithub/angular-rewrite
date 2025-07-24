@@ -1,0 +1,92 @@
+﻿<div id="preferencesSection" class="form-body" ng-form="frmPreferences">
+    <div class="form-row">
+
+        <!-- Preferred Location-->
+            <div class="form-group form-col-4" ng-class="{'error has-error': setFocusOnInput && (angular.isUndefined(person.Profile.PreferredLocation) || person.Profile.PreferredLocation == null)}">
+                <label class="control-label">{{'Preferred Location *' | i18n }}</label>
+                <soar-select-list name="inpLocation"
+                                  id="inpLocation"
+                                  placeholder="{{'No Location Selected' | i18n }}"
+                                  text-field="LocationNameWithDate"
+                                  value-field="LocationId"
+                                  option-list="locationsDDL"
+                                  ng-model="person.Profile.PreferredLocation"
+                                  sb-tab="1"
+                                  sb-required="true">
+                </soar-select-list>
+                <span id="lblPreferredLocationRequired" class="help-block" ng-show="setFocusOnInput && (angular.isUndefined(person.Profile.PreferredLocation) || person.Profile.PreferredLocation == null)">
+                    {{ 'This field is required.' | i18n }}
+                </span>
+            </div>
+        <!-- Preferred Dentist-->
+        <div class="form-group form-col-4">
+            <label class="control-label">{{'Preferred Dentist' | i18n }}</label>
+
+            <!-- use provider-selector limit to ProviderTypeIds 1,5 for dentist-->
+            <provider-selector place-holder="dentistPlaceHolder" 
+                input-id="inpDentist" 
+                patient-info="person"
+                set-preferred="false"                 
+                provider-type-ids="[1,5]"
+                selected-provider="person.Profile.PreferredDentist" 
+                filter-by-location-id="preferredLocationId"
+                filter-inactive-providers="true"
+                disable-input="person.Profile.PreferredLocation===null">
+            </provider-selector>            
+            
+        </div>
+        <!--Select Hygienist-->
+        <div class="form-group form-col-4">
+            <label class="control-label">{{'Preferred Hygienist' | i18n }}</label>
+
+            <!-- use provider-selector limit to ProviderTypeIds 1,2,3,5 for hygienist-->
+            <provider-selector
+                place-holder="hygienistPlaceHolder"
+                input-id="inpHygienist"
+                patient-info="person"
+                set-preferred="false"               
+                provider-type-ids="[1,2,3,5]"
+                selected-provider="person.Profile.PreferredHygienist"
+                filter-by-location-id="preferredLocationId"
+                filter-inactive-providers="true"                             
+                disable-input="person.Profile.PreferredLocation===null">
+            </provider-selector>
+
+           
+        </div>
+    </div>
+    <div class="form-row">
+        <!-- Alternate Location-->
+        <div class="form-group form-col-3">
+            <label class="control-label">{{'Alternate Location' | i18n }}</label>
+            <soar-select-list name="inpAltLocation"
+                              id="inpAltLocation"
+                              placeholder="{{'Select Location' | i18n }}"
+                              text-field="LocationNameWithDate"
+                              value-field="LocationId"
+                              option-list="alternateOptionsDDL"
+                              ng-model="patientAlternateChosenLocation"
+                              sb-tab="1"
+                              sb-required="false">
+            </soar-select-list>
+        </div>
+        <tag ng-repeat="location in person.PatientLocations"
+             ng-if="!location.IsPrimary && location.ObjectState != 'Delete'"
+             class="pull-left"
+             uib-tooltip="Cannot remove this location Due to patient activity"
+             tooltip-enable="{{location.PatientActivity}}"
+             tooltip-placement="{{top-right}}"
+             title="{{location.LocationName}}"
+             remove-function="removePatientLocation(location)"
+             is-primary="true"
+             hide-remove="location.PatientActivity"
+             base-id="{{location.LocationId}}"></tag>
+        
+    </div>
+    
+    <div ng-show="!users.length || !locationsDDL.length">
+        <no-results loading="loading"></no-results>
+    </div>
+</div>
+
+

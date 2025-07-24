@@ -1,0 +1,350 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jquery": true
+    },
+    "extends": [],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+        // "project": "./tsconfig.json"
+    },
+    "plugins": [
+        "jasmine",
+        "@typescript-eslint"
+    ],
+    "overrides": [
+        {
+            "files": "v1.0/**/*.js",
+            "rules": {
+                "for-direction": "error",
+                "getter-return": "error",
+                "no-mixed-spaces-and-tabs": "off",
+                "no-await-in-loop": "error",
+                "no-compare-neg-zero": "error",
+                "no-cond-assign": "error",
+                "no-debugger": "error",
+                "no-dupe-args": "error",
+                "no-dupe-keys": "error",
+                "no-duplicate-case": "error",
+                "no-ex-assign": "error",
+                "no-func-assign": "error",
+                "no-invalid-regexp": "error",
+                "no-obj-calls": "error",
+                "no-template-curly-in-string": "error",
+                "no-unreachable": "error",
+                "no-unsafe-finally": "error",
+                "no-undef": "error",
+                "no-global-assign": "error"
+            },
+            "globals": {
+                "_": false,
+                "angular": false,
+                "BaseCtrl": false,
+                "BaseSchedulerCtrl": false,
+                "kendo": false,
+                "module": false,
+                "moment": false
+            }
+        },
+        {
+            "files": [
+                "*_test.js",
+                "*_tests.js",
+                "testHelper.js"
+            ],
+            "env": {
+                "jasmine": true
+            },
+            "globals": {
+                "_$location_": false,
+                "_authPatSecurityService_": false,
+                "_localize_": false,
+                "_localizeFactory_": false,
+                "_modalFactoryProvider_": false,
+                "_tabLauncher_": false,
+                "_toastr_": false,
+                "_practiceService_": false,
+                "_locationService_": false,
+                "_soarConfig_": false,
+                "_referenceDataService_": false,
+                "inject": false,
+                "Dynamsoft": false,
+                //jasmine
+                "afterEach": false,
+                "beforeEach": false,
+                "describe": false,
+                "expect": false,
+                "it": false,
+                "jasmine": false,
+                "spyOn": false
+            },
+            "rules": {}
+        },
+        {
+            "files": [
+                "v1.0/App/Test/reports/**/*.js"
+            ],
+            "rules": {
+                "no-undef": "off"
+            }
+        },
+        { // Rules for ALL Typescript under /src.
+            "files": [
+                "src/**/*.ts"
+            ],
+            "rules": {
+                "no-restricted-imports": [
+                    "error",
+                    {
+                        "name": "angular",
+                        "message": "angular.js is already in the root page - DO NOT IMPORT!"
+                    }
+                ]
+            }
+        },
+        { // Rules for ALL Typescript except *.downgrade.ts
+            "files": [
+                "src/**/!(*.downgrade).ts"
+            ],
+            "rules": {
+                "no-restricted-syntax": [
+                    "error",
+                    {
+                        "message": "downgradeComponent() not allowed unless in .downgrade.ts file (one per module)",
+                        "selector": "CallExpression > Identifier[name='downgradeComponent']"
+                    },
+                    {
+                        "message": "downgradeInjectable() not allowed unless in .downgrade.ts file (one per module)",
+                        "selector": "CallExpression > Identifier[name='downgradeInjectable']"
+                    }
+                ]
+            }
+        },
+        { // Rules for NEW & REFACTORED Typescript under /src.
+            "files": [
+                //"src/insurance/era/era-landing/**/*.ts",
+                "src/@shared/components/fee-list-location/fee-list-location.component.ts",
+                "src/@shared/components/form-controls/date-range-selector/date-range-selector.component.ts",
+                "src/dashboard/widgets/templates/open-clinical-notes-widget/open-clinical-notes-widget.component.ts",
+                "src/business-center/practice-settings/team-members/team-member-crud/team-member-locations/team-member-location-setup/team-member-location-setup.component.ts",
+                "src/business-center/practice-settings/team-members/team-member-crud/team-member-locations/team-member-locations.component.ts",
+                "src/@shared/providers/service-codes.service.ts",
+                "src/business-center/practice-settings/location-landing/location-landing.component.ts",
+                "src/business-center/practice-settings/billing/bank-accounts/bank-accounts.component.ts",
+                "src/business-center/practice-settings/view-location/view-location.component.ts",
+                "src/business-center/locations/location-search/location-search.component.ts",
+                "src/business-center/practice-settings/location-crud/location-crud.component.ts",
+                "src/@shared/providers/location-identifier.service.ts",
+                "src/business-center/practice-settings/identifiers/locations-identifiers/locations-identifiers.component.ts",
+                "src/business-center/practice-settings/team-members/team-member-crud/team-member-additional-identifiers/team-member-additional-identifiers.component.ts",
+                "src/business-center/practice-settings/team-members/team-member-crud/team-member-contact-information/team-member-contact-information.component.ts",
+                "src/business-center/practice-settings/identifiers/locations-identifiers/locations-identifiers.component.ts",
+                "src/business-center/practice-settings/fee-lists/fee-lists-landing/fee-lists-landing.component.ts",
+                "src/dashboard/widgets/templates/pending-claims-half-donut-widget/pending-claims-half-donut-widget.component.ts",
+                "src/dashboard/widgets/templates/insurance-claims-half-donut-widget/insurance-claims-half-donut-widget.component.ts",
+                "src/@shared/providers/preventive-care.service.ts",
+                "src/@shared/providers/note-templates-http.service.ts",
+                "src/business-center/practice-settings/payment-types/payment-types.component.ts",
+                "src/business-center/practice-settings/payment-types/payment-types-list/payment-types-list.component.ts",
+                "src/business-center/practice-settings/payment-types/payment-type/payment-type.component.ts",
+                "src/@shared/providers/new-standard.service.ts",
+                "src/business-center/service-code/swiftpick-code-crud/swiftpick-code-crud.component.ts",
+                "src/business-center/practice-settings/adjustment-types/adjustment-types.component.ts",
+                "src/business-center/practice-settings/adjustment-types/adjustment-types-list/adjustment-types-list.component.ts",
+                "src/business-center/practice-settings/adjustment-types/adjustment-type-form/adjustment-type-form.component.ts",
+                "src/dashboard/widgets/templates/receivables-half-donut-widget/receivables-half-donut-widget.component.ts",
+                "src/dashboard/widgets/templates/schedule-utilization-gauge-widget/schedule-utilization-gauge-widget.component.ts",
+                "src/business-center/service-code/service-code-crud/service-code-crud.component.ts",
+                "src/business-center/service-code/service-swift-code-service/service-swift-code.service.ts",
+                "src/business-center/practice-settings/chart/note-templates/note-templates.component.ts",
+                "src/business-center/practice-settings/chart/note-templates/note-templates-list/note-templates-list.component.ts",
+                "src/business-center/practice-settings/chart/note-templates/note-templates-helper.service.ts",
+                "src/@shared/components/section-crud/section-header/section-header.component.ts",
+                "src/@shared/components/section-crud/section-crud.component.ts",
+                "src/@shared/components/section-crud/section-item-crud/section-item-crud.component.ts",
+                "src/@shared/components/section-crud/section-item-crud/adlib/adlib.component.ts",
+                "src/@shared/components/section-crud/section-item-crud/custom-text-field/custom-text-field.component.ts",
+                "src/@shared/components/section-crud/section-item-crud/link-tooth/link-tooth.component.ts",
+                "src/@shared/components/section-crud/section-item-crud/multiple-choice/multiple-choice.component.ts",
+                "src/@shared/components/section-crud/section-item-crud/yes-no-true-false/yes-no-true-false.component.ts",
+                "src/@shared/components/accordion/accordion.component.ts",
+                "src/@shared/components/section-crud/section-footer/section-footer.component.ts",
+                "src/@shared/components/form-controls/numeric-range-selector/numeric-range-selector.component.ts",
+                "src/business-center/practice-settings/chart/draw-types/draw-types-landing.component.ts",
+                "src/dashboard/widgets/templates/hygiene-retention-half-donut-widget/hygiene-retention-half-donut-widget.component.ts",
+                "src/dashboard/widgets/templates/net-gross-production-gauge-widget/net-gross-production-gauge-widget.component.ts",
+                "src/patient/patient-landing/patient-landing.component.ts",
+                "src/@shared/providers/payment-types.service.ts",
+                "src/@shared/providers/adjustment-types.service.ts",
+                "src/patient/patient-slideout/patient-slideout.component.ts",
+                "src/business-center/practice-settings/clinical/preventive-care-setup/preventive-care-setup.component.ts",
+                "src/business-center/practice-settings/service-types/service-types.component.ts",
+                "src/@shared/components/badge/badge.component.ts",
+                "src/patient/patient-overview/patient-overview.component.ts",
+                "src/patient/patient-overview/patient-pending-encounter/patient-pending-encounter.component.ts",
+                "src/@shared/components/patient-appointment/patient-appointment.component.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-summary.component.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-balance/patient-account-balance.component.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-insurance/patient-account-insurance.component.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-insurance-adjusted-estimate/patient-account-insurance-adjusted-estimate.component.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-insurance-estimate/patient-account-insurance-estimate.component.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-latest-statement/patient-account-latest-statement.component.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-portion/patient-account-portion.component.ts",
+                "src/patient/patient-overview/patient-alert-flags/patient-alert-flags.component.ts",
+                "src/patient/patient-overview/patient-preventive-care/patient-preventive-care.component.ts",
+                "src/patient/patient-overview/treatment-plans-count/treatment-plans-count.component.ts",
+                "src/patient/patient-shared/odontogram-snapshot/odontogram-snapshot.component.ts",
+                "src/patient/patient-shared/patient-account-aging/patient-account-aging.component.ts",
+                "src/@shared/components/sub-section/sub-section.component.ts",
+                "src/@shared/components/real-time-eligibility/real-time-eligibility.component.ts",
+                "src@sharedcomponents/soar-select-list-with-grouping/soar-select-list-with-grouping.component.ts",
+                "src/patient/common/components/slideout-filter/app-slideout-filter.component.ts",
+                "src/patient/patient-landing/all-patient-slideout/all-patient-slideout.component.ts",
+                "src/patient/service/patient-filter.service.ts",
+                "src/@shared/components/patient-grid/patient-grid.component.ts",
+                "src/patient/common/http-providers/patient-landing-grid.service.ts",
+                "src/dashboard/widgets/templates/appointments-grid-widget/appointments-grid-widget.component.ts",
+                "src/patient/patient-dashboard/patient-dashboard.component.ts",
+                "src/dashboard/user-dashboard/user-dashboard.component.ts",
+                "src/@shared/components/new-profile-section/new-profile-section.component.ts",
+                "src/patient/patient-registration/registration-header/registration-header.component.ts",
+                "src/patient/patient-landing/treatment-plans-slideout/treatment-plans-slideout.component.ts",
+                "src/patient/patient-landing/other-to-do-slideout/other-to-do-slideout.component.ts",
+                "src/patient/patient-landing/appointment-slideout/appointment-slideout.component.ts",
+                "src/patient/patient-landing/preventive-care-slideout/preventive-care-slideout.component.ts",
+                "src/@shared/components/app-uib-modal/app-uib-modal.component.ts",
+                "src/patient/patient-landing/patient-export-modal/patient-export-modal.component.ts",
+                "src/@shared/providers/csv-helper.service.ts",
+                "src/patient/patient-landing/send-mailing-modal/send-mailing-modal.component.ts",
+                "src/@shared/widget/gauge/gauge.component.ts",
+                "src/@shared/widget/simple-half-donut/simple-half-donut.component.ts",
+                "src/patient/service/active-tab.service.ts",
+                "src/patient/service/grid-helper.service.ts",
+                "src/patient/service/grid-operation.service.service.ts",
+                "src/insurance/attachments/**/*.ts",
+                "src/patient/patient-apply-insurance-payment/apply-insurance-payment.component.ts",                
+                "src/patient/common/components/apply-insurance-payment-table/apply-insurance-payment-table.component.ts",
+                "src/@shared/pipes/remainingAmountToDistribute/remaining-amount-to-distribute.pipe.ts",
+                "src/@shared/pipes/applyInsurancePaymentIsValid/apply-insurance-payment-is-valid.pipe.ts",
+                "src/browser-cache/**/!(*.spec|*.downgrade).ts"
+            ],
+            "extends": [
+                "eslint:recommended",
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@typescript-eslint/recommended-requiring-type-checking"
+            ],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "project": "./tsconfig.json" // Required if you use plugin:@typescript-eslint/recommended-requiring-type-checking
+            },
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "error",
+                "@typescript-eslint/no-unsafe-argument": "off",
+                "@typescript-eslint/no-unsafe-member-access": "off",
+                "@typescript-eslint/no-unsafe-call": "off",
+                "@typescript-eslint/no-empty-function": "off",
+                "@typescript-eslint/no-unsafe-assignment": "off",
+                "@typescript-eslint/unbound-method": "off"
+            }
+        },
+        { // Rules for Jasmine tests under /src.  Add all folders updated to support these rules here.
+            "files": [
+                // "src/insurance/era/era-landing/**/*.spec.ts",
+                "src/dashboard/widgets/templates/hygiene-retention-half-donut-widget/hygiene-retention-half-donut-widget.component.spec.ts",
+                "src/patient/patient-landing/patient-landing.component.spec.ts",
+                "src/@shared/components/form-controls/date-range-selector/date-range-selector.component.spec.ts",
+                "src/dashboard/widgets/templates/schedule-utilization-gauge-widget/schedule-utilization-gauge-widget.component.spec.ts",
+                "src/dashboard/widgets/templates/net-gross-production-gauge-widget/net-gross-production-gauge-widget.component.spec.ts",
+                "src/dashboard/widgets/templates/pending-claims-half-donut-widget/pending-claims-half-donut-widget.component.spec.ts",
+                "src/dashboard/widgets/templates/insurance-claims-half-donut-widget/insurance-claims-half-donut-widget.component.spec.ts",
+                "src/@shared/providers/adjustment-types.service.spec.ts",
+                "src/@shared/providers/payment-types.service.spec.ts",
+                "src/@shared/widget/simple-half-donut/simple-half-donut.component.spec.ts",
+                "src/business-center/practice-settings/billing/bank-accounts/bank-accounts.component.spec.ts",
+                "src/business-center/practice-settings/clinical/preventive-care-setup/preventive-care-setup.component.spec.ts",
+                "src/business-center/practice-settings/service-types/service-types.component.spec.ts",
+                "src/@shared/components/badge/badge.component.spec.ts",
+                "src/@shared/components/form-controls/numeric-range-selector/numeric-range-selector.spec.component.ts",
+                "src/patient/patient-overview/patient-overview.component.spec.ts",
+                "src/patient/patient-overview/patient-pending-encounter/patient-pending-encounter.component.spec.ts",
+                "src/@shared/components/patient-appointment/patient-appointment.component.spec.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-summary.component.spec.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-balance/patient-account-balance.component.spec.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-insurance/patient-account-insurance.component.spec.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-insurance-adjusted-estimate/patient-account-insurance-adjusted-estimate.component.spec.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-insurance-estimate/patient-account-insurance-estimate.component.spec.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-latest-statement/patient-account-latest-statement.component.spec.ts",
+                "src/patient/patient-overview/patient-account-summary/patient-account-portion/patient-account-portion.component.spec.ts",
+                "src/patient/patient-overview/patient-alert-flags/patient-alert-flags.component.spec.ts",
+                "src/patient/patient-overview/patient-preventive-care/patient-preventive-care.component.spec.ts",
+                "src/patient/patient-overview/treatment-plans-count/treatment-plans-count.component.spec.ts",
+                "src/patient/patient-shared/odontogram-snapshot/odontogram-snapshot.component.spec.ts",
+                "src/patient/patient-shared/patient-account-aging/patient-account-aging.component.spec.ts",
+                "src/@shared/components/sub-section/sub-section.component.spec.ts",
+                "src/@shared/components/form-controls/numeric-range-selector/numeric-range-selector.component.spec.ts",
+                "src@sharedcomponents/soar-select-list-with-grouping/soar-select-list-with-grouping.component.spec.ts",
+                "src/patient/common/components/slideout-filter/app-slideout-filter.component.spec.ts",
+                "src/patient/patient-landing/all-patient-slideout/all-patient-slideout.component.spec.ts",
+                "src/patient/service/patient-filter.service.spec.ts",
+                "src/@shared/components/real-time-eligibility/real-time-eligibility.component.spec.ts",
+                "src/patient/common/http-providers/patient-landing-grid.service.spec.ts",
+                "src/dashboard/widgets/templates/appointments-grid-widget/appointments-grid-widget.component.spec.ts",
+                "src/patient/patient-dashboard/patient-dashboard.component.spec.ts",
+                "src/@shared/components/new-profile-section/new-profile-section.component.spec.ts",
+                "src/patient/patient-registration/registration-header/registration-header.component.spec.ts",
+                "src/patient/patient-landing/treatment-plans-slideout/treatment-plans-slideout.component.spec.ts",
+                "src/patient/patient-slideout/patient-slideout.component.spec.ts",
+                "src/patient/patient-landing/appointment-slideout/appointment-slideout.component.spec.ts",
+                "src/patient/patient-landing/other-to-do-slideout/other-to-do-slideout.component.spec.ts",
+                "src/patient/patient-landing/preventive-care-slideout/preventive-care-slideout.component.spec.ts",
+                "src/@shared/components/app-uib-modal/app-uib-modal.component.spec.ts",
+                "src/@shared/components/patient-grid/patient-grid.component.spec.ts",
+                "src/patient/patient-landing/patient-export-modal/patient-export-modal.component.spec.ts",
+                "src/@shared/providers/csv-helper.service.spec.ts",
+                "src/patient/patient-landing/send-mailing-modal/send-mailing-modal.component.spec.ts",
+                "src/@shared/widget/gauge/gauge.component.spec.ts",
+                "src/dashboard/widgets/templates/open-clinical-notes-widget/open-clinical-notes-widget.component.spec.ts",
+                "src/dashboard/widgets/templates/receivables-half-donut-widget/receivables-half-donut-widget.component.spec.ts",
+                "src/patient/service/active-tab.service.spec.ts",
+                "src/patient/service/grid-helper.service.spec.ts",
+                "src/patient/service/grid-operation.service.service.spec.ts",
+                "src/insurance/attachments/**/*.spec.ts",
+                "src/patient/patient-apply-insurance-payment/apply-insurance-payment.component.spec.ts",                
+                "src/patient/common/components/apply-insurance-payment-table/apply-insurance-payment-table.component.spec.ts",
+                "src/@shared/pipes/remainingAmountToDistribute/remaining-amount-to-distribute.pipe.spec.ts", 
+                "src/@shared/pipes/applyInsurancePaymentIsValid/apply-insurance-payment-is-valid.pipe.spec.ts"
+            ],
+            "extends": [
+                "eslint:recommended",
+                "plugin:@typescript-eslint/recommended",
+                "plugin:jasmine/recommended"
+            ],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "project": "./tsconfig.json" // Required if you use plugin:@typescript-eslint/recommended-requiring-type-checking
+            },
+            "env": {
+                "jasmine": true
+            },
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "error",
+                "@typescript-eslint/no-unsafe-argument": "off",
+                "@typescript-eslint/no-unsafe-member-access": "off",
+                "@typescript-eslint/no-unsafe-call": "off",
+                "@typescript-eslint/no-empty-function": "off",
+                "@typescript-eslint/no-unsafe-assignment": "off",
+                "@typescript-eslint/unbound-method": "off",
+                "@typescript-eslint/no-floating-promises": "off",
+                "jasmine/no-unsafe-spy": "off", //ToDo : Revisit after confirmation about using this rule
+                "jasmine/prefer-toHaveBeenCalledWith": "off", //ToDo : Revisit after confirmation about using this rule
+                "jasmine/new-line-before-expect": "off", //ToDo : Revisit after confirmation about using this rule
+                "jasmine/new-line-between-declarations": "off", //ToDo : Revisit after confirmation about using this rule
+                "jasmine/prefer-promise-strategies": "off" //ToDo : Revisit after confirmation about using this rule
+            }
+        }
+    ]
+}

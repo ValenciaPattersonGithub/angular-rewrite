@@ -1,0 +1,164 @@
+﻿.perioRead {
+    display: block;
+    border-bottom: 1px solid #eeeeee;
+    transition: @brand-transition;
+    background-color: #ffffff;
+
+    &.BleedingPocket {
+        border-left: none;
+        border-right: none;
+        background-color: #FAFAFA;
+
+
+        .perioRead__header {
+            border-left: none;
+            border-right: none;
+        }
+
+        .perioRead__footer {
+            border-left: none;
+            border-right: none;
+        }
+    }
+
+    &.active {
+        background-color: @brand-color_dark-gray;
+    }
+
+    .clearfix;
+
+    &__header {
+        .clearfix;
+        display: inline-block;
+        width: 10%;
+        float: left;
+        padding: @brand-padding_xs;
+        font-weight: bold;
+        border-left: 1px solid #eeeeee;
+        border-right: 1px solid #eeeeee;
+    }
+
+    &__footer {
+        .clearfix;
+        display: inline-block;
+        text-align: left;
+        float: left;
+        width: 10%;
+        padding: @brand-padding_xs;
+        font-weight: bold;
+        border-left: 1px solid #eeeeee;
+        border-right: 1px solid #eeeeee;
+    }
+
+    &__title {
+        display: block;
+        text-align: right;
+    }
+
+    &__body {
+        .clearfix;
+        display: inline-block;
+        width: 80%;
+        float: left;
+    }
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.perioInputs {
+    display: table;
+    width: 100%;
+    padding: 0 @brand-padding_xs;
+    margin: 0;
+
+    &__row {
+        display: table-row;
+    }
+
+    &__tooth {
+        display: table-cell;
+        text-align: center;
+        padding-top: 3px;
+
+        .perioAlertLevel {
+            color: @perio-alert-level-color;
+        }
+    }
+
+    &__ctrl {
+        background-color: @brand-color_white;
+        border: @brand-border_light;
+        cursor: pointer;
+        float: left;
+        min-height: 20px;
+        margin: 1px;
+        min-width: 14px;
+        text-align: center;
+        font-size: 90%;
+        background-color: @brand-color_dark-gray;
+        letter-spacing: -1px;
+
+        &.activeTooth {
+            background-color: @perio-chart-active-tooth-color;
+        }
+
+        &.activeExam {
+            background-color: @white;
+        }
+
+        &.activeExam[disabled] {
+            background-color: @brand-color_dark-gray;
+        }
+
+        &.activeInput {
+            border: solid 1px @brand-color_font-dark;
+        }
+
+        &.notClickable {
+            cursor: default;
+        }
+    }
+
+    &__bleedingSuppurationCircle {
+        background-color: @brand-color_white;
+        border: @brand-border_light;
+        border-radius: 50%;
+        cursor: pointer;
+        display: inline-block;
+        float: left;
+        height: 13px;
+        margin: 6px 0 6px 3px;
+        width: 13px;
+
+        &.bleeding {
+            background-color: @perio-alert-level-color;
+        }
+
+        &.suppuration {
+            background-color: @perio-chart-suppuration-color;
+        }
+
+        &.both {
+            background-color: @perio-alert-level-color;
+            border: @perio-chart-suppuration-color solid 3px;
+        }
+    }
+
+    &__toothNumber {
+        background-color: @brand-color_dark-gray;
+        border-radius: 50%;
+        clear: left;
+        font-size: 1.2em;
+        height: 30px;
+        margin: @brand-margin_xs 0 0 11px;
+        padding-top: 3px;
+        text-align: center;
+        width: 30px;        
+
+        &.missing {
+            opacity: 0;
+        }
+    }
+}

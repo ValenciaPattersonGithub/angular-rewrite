@@ -1,0 +1,40 @@
+﻿<!-- <business-nav></business-nav> -->
+<div ng-controller="TeamMemberIdentifierController">
+    <div class="userIdentifier">
+        <form name="frmTeamMemberIdentifier" role="form" novalidate>
+            <div class="rowFull white">
+                <div class="userIdentifier__header">
+                    <!--Breadcrumbs-->
+                    <ul class="userIdentifier__breadcrumb">
+                        <li ng-repeat="breadcrumb in dataForCrudOperation.BreadCrumbs">
+                            <ng-switch on="$last">
+                                <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n}}</span>
+                                <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePageState(breadcrumb)"><a href="">{{breadcrumb.name | i18n }}</a></span>
+                            </ng-switch>
+                        </li>
+                    </ul>
+                    <!--header-->
+                    <div class="userIdentifier__title">
+                        <h1>{{ 'Additional Identifiers' | i18n }}</h1>
+                    </div>
+                    <div class="userIdentifier__actions">
+                        <button id="createButton{{ $index }}" ng-click="createUserIdentifier()" check-auth-z="{{ !hasCreateAccess }}" class="btn btn-primary" icon="fa-plus">
+                            {{ '{0}' | i18n:['Additional Identifier'] }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="userIdentifier__body">
+                <!--show the master list if not in edit mode-->
+                <div ng-class="{'slide-animation': forward, 'slide-backward-animation': !forward}">
+                    <div class="userIdentifier__list">
+                        <div id="teamMemberIdentifiersGrid" kendo-grid="teamMemberIdentifiersGrid" options="teamMemberIdentifierKendo" ng-hide="personsLoading" check-auth-z="{{ hasViewAccess }}"></div>
+                        <div kendo-window="teamMemberIdentifiersConfirm" options="teamMemberIdentifierConfirmOpt" class="k-gird-confirm" check-auth-z="{{ !hasDeleteAccess }}"></div>
+                        <!--loading spinner-->
+                        <no-results loading="loading" ng-hide="!loading"></no-results>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

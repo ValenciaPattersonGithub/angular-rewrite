@@ -1,0 +1,82 @@
+﻿<div class="appointmentProviders">
+    <div ng-show="selectedProviders.length > 0 && appointment.Classification != 2" class="row appointmentProviders__body">
+        <div class="fuseGrid container pull-right">
+            <!--grid row headers-->
+            <div class="row header">
+                <div class="col-sm-3"></div>
+                <div ng-repeat="prov in selectedProviders">
+                    <div class="col-sm-4">
+                        <button ng-if="!readOnly" class="btn icon-button" type="button" ng-click="deleteProvider($index, prov.UserId)">
+                            <i class="far fa-times-circle"></i>
+                        </button>
+                        <span>{{prov.FirstName.charAt(0)}}. {{prov.LastName}}</span>
+                    </div>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+
+            <!--slots-->
+            <div class="row body padding-5" ng-repeat="slot in slots">
+                <div class="col-xs-3">
+                    <strong>{{slot.Start | date: 'h:mm a'}}</strong>
+                </div>
+                <div ng-repeat="prov in selectedProviders">
+                    <!-- TODO evaluate this -->
+                    <div class="col-xs-4">
+                        <input type="checkbox" id="{{prov.UserId}}_{{slot.Name}}" ng-if="isSelected(prov,slot)" ng-click="selectSlot(prov,slot)"
+                               checked="checked" ng-disabled="readOnly" />
+                        <input type="checkbox" id="{{prov.UserId}}_{{slot.Name}}" ng-if="!isSelected(prov,slot)" ng-click="selectSlot(prov,slot)"
+                               ng-disabled="readOnly" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- provider conflicts -->
+    <!-- TODO check localization.... -->
+
+
+    <div ng-if="!loading && appointment.Classification == 0">
+
+        <!-- display conflict no providers selected -->
+        <div ng-show="!appointment.Valid && selectedProviders.length == 0">
+            <p class="error">{{'Please select at least one provider.'}}</p>
+        </div>
+
+        <!-- display conflict no providers slots selected -->
+        <div ng-show="!appointment.Valid && providerSchedules.length == 0 && selectedProviders.length > 0">
+            <!--<p class="error">{{'Please select a time for the provider.'|i18n}}</p>-->
+        </div>
+
+        <!-- display conflict no providers selected -->
+        <div ng-show="providerValidationMissingHours && providerValidationMissingHours.length > 0" >
+            <div ng-repeat="item in providerValidationMissingHours">
+                <label id="lblProviderWarning" class="error">{{ 'Please select a time for the provider: {0}' | i18n:[item.ProviderName] }}</label>
+            </div>
+        </div>
+    </div>
+    <!-- TODO check localization -->
+
+    <div class="row">        
+        <div class="col-xs-12">
+            <!-- NOTE  filtered to remove conflicts with examining dentist user id-->
+            
+            <div ng-repeat="conflict in providerConflicts">
+                <label id="lblProviderLocationConflictWarning" ng-show="conflict.IsAnotherLocation" class="warning">
+                    {{ 'The provider {0} has another appointment at {1} from {2} to {3} {4}!' | i18n:[conflict.$$ProviderName,
+                    conflict.LocationName,conflict.$$From,conflict.$$To,conflict.tzAbbr] }}
+                </label>
+                <label id="lblProviderLocationConflictWarning" class="warning" ng-show="!conflict.IsAnotherLocation">
+                    {{ 'The provider {0} has another appointment from {1} to {2} {3}!' | i18n:[conflict.$$ProviderName,
+                    conflict.$$From,conflict.$$To,conflict.tzAbbr] }}
+                </label>
+            </div>            
+            <div ng-repeat="provider in outsideWorkingHoursConflicts">
+                <!-- display warning provider is not scheduled within provider hours -->
+                <label id="lblProviderWarning" class="warning">
+                    {{ 'You are scheduling {0} outside of scheduled hours.' | i18n:[provider.$$ProviderName]}}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

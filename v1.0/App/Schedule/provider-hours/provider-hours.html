@@ -1,0 +1,99 @@
+﻿<div class="provider-hours">
+    <div>
+
+        <ul class="provider-hours__breadcrumb">
+            <li ng-repeat="breadcrumb in breadCrumbs">
+                <ng-switch on="$last">
+                    <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+                    <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePath(breadcrumb)"><a>{{breadcrumb.name | i18n }}</a></span>
+                </ng-switch>
+            </li>
+        </ul>
+
+        <div class="row provider-hours__title">
+            <div class="col-sm-9">
+                <h1>{{::'Provider Hours at' | i18n}} {{currentLocation.name}}</h1>
+            </div>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="btnProviderOccurrences"
+                                class="btn btn-default fill-width pull-right ellipsis-overflow"
+                                check-auth-z="soar-sch-sprvhr-view"
+                                ng-click="showProviderOccurrences()">
+                            {{::'Provider Occurrences'|i18n}}
+                        </button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button id="btnManageIdealDays"
+                                class="btn btn-default fill-width pull-right ellipsis-overflow"
+                                check-auth-z="soar-sch-schidl-idlprv"
+                                ng-disabled="allowManageIdealDays==false"
+                                ng-click="manageIdealDays()">
+                            {{::'Ideal Day Templates'|i18n}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            <h4>{{::'Providers' | i18n}}</h4>
+            {{::'Drag and drop a Provider to a Room to set their hours' | i18n}}
+            <div class="provider-hours__providerFilter">
+                <div class="form-inline">
+                    <div class="form-group has-feedback">
+                        <input class="form-control" id="inputFilterProvider" placeholder="{{ ::'Search' | i18n }}" type="text" ng-model="providerFilterString" set-focus />
+                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="provider-hours__providerList">
+                <div>
+                    <span class="date-selector-btn padding-10"><i class="far fa-calendar-alt fa-2x"></i></span>
+                </div>
+                <div ng-repeat="prov in providers">
+                    <button class="btn soar-link icon-button pull-left provider-hours__showOnSchedule"
+                            id="btnShowOnSchedule{{index}}"
+                            ng-if="prov.ShowOnSchedule==true"
+                            ng-class="{notActive: (disableShowOnSchedule)}"
+                            ng-disabled="disableShowOnSchedule"
+                            ng-click="toggleShowOnSchedule(prov)">
+                        <i ng-show="true" class="fa fa-eye fa-2x"></i>
+                    </button>
+                    <button class="btn soar-link icon-button pull-left provider-hours__showOnScheduleInActive"
+                            id="btnShowOnScheduleFalse{{index}}"
+                            ng-if="prov.ShowOnSchedule==false"
+                            ng-class="{notActive: (disableShowOnSchedule)}"
+                            ng-disabled="disableShowOnSchedule"
+                            ng-click="toggleShowOnSchedule(prov)">
+                        <i ng-show="true" class="fa fa-eye-slash fa-2x"></i>
+                    </button>
+                    <div class="provider-hours__providerContainer"
+                         id="{{prov.UserId}}"
+                         check-auth-z="soar-sch-swkstp-add"
+                         ng-disabled="prov.ShowOnSchedule==false"
+                         ng-style="{ 'background-color': prov.Color ? prov.Color : 'grey' }"
+                         k-hint="hint"
+                         kendo-draggable k-dragstart="onDragStart">
+                        <div>
+                            <span>{{prov.FirstName}} {{prov.LastName}}</span><span ng-show="prov.ProfessionalDesignation">, {{prov.ProfessionalDesignation}}</span>
+                            <br />
+                            {{prov.ProviderType}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-10" k-drop="dropped" kendo-droptarget>
+            <div id="eventTooltip" kendo-tooltip k-options="tooltipOptions" class="k-group">
+                <div kendo-scheduler="scheduler" k-options="schedulerOptions">
+                    <div k-event-template class="provider-hours__eventTemplate" ng-style="{ 'background-color': dataItem.color > '' ? dataItem.color : 'grey' }" check-auth-z="soar-sch-swkstp-edit">
+                        {{dataItem.title}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

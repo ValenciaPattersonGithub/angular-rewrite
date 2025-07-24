@@ -1,0 +1,54 @@
+<div class="referral-container" id="referralContainer">
+    <div class="referral-header" id="referralHeader">
+        <span class="referral-title">{{'Referrals' | translate}}</span>
+    </div>
+    <hr>
+    <form class="form-horizontal" id="referral-form-horizontal" [formGroup]="Referrals" *ngIf="Referrals">
+        <div class="referral-content" id="referralContent">
+            <div class="referral-type">
+                <div class="referral-type-label-div mb-5">
+                    <app-label class="referral-type-label" [label]="'Referral Type'"></app-label>
+                </div>
+                <div class="referral-type-select-div">
+                    <select (change)='onReferralTypeSelected($event)' class="referral-selectlist"
+                        formControlName="ReferralType">
+                        <option value="" selected>{{'Select Referral Type' | translate}}</option>
+                        <option value="1">{{'Other' | translate}}</option>
+                        <option value="2">{{'Person' | translate}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="referral-source" *ngIf="showSources">
+                <div class="referral-source-label-div mb-5">
+                    <app-label class="referral-source-label" [label]="'Referral Source'"></app-label>
+                </div>
+                <div class="referral-source-select-div">
+                    <select class="referral-selectlist" formControlName="ReferralSourceId"
+                        [ngClass]="{'error-control': !Referrals.get('SourceDescription1').valid}"
+                        (change)='onReferralSelected($event)'>
+                        <option value="" selected>{{'Select Referral Source' | translate}}</option>
+                        <option [value]='source.value' *ngFor="let source of sources">
+                            {{source.text}}
+                        </option>
+
+                    </select>
+                </div>
+                <svg-icon [attr.id]="errctrlRefferalSource" class="error-icon" name="tooltipIcon"
+                    iconHeight="15px" tooltip="Please select a source" placement="top-error" delay="500"
+                    *ngIf="!Referrals.get('SourceDescription1').valid" iconWidth="15px"></svg-icon>
+            </div>
+            <div class="referral-person-search" *ngIf="showPersonSearch">
+                <div class="referral-plan-label mb-5">
+                    <app-label class="referral-plan-name-label" [label]="'Find a Person'"></app-label>
+                </div>
+                <div class="referral-plan-select">
+                    <responsible-party-search (selectedValueChanged)="onSelectedValueChanged($event)"
+                        [isValid]="Referrals.get('SourceDescription1').valid"
+                        [errorToolTipMessage]="'Please select a person'" [variation]="'adjustWidth'"
+                        [componentName]="'Referral'" [responsibleParty]="responsiblePersonName">
+                    </responsible-party-search>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

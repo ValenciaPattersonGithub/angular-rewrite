@@ -1,0 +1,41 @@
+.prodcollectionsummaryreport {
+    grid-template-columns: 6fr 2fr 2fr 2fr 0.05fr
+}
+.prodcollectionsummaryreportgroupheader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+.prodcollectionsummaryreportgroupfooter {
+    grid-template-columns: 6fr 2fr 2fr 2fr 0.05fr;
+    background: transparent;
+}
+.prodcollectionsummaryreportfooter {
+    grid-template-columns: 8fr 3fr 1fr 0.05fr
+}
+.groupheader{
+    position: sticky;
+    top: 85px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.prodcollectionsummaryreport{
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+            margin-left: 3px;
+        }
+      }
+}

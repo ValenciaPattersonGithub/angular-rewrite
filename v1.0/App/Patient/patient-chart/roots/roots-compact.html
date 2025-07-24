@@ -1,0 +1,5 @@
+﻿<div class="rootCmpct">
+    <button ng-disabled="disableSelection" ng-repeat="root in data" class="btn btn-default btnStateReset" id="tdRootValue{{root.RootAbbreviation}}" ng-click="selectRoot(root)" ng-show="showRootsForTooth(root)" ng-class="{active: root.selected }">
+        {{::root.RootAbbreviation | i18n}}
+    </button>
+</div>

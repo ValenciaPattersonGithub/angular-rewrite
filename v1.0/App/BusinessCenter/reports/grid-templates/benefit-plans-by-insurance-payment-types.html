@@ -1,0 +1,37 @@
+
+<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Benefits.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Benefits.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell"></th>
+                    <th class="col-sm-3 cell">{{ 'Insurance Payment Type' | i18n }}</th>
+                    <th class="col-sm-1 cell" colspan="1"></th>
+                    <th class="col-sm-3 cell">{{ 'Benefit Plan' | i18n }}</th>
+                    <th class="col-sm-1 cell" colspan="1"></th>
+                    <th class="col-sm-3 cell">{{ 'Plan/Group Number' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'" ng-repeat="benefit in data.Benefits">
+                <tr ng-if='benefit.BenefitsPlan.length > 0'>
+                    <th class="col-sm-1 cell"></th>
+                    <td class="col-sm-3 cell">{{benefit.InsurancePaymentType}}</td>
+                    <td class="col-sm-1 cell" colspan="1"></td>
+                    <td class="col-sm-3 cell" colspan="1"></td>
+                    <td class="col-sm-1 cell" colspan="1"></td>
+                    <td class="col-sm-3 cell" colspan="1"></td>
+                </tr>
+                <tr ng-repeat="benefitPlan in benefit.BenefitsPlan" ng-if='benefit.BenefitsPlan.length > 0'>
+                    <th class="col-sm-1 cell"></th>
+                    <td class="col-sm-3 cell"></td>
+                    <th class="col-sm-1 cell"></th>
+                    <td class="col-sm-3 cell">{{benefitPlan.BenefitPlan}}</td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-3 cell">{{benefitPlan.PlanGroupNumber}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

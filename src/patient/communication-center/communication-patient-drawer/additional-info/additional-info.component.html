@@ -1,0 +1,23 @@
+<div class="additionalInfoHeader" id="add-info-header">
+    <div class="additionalInfoHeader-title" id="add-info-header-title">
+        <span class="additionalInfoHeader-main-title" id="add-info-header-main-title">{{ 'Additional Info' | translate }}</span>
+    </div>
+    <div class="additionalInfoDetail" id="add-info-detail">
+        <span class="additionalInfoDetail-nextApplabel" id="add-info-detail-nextApp-label">{{ 'Next Appointment: ' | translate }}</span>
+        <span class="additionalInfoDetail-nextApp" id="add-info-detail-nextApp">{{nextApp.$$StartTimeLocal ?
+            (nextApp.$$StartTimeLocal | date:'MM/dd/yyyy hh:mm a') : 'N/A'}}</span>
+        <span class="additionalInfoDetail-nextprevlabel" id="add-info-detail-nextPrev-label">{{ 'Next Preventive: ' | translate }}</span>
+        <span class="additionalInfoDetail-nextprev" id="add-info-detail-nextPrev">{{prevCareDue ? (prevCareDue | date:'MM/dd/yyyy hh:mm a') :
+            'N/A'}}</span>
+        <span class="additionalInfoDetail-groupslabel" id="add-info-detail-group-label">{{ 'Groups: ' | translate }}</span>
+        <span class="additionalInfoDetail-groups" id="add-info-detail-group">
+            <span class="additionalInfoDetail-subgroups" *ngFor="let group of patientGroups" id="add-info-detail-description">{{group ? group : 'N/A' }}<br></span>
+            <span *ngIf="!(patientGroups && patientGroups.length)" id="add-info-detail-na">{{'N/A' | translate}}</span>
+        </span>
+        <span class="additionalInfoDetail-additionalIdentifierslabel" id="add-info-detail-add-Identifiers-label">{{ 'Additional Identifiers: ' | translate}}</span>
+        <Span class="additionalInfoDetail-additionalIdentifiers" id="add-info-detail-add-Identifiers">
+            <span class="additionalInfoDetail-subadditionalIdentifiers" *ngFor="let identifier of additionalIdentifiers" id="add-info-detail-additionalIdentifiers">{{identifier ? identifier : 'N/A'}}<br></span>
+            <span *ngIf="!(additionalIdentifiers && additionalIdentifiers.length)" id="add-info-detail-Identifiers-na">{{'N/A' | translate}}</span>
+        </Span>
+    </div>
+</div>

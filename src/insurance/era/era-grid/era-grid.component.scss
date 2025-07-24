@@ -1,0 +1,145 @@
+@import "variables";
+
+.era {
+    grid-template-columns: 1fr 1fr 2fr 1fr 1fr 1fr 3%;
+}
+
+.era-new {
+    grid-template-columns: 1fr 1fr 1fr 1.5fr 0.7fr 1.2fr 1fr 0.5fr 3%;
+}
+
+.claim {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 3%;
+}
+
+.grid {
+    display: grid;
+
+    &.header {
+        border: 1px solid #eeeeee;
+        color: $action-blue;
+        font-weight: bold;
+
+        &.era {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 2;
+
+            &.locationInactive {
+                top: 80px;
+            }
+        }
+
+        >div {
+            border-right: 1px solid #eeeeee;
+            padding: 10px;
+
+            .sort {
+                float: right;
+                padding-top: 3px;
+            }
+
+            &:last-child {
+                border: 0;
+            }
+
+            &:not(:last-child):hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &.item {
+        color: #555555;
+        border: 1px solid #eeeeee;
+        border-top: 0;
+
+        >div {
+            border-right: 1px solid #eeeeee;
+            padding: 10px;
+
+            span {
+                color: $action-blue;
+
+                &.disabled {
+                    color: $disabled-grey;
+                }
+
+                &:not(.fas) {
+                    pointer-events: auto;
+                }
+            }
+
+            &.ellipsis {
+                padding: 0;
+
+                &.disabled {
+                    color: $disabled-grey;
+                    pointer-events: auto;
+                }
+            }
+
+            &:not(.ellipsis) {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                span {
+                    width: 15px;
+                }
+            }
+
+            &:last-child {
+                border: 0;
+                color: $action-blue;
+            }
+
+            &.click:hover,
+            &:last-child:hover {
+                cursor: pointer;
+            }
+        }
+
+        &:nth-child(even) {
+            background: $bg-grey;
+        }
+
+        &.disabled {
+            color: $disabled-grey;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    }
+}
+
+.expand {
+    padding: 19px 16px 14px 15px;
+    width: 117100%0px;
+    fill: #f4f3f5;
+    box-shadow: inset 0px 5px 7px rgba(0, 0, 0, 0.2);
+}
+
+.showMoreSection {
+    display: flex;
+    padding: 10px;
+    width: 100%;
+    justify-content: center;
+
+    .showMoreButton {
+        border-radius: 15px;
+        text-align: center;
+        padding: 5px;
+        width: 20%;
+        box-shadow: none;
+    }
+}
+
+.loading {
+    text-align: center;
+    font-size: 20px;
+}
+
+.tooltip-container {
+    margin: 0 7px;
+}

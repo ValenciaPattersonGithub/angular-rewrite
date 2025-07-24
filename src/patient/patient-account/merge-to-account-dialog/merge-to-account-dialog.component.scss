@@ -1,0 +1,129 @@
+@import 'variables';
+
+// NOTE, most of this should be moved to an appwide file after styleguide in place.
+// stuff like borders and font size aren't usually needed at a module level
+// some of this is patterned after payment types
+
+.merge-to-account-dialog {  
+  font-family: $global-font-family;
+  font-size: 12px;
+  width: 500px;
+  border-radius: 5px;
+  background-color: $polar-white;
+  background-size: cover;
+  
+  .k-window .k-window-content {
+    padding: 0px;
+  }
+
+  .k-dialog .k-content {
+    padding: 0px;    
+  }
+
+  .dialog-header {
+    font-size: 18px;
+    padding: 10px 15px 15px 15px;      
+    color: $text-black;
+    text-decoration: none solid $text-black;
+    border-bottom: 1px solid $page-content-divider-color;    
+  }
+
+  .dialog-content {
+    font-size: 14px;
+    padding: 15px;  
+    color: $text-black;
+    text-decoration: none solid $text-black;
+  }
+
+  .dialog-sub-header {
+    line-height: 18px;
+  }
+
+  .dialog-footer {    
+    padding: 15px;
+    color: $text-black;
+    text-decoration: none solid $text-black;
+    border-top: 1px solid $border-grey;
+  }
+
+  .title-bar { 
+    padding:15px;   
+    border-bottom: 1px solid $page-content-divider-color;    
+  }  
+
+  .dialog-title {
+    font-size: 18px;
+    padding-left: 15px;      
+    color: $text-black;
+    text-decoration: none solid $text-black;
+  }
+
+  .btn_toolbar{
+    padding: 10px 0;
+    float:right;
+  }
+
+  .default_button  {
+    background-color: $bg-grey;
+    background-image: none;
+    background-position: center center;
+    background-repeat: repeat;
+    background-size: cover;
+    border: 1px solid $action-blue;
+    border-radius: 5px;
+    margin-left:10px;
+    padding: 0px;
+    width: 125px;
+    height: 25px;
+    color: $action-blue;
+    font-size: 12px;
+    text-align: center;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+    font-family: $global-font-family !important;
+    margin-top: -4px;
+    
+  }
+  button.default_button:disabled,
+  .default_button[disabled]{
+    cursor: not-allowed;         
+    border: 1px solid $disabled-grey;
+    color: $disabled-grey;
+    text-decoration: none solid $disabled-grey;
+  }
+  button.default_button:hover,
+  button.default_button:active,
+  button.default_button:focus {
+    border-color: $light-action-blue;
+  }
+
+
+  .primary_button {
+    background-color: $page-primary-button-background;
+    background-image: none;
+    background-position: center center;
+    background-repeat: repeat;
+    background-size: cover;
+    border-radius: 5px;
+    border-width: 0px;
+    border-color: $disabledLink;
+    border-style: solid;
+    padding: 0px;
+    width: 125px;
+    height: 25px;
+    margin-left:10px;
+    color: $Tooltip-text-color;
+    font-size: 12px;
+    text-align: center;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+    font-family: $global-font-family !important;
+    margin-top: -4px;
+  }
+  button.primary_button.disabled {
+    cursor: not-allowed;
+  }
+}
+

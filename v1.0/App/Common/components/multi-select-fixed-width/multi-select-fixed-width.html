@@ -1,0 +1,62 @@
+﻿<div id="multi-select" class="multi-select">
+    <div class="dropdown" ng-class="{'open': open }" onclick="event.stopPropagation(); window.event.cancelBubble = true;">
+        <button id="btn{{id}}ToggleMultiSelect" class="btn multi-select__button" type="button" aria-expanded="false" ng-class="{ 'border-bottom-none': open }" ng-click="open = !open" ng-disabled="msDisabled">
+            <span class="multi-select__button__text">
+                <b ng-hide="selectedCount == list.length || selectedCount == 0 && !allowBlank">
+                    {{ selectedCount }}
+                </b>
+                <span ng-show="selectedCount == list.length || selectedCount == 0 && !allowBlank" ng-bind="::('All' | i18n)"></span>
+                {{ type | i18n }}
+            </span>
+            <span class="fa fa-caret-down"></span>
+        </button>
+        <!-- calculating the width was causing digest cycles on schedule page hurting peformance and the method used to style the min-width was being called all the time.-->
+        <ul class="dropdown-menu" style="min-width:400px;" aria-labelledby="btn{{id}}ToggleMultiSelect">
+            <li role="separator"></li>
+            <li>
+                <a id="btn{{id}}ToggleAll" class="truncate multi-select__list-item__link" ng-click="toggleAll()">
+                    <span id="selectAll" class="dropdown-menu__icon fa far" ng-class="{true: 'fa-check-square', false: 'fa-square'}[selectedCount == list.length]"></span>
+                    <span class="">
+                        {{ selectAllLabel }}
+                    </span>
+                </a>
+            </li>
+        </ul>
+        <ul ng-if="!isGrouped" id="msRepeater{{id}}" style="min-width:400px;" class="dropdown-menu multi-select__repeater" aria-labelledby="btn{{id}}ToggleMultiSelect">
+            <li ng-repeat="item in list">
+                <a id="btn{{id}}MultiSelectItem{{$index}}" class="truncate" ng-click="clickItem(item)">
+                    <span class="dropdown-menu__icon fa far" ng-class="{true: 'fa-check-square', false: 'fa-square'}[item.Selected]"></span>
+                    <span  ng-class="{'bold':item.highlighted==true, 'inactive':item.IsActive === false}">
+                        {{ displayFunction ? displayFunction(item) : item[displayField] }} 
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+        <ul ng-if="isGrouped" id="msRepeater{{id}}" style="min-width:400px;" class="dropdown-menu multi-select__repeater" aria-labelledby="btn{{id}}ToggleMultiSelect">
+            <li ng-repeat="(key, value) in list | groupBy:'Status'">
+                <span class="ui-select-choices-group-label dropdown-header">{{ {true: 'Pending Inactive', false: key}[key == "Pending"] }}</span>
+                <ul class="list-unstyled">
+                    <li class="grouped-anchor" ng-if="hasMultipleGroups">
+                        <a id="btn{{id}}ToggleAll" class="truncate multi-select__list-item__link grouped-anchor grouped" ng-click="toggleSelected(key)">
+                            <!-- this is still calling a method all the time ... but we are doing it 1/2 as much as before ... need to come back and fix this
+                            after I think about it a bit. -->
+                            <span id="icon{{key}}" class="dropdown-menu__icon fa far" ng-class="{true: 'fa-check-square', false: 'fa-square'}[selectedAll(key)]"></span>
+                            <span class="" ng-bind="selectAllLabel">
+                            </span>
+                        </a>
+                    </li>
+                    <li ng-repeat="item in value" class="grouped-anchor">
+                        <a id="btn{{id}}MultiSelectItem{{$index}}" class="truncate grouped-anchor grouped" ng-click="clickItem(item)">
+                            <span class="dropdown-menu__icon fa far" ng-class="{true: 'fa-check-square', false: 'fa-square'}[item.Selected]"></span>
+                            <span ng-class="{'bold':item.highlighted==true, 'inactive':item.IsActive === false}">
+                                {{ displayFunction ? displayFunction(item) : item[displayField] }} 
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <hr class="grouped-hr">
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="encounter-cart">
+    <div class="form-row">
+        <div class="panel">
+            <div class="form-row">
+                <div class="col-sm-12 title-bar">
+                    <div class="col-sm-4">
+                        <div class="text-left page_sub_title">
+                            {{ title }}
+                            <div class="service_title" *ngFor="let service of sortServicesBy('InsuranceOrder'); let isLast = last; let i = index">
+                                <a (click)="scrollToService('#encounterCartCard'+i)">{{service.Code}}</a>{{isLast ? '' : ', '}}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="float-right">
+                            <span>
+                                <app-button id="btnCancel" class="command-button" variation="secondary" (onClick)="cancelClicked()" buttonLabel="{{ 'Cancel' | translate }}"></app-button>
+                            </span>
+                            <span>
+                                <app-button id="btnResetAllowedAmt" class="command-button" variation="secondary" [isDisabled]="isResetAllowedAmountsDisabled" (onClick)="confirmResetAllowedAmounts()" buttonLabel="{{ 'Reset Allowed Amounts' | translate }}"></app-button>
+                            </span>
+                            <span>
+                                <app-button id="btnAddService" class="command-button" variation="secondary" [isDisabled]="isLoadingData" (onClick)="addServiceClicked()" buttonLabel="{{ '+ Add Service to Encounter' | translate }}"></app-button>
+                            </span>
+                            <span>
+                                <app-button id="btnSaveAsPending" class="command-button" variation="secondary" [isDisabled]="!canSave || !promisesComplete || !hasChanges  || services.length <= 0 || isRecalculating" (onClick)="saveAsPendingClicked()" 
+                                            buttonLabel="{{ 'Save as Pending' | translate }}"></app-button>
+                            </span>
+                            <span kendoTooltip position="right" tooltipClass="app-tooltip" title="{{ checkoutButtonTooltip }}">
+                                <app-button id="btnStartCheckout" class="command-button" variation="primary" [isDisabled]="services.length <= 0 || !canSave || !promisesComplete || hasCheckoutPermissions===false || isRecalculating" (onClick)="startCheckoutClicked()" check-auth-z="soar-acct-enctr-chkout" buttonLabel="{{ (isEditEncounter ? 'Continue Checkout' : 'Start Checkout') | translate }}"></app-button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="services.length > 0">
+                    <div class="col-sm-1 date">
+                        <label class="control-label">{{ 'Set date for all services to:' | translate }}</label>
+                        <app-date-picker [(value)]="serviceDate" 
+                                         [maxDate]="maxServiceDate"
+                                         [minDate]="minServiceDate"
+                                         (dateChanged)="onServiceDateChanged($event)">
+                        </app-date-picker>
+                        <p class="error" *ngIf="!isValidDateRange">{{invaliDate}}</p>
+                    </div>
+                    <div class="col-sm-2 provider-on-claims-update">
+                        <label class="control-label">{{ 'Set provider on all services to:' | translate }}</label>
+                        <provider-selector id="cartSetAllProvidersOnService" [(selectedProvider)]="providerOnServices"
+                                           (providerChanged)="onProviderOnServicesChanged($event)"
+                                           [providerTypeIds]="[1,2,3,5]"
+                                           [patientInfo]="patientData">
+                        </provider-selector>
+                    </div>
+                    <div class="col-sm-2 provider-on-claims-update">
+                        <label class="control-label">{{ 'Set provider on all claims to:' | translate }}</label>
+                        <practice-provider-selector id="cartSetAllProvidersOnClaims" [(selectedProviderId)]="providerOnClaims" [providerOnClaimsOnly]="true" (selectedProviderIdChange)="onProviderOnClaimsChanged($event)">
+                        </practice-provider-selector>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="panel">
+                <div class="row" *ngFor="let service of sortServicesBy('InsuranceOrder') as sortedServices; let i = index">
+                    <encounter-cart-card id="encounterCartCard{{i}}" [(service)]="sortedServices[i]" [benefitPlans]="patientBenefitPlans" (serviceClosed)="onRemoveService($event)"
+                                         (serviceChange)="onServiceChanged($event)"                                          
+                                         (transactionRecalculated)="onTransactionRecalculated($event)"
+                                         (changesInProgress)="onChangesInProgress($event)"></encounter-cart-card>
+                </div>
+            </div>        
+            
+            <encounter-cart-balance-bar #encounterBar [services]="services"></encounter-cart-balance-bar>
+
+            <div class="col-sm-12 footer-bar">
+                <div class="float-right">
+                    <span>
+                        <app-button id="btnCancel" class="command-button" variation="secondary" (onClick)="cancelClicked()" buttonLabel="{{ 'Cancel' | translate }}"></app-button>
+                    </span>
+                    <span>
+                        <app-button id="btnResetAllowedAmt" class="command-button" variation="secondary" [isDisabled]="isResetAllowedAmountsDisabled" (onClick)="confirmResetAllowedAmounts()" buttonLabel="{{ 'Reset Allowed Amounts' | translate }}"></app-button>
+                    </span>
+                    <span>
+                        <app-button id="btnAddService" class="command-button" variation="secondary" [isDisabled]="isLoadingData" (onClick)="addServiceClicked()" buttonLabel="{{ '+ Add Service to Encounter' | translate }}"></app-button>
+                    </span>
+                    <span>
+                        <app-button id="btnSaveAsPending" class="command-button" variation="secondary" [isDisabled]="!canSave || !promisesComplete || !hasChanges  || services.length <= 0 || isRecalculating" (onClick)="saveAsPendingClicked()"
+                                    buttonLabel="{{ 'Save as Pending' | translate }}"></app-button>
+                    </span>
+                    <span kendoTooltip position="right" tooltipClass="app-tooltip" title="{{ checkoutButtonTooltip }}">
+                        <app-button id="btnStartCheckout" class="command-button" variation="primary" [isDisabled]="services.length <= 0 || !canSave || !promisesComplete || hasCheckoutPermissions===false || isRecalculating" (onClick)="startCheckoutClicked()" check-auth-z="soar-acct-enctr-chkout" buttonLabel="{{ (isEditEncounter ? 'Continue Checkout' : 'Start Checkout') | translate }}"></app-button>
+                    </span>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+</div>

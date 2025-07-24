@@ -1,0 +1,6 @@
+<ng-container ng-if="migrationFeatureFlagsLoaded && useConverted"> 
+    <appointment-types-landing-ng></appointment-types-landing-ng>
+</ng-container>
+<ng-container ng-if="migrationFeatureFlagsLoaded && (! useConverted)">
+    <appointment-types-landing-template-original></appointment-types-landing-template-original>
+</ng-container>

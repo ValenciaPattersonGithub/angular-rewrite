@@ -1,0 +1,45 @@
+.encounterscarrierreport {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+}
+.encounterscarrierreportgroupHeader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+
+.groupheader{
+    padding-right: 0.5%;
+    position: sticky;
+    //top: 110px;
+    background: white;
+    z-index: 1;
+    &.locationheader{
+       top: 110px;
+    }
+    &.carrierheader{
+        top: 150px;
+     }
+}
+.encounterscarrierreportfooter {
+    grid-template-columns: 9fr 1fr 1fr 1fr
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.encounterscarrierreport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 5px;
+            align-items: center;
+            margin-left: -5px;
+        }
+      }
+}

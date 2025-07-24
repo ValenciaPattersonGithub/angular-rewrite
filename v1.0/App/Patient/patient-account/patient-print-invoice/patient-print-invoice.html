@@ -1,0 +1,209 @@
+﻿<div class="invoicePrint" ng-if="invoiceDto">
+    <div class="invoicePrint__practice">
+        <div class="width-100p">
+            <span class="invoicePrint__headingBlack">{{'make checks payable to:' | i18n}}</span><br />
+            <div class="top-info-style">
+                {{invoiceDto.LocationNameLine1}}
+            </div>
+            <div class="top-info-style" ng-if="invoiceDto.LocationNameLine2">{{invoiceDto.LocationNameLine2}}</div>
+            <div class="top-info-style">
+                {{invoiceDto.LocationAddressLine1}} {{invoiceDto.LocationAddressLine2}}
+            </div>
+            <div class="top-info-style">
+                {{invoiceDto.LocationCityStateZip}}
+            </div>
+        </div>
+        <div class="invoicePrint__print">
+            <button id="btnPrint" class="btn btn-default" onclick="window.print();">
+                <i class="fa fa-print"></i>{{'Print this invoice' | i18n}}
+            </button>
+        </div>
+    </div>
+    <div class="invoicePrint__title">
+        {{'Invoice' | i18n}}
+    </div>
+    <hr />
+    <div class="invoicePrint__patient">
+        <div  class="width-100p">
+            <span class="invoicePrint__headingBlack">{{'addressee:' | i18n}}</span><br />
+            <div class="top-info-style">{{invoiceDto.AccountName}}</div>
+            <div class="top-info-style">
+                {{invoiceDto.AccountAddressLine1}}
+            </div>
+            <div class="top-info-style" ng-if="invoiceDto.AccountAddressLine2">{{invoiceDto.AccountAddressLine2}}</div>
+            <div class="top-info-style">
+                {{invoiceDto.AccountCityStateZip}}
+            </div>
+        </div>
+        <div class="invoicePrint__paymentOverview">
+            <div class="invoicePrint__paymentOverview--container">
+                <div class="invoicePrint__headingBlue">{{invoiceDate | i18n}}</div>
+                <div id="invoicePrint_DisplayDate">{{invoiceDto.InvoiceDate | toDisplayDate}}</div>
+            </div>
+            <div class="invoicePrint__paymentOverview--container invoicePrint__paymentOverview--blue">
+                <div>{{'due now' | i18n}}</div>
+                <div id="invoicePrint_DueNow" ng-if="invoiceDto.DueNow >= 0">{{ invoiceDto.DueNow | absoluteValue | currency}}</div>
+                <div id="invoicePrint_DueNow" ng-if="invoiceDto.DueNow < 0">({{ invoiceDto.DueNow | absoluteValue | currency}})</div>
+            </div>
+        </div>
+    </div>
+    <div class="invoicePrint__encounter">
+        <div>
+            <span>{{'date' | i18n}}</span>
+            <span>{{'patient' | i18n}}</span>
+            <span>{{'description' | i18n}}</span>
+            <span>{{'amount' | i18n}}</span>
+        </div>
+        <hr />
+        <div class="invoicePrint__encounterDetail" ng-repeat="item in invoiceDto.Details">
+            <span id="invoicePrint_Date{{$index}}">{{item.TransactionDate | toDisplayDate}}</span>
+            <span id="invoicePrint_PatientName{{$index}}" class="invoice-break-word">{{item.PatientName}}</span>
+            <span id="invoicePrint_Description{{$index}}" class="invoice_desc">
+                {{item.TransactionDescription}}
+            </span>
+            <span id="invoicePrint_Amount{{$index}}" ng-if="item.Amount >= 0">{{item.Amount | currency}}&nbsp;</span>
+            <span id="invoicePrint_Amount{{$index}}" ng-if="item.Amount < 0">({{item.Amount * -1 | currency}})</span>
+            <div class="row invoice_marginRight" ng-if="item.Tax">
+                <!---->
+                <div class="col-lg-10 col-xs-10 text-right invoice_paddingRight">{{'Tax' | i18n}}</div>
+                <div class="col-lg-2 col-xs-2 text-right invoice_paddingRightAmount">{{item.Tax | currency}}</div>
+            </div>
+            <div class="row invoice_marginRight" ng-if="item.Discount">
+                <div class="col-lg-10 col-xs-10 text-right invoice_paddingRight">{{'Discount' | i18n}}</div>
+                <div class="col-lg-2 col-xs-2 text-right invoice_paddingRightAmount">({{item.Discount | currency}})</div>
+            </div>
+            <!--PaymentGatewayDetail-->
+            <div ng-show="item.PaymentGatewayDetail">
+                <div class="invoicePrint__receiptDetails">
+                    <div class="invoicePrint__receiptContainer pull-right" style="width:70%;">
+
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'Entry Legend'|i18n  }}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptEntryLegend}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'Entry Method'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptEntryMethod}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'Approval Code'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptApprovalCode}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'AC'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptApplicationCryptogram}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'ATC'|i18n }}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptApplicationTransactionCounter}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'AID'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptApplicationIdentifier}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'AID NAME'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptApplicationPreferredName}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'TVR'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptTerminalVerificationResults}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'TSI'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptTransactionStatusInformation}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'Resp CD'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptAuthorizationResponseCode}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'TRN REF'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptTransactionReferenceNumber}}&nbsp;/&nbsp;</span>
+                        </div>
+                        <div class="invoicePrint__receiptItem">
+                            <span class="invoicePrint__receiptItemLabel">{{'VAL CODE'|i18n}}</span>
+                            <span class="invoicePrint__receiptItemValue">{{item.PaymentGatewayDetail.ReceiptValidationCode}}&nbsp;/&nbsp;</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="invoicePrint__receiptFooter"></div>
+        </div>
+    </div>
+    <hr />
+    <div class="invoicePrint__totals">
+        <div>
+            {{hCharges | i18n}}
+            <div class="invoicePrint__totalsValue" id="invoicePrint_Charges">{{invoiceDto.TodaysCharges | currency}}</div>
+        </div>
+        <div>
+            {{'Other Balance' | i18n}}
+            <div id="invoicePrint_PreviousBal" ng-if="hasPreviousBalance && invoiceDto.PreviousBalance >= 0" class="invoicePrint__totalsValue">{{ invoiceDto.PreviousBalance | absoluteValue | currency  }}</div>
+            <div id="invoicePrint_PreviousBal" ng-if="hasPreviousBalance && invoiceDto.PreviousBalance < 0" class="invoicePrint__totalsValue">({{ invoiceDto.PreviousBalance | absoluteValue | currency }})</div>
+            <div id="noinvoicePrint_PreviousBalance " ng-if="!hasPreviousBalance" class="invoicePrint__totalsValue">{{'not included'}}</div>
+        </div>
+        <div>
+            {{'Estimated Insurance' | i18n}}
+            <div id="invoicePrint_EstimatedInsurance" ng-if="hasEstimatedInsurance && invoiceDto.InsuranceEstimated <= 0" class="invoicePrint__totalsValue">{{ invoiceDto.InsuranceEstimated | absoluteValue | currency}}</div>
+            <div id="invoicePrint_EstimatedInsurance" ng-if="hasEstimatedInsurance && invoiceDto.InsuranceEstimated > 0" class="invoicePrint__totalsValue">({{ invoiceDto.InsuranceEstimated | absoluteValue | currency}})</div>
+            <div id="noinvoicePrint_EstInsurance" ng-if="!hasEstimatedInsurance" class="invoicePrint__totalsValue">{{'not included'}}</div>
+        </div>
+        <div>
+            {{hPayments | i18n}}
+            <div id="invoicePrint_Payments" class="invoicePrint__totalsValue" ng-if="invoiceDto.TodaysAccountPayments >= 0"> {{ invoiceDto.TodaysAccountPayments | absoluteValue | currency }}</div>
+            <div id="invoicePrint_Payments" class="invoicePrint__totalsValue" ng-if="invoiceDto.TodaysAccountPayments < 0">({{ invoiceDto.TodaysAccountPayments | absoluteValue | currency}})</div>
+        </div>
+        <div>
+            {{hAdjustments | i18n}}
+            <div id="invoicePrint_Adjustments" ng-if="invoiceDto.TodaysAdjustments >= 0" class="invoicePrint__totalsValue">{{ invoiceDto.TodaysAdjustments | absoluteValue | currency}}</div>
+            <div id="invoicePrint_Adjustments" ng-if="invoiceDto.TodaysAdjustments < 0" class="invoicePrint__totalsValue">({{ invoiceDto.TodaysAdjustments | absoluteValue | currency}})</div>
+        </div>
+        <div>
+            {{'Due Now' | i18n}}
+            <div id="invoicePrint_TotalDueNow" ng-if="invoiceDto.DueNow >= 0" class="invoicePrint__totalsValue">{{ invoiceDto.DueNow | absoluteValue | currency}}</div>
+                <div id="invoicePrint_TotalDueNow" ng-if="invoiceDto.DueNow < 0" class="invoicePrint__totalsValue">({{ invoiceDto.DueNow | absoluteValue | currency}})</div>
+        </div>
+    </div>
+    <div class="invoicePrint__futureAppts">
+        <span class="invoicePrint__headingBlackNoUppercase">{{'Future Appointments' | i18n}}</span><br />
+        <div>
+            <div>{{'patient' | i18n}}</div>
+            <div>{{'date' | i18n}}</div>
+            <div>{{'appointment type' | i18n}}</div>
+            <div>{{'duration' | i18n}}</div>
+        </div>
+        <hr />
+        <div ng-if="hasFutureAppointment" ng-repeat="item in invoiceDto.FutureAppointments">
+            <div id="FuturePatient{{$index}}" class="invoice-break-word">{{item.PatientName}}</div>
+            <div id="FutureDate{{$index}}">{{item.StartTime}}</div>
+            <div id="FutureAppiontmentType{{$index}}">{{item.AppointmentType}}</div>
+            <div id="FutureDuration{{$index}}">{{item.Duration}} {{'minutes' | i18n}}</div>
+        </div>
+        <div ng-if="!hasFutureAppointment">
+            <div id="noFutureAppt">{{'not included'}}</div>
+        </div>
+    </div>
+    <div class="invoicePrint__notes">
+        <span class="invoicePrint__headingBlackNoUppercase">{{'Notes' | i18n}}</span><br />
+        <div id="Print_Notes">
+            {{invoiceDto.Note}}
+        </div>
+    </div>
+    <div class="invoicePrint__message">
+        <div ng-if="invoiceDto.Message">
+            {{invoiceDto.Message}}
+        </div>
+    </div>
+    <div class="invoicePrint__footer">
+        <div class="invoicePrint__ada">
+            <img src="Images/logo-ada.png" />
+            <div>
+                {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT).' | i18n}}
+                <br />
+                {{'Copyright &copy; American Dental Association (ADA). All rights reserved.' | i18n}}
+            </div>
+        </div>
+    </div>
+</div>

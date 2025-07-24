@@ -1,0 +1,42 @@
+<div class="userLoginTimePanel">
+
+    <div class="userLoginTimePanel__header">{{title | translate}}</div>
+    <div class="userLoginTimePanel__description">
+        {{description | translate}}        
+    </div>
+    <div class="userLoginTimePanel__daySelectors">
+        
+        <div class="userLoginTimePanel__daySelectorRow">
+            <div class="userLoginTimePanel__daySelectorButton" *ngFor="let day of this.daysOfWeek">
+                <app-button-onoff id="UserLoginTimeDay{{day.Text}}" [buttonText]="day.Text" [(isChecked)]="day.Selected"
+                                  (checkChanged)="dayToggled($event, day)"></app-button-onoff>                
+            </div>            
+        </div>
+    </div>
+
+    <div *ngIf="showTimezone" class="userLoginTimePanel__section">     
+        <label class="userLoginTimePanel__label" for="timeZones">{{timeZoneLabel | translate}}</label>
+        <div>
+            <app-select [fieldId]="'timeZones'" [value] = "timezone" size="large" [listItems]="this.timeZones" (selectionChange)="timezoneChange($event)"></app-select>
+        </div>
+    </div>
+
+
+    <div class="userLoginTimePanel__section">
+       {{workingHoursSection | translate}} 
+    </div>
+
+    <div class="userLoginTimePanel__section" *ngFor="let day of this.daysOfWeek">
+        <div *ngIf="day.Selected==true">
+            <label class="userLoginTimePanel__label" for="test">{{day.Name | translate}}</label>
+            <div name="test" class="userLoginTimePanel__startAndEndTimes">
+                <app-select [fieldId]="day.Text + '-startTime'" size="small" [isDisabled]="day.IsDayDisabled" [(value)]="day.StartTime" [listItems]="this.times" (selectionChange)="startTimeChanged($event, day)"></app-select>
+                <span class="userLoginTimePanel__startAndEndTimesMiddle">{{toLabel | translate}}</span>
+                <app-select [fieldId]="day.Text + '-endTime'" size="small" [isDisabled]="day.IsDayDisabled" [(value)]="day.EndTime" [listItems]="this.times" (selectionChange)="endTimeChanged($event, day)"></app-select>
+                <app-check-box class="userLoginTimePanel__startAndEndTimesNoAccess" [label]="'No Access All Day'" id="chkUltDisableAccess{{day.Name}}" [value]="day.IsDayDisabled"
+                    [checked]="day.IsDayDisabled" (checkChanged)="toggleIsDayDisabled($event, day)"></app-check-box>
+                <span *ngIf="!day.IsValid" class="userLoginTimePanel__timeError">Start Time must be before End Time</span>
+            </div>
+        </div>
+    </div>
+</div>

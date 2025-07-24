@@ -1,0 +1,144 @@
+﻿.prevCarePanel {
+    &__primary{
+        .clearfix;
+       
+    }
+    &__due,
+    &__nextAppt {
+        .make-md-column(6);
+
+        > span {
+            display: block;
+        }
+    }   
+    &__due {
+        padding-left: 0;
+    }  
+    &__dueDays {
+        font-size: @brand-font_xl;
+    }
+    &__nextAppt {
+        border-left: @brand-border;
+        padding-right: 0;
+    }   
+    &__nextApptDate {
+        font-size: @brand-font_xl;
+    }   
+    &__nextApptName {
+        font-weight: @brand-font_heavy;
+    }  
+    &__secondary{
+        display: block;
+        width:100%;
+    }
+    &__name {
+        h2 {
+            margin-top: 0;
+            font-size: @brand-font_xl;
+        }
+    }
+    &__info {
+        .clearfix;
+        padding-bottom: @brand-padding_sm;
+    }
+    &__grid {
+        /*thead {
+            display: none;
+        }
+        .k-grid-header {
+            display: none;
+        }*/
+        .k-grid-content {
+            overflow: visible;
+            tr td {
+                overflow: visible;
+            }
+
+            tbody{
+                tr:first-child .chkSetDueDate,tr:nth-child(2) .chkSetDueDate{
+                display:block !important;
+                text-align:center;
+            }
+            }
+        }
+    }
+    &__editFrequency {
+        display: inline-block;
+        margin-right: @brand-margin_sm;
+        position: relative;
+        width: 40%;
+    }
+    &__input {
+        width: 100%;
+    }
+    &__reset {
+        color: @remove-color;
+        position: absolute;
+        right: 5px;
+        top: 6px;
+    }
+    &__title {
+
+        h1 {
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_horizontal;
+            padding-bottom: @brand-padding_horizontal;
+        }
+
+    }
+    &__header {
+        .clearfix;
+        font-weight: @brand-font_heavy;
+        display: inline-block;        
+        float: left;
+        width:100%;        
+    }
+    &__separator {
+        padding: 0 @brand-padding_xs;
+    }
+    &__actions {
+        margin-bottom: @brand-margin_sm;
+                
+        .btn:first-child {
+            padding-left: 0;
+        }            
+    }
+    &__detailTgl {
+        .btn;
+        .btn-link;
+        padding-left: 0;
+    }
+    &__nextApptDate {
+        font-size: @brand-font_xl;
+        color: #66b5d7;;
+        cursor: pointer;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline; 
+        }
+    }
+}
+
+.prevCareProgress {
+    margin-top: @brand-margin_sm;
+
+    &__header {
+        .clearfix;
+        font-weight: @brand-font_heavy;
+        display: inline-block;        
+        float: left;
+        width:100%;        
+    }
+    &__details {
+        .clearfix;
+    }
+    &__due {
+        float: right;
+    }
+}
+
+/*
+       
+*/

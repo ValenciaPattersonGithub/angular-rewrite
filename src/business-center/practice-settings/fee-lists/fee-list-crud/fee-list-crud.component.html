@@ -1,0 +1,251 @@
+<div class="rowFull white feeLists">
+  <form name="frmfeeCrud">
+  <div class="feeLists__header">
+    <div class="feeLists__title" *ngIf="feeListData?.Create">
+      <h1>{{ 'Create a Location Fee List'| translate }}</h1>
+    </div>
+    <div class="feeLists__title" *ngIf="feeListData?.ViewOnly">
+      <h1>{{ feeListData?.FeeList?.Name }}</h1>
+    </div>
+    <div class="feeLists__title" *ngIf="feeListData?.EditMode">
+      <h1>
+        {{'Edit' | translate }} {{ feeListData?.FeeList?.Name }}
+        <!--Draft label based on draft date-->
+        <span *ngIf="feeListData?.EditMode && feeListData?.FeeList?.DraftDate"> ({{'Draft '|translate}}) </span>
+      </h1>
+      <span *ngIf="feeListData?.EditMode && feeListData?.FeeList?.DraftDate">
+        <label>{{'Saved as draft on '| translate }}{{feeListData?.FeeList?.DraftDate | date : 'MMM/dd/yyyy'}}</label>
+      </span>
+    </div>
+  </div>
+  <div class="feeLists__body">
+    <div class="feeLists__list">
+      <div class="form-group">
+        <!--Create or Edit FeeList label-->
+        <div class="row" *ngIf="feeListData?.Create">
+          <div class="col-sm-6 feeListCrud">
+            <div class="col-sm-6 feeListCrud">
+              <label id="lblFeeListDescription" class="control-label" for="inpFeeListName">
+                {{ 'Location Fee List Name'| translate }}</label>
+            </div>
+            <div class="col-sm-6 feeListCrud">
+              <label id="lblImportFeeListDescription" class="control-label" for="inpFeeListName">
+                {{'Import Existing Location Fee List (optional)' | translate }}</label>
+            </div>
+          </div>
+        </div>
+        <div class="row filters-row">
+          <!--Create or Edit FeeList label-->
+          <div class="col-sm-5 feeListCrud">
+            <div class="" *ngIf="feeListData?.EditMode">
+              <!--percentage-->
+              <div class="">
+                <div class="feeListCrud__gridContainer">
+                  <div class="feeListCrud__gridItem input-group">
+                    <input id="inpUpdatePercentage" name="inpUpdatePercentage" class="feeListCrud__percentageCol"
+                       [(ngModel)]="updateByPercentage" placeholder="0%" />
+                  </div>
+                  <div class="feeListCrud__gridItem">
+                    <label id="inpApplyPercentage" class="control-label padding-6" (click)="applyPercentage()">
+                      {{'Update all fees by percentage' | translate }}</label>
+                  </div>
+                  <div class="feeListCrud__gridItem">
+                    <label id="roundresult"><input type="checkbox" id="chkRoundResult" [(ngModel)]="roundResult" name="roundResult"
+                        value="roundResult">&nbsp;{{'Round to nearest dollar' | translate}}</label>
+                  </div>
+                  <div class="feeListCrud__gridItem">
+                    <button id="btnUpdateByPercentage" class="btn btn-primary pull-right"
+                      title="{{ 'Update all fees by percentage' | translate }}" (click)="applyPercentage()"
+                      [disabled]="updateByPercentage == ''">{{ 'Apply' |translate }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div [ngClass]="{error: !formIsValid && (isInputDuplicate || isInputRequired)}" *ngIf="feeListData?.Create">
+                <input id="inpFeeListName" class="form-input required valid" #inpFeeListName [(ngModel)]="feeListData.FeeList.Name"
+                  placeholder="{{ 'Location Fee List Name' | translate }}" name="inpFeeListName" maxlength="100" type="text" 
+                  set-focus [disabled]="feeListData.ViewOnly" (ngModelChange)="changeFeeList(feeListData)" 
+                  (blurEvent)="ensureUniqueName()" required >
+
+                <label id="lblFeeListNameDuplicate" class="help-text" *ngIf="!formIsValid && isInputDuplicate"> 
+                  {{ 'Duplicate Location Fee List Name' | translate }} </label>
+
+                <label id="lblFeeListNameRequired" class="help-text" *ngIf="!formIsValid && isRequired()"> 
+                  {{ 'This field is required.' | translate }} </label>
+              </div>
+
+              <label *ngIf="feeListData?.ViewOnly" class="lastupdate">{{'Last updated on '|translate}}{{feeListData?.FeeList?.DateModified | date : 'MM/dd/yyyy'}}</label>
+            </div>
+
+            <div class="row col-sm-8 align_right" *ngIf="feeListData?.Create">
+               <soar-select-list  id="importLists"  name="lstFeeListLocation" [sbTab]="10"
+                [placeHolder]="'Select Location Fee List'"
+                [textField]="'Name'" 
+                [valueField]="'FeeListId'" 
+                [optionList]="feeLists"
+                [disableInput]="feeLists?.length == 0"
+                (selectedItemValueChange)="setImportList($event)">
+              </soar-select-list>
+              <span class="col-xs-6"><button (click)="importFeeList(listToImport)" id="importFeeList" class="btn btn-primary"
+                   [disabled]="disableImport">{{'Import Location Fee List' | translate}}</button></span>
+            </div>
+          </div>
+
+          <div class="col-sm-4" *ngIf="feeListData?.Create || feeListData?.ViewOnly || feeListData?.EditMode" >
+            <div class="col-xs-11 search-field">
+              <input class="form-control border-solid-black" id="inpSearchBoxServiceCodes"
+                placeholder="{{'Search by service code, CDT code, description, service type...'|translate}}"
+                type="text" name="servicesearch" [formControl]="searchServiceCodesKeyword" />
+            </div>
+            <div class="col-xs-1 searchIcon">
+              <span class="glyphicon glyphicon-search"></span>
+            </div>
+          </div>
+
+          <div class="col-sm-3" *ngIf="feeListData?.Create || feeListData?.ViewOnly || feeListData?.EditMode">
+            <div class="serviceCodeInactiveSelectorContainer" style="margin-top: 8px">
+              <input id="showInactiveServiceSelector" type="checkbox" name="showinactive"
+                [formControl]="showInactive"> Show Inactive</div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div>
+        <no-results loading="loadingFeeList" *ngIf="loadingFeeList"></no-results>
+      </div>
+      <div class="location-fee-list fuseGrid container pull-left" *ngIf="!loadingFeeList">
+        <div class="grid rows header">
+          <div id="gridHeaderServiceCode" class="cell sortCursor" (click)="changeSortingForGrid('Code')">
+            {{'Service Code'|translate}}
+            <span class="fa fas fa-lg pull-right" [ngClass]="orderByFeelist.asc ? 'fa-sort-up' : 'fa-sort-down'" *ngIf="orderByFeelist?.field == 'Code'"></span>
+          </div>
+
+          <div id="gridHeaderCdtCodeName" class="cell sortCursor" (click)="changeSortingForGrid('CdtCodeName')">
+            {{'CDT Code'|translate}}
+            <span class="fa fas fa-lg pull-right" [ngClass]="orderByFeelist.asc ? 'fa-sort-up' : 'fa-sort-down'" *ngIf="orderByFeelist?.field == 'CdtCodeName'"></span>
+          </div>
+
+          <div id="gridHeaderDescription" class="cell">{{'Description'|translate}}</div>
+
+          <div id="gridHeaderServiceType" class="cell sortCursor" (click)="changeSortingForGrid('ServiceTypeDescription')">
+            {{'Service Type'|translate}}
+            <span class="fa fas fa-lg pull-right" [ngClass]="orderByFeelist.asc ? 'fa-sort-up' : 'fa-sort-down'" *ngIf="orderByFeelist?.field == 'ServiceTypeDescription'"></span>
+          </div>
+
+          <div id="gridHeaderTaxType" class="cell pull-left">{{'Tax Type'|translate}}</div>
+
+          <div id="gridHeaderCurrentFee" class="cell text-right" *ngIf="feeListData?.EditMode">{{'Current Fee'|translate}}</div>
+
+          <div id="gridHeaderFee" class="cell" *ngIf="feeListData?.ViewOnly|| feeListData?.Create">{{'Fee'|translate}}</div>
+
+          <div id="gridHeaderNewFee" class="cell text-right" *ngIf="feeListData?.EditMode">{{'New Fee'|translate}}</div>
+        </div>
+        <cdk-virtual-scroll-viewport class="virtual-viewport" [itemSize]="50" id="feeListServiceCodesVirtualScrollId">
+          <div *cdkVirtualFor="let feeListServiceCode of filteredServiceCodes$ | async | orderByFeelist:{sortColumnName:orderByFeelist?.field, sortDirection: (orderByFeelist?.asc==true ? 1:-1)}; index as index; odd as isOdd; even as isEven"
+                 [class.odd]="isOdd" [class.even]="isEven">
+            <div class="grid rows codes">
+                <div id="gridRowCode_{{$index}}" class="cell">
+                    {{ feeListServiceCode?.Code}}
+                    <i *ngIf="!feeListServiceCode?.IsActive"
+                        class="fa fa-exclamation-triangle inactive-service-warning"
+                        tooltip-append-to-body="true"
+                        [tooltip]="feeListServiceCode?.InactivationDate ? 'Inactive as of ' + (feeListServiceCode?.InactivationDate|date:'MM/dd/yyyy') : ('This service is inactive')">
+                    </i>
+                </div>
+
+                <div id="gridRowCdtCodeName_{{index}}" class="cell">
+                    {{feeListServiceCode?.CdtCodeName}}
+                </div>
+
+                <div id="gridRowDescription_{{index}}" class="cell">
+                    {{feeListServiceCode?.Description}}
+                </div>
+
+                <div id="gridRowServiceTypeDescription_{{index}}" class="cell">
+                    {{feeListServiceCode?.ServiceTypeDescription}}
+                </div>
+
+                <div id="gridRowTaxType_{{index}}" class="cell feeListCrud__viewMode" *ngIf="!(feeListData?.Create || feeListData?.EditMode)">
+                    {{feeListServiceCode?.$$TaxableServiceTypeName}}
+                </div>
+
+                <!-- Taxable Service -->
+
+                <div class="cell" *ngIf="feeListData?.Create || feeListData?.EditMode" [ngClass]="{'error': !formIsValid && feeListServiceCode?.$$NewTaxableServiceTypeIdError}">
+                    <soar-select-list id="taxableServiceTypes{{index}}" name="taxableServiceTypes{{index}}" *ngIf="taxableServices?.length>0"
+                                        [textField]="'Name'"
+                                        [valueField]="'Id'"
+                                        [optionList]="taxableServices"
+                                        [(ngModel)]="feeListServiceCode.NewTaxableServiceTypeId" [sbTab]="10"
+                                        (selectedItemValueChange)="changeFeeList(feeListServiceCode, $event)">
+                    </soar-select-list>
+                    <label class="help-text" *ngIf="!formIsValid && feeListServiceCode?.$$NewTaxableServiceTypeIdError">{{'Must be valid Tax Type' | translate }}</label>
+                </div>
+
+                <div id="gridRowFee_{{index}}" *ngIf="!feeListData?.Create" class="cell feeListCrud__viewMode text-right">
+                    {{feeListServiceCode?.Fee | currency}}
+                </div>
+
+                <div class="cell currency" *ngIf="feeListData?.Create || feeListData?.EditMode" 
+                     [ngClass]="{'error': !formIsValid && feeListServiceCode?.$$MaxFeeError}">
+                    <div class="icon">$</div>
+                    <input type="text"
+                           [disabled]="feeListData?.ViewOnly"
+                           class="form-input text-right"
+                           id="inpFeeListFee_{{index}}"
+                           name="inpFeeListFee_{{index}}"
+                           maxlength="12"
+                           [(ngModel)]="feeListServiceCode.NewFee"
+                           [tabindex]="10"
+                           mask="separator.2" thousandSeparator=","
+                           [clearIfNotMatch]="false" [showMaskTyped]="false"
+                           (ngModelChange)="changeFeeList(feeListServiceCode)" />
+                    <label class="help-text" *ngIf="!formIsValid && feeListServiceCode?.$$MaxFeeError">{{ 'Must be between $0.00 to $999,999.99'| translate }}</label>
+                </div>
+            </div>
+          </div>
+        </cdk-virtual-scroll-viewport>
+      </div>
+      <div class="clearfix"></div>
+      <div class="feeListCrud__footer">
+        <div class="feeListCrud__actions">
+
+          <button id="btnPublishFeeList" *ngIf="feeListData?.EditMode" class="btn btn-primary pull-right"
+            (click)="updateFeeList(false)" checkRoleAccess="soar-biz-feelst-add"
+            [disabled]="savingList || loadingFeeList || feeListData?.DataHasChanged===false && feeListData?.FeeList?.DraftDate === null">
+            {{'Publish' |translate }}
+          </button>
+
+          <button id="btnSaveFeeListDraft" *ngIf="feeListData?.EditMode" class="btn btn-primary pull-right"
+            (click)="updateFeeList(true)" checkRoleAccess="soar-biz-feelst-add"
+            [disabled]="savingList || feeListData?.DraftDataHasChanged===false || loadingFeeList">
+            {{ 'Save as Draft'|translate}}
+          </button>
+
+          <button id="btnDeleteFeeListDraft" *ngIf="feeListData?.EditMode && feeListData?.FeeList?.DraftDate"
+            class="btn btn-primary pull-right" (click)="deleteFeelistDraft()" checkRoleAccess="soar-biz-feelst-delete"
+            [disabled]="savingList || loadingFeeList">
+            {{ 'Delete Draft' |translate}}
+          </button>
+
+          <button id="btnSaveFeeList" *ngIf="feeListData?.Create" class="btn btn-primary pull-right"
+            (click)="saveList()" checkRoleAccess="soar-biz-feelst-add"
+            [disabled]="isRequired() || savingList || loadingFeeList || feeListData?.DataHasChanged===false">
+            {{ 'Save' |translate}}
+          </button>
+
+          <button id="btnCancelFeeList" *ngIf="!feeListData?.ViewOnly" class="btn btn-default pull-right"
+            (click)="cancelListChanges()" [disabled]="savingList || loadingFeeList">{{ 'Cancel' |translate }}
+          </button>
+
+          <button id="btnCloseFeeList" *ngIf="feeListData?.ViewOnly" class="btn btn-default pull-right"
+            (click)="close()" [disabled]="savingList || loadingFeeList">{{ 'Close' |translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+</div>

@@ -1,0 +1,7 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.ReferralTypes.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid avoidPageBreak" ng-if="data.ReferralTypes.length > 0 && !showFilterMessage">
+        <referred-patients-report [data]="data"></referred-patients-report>
+    </div>
+</div>

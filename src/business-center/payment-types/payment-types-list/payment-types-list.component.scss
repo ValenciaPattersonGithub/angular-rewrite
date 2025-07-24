@@ -1,0 +1,59 @@
+@import 'variables';
+// These kendo files do not contain imports of Kendo, they merely overwrite kendo css
+@import 'toolTip.scss';
+
+.filter_status {
+    color: $page-content-select-color;
+    font-style: normal;
+    font-family: $font-family !important;
+    font-size: 14px;
+    line-height: 18px;
+    padding-top: 10px;
+  }
+  select {
+    mix-blend-mode: normal;
+    color: $page-content-select-color;
+    border-width: 1px;
+    border-color: $page-content-select-border-color;
+    border-style: solid;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    text-align-last: left;
+    width: 120px;
+    height: 25px;
+    font-family: $font-family !important;
+  }
+  .sort-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 7px;
+  }
+  .icon-right {
+    top: calc(40% - 6px);
+    float: right;
+  }
+  ul.dropdown-menu a.minus_zindex{
+    z-index: 0;
+    position: relative;
+  }
+  .confirmationMessage>p {
+    padding-left: 10px !important;
+  }
+  .popup_heading
+  {
+    padding: 0px 0px 0px 10px !important;
+  }
+  button.disabled {
+    cursor: not-allowed;
+  }
+  .dropdown-menu li a:last-child {
+    border-bottom: none !important;
+    position: initial;
+  }
+  a.deleteTooltip:last-child:before {
+    bottom: -11px;
+  }

@@ -1,0 +1,111 @@
+﻿<!-- <business-nav ng-if="!isSingleDeposit"></business-nav> -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div class="depositPaymentsModal">
+    <div class="depositPaymentsModal__container">
+        <div class="depositPaymentsModal__header">
+            <h1>{{ header | i18n }}</h1>
+        </div>
+        <div class="depositPaymentsModal__body">
+            <div class="row">
+                <div class="col-xs-8 col-md-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-xs-8 col-md-8 col-lg-8">
+                                    <h4>{{ 'Step 1: Select Payments' | i18n}}</h4>
+                                </div>
+                                <div class="col-xs-4 col-md-4 col-lg-4">
+                                    <h4 class="pull-right">
+                                        Undeposited Total: {{ undepositedTotal | currency : "$"}}
+                                    </h4>
+                                </div>
+                            </div>
+                            <grid id="paymentsGrid" options="paymentsGridOptions"/>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="transactions.length > 0">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
+                            <label class="blackFont pull-right padding-right-20 padding-top-20">{{ 'Deposit Total ' | i18n}}{{ paymentGridTotal | currency : "$"}}</label>
+                        </div>
+                    </div>
+                    <div class="clear-fix padding-top-30">&nbsp;</div>
+                    <h4>{{ 'Step 2: Select Bank' | i18n}}</h4>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6 col-lg-6">
+                            <label>Deposit Selected To:</label>
+                            <div>
+                                <ui-select id="BankSelect" ng-model="currentBank.selected" theme="bootstrap">
+                                    <ui-select-match>
+                                        <span>{{$select.selected.Value | truncate:27}}</span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="bank in bankAccounts track by bank.Key">
+                                        <span>{{bank.Value | truncate:30}}</span> 
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                          
+                            <label class="text-danger" ng-if="bankAccounts.length == 0" value="">{{ 'No bank accounts found for this location.' | i18n }}</label>
+                        </div>
+                        <div class="col-xs-6 col-md-6 col-lg-6">
+                            <div>
+                                <label>Date</label>
+                                <date-selector input-id="inpDepositDate" placeholder="MM/DD/YYYY" format="MM/dd/yyyy" date-var="depositDto.DepositDate" valid="valid " class="ng-isolate-scope" />
+                            </div>
+
+                            <div class="pull-right padding-top-20">
+                                <button class="btn btn-primary" ng-disabled="disableAdd" ng-click="addSelectedPayment()">{{ 'Add' | i18n }}</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-xs-4 col-md-4 col-lg-4">
+                    <h4>{{ 'Deposit Summary' | i18n}}</h4>
+                    <div class="grid scrollSummary">
+                        <label ng-if="depositSummary.Rows.length == 0">{{ 'Start building your deposit by selecting payments and a bank.' |i18n }}</label>
+                        <div ng-if="depositSummary.Rows.length > 0">
+                            <div class="row blackFont">
+                                <div class="col-xs-5 col-md-5 col-lg-5">
+                                    <label>Bank Account</label>
+                                </div>
+                                <div class="col-xs-4 col-md-4 col-lg-4">
+                                    <label class="pull-right">Total</label>
+                                </div>
+                                <div class="col-xs-3 col-md-3 col-lg-3">
+                                    <label>Print Slips</label>
+                                    <input type="checkbox" id="printAll" class="pull-right" ng-click="printAll()" />
+                                </div>
+                            </div>
+                            <div class="row gridBody" ng-repeat="row in depositSummary.Rows">
+                                <div class="col-xs-5 col-md-5 col-lg-5">
+                                    <label>{{ row.Bank | i18n}}</label>
+                                </div>
+                                <div class="col-xs-4 col-md-4 col-lg-4">
+                                    <label class="pull-right">{{ row.Total | currency : "$" }}</label>
+                                </div>
+                                <div class="col-xs-3 col-md-3 col-lg-3">
+                                    <input type="checkbox" class="printSlip pull-right" id="deposit{{$index}}" ng-click="printSlip($index)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="depositSummary.Rows.length > 0">
+                        <div class="col-xs-10 col-md-10 col-lg-10">
+                            <label class="blackFont pull-right padding-right-30">{{ 'Grand Total: ' | i18n}}{{ depositSummary.TotalAmount | currency : "$" }}</label>
+                        </div>
+                        <div class="col-xs-2 col-md-2 col-lg-2">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer padding-top-30">
+            <button class="btn btn-default" ng-click="cancel()">{{ 'Cancel' | i18n }}</button>
+            <button class="btn btn-primary" ng-disabled="disableDeposit" ng-click="deposit()">{{ pageMode == "Create" ? "Deposit" : "Update Deposit" }}</button>
+        </div>
+    </div>
+    
+
+</div>

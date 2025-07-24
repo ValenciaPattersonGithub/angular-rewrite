@@ -1,0 +1,130 @@
+﻿<div>
+	<div class="row" ng-show="!editing">
+	    <div class="col-xs-12 padding-bottom-4">
+            <label>
+                {{ 'Referred By' | i18n }}:
+            </label>
+	        <span id="lblNoReferral" ng-if="!referral.ReferralType  || referral.ReferralType  == patientReferralTypes.None">
+	            {{ 'No {0}' | i18n:['Referral'] }}
+	        </span>
+	        <span id="lbl{{ baseId }}{{$index}}" ng-if="referral.ReferralType  == patientReferralTypes.Other" class="italic">
+                {{ referral.SourceDescription1 | truncate: 40}}
+                <i ng-show="referral.SourceDescription1.length > 40 ">...</i>
+	        </span>
+            <span ng-if="referral.ReferralType  == patientReferralTypes.Person">
+                <a id="btnReferredByPatient" class="btn btn-link padding-none" ng-href="#/Patient/{{referral.ReferralSourceId}}/Overview">
+                    {{ referral.SourceDescription1 | truncate: 20}}
+                    <i ng-show="referral.SourceDescription1.length > 20 ">...</i>
+                    {{ referral.SourceDescription2 | truncate: 20}}
+                    <i ng-show="referral.SourceDescription2.length > 20 ">...</i>
+                </a>
+                <span id="lblReferredByDateOfBirth" class="pull-right">
+                    {{ referral.DateOfBirth | toShortDisplayDateUtc }}
+                </span>
+            </span>
+	    </div>
+	</div>
+
+    <div ng-show="editing">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8">
+                <soar-select-list id="inpReferralType"
+                                  name="inpReferralType"
+                                  placeholder="{{ 'Select Referral Type' | i18n }}"
+                                  text-field="name"
+                                  value-field="value"
+                                  option-list="patientReferralTypeOptions"
+                                  ng-model="referral.ReferralType"
+                                  sb-change="ReferralTypeChanged"></soar-select-list>
+                <!--<select kendo-combo-box
+                        id="inpReferralType"
+                        k-placeholder="'- {{'Select Referral Type' | i18n}} -'"
+                        k-data-text-field="'name'"
+                        k-data-value-field="'value'"
+                        k-data-source="patientReferralTypeOptions"
+                        k-filter="'startsWith'"
+                        k-suggest="true"
+                        k-change="ReferralTypeChanged"
+                        ng-model="referral.ReferralType"
+                        sync-focus-with="editing"></select>-->
+            </div>
+        </div>
+
+        <div class="clearfix">&nbsp;</div>
+
+        <!-- Patients -->
+        <div class="row" ng-if="referral.ReferralType == patientReferralTypes.Person">
+            <div class="col-xs-12 col-sm-8 form-search-input">
+                <!-- search input -->
+                <i ng-hide="loading || term.length > 0" class="fa fa-search"></i>
+
+                <div ng-class="{error:!valid && attemptedSave}">
+                    <input id="inpPatientSearch" class="form-input" type="text" ng-model="patientSearchParams.searchFor" ng-keyup="executePatientSearch(false)" placeholder="{{ 'Find a Person' | i18n }}" />
+                    <label id="lblPatientReferralRequired" class="help-text" ng-show="!valid && attemptedSave">
+                        {{ 'This field is required.' | i18n }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="referral.ReferralType == patientReferralTypes.Person">
+            <!-- search results -->
+            <div class="col-xs-12 col-sm-8">
+                <div class="form-search-container background-white" ng-show="patientSearch.Results.length > 0" soar-infinite-scroll="executePatientSearch(true)">
+                    <div class="row" ng-repeat="patient in patientSearch.Results | filter:filterPatient | orderBy: sort" ng-class-even="'item-zebra-dark'" ng-class-odd="'item-zebra-light'" ng-click="SelectPatient(patient)">
+                        <div class="col-xs-12">
+                            <div class="media referred-media">
+                                <i class="pull-left far fa-image fa-3x referred-media-icon"></i>
+                                <div class="media-body referred-media-body">
+                                    <p>
+                                        <!-- hard coded lengths to avoid line breaks from long names. preferred name will not show if name(s) is a certain length -->
+                                        <span id="lblReferredByFirstName{{$index}}" ng-bind-html="(patient.FirstName.length + patient.LastName.length) > 22 ? patient.FirstName[0] + '.' : patient.FirstName | uppercase |  highlightSearchCriteria:patientSearchParams.searchFor"></span>
+                                        <span id="lblReferredByLastName{{$index}}" ng-bind-html="patient.LastName.length > 22 ? patient.LastName.substring(0, 21) : patient.LastName | uppercase |  highlightSearchCriteria:patientSearchParams.searchFor"></span>
+                                    </p>
+                                    <p id="lblReferredByDOB"> {{ patient.DateOfBirth | toDisplayDateUtcMMDDYY }} </p>
+                                    <p id="lblReferredByAddress" ng-show="patient.City"> {{ patient.AddressLine1 }} {{ patient.City }}, {{ patient.State }} {{ patient.ZipCode }}</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- External Sources -->
+        <div class="row" ng-if="referral.ReferralType == patientReferralTypes.Other">
+            <div class="col-xs-12 col-sm-8">
+                <div ng-class="{error:!valid && attemptedSave}">
+                    <soar-select-list id="inpReferralSource"
+                                      name="inpReferralSource"
+                                      placeholder="{{ 'Select {0}' | i18n:['Referral Source'] }}"
+                                      text-field="SourceName"
+                                      value-field="PatientReferralSourceId"
+                                      option-list="referralSources"
+                                      ng-model="referral.ReferralSourceId"
+                                      sb-change="SelectOther"></soar-select-list>
+                    <!--<select kendo-combo-box
+                            id="inpReferralSource"
+                            k-placeholder="'- {{ 'Select {0}' | i18n:['Referral Source'] }} -'"
+                            k-data-text-field="'SourceName'"
+                            k-data-value-field="'PatientReferralSourceId'"
+                            k-data-source="referralSources"
+                            k-suggest="true"
+                            k-change="SelectOther"
+                            ng-model="referral.ReferralSourceId"></select>-->
+                    <label id="lblReferralSourceRequired" class="help-text" ng-show="!valid && attemptedSave">
+                        {{ 'This field is required.' | i18n }}
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="row" >
+        <div class="col-xs-12 padding-bottom-4">
+            <label>
+                {{ 'Referred Patients' | i18n }}:
+            </label>
+            <person-list base-id="referredPatientsList" list="referredPatients" showNewPatientHeader="showNewPatientHeader"></person-list>
+        </div>
+    </div>
+</div>

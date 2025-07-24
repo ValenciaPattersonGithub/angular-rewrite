@@ -1,0 +1,46 @@
+﻿<div class="patient-export">
+    <div>
+        <h2 class="patient-export-main-header">Include Contact Details?</h2>
+    </div>
+    <hr class="patient-export-hr" />
+    <div class="main-area">
+        <div>
+            <label class="patient-export-label">Include:</label>
+        </div>
+        <div>
+            <select class="patient-export-select patient-export-select-width" ng-model="selection.key" ng-init="selection = items[0]"
+                    ng-options="item.key as item.value for item in items" ng-change="setCategory()">
+                <!--track by item.key-->
+            </select>
+        </div>
+        <div class="clearfix checkbox-area">
+            <div class="checkbox-section" ng-if="selection.key == 1">
+                <div class="checkBox-area-header">Patient</div>
+                <div class="checkbox-container"><input type="checkbox" name="p-Main" ng-model="Main.Patient" ng-click="toggleCheckBoxes('Patient')">&nbsp;Select/Deselect All</div>
+                <hr class="patient-export-hr margin-top-10" />
+                <div class="checkbox-container"><input type="checkbox" name="p-Mail" ng-model="ContactInfo.PatientMailing"> Mailing Address</div>
+                <div class="checkbox-container"><input type="checkbox" name="p-Email" ng-model="ContactInfo.PatientEmail"> Email Address</div>
+                <div class="checkbox-container"><input type="checkbox" name="p-primary-phone" ng-model="ContactInfo.PatientPrimaryPhone"> Primary Phone Number</div>
+                <div class="checkbox-container"><input type="checkbox" name="p-home-phone" ng-model="ContactInfo.PatientHomePhone"> Home Phone Number</div>
+                <div class="checkbox-container"><input type="checkbox" name="p-mobile-phone" ng-model="ContactInfo.PatientMobilePhone"> Mobile Phone Number</div>
+                <div class="checkbox-container"><input type="checkbox" name="p-work-phone" ng-model="ContactInfo.PatientWorkPhone"> Work Phone Number</div>
+            </div>
+            <div class="checkbox-section" ng-if="selection.key == 1">
+                <div class="checkBox-area-header">Responsible Party</div>
+                <div class="checkbox-container"><input type="checkbox" name="rp-Main" ng-model="Main.ResponsibleParty" ng-click="toggleCheckBoxes('ResponsibleParty')">&nbsp;Select/Deselect All</div>
+                <hr class="patient-export-hr margin-top-10" />
+                <div class="checkbox-container"><input type="checkbox" name="rp-Mail" ng-model="ContactInfo.ResponsibleMailing"> Mailing Address</div>
+                <div class="checkbox-container"><input type="checkbox" name="rp-Email" ng-model="ContactInfo.ResponsibleEmail"> Email Address</div>
+                <div class="checkbox-container"><input type="checkbox" name="rp-primary-phone" ng-model="ContactInfo.ResponsiblePrimaryPhone"> Primary Phone Number</div>
+                <div class="checkbox-container"><input type="checkbox" name="rp-home-phone" ng-model="ContactInfo.ResponsibleHomePhone"> Home Phone Number</div>
+                <div class="checkbox-container"><input type="checkbox" name="rp-mobile-phone" ng-model="ContactInfo.ResponsibleMobilePhone"> Mobile Phone Number</div>
+                <div class="checkbox-container"><input type="checkbox" name="rp-work-phone" ng-model="ContactInfo.ResponsibleWorkPhone"> Work Phone Number</div>
+            </div>
+        </div>
+    </div>
+    <hr class="patient-export-hr" />
+    <div class="clearfix button-area">
+        <button class="patient-export-button-export button-position" ng-click="export()">Export</button>
+        <button class="patient-export-button-cancel button-position" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

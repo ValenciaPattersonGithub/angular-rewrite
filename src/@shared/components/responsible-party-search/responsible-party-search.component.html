@@ -1,0 +1,90 @@
+<div class="responsiblePersonWrapper" id="rp-wrapper">
+  <div class="responsiblePersonWrapper-main-search" id="rp-main-search">
+    <div class="responsiblePersonWrapper-input-group" id="rp-input-group">
+      <input
+        class="responsiblePersonWrapper-search-input"
+        [formControl]="searchInput"
+        placeholder="Search"
+        type="text"
+        [value]="searchTerm"
+        id="rp-search-input"
+        [attr.disabled]="disableSearchInput"
+        autocomplete="off"
+        [ngClass]="{ 'rp-error-control': !isValid }"
+      />
+      <span class="responsiblePersonWrapper-main-search-icon" *ngIf="!IsResponsiblePersonEditable" [ngClass]="{ 'rp-error-control': !isValid }">
+        <svg-icon class="responsiblePersonWrapper-search-icon" name="searchIcon" iconHeight="20px" iconWidth="20px" id="rp-search-icon"></svg-icon>
+      </span>
+      <span *ngIf="IsResponsiblePersonEditable" (click)="clearSearch()" class="responsiblePersonWrapper-main-clear-icon" id="rp-main-clear-icon">
+        <svg-icon class="responsiblePersonWrapper-clear-icon" name="closeIcon" iconHeight="20px" iconWidth="20px" id="rp-clear-icon"></svg-icon>
+      </span>
+      <span *ngIf="!isValid">
+        <svg-icon
+          id="rp-error-icon"
+          class="rp-error-icon"
+          name="tooltipIcon"
+          iconHeight="15px"
+          tooltip="{{ errorToolTipMessage }}"
+          placement="top-error"
+          delay="200"
+          iconWidth="15px"
+        ></svg-icon>
+      </span>
+    </div>
+
+    <ul [ngClass]="variation" class="responsiblePersonWrapper-dropdown" *ngIf="!hideData" id="rp-dropdown">
+        <li class="responsiblePersonWrapper-add-person-li" *ngIf="componentName === 'Insurance' && (searchResults.length > 0 || noSearchResults)">
+            <div class="responsiblePersonWrapper-add-person">
+                <app-button (onClick)="addAPerson()" id="btn_generateletter" buttonLabel="{{ 'Add a Person' | translate }}" variation="primary"> </app-button>
+            </div>
+        </li>
+        <li id="rp-li-data" (click)="onResponsiblePersonSelect(person)" *ngFor="let person of searchResults">
+            <div class="responsiblePersonWrapper-search-data-wrapper" id="rp-search-data-wrapper">
+                <div class="responsiblePersonWrapper-main-person-icon" id="rp-main-person-icon">
+                    <span class="responsiblePersonWrapper-inner-person-icon" id="rp-inner-person-icon">
+                        <svg-icon class="responsiblePersonWrapper-person-icon" name="personIcon" iconHeight="20px" iconWidth="20px" id="rp-person-icon"> </svg-icon>
+                    </span>
+                </div>
+                <div class="responsiblePersonWrapper-name" id="rp-name">
+                    <span class="responsiblePersonWrapper-mr-2" [style.font-weight]="person.FirstName && person.FirstName.includes(searchString) ? 'bold' : 'normal'">{{ person.FirstName }}</span>
+                    <span class="responsiblePersonWrapper-mr-2" [style.font-weight]="person.MiddleName && person.MiddleName.includes(searchString) ? 'bold' : 'normal'">{{ person.MiddleName }}</span>
+                    <span class="responsiblePersonWrapper-mr-2" [style.font-weight]="person.LastName && person.LastName.includes(searchString) ? 'bold' : 'normal'">{{ person.LastName }}</span>
+                    <span class="responsiblePersonWrapper-mr-2" *ngIf="componentName === 'PersonalDetail'" [style.font-weight]="person.Suffix && person.Suffix.includes(searchString) ? 'bold' : 'normal'">{{ person.Suffix }}</span>
+ 
+                    <span class="responsiblePersonWrapper-mr-2"
+                          *ngIf="componentName === 'Referral'"
+                          [style.font-weight]="person.PreferredName && person.PreferredName.includes(searchString) ? 'bold' : 'normal'">{{ person.PreferredName }}</span>
+                </div>
+                <div class="responsiblePersonWrapper-code-pipe" id="rp-code-pipe">
+                    <span>{{ "|" }}</span>
+                </div>
+                <div class="responsiblePersonWrapper-code" id="rp-code">
+                    <label class="responsiblePersonWrapper-label"> {{ "ID: " | translate }} </label>
+
+                    
+                    <span [style.font-weight]="person.PatientCode && person.PatientCode.includes(searchString) ? 'bold' : 'normal'">{{ person.PatientCode }}</span>
+
+                </div>
+                <div class="responsiblePersonWrapper-dob-pipe" id="rp-dob-pipe">
+                    <span>{{ "|" }}</span>
+                </div>
+                <div class="responsiblePersonWrapper-dob" id="rp-dob">
+                    <label class="responsiblePersonWrapper-label"> {{ "DOB: " | translate }} </label>
+                    <span class="mr-2"> </span>
+                    
+
+                    <span class="mr-2" [style.font-weight]="person.DateOfBirth && (person.DateOfBirth | date: 'MM/dd/yyyy').includes(searchString) ? 'bold' : 'normal'">{{ person.DateOfBirth | date: 'MM/dd/yyyy' }}</span>
+
+                </div>
+            </div>
+        </li>
+        <li *ngIf="noSearchResults && searchResults.length == 0">
+            <div class="responsiblePersonWrapper-no-record" id="rp-no-record">
+                <span id="lblResultMessage">
+                    {{ "No responsible person match the search criteria." | translate }}
+                </span>
+            </div>
+        </li>
+    </ul>
+  </div>
+</div>

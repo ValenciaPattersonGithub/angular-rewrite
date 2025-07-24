@@ -1,0 +1,51 @@
+﻿@import "variables";
+
+.label-wrapper {
+  white-space: nowrap;
+  display: flex;
+}
+.textarea-wrapper {
+  font-family: $global-font-family;
+  display: grid;
+  grid-template: auto auto / auto;
+  grid-gap: 3px 5px;
+
+  &.label-left {
+    grid-template: auto / min-content auto;
+    .label-wrapper {
+      // when the label is on the left, allow the label to align to the flex-start (top).
+      // The error icon should align with the label.
+      align-items: flex-start;
+    }
+  }
+  &:not(.label-left) {
+    .label-wrapper {
+      // when label is not left aligned, allow to center to keep the error icon inline with the label
+      align-items: center;
+    }
+  }
+
+  & textarea {
+    font-family: $global-font-family;
+    color: $text-black;
+    font-size: $global-body-font-size;
+    height: 130px;
+    padding: 8px;
+    border: 1px solid $border-grey;
+    border-radius: 4px;
+    resize: vertical;
+
+    &.no-resize {
+      resize: none;
+    }
+
+    &.error {
+      border: 2px solid $alert-red;
+    }
+  }
+}
+.error-icon {
+  margin-left: 5px;
+  color: $alert-red;
+}
+

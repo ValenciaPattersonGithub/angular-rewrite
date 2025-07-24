@@ -1,0 +1,59 @@
+<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.ActivityEvents.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" infinite-scroll="getPagedReport()" infinite-scroll-disabled="isUpdating() || allDataDisplayed()" ng-if="data.ActivityEvents.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="reportGrid__row stripOdd">
+                    <th class="col-sm-1 cell">{{ 'Date/Time' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'TeamMember' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Location' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Area' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Type' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Action' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Description' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Amount' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total Amount' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'" class="reportGrid__row" ng-repeat="activityLog in data.ActivityEvents" ng-if="data.ActivityEvents.length > 0">
+                    <td class="col-sm-1 cell">{{activityLog.EventDate | toShortDisplayDateLocal}}<br />{{activityLog.EventDate | toDisplayTime}}</td>
+                    <td class="col-sm-1 cell">{{activityLog.EventUserName}}</td>
+                    <td class="col-sm-1 cell">{{activityLog.Location}}</td>
+                    <td class="col-sm-1 cell">{{activityLog.Area | getActivityArea}}</td>
+                    <td class="col-sm-1 cell">{{activityLog.Type | getActivityType}}</td>
+                    <td class="col-sm-1 cell">{{activityLog.Action | getActivityAction}}</td>
+                    <td class="col-sm-1 cell">{{activityLog.ProviderName}}</td>
+                    <td class="col-sm-1 cell">{{activityLog.PatientName}}</td>
+                    <td class="col-sm-2 cell">
+                        <div ng-if="activityLog.Type === 22 && activityLog.Action === 1">
+                            <p class="respectCRLF">The clinical note <a href='' ng-click="launchClinicalTab(activityLog.PatientId, activityLog.Type, null)">{{activityLog.Description}}</a> was saved.</p>
+                        </div>
+                        <div ng-if="activityLog.Type === 22 && activityLog.Action === 2">
+                            <p class="respectCRLF">{{activityLog.Description}}<a href='' ng-click="launchClinicalTab(activityLog.PatientId, activityLog.Type, null)">Click to view.</a></p>
+                        </div>
+                        <div ng-if="activityLog.Type === 22 && activityLog.Action === 3">
+                            <p class="cell respectCRLF">The clinical note <a href='' ng-click="launchClinicalTab(activityLog.PatientId, activityLog.Type, null)">{{activityLog.Description}}</a> was deleted.</p>
+                        </div>
+                        <div ng-if="activityLog.Type === 25 && activityLog.Action === 1  && activityLog.Area === 3">
+                            <p class="respectCRLF">The <a href='' ng-click="launchClinicalTab(activityLog.PatientId, activityLog.Type, activityLog.Description)">medical health history</a> was added.</p>
+                        </div>
+                        <div ng-if="activityLog.Type === 25 && activityLog.Action === 1  && activityLog.Area === 15">
+                            <p class="respectCRLF">{{activityLog.Description}}</p>
+                        </div>
+                        <div ng-if="activityLog.Type === 25 && activityLog.Action === 2  && activityLog.Area === 3">
+                            <p class="respectCRLF">The <a href='' ng-click="launchClinicalTab(activityLog.PatientId, activityLog.Type, activityLog.Description)">medical health history</a> was modified.</p>
+                        </div>
+                        <div class="respectCRLF" ng-if="activityLog.Type !== 22 && (activityLog.Type !== 25 && activityLog.Area !== 3)">{{activityLog.Description}}</div>
+                    </td>
+                    <td class="col-sm-1 cell text-right">{{activityLog.Amount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{activityLog.TotalAmount | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

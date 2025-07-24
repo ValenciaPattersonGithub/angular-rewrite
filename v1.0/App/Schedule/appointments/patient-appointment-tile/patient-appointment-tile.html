@@ -1,0 +1,39 @@
+﻿<div class="patApptTile">
+    <div class="timelineTile" ng-click="editAppointmentFromModal(patientAppointment)" ng-class="{timelineTileBorder : timelineView}">
+        <div class="timelineTile__row">
+            <div ng-if="timelineView" class="timelineTile__iconContainer">
+                <img class="timelineTile__icon" ng-src="{{ 'Images/TimelineFilterIcons/appointments.svg' }}" />
+            </div>
+            <div class="timelineTile__content">
+                <div class="timelineTile__leftContent">
+                    <div class="patApptTile__apptType">
+                        <!--DisplayAs-->
+                        <span id="lblApptType{{tileIndex}}" title="{{ patientAppointment.AppointmentTypeName}}">{{ truncatedAppointmentType }}</span>
+                    </div>
+                    <!--Description-->
+                    <div class="patApptTile__svc">
+                        <span id="lblServiceDescription{{tileIndex}}" title="{{ patientAppointment.ServiceCodeDisplayAs }}">{{ truncatedServiceCodeDisplayAs }}</span>
+                    </div>
+                    <!--StartTime-->
+                    <div class="patApptTile__time">
+                        <span id="lblStartTime{{tileIndex}}">
+                            <span>{{ dateStartTime }} ({{patientAppointment.tzAbbr}})</span><span class="patApptTile__pvdr" ng-if="patientAppointment.ProviderName"> {{ ::'with ' | i18n}} {{patientAppointment.ProviderName}}</span>
+                        </span>
+                    </div>
+                    <!--Elapsed time-->
+                    <div ng-if="patientAppointment.ActualStartTime && patientAppointment.Status != 3 && patientAppointment.Status != 5">
+                        <elapsed-time [start-time]="patientAppointment.ActualStartTime" [end-time]="patientAppointment.ActualEndTime"></elapsed-time>
+                    </div>
+                </div>
+
+                <div class="timelineTile__rightContent" >
+                    <!--ng-if="!showLabel" -->
+                    <button id="btnApptStatus" class="patApptTile__strtAppt btn btn-primary active" check-auth-z="{{soarAuthClinicalAppointmentsEditKey}}" ng-if="showStartButton && !showLabel" ng-click="beginAppointment($event)" ng-disabled="isDisabled">
+                        {{ apptStatus }}
+                    </button>
+                    <label id="lblApptStatus" ng-if="showLabel" class="patApptTile__lblStatus">{{apptStatus}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

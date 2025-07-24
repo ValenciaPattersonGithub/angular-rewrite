@@ -1,0 +1,50 @@
+<div class="dentalRecords-detail-container">
+    <div class="dentalRecords-header">
+        <span class="dentalRecords-header-title">{{'Dental Records' | translate}}</span>
+        <div class="dentalRecords-header-actionButtons" >
+            <app-button id="btndcedit" buttonLabel="{{'Edit' | translate }}" variation="secondary" class="ml-10"
+                (onClick)="updatePerson()" *ngIf="patientProfile" [isDisabled]='!hasEditAccess'></app-button>
+        </div>
+    </div>
+    <hr>
+    <div class="dentalRecordsDetailContent">
+        <div class="dentalRecordsDetailContent-previous-dentist">
+            <div class="dentalRecordsDetailContent-identifiers-label">
+                <app-label class="dentalRecordsDetailContent-referral-label" [label]="'Previous Dentist'">
+                </app-label>
+            </div>
+            <span class="dentalRecordsDetailContent-label">{{dentalOffice ? dentalOffice.Name : 'N/A'}}</span>
+        </div>
+        <div class="dentalRecordsDetailContent-phone-number">
+            <div class="dentalRecordsDetailContent-identifiers-label">
+                <app-label class="dentalRecordsDetailContent-referral-label" [label]="'Phone Number'">
+                </app-label>
+            </div>
+            <span class="dentalRecordsDetailContent-label"> {{dentalOffice ? (dentalOffice.PhoneNumber | phoneNumber) : 'N/A'}}
+            </span>
+        </div>
+        <div class="dentalRecordsDetailContent-email">
+            <div class="dentalRecordsDetailContent-identifiers-label">
+                <app-label class="dentalRecordsDetailContent-referral-label" [label]="'Email'">
+                </app-label>
+            </div>
+            <span class="dentalRecordsDetailContent-label"> {{dentalOffice ? dentalOffice.Email : 'N/A'}}
+            </span>
+        </div>
+        <div class="dentalRecordsDetailContent-address">
+            <div class="dentalRecordsDetailContent-identifiers-label">
+                <app-label class="dentalRecordsDetailContent-referral-label" [label]="'Address'">
+                </app-label>
+            </div>
+            <span class="dentalRecordsDetailContent-label">{{address}}<br>{{displayCityStateZipCode}}</span>
+        </div>
+        <div class="dentalRecordsDetailContent-notes">
+            <div class="dentalRecordsDetailContent-identifiers-label">
+                <app-label class="dentalRecordsDetailContent-referral-label" [label]="'Notes'">
+                </app-label>
+            </div>
+            <span class="dentalRecordsDetailContent-label"> {{dentalOffice ? dentalOffice.Notes : 'N/A'}}
+            </span>
+        </div>
+    </div>
+</div>

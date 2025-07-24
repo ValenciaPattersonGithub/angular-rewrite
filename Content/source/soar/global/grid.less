@@ -1,0 +1,868 @@
+﻿.k-grid {
+    border: none;
+    background-color: transparent;
+    &.k-widget {
+        box-shadow: none;
+    }
+    .k-grid-toolbar {
+        background-color: transparent;
+        border-color: transparent;
+        padding-bottom: @brand-padding_xs;
+        padding: 0 0 @brand-padding_sm;
+
+        .k-button {
+            &.k-grid-add {
+                .btn;
+                .btn-primary;
+                .k-icon {
+                    display: none;
+                }
+            }
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+    .k-grid-header  {
+            border: none;
+            background-color: @brand-color_dark-gray;
+            padding-top: @brand-padding_sm;
+            padding-bottom: @brand-padding_sm;
+
+        .k-grid-header-wrap {
+            border: none;
+
+
+            .k-header {
+                border: none;
+                background-color: transparent;
+                font-weight: @brand-font_heavy;
+                color: @brand-color_font-header;
+
+                &.k-icon { 
+                    &.k-i-close {
+                        display: none;
+                    }
+                    &.k-i-loading {
+                        display: none;
+                    }
+                }
+
+                .k-link {
+                    position: relative;
+
+                    .k-icon {
+                        position: absolute;
+                        top: 50%;
+                        //right: @brand-padding_sm;
+                        transform: translate(0, -50%);
+                        margin: 0 0 0 @brand-margin_sm;
+                        background-image: none;
+                        &:before {
+                            position: absolute;
+                            top: 50%;
+                            transform: translate(0, -50%);
+                            font-family: 'Font Awesome 5 Pro';
+                            font-size: 14px;
+                        }
+                        &.k-i-sort-asc-sm:before {
+                            // fa-chevron-up
+                            content: "\f0dd";
+                        }
+                        &.k-i-sort-desc-sm:before {
+                            // fa-chevron-down
+                            content: "\f0de";
+                        }
+                    }
+                }
+                
+                
+
+                .k-grid-filter {
+                    .k-icon {
+
+                        background-image: none;
+
+                        &.k-filter:before {
+                            // fa-filter
+                            display: inline-block;
+                            line-height: 1;
+                            font-family: 'Font Awesome 5 Pro';
+                            content: "\f0b0";
+                            font-size: 14px;
+                        }
+                    }
+                }
+                
+            }
+            .k-filter-row {
+                > th {
+                    border-color: transparent;
+                    .k-filtercell {
+                        display: block;
+                        position: relative;
+                        
+                        > span {
+                            padding-right: (@brand-padding_xl*2);
+                        }
+
+                        .k-button {
+                            right: @brand-margin_sm;
+                            height: 28px;
+                            padding: 0;
+                            background-color: transparent;
+                            border: none;
+                            .k-icon {
+                                background-image: none;
+                                font-size: 1em;
+
+
+                                &:before {
+                                    display: block;
+                                    width: 100%;
+                                    height: 100%;
+                                    font-family: 'Font Awesome 5 Pro';
+                                    content: '\f00d';
+                                    font-size: 16px;
+                                    line-height: 1;
+                                    color: @brand-color_link;
+                                }
+                            }
+                        }
+                        .k-autocomplete {
+                            .k-input {
+                                .form-control;
+                                box-sizing: border-box;
+                            }
+                        }
+                        .k-textbox {
+                            width: 100%;
+                        }
+                        .k-dropdown-operator {
+                            right: @brand-padding_xl;
+                            width: auto;                     
+                            .k-dropdown-wrap {
+                                display: inline-block;
+                                position: relative;
+                                width: 25px;
+                                padding: 0;
+
+                                &.k-state-default {
+                                    border-color: transparent;
+                                    background-color: transparent;
+                                }
+
+                                .k-select {
+                                    .clearfix;
+                                    display: inline-block;
+                                    width: 100%;
+                                    height: 100%;
+                                    min-height: unset;
+                                    overflow: visible;
+
+                                    .k-filter {
+                                        &:before {
+                                            content: "\f0b0";
+                                        }
+                                    }
+                                }
+                                > .k-input {
+                                    padding: 0;
+                                    width: auto;
+                                    height: auto;
+                                    opacity: 0;
+                                }
+                            }
+                        }
+                    
+                    }
+                }
+            }
+        }
+    }
+    .k-numerictextbox {
+        
+        .k-numeric-wrap {
+            &.k-state-focused {
+                outline: none;
+                border-color: @brand-color_active;
+                box-shadow: none;
+            }
+            .k-link {
+                position: relative;
+                display: block;
+                height: unset;
+                width: 100%;
+                height: 50%;
+            }
+        }
+    }
+    .k-textbox {
+        height: 30px;
+        border: @brand-border;
+        
+        &:focus {
+            border-color: @brand-color_active;
+        }
+    }
+    .k-datepicker {
+        .k-picker-wrap {
+            &.k-state-focused {
+                outline: none;
+                border-color: @brand-color_active;
+                box-shadow: none;
+            }
+        }
+        .k-select {
+            border-left-color: transparent;
+
+            .k-icon {
+                background-image: none;
+
+
+                &:before {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    font-family: 'Font Awesome 5 Pro';
+                    content: '\f073';
+                    font-size: 16px;
+                    font-weight: @brand-font_heavy;
+                    line-height: 1;
+                }
+            }
+        }
+    }
+                       
+    .k-grid-content {
+        box-sizing: border-box;
+        border: @brand-border_light;
+        border-right-width: 2px;
+        background-color: @brand-color_white;
+
+        .km-scroll-container {
+            margin-right: -1px; //Kendo, man...go figure.
+        }
+
+        tr {
+            &:last-child {
+                td {
+                    border-bottom: none;
+                }
+            }
+            &.k-alt {
+                background-color: @brand-tbl_zebra-dark;
+                .k-group-cell {
+                    padding: 0;
+                    background-color: @brand-tbl_zebra-dark;
+                }
+            }
+            &.k-detail-row,
+            &.k-alt.k-detail-row {
+                background-color: @brand-color_dark-gray;
+
+                td {
+                    &.k-detail-cell {
+                        padding: @brand-padding_sm 0;
+                    }
+                    &.k-group-cell {
+                        background-color: @brand-color_dark-gray;
+                    }
+
+                    .k-grid {
+                        background-color: @brand-color_white;
+                    }
+                }
+            }
+
+            &[editable="false"] {
+                .k-grid-customDelete, 
+                .k-grid-customEdit {
+                    opacity: 0.8;
+                    &:hover {
+                        cursor: not-allowed;
+                    }
+                }
+            }
+            
+            &.k-grid-edit-row {
+                background-color: @brand-grid_edit-row-bg-color;
+
+                td.k-grid-commands {
+                    .k-button {
+                        color: @brand-color_white;
+
+                        &:hover {
+                            color: darken(@brand-color_white, 5);
+                        }
+                    }
+                }
+                td > .k-textbox {
+                    .form-control;
+                }
+            }
+
+            td {
+                padding: @brand-padding_sm;
+                border: none;
+                border-bottom: @brand-border_light;
+
+                &.k-group-cell {
+                    padding: 0;
+                    background-color: transparent;
+                }
+
+                &.k-grid-commands {
+                    text-align: right;
+
+                    .k-grid-customDelete,
+                    .k-grid-customEdit,
+                    .k-grid-update,
+                    .k-grid-delete,
+                    .k-grid-cancel,
+                    .k-grid-edit {
+                        .btn;
+                        .btn-link;
+                        min-width: 0;
+                        float: right;
+                        &:active:focus,
+                        &:focus {
+                            outline: none;
+                            box-shadow: none;
+                        }
+                    }
+                    
+                    .k-grid-customDelete,
+                    .k-grid-customEdit {
+                        > span {
+                            width: auto;
+                            height: auto;
+                            background-image: none;
+                            display: inline-block;
+                            &:before {
+                                line-height: 1;
+                                font-size: 18px;
+                            }
+                        }
+                    }
+                    .k-grid-customDelete > span {
+                        &:before {
+                            content: "\f1f8";
+                        }
+                    }
+                    .k-grid-customEdit > span {
+                        &:before {
+                            content: "\f040";
+                        }
+                    }
+                }
+
+                > span {
+                    display: inline-block;
+                    padding: 8px 0 5px;
+                    &.k-widget {
+                        padding: 0;
+                    }
+                    &.k-dirty {
+                        display: none;
+                    }
+                    &.k-textbox {
+                        display: block;
+                        width: 100%;
+                        padding: 4px 0 0 8px;
+                    }
+                }
+            }
+        }
+    }
+}
+.has-custom-group-header {
+
+}
+.k-filter-menu {
+    padding: @brand-padding_sm;
+
+    .k-filter-help-text {
+        font-size: 14px;
+    }
+    .k-widget {
+        margin-top: @brand-margin_sm;
+    }
+    .k-dropdown-wrap .k-input {
+        height: auto;
+        line-height: 1;
+        font-size: 14px;
+    }
+    .k-list-container {
+        .k-item {
+            font-size: 14px;
+        }
+    }
+    input.k-textbox {
+        height: auto;
+        line-height: 1;
+    }
+    .k-datepicker {
+        .k-picker-wrap:before, 
+        .k-numeric-wrap:before {
+            height: auto;
+        }
+
+        .k-picker-wrap {
+            .k-input {
+                height: auto;
+                line-height: 1;
+                font-size: 14px;
+            }
+            .k-select {
+                position: relative;
+                height: auto;
+                min-height: unset;
+
+                .k-icon {
+                    position: absolute;
+                    top: 50%;
+                    right: 50%;
+                    transform: translate(50%, -50%);
+                    background: none;
+
+                    &.k-i-calendar:before {
+                        // fa-filter
+                        display: inline-block;
+                        line-height: 1;
+                        font-family: 'Font Awesome 5 Pro';
+                        content: "\f073";
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+    .k-button {
+        width: auto;
+        float: right;
+        margin: @brand-margin_sm 0 0 @brand-margin_sm;
+        font-size: 14px;
+        transition: @brand-transition_link;
+
+        &[type="reset"] {
+            border-color: transparent;
+            background-color: transparent;
+            }
+        }
+}
+
+.k-popup-edit-form {
+    .k-textbox {
+        .form-control;
+    }
+    .k-dropdown {
+        width: 100%;
+    }
+    .k-edit-buttons {
+        .clearfix;
+        .k-grid-update,
+        .k-grid-cancel {
+            .btn;
+            float: right;
+            margin-left: @brand-margin_sm;
+
+            .k-icon {
+                display: none;
+            }
+        }
+        .k-grid-cancel {
+            .btn-default;
+        }
+        .k-grid-update {
+            .btn-primary;
+        }
+    }
+    
+}
+
+.fuseGrid {
+    width: 100%;
+    height: auto;
+    padding: 0 0 0 0px;
+    display: table;
+
+    .header {
+        background-color: #fff;
+        display: table-row;
+        padding: 15px;
+        font-weight: bold;
+        width: 100%;
+
+        .tableLabel {
+            color: #000000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        select {
+            width: 100%;
+        }
+    }
+
+    .subHeader {
+        background-color: none;
+        display: table-row;
+        padding: 15px;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .subContainer {
+        padding-top: 20px;
+        padding-bottom: 30px;
+        padding-left: 16%;
+        padding-right: 14%;
+    }
+
+    .subContainer:nth-child(n+2) {
+        padding-top: 0px;
+        padding-bottom: 30px;
+        padding-left: 16%;
+        padding-right: 14%;
+    }
+
+    .body {
+        background-color: #eee;
+        display: table-row;
+    }
+
+
+    .body:nth-child(odd) {
+        background-color: #fff;
+    }
+
+    .body:nth-child(even) {
+        background-color: #FAFAFA;
+    }
+
+    .header-scroll {
+        padding-right: 33px;
+    }
+
+    .cell-container {
+        display: table-cell;
+        padding: 0;
+    }
+
+    .cell-scroll {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 300px;
+    }
+
+    .cell {
+        display: table-cell;
+        padding: 5px;
+        overflow: hidden;
+    }
+
+    .cell .btn-link {
+        padding: 0;
+    }
+
+    .btn-link-left {
+        text-align: left;
+    }
+
+    .filter-icons {
+        position: absolute;
+        right: 0;
+
+        .fa {
+            font-size: 20px;
+            padding: 8px;
+        }
+
+        .fa-times {
+            padding-left: 0;
+            padding-right: 14px;
+            color: @brand-color_red;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .filter {
+        width: 100%;
+    }
+
+    .footer {
+        border-top: solid 1px @brand-color_darker-gray;
+    }
+
+    .disabledRow {
+        font-style: italic;
+        color: gray;
+        pointer-events: none;
+        cursor: default;
+
+        a, .fa-calendar-alt, .btn-link {
+            color: inherit;
+        }
+
+        .enableLink {
+            pointer-events: initial !important;
+            cursor: pointer !important;
+            color: #0F7BBB !important;
+        }
+    }
+
+    .deletedRow {
+        font-style: italic;
+        color: gray;
+    }
+
+    .wrapButtonText {
+        white-space: normal;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+    .fa {
+        color: #2DABCB;
+    }
+
+    hr {
+        border: solid 1px;
+        margin: 0px;
+        color: #DBDBDB;
+        width: 100%;
+    }
+
+    .gridActions {
+        font-size: 13px;
+        color: #6B7073;
+
+        &__icons {
+            float: right;
+
+            .fa {
+                padding: 3px;
+            }
+        }
+    }
+
+    .input {
+        border-radius: 5px;
+    }
+
+    .inactivePatient {
+        font-style: italic;
+        color: gray;
+
+        a, .fa-calendar-alt, .fa-user, .btn-link {
+            color: inherit;
+        }
+
+        .enableLink {
+            pointer-events: initial !important;
+            cursor: pointer !important;
+            color: #0F7BBB !important;
+        }
+    }
+
+    .blockAppointment {
+        a, .fa-calendar-alt, .fa-user, .btn-link {
+            color: #2DABCB;
+        }
+    }
+
+    .hidden-col {
+        display: none;
+    }
+}
+
+.fusePrintGrid {
+    width: 100%;
+    height: auto;
+    padding: 0 0 0 0px;
+
+    .header {
+        background-color: #fff;
+        display: table-row;
+        padding: 15px;
+        font-weight: bold;
+        width: 100%;
+
+        .tableLabel {
+            color: #000000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        select {
+            width: 100%;
+        }
+    }
+
+    .subHeader {
+        background-color: none;
+        display: table-row;
+        padding: 15px;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .subContainer {
+        padding-top: 20px;
+        padding-bottom: 30px;
+        padding-left: 16%;
+        padding-right: 14%;
+    }
+
+    .body {
+        background-color: #eee;
+        display: table-row;
+    }
+
+
+    .body:nth-child(odd) {
+        background-color: #fff;
+    }
+
+    .body:nth-child(even) {
+        background-color: #FAFAFA;
+    }
+
+    .header-scroll {
+        padding-right: 33px;
+    }
+
+    .cell-container {
+        display: table-cell;
+        padding: 0;
+    }
+
+    .cell-scroll {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 300px;
+    }
+
+    .cell {
+        display: table-cell;
+        padding: 5px;
+        overflow: hidden;
+    }
+
+    .cell .btn-link {
+        padding: 0;
+    }
+
+    .btn-link-left {
+        text-align: left;
+    }
+
+    .filter-icons {
+        position: absolute;
+        right: 0;
+
+        .fa {
+            font-size: 20px;
+            padding: 8px;
+        }
+
+        .fa-times {
+            padding-left: 0;
+            padding-right: 14px;
+            color: @brand-color_red;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .filter {
+        width: 100%;
+    }
+
+    .footer {
+        border-top: solid 1px @brand-color_darker-gray;
+    }
+
+    .disabledRow {
+        font-style: italic;
+        color: gray;
+        pointer-events: none;
+        cursor: default;
+
+        a, .fa-calendar-alt, .btn-link {
+            color: inherit;
+        }
+
+        .enableLink {
+            pointer-events: initial !important;
+            cursor: pointer !important;
+            color: #0F7BBB !important;
+        }
+    }
+
+    .deletedRow {
+        font-style: italic;
+        color: gray;
+    }
+
+    .wrapButtonText {
+        white-space: normal;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+    .fa {
+        color: #2DABCB;
+    }
+
+    hr {
+        border: solid 1px;
+        margin: 0px;
+        color: #DBDBDB;
+        width: 100%;
+    }
+
+    .gridActions {
+        font-size: 13px;
+        color: #6B7073;
+
+        &__icons {
+            float: right;
+
+            .fa {
+                padding: 3px;
+            }
+        }
+    }
+
+    .input {
+        border-radius: 5px;
+    }
+
+    .inactivePatient {
+        font-style: italic;
+        color: gray;
+
+        a, .fa-calendar-alt, .fa-user, .btn-link {
+            color: inherit;
+        }
+
+        .enableLink {
+            pointer-events: initial !important;
+            cursor: pointer !important;
+            color: #0F7BBB !important;
+        }
+    }
+
+    .hidden-col {
+        display: none;
+    }
+}

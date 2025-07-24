@@ -1,0 +1,280 @@
+﻿.userCrud {
+
+    &__header-container {
+        .containerStandard;
+        .clearfix;
+    }
+
+    &__header {
+        .containerStandard;
+        .clearfix;
+        padding-top: 0px;
+        width: 100%;
+
+        &.keepTop {
+            position: fixed;
+            background-color: white;
+            width: 96%;
+            z-index: 1001;
+            max-width: 1600px;
+        }
+
+        .userCrud__title {
+            display: inline-block;
+            float: left;
+
+            h1 {
+                font-size: @brand-font_h1;
+                margin: 0;
+                padding-top: @brand-padding_horizontal;
+                padding-bottom: @brand-padding_horizontal;
+            }
+        }
+    }
+
+    .form-container {
+        padding: 0;
+    }
+
+    &__title {
+        display: inline-block;
+        float: left;
+
+        h1 {
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_horizontal;
+            padding-bottom: @brand-padding_horizontal;
+        }
+    }
+
+    &__actions {
+        .containerStandard;
+        display: inline-block;
+        padding-top: 0;
+        padding-bottom: @brand-padding_horizontal;
+        float: left;
+    }
+
+    &__form {
+        .containerStandard;
+        padding-top: 0;
+        padding-bottom: 100px;
+    }
+
+    &__rlLoading {
+        float: right;
+    }
+
+    .form-section-header-newer {
+        margin-top: 5px;
+    }
+
+    .locationSelect {
+        padding-bottom: @brand-padding_sm;
+    }
+
+    .userRoles {
+        &__validationErrors {
+            .error {
+                padding-bottom: @brand-padding_sm;
+                color: red;
+            }
+        }
+
+        &__assignRolesBy {
+            input:hover {
+                cursor: pointer;
+            }
+
+            div {
+                margin-left: 125px;
+            }
+        }
+
+        .form-label-newer {
+            top: 5px;
+        }
+
+        &__rolesGrid {
+
+            .gridRow {
+                padding: @brand-padding_sm;
+            }
+
+            .gridRow:nth-child(even) {
+                background-color: #fff;
+            }
+
+            .gridRow:nth-child(odd) {
+                background-color: #eee;
+            }
+
+            .tag-container {
+                margin-top: 3px;
+            }
+
+            i.inactive {
+                color: @brand-color_link-disabled;
+            }
+
+            i.active {
+                color: @brand-color_link;
+            }
+
+            button {
+                background: none;
+                border: none;
+                outline: none;
+            }
+        }
+
+        &__label {
+            margin-bottom: 0px;
+        }
+
+        &__row-hr {
+            width: 100%;
+            margin-top: 20px;
+            display: inline-block;
+        }
+    }
+
+    &__rxAccessTooltip {
+        max-width: 25%;
+    }
+}
+
+// #region User CRUD form
+.tenant {
+    color: @gray-light;
+    font-style: italic;
+    position: absolute;
+    right: 25px;
+    top: 10px;
+}
+
+.form-input-with-tenant {
+    padding-right: 200px;
+}
+
+.grid-body {
+    background-color: #eee;
+    display: table-row;
+    .grid-height;
+}
+
+
+.grid-body:nth-child(odd) {
+    background-color: #eee;
+}
+
+.grid-body:nth-child(even) {
+    background-color: #fff;
+}
+
+.grid-body:last-child {
+    background-color: #fff;
+}
+
+.border-bottom-gray {
+    border-bottom: 1pt solid #CCCCCC;
+}
+
+.grid-height {
+    height: auto;
+    max-height: 100%;
+}
+
+.grid-text {
+    cursor: auto;
+    font-size: 14px;
+}
+
+.state-license-dropdown {
+    background-color: white;
+    color: #3a3333;
+    border-radius: 3px;
+    height: 38px;
+}
+
+.grid-header {
+    cursor: auto;
+    font-size: 12px;
+}
+
+.hasHeight {
+    height: 90px;
+}
+
+.warning-font-style {
+    color: #CD853F;
+    font-weight: bold;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.tag-unverified {
+    background-color: @brand-color_red;
+    border-color: @brand-color_red;
+    pointer-events: none;
+}
+
+.tag-verified {
+    background-color: @brand-color_green;
+    border-color: @brand-color_green;
+    pointer-events: none;
+}
+
+.fuseGrid_cell {
+    display: table-cell;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.fuseGrid_cell_header {
+    border-top: solid 1px;
+    border-top-color: #DBDBDB;
+    border-bottom: solid 1px;
+    border-bottom-color: #DBDBDB;
+}
+
+.fuseGrid_cell_body {
+    border-bottom: solid 1px;
+    border-bottom-color: #DBDBDB;
+    height: 40px;
+}
+
+.fuseGrid_scroll {
+    overflow-y: auto;
+    height: 205px;
+}
+
+.inactive-loc-color * {
+    color: #ff9800; 
+    border-color: #ff9800;
+}
+
+.margin-left-20 {
+    margin-left:20px;
+}
+
+.dd-disable {
+    background-color: gray;
+    height: 42px;
+    width: 176px;
+    position: relative;
+    margin-bottom: -40px;
+    opacity: .01;
+    z-index: 2;
+}

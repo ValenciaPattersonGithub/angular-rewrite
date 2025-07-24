@@ -1,0 +1,354 @@
+﻿<div>
+    <div class="form-body-old" ng-form="frmPatientPersonalInfo">
+        <div class="row" ng-show="editing == false">
+            <div class="col-xs-10 padding-none patient-contact-info-section">
+                <div class="col-xs-12 padding-none">
+                    <!-- Address Line One, Two, City/State/Zip  -->
+                    <div class="row">
+                        <div class="col-xs-2 padding-none patient-contact-info-badge">
+                            <p ng-show="(personalInfo.Profile.AddressLine1 && personalInfo.Profile.AddressLine1 != '') ||
+                                      (personalInfo.Profile.AddressLine2 && personalInfo.Profile.AddressLine2 != '')">
+                                <div ng-if="personalInfo.Profile.AddressReferrerId">
+                                    <initial-badge class="initialBadgeColorOverride" person="patientAddressReference"></initial-badge>
+                                </div>
+                            </p>
+                        </div>
+                        <div class="col-xs-10 padding-none">
+                            <!-- Address Line One -->
+                            <div class="patientContactInfo__view-item" style="display: inline-flex; width: 130%;" ng-show="personalInfo.Profile.AddressLine1 && personalInfo.Profile.AddressLine1 != ''" title="{{personalInfo.Profile.AddressLine1}}">
+                                <label id="lblPatientAddressLineOne">{{ personalInfo.Profile.AddressLine1 | truncate:45}}</label><label ng-show="{{personalInfo.Profile.AddressLine1.length > 45}}">...</label>
+                            </div>
+
+                            <!-- Address Line Two -->
+                            <div class="patientContactInfo__view-item" style="display: inline-flex; width: 130%;" ng-show="personalInfo.Profile.AddressLine2 && personalInfo.Profile.AddressLine2 != ''" title="{{personalInfo.Profile.AddressLine2}}">
+                                <label id="lblPatientAddressLineTwo">{{ personalInfo.Profile.AddressLine2 | truncate:45}}</label><label ng-show="{{personalInfo.Profile.AddressLine2.length > 45}}">...</label>
+                            </div>
+
+                            <!-- City/State/Zip -->
+                            <div class="patientContactInfo__view-item" style="width: 127%;" ng-show="(personalInfo.Profile.City && personalInfo.Profile.City != '') || (personalInfo.Profile.State && personalInfo.Profile.State != '') || (personalInfo.Profile.ZipCode && personalInfo.Profile.ZipCode != '')">
+                                <!-- had to put these on the same line or else the browser would insert a phantom space - no idea why -->
+                                <label id="lblPatientCity" title="{{personalInfo.Profile.City}}">{{ personalInfo.Profile.City | truncate:45 }}</label><label ng-show="{{personalInfo.Profile.City.length > 45}}" title="{{personalInfo.Profile.City}}">...</label><label ng-show="(personalInfo.Profile.City && personalInfo.Profile.City != '') && (personalInfo.Profile.State && personalInfo.Profile.State != '')">, </label>&nbsp;
+                                <label id="lblPatientState" title="{{personalInfo.Profile.State}}">{{ personalInfo.Profile.State }} </label>&nbsp;
+                                <label id="lblPatientZip" title="{{personalInfo.Profile.ZipCode}}">{{ personalInfo.Profile.ZipCode | zipCode }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>&nbsp;</div>
+
+                    <div class="row" ng-repeat="email in personalInfo.Emails | filter: filterState('ObjectState') track by $index">
+                        <div class="col-xs-2 padding-none patient-contact-info-badge">
+                            <div ng-if="email.AccountEmailId">
+                                <initial-badge class="initialBadgeColorOverride" person="patientEmailReference(email)"></initial-badge>
+                            </div>
+                        </div>
+                        <div class="col-xs-10 padding-none">
+                            <div class="patientContactInfo__view-item" title="{{ email.Email }}">
+                                <div class="col-xs-6 padding-none patient-contact-info-text">
+                                    <div class="row">
+                                        <a class="btn btn-link padding-none" id="btnPatientEmail{{$index}}Address" ng-href="mailto:{{ email.Email }}">{{ email.Email | truncate:26 }}</a><label title="{{ email.Email }}" ng-show="{{ email.Email.length > 26}}">...</label>
+                                        <span>&nbsp;&nbsp;&nbsp;</span>
+                                        <span id="lblPatientEmail{{$index}}IsPrimary" ng-show="email.IsPrimary">{{ 'Preferred' | i18n }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 padding-none patient-contact-info-button" ng-if="email.ReminderOK">
+                                    <button class="btn btn-success btn-md email-reminder-ok" disabled style="opacity: 1; cursor: default; pointer-events: none;">{{ 'Reminders OK' | i18n }}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="patient-contact-info-space" ng-if="email.ReminderOK">&nbsp;</div>
+                    </div>
+                    <div>&nbsp;</div>
+
+                    <div class="row" ng-repeat="phone in personalInfo.Phones">
+                        <div class="col-xs-2 padding-none patient-contact-info-badge" ng-show="personalInfo.Phones.length > 0 && personalInfo.Phones[0].PhoneNumber != ''">
+                            <div ng-if="phone.PhoneReferrer">
+                                <initial-badge class="initialBadgeColorOverride" person="patientPhoneReference(phone)"></initial-badge>
+                            </div>
+                        </div>
+                        <!-- Patient's First Two Phones -->
+                        <div class="col-xs-10 padding-none">
+                            <div class="patientContactInfo__view-item">
+                                <div class="col-xs-6 padding-none patient-contact-info-text">
+                                    <div class="row">
+                                        <span id="lblPatientPhoneView{{$index}}">{{ phone.PhoneNumber | tel }}</span>
+                                        <span id="lblPatientPhoneOneType{{$index}}" ng-show="phone.Type">({{ typeInitial(phone.Type) }})</span>
+                                        <span id="lblPatientPhone{{$index}}IsPrimary" ng-show="phone.IsPrimary">{{ 'Preferred' | i18n }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 padding-none patient-contact-info-button" ng-show="showReminder(phone)">
+                                    <div class="phone-reminder-btn-div">
+                                        <button class="btn btn-default btn-md phone-reminder-btn-text-ok" disabled style="opacity: 1; cursor: default; pointer-events: none;"><span class="far fa-comment" ng-style="!showTextIcon(phone) && {'visibility' : 'hidden'}"></span> <span class="fa fa-phone" ng-style="!phone.ReminderOK && {'visibility' : 'hidden'}"></span></button>
+                                        <button class="btn btn-success btn-md phone-reminder-btn-reminder-ok" disabled style="opacity: 1; cursor: default; pointer-events: none;">{{ 'Reminders OK' | i18n }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="patient-contact-info-space" ng-if="phone.ReminderOK || phone.TextOk">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Personal Picture-->
+            <div class="col-xs-3 pull-right padding-none patient-contact-info-personal-picture">
+                <div class="col-xs-12 padding-none flex flex-end">
+                    <img class="patient-account-picture flex-shrink-1" src="Images/Smiley.png" />
+                </div>
+                <div class="col-xs-12 padding-none">
+                    <label id="lblPatientStatus" ng-style="findStatus(personalInfo.Profile.$$DisplayStatus) && {'font-size':'12px'}">
+                        {{ personalInfo.Profile.$$DisplayStatus }}
+                    </label>
+                </div>
+                <div class="col-xs-12 padding-none" ng-if="personalInfo.Profile.DateOfBirth">
+                    <span id="lblDOBView">{{ personalInfo.Profile.DateOfBirth | date: "MMM d, y" }}</span>
+                </div>
+                <!-- Age View-->
+                <div class="col-xs-12 padding-none" ng-if="personalInfo.Profile.DateOfBirth">
+                    <span id="lblAgeView">{{ 'Age' | i18n }}: {{ personalInfo.Profile.DateOfBirth | age }}</span>
+                </div>
+                <!--Sex-->
+                <div class="col-xs-12 padding-none" ng-switch="personalInfo.Profile.Sex">
+                    <span id="lblSexMaleView" ng-if="personalInfo.Profile.Sex =='M'" class="">{{ 'Male' | i18n }}</span>
+                    <span id="lblSexFemaleView" ng-if="personalInfo.Profile.Sex =='F'" class="">{{ 'Female' | i18n }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="loading == true">
+            <no-results loading="loading"></no-results>
+        </div>
+
+        <div ng-show="editing == true && loading==false" ng-disabled="loading == true">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- First Name -->
+                    <label class="">{{'First Name' | i18n }} *</label>
+                    <div ng-class="{error: !valid && !frmPatientPersonalInfo.inpFirstName.$valid }">
+                        <input id="inpFirstName" class="form-input required valid" placeholder="{{ 'First name' | i18n }}" ng-model="personalInfo.Profile.FirstName" capitalize-first-with-override
+                               name="inpFirstName" maxlength="64" required char-pattern="{{personalInfoRegex}}" sync-focus-with="editing" /> <!--defaultFocusOnFirstName-->
+                        <label id="lblFirstNameRequired" class="help-text " ng-show="!valid && !frmPatientPersonalInfo.inpFirstName.$valid">
+                            {{ 'This field is required.' | i18n }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <div class="row">
+                <div class="col-xs-12" ng-show="editing == true">
+                    <!-- Last Name -->
+                    <label class="">{{'Last Name' | i18n }} *</label>
+                    <div ng-class="{error:!valid && !frmPatientPersonalInfo.inpLastName.$valid}">
+                        <input id="inpLastName" class="form-input required valid" placeholder="{{ 'Last name' | i18n }}" ng-model="personalInfo.Profile.LastName" capitalize-first-with-override name="inpLastName" maxlength="64" required char-pattern="{{personalInfoRegex}}" />
+                        <label id="lblLastNameRequired" class="help-text" ng-show="!valid && !frmPatientPersonalInfo.inpLastName.$valid">
+                            {{ 'This field is required.' | i18n }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <div class="row">
+                <!-- Middle Name -->
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-5" ng-show="editing == true">
+                    <label class="">{{'Middle Initial' | i18n }} </label>
+                    <input id="inpMiddleName" class="form-input" placeholder="{{ 'Initial' | i18n }}" ng-model="personalInfo.Profile.MiddleName" capitalize-first-with-override name="inpMiddleName" maxlength="1" char-pattern="{{personalInfoRegex}}" />
+                </div>
+
+                <!-- Suffix -->
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-5" ng-show="editing == true">
+                    <label class="">{{'Suffix' | i18n }} </label>
+                    <input id="inpSuffix" class="form-input" placeholder="{{ 'Jr., Sr., IV' | i18n }}" ng-model="personalInfo.Profile.Suffix" capitalize-first-with-override name="inpSuffix" maxlength="20" char-pattern="{{personalInfoRegex}}" />
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <div class="row">
+                <div class="col-xs-12" ng-show="editing == true">
+                    <!-- Preferred Name-->
+                    <label class="">{{ 'Preferred {0}' | i18n:['Name'] }} </label>
+                    <input id="inpPreferredName" class="form-input" placeholder="{{ 'Prefers to be called...' | i18n }}" ng-model="personalInfo.Profile.PreferredName" capitalize-first-with-override name="inpPreferredName" maxlength="64" char-pattern="{{personalInfoRegex}}" />
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+            <div class="row">
+                <div class="col-xs-12" ng-show="editing == true">
+                    <!-- Sex -->
+                    <radiogroup unique-id="inpSex"
+                                value="personalInfo.Profile.Sex"
+                                options="patientProfileSexOptions"
+                                labels="patientProfileSexLabels"
+                                change-function="uncheckedSex($event)">
+                    </radiogroup>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+            <div class="row">
+                <!-- DOB -->
+                <div class="col-xs-12 col-sm-8 col-md-8" ng-show="editing == true">
+                    <label class="">{{'Date of Birth' | i18n }} </label>
+                    <date-selector input-id="inpDateOfBirth"
+                                   placeholder="MM/DD/YYYY"
+                                   date-var="personalInfo.Profile.DateOfBirth"
+                                   valid="validDob"
+                                   format="MM/dd/yyyy"
+                                   max-date="maxDate">
+                    </date-selector>
+                    <!-- Age -->
+                    <div ng-show="personalInfo.Profile.DateOfBirth">
+                        <label class="">{{ 'Age' | i18n }}:</label>
+                        <span id="lblAge">{{ personalInfo.Profile.DateOfBirth | age }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!-- Status -->
+            <div class="row">
+                <div class="col-xs-12" ng-show="editing == true">
+                    <div>
+                        <label class="">{{'Status' | i18n }} </label>
+                    </div>
+                    <checkbox checkbox-id="inpPatientStatus" class="patientPersonalInfo__status" checkbox-value="personalInfo.Profile.IsPatient" change-function="isPatientBooleanChanged()" checkbox-label="'Patient'"></checkbox>
+                    <checkbox checkbox-id="inpPatientIsActive" auth-z="soar-per-perdem-inactv" class="patientPersonalInfo__status" checkbox-value="personalInfo.Profile.IsActive" title="{{noAuthInactivationMessage}}" change-function="activeStatusChange()" checkbox-label="'Active'"></checkbox>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!-- Responsible Party -->
+
+            <patient-responsible-party show-header="true"
+                                       patient="personalInfo.Profile"
+                                       responsible-person="responsiblePerson"
+                                       disable-party="disableResponsibleParty" default-focus="defaultFocusOnRespParty"
+                                       show-error="!valid && !validResponsiblePerson" is-valid="validResponsiblePerson">
+
+            </patient-responsible-party>
+
+            <div class="clearfix">&nbsp;</div>
+
+            <div>
+
+                <!-- Street Address -->
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="">{{ 'Address' | i18n }}</label>
+                        </div>
+                        <div class="col-xs-12">
+                            <input class="form-input" id="inpAddressLineOne" type="text" placeholder="{{ 'Street address' | i18n }}"
+                                   ng-model="personalInfo.Profile.AddressLine1" maxlength="128"
+                                   char-pattern="[^ -;=?-~]" ng-disabled="patientData.AddressReferrerId" />
+                        </div>
+                        <div class="col-xs-12">
+                            <input class="form-input" id="inpAddressLineTwo" type="text" placeholder="{{ 'Address Line 2' | i18n }}"
+                                   ng-model="personalInfo.Profile.AddressLine2" maxlength="128"
+                                   char-pattern="[^ -;=?-~]" ng-disabled="patientData.AddressReferrerId" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix">&nbsp;</div>
+
+                <!-- City -->
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="">{{ 'City' | i18n }}</label>
+                        </div>
+                        <div class="col-xs-12">
+                            <input class=" form-input" id="inpCity" type="text" placeholder="{{ 'Enter city' | i18n }}"
+                                   ng-model="personalInfo.Profile.City" capitalize-first-with-override maxlength="64"
+                                   char-pattern="[^a-zA-Z-'. ]" ng-disabled="patientData.AddressReferrerId" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix">&nbsp;</div>
+
+                <!-- State -->
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="">{{ 'State' | i18n }}</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-10">
+                            <state-list state-list-id="inpState" source="personalInfo.Profile.State" disable-input="patientData.AddressReferrerId"></state-list>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+
+                <!-- ZIP Code -->
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="">{{ 'ZIP Code' | i18n }}</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-7">
+                            <div ng-class="{error: hasErrors && !frmPatientPersonalInfo.inpZipCode.$valid}">
+                                <input class="form-input" id="inpZipCode" zip-field="personalInfo.Profile.ZipCode"
+                                       type="text" name="inpZipCode" placeholder="{{ 'ZIP Code' | i18n }}" ng-model="personalInfo.Profile.ZipCode"
+                                       maxlength="10" minlength="5" ng-disabled="patientData.AddressReferrerId" />
+                                <label class="help-text" id="errZipCode" ng-show="hasErrors && frmPatientPersonalInfo.inpZipCode.$dirty && !frmPatientPersonalInfo.inpZipCode.$valid">
+                                    {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix">&nbsp;</div>
+                <!-- Email Info -->
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="">{{ 'Email' | i18n }}</label>
+                        </div>
+                        <div class="form-group">
+                            <!-- Email Address One -->
+                            <div class="col-xs-12">
+                                <div ng-class="{error:hasErrors &&  !frmPatientPersonalInfo.inpPatientEmailOneAddress.$valid}">
+                                    <input class="form-input" id="inpPatientEmailOneAddress" name="inpPatientEmailOneAddress" type="text" placeholder="{{ 'Email address' | i18n }}" ng-model="personalInfo.Profile.EmailAddress" valid-email maxlength="256">
+                                    <label class="help-text" id="errPatientEmailOneAddress" ng-show="hasErrors && frmPatientPersonalInfo.inpPatientEmailOneAddress.$dirty && !frmPatientPersonalInfo.inpPatientEmailOneAddress.$valid">
+                                        {{ 'This field requires a valid email address.'| i18n }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!-- Email Address Two -->
+                            <div class="col-xs-12">
+                                <div ng-class="{error: hasErrors  && !frmPatientPersonalInfo.inpPatientEmailTwoAddress.$valid}">
+                                    <input class="form-input" id="inpPatientEmailTwoAddress" name="inpPatientEmailTwoAddress" type="text" placeholder="{{ 'Email address' | i18n }}" ng-model="personalInfo.Profile.EmailAddress2" valid-email maxlength="256" />
+                                    <label class="help-text" id="errPatientEmailTwoAddress" ng-show="hasErrors && frmPatientPersonalInfo.inpPatientEmailTwoAddress.$dirty && !frmPatientPersonalInfo.inpPatientEmailTwoAddress.$valid">
+                                        {{ 'This field requires a valid email address.'|i18n }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+
+
+            </div>
+
+            <div ng-class="personalInfo.ProfileVisible" id="personalInfo.Profile">
+                <div class="row">
+                    <phone-info class="phone-container-narrow" phones="personalInfo.Phones" max-limit="5" valid-phones="validPhones" valid-form="!hasErrors" has-texts="true" has-notes="true" patient-info="personalInfo"></phone-info>
+                </div>
+            </div>
+
+            <div class="clearfix">&nbsp;</div>
+
+        </div>
+        <!-- TODO: adding temporary inline styles for positioning until we get a definitive wireframe for this view -->
+        <div id="divDuplicatePatients" ng-show="editing == true"
+             style="position:absolute;z-index:2;right:0px; width: 100%; top: 150px;left:105%">
+            <patient-duplicates patient="personalInfo.Profile"></patient-duplicates>
+        </div>
+
+    </div>
+</div>
+
+

@@ -1,0 +1,140 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="encounterspaymentreport grid header">
+        <div class="col-sm-1-migration">{{ 'Date' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Patient' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'DOB' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Policy Holder' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'PH ID' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Group #' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Service Code' | translate }}</div>
+        <div class="col-sm-1-migration text-center">{{ 'Tooth' | translate }}</div>
+        <div class="col-sm-1-migration text-center">{{ 'Area' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Fee Charged' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Allowed Amount' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Difference' | translate }}</div>
+        <div class="col-sm-1-migration leftmargin">{{ 'Secondary Insurance' | translate }}</div>
+    </div>
+    <div class="encounterspaymentreportgroupHeader groupheader locationheader" style="padding-right: 0.5%;">
+        <div class="col-sm-12-migration text-center">
+            <h4>{{ ofcLocation }}</h4>
+        </div>
+    </div>
+    <div class="encounterspaymentreportgroupHeader groupheader paymentheader" style="padding-right: 0.5%;">
+        <div class="col-sm-12-migration text-center" id="headerLocationDiv">
+            <h4>{{ payment }}</h4>
+        </div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="100" tabindex="0"
+            (scrolledIndexChange)="nextItem($event)">
+            <div *cdkVirtualFor="let encounter of reportData; index as i" class="{{encounter.Class}}">
+                <input type="hidden" value="{{encounter.Payment}}" id="encountersPayment{{i}}" />
+                <input type="hidden" value="{{encounter.Location}}" id="encountersLocation{{i}}" />
+                <div class="encounterspaymentreportgroupHeader" *ngIf="i>0 && encounter.IsPaymentHeader == true"
+                    >
+                    <div class="col-sm-12-migration text-center" id="subHeaderPaymentDiv{{i}}">
+                        <h4>{{ encounter.Payment }}</h4>
+                    </div>
+                </div>
+                <div  id="divMainInfo{{i}}"  class="encounterspaymentreport grid" *ngIf="encounter.IsEncountersPaymentHeader == true"
+                    >
+                    <div class="col-sm-1-migration">{{ encounter.Date | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-1-migration">{{ encounter.Patient }}</div>
+                    <div class="col-sm-1-migration">{{ encounter.DateOfBirth | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-1-migration">{{ encounter.PolicyHolder }}</div>
+                    <div class="col-sm-1-migration">{{ encounter.PolicyHolderId }}</div>
+                    <div class="col-sm-1-migration">{{ encounter.GroupNumber }}</div>
+                    <div class="col-sm-1-migration">{{ encounter.Service }}</div>
+                    <div class="col-sm-1-migration text-center">{{ encounter.Tooth }}</div>
+                    <div class="col-sm-1-migration text-center">{{ encounter.Area }}</div>
+                    <div class="col-sm-1-migration text-right">{{ encounter.FeeCharged | currency }}</div>
+                    <div class="col-sm-1-migration text-right">{{ encounter.AllowedAmount | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="encounter.Difference >= 0">
+                        {{encounter.Difference |
+                        currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="encounter.Difference < 0">
+                        ({{encounter.Difference * -1 | currency}})
+                    </div>
+                    <div class="col-sm-1-migration leftmargindetail">{{ encounter.SecondaryInsurance }}</div>
+                </div>
+                <div id="divMainInfo{{i}}" class="encounterspaymentreport grid item" *ngIf="encounter.IsEncountersPaymentHeader != true">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">{{encounter.Service}}</div>
+                    <div class="col-sm-1-migration text-center">{{ encounter.Tooth }}</div>
+                    <div class="col-sm-1-migration text-center">{{ encounter.Area }}</div>
+                    <div class="col-sm-1-migration text-right">{{ encounter.FeeCharged | currency }}</div>
+                    <div class="col-sm-1-migration text-right">{{ encounter.AllowedAmount | currency }}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="encounter.Difference >= 0">
+                        {{encounter.Difference |
+                        currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="encounter.Difference < 0">
+                        ({{encounter.Difference * -1 | currency}})
+                    </div>
+                    <div class="col-sm-1-migration leftmargindetail">{{ encounter.SecondaryInsurance }}</div>
+                </div>
+                <div id="paymentTotalDiv{{i}}" class="encounterspaymentreportfooter grid" *ngIf="encounter.IsFooter == true">
+                    <div></div>
+                    <div class="col-sm-2-migration text-right reportGrid__label">{{'Totals for' | translate}}
+                        {{encounter.Payment}}:</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label">{{encounter.PaymentTotalCharged |
+                        currency}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label">{{encounter.PaymentTotalAllowed |
+                        currency}}
+                    </div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"
+                        *ngIf="encounter.PaymentDifference >=0">
+                        {{encounter.PaymentDifference | currency}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"
+                        *ngIf="encounter.PaymentDifference < 0">
+                        ({{encounter.PaymentDifference * -1 | currency}})</div>
+                </div>
+
+                <div class="encounterspaymentreportfooter grid" *ngIf="encounter.IsFooter == true">
+                    <div></div>
+                    <div class="col-sm-2-migration text-right reportGrid__label">{{'Total Patients' | translate}}:
+                    </div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration text-right reportGrid__label">
+                        {{encounter.TotalPaymentPatients}}
+                    </div>
+                </div>
+
+                <div class="encounterspaymentreportfooter grid item reportGrid__footer"
+                    *ngIf="encounter.IsLocationFooter == true">
+                    <div></div>
+                    <div class="col-sm-2-migration text-right reportGrid__label">{{'Totals for All Payments' |
+                        translate}}:</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label">{{encounter.AllFeeCharged | currency}}
+                    </div>
+                    <div class="col-sm-1-migration text-right reportGrid__label">{{encounter.AllAllowedAmount |
+                        currency}}
+                    </div>
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="encounter.AllDifference >=0">
+                        {{encounter.AllDifference
+                        | currency}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="encounter.AllDifference < 0">
+                        ({{encounter.AllDifference * -1 | currency}})</div>
+                </div>
+                <div class="encounterspaymentreportfooter grid" *ngIf="encounter.IsLocationFooter == true">
+                    <div></div>
+                    <div class="col-sm-9-migration text-right reportGrid__label">{{'Total Patients for All Payments' |
+                        translate}}:</div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="reportGrid__label text-right col-sm-1-migration">{{encounter.TotalLocationPatients}}
+                    </div>
+                </div>
+                <div class='col-sm-12 text-center margin-top-footer' *ngIf="i+1 == reportData.length">
+                    {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright ©
+                    American Dental Association (ADA). All rights reserved.' | translate}}
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

@@ -1,0 +1,236 @@
+﻿.creditTrans {
+	height: 500px;
+	padding-top: 24px;
+
+	&__header {
+		.modal-header;
+		.clearfix;
+
+		.required {
+			display: inline-block;
+			float: right;
+			margin-top: 20px;
+		}
+	}
+
+	&__body {
+		.modal-body;
+		.clearfix;
+	}
+
+	&__formBox {
+		.clearfix;
+	}
+
+	&__unapplied {
+		.clearfix;
+		font-size: 12px !important;
+		padding-bottom: 10px;
+
+		.unapplied-transaction-label {
+			display: inline-block;
+			float: left;
+			font-size: 1.3em;
+			line-height: 0.8;
+		}
+
+		.no-padding-left {
+			padding-left: 0;
+		}
+
+		.date-label {
+			float: left;
+			width: 14.5%;
+		}
+
+		.type-label {
+			float: left;
+			width: 14.5%;
+		}
+
+		.desc-label {
+			float: left;
+			width: 29%;
+		}
+
+		.amount-label {
+			float: left;
+			width: 28%;
+		}
+
+		.unapplied-amount-label {
+			float: left;
+			width: 14%;
+		}
+	}
+
+	&__actions {
+		.clearfix;
+		padding-bottom: 10px;
+
+		.unapplied-transaction-label {
+			display: inline-block;
+			float: left;
+			font-size: 1.3em;
+			line-height: 0.8;
+		}
+
+		.no-padding-left {
+			padding-left: 0;
+		}
+	}
+
+	&__tableBox {
+		.clearfix;
+		border: 1px solid #999;
+	}
+
+	&__footer {
+		.modal-footer;
+		.clearfix;
+	}
+
+	&__provider {
+		width: 90%;
+
+		.k-input {
+			width: 150px;
+		}
+	}
+
+	&__negative-note-col {
+		height: 38px;
+	}
+
+	&__margin-top-minus4-percent {
+		margin-top: -4%;
+	}
+
+	&__margin-top-minus2-percent {
+		margin-top: -2%;
+	}
+
+	&__amount-error {
+		border: 1px solid @brand-color_error;
+	}
+
+	&__empty-row {
+		height: 10px !important;
+	}
+
+	&__no-padding {
+		padding: 0 !important;
+	}
+
+	.fuseGrid {
+		overflow-y: scroll;
+
+		.header {
+			display: inline;
+			padding: 0;
+
+			div {
+				padding: 0;
+
+				&.header-right {
+					text-align: right;
+					padding-right: 14px;
+				}
+			}
+		}
+
+		.body {
+			display: block;
+			max-height: 400px;
+			overflow-y: scroll;
+
+			div {
+				padding-top: 2px;
+			}
+
+			.row {
+				background-color: #FAFAFA;
+
+				&:nth-child(even) {
+					background-color: #FFF;
+
+					&:hover {
+						background-color: #FAFAFA;
+					}
+				}
+			}
+
+			.amount-col {
+				input {
+					width: 60%;
+				}
+			}
+		}
+
+		.amount-col {
+			input {
+				width: 60%;
+			}
+		}
+
+		.footer {
+			padding-right: 16px;
+
+			.totals {
+				padding-right: 16px;
+			}
+
+			.amount {
+				.totalAmount {
+					width: 60%;
+				}
+			}
+		}
+
+		.right {
+			text-align: right;
+		}
+	}
+}
+
+	.apply-label {
+		display: inline-block;
+		float: left;
+		font-size: 1.5em;
+		line-height: 0.8;
+		margin-top: 15px !important;
+		padding-left: 0;
+	}
+
+@media only screen and (max-device-width: 1240px) and (-webkit-min-device-pixel-ratio: 1) {
+	.fuseGrid {
+
+		.body {
+			.amount-col {
+				input {
+					width: 100%;
+				}
+			}
+		}
+
+		.footer {
+			padding-right: 0px;
+
+			.totals {
+				padding-right: 0px;
+			}
+
+			.amount {
+				.totalAmount {
+					width: 100%;
+				}
+			}
+		}
+
+		.amount-col {
+			input {
+				width: 100%;
+			}
+		}
+	}
+}

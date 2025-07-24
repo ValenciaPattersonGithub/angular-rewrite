@@ -1,0 +1,9 @@
+﻿<div class="modal-body">
+    <contact-details-panel patient-data="patient" panel-title="Contact Details" phones="patient.Phones" emails="patient.Emails" set-focus-on-input="false"></contact-details-panel>
+</div>
+<div class="modal-footer">
+    <div>
+        <button id="btnCancelNo" ng-click="cancelEditContactInfoSave();" class="btn btn-default">{{ 'Cancel' | i18n }}</button>
+        <button id="btnCancelYes" ng-click="saveEditContactInfo();" ng-disabled="!patient.Profile.ContactsAreValid" class="btn btn-primary">{{ 'Save' | i18n }}</button>
+    </div>
+</div>

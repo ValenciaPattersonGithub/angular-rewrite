@@ -1,0 +1,210 @@
+﻿<div ng-controller="HeaderController">
+    <header class="top-header" id="top-header">
+        <div class="top-nav">
+            <!-- Fuse Logo -->
+            <div id="fuseLogo" class="col-sm-2 top-nav-column hidden-xs hdr-menu">
+                <div>
+                    <span>
+                        <img ng-src="Images/Fuse_Logo-02.svg" alt="Fuse" />
+                    </span>
+                </div>
+            </div>
+            <!-- Global Search / Tablet and Greater -->
+            <div ng-if="patAuthContext.isAuthorized" class="col-sm-3 top-nav-column hidden-xs nav-search">
+                <span class="top-nav-search">
+                    <search-bar auth-z="{{amfa}}" global-search="true" base-id="Search" header="true"
+                                b-focus="focusOnSearchBar" header-search="true"></search-bar>
+                </span>
+            </div>
+            <div class="top-nav-options top-nav-column hidden-xs pull-right">
+                <!-- User Section - Authenticated -->
+                <ul ng-if="patAuthContext.isAuthorized" class="nav navbar-nav navbar-right hidden-xs flexbox-container">
+
+                    <li ng-if="ultHeaderCountdown">
+                        <div ng-if="ultHeaderCountdown" class="ult-countdown">
+                            Session expires in {{ultHeaderCountdown | secondsToMinutesSeconds | date:'mm:ss'}}
+                        </div>
+                    </li>
+
+                    <!--Alerts Badge-->
+                    <li class="" ng-if="rxUser">
+                        <div class="pull-left top-nav-login-container top-nav-item">
+                            <div class="top-nav-link">
+                                <a href="{{notifications.url}}" target="_blank" class="notificationsLink">
+                                    <i ng-if="!ShowNotifications" class="far fa-bell fa-lg">
+                                        <span class="badge"
+                                              ng-class="{'badge-warning': notifications.count > 0}">{{notifications.counts | i18n}}</span>
+                                    </i>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="top-nav-quicklinks top-nav-item" tabindex="2">
+                            <div href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                 aria-haspopup="true" aria-expanded="false">
+                                <div class="flexbox-container">
+                                    <span>
+                                        <i class="far fa-bookmark"></i>
+                                        {{'Quick Links' | i18n}}
+                                        <i class="fa fa-caret-down"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a id="lnkDoseSpotAdminPortal" class="dropdown" target="_blank" rel="noopener"
+                                       href="{{DoseSpotAdminPortalUrl}}"
+                                       ng-if="showAdminLink">{{'DoseSpot Admin Portal' | i18n}}</a>
+                                </li>
+                                <li>
+                                    <a id="lnkDentalXChangePortal" class="dropdown" target="_blank" rel="noopener"
+                                       href="{{DentalXChangePortalUrl}}">{{'DentalXChange Portal' | i18n}}</a>
+                                </li>
+                                <li>
+                                    <a ng-class="{'disableAnchor': !loggedInLocation || !loggedInLocation.IsPaymentGatewayEnabled}"
+                                       id="lnkOpenEdgePortal" class="dropdown" target="_blank" rel="noopener"
+                                       uib-tooltip="{{'Credit Card Reporting' | i18n}}" tooltip-placement="bottom auto"
+                                       ng-click="loggedInLocation && loggedInLocation.IsPaymentGatewayEnabled ? angular.noop() : $event.preventDefault()"
+                                       href="{{OpenEdgePortalUrl}}">
+                                        {{'Open Edge Portal' | i18n}}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="lnkRevenueWellPortal" class="dropdown" target="_blank" rel="noopener"
+                                       href="{{RevenueWellPortalUrl}}">{{'RevenueWell Portal' | i18n}}</a>
+                                </li>
+                                <li>
+                                    <a id="lnkFuseAcademy" class="dropdown" target="_blank" rel="noopener"
+                                       href="{{FuseAcademyUrl}}">{{'Fuse Academy' | i18n}}</a>
+                                </li>
+                                <li ng-if="AddPRMLinkInQuickLinks">
+                                    <a id="prm" class="dropdown" target="_blank" rel="noopener"
+                                       href="{{PRMUrl()}}">Fuse Connect</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="top-nav-quicklinks top-nav-item">
+                            <div href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                 aria-haspopup="true" aria-expanded="false">
+                                <div class="flexbox-container">
+                                    <initial-badge ng-if="currentUserData != null" person="currentUserData"
+                                                   class="pull-left header-initial-badge"></initial-badge>
+                                    <span>
+                                        {{currentUser}}
+                                        <i class="fa fa-caret-down"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <ul class="dropdown-menu menuClass">
+                                <span class="fa-arrow">
+                                    <i class="fa fa-caret-up"></i>
+                                </span>
+                                <li class="dropdown-menu1">
+                                    <a class="dropdown" target="_blank"
+                                       href="{{ResetPasswordUrlBase}}">Change My Password</a>
+                                </li>
+                                <li class="dropdown-menu1" ng-if="enableMFASettings && isActiveMFASession">
+                                    <a class="dropdown"
+                                       href="{{mfaSettingsUrlDecoded}}">Change MFA Settings</a>
+                                </li>
+                                <li class="dropdown-menu1">
+                                    <a ng-mouseover="mouseover();" ng-mouseleave="mouseleave();">
+                                        Change My Landing Page
+
+                                    </a>
+                                    <i class="fa fa-angle-right"
+                                       ng-class="{'fa-angle-blue': !arrowFlag, 'fa-angle-white': arrowFlag}"
+                                       aria-hidden="true"></i>
+                                    <ul class="sub-menu dropdown-menu">
+                                        <li ng-repeat="item in menu" id="page-{{item.id}}" class="menu-border1 sub-dropdown">
+                                            <a ng-class="{'selectedClass': item.id === DefaultLandingPage}" check-auth-z="{{item.auth}}" ng-click="item.id !== DefaultLandingPage && selectPage(item.id);">{{item.name}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!--<li>
+                    <div class="top-nav-locations top-nav-item">
+                        <location-selector practice-locations="filteredLocations"></location-selector>
+                    </div>
+                </li>-->
+                    <!--NEW cirective-->
+                    <li>
+                        <div class="top-nav-locations top-nav-item">
+                            <global-location-selector></global-location-selector>
+                        </div>
+                    </li>
+                    <li ng-if="ShowNotifications" class="leftNav_mainNav__list-item" placement="right" delay="500">                        <div class="top-nav-login-container top-nav-item">
+                            
+                            <div class="dropdown">
+                                <i class="fa fa-bell" data-toggle="dropdown" uib-tooltip="Notifications" tooltip-placement="bottom"></i>
+                                <i ng-if="IsNotificationBellRed ||isRxNotificationsCountGreaterThanZero" class="fas fa-circle notification-indicator"></i>
+                                <ul class="dropdown-menu notification-bell-icon" style="padding-bottom: 0px;">
+                                    <span class="fa-arrow">
+                                        <i class="fa fa-caret-up"></i>
+                                    </span>
+                                  <li class="notification-sub-menu">
+                                    <notifications [drawer]="drawer"></notifications>
+                                  </li>
+                                </ul>
+                              </div>
+                        </div>
+                    </li>
+                    <li ng-show="practiceSettings.IsLiveChatEnabled">
+                        <div class="top-nav-item" uib-tooltip="{{liveChatToolTipText}}" tooltip-placement="bottom"
+                             ng-click="startLiveChat()">
+                            <svg version="1.2" xmlns="http://www.w3.org/2000/svg"
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" overflow="visible" preserveAspectRatio="none"
+                                 viewBox="0 -2.499092558983669 54 54" width="24" height="24">
+                                <g>
+                                    <g xmlns:default="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path d="M33,16V0H0v27h13l3.5,6.2L20,27h1v16h13l3.5,6.2L41,43h13V16H33z M21,25h-2l-2.5,4.2L14,25H2V2h29v14H21V25z M52,41H40    l-2.5,4.2L35,41H23V18h29V41z"
+                                                  style="fill: rgb(255, 255, 255);" vector-effect="non-scaling-stroke" />
+                                        </g>
+                            </svg>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div class="top-nav-login-container top-nav-item">
+                            <div id="btnNewTab" ng-click="openNewTab()" class="top-nav-new-tab">
+                                <span class="fas fa-external-link-square-alt fa-lg"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="navLoginForm" class="pull-left top-nav-login-container top-nav-item">
+                            <div id="btnSignOut" ng-show="patAuthContext.isAuthorized" class="top-nav-link"
+                                 ng-click="logout()" tabindex="2">
+                                <i class="fas fa-sign-out-alt fa-lg"></i>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="globalAppHeader" name="globalAppHeader"
+             ng-if="toShow && loggedInLocation && loggedInLocation.DeactivationTimeUtc" class="top-nav-alert">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <label>&nbsp;&nbsp;&nbsp;{{ isInactive ? ('Warning! This Location is Inactive' | i18n) : ('Warning! This location is pending inactivation on' | i18n) + ' ' + (loggedInLocation.DeactivationTimeUtc | date : 'MM/dd/yyyy') }}</label>
+        </div>
+    </header>
+    <div ng-show="!isNavCollapsed" ng-if="!loading" class="mainNav" ng-class="{'mainNav-with-alert': toShow}" ng-style="isPatientEngagement && {'visibility':'hidden'}">
+        <navigation nav-clicked="navWasClicked"></navigation>
+        <!--<nav-bar nav-clicked="navWasClicked"></nav-bar>-->
+    </div>
+
+</div>
+<div id="PFILinkContainer">
+    <div id="PFIChatLink">
+        <span id="PFILinkInfo" style="visibility: hidden;"></span>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+﻿<div class="toothChart">
+    <div class="toothChart__title">
+        <h3>{{ 'Affected Tooth' | i18n }} <span ng-hide="disableSelection">*</span></h3>
+    </div>
+    <div class="toothChart__perm">
+        <div class="toothChart__permTop">
+            <button id="{{tooth.USNumber}}" 
+                    class="toothChart__toothCtrl" 
+                    ng-click="selectTooth(tooth)" 
+                    ng-class="{active: tooth.Selected}" 
+                    ng-disabled="disableSelection || quadrantSelectionOnly"
+                    ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Upper', Description: 'Permanent'}">
+                {{tooth.USNumber}}
+            </button>
+        </div>
+        <div class="toothChart__permBtm">
+            <button id="{{tooth.USNumber}}" 
+                    class="toothChart__toothCtrl" 
+                    ng-click="selectTooth(tooth)" 
+                    ng-class="{active: tooth.Selected}" 
+                    ng-disabled="disableSelection || quadrantSelectionOnly"
+                    ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Lower', Description: 'Permanent'} | orderBy : 'USNumber' : true">
+                {{tooth.USNumber}}
+            </button>
+        </div>
+    </div>
+    <div class="">
+        <div class="toothChart__regions"></div>
+        <div class="toothChart__prim">
+            <div class="toothChart__primTop">
+                <button id="{{tooth.USNumber}}" 
+                        class="toothChart__toothCtrl" 
+                        ng-click="selectTooth(tooth)" 
+                        ng-class="{active: tooth.Selected}" 
+                        ng-disabled="disableSelection || quadrantSelectionOnly"
+                        ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Upper', Description: 'Primary'}">
+                    {{tooth.USNumber}}
+                </button>
+            </div>
+            <div class="toothChart__primBtm">
+                <button id="{{tooth.USNumber}}" 
+                        class="toothChart__toothCtrl" 
+                        ng-click="selectTooth(tooth)" 
+                        ng-class="{active: tooth.Selected}" 
+                        ng-disabled="disableSelection || quadrantSelectionOnly"
+                        ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Lower', Description: 'Primary'} | orderBy : 'USNumber' : true">
+                    {{tooth.USNumber}}
+                </button>
+            </div>
+        </div>
+        <div class="toothChart__regions"></div>
+    </div>
+</div>

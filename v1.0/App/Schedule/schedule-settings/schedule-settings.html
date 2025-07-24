@@ -1,0 +1,53 @@
+﻿<div class="modal-header no-border">
+	<div class="row">
+        <div class="patEncRef__bread col-xs-12 schedule-settings__margin-left-35">
+            <ul class="patientAcctInsPmt__breadcrumb" ng-show="fromSchedule">
+                <li>
+                    <span><a ng-click="navigateSchedule()" class="ng-binding">Schedule</a></span>
+                </li>
+                <li class="ng-binding">Set Time Increments</li>
+            </ul>
+            <ul class="patientAcctInsPmt__breadcrumb" ng-show="fromPracticeSettings" style="">
+                <li>
+                    <span><a ng-click="navigatePracticeSettings()" class="ng-binding">Practice Settings</a></span>
+                </li>
+                <li class="ng-binding">Set Time Increments</li>
+            </ul>
+        </div>
+		<div class="col-xs-12">
+            <div id="lblScheduleSettingsHeader" class="page-title-responsive form-header-newer" ng-show="true">{{ ::('Schedule Settings' | i18n) }}</div>
+		</div>
+	</div>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
+							<label id="lblTimeIncrement" class="form-label-newer">{{::('Time Increments' | i18n) }} * </label>
+						</div>
+						<div class="col-xs-12 col-sm-7 col-md-8 col-lg-9">
+                            <select kendo-drop-down-list
+                                    id="inpTimeIncrements"
+                                    k-data-text-field="'Display'"
+                                    k-data-value-field="'Value'"
+                                    k-data-source="timeIncrements"
+                                    k-value-template="valueTemplate"
+                                    ng-model="settings.Data.DefaultTimeIncrement"
+                                    tabindex="1"></select>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer no-border">
+    <button id="btnScheduleSettingsCancel" ng-click="showCancelModal();" ng-disabled="savingSettings" class="btn btn-default pull-left" tabindex="1">{{ 'Cancel' | i18n }}</button>
+    <button id="btnScheduleSettingsSave" ng-click="settings.Save();" check-auth-z="soar-biz-biz-edit" ng-disabled="savingSettings" class="btn btn-primary pull-left" tabindex="1">{{ 'Save' | i18n }}</button>
+</div>

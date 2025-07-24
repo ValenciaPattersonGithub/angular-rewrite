@@ -1,0 +1,68 @@
+﻿.noteTemp {
+    .containerStandard;
+
+    &__secondary {
+        .make-xs-column(3);
+        padding: 0;
+    }
+
+    &__primary {
+        .make-xs-column(9);
+        padding-top: 11px;
+    }
+
+    &__breadcrumb {
+        .breadcrumb;
+        margin: 0;
+        padding-left: 0;
+    }
+}
+
+.noteTempEditor {
+    &__header {
+        .clearfix;
+        margin-bottom: @brand-margin_md;
+
+        h4 {
+            display: inline-block;            
+        }
+
+        .form-control {
+            display: inline-block;
+            width: 200px;
+            height: auto;
+            float: left;
+            margin-right: @brand-margin_sm;
+        }
+
+        .btn-primary {
+            float: left;
+            margin-top: 2px;
+        }
+    }
+
+    &__body {
+        h4 {
+           word-wrap:break-word;           
+        }
+        > div {
+            margin-bottom: @brand-margin_lg;            
+        }
+    }   
+
+    &__addButton {
+        margin-bottom: @brand-margin_md;
+    }
+
+    &__actions {
+        text-align: right;
+    }
+
+    &__category {
+        border: 0px;
+        background: none;
+        padding: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}

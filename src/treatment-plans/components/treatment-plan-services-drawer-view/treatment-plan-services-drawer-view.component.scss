@@ -1,0 +1,355 @@
+@import "variables";
+
+// todo: update select list components to use the library.
+// These styles are directly imported and require the classes fui-select-container and fui-select to work
+@import '../@shared/components/form-controls/select-list/select-list.component';
+
+.treatment-plan-service-draw-content-container {
+}
+
+.item-box {
+    font-family: $global-font-family;
+}
+
+.item-box-space {
+    padding: 10px 15px 0px 15px;
+}
+
+.selectAllContainerText {
+    text-align: center;
+    font-family: $global-font-family;
+    padding-left: 5px;
+}
+
+.select-all-container {
+    text-align: center;
+    font-family: $global-font-family;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+
+    label {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: normal;
+
+        & > svg {
+            margin-right: 5px;
+        }
+
+        :hover {
+            cursor: pointer;
+        }
+    }
+
+}
+
+.filters-container {
+    text-align: center;
+    font-family: $global-font-family;
+    display: grid;
+    grid-template: auto / 1fr 1fr;
+    grid-gap: 15px;
+    padding: 15px;
+
+    .select-list {
+        height: 25px;
+        border: 1px solid $border-grey;
+        border-radius: 5px;
+        background-color: $polar-white;
+        background-size: cover;
+        font-size: 12px;
+        color: $text-black;
+        text-decoration: none solid $text-black;
+    }
+}
+
+.proposed-service-checkbox {
+    display: none;
+}
+
+.proposed-service-checkbox-all {
+    display: none;
+}
+
+.reorder-services-checkbox {
+    label {
+        margin: 6px 8px 0px 8px;
+    }
+
+    :hover {
+        cursor: pointer;
+    }
+}
+
+.checkbox-drawer {
+    fill: $action-blue;
+}
+
+.customHr {
+    margin: 0 0 0 0;
+}
+
+.description-textArea-content {
+    position: relative;
+}
+
+.service-drawer-item {
+    border-radius: 5px;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+    border-top: 1px solid #dadcdc;
+
+    &.disableDrag{
+        border:1px solid #dadcdc        
+    }
+}
+
+.service-drawer-table {
+    width: 100%;
+    height: 100px;
+
+    &.disableDrag{
+        border-spacing:2px;
+        border-radius:5px;
+        border-collapse:separate;
+        border-color:#dadcdc;
+    }
+}
+
+.service-drawer-table .drag-handle {
+    width: 40px;
+    border-right: 1px;
+    border-color: #DADCDC;
+    border-right-style: solid;
+}
+
+.service-drawer-table .dragHandlePlaceHolder {
+    min-width: 40px;
+    border-right: 1px;
+    border-color: #DADCDC;
+    border-right-style: solid;
+}
+
+.service-drawer-table .drag-area {
+    vertical-align: middle;
+}
+
+.service-drawer-table .description-textArea {
+    font-size: 12px;
+    width: 250px;
+    padding: 0px 8px 0px 0px;
+    vertical-align: middle;
+}
+
+.service-drawer-table .description-textArea .description-textArea-content {
+    word-break: break-word;
+}
+
+.service-drawer-table .details-area {
+    padding: 4px 0px 0px 0px;
+    vertical-align: middle;
+}
+
+.service-drawer-table .location-area {
+    padding: 0px 0px 4px 0px;
+}
+
+.service-drawer-table .details-area-label {
+    font-weight: 700;
+}
+
+.service-drawer-table .preview-textArea {
+    text-align: center;
+    width: 80px;
+    word-break: break-word;
+    font-size: 12px;
+}
+
+.service-drawer-table .preview-highlight {
+    font-weight: 400;
+    word-break: break-word;
+}
+
+/////////////////////////////////
+/* Drag and Drop Styles */
+/////////////////////////////////
+
+.drag-handle .drag-svg {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.drag-handle .drag-svg svg {
+    fill: $action-blue;
+    margin: 10px 3px 5px 3px
+}
+
+.drag-handle .drag-svg:hover svg {
+    fill: $light-action-blue;
+}
+
+.cdk-drag-preview {
+}
+
+.drawer-preview {
+    transform: translate(-25px, -25px);
+    min-height: 70px;
+    vertical-align: middle;
+    width: 550px;
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+}
+
+.multiple-selected {
+    transform: translate(-25px, -25px);
+    min-height: 70px;
+    vertical-align: middle;
+    width: 550px;
+    border-radius: 5px;
+    background-color: $action-blue;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+}
+
+.multiple-selected .description-textArea {
+    color: white;
+    font-weight: 700;
+    width: 100%;
+}
+
+.drawer-preview td {
+    padding-bottom: 0px;
+}
+
+.drawer-preview .drag-handle {
+    width: 40px;
+    border-right: 1px;
+    border-color: #DADCDC;
+    border-right-style: solid;
+}
+
+.drawer-preview .drag-area {
+    width: 55px;
+    padding: 0px 8px 0px 8px;
+    vertical-align: middle;
+}
+
+.drawer-preview .drag-svg svg {
+    fill: $action-blue;
+    margin: 10px 3px 5px 3px
+}
+
+.drawer-preview .drag-svg:hover svg {
+    fill: $light-action-blue;
+}
+
+.drawer-preview .description-textArea {
+    padding-left: 10px;
+    width: 340px;
+    word-break: break-word;
+}
+
+.drawer-preview .preview-textArea {
+    width: 80px;
+    text-align: center;
+}
+
+.drawer-preview .preview-highlight {
+    word-break: break-word;
+}
+
+.drawer-preview .details-area-label {
+    font-weight: 700;
+}
+
+.cdk-drag-disabled .service-drawer-item {
+    background: #ccc;
+    cursor: default;
+}
+
+.cdk-drag-handle:hover {
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+/* Issue with dragging cursor https://github.com/angular/components/issues/20246 */
+.cdk-drop-list-dragging {
+    cursor: -webkit-grabbing !important;
+    cursor: grabbing !important;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.txPlan-services-drawer.cdk-drop-list-dragging .treatment-plan-service-row:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.txPlan-services-drawer {
+    .disableDrag {
+        background-color: $polar-white;
+        cursor: not-allowed;
+        color: $placeholder-grey;
+        border-color: #dadcdc;
+        border-collapse:separate;
+        border-spacing:2px;
+    }
+    
+}
+
+.drawer-custom-placeholder-spacer {
+    height: 0px;
+    margin-top: 0px;
+}
+
+.drawer-custom-placeholder {
+    border-radius: 5px;
+    border: dashed 2px #999 !important;
+    height: 70px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    background: #ccc;
+    stroke-width: 1;
+    margin: 0 15px 0 15px;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.txPlan-service-drawer-title {
+    background-color: $polar-white;
+    border-bottom: 1px solid $border-grey;
+    display: flex;
+    padding: 0 15px;
+    font-family: $global-font-family;
+}
+
+.drawer-service-link {
+    font-family: $global-font-family;
+    font-size: 14px;
+    font-weight: 700;
+    color: $text-black;
+    border: none;
+    padding-top: 9px;
+}
+
+.drawer-service-link.active {
+    background-color: transparent;
+    font-weight: 700;
+    color: $action-blue;
+    padding-bottom: 7px;
+    border-bottom: 3px solid $action-blue;
+}

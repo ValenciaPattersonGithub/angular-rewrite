@@ -1,0 +1,156 @@
+<div ngClass="fade-in">
+  <div class="conditions">
+    <form name="frmConditions" role="form" novalidate>
+      <div class="rowFull">
+        <div class="conditions__header">
+          <!--Breadcrumbs-->
+          <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+          <div class="conditions__title">
+            <h1>{{ 'Conditions' | translate }}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="conditions__body">
+        <div [ngClass]="{'slide-animation': 'forward', 'slide-backward-animation': '!forward'}">
+          <div class="conditions__list">
+            <app-kendo-grid [data]="conditionsData"
+                            [gridHeight]="'455'"
+                            [state]="state"
+                            [isFilterable]="true"
+                            [isSortable]="true"
+                            [hasCreateAccess]="hasCreateAccess"
+                            [hasCreateButton]="true"
+                            [columns]="columns"
+                            [createButton]="{class: 'conditions__actions', id: 'btnCreate', text: 'Add Condition'}"
+                            [formGroup]="formGroup"
+                            [loading]="loading"
+                            [hasKendoAddEdit]="true"
+                            [popUptemplate]="templateElement"
+                            [isDialogOpen]="isDialogOpen"
+                            [closeDialog]="closeDialog"
+                            (addNewItem)="addNewCondition()"
+                            (deleteItem)="deleteConditions($event)"
+                            (editItem)="editCondition($event)">
+            </app-kendo-grid>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #templateRef>
+  <div>
+    <form name="frmConditionCrud" role="form" action="javascript:;" novalidate #conditionsForm="ngForm">
+      <div class="modal-header">
+        <div class="row">
+          <div class="col-lg-8 col-md-8 col-sm-8 p-2">
+            <span class="ml-2">
+              {{ editMode ? 'Edit Condition' : 'Add Condition' | translate }}
+            </span>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-3 p-0 text-right">
+            <button class="btn soar-link icon-button font-size-20"
+                    (click)="cancelConditionPopup()">
+              <b>x</b>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+              <label id="lblDescription" class="form-label-newer" for="inpDescription">{{'Description' | translate }}*</label>
+          </div>
+          <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+            <input id="inpDescription"
+                   #inpDescription="ngModel"
+                   class="form-input required"
+                   name="inpDescription"
+                   maxlength="50"
+                   (ngModelChange)='checkDuplicateDescriptionOnBlur($event, condition)'
+                   [ngModelOptions]="{ updateOn: 'blur' }"
+                   [(ngModel)]="condition.Description"
+                   setFocus
+                   required />
+            <div class="k-tooltip-validation" *ngIf="conditionsForm?.submitted && inpDescription?.errors?.required">
+              <span class="k-icon k-i-warning"></span>
+              {{ 'Description is required' | translate }}
+              <div class="k-callout k-callout-n"></div>
+            </div>
+            <div class="k-tooltip-validation" *ngIf="isInputDuplicate">
+              <span class="k-icon k-i-warning"></span>
+              {{ 'Duplicate Description' | translate }}
+              <div class="k-callout k-callout-n"></div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+            <label id="lblAbbreviation" class="form-label-newer" for="inpAbbreviation">
+              {{'Abbreviation' | translate }}
+            </label>
+          </div>
+          <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+            <input id="inpAbbreviation" #inpAbbreviation
+                   class="form-input required valid"
+                   name="inpAbbreviation"
+                   [(ngModel)]="condition.Abbreviation"
+                   maxlength="8"
+                   type="text" />
+          </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+            <label id="translate" class="form-label-newer" for="inpAffectedAreas">{{'Affected Area' | translate }}*</label>
+          </div>
+          <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+            <soar-select-list id="inpAffectedAreas" #lstAffectedArea="ngModel"
+                              name="lstAffectedArea"
+                              [placeHolder]="'Select an Affected Area'"
+                              [textField]="'Name'"
+                              [valueField]="'Id'"
+                              [optionList]="affectedAreas"
+                              [(ngModel)]="condition.AffectedAreaId"
+                              (selectedItemValueChange)="affectedAreaChange($event)">
+            </soar-select-list>
+            <div class="k-tooltip-validation top-0" *ngIf="conditionsForm?.submitted && !lstAffectedArea?.value">
+              <span class="k-icon k-i-warning"></span>
+              {{ 'Affected Area is required' | translate }}
+              <div class="k-callout k-callout-n"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+            <label id="lblDrawTypes" class="form-label-newer" for="inpDrawTypes">{{'Draw Type' | translate }}</label>
+          </div>
+          <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+            <soar-select-list id="lstDrawType" #lstDrawType name="lstDrawType"
+                              [disableInput]="!condition.AffectedAreaId"
+                              [placeHolder]="'Select Draw Type'"
+                              [textField]="'Description'"
+                              [valueField]="'DrawTypeId'"
+                              [optionList]="filteredDrawTypes"
+                              [(ngModel)]="condition.DrawTypeId"
+                              [sbTab]="10">
+            </soar-select-list>
+          </div>
+        </div>
+      </div>
+
+      <div class="conditionsCrud">
+        <div class="conditionsCrud__btn">
+          <button id="btnCancel" (click)="cancelConditionPopup();" class="btn btn-link">{{ 'Cancel' | translate }}</button>
+          <button id="btnDone" (click)="saveUpdatedCondition(conditionsForm);" class="btn btn-primary">{{ 'Save' | translate }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

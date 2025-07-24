@@ -1,0 +1,16 @@
+<div class="buttonMenuAuto"  [ngClass]="variation">
+    <ul class="menu" [class.disabled]="isDisabled">
+        <li class="menu-one" >
+            <a [class.isDisabled]="isDisabled">
+                {{buttonText}}
+            </a>
+            <ul *ngIf="!isDisabled" class="sub-menu first-sub-menu">
+                <li id="{{id}}_option" (click)="optionClicked(item)" *ngFor="let item of options">
+                    <a>
+                        {{item.text}}
+                    </a>
+                </li>                           
+            </ul>
+        </li>
+    </ul>
+</div>

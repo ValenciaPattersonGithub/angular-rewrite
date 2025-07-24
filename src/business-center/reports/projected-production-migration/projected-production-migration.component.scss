@@ -1,0 +1,39 @@
+.projectednetproductionreport {
+    grid-template-columns: 2fr 2fr 2fr 2fr 2fr 2fr 0.05fr
+}
+.projectednetproductionreportHeader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+.projectednetproductionreportfooter {
+    grid-template-columns: 2fr 8fr 2fr 0.05fr
+}
+.projectednetproductionreportfooter1 {
+    grid-template-columns: 12fr 0.05fr
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.projectednetproductionreport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+        }
+      }
+}

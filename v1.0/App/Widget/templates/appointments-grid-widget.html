@@ -1,0 +1,151 @@
+﻿<div ng-controller="AppointmentsGridWidgetController" class="appointmentsGridWidget" ng-click="closeMultiSelects()">
+    <div class="appointmentsGridWidget__header soarWidget__header panel-heading">
+        <div class="appointmentsGridWidget__title">
+            <div class="widget-handle">
+                <label>{{ data.Title | i18n }} {{ ::('on' | i18n) }} {{ dateFilter | date : 'fullDate' }}</label>
+            </div>
+            <date-selector input-id="appointmentWidgetCalendarInput"
+                           ng-model="dateFilter"
+                           date-var="dateFilter"
+                           format="MM/dd/yyyy"
+                           valid="valid"
+                           on-select="onDateChange(dateFilter)">
+            </date-selector>
+            <div class="btn-group" uib-dropdown>
+                <button id="appointmentsMenu" class="btn btn-link" uib-dropdown-toggle>
+                    <i class="fa fa-ellipsis-v"></i>
+                </button>
+                <ul class="dropdown-menu-right" uib-dropdown-menu role="menu" aria-labelledby="appointmentsMenu">
+                    <li>
+                        <a ng-if="!isChrome" ng-click="navigate('#/Schedule/?date=')" check-auth-z="soar-sch-swkstp-view">{{ 'Go to Schedule' | i18n }}</a>
+                        <a ng-if="isChrome" ng-click="navigate('#/Schedule/?date=')" check-auth-z="soar-sch-swkstp-view">{{ 'Go to Schedule' | i18n }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="appointmentsGridWidget__filters">
+            <div class="col-sm-6">
+                <div class="col-sm-2">
+                    <label>at</label>
+                </div>
+                <div class="col-sm-10">
+                    <multi-select ng-if="initializeCalled"
+                                  id="appointmentsGridWidgetLocationFilter"
+                                  auth-z="'soar-sch-sch-view'"
+                                  type="Locations"
+                                  list="options.locationFilterOptions"
+                                  initial-selection="initials.locationInitial"
+                                  selected="filters.locationFilter"
+                                  id-field="id"
+                                  display-field="display"
+                                  open="opens.locationsOpen"
+                                  on-change="locationChange(filters.locationFilter)">
+                    </multi-select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="col-sm-2">
+                    <label>for</label>
+                </div>
+                <div class="col-sm-10">
+                    <multi-select ng-if="initializeCalled"
+                                  id="appointmentsGridWidgetProviderFilter"
+                                  auth-z="'soar-sch-sch-view'"
+                                  type="Providers"
+                                  list="options.providerFilterOptions"
+                                  initial-selection="initials.providerInitial"
+                                  selected="filters.providerFilter"
+                                  id-field="id"
+                                  display-field="display"
+                                  open="opens.providersOpen"
+                                  on-change="providerChange(filters.providerFilter)">
+                    </multi-select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fuseGrid">
+        <div class="row header">
+            <div class="col-sm-1 cell" ng-click="sortTime()">
+                {{ ::('Time' | i18n) }}
+            </div>
+            <div class="col-sm-2 cell" ng-click="sortPatient()">
+                {{ ::('Patient' | i18n) }}
+            </div>
+            <div class="col-sm-2 cell" ng-click="sortApptType()">
+                {{ ::('Appt Type' | i18n) }}
+            </div>
+            <div class="col-sm-2 cell" ng-click="sortLocation()">
+                {{ ::('Location' | i18n) }}
+            </div>
+            <div class="col-sm-2 cell" ng-click="sortRoom()">
+                {{ ::('Room' | i18n) }}
+            </div>
+            <div class="col-sm-2 cell" ng-click="sortProvider()">
+                {{::('Provider' | i18n)}}
+            </div>
+            <div class="col-sm-1 cell"></div>
+        </div>
+    </div>
+    <div class="appointmentsGridWidget__body">
+        <div class="fuseGrid">
+            <div class="row" ng-if="providerAppointments.length > 0" ng-repeat="providerAppointment in providerAppointments" ng-class-even="'item-zebra-light'" ng-class-odd="'item-zebra-dark'">
+                <div class="col-sm-1 cell">
+                    <button id="id{{ providerAppointment.appointment.Person.FirstName }}{{ providerAppointment.appointment.Person.LastName }}{{ providerAppointment.startTime | date:'HHmm' }}Time" class="btn btn-link" ng-click="showAppointmentModal(providerAppointment)" check-auth-z="soar-sch-sptapt-edit">
+                        {{ parseDate(providerAppointment.startTime)| date : 'h:mma' }}
+                    </button>
+                    <i class="appointmentWidget__Status fa {{ getStatusIcon(providerAppointment.appointment.Appointment.Status) }}" uib-tooltip="{{ getStatusDescription(providerAppointment.appointment.Appointment.Status) }}" tooltip-append-to-body="true" tooltip-class="tooltipWidth" tooltip-placement="bottom"></i>
+                </div>
+                <div id="id{{ providerAppointment.appointment.Person.FirstName }}{{ providerAppointment.appointment.Person.LastName }}{{ providerAppointment.startTime | date:'HHmm' }}Patient" class="col-sm-2 cell">
+                    <a href="#/Patient/{{providerAppointment.appointment.Person.PatientId}}/Overview/" class="appointmentsGridWidget__patientLink">{{ formatPatientName(providerAppointment.appointment.Person) }}</a>
+                </div>
+                <div id="id{{ providerAppointment.appointment.Person.FirstName }}{{ providerAppointment.appointment.Person.LastName }}{{ providerAppointment.startTime | date:'HHmm' }}ApptType" class="col-sm-2 cell">
+                    {{ providerAppointment.appointment.AppointmentType.Name }}
+                </div>
+                <div id="id{{ providerAppointment.appointment.Person.FirstName }}{{ providerAppointment.appointment.Person.LastName }}{{ providerAppointment.startTime | date:'HHmm' }}Location" class="col-sm-2 cell">
+                    {{ providerAppointment.appointment.Location.NameLine1 }}
+                </div>
+                <div id="id{{ providerAppointment.appointment.Person.FirstName }}{{ providerAppointment.appointment.Person.LastName }}{{ providerAppointment.startTime | date:'HHmm' }}Room" class="col-sm-2 cell">
+                    {{ providerAppointment.appointment.Room.Name }}
+                </div>
+                <div id="id{{ providerAppointment.appointment.Person.FirstName }}{{ providerAppointment.appointment.Person.LastName }}{{ providerAppointment.startTime | date:'HHmm' }}Provider" class="col-sm-2 cell">
+                    {{findProviderName(providerAppointment.providerId, providerAppointment.appointment.ProviderUsers)}}
+                </div>
+                <div class="col-sm-1 cell">
+                    <div class="iconContainer">
+                        <div ng-if="providerAppointment.alerts.medicalAlerts.length" class="medicalAlert" uib-tooltip-template="'medicalAlertsTooltipTemplate.html'" tooltip-append-to-body="true" tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                            <i class="medicalAlertIcon__medicalHistoryIconColor fa fa-heart"><span class="medicalAlertIcon__notificationBadge">{{providerAppointment.alerts.medicalAlerts.length}}</span></i>
+                        </div>
+                        <div ng-if="providerAppointment.alerts.allergyAlerts.length" class="medicalAlertIcon__container allergyAlert" uib-tooltip-template="'allergyAlertsTooltipTemplate.html'" tooltip-append-to-body="true" tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                            <i class="fi-allergies"><span class="medicalAlertIcon__svgNotificationBadge">{{providerAppointment.alerts.allergyAlerts.length}}</span></i>
+                        </div>
+                        <div ng-if="providerAppointment.alerts.premedAlerts.length" class="medicalAlertIcon__container premedAlert" uib-tooltip="Premedication required" tooltip-append-to-body="true" tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                            <i class="fi-premed"><span class="medicalAlertIcon__svgNotificationBadge">{{providerAppointment.alerts.premedAlerts.length}}</span></i>
+                        </div>
+                        <div ng-if="providerAppointment.appointment.Appointment.Note" class="medicalAlertIcon__container" uib-tooltip="{{providerAppointment.appointment.Appointment.Note}}" tooltip-append-to-body="true" tooltip-class="tooltipWidth" tooltip-placement="bottom">
+                            <i class="appointmentWidgetNoteIcon fa fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!--tooltip template - medical alerts-->
+                <script type="text/ng-template" id="medicalAlertsTooltipTemplate.html">
+                    <div class="row" ng-repeat="flag in providerAppointment.alerts.medicalAlerts | orderBy:'MedicalHistoryAlertDescription'">
+                        <div class="col-sm-12">
+                            <span class="pull-left">{{flag.MedicalHistoryAlertDescription}}</span>
+                        </div>
+                    </div>
+                </script>
+
+                <!--tooltip template - allergy alerts-->
+                <script type="text/ng-template" id="allergyAlertsTooltipTemplate.html">
+                    <div class="row" ng-repeat="flag in providerAppointment.alerts.allergyAlerts | orderBy:'MedicalHistoryAlertDescription'">
+                        <div class="col-sm-12">
+                            <span class="pull-left">{{flag.MedicalHistoryAlertDescription}}</span>
+                        </div>
+                    </div>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+export interface PrintPatientReferral {
+    name: string;
+    dob: string;
+    age: string;
+    phone: string;
+    workPhone: string;
+    email: string;
+    gender: string;
+    responsibleParty: string;
+    height: string;
+    weight: string;
+    alerts: string;
+    signatureOnFile: string;
+    statusPatient: string;
+    notes: string;
+    referringOfficeAddress1: string;
+    referringOfficeAddress2: string;
+    practiceName: string;
+    referringOfficeName: string;
+    referringDoctorName: string;
+    treatmentPlan: string;
+    services: string[];
+    reportType: string;
+    referralSource: string;
+    campaignName: string;
+    referralCategory: string;
+    referringPatientEmail: string;
+    nextAppointment: string;
+    returnDate: string;
+    actualReturnDate?: string;
+    referringEmail?: string;
+    referringPhone?: string;
+}

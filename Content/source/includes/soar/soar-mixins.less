@@ -1,0 +1,308 @@
+﻿@import 'buttonIcon.less';
+@import 'formLayout.less';
+
+.containerStandard {
+    // Use me for the main container for views.
+    width: 96%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-top: @brand-padding_md;
+    .clearfix;
+}
+
+.standardHeader {
+
+    &__header {
+        width: 96%;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+    &__breadcrumb {
+        .breadcrumb;
+        margin: @brand-margin_sm 0 0;
+    }
+    &__title {
+        .clearfix;
+
+        > h1 {
+            margin: @brand-margin_sm 0;
+            padding: 0;
+            font-size: @brand-font_h1;
+            line-height: 1;
+        }
+        > h2 {
+            margin: @brand-margin_sm 0;
+            padding: 0;
+            font-size: @brand-font_h2;
+            line-height: 1;
+        }
+
+        .dropdownNav__toggle {
+            font-size: @brand-font_navToggle;
+        }
+    }
+
+    &__navItem {
+        display: inline-block;
+        float: left;
+        .dropdownNav__toggle {
+            padding: @brand-padding_md 0;
+            line-height: 1;
+        }
+        .control-span {
+            padding: @brand-padding_md;
+            font-size: @brand-font_h3;
+            line-height: 1;
+        }
+    }
+    &__actions {
+        padding-bottom: @brand-padding_md;
+    }
+}
+
+.unsetList {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.concatString {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;  
+}         
+
+.iconBefore(@default, @active) {
+    &:before {
+        display: inline-block;
+        font-family: 'Font Awesome 5 Pro';
+        content: @default;
+        margin-right: @brand-margin_sm;
+    }
+
+    &.active {
+        &:before {
+            content: @active;
+        }
+    }
+}
+
+/************************
+ ******** TABLES ********
+ ***********************/
+.soarTblSort {
+    thead > tr > td,
+    thead > tr > th {
+        &:hover {
+            background-color: @brand-color_lighter-gray;
+        }
+        // Table Sorting
+        &:after {
+            .fa;
+            content: @fa-var-sort-up;
+
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            display: inline-block;
+            transform: translateY(-3px);
+            opacity: 0.5;
+        }
+        &.active {
+            &:after {
+                opacity: 1;
+            }
+        }
+        &.asc {
+            &:after {
+                content: @fa-var-sort-down;
+                transform: translateY(3px);
+            }
+        }
+    }
+}
+
+.btnStateReset {
+    // Use me to get rid of those pesky :focus and :active states
+    &:active {
+        background-color: transparent;
+        outline: none;
+    }
+    &:focus {
+        background-color: inherit;
+        border-color: inherit;
+        outline: none;
+    }
+    &.active:focus,
+    &:active:focus,
+    &:focus:active,
+    &:hover:focus {
+        outline: none;
+        border-color: inherit;
+    }
+}
+
+.btn-nav-toggle {
+    .btnStateReset;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 0px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    min-width: 42px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+
+// div version of a <hr>
+.section-divider {
+    width: 100%;
+    border-top: 1px solid @gray-lighter;
+    margin: 8px 0% 8px 0%;
+}
+
+// Filter Tabs
+
+// Apply this mixin to the BEM block and follow the markup 
+// patterns according to the defined element names.
+.filterTabs(@width) {
+
+    .clearfix;
+    display: block;
+    position: relative;
+    padding: 0;
+    margin: 0;
+   
+
+    &__item {
+        display: inline-block;
+        box-sizing: border-box;
+        width: @width;
+        padding-right: @brand-padding_md;
+        float: left;
+
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+
+    &__ctrl {
+        position: relative;
+        display: block;
+        padding: @brand-padding_xl 0;
+        text-align: center;
+        border-bottom: 8px solid  darken(#0f7bbb, 10);
+        color: #0f7bbb;
+        background-color: #19a7f8;
+        transition: @brand-transition_link;
+        width: 100%;
+
+        &:hover {
+            color: darken(#0f7bbb, 10);
+            background-color: darken(#0f7bbb, 10);
+        }
+
+        &.active {
+            color: @brand-color_white;
+            background-color: darken(#0f7bbb, 10);
+            outline: none;
+
+            &:after {
+                top: 100%;
+	            left: 50%;
+                transform: translateX(-50%);
+	            border: solid transparent;
+	            content: " ";
+	            height: 0;
+	            width: 0;
+	            position: absolute;
+	            pointer-events: none;
+	            border-color: transparent;
+	            border-top-color:  darken(#0f7bbb, 10);
+	            border-width: 16px;
+            }
+        }
+
+
+        &:disabled{
+            color: @brand-color_darker-gray;
+            background-color: @brand-color_dark-gray;
+            border-bottom-color: @brand-color_dark-gray;
+
+            &:hover {
+                cursor: default;
+                opacity: 1.0;
+            }
+        }
+    }
+    &__count,
+    &__total,
+    &__label {
+        display: block;
+         color: @brand-color_white;
+    }
+    &__count {
+        font-size: 2em;
+    }
+    &__total {
+
+    }
+    &__label {
+        font-weight: 700;
+    }
+     
+}
+
+// **MIXIN for resetting header margins**
+.headerReset {
+    h1,h2,h3,h4,h5 {
+        margin: @brand-header_margin 0;
+    }
+}
+
+/*
+    **** SEE TIM PLUMMER BEFORE YOU RE-ENABLE THIS *****
+
+ a.disabled {
+        color: #DADCDC;
+        pointer-events: none;
+        cursor: not-allowed;             
+    }
+*/
+// ANIMATIONS!
+
+// The conditions of the animation
+.mixSoarFlashBG(@bgColor, @fontColor) {
+    0% { 
+        background-color: @bgColor;
+        color: @fontColor;
+    }
+    100% {
+        background-color: inherit;
+        color: inherit;
+    }
+}
+
+
+@-webkit-keyframes flash-green { .mixSoarFlashBG( @brand-color_secondary, @brand-color_white); }
+@-moz-keyframes flash-green { .mixSoarFlashBG( @brand-color_secondary, @brand-color_white); }
+@-ms-keyframes flash-green { .mixSoarFlashBG( @brand-color_secondary, @brand-color_white); }
+@-o-keyframes flash-green { .mixSoarFlashBG( @brand-color_secondary, @brand-color_white); }
+@keyframes flash-green { .mixSoarFlashBG( @brand-color_secondary, @brand-color_white); }
+
+

@@ -1,0 +1,28 @@
+﻿<span class="communicationIcon" ng-switch="communicationTypeId" ng-if="developmentMode">
+    <span class="no-wrap" ng-switch-when="6">
+        <button id="comm{{communicationTypeId}}{{patienttId}}" class="communicationIcon__transparent" ng-disabled="disable" ng-if="showIcon" ng-click="openModal()">
+            <i class="fa fa-comment"><span class="communicationIcon__notificationBadge" ng-if="showCount">{{count}}</span></i>
+        </button>
+    </span>
+    <span class="no-wrap" ng-switch-when="7">
+        <button id="comm{{communicationTypeId}}{{patienttId}}" class="communicationIcon__transparent" ng-disabled="disable" ng-if="showIcon" ng-click="openModal()">
+            <i class="far fa-envelope"><span class="communicationIcon__notificationBadge" ng-if="showCount">{{count}}</span></i>
+        </button>
+    </span>
+    <span class="no-wrap" ng-switch-when="3">
+        <button id="comm{{communicationTypeId}}{{patienttId}}" class="communicationIcon__transparent" ng-disabled="disable" ng-if="showIcon" ng-click="openModal()">
+            <i class="fa fa-phone"><span class="communicationIcon__notificationBadge" ng-if="showCount">{{count}}</span></i>
+        </button>
+    </span>
+
+    <span class="no-wrap" ng-switch-when="5">
+        <button id="comm{{communicationTypeId}}{{patienttId}}" class="communicationIcon__transparent" ng-disabled="disable" ng-if="showIcon" ng-click="openModal()">
+            <i class="">
+                <img class="communicationIcon__usMail" ng-src="Images/PatientCommunication/Fuse_Stamp_Icon.svg">
+                <span class="communicationIcon__notificationBadge usMailBadge" ng-if="showCount">{{count}}</span>
+                <img />
+            </i>
+        </button>
+    </span>
+</span>
+

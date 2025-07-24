@@ -1,0 +1,321 @@
+﻿<div class="patientInsurance" ng-class="{'editContainer': editing}" ng-init="initialize()">
+    <div class="form-body">
+        <div class="form-row">
+            <!-- Policy Holder -->
+            <div class="form-col-4">
+                <label class="control-label">{{ 'Policy Holder' | i18n }} <span ng-show="validatePolicyHolder">*</span></label>
+                <div ng-class="{ 'has-error': insurance.$hasErrors}">
+                    <soar-select-list id="inpPolicyHolder"
+                                      name="inpPolicyHolder"
+                                      text-field="$name"
+                                      value-field="$patientId"
+                                      option-list="policyHolders"
+                                      ng-model="policyHolder"
+                                      sb-change="policyHolderChanged"
+                                      sb-tab="100"
+                                      disable-input="disablePolicyHolder || insurance.hasOpenClaims || editing">
+                    </soar-select-list>
+                    <span class="help-block" ng-show="validatePolicyHolder && insurance.$hasErrors && insurance.PolicyHolderId == null && patientId != -1">{{ 'This field is required.' | i18n }}</span>
+                </div>
+            </div>
+            <div class="form-col-4" ng-show="disablePolicyHolder">
+                <label class="control-label"> </label>
+                <button class="btn btn-link" id="btnToggleDependentsSection" ng-click="toggleDependentsSection()">{{ 'Why can\'t I change my policy holder?' | i18n }}</button>
+
+                <div class="patientInsurance__dependentList" ng-show="disablePolicyHolder && showDependentList">
+                    <button id="btnCloseDependentList" class="form-btn-remove" icon="fa-times-circle" ng-show="disablePolicyHolder && showDependentList" ng-click="closeDependentList()">{{ 'Remove' | i18n }}</button>
+                    <span>{{ 'The policy holder cannot be changed because this person is the policy holder for other patients. Remove this person as the policy holder for the following patients to continue: ' }}</span>
+                    <div class="patientInsurance__dependentListItems">
+                        <span id="lblDependent"
+                              class="patientInsurance__dependentListItem"
+                              ng-repeat="dependent in dependentList">{{ patSharedServices.Format.PatientName(dependent.PersonLiteDto) }}{{ dependent.PersonLiteDto.DateOfBirth ? ' | ' : '' }}{{ dependent.PersonLiteDto.DateOfBirth ? dependent.PersonLiteDto.DateOfBirth : '' | toShortDisplayDate }}</span>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Policy Holder "Other...", Patient Search -->
+            <fieldset class="form-col-4" ng-show="policyHolder == -1" ng-class="{ 'has-error': (insurance.$hasErrors && policyHolder && !selectedPolicyHolder) || (policyHolder && !insurance.$validPolicyHolder) }" ng-disabled="insurance.hasOpenClaims">
+                <label class="control-label">&nbsp;</label>
+                <div ng-show="displayPolicyHolder != null">
+                    <span class="control-span">{{ displayPolicyHolder.$name }}</span>
+                    <button class="form-btn-remove" ng-click="clearDisplayPolicyHolder()"></button>
+                </div>
+
+                <span ng-show="displayPolicyHolder == null">
+                    <search-bar base-id="policyHolderSearch"
+                                header="false"
+                                select-mode="true"
+                                selected="selectedPolicyHolder"
+                                b-focus="true"
+                                show-search-button="true"
+                                show-clear-button="true"
+                                clear="clearPatientSearch"
+                                hold-search-term="true"
+                                view-result="fillSearch"
+                                tab-index="100"
+                                current-patient-id="selfGuid">
+                    </search-bar>
+                </span>
+                <span class="help-block" ng-show="insurance.$hasErrors && policyHolder && !selectedPolicyHolder">{{ 'This field is required.' | i18n }}</span>
+                <!--<span class="help-block" ng-show="policyHolder && !insurance.$validPolicyHolder">{{ 'This policy holder is a dependent.' | i18n }}</span>-->
+                <!-- Commented out as Amy said -->
+            </fieldset>
+            <!-- "Remove" link -->
+            <div class="form-col-4" ng-class="{'align-right': disablePolicyHolder}" ng-if="!editing">
+                <label class="control-label">&nbsp;</label>
+                <button class="btn btn-link"  id="btnRemoveInsurance" ng-hide="addForOther" ng-click="removeInsurance()">{{ 'Remove' | i18n }}</button>
+            </div>
+        </div>
+
+        <!-- Benefit Plan Search -->
+        <div class="form-row" ng-if="policyHolder || addForOther">
+            <div class="form-col-4">
+                <label class="control-label">{{ 'Plan Name' | i18n }} <span ng-show="validatePolicyHolder || addForOther">*</span></label>
+                <!-- For Add -->
+
+                <a id="btnViewSelectedPlan"
+                   class="control-span"
+                   ng-click="openBenefitPlanTab(selectedPlan.BenefitId)"
+                   ng-disabled="!selectedPlan"
+                   ng-show="selectedPlan"
+                   check-auth-z="soar-per-pbplan-view">
+                    {{ selectedPlan.Name }}
+                </a>
+                <span class="control-span" ng-show="policyHolder == '-1' && !selectedPolicyHolder && !editing">
+                    {{ 'Select a Policy Holder' | i18n }}
+                </span>
+                <a id="btnClearSelectedPlan" class="btn btn-link" ng-show="selectedPlan && policyHolder == selfGuid && !disablePolicyHolder" ng-click="clearSelectedPlan()">{{ 'Change' | i18n }}</a>
+
+                <div ng-show="(selectedPlan == null && policyHolder != selfGuid)" ng-disabled="(selectedPlan == null && policyHolder != selfGuid && (policyHolder == '-1' && selectedPolicyHolder == null))">
+                    <span class="pull-left">
+                        <a id="btnSelectPlanFromAccountMember" check-auth-z="soar-per-pbplan-view" class="control-span" ng-show="policyHolder > '' && policyHolder != '-1'" ng-click="policyHolderChanged(policyHolder)">
+                            {{ 'Select a Plan' | i18n }}
+                        </a>
+                        <a id="btnSelectPlanFromPatient" check-auth-z="soar-per-pbplan-view" class="control-span" ng-show="policyHolder == -1 && selectedPolicyHolder && selectedPlan == null" ng-click="getBenefitPlansForPolicyHolder(selectedPolicyHolder)">
+                            {{ 'Select a Plan' | i18n }}
+                        </a>
+                    </span>
+
+                </div>
+                <!--<search-bar-autocomplete [list]="benefitPlans" [placeholder]="'Search Plans'" (selectedValueChanged)="selectPlan(item)"></search-bar-autocomplete>-->
+                <div ng-class="{ 'has-error': insurance.$hasErrors && policyHolder && !selectedPlan }">
+                    <div ng-show="policyHolder == selfGuid || policyHolderDisplay == 'Self' || addForOther">
+
+                        <!--<benefit-plan-search [benefit-plan-list]="benefitPlans" (selectedPlanChanged)="selectPlan(item)"></benefit-plan-search>-->
+                        <typeahead class="typeahead soar-typeahead typeaheadResults patientInsurance__planTypeahead"
+                                   ng-hide="selectedPlan != null"
+                                   id="inpInsurancePlan"
+                                   name="inpInsurancePlan"
+                                   appearance="form-control"
+                                   search="filterBenefitPlans(term)"
+                                   select="selectPlan(item)"
+                                   show-search-button="true"
+                                   items="benefitPlans"
+                                   term="searchTerm"
+                                   placeholder="{{ 'Search {0}'| i18n:['Plans'] }}"
+                                   disable-input="(policyHolder != selfGuid && !addForOther) || insurance.hasOpenClaims"
+                                   tab-index="100"
+                                   clear-content="clearContent()">
+                            <ul id="lstFilteredCarriers">
+                                <li ng-repeat="plan in filteredBenefitPlans|orderBy:'Name' track by plan.BenefitId" typeahead-item="plan">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label>Benefit Plan:</label>
+                                            <span ng-show="::plan.Name" id="lblPlanName" ng-bind-html="::plan.Name | boldTextSearchCriteriaSpecialCharacters:searchTerm"></span>
+                                            <br>
+                                            <label>Carrier:</label>
+                                            <span ng-show="::plan.CarrierName" id="lblCarrierName" ng-bind-html="::plan.CarrierName | boldTextSearchCriteriaSpecialCharacters:searchTerm"></span>
+                                            <br>
+                                            <label>Group:</label>
+                                            <span ng-show="::plan.PlanGroupNumber"
+                                                  id="lblPlanGroupNumber"
+                                                  ng-bind-html="::plan.PlanGroupNumber | boldTextSearchCriteriaSpecialCharacters:searchTerm">
+                                            </span>
+                                            <span ng-show="::plan.PlanGroupName"
+                                                  id="lblPlanGroupName"
+                                                  ng-bind-html="::plan.PlanGroupName | boldTextSearchCriteriaSpecialCharacters:searchTerm">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li ng-show="filteredBenefitPlans.length==0">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <span class="text-muted" id="lblNoResultMessage">
+                                                {{ 'No search results.'| i18n }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </typeahead>
+                    </div>
+                    <span class="help-block" ng-show="insurance.$hasErrors == true && policyHolder && !selectedPlan">{{ 'This field is required.' | i18n }}</span>
+                </div>
+            </div>
+            <!-- Policy Holder ID -->
+            <div class="form-col-4"
+                 uib-tooltip="{{ 'Policy Holder ID can only be edited from the Policy Holder' | i18n }}"
+                 tooltip-enable="policyHolder !== selfGuid"
+                 tooltip-placement="bottom">
+                <label control-label for="inpPolicyHolder">{{ 'Policy Holder ID' | i18n }}</label>
+                <input id="inpPolicyHolderStringId"
+                       class="patientInsurance__policyHolderStringId"
+                       ng-model="insurance.PolicyHolderStringId"
+                       placeholder="{{ 'Policy Holder ID' | i18n }}"
+                       maxlength="20" ng-disabled="(policyHolder != selfGuid)"
+                       tabindex="100" />
+            </div>
+            <!-- Member ID -->
+            <div class="form-col-4">
+                <label control-label for="inpMemberId">{{ 'Member ID' | i18n }}</label>
+                <input id="inpMemberId"
+                       class="patientInsurance__memberId"
+                       ng-model="insurance.MemberId"
+                       placeholder="{{ 'Member ID' | i18n }}"
+                       maxlength="20"
+                       tabindex="100" />
+            </div>
+
+        </div>
+        <div class="form-row">
+            <!-- Plan/Group Number (Member ID) -->
+            <div class="form-col-4" ng-show="editing && !changedPlan">
+                <label class="control-label" for="inpPolicyHolder">{{ 'Plan/Group Number' | i18n }}</label>
+                <span class="control-span" ng-disabled="true">{{ insurance.$planGroupNumber }}</span>
+            </div>
+        </div><br />
+        <div class="form-row" style="display:none">
+            <div class="form-col-6">
+                <checkbox class="patientInsurance__checkbox"
+                          tabindex="100"
+                          checkbox-id="inpDependentChildOnly"
+                          checkbox-value="insurance.DependentChildOnly"
+                          checkbox-label="'Dependent Child Coverage Only'"
+                          checkbox-disabled="editing">
+                </checkbox>
+            </div>
+        </div>
+        <div class="form-row">
+            <!-- Effective Date -->
+            <div class="form-col-4">
+                <label for="inpEffectiveDate">{{ 'Effective Date' | i18n }}</label>
+                <date-selector ng-if="!editing"
+                               tab-index="100"
+                               input-id="inpEffectiveDate"
+                               placeholder="MM/DD/YYYY"
+                               date-var="insurance.EffectiveDate"
+                               valid="insurance.$dateValid"
+                               format="MM/dd/yyyy"
+                               max-date="maxDate"
+                               disable-date-input="policyHolder && policyHolder.length > 0 || addForOther">
+                </date-selector>
+                <date-selector ng-if="editing"
+                               tab-index="100"
+                               input-id="inpEffectiveDate"
+                               placeholder="MM/DD/YYYY"
+                               date-var="insurance.EffectiveDate"
+                               valid="insurance.$dateValid"
+                               format="MM/dd/yyyy"
+                               max-date="maxDate">
+                </date-selector>
+            </div>
+            <!--Relationship to policy holder-->
+            <div class="form-col-6" ng-show="policyHolder && policyHolder != selfGuid">
+                <label class="control-label">{{ 'Relationship to Policy Holder' | i18n }} <span ng-show="validatePolicyHolder">*</span></label>
+                <div class="patientInsurance__nopadding" ng-class="{ 'has-error': insurance.$hasErrors && policyHolder && !insurance.RelationshipToPolicyHolder }">
+                    <soar-select-list id="inpPolicyHolderRelationship"
+                                      name="inpPolicyHolderRelationship"
+                                      text-field="Description"
+                                      value-field="Value"
+                                      placeholder="{{ 'Relationship' | i18n }}"
+                                      option-list="relationships"
+                                      ng-model="insurance.RelationshipToPolicyHolder"
+                                      sb-tab="100">
+                    </soar-select-list>
+                    <span class="help-block" ng-show="insurance.$hasErrors && policyHolder && !insurance.RelationshipToPolicyHolder">{{ 'This field is required.' | i18n }}</span>
+                </div>
+            </div>
+        </div><br />
+
+        <!-- select list for insurance priority -->
+        <div class="form-col-12" ng-if="priorityOptions.length > 1 && priorityOptions.length < 7 && !refreshOptions">
+            <!-- Priority -->
+            <label class="control-label" for="inpPriority{{index}}">{{ 'Priority' | i18n }}</label>
+            <div >
+                <soar-select-list id="inpPriority{{index}}"
+                                  name="inpPriority{{index}}"
+                                  class="patientInsurance__priority"
+                                  text-field="Name"
+                                  value-field="Priority"
+                                  sb-tab="100"
+                                  ng-model="insurance.Priority"
+                                  option-list="priorityOptions"
+                                  sb-change="changePriority">
+                </soar-select-list>
+            </div>
+        </div>
+
+        <!-- Patient Eligible for EPSDT/Title XIX -->
+        <div class="form-row" ng-show="editing">
+            <div class="form-col-6">
+                <label control-label for="inpEligibleEPSDTTitleXIX">&nbsp;</label>
+                <checkbox class="patientInsurance__checkbox"
+                            tabindex="100"
+                            checkbox-id="inpEligibleEPSDTTitleXIX"
+                            checkbox-value="insurance.EligibleEPSDTTitleXIX"
+                            checkbox-label="'Patient Eligible for EPSDT/Title XIX'"
+                            checkbox-disabled="!policyHolder && !editing">
+                </checkbox>
+            </div>
+        </div>
+        <!-- Deductibles -->
+		<div class="form-row deductibles" ng-show="editing">
+			<div class="row">
+				<label class="control-label" for="inpDeductibleRemaining">{{ 'Individual Deductible Left' | i18n }}</label>
+                <span ng-if="selectedPlan.IndividualDeductible <= 0" class="tooltip-container" kendo-tooltip k-position="'top'" k-content="'<span class=\'patientInsurance-tooltip\'>Individual Deductible Left is disabled because the benefit plan has no individual deductible.</span>'">
+                    <i class="fa fa-question-circle"></i>
+                </span>
+				<div class="input-group">
+					<span class="input-group-addon">$</span>
+					<input id="inpDeductibleRemaining" ng-model="insurance.$individualDeductibleLeft" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0  }}" ng-disabled="selectedPlan.IndividualDeductible <= 0" class="form-control" placeholder="0.00"
+						   tabindex="12" type="text" model-format="currencyNoSymbol" ng-change="individualDeductibleLeftOnChange()" maxlength="12" />
+				</div>
+			</div>
+			<div class="row">
+				<label class="control-label" for="inpFamilyDeductibleRemaining">{{ 'Family Deductible Left' | i18n }}</label>
+                <span ng-if="selectedPlan.FamilyDeductible <= 0" class="tooltip-container" kendo-tooltip k-position="'top'" k-content="'<span class=\'patientInsurance-tooltip\'>Family Deductible Left is disabled because the benefit plan has no family deductible.</span>'">
+                    <i class="fa fa-question-circle"></i>
+                </span>
+				<div class="input-group">
+					<span class="input-group-addon">$</span>
+					<input id="inpFamilyDeductibleRemaining" ng-model="insurance.$familyDeductibleLeft" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0  }}" ng-disabled="selectedPlan.FamilyDeductible <= 0" class="form-control" placeholder="0.00"
+						   tabindex="12" type="text" model-format="currencyNoSymbol" ng-change="familyDeductibleLeftOnChange()" maxlength="12" />
+				</div>
+			</div>
+            <div class="row">
+				<label class="control-label" for="inpAdditionalBenefits">Additional Benefits</label>
+                <span ng-if="disableIndividualAnnualMax" class="tooltip-container" kendo-tooltip k-position="'top'" k-content="'<span class=\'patientInsurance-tooltip\'>Additional Benefits is disabled because the benefit plan has no individual annual maximum.</span>'">
+                    <i class="fa fa-question-circle"></i>
+                </span>
+				<div class="input-group">
+					<span class="input-group-addon">$</span>
+					<input id="inpAdditionalBenefits" ng-model="insurance.$additionalBenefits" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0  }}" ng-disabled="disableIndividualAnnualMax" class="form-control" placeholder="0.00"
+						   tabindex="12" type="text" model-format="currencyNoSymbol" maxlength="12" ng-change="additionalBenefitsOnChange()" />
+				</div>
+			</div>
+			<div class="row">
+				<label class="control-label" for="inpIndividualMaxLeft">{{ 'Individual Annual Maximum Left' | i18n }}</label>
+                <span class="tooltip-container" kendo-tooltip="individualMaxLeftTooltip" k-position="'top'" k-content="individualMaxLeftTooltipContent">
+                    <i class="fa fa-question-circle"></i>
+                </span>
+				<div class="input-group">
+					<span class="input-group-addon">$</span>
+					<input id="inpIndividualMaxLeft" ng-model="insurance.$individualMaxLeft" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0  }}" ng-disabled="disableIndividualAnnualMax" class="form-control" placeholder="0.00"
+						   tabindex="12" type="text" model-format="currencyNoSymbol" ng-change="individualMaxLeftOnChange()" maxlength="12" />
+				</div>
+			</div>
+		</div>
+    </div>
+	<hr ng-if="!editing" />
+</div>

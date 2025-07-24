@@ -1,0 +1,87 @@
+﻿<div class="perioNav" ng-class="{active: activeExamType.Type === examType}" keep-top-full>
+    <div class="perioNav__body">
+        <!--tooth nav-->
+        <div class="perioNav__toothNav">
+            <button class="btn btn-link"
+                    ng-click="navToNextValidTooth(false)" active-arch="arch" arch="''" ng-disabled="!chartedTeethLoaded">
+                <span class="fa  fa-angle-left perioNav__navArrows"></span>
+            </button>
+            <span class="perioNav__toothDisplay">{{ 'Tooth' | i18n }} {{ activeToothId }}</span>
+            <button class="btn btn-link"
+                    ng-click="navToNextValidTooth(true)" active-arch="arch" arch="''" ng-disabled="!chartedTeethLoaded">
+                <span class="fa fa-angle-right perioNav__navArrows"></span>
+            </button>
+        </div>
+        <div class="perioNav__section">
+            <div class="perioNav__sectionTitle">
+                {{'BUCCAL'|i18n}}
+            </div>
+            <!--quadrant UB DepthPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'DepthPocket'" exam-type-abbrev="'dp'" quadrant="'UB'"></perio-nav-readings>
+            <!--quadrant LB DepthPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'DepthPocket'" exam-type-abbrev="'dp'" quadrant="'LB'"></perio-nav-readings>
+            <!--quadrant UB GingivalMarginPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'GingivalMarginPocket'" exam-type-abbrev="'gm'" quadrant="'UB'"></perio-nav-readings>
+            <!--quadrant LB GingivalMarginPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'GingivalMarginPocket'" exam-type-abbrev="'gm'" quadrant="'LB'"></perio-nav-readings>
+            <!--quadrant UB MgjPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'MgjPocket'" exam-type-abbrev="'mgj'" quadrant="'UB'"></perio-nav-readings>
+            <!--quadrant LB MgjPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'MgjPocket'" exam-type-abbrev="'mgj'" quadrant="'LB'"></perio-nav-readings>
+            <!--quadrant UB BleedingPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'BleedingPocket'" exam-type-abbrev="'bp'" quadrant="'UB'"></perio-nav-readings>
+            <!--quadrant LB BleedingPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'BleedingPocket'" exam-type-abbrev="'bp'" quadrant="'LB'"></perio-nav-readings>
+            <!--quadrant UB-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'SuppurationPocket'" exam-type-abbrev="'sp'" quadrant="'UB'"></perio-nav-readings>
+            <!--quadrant LB-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'SuppurationPocket'" exam-type-abbrev="'sp'" quadrant="'LB'"></perio-nav-readings>
+        </div>
+
+        <div class="perioNav__section">
+            <!--quadrant UB FurcationGradeRoot-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'FurcationGradeRoot'" exam-type-abbrev="'fg'" quadrant="'UB'"></perio-nav-readings>
+            <!--quadrant LB FurcationGradeRoot-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'FurcationGradeRoot'" exam-type-abbrev="'fg'" quadrant="'LB'"></perio-nav-readings>
+            <!--quadrant UB Mobility-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'Mobility'" exam-type-abbrev="'mob'" quadrant="'UB'"></perio-nav-readings>
+            <!--quadrant LB-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'B'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'Mobility'" exam-type-abbrev="'mob'" quadrant="'LB'"></perio-nav-readings>
+
+        </div>
+
+        <div class="perioNav__section">
+            <div class="perioNav__sectionTitle">
+                {{'LINGUAL'|i18n}}
+            </div>
+            <!--quadrant UL DepthPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'DepthPocket'" exam-type-abbrev="'dp'" quadrant="'UL'"></perio-nav-readings>
+            <!--quadrant LL DepthPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'DepthPocket'" exam-type-abbrev="'dp'" quadrant="'LL'"></perio-nav-readings>
+            <!--quadrant UL GingivalMarginPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'GingivalMarginPocket'" exam-type-abbrev="'gm'" quadrant="'UL'"></perio-nav-readings>
+            <!--quadrant LL GingivalMarginPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'GingivalMarginPocket'" exam-type-abbrev="'gm'" quadrant="'LL'"></perio-nav-readings>
+
+
+            <!--quadrant UL MgjPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'MgjPocket'" exam-type-abbrev="'mgj'" quadrant="'UL'"></perio-nav-readings>
+            <!--quadrant LL MgjPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'MgjPocket'" exam-type-abbrev="'mgj'" quadrant="'LL'"></perio-nav-readings>
+
+
+            <!--quadrant UL BleedingPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'BleedingPocket'" exam-type-abbrev="'bp'" quadrant="'UL'"></perio-nav-readings>
+            <!--quadrant LL BleedingPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'BleedingPocket'" exam-type-abbrev="'bp'" quadrant="'LL'"></perio-nav-readings>
+            <!--quadrant UL SuppurationPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'upper'" active-arch="arch" arch="'upper'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'SuppurationPocket'" exam-type-abbrev="'sp'" quadrant="'UL'"></perio-nav-readings>
+            <!--quadrant LL SuppurationPocket-->
+            <perio-nav-readings keypad-model="keypadModel" ng-show="arch === 'lower'" active-arch="arch" arch="'lower'" ng-disabled="!toothExam" disable="!toothExam" surface="'L'" active-tooth="activeTooth" tooth-exam="toothExam" charted-teeth="chartedTeeth" exam-type="'SuppurationPocket'" exam-type-abbrev="'sp'" quadrant="'LL'"></perio-nav-readings>
+
+        </div>
+        <div class="perioNav__section">
+            <perio-keypad keypad-model="keypadModel"></perio-keypad>
+        </div>
+    </div>
+</div>

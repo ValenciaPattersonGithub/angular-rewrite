@@ -1,0 +1,203 @@
+﻿<div class="open-time-search open">
+    <div class="open-time-search__box">
+        <div class="open-time-search__header">
+        </div>
+        <div class="open-time-search__body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="pull-right padding-15">
+                        <button id="btnCloseTimeSearch" class="btn btn-link" ng-click="hideFilters()" style="z-index:99999"><i class="fa fa-times"></i></button>
+                    </div>
+                    <div class="col-sm-12 title-container">
+                        <div class="open-time-search__title">
+                            <h3>{{'Search for {0}' | i18n:['Open Time'] }} {{scheduleViewLabel }}</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="col-sm-6" ng-if="initDateSelector">
+                            <!--FROM DATE-->
+                            <label class="date-picker-label">{{'From' | i18n }}</label>
+                            <date-selector input-id="fromDate" date-var="searchParams.startDateTime" valid="validStartDate" format="MM/dd/yyyy" min-date="minDate"></date-selector>
+                        </div>
+                        <div class="col-sm-6"  ng-if="initDateSelector">
+                            <!--TO DATE-->
+                            <label class="date-picker-label">{{'To' | i18n }}</label>
+                            <date-selector input-id="toDate" date-var="searchParams.endDateTime" valid="validEndDate" format="MM/dd/yyyy" min-date="minDate"></date-selector>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="error" ng-if="searchParams.startDateTime > searchParams.endDateTime">
+                                    <label id="errBlockDateRequired" class="help-text" style="margin-left:15px;">{{ 'From date must be less than To date.' | i18n }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="error" ng-show="searchParams.startDateTime == null && searchParams.endDateTime == null">
+                                    <label id="lblDateRangeRequired" class="help-text" style="margin-left:15px;">{{ 'Date range is required to complete search.' | i18n }}</label>
+                                </div><br />
+                                <!--JUMP MONTHS-->
+                                <div class="jump-months-container">
+                                    <label id="lblJump3Months" ng-click="jumpMonth(3)">3{{'M'|i18n}}</label>&nbsp;&nbsp;
+                                    <label id="lblJump6Months" ng-click="jumpMonth(6)">6{{'M'|i18n}}</label>&nbsp;&nbsp;
+                                    <label id="lblJump9Months" ng-click="jumpMonth(9)">9{{'M'|i18n}}</label>&nbsp;&nbsp;
+                                    <label id="lblJump12Months" ng-click="jumpMonth(12)">1{{'Y'|i18n}}</label>
+                                </div>
+                                <br />
+                                <br />
+                                <h4 class="opening-label">
+                                    {{ 'Openings' | i18n }}
+                                    <span ng-if="loading"><i class="fa fa-spinner fa-spin"></i> {{ 'Loading...' | i18n }}</span>
+                                </h4>
+                                <br />
+                                <div id="openingsList" ng-if="openSlots.length > 0"class="openings-container" style="overflow-x: hidden; overflow-y: scroll; height:400px; max-width:100%;">
+                                    <!--LIST THE OPENINGS HERE-->
+                                    <paged-view items="openSlots" child-scope-name="slot" items-per-page="itemsPerPage" >
+                                        <div class="row slot body ">
+                                            <div class="col-sm-7 slotItem">
+                                                <div>{{slot.LocationDayOfWeek }} {{slot.LocationStartTime | date: 'MM/dd/yyyy'}}</div>
+                                                <div class="slotLabel">{{slot.LocationStartTime | date: 'hh:mm a'}} - {{slot.LocationEndTime | date: 'hh:mm a'}} {{slot.TimeZoneAbbreviation}} </div>
+                                                <div ng-if="slot.$$searchGroup == 1" class="slotLabel" title="{{slot.ProviderName}}">{{slot.ProviderName | limitTo: 20 }}{{slot.ProviderName.length > 20 ? '...' : ''}}</div>
+                                                <div ng-if="slot.$$searchGroup == 2" class="slotLabel" title="{{slot.RoomName}}">{{slot.RoomName | limitTo: 20 }}{{slot.RoomName.length > 20 ? '...' : ''}}</div>
+                                            </div>
+                                            <div class="col-sm-5" style="margin-left: -18px;">
+                                                <h4>
+                                                    <button class="btn soar-link icon-button font-18" icon="fa-plus" id="btnSearchForOpenTime" ng-click="controller.scheduleAppointment(slot)">{{ 'Schedule' | i18n }}</button>
+                                                </h4>
+                                            </div>
+                                        </div><br />
+                                    </paged-view>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 right-content">
+                        <label class="open-time-search-label">{{ 'Appointment Type' | i18n }}</label><br />
+                        <soar-select-list id="openTimeAppointmentType"
+                                          name="openTimeAppointmentType"
+                                          placeholder="{{'All Types' | i18n }}"
+                                          sb-tab="100"
+                                          text-field="Name"
+                                          value-field="AppointmentTypeId"
+                                          value-template="apptTypeValueTemplate"
+                                          list-template="apptTypeListTemplate"
+                                          option-list="appointmentTypes"
+                                          ng-model="searchParams.appointmentTypeId"
+                                          class="open-time-search-control-lg"
+                                          sb-change="appointmentTypeChanged"></soar-select-list>
+
+                        <label id="lblDuration" class="open-time-search-label duration-label">{{'Duration' | i18n }}</label>
+                        <select kendo-combo-box
+                                id="openTimeDuration"
+                                k-suggest="true"
+                                k-filter="'startsWith'"
+                                k-data-text-field="'duration'"
+                                k-data-value-field="'duration'"
+                                k-data-source="durations"
+                                ng-model="searchParams.duration"
+                                tabindex="100"
+                                class="open-time-search-control-sm"></select>
+                        <br />
+                        <!-- Preferred Time -->
+                        <label class="open-time-search-label preferred-time-label">{{ 'Preferred {0}' | i18n: ['Time'] }}</label><br />
+                        <label>
+                            <!--Select Any Provider-->
+                            <input type="radio" name="preferredTime" value="0" ng-model="searchParams.preferredTime" style="margin-right: 5px">
+                            <span class="normalize-weight">{{'Any {0}' | i18n: ['Time'] }}</span>
+                        </label><br />
+                        <!--Future PBI, hide for now-->
+                        <label>
+                            <input type="radio" name="preferredTime" value="1" ng-model="searchParams.preferredTime" style="margin-top: 5px; margin-right: 5px">
+                            <span class="normalize-weight">{{'Morning' | i18n }}</span>
+                        </label><br />
+                        <!--Future PBI, hide for now-->
+                        <label>
+                            <input type="radio" name="preferredTime" value="2" ng-model="searchParams.preferredTime" style="margin-top: 5px; margin-right: 5px">
+                            <span class="normalize-weight">{{'Afternoon' | i18n }}</span>
+                        </label><br />
+                        <!--preferred days-->
+                        <label class="open-time-search-label">{{ 'Preferred {0}' | i18n: ['Day'] }}</label><br />
+                        <div class="row">
+                            <span ng-repeat="day in daysOfWeek" class="col-md-1" style="display: inline-block;">
+                                <input id="{{day.abbr}}"
+                                       type="checkbox" value="{{day.id}}"
+                                       ng-checked="day.selected"
+                                       ng-click="toggleDayOfWeekSelect(day)">
+                                <label for="{{day.abbr}}">
+                                    {{day.abbr | i18n}}
+                                </label>
+                            </span>
+                        </div>
+                        <!--Provider -->
+                        <label class="open-time-search-label">{{ 'Provider' | i18n }}</label><br />
+                        <!--Select Any/Ignore Provider-->
+                        <label>
+                            <input type="radio" name="providerOption" value="{{anyProvider}}" ng-model="searchParams.providerOption" style="margin-right: 5px">
+                            <span ng-if="searchGroup == viewByProvider" class="normalize-weight">{{'Any {0}' | i18n: ['Provider'] }}</span>
+                            <span ng-if="searchGroup == viewByRoom" class="normalize-weight">{{'Ignore {0}' | i18n: ['Provider'] }}</span>
+                        </label>
+                        <br />
+                        <label ng-if="searchGroup == 1">
+                            <input type="radio" name="providerOption" value="{{anyDentist}}" ng-model="searchParams.providerOption" style="margin-top: 5px; margin-right: 5px">
+                            <span class="normalize-weight">{{'Any {0}' | i18n: ['Dentist'] }}</span>
+                        </label>
+                        <br ng-if="searchGroup == 1" />
+                        <label ng-if="searchGroup == 1">
+                            <input type="radio" name="providerOption" value="{{anyHygienist}}" ng-model="searchParams.providerOption" style="margin-top: 5px; margin-right: 5px">
+                            <span class="normalize-weight">{{'Any {0}' | i18n: ['Hygienist'] }}</span>
+                        </label>
+                        <br ng-if="searchGroup == 1" />
+                        <!--Select a Single Provider-->
+                        <label class="font-weight-normal">
+                            <input type="radio" name="providerOption" value="{{singleProvider}}" ng-model="searchParams.providerOption" style="margin-top: 10px; margin-right: 5px">
+                            <span>
+                                <provider-selector input-id="openTimeProvider"
+                                                   place-holder="providerPlaceholder"
+                                                   class="open-time-search-control-lg"
+                                                   provider-type-ids="[1,2,3,5]"
+                                                   selected-provider="searchParams.providerId"                                                  
+                                                   disable-input="searchParams.providerOption != singleProvider"
+                                                   filter-by-location-id="filteredLocation.LocationId"
+                                                   filter-inactive-providers="true"
+                                                   filter-show-on-schedule="true">
+                               </provider-selector>
+                            </span>
+                        </label>
+                        <br />
+
+
+
+
+                        <label class="open-time-search-label">{{ 'Location' | i18n }}</label><br />
+                        <label class="normalize-weight">{{ filteredLocation.NameAbbreviation | i18n }}</label><br />
+
+                        <label class="open-time-search-label">{{ 'Room' | i18n }}</label><br />
+                        <label>
+                            <input type="radio" name="roomOption" value="{{anyRoom}}" ng-model="searchParams.roomOption" ng-click="searchParams.roomId = null" style="margin-top: 5px; margin-right: 5px">
+                            <span class="normalize-weight">{{'Any {0}' | i18n: ['Room'] }}</span>
+                        </label><br />
+                        <input type="radio" name="roomOption" value="{{singleRoom}}" ng-model="searchParams.roomOption" style="margin-top: 10px; margin-right: 5px">
+                        <span>
+                            <soar-select-list id="openTimeRoom"
+                                              name="openTimeRoom"
+                                              placeholder="{{'Select Room' | i18n }}"
+                                              sb-tab="100"
+                                              text-field="Name"
+                                              value-field="RoomId"
+                                              option-list="treatmentRoomsByLocation"
+                                              ng-model="searchParams.roomId"
+                                              class="open-time-search-control-lg"
+                                              disable-input="searchParams.roomOption != singleRoom"></soar-select-list>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+    </div>
+    <div class="row">
+        <div class="pull-right margin-bottom10" style="margin-right: 50px;">
+            <button class="btn btn-primary" icon="fa-search" id="btnSearchForOpenTime" ng-click="search()" ng-disabled="!validSearchParameters()">Search</button>
+        </div>
+    </div>
+</div>

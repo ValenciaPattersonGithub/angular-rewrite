@@ -1,0 +1,238 @@
+﻿.chartingControls {
+    height: calc(100% - 140px);    
+
+    .disabled {
+        color: @brand-color_gray;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    &__btnContainer {
+        display: inline-block;
+        text-align: center;
+        width: 24%;
+
+        &.hollow {
+            opacity: .55;
+
+            .remove {
+                display: none;
+            }
+        }
+    }
+
+    &__btn {
+        .btn;
+        .btn-default;
+        border: 2px solid;
+        border-radius: 5px;
+        height: 64px;
+        margin: @brand-margin_sm 0 0 0;
+        padding: 0px;
+        width: 64px;
+
+        &.sortable {
+            cursor: move;
+        }
+
+        
+        &.conditionColor {
+            border-color: #6FAEEE;
+        }
+        &.svcBtnColor {
+            border-color: #FD9290;
+        }
+
+        &.swiftCodeBtnColor {
+            border-color: #67C1BD;
+        }
+        &.groupColor {
+            border-color: #CCC;
+        }
+        &.groupableItem {
+            cursor: move
+        }
+    }
+
+    &__removeBtn{
+        position: relative;
+        float: right;
+        margin-top: 12px;
+        cursor: pointer;
+
+        i {
+            margin-left: -60px;
+        }
+    }
+
+    &__btnIcon {
+        width: 48px;
+        height: 48px;
+        text-align: center;
+
+        .img {
+            border: none;
+        }
+    }
+
+    &__btnText {
+        display: block;
+        font-family: @brand-font;
+        font-weight: 100;
+        font-size: @brand-font_sm;
+        text-align: center;
+    }
+
+    &__layoutContainer {
+        height: 90%;
+        background-color: @brand-color_white;
+        /*margin-bottom: @brand-margin_md;
+        margin-top: @brand-margin_md;*/
+        padding: @brand-padding_md;
+    }
+
+    &__layout {
+        height: 90%;
+        overflow-y: auto;
+    }
+
+    &__controls {
+        display: flex;
+        padding: 0 25px 10px 5px;
+
+        .addActions {
+            float: right;
+            padding-right: @padding10;
+            margin-right: 50px;
+        }
+
+        .groupButtons {
+            margin-left: @brand-margin_sm;
+        }
+
+        .groupButtonsEdit {
+            margin-right: @padding5;
+        }
+    }
+
+    &__groupBtns {
+        display: flex;
+        justify-content: flex-end;
+        flex-grow: 1;
+        & .import-btn {
+            margin-right: auto;
+        }
+    }
+
+    &__manageBtns {
+        margin-left: 5px;
+    }
+
+    &__dotNavigation {
+        text-align: center;
+        margin-top: -35px;
+        display: table;
+
+        .page {
+            display: table-cell;
+            width: 20%;
+            margin: 0 auto;
+            height: 40px;
+        }
+
+        .data {
+            margin: auto auto;
+            background-color: @brand-color_white;
+            border: 1px solid @btn-default-color;
+            border-radius: 25px 25px 25px 25px;
+            padding: @padding5;
+            opacity: 25;
+            width: 10px;
+            cursor: pointer;
+            margin-top:10px;
+        }
+
+        .active {
+            background-color: @btn-default-color;
+        }
+
+        .droppablePage {
+            &:hover {
+                content: "\f02c";
+            }
+        }
+    }
+
+    &__groupTitle {
+        .groupNameInput {
+            width: 85%;
+            display: inline;
+        }
+
+        .title {
+            display: inline;
+        }
+
+        .saveName {
+            color: green;
+            padding: @padding5;
+            cursor: pointer;
+        }
+
+        .cancel {
+            cursor: pointer;
+        }
+
+        .disabled {
+            color: @brand-color_gray;
+            pointer-events: none;
+            cursor: not-allowed;
+            padding: @padding5;
+        }
+    }
+}
+
+    .tooltip-inner {
+        max-width:100%;
+    }
+.chartingButtonTooltip {
+    max-width:100%;
+    display: table-cell;
+    margin-right: 0px;
+
+    &__title{
+        display: table-cell; 
+        text-align:right; 
+        padding-right:@padding10;      
+    }
+    &__content{
+        display: table-cell;
+        text-align:left;
+    }
+    &__row{
+        width:100%;
+        display: table-row;
+        text-align:left; 
+    }
+}
+/* Tooltip fix for firefox */
+@-moz-document url-prefix() {
+    .tooltipWidth .tooltip-inner {
+        width: 150%;
+        text-wrap: none;
+    }
+}
+
+.open .chartingControls__dotNavigation {
+    margin-top: 0px;
+}
+
+.open .chartingControls__layout {
+    height: 100%;
+}
+
+.open .chartingControls__layoutContainer {
+    height: 100%;
+    overflow-y: auto;
+    padding: 0px;
+}

@@ -1,0 +1,41 @@
+<div class="list-option-container srvcTypes">
+  <form name="frmServiceTypes" role="form" novalidate>
+    <!--header-->
+    <div class="rowFull white">
+      <div class="srvcTypes__header">
+        <!--Breadcrumbs-->
+        <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+        <div class="srvcTypes__title">
+          <h1>{{ 'Service Types' | translate }}</h1>
+        </div>
+      </div>
+    </div>
+    <div class="srvcTypes__body">
+      <!--show the master list if not in edit mode-->
+      <div [ngClass]="{'slide-animation': 'forward', 'slide-backward-animation': '!forward'}">
+        <!--the list-->
+        <div class="srvcTypes__list">
+          <app-kendo-grid [data]="updatedServiceTypes"
+                          [gridHeight]="'455'"
+                          [state]="state"
+                          [isFilterable]="true"
+                          [isSortable]="true"
+                          [hasCreateAccess]="hasCreateAccess"
+                          [hasCreateButton]="true"
+                          [createButton]="{class: 'srvcTypes__actions', id: 'btnCreate', text: 'Add Service Type'}"
+                          [columns]="columns"
+                          [formGroup]="formGroup"
+                          [hasKendoAddEdit]="true"
+                          [loading]="loading"
+                          (deleteItem)="deleteServiceType($event)"
+                          (editItem)="editServiceType($event)"
+                          (saveItem)="saveServiceType($event)"
+                          (addNewItem)="addNewServiceType()">
+          </app-kendo-grid>
+          <!--loading spinner-->
+          <no-results *ngIf="loading" [loading]="loading"></no-results>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

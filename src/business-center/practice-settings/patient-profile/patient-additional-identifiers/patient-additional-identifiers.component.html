@@ -1,0 +1,176 @@
+<div class="list-option-container ptnAddIdents">
+  <form name="frmPtnAddIdents" role="form" novalidate>
+    <!--header-->
+    <div class="rowFull white">
+      <div class="ptnAddIdents__header">
+        <!--Breadcrumbs-->
+        <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+        <div class="ptnAddIdents__title">
+          <h1>{{ 'Additional Identifier' | translate }}</h1>
+        </div>
+      </div>
+    </div>
+    <div class="ptnAddIdents__body">
+      <!--show the master list if not in edit mode-->
+      <div [ngClass]="{'slide-animation': 'forward', 'slide-backward-animation': '!forward'}">
+        <!--the list-->
+          <div  class="ptnAddIdents__list">
+              <app-kendo-grid [data]="patientAdditionalIdentifiers"
+                              [gridHeight]="'455'"
+                              [state]="state"
+                              [isFilterable]="true"
+                              [isSortable]="true"
+                              [loading]="loading"
+                              [popUptemplate]="templateElement"
+                              [hasCreateAccess]="hasCreateAccess"
+                              [hasCreateButton]="true"
+                              [createButton]="{class: 'ptnAddIdents__actions', id: 'btnCreate', text: 'Additional Identifier'}"
+                              [columns]="columns"
+                              [formGroup]="formGroup"
+                              [hasKendoAddEdit]="true"
+                              [dialogSettings]="dialogSettings"
+                              [isDialogOpen]="isDialogOpen"
+                              [closeDialog]="closeDialog"
+                              (deleteItem)="deletePatientAdditionalIdentifiers($event)"
+                              (editItem)="editPatientAdditionalIdentifiers($event)"
+                              (addNewItem)="addNewPatientAdditionalIdentifiers()">
+              </app-kendo-grid>
+              <!--loading spinner-->
+              <no-results *ngIf="loading" [loading]="loading"></no-results>
+          </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<ng-template #templateRef>
+  <div class="additionalIdentifierModal">
+    <div class="modal-header">
+      <div class="row">
+        <div class="col-lg-11 col-md-11 col-sm-11 padding-none">
+          <h4 class="margin-left-20"> {{ 'Additional Identifier' | translate }}</h4>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 padding-none text-center">
+          <button class="btn soar-link icon-button font-size-20"
+            (click)="confirmCancelIdentifierChanges()"><b>x</b></button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row" *ngIf="patientAdditionalIdentifier">
+        <div class="col-lg-8 col-md-8 col-sm-8 padding-none">
+          <div class="form-group padding-left-20"
+            title="{{patientAdditionalIdentifier.IsUsed ? 'Identifiers has been previously used, so Answer Type cannot be changed.':'' | translate}}">
+            <label id="lblAdditionalIdentifierName" class="control-label" for="inpAdditionalIdentifierName">{{
+              'Additional Identifier Name' | translate }} <span class="required-label">*</span></label>
+            <div>
+              <input id="inpAdditionalIdentifierName" name="inpAdditionalIdentifierName"
+                class="required valid master-list-input" [(ngModel)]="patientAdditionalIdentifier.Description"
+                setFocus (keydown.enter)="enterKeyEvent()" (ngModelChange)="onUpdateIdentifier()" maxlength="24" [disabled]="patientAdditionalIdentifier.IsUsed" />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 padding-none">
+          <div class="form-group pl-40px">
+            <label id="lblAdditionalIdentifieType" class="control-label margin-bottom10" for="inpAdditionalIdentifierType">{{ 'Answer
+              Type' | translate }}</label>
+            <div *ngIf="!patientAdditionalIdentifier.IsUsed">
+              <app-radio-button label="{{ 'Free Form Text' | translate }}" name="rbtnAdditionalIdentifierType" value="0"
+                id="rdoFreeFormText" 
+                [checked]="patientAdditionalIdentifier.IsSpecifiedList=='0'"  
+                (change)="changeAnswerType(false)">
+              </app-radio-button> 
+              <app-radio-button label="{{ 'Specified List' | translate}}" name="rbtnAdditionalIdentifierType" value="1"
+                id="rdoSpecifiedList"
+                [checked]="patientAdditionalIdentifier.IsSpecifiedList=='1'" (change)="changeAnswerType(true)">
+              </app-radio-button>
+            </div>
+
+            <div *ngIf="patientAdditionalIdentifier.IsUsed" position="top" tooltipClass="app-tooltip"
+              title="{{'Identifiers has been previously used, so Answer Type cannot be changed.'|translate}}">
+              <app-radio-button label="{{ 'Free Form Text' | translate }}" name="rbtnAdditionalIdentifierType" value="0"
+                id="rdoFreeFormText" [checked]="patientAdditionalIdentifier.IsSpecifiedList=='0'" [disabled]="true"
+                 >
+              </app-radio-button> 
+              <app-radio-button label="{{ 'Specified List' | translate}}" name="rbtnAdditionalIdentifierType" value="1"
+                id="rdoSpecifiedList" [checked]="patientAdditionalIdentifier.IsSpecifiedList=='1'" [disabled]="true"
+                 >
+              </app-radio-button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="patientAdditionalIdentifier?.IsSpecifiedList">
+        <div class="col-lg-8 col-md-8 col-sm-8 padding-none padding-left-20 list-item-grid">
+          <kendo-grid #AdditionalIdentifierGridID [kendoGridBinding]="patientAdditionalIdentifier.ListValues" (edit)="editListItem($event)"
+            (cancel)="cancelListItem($event)" (save)="saveListItem($event)" (add)="addListItem($event)"
+            (remove)="removeListItem($event)">
+            <ng-template kendoGridToolbarTemplate>
+              <button kendoGridAddCommand class="btn btn-primary"> {{'Add New List Item'| translate }}</button>
+            </ng-template>
+            <kendo-grid-column field="Order" [width]="70">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem?.Order}}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Value" title="Value" [width]="180">
+
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.Value }}
+              </ng-template>
+              <ng-template kendoGridEditTemplate let-column="column" let-dataItem="dataItem" let-isNew="isNew"
+                let-formGroup="listItemformGroup">
+
+                <input #input class="k-textbox value-input-box" [(ngModel)]="dataItem.Value"
+                  (focusout)="getValueFieldValidation(dataItem.Value)" />
+                <div class="k-tooltip-validation" *ngIf="identifierListItemValuesValidation!=''">
+                  <span class="k-icon k-i-warning"></span>
+                  {{ identifierListItemValuesValidation }}
+                </div>
+
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-command-column [width]="165">
+              <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+
+                <button kendoGridRemoveCommand *ngIf="!dataItem.IsUsed" class="action-buttons pull-right"><i
+                    class="fas fa-trash-alt"></i></button>
+                <button *ngIf="dataItem.IsUsed" class="action-buttons pull-right" kendoTooltip position="top"
+                  tooltipClass="app-tooltip"
+                  title="{{'Item has been previously selected as a response and cannot be deleted.'|translate}}"><i
+                    class="fas fa-trash-alt"></i></button>
+
+                <button *ngIf="!dataItem.IsUsed && hasEditAccess" kendoGridEditCommand
+                  class="action-buttons pull-right"><i class="fas fa-pencil-alt"></i></button>
+
+                <button *ngIf="dataItem.IsUsed" class="action-buttons pull-right" kendoTooltip position="top"
+                  tooltipClass="app-tooltip"
+                  title="{{'Item has been previously selected as a response and cannot be edited.'|translate}}"><i
+                    class="fas fa-pencil-alt"></i></button>
+
+                <button *ngIf="!showReOrderListButtons" class="move-action-buttons pull-right" icon="fa-chevron-down"
+                  (click)="moveDownListItem(dataItem)"></button>
+                <button *ngIf="!showReOrderListButtons" class="move-action-buttons pull-right" icon="fa-chevron-up"
+                  (click)="moveUpListItem(dataItem)"></button>
+
+                <button kendoGridCancelCommand class="ban-button pull-right"><i class="fa fa-ban"></i></button>
+                <button kendoGridSaveCommand class="check-button pull-right"><i class="fa fa-check"></i></button>
+              </ng-template>
+            </kendo-grid-command-column>
+            <ng-template kendoGridNoRecordsTemplate>
+            </ng-template>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" id="btnSave" [disabled]="disableSaveIdentifierButton()" (click)="opneSaveConfirmPopUp()"
+        class="btn btn-primary pull-right">
+        {{ 'Save' | translate }}</button>
+      <button type="button" id="btnCancel" (click)="confirmCancelIdentifierChanges()"
+        class="btn btn-default margin-right-5 pull-right">{{
+        'Cancel' | translate }}</button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,147 @@
+@import "variables";
+
+.add-patient-benefit-plans {
+    & .fui-select-label { 
+        .label {
+            font-size: $global-body-font-size;
+        }
+        
+    }        
+    &__red-border {
+        border: 1px solid $alert-red
+    }
+
+    &__policy-number {        
+        font-size: $global-h2-size;
+        border-bottom: 1px solid $text-black;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        
+        &-close-icon {
+            float: right;
+            color: $dropdown-hover-color;
+        }
+    }
+
+    &__card-container {
+        margin: 15px;
+    }
+    & .label {
+        font-size:$global-body-font-size !important;
+    }
+    & .control-label {
+        margin-bottom: 0;
+    }    
+
+}
+
+
+
+//Used to display error message 
+.help-text {
+    color: $error-color;
+}
+   
+.add-policy {
+    grid-row: 11;
+    grid-column-start: 1;
+    grid-column-end: 3 span;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 10% 90%;
+    width: 60%;
+    &-icon {
+        color: $dropdown-hover-color;
+        grid-column: 1;
+        grid-row:1;
+    }
+    &-icon-add {
+        color: $background-color;
+        grid-column: 1;
+        grid-row:1;
+    }
+    &-icon-label {
+        color: $dropdown-hover-color;
+        grid-column: 2;
+        grid-row:1;    
+    }
+}
+
+
+.add-policy-label {
+    font-size: $global-body-font-size;
+    color: $dropdown-hover-color;
+    font-weight: 600 !important;
+}
+
+.md-modal {
+    min-width: 500px;
+    min-height: 200px;
+}
+
+.app-modal {
+    display: grid;
+    grid-template: 40px 1fr auto / auto;
+    grid-template-areas:
+        'header' 'content' 'footer';
+    margin: 15px 15px 15px 15px;
+    font-family: $global-font-family;   
+    border-radius: 5px;
+    background-color: #ffffff;
+    background-size: cover;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.app-modal-header {
+    padding: 15px;
+    grid-area: header;
+    font-size: $app-modal-header-font-size;
+    font-weight: $app-modal-header-font-weight;
+    font-family: $global-font-family;
+    border-bottom: $app-modal-header-border;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.app-modal-body {
+    grid-area: content;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+
+    .bodyItem {
+        margin-bottom: 10px;
+        width: 240px;
+        position: relative;
+    }
+
+    .fui-select-container {
+        width: 240px;
+    }
+
+    .bodyItem:last-child {
+        margin-bottom: 0px;
+    }
+}
+
+.app-modal-footer {
+    grid-area: footer;
+    padding: 15px;
+    border-top: $app-modal-header-border;
+    display: flex;
+    justify-content: flex-end;
+
+    app-button{
+        margin-left:10px;
+    }
+}
+
+.app-modal-bold-text {
+    font-weight: bold;
+}
+
+.app-modal-text {
+    font-weight: normal;
+}
+

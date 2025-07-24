@@ -1,0 +1,28 @@
+﻿<div class="typeahead">
+    <form class="typeahead-form">
+        <div class="typeahead-control" style="right:12px">
+            <!--<i class="fa fa-spinner fa-spin" ng-show="loading"></i>-->
+            <i class="fa fa-search" ng-show="!loading && !term && !readOnly"></i>
+            <i class="fa fa-times" id="cancelClear" ng-show="!loading && term && showClearButton" ng-click="clearContent()"></i>
+            <i class="fas fa-sort-down" style="color:#2DABCB;" ng-show="readOnly"></i>
+        </div>
+        <input id="{{ id }}" 
+               focus-on="{{bFocus}}" 
+               class="typeahead-input" 
+               placeholder="{{ placeholder }}" 
+               ng-model="term" 
+               ng-change="query()" 
+               type="text"
+               autocomplete="off"
+               check-auth-z="{{!authorized}}"
+               ng-disabled="disableInput" 
+               tabindex="{{ (tabIndex == '0' || tabIndex) ? tabIndex : 1 }}"
+               ng-readonly="readOnly" 
+               ng-style="readOnly && {'background-color':'white'}"
+               ng-attr-maxlength="{{ maxlength }}"
+               />
+    </form>
+    <div ng-hide="!term && !showList" class="typeahead-list">
+        <div ng-transclude></div>
+    </div>
+</div>

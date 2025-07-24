@@ -1,0 +1,107 @@
+﻿<div ng-class="'fade-in'" resize initial-width="500" initial-height="1025">
+    <div class="holidays">
+        <div class="patEncRef__bread">
+            <ul class="patientAcctInsPmt__breadcrumb" ng-show="fromSchedule" style="">
+                <li>
+                    <span><a ng-click="navigateSchedule()" class="ng-binding">{{ ::('Schedule' | i18n) }}</a></span>
+                </li>
+                <li class="ng-binding">{{ ::('Set Holidays' | i18n) }}</li>
+            </ul>
+            <ul class="patientAcctInsPmt__breadcrumb" ng-show="fromPracticeSettings">
+                <li>
+                    <span><a ng-click="navigatePracticeSettings()" class="ng-binding">{{ ::('Practice Settings' | i18n) }}</a></span>
+                </li>
+                <li class="ng-binding">{{ ::('Set Holidays' | i18n) }}</li>
+            </ul>
+        </div>
+        <div class="rowFull white">
+            <div class="holidays__header">
+                <div class="holidays__title">
+                    <h1>{{ ::('Holidays' | i18n) }}</h1>
+                </div>
+                <div class="holidays__add">
+                    <a id="btnAddHoliday" class="btn btn-primary" check-auth-z="soar-sch-schhol-add" ng-click="createHoliday()">+ {{'Add {0}'|i18n:['Holiday']}}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="rowFull">
+            <div class="holidays__content">
+                <div class="col-xs-6">
+
+                    <!--List of default holidays grid-->
+                    <div class="fuseGrid container pull-left">
+                        <div class="row header">
+                            <div id="gridHeaderDefaultHolidayDescription" class="col-sm-6 cell sortCursor"
+                                 ng-click="changeSortingForGrid('Description')">
+                                {{'Name'|i18n}}
+                                <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'Description'"></span>
+                            </div>
+                            <div id="gridHeaderDefaultHolidayDate" class="col-sm-4 cell sortCursor"
+                                 ng-click="changeSortingForGrid('Date')">
+                                {{'Date'|i18n}}
+                                <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'Date'"></span>
+                            </div>
+                            <div id="gridHeaderDefaultHolidayActive" class="col-sm-2 cell">
+                            </div>
+                        </div>
+
+                        <!--default holidays-->
+                        <div class="row body" ng-repeat="holiday in holidays | filter:{IsDefaultHoliday:true}  | orderBy:orderBy.field:!orderBy.asc ">
+                            <div id="gridDefaultHolidayDescription_{{$index}}" class="col-sm-6 cell" ng-bind-html="holiday.Description">
+                            </div>
+                            <div id="gridDefaultHolidayDate_{{$index}}" class="col-sm-4 cell" ng-class="{'text-muted': !holiday.IsActive}">
+                                {{ holiday.Date | toShortDisplayDate }}
+                            </div>
+                            <div id="gridDefaultHolidayIsActive_{{$index}}" class="col-sm-2 cell pull-right">
+                                <checkbox auth-z="soar-sch-schhol-edit" checkbox-id="defaultHolidayInactive{{$index}}" checkbox-value="holiday.IsActive" change-function="saveHoliday(holiday)" class="holidays-checkbox"></checkbox>
+                            </div>
+                        </div>
+                        <div>
+                            <no-results loading="loading" ng-hide="!loading"></no-results>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6">
+
+                    <!--List of default holidays grid-->
+                    <div class="fuseGrid container pull-left">
+                        <div class="row header">
+                            <div id="gridHeaderHolidayDescription" class="col-sm-6 cell sortCursor"
+                                 ng-click="changeSortingForGrid('Description')">
+                                {{::('Name'|i18n)}}
+                                <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'Name'"></span>
+                            </div>
+                            <div id="gridHeaderHolidayDate" class="col-sm-4 cell sortCursor"
+                                 ng-click="changeSortingForGrid('Date')">
+                                {{ ::('Date'|i18n)}}
+                                <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'Date'"></span>
+                            </div>
+                            <div id="gridHeaderHolidayActive" class="col-sm-2 cell">
+                            </div>
+                        </div>
+
+                        <!--default holidays-->
+                        <div class="row body" ng-repeat="holiday in holidays | filter:{IsDefaultHoliday:false}  | orderBy:orderBy.field:!orderBy.asc ">
+                            <div id="gridHolidayDescription_{{$index}}" class="col-sm-6 cell" ng-bind-html="holiday.Description">
+                            </div>
+                            <div id="gridHolidayDate_{{$index}}" class="col-sm-4 cell" ng-class="{'text-muted': !holiday.IsActive}">
+                                {{ holiday.Date | toShortDisplayDate }}
+                            </div>
+                            <div id="gridHolidayIsActive_{{$index}}" class="col-sm-2 cell pull-right">
+                                <checkbox auth-z="soar-sch-schhol-edit" checkbox-id="holidayInactive{{$index}}" checkbox-value="holiday.IsActive" change-function="saveHoliday(holiday)" class="holidays-checkbox"></checkbox>
+                                <i id="btnEditHoliday{{$index}}" class="btn fas fa-pencil-alt icon-click holidays__buttons" check-auth-z="soar-sch-schhol-edit" ng-click="createHoliday(holiday)" ng-disabled="!holiday.IsActive"></i>
+                                <i id="btnDeleteHoliday{{$index}}" class="btn fa fa-times icon-click holidays__buttons" check-auth-z="soar-sch-schhol-delete" ng-click="deleteHoliday(holiday)" ng-disabled="!holiday.IsActive"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <no-results loading="loading" ng-hide="!loading"></no-results>
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,17 @@
+<div class="merge-to-account-dialog"> 
+    <div class="dialog-header">
+        <span class="text-left">{{ title | translate  }}</span>
+    </div>           
+    <div class="dialog-content">
+        <div class="dialog-sub-header">
+            <span class="text-left">{{ message | translate  }}</span>
+        </div>
+    </div>    
+    <div class="dialog-footer"> 
+        <div class="btn_toolbar">
+            <button *ngIf="okAndCancel === true" id="btnCancel" class="btn default_button" (click)="cancelClicked()" type="button">{{'Cancel'| translate}}</button>
+            <button id="btnOk" class="btn primary_button" type="button" (click)="okClicked()">{{'OK'| translate}}</button>
+        </div>
+    </div>
+</div> 
+ 

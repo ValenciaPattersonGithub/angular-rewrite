@@ -1,0 +1,71 @@
+﻿.patientMedicalHistoryTile {
+    .clearfix;
+    background-color: @brand-color_white;
+    transition: all 0.5s ease 0s;
+    width: 100%;    
+
+    &.active {
+        background-color: @brand-color_gray;
+    }
+
+    &__detailsBox {
+        float: left;
+        background-color: @brand-color_white;
+        width: 100%;
+
+        &.disabled-tile {
+            background-color: @brand-color_dark-gray;
+            cursor: not-allowed;
+        }
+        &.groupedTop {
+            border-left: 5px solid @brand-color_darker-gray;
+            border-right: 5px solid @brand-color_darker-gray;
+            border-top: 25px solid @brand-color_darker-gray;
+            margin-bottom: -3px;
+        }
+    }
+
+    &__details {
+        .clearfix;
+        width: 100%;
+        padding-right: 4px;
+        float: left;
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        cursor: pointer;
+    }
+
+    &__description {
+        width: 100%;
+        float: left;
+        font-weight: 500;
+    }
+
+    &__icon {
+        display: inline-block;
+        float: right;
+        border-radius: 25px;
+        border: 2px solid @brand-color_gray;
+        height: 40px;
+        margin-top: 8px;
+        padding-top: 10px;
+        text-align: center;
+        background-color: @brand-color_gray;
+        width: 40px;
+
+        &.link {
+            cursor: pointer;
+        }
+
+        &.groupedTop {
+            margin-bottom: 8px;
+            margin-top: 4px;
+        }
+    }
+
+    &__iconLink {
+        position: relative;
+        top: -22px;
+        float: right;
+    }
+}

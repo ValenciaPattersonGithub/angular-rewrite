@@ -1,0 +1,119 @@
+﻿
+<div class="idealDaysCrud">
+    <form name="frmIdealDaysCrud" novalidate>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>{{ actionTitle }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="idealDaysCrud__content ">
+
+            <div class="col-sm-12">
+                <div class="col-sm-6 idealDaysCrud__sticky">
+                    <div class="col-xs-12"><label>{{::'Template Name'}}</label><span class="required">*</span></div>
+                    <div class="col-xs-12" ng-class="{error: !formIsValid && !frmIdealDaysCrud.inpIdealDayTemplateName.$valid}">
+                        <input id="inpIdealDayTemplateName"
+                               class="form-input required valid"
+                               placeholder="{{ '{0} {1}' | i18n:  ['Template', 'Name'] }}"
+                               ng-model="idealDaysTemplateDto.Name"
+                               name="inpIdealDayTemplateName"
+                               maxlength="500"
+                               type="text"
+                               set-focus
+                               ng-disabled="false" 
+                               ng-blur=""
+                               required />                    
+                    <span id="lblIdealDayTemplateNameRequired" class="help-text " ng-show="!formIsValid && !frmIdealDaysCrud.inpIdealDayTemplateName.$valid">
+                        {{ ::'This field is required.' | i18n }}
+                    </span>
+                </div>
+
+
+                    <!--Draggable appointment type-->
+                    <div class="clearfix"></div>
+                    <div class="col-xs-12 padding-top-16"  >
+                        {{::'Drag and Drop an Appointment Type'|i18n}}
+                        <div class="idealDaysCrud__apptTypes">
+                            <div ng-repeat="apptType in appointmentTypes">
+                                <div class="min-width drag-container">
+                                    <div id="{{::apptType.AppointmentTypeId}}"
+                                         kendo-draggable
+                                         check-auth-z="soar-sch-schidl-idlprv"
+                                         k-hint="draggableHint"
+                                         k-cursor-offset="{ top: -10, left: -10 }"
+                                         k-drag="checkPosition"
+                                         k-dragstart="onDragStart"
+                                         k-dragend="onDragEnd"
+                                         class="drag-hint"
+                                         ng-style="{'background': apptType.AppointmentTypeColor, 'color': apptType.FontColor}">
+                                        {{apptType.Name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Drag to scheduler-->
+                <div class="col-sm-6" ng-class="{error: !formIsValid && idealDaysTemplateDto.Details.length == 0}">
+                    <span id="lblIdealDayTemplateDetailsRequired" class="help-text " ng-show="!formIsValid && idealDaysTemplateDto.Details.length == 0">
+                        {{ ::'List cannot be empty. One or more items must be provided.' | i18n }}
+                    </span>
+                    <div class="col-xs-12"><label class="hoursLabel">{{::'Hours'}}</label></div>
+                    <div kendo-scheduler="idealDaysScheduler"
+                         k-options="schedulerIdealDaysOptions"
+                         k-drop="dropToSchedule"
+                         kendo-droptarget>
+                        <!--custom event template for each occurrence-->
+                        <div k-event-template
+                             check-auth-z="soar-sch-schidl-idlprv"
+                             class='custom-event'>
+                            <button ng-hide="dataItem.type == 'lunch'" ng-click="removeOccurrence(dataItem)"
+                                    class="event-btn">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <div class="">
+                                <div> {{ dataItem.Name }}</div>
+                                <div>({{ dataItem.end.getTime() - dataItem.start.getTime() | minutes }} {{'minutes'| i18n}})</div>
+                            </div>
+                        </div>
+                        <!--<div k-date-header-template>
+                        </div>-->
+                    </div>
+
+                </div>
+                      
+            </div>
+        </div>
+
+        <!--create agreement-->
+        <div class="idealDaysCrud__footer">
+            <div class="idealDaysCrud__actions">
+                <div class="idealDaysCrud__actions">
+
+                    <!--TODO new amfa -->
+                    <button id="btnSaveIdealDay"
+                            ng-show="true"
+                            class="btn btn-primary pull-right"
+                            ng-click="saveIdealDayTemplate()"
+                            check-auth-z="soar-sch-schidl-idlprv"
+                            ng-disabled="saving|| loading || dDataHasChanged===false">
+                        {{ actionText |i18n }}
+                    </button>
+                    <button id="btnCancelIdealDay"
+                            ng-hide="false"
+                            class="btn btn-default pull-right"
+                            ng-click="cancelListChanges()"
+                            ng-disabled="saving || loading">
+                        {{ ::'Cancel' |i18n }}
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+

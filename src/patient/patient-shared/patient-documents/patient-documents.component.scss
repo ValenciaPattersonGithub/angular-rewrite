@@ -1,0 +1,297 @@
+@import "variables";
+@import "toolTip.scss";
+.patientDocuments {
+    font-family: $global-font-family;
+    &-container {
+        padding: 15px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 5px;
+        hr {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-top: 1px solid #2b144e;
+        }
+    }
+    &-header {
+        display: grid;
+        grid-template: 1fr / 50% 50%;
+        grid-template-areas: "documentButton";
+        // 50% = 1st Column
+        // 50% = 2nd Column
+        // documentButton = 1st Row
+        &-title {
+            height: 16px;
+            font-size: 16px;
+            color: $text-black;
+            text-decoration: none solid $text-black;
+            line-height: 16px;
+            font-weight: bold;
+            grid-area: documentButton / 1; // documentButton => row and 1 => 1st column
+        }
+        &-actionButtons {
+            grid-area: documentButton / 2; // documentButton => row and 2 => 2nd column
+            justify-self: end;
+        }
+    }
+    &-section {
+        grid-row: 2;
+        grid-column-start: 1;
+        grid-column-end: span col3-end;
+        margin-bottom: 10px;
+        max-height: 240px;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+            width: 16px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: $appointment-dropdownlist-background-color;
+        }
+        &::-webkit-scrollbar-track:hover {
+            background-color: $appointment-dropdownlist-background-color;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: $appointment-dropdownlist-box-background-color;
+            border-radius: 16px;
+            border: 5px solid $appointment-dropdownlist-background-color;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: $appointment-dropdownlist-box-hover-background-color;
+            border: 4px solid $appointment-dropdownlist-box-hover-border-color;
+        }
+
+        &::-webkit-scrollbar-button {
+            display: none;
+        }
+    }
+    &-label {
+        font-family: $global-font-family !important;
+        font-weight: bold !important;
+        font-size: 12px !important;
+        color: $label-color; // non-standard black, see design system
+        padding: 0; // reset padding
+        margin: 0; // reset margin
+    }
+    &-grid {
+        display: grid;
+        grid-template-columns: 24% 24% 24% 24% 4%;
+        border: 1px solid $patient-registration-border-color;
+        border-top: 0px;
+        min-height: 40px;
+        max-height: 240px;
+        &-header {
+            border-right: 1px solid $patient-registration-border-color;
+            border-top: 1px solid $patient-registration-border-color;
+            padding: 10px 0px 10px 10px;
+        }
+        &-header:last-of-type {
+            border-right: none;
+        }
+        &-item {
+            border-right: 1px solid $patient-registration-border-color;
+            border-top: none;
+            padding-left: 5px;
+            padding-top: 10px;
+            outline: none;
+            margin-left: 5px;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            &:hover {
+                text-overflow: clip;
+                white-space: normal;
+                word-break: break-word;
+            }
+            & span {
+                margin-right: 3px;
+            }
+            color: #555555;
+        }
+        &-item:first-of-type {
+            color: $dropdown-hover-color;
+            cursor: pointer;
+        }
+        &-item:last-of-type {
+            border-right: none;
+            position: relative;
+            overflow: visible;
+        }
+    }
+}
+.ml-10 {
+    margin-left: 10px;
+}
+.doc-modal {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-areas: "header" "content" "footer";
+    margin: 0;
+    border: 1px solid $short-input-text-color;
+    border-radius: 4px;
+    outline: 0;
+    background-color: $background-color;
+    border-radius: 5px;
+    box-shadow: $global-drop-shadow;
+    max-width: 80vw;
+    max-height: 80vh;
+    min-height: 1px;
+    min-width: 300px;
+}
+
+.doc-modal-body {
+    grid-area: content;
+    border-top: $app-modal-header-border;
+    border-bottom: $app-modal-header-border;
+    overflow: auto;
+}
+
+.doc-modal-header {
+    font-size: $app-modal-header-font-size;
+    font-weight: $app-modal-header-font-weight;
+    font-family: $global-font-family;
+    color: $text-black;
+    height: 18px;
+}
+
+.search-message {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 12px;
+    color: $label-color;
+}
+
+.doc-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    grid-area: footer;
+}
+
+.doc-modal-bold-text {
+    font-weight: bold;
+}
+
+.doc-modal-text {
+    font-weight: normal;
+}
+
+.btnFlexContainer {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.containerPadding {
+    padding: 15px;
+}
+
+.closeModal {
+    cursor: pointer;
+    color: $action-blue;
+
+    &:hover {
+        color: $light-action-blue;
+    }
+}
+
+.close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 15px;
+}
+
+.doc-btn {
+    margin-left: 10px;
+}
+
+table,
+th,
+td {
+    border: 1px solid $patient-registration-border-color;
+    font-size: 12px;
+    color: $text-black;
+}
+
+tr:nth-child(even) {
+    background-color: $grid-odd-row-background-color;
+}
+
+tr:nth-child(odd) {
+    background-color: $background-color;
+}
+
+th {
+    color: $text-black;
+    font-weight: 700;
+}
+
+th,
+td {
+    text-align: left !important; //have to put !important because typography.less is forcing some column text to the right
+}
+
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+label {
+    position: relative;
+}
+
+label:before {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill-rule='evenodd'%3E%3Cpath d='M16.036 18.455l2.404-2.405 5.586 5.587-2.404 2.404zM8.5 2C12.1 2 15 4.9 15 8.5S12.1 15 8.5 15 2 12.1 2 8.5 4.9 2 8.5 2zm0-2C3.8 0 0 3.8 0 8.5S3.8 17 8.5 17 17 13.2 17 8.5 13.2 0 8.5 0zM15 16a1 1 0 1 1 2 0 1 1 0 1 1-2 0'%3E%3C/path%3E%3C/svg%3E")
+        center / contain no-repeat;
+}
+
+.field {
+    min-width: 125px;
+}
+
+a.disabled {
+    cursor: not-allowed;
+}
+a.menuLink {
+    border-bottom: 1px solid $dropdown-border-color;
+}
+.dropdown-menu li a:last-child {
+    border-bottom: none !important;
+}
+.dropdown-menu {
+    padding: 0px 0px !important;
+    font-family: $global-font-family;
+    font-size: 12px;
+    position: absolute;
+    right: 20px;
+    margin-top: -30px;
+}
+
+.dropdown-menu > li > a:hover {
+    background-color: $action-blue !important;
+    color: $dropdown-text-color !important;
+}
+.dropdown-menu > li > a:focus {
+    background-color: $action-blue !important;
+    color: $dropdown-text-color !important;
+    position: absolute;
+}
+.document-modal {
+    width: 300px;
+}
+
+.fa-sort,
+.fa-sort-up,
+.fa-sort-down {
+    float: right;
+    margin-right: 15px;
+}
+

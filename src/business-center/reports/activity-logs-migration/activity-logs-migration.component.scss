@@ -1,0 +1,40 @@
+.activity-log-report {
+  grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr 1fr 1fr;
+}
+
+.grid {
+  display: grid;
+
+  &.header {
+    font-weight: bold;
+    margin-right: 7px;
+
+    &.activity-log-report {
+      position: sticky;
+      top: 62px;
+      background: white;
+      z-index: 1;
+
+      &.locationInactive {
+        top: 80px;
+      }
+    }
+
+    > div {
+      padding: 5px;
+      align-items: center;
+      margin-left: -5px;
+    }
+  }
+
+  &.item {
+    > div {
+      padding: 5px;
+      align-items: center;
+    }
+
+    .respectCRLF {
+      white-space: pre-wrap;
+    }
+  }
+}

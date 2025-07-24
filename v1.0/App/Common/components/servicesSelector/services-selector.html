@@ -1,0 +1,85 @@
+﻿<div id="modalSelectServiceCodes">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Service Codes</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-left">
+            <button id="lblAddServiceCodes" ng-disabled="serviceTransactions.length === 0" class="add-selected-services btn btn-primary" ng-click="onAddServices($event)">{{ 'Add Selected to Appointment' | i18n }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-inline col-md-12">
+      <div class="form-group has-feedback col-md-2">
+        <div class="services-selector-service-code-label">Service Code</div>
+      </div>
+      <div class="form-group has-feedback col-md-4">
+        <div class="services-selector-service-description-label">Service Code Description</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-inline col-md-5">
+      <div class="form-group has-feedback">
+        <input class="form-input border-solid-black" id="inpSearchServiceCodes" ng-disabled="fieldOptions.SearchBoxInput.Disabled" set-focus placeholder="" type="text" ng-model="searchServiceCodesKeyword" />
+        <span id="lblFeedbackCode" ng-hide="fieldOptions.SearchBoxInput.Hidden" ng-disabled="fieldOptions.SearchBoxInput.Disabled" class="glyphicon glyphicon-search form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input class="form-input border-solid-black" id="inpSearchServiceDescription" ng-disabled="fieldOptions.SearchBoxInput.Disabled" set-focus placeholder="" type="text" ng-model="searchServiceCodesDescription" />
+        <span id="lblFeedbackDescription" ng-hide="fieldOptions.SearchBoxInput.Hidden" ng-disabled="fieldOptions.SearchBoxInput.Disabled" class="glyphicon glyphicon-search form-control-feedback"></span>
+      </div>
+    </div>
+    <div class="col-md-4 services-selector-service-type-dd">
+      <div class="form-group" ng-disabled="fieldOptions.ServiceTypeSelector.Disabled">
+        <soar-select-list
+          id="lstServiceType"
+          name="lstServiceType"
+          class-name="form-control"
+          text-field="Description"
+          value-field="ServiceTypeId"
+          option-list="serviceTypes"
+          ng-model="filterItem"
+          placeholder="{{ 'Service Types' | i18n }}"
+          sb-required="required"
+        ></soar-select-list>
+      </div>
+    </div>
+  </div>
+  <div class="service-codes-box" ng-class="{'scroll-y-400' : editMode == false}">
+    <div class="col-xs-12">
+      <form name="serviceCodeSelectorForm" role="form" action="javascript:void(0);" novalidate>
+        <ul class="list-unstyled list-striped">
+          <li
+            id="trServiceRow{{$index}}"
+            class="service-list-item"
+            ng-repeat="serviceCode in filteredServiceCodes=(serviceCodes | filter:{IsActive: true}| filter:serviceTypeFilter | orderBy:'Code' : orderBy:asc | searchOnParticularColumn:searchServiceCodesKeyword:['Code']| searchOnParticularColumn:searchServiceCodesDescription:['Description'])"
+          >
+            <div class="row" novalidate ng-class="{ 'padding-bottom-10': activeIndex == $index }">
+              <div id="tdCdtCodeName{{$index}}" class="col-xs-12 col-sm-2 col-md-2 overflow-hidden services-selector-cdt-code-name-col" title="{{serviceCode.Code}}">
+                <input id="chkServiceCode{{$index}}" class="service-code-select" type="checkbox" ng-model="checked" ng-change="serviceSelected(checked,serviceCode)" />
+                <span id="lblCdtCodeNameHeader" ng-bind-html="serviceCode.Code  | highlightTextIfContains:searchServiceCodesKeyword"></span>
+              </div>
+              <div id="tdDescription{{$index}}" class="col-xs-12 col-sm-3 col-md-5 overflow-hidden truncate services-selector-description-col" title="{{serviceCode.CompleteDescription}}">
+                <span id="lblDescriptionHeader" ng-bind-html="serviceCode.CompleteDescription  | highlightTextIfContains:searchServiceCodesDescription:65"></span>
+              </div>
+            </div>
+          </li>
+          <li ng-show="serviceCodes.length==0 || filteredServiceCodes.length==0">
+            <div class="row">
+              <div class="col-xs-12">
+                <no-results loading-message="loadingMessageNoResults" loading="loadingServices==true" filtering="filteringServices" filtering-message="filteringMessageNoResults"></no-results>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>

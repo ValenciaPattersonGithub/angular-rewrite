@@ -1,0 +1,199 @@
+<div class="apply-insurance-payment-page">
+  <div class="apply-insurance-payment-header">
+    <!-- Patient header -->
+    <registration-header
+      [isPatientHeader]="true"
+      [patientProfile]="person.Profile"
+      (activeUrl)="activeUrl($event)"></registration-header>
+
+    <div class="breadCrumbs-title">
+      <!-- BreadCrum  -->
+      <app-page-navigation [navigationData]="breadCrumbs" (currentPath)="changePath($event)"></app-page-navigation>
+
+      <!-- current page label and navigation  -->
+    </div>
+  </div>
+
+  <div class="apply-insurance-payment-container">
+    <div class="apply-insurance-payment">
+      <div class="header-container" data-qa="ins-pmt-payment-header">
+        <div>
+          <p class="apply-insurance-header-label">
+            {{ titleMessage | translate }}
+          </p>
+        </div>
+        <div class="mr-15 backBtn">
+          <button
+            class="bckBtn secondary"
+            icon="fa-arrow-left"
+            (click)="confirmCancellation()"
+            data-qa="ins-pmt-payment-back-button">
+            {{ 'Back' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <hr class="apply-insurance-header-line-primary" />
+
+      <div class="form-row">
+        <div class="form-group date-picker-override" data-qa="ins-pmt-payment-date">
+          <label class="control-label">{{ 'Date' | translate }}</label>
+          <app-date-picker 
+            [id]="'insPmtDate'"
+            [(value)]="insurancePaymentDto.DateEntered"
+            (dateChanged)="onPaymentDateChanged($event)">
+            [maxDate]="today"
+            data-qa="ins-pmt-form-input-payment-date">
+          </app-date-picker>
+        </div>
+
+        <div class="form-group currency-input-override" data-qa="ins-pmt-payment-amount">
+          <label class="control-label">{{ 'Amount' | translate }}</label>
+          <currency-input
+            id="insPmtAmount"
+            data-qa="ins-pmt-form-input-payment-amount"
+            [(amount)]="insurancePaymentDto.Amount"
+            [isDisabled]="editMode || isInsTransactionDeposited"
+            (amountChange)="processPaymentChange($event, claims)"
+            (numericKeyPressed)="numericKeyPressed()">
+          </currency-input>
+          <span
+            *ngIf="insurancePaymentDto.Amount > remainingBalance && remainingBalance != 0"
+            class="error help-text"
+            data-qa="ins-pmt-form-error-payment-amount"
+            >{{ 'Amount cannot be greater than the charge of ' | translate
+            }}<strong>{{ remainingBalance | currency }}</strong></span
+          >
+        </div>
+
+        <div class="form-group insurance-payment-types-dropdown" data-qa="ins-pmt-payment-type">
+          <label class="control-label">{{ 'Payment Type' | translate }}</label>
+          <div
+            [ngClass]="{
+              'input-error': !insurancePaymentDto.InsurancePaymentTypeId
+            }">
+            <insurance-payment-types-dropdown
+              id="insPaymentTypesDropdown"
+              data-qa="ins-pmt-form-input-payment-type-dropdown"
+              [initialSelectedPaymentType]="insurancePaymentDto.InsurancePaymentTypeId"
+              [isPatientInsMultiClaim]="this.userLocation?.IsPaymentGatewayEnabled && claims && claims.length > 1"
+              (selectedPaymentTypeChange)="selectedPaymentTypeWatcher($event)">
+            </insurance-payment-types-dropdown>
+          </div>
+          <span *ngIf="!insurancePaymentDto.InsurancePaymentTypeId"
+                class="error help-text"
+                data-qa="ins-pmt-form-error-payment-type">
+              {{ 'Please select a Payment Type' | translate }}
+          </span>
+        </div>
+
+        <div class="form-group" *ngIf="showCreditCardDropDown">
+          <div [ngClass]="{ 'input-error': isPaymentDeviceExist && (!selectedCardReader || selectedCardReader == '0') }">
+            <card-reader-select [location]="userLocation"
+              (onCardReaderChange)="cardReaderChanged($event)"
+              (isCardReaderExist)="isCardReaderExist($event)"
+              [showLabel]="true">
+            </card-reader-select>
+          </div>
+          <span *ngIf="isPaymentDeviceExist && (!selectedCardReader || selectedCardReader == '0')"
+            class="error help-text"
+            data-qa="card-reader-select-error">
+              {{ 'Please select a Card Reader' | translate }}
+          </span>
+        </div>
+
+        <div class="form-group" data-qa="ins-pmt-payment-prompt" *ngIf="paymentPrompt && paymentPrompt !== ''">
+          <label class="control-label"> {{ paymentPrompt | translate }}</label>
+          <input
+            class="apply-insurance-form-control"
+            data-qa="ins-pmt-form-input-payment-type"
+            id="paymentPrompt"
+            [disabled]="isInsTransactionDeposited"
+            type="text"
+            [(ngModel)]="insurancePaymentDto.PaymentTypePromptValue"
+            maxlength="25" />
+        </div>
+        </div>
+
+      <hr class="bulk-payment-header-line-secondary" />
+
+      <apply-insurance-payment-table
+        [claims]="claims"
+        (finalPaymentChange)="finalPaymentChangeEvent($event)"
+        (paymentAmountBlurChange)="paymentAmountBlurEvent($event)"
+        (serviceAmountBlurChange)="serviceAmountBlurEvent($event)"
+        (serviceAllowedAmountBlurChange)="serviceAllowedAmountBlurEvent($event)"
+        (patientNameClick)="navToPatientProfile($event)"
+        [masterNote]="insurancePaymentDto.Note"
+        (masterNoteChange)="masterNoteChangeEvent($event)"
+        [editMode]="editMode"
+        [isInsTransactionDeposited]="isInsTransactionDeposited"
+        [canEditAllowedAmount]="canEditAllowedAmount">
+      </apply-insurance-payment-table>
+
+      <div class="row padding-10 footer">
+        <div class="pull-right">
+          <div class="form-row">
+            <div class="form-group" data-qa="ins-pmt-reset-allowed-amounts">
+              <app-button 
+                id="resetAllowedAmountsButton"
+                variation="secondary"
+                data-qa="ins-pmt-form-reset-allowed-amounts-button"
+                (onClick)="resetAllowedAmounts()"
+                buttonLabel="{{ 'Reset Allowed Amounts' | translate }}"
+                [isDisabled]="!hasEditedAllowedAmounts">
+              </app-button>              
+            </div>
+            <div class="form-group" data-qa="ins-pmt-cancel">
+              <app-button
+                id="clearCancel"
+                variation="secondary"
+                data-qa="ins-pmt-form-cancel-button"
+                (onClick)="confirmCancellation()"
+                buttonLabel="{{ 'Cancel' | translate }}">
+              </app-button>
+            </div>
+            <div class="form-group" data-qa="ins-pmt-apply">
+              <app-button
+                id="applyButton"
+                class=""
+                data-qa="ins-pmt-form-apply-button"
+                variation="primary"
+                (onClick)="apply()"
+                buttonLabel="{{ 'Apply' | translate }}"
+                [isDisabled]="isApplyButtonDisabled()">
+              </app-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-offset-9 col-sm-3 error" data-qa="ins-pmt-form-error-apply">
+          <span class="pull-right">
+            <span *ngIf="unappliedAmount > minValCheck" class="error help-text"
+              >{{ 'You have' | translate }} {{ unappliedAmount | currency }}
+              {{ 'left to distribute. Please correct before proceeding' | translate }}</span
+            >
+            <span *ngIf="unappliedAmount < -0.009999" class="error help-text"
+              >{{ 'The distributed amount of' | translate }}
+              {{ insurancePaymentDto.Amount - unappliedAmount | translate }}
+              {{ 'exceeds the payment amount of' | translate }}
+              {{ insurancePaymentDto.Amount | currency }}
+              {{ '. Please correct before proceeding' | translate }}</span
+            >
+            <span *ngIf="isInsTransactionDeposited" class="error help-text">{{
+              'Remove the payment from the deposit to make edits' | translate
+            }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<paypage-modal
+  [isVisible]="showPayPageModal"
+  [iframeSrc]="payPageUrl"
+  (close)="closePaypage()"
+  (paypageRedirectCallBackEvent)="paypageRedirectCallBackEvent()"
+></paypage-modal>

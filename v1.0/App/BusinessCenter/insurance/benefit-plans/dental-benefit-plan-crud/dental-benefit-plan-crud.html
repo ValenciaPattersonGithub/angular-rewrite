@@ -1,0 +1,755 @@
+﻿<div class="benefitPlanCrud" ng-form="frmPlan" ng-init="initialize()">
+    <div class="rowFull white">
+        <div class="benefitPlanCrud__header">
+            <div class="benefitPlanCrud__title">
+                <h1>
+                    <span ng-hide="editing == true">{{ 'Add a {0}' | i18n:['Plan'] }}</span>
+                    <span ng-show="editing == true">{{ planName }}</span>
+                </h1>
+                <div class="row">
+                    <div class="benefitPlanCrud__actions col-sm-4">
+                        <button data-qa="dental-ben-plan-form-btn-cancel" id="btnCancel" ng-click="cancel();" class="btn btn-default" tabindex="1">{{ 'Cancel' | i18n }}</button>
+                        <button data-qa="dental-ben-plan-form-btn-save" check-auth-z="soar-ins-ibplan-add" 
+                            id="btnSave"
+                            ng-click="benefitPlan.$affectedAmounts ? checkForDependents(benefitPlan) : save(benefitPlan);" 
+                            ng-disabled="disableSaveButton"
+                            class="btn btn-primary"
+                            tabindex="1">{{'Save' | i18n }}</button>
+                        <button data-qa="dental-ben-plan-form-btn-copy" ng-show="editing" check-auth-z="soar-ins-ibplan-add" id="btnCreateCopy" ng-click="copyPlan(benefitPlan);" class="btn btn-primary" tabindex="1">{{ 'Create a copy of this benefit plan' | i18n }}</button>
+                    </div>
+                    <div class="col-sm-offset-5 col-sm-3 col-md-2 col-lg-1 toggle-align">
+                        <label>Active</label>
+                        <div class="onoffswitch pull-right">
+                            <input data-qa="dental-ben-plan-form-input-active-status"  type="checkbox" ng-change="setActiveStatus(benefitPlan)" name="onoffswitch" class="onoffswitch-checkbox" id="inactivateSwitch" ng-model="benefitPlan.IsActive">
+                            <label class="onoffswitch-label" for="inactivateSwitch" style="margin-bottom: 0;"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rowFull white">
+        <no-results loading="loading" ng-hide="!loading"></no-results>
+        <div class="benefitPlanCrud__body" ng-hide="loading">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <label class="benefitPlanCrud__section">
+                        {{ 'Plan Information' | i18n }}
+                    </label>
+                </div>
+            </div>
+
+            <div class="row  form-horizontal">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpPlanName">{{ 'Plan Name' | i18n }}*</label>
+                        <div class="col-sm-8">
+                            <div ng-class="{error: hasErrors && !frmPlan.inpPlanName.$valid}">
+                                <input data-qa="dental-ben-plan-form-input-plan-name" id="inpPlanName" class="form-control" set-focus name="inpPlanName" type="text" placeholder="{{ 'Plan Name' | i18n }}" ng-model="benefitPlan.Name" ng-change="checkForDuplicates(benefitPlan)" capitalize-first-with-override maxlength="64" tabindex="12" required />
+                                <label id="lblPlanNameRequired" class="help-text " ng-show="hasErrors && !frmPlan.inpPlanName.$valid">
+                                    {{ 'This field is required.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpCarrier">{{ 'Carrier' | i18n }}*</label>
+                        <div class="col-sm-8">
+                            <div class="form-control truncate" ng-show="selectedCarrier != null">
+                                <span class="pull-left">
+                                    <a class="benefitPlanCrud__carrierLink" ng-click="openCarrierTab(selectedCarrier.CarrierId)">
+                                        {{ selectedCarrier.Name }}
+                                    </a>
+                                </span>
+                                <span class="pull-right">
+                                    <a class="benefitPlanCrud__carrierLink" ng-if="!prefilledCarrier" ng-click="clearSelectedCarrier()"><span class="fa fa-times"></span></a>
+                                </span>
+                            </div>
+                            <div ng-class="{error: hasErrors && !selectedCarrier}">
+                                <typeahead class="typeahead soar-typeahead typeaheadResults"
+                                           ng-hide="selectedCarrier != null"
+                                           id="inpCarrier"
+                                           name="inpCarrier"
+                                           appearance="form-input"
+                                           search="filterCarriers(term)"
+                                           select="selectCarrier(item)"
+                                           show-search-button="true"
+                                           clear-content="clearSelectedCarrier()"
+                                           items="filteredCarriers"
+                                           term="searchTerm"
+                                           placeholder="{{ 'Search {0}'| i18n:['Carriers'] }}"
+                                           tab-index="12">
+
+                                    <ul id="lstFilteredCarriers">
+                                        <li ng-repeat="carrier in filteredCarriers" typeahead-item="carrier" ng-animate="'animate'" ng-hide="false">
+                                            <div class="row">
+                                                <div class="col-sm-8 col-md-10">
+                                                    <span ng-show="carrier.Name" id="lblCarrierName{{ $index }}" ng-bind-html="carrier.Name |  boldTextSearchCriteriaSpecialCharacters:searchTerm"></span>
+                                                </div>
+                                                <div class="col-sm-4 col-md-2">
+                                                    <span ng-show="carrier.PayerId" id="lblCarrierPayerId{{ $index }}" ng-bind-html="carrier.PayerId |  boldTextSearchCriteriaSpecialCharacters:searchTerm"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-8 col-sm-offset-1">
+                                                    <div ng-show="carrier.AddressLine1" id="lblCarrierName{{ $index }}" ng-bind-html="carrier.AddressLine1"></div>
+                                                    <div ng-show="carrier.AddressLine2" id="lblCarrierName{{ $index }}" ng-bind-html="carrier.AddressLine2"></div>
+                                                    <div ng-show="carrier.City" id="lblCarrierName{{ $index }}" ng-bind-html="carrier.City"></div>
+                                                    <div ng-show="carrier.State" id="lblCarrierName{{ $index }}" ng-bind-html="carrier.State"></div>
+                                                    <div ng-show="carrier.ZipCode" id="lblCarrierName{{ $index }}" ng-bind-html="carrier.ZipCode"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li ng-show="filteredCarriers.length==0">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <span class="text-muted" id="lblNoResultMessage">
+                                                        {{ 'No search results.'| i18n }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </typeahead>
+                                <label id="lblPlanNameRequired" class="help-text " ng-show="hasErrors && !selectedCarrier">
+                                    {{ 'This field is required.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{ 'Website' | i18n }}</label>
+                        <div class="col-sm-8" style="padding-top:9px">
+                            <span ng-show="selectedCarrier.Website">
+                                <a target="_blank" rel="noreferrer" href="{{ websiteUrl }}">
+                                    {{ selectedCarrier.Website }}
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpGroupNumber">{{ 'Plan / Group Number' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <div ng-class="{error: hasErrors && !frmPlan.inpGroupNumber.$valid}">
+                                <input data-qa="dental-ben-plan-form-input-group-number"  id="inpGroupNumber" class="form-control benefitPlanCrud__groupNumber" name="inpGroupNumber" type="text" placeholder="{{ 'Plan / Group Number' | i18n }}" ng-model="benefitPlan.PlanGroupNumber" ng-change="checkForDuplicates(benefitPlan)" maxlength="20" tabindex="12" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpGroupNumber">{{ 'Plan / Group Name' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <div ng-class="{error: hasErrors && !frmPlan.inpGroupNumber.$valid}">
+                                <input data-qa="dental-ben-plan-form-input-group-name"  id="inpGroupName" class="form-control benefitPlanCrud__groupNumber" name="inpGroupName" type="text" placeholder="{{ 'Plan / Group Name' | i18n }}" ng-model="benefitPlan.PlanGroupName" ng-change="" maxlength="20" tabindex="12" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!-- Renewal Month -->
+                        <label class="col-sm-4 control-label" for="inpRenewalMonth">{{ 'Renewal Month' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <soar-select-list id="inpRenewalMonth"
+                                              name="inpRenewalMonth"
+                                              data-qa="dental-ben-plan-form-select-renewal-month" 
+                                              class="benefitPlanCrud__renewalMonth"
+                                              text-field="Text"
+                                              value-field="Value"
+                                              sb-tab="12"
+                                              placeholder="{{ 'Renewal Month' | i18n }}"
+                                              option-list="months"
+                                              ng-model="benefitPlan.RenewalMonth">
+                            </soar-select-list>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <!-- Fee Schedule -->
+                        <label class="col-sm-4 control-label" for="inpFeeSchedule">{{ 'Fee Schedule' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <soar-select-list class="select_fee" id="inpFeeSchedule" ng-if="feeSchedules.length > 0"
+                                              data-qa="dental-ben-plan-form-select-fee"
+                                              name="inpFeeSchedule"
+                                              text-field="FeeScheduleName"
+                                              value-field="FeeScheduleId"
+                                              sb-change="checkTax"
+                                              placeholder="{{ 'Fee Schedule' | i18n }}"
+                                              option-list="feeSchedules"
+                                              ng-model="benefitPlan.FeeScheduleId"
+                                              disable-input="noFeeSchedules"
+                                              tooltip-enable="noFeeSchedules"
+                                              tooltip-placement="auto"
+                                              uib-tooltip="There are no Fee Schedules attached to the Carrier.">
+                            </soar-select-list>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2" id="feeScheduleLink">
+                    <span ng-show="benefitPlan.FeeScheduleId">
+                        <a ng-click="openFeeScheduleItem(benefitPlan.FeeScheduleId)">Open fee schedule</a>
+                        </span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12" ng-show="checkingDuplicates">
+                        <div class="benefitPlanCrud__duplicates">
+                            <span class="benefitPlanCrud__duplicateMessage">{{ 'Checking for duplicates...' | i18n }}</span>
+                            <span class="benefitPlanCrud__duplicatesLoadingIcon fa fa-spin fa-spinner"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12" ng-if="duplicates.length > 0">
+                        <div class="benefitPlanCrud__duplicates">
+                            <span class="benefitPlanCrud__duplicateMessage" ng-show="duplicates.length > 1">{{ 'There are {0} possible duplicates.' | i18n:[duplicates.length] }}</span>
+                            <span class="benefitPlanCrud__duplicateMessage" ng-show="duplicates.length == 1">{{ 'There is {0} possible duplicate.' | i18n:[duplicates.length] }}</span>
+                            <button id="btnToggleDuplicates" class="benefitPlanCrud__duplicatesShowToggle" ng-click="toggleDuplicateVisibilty()">{{ (showDuplicates ? 'hide' : 'view') | i18n}}</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12" ng-show="showDuplicates">
+                        <table id="tableBenefitPlans" class="table benefitPlan__table">
+                            <thead class="benefitPlanheader">
+                                <tr>
+                                    <th id="tdBenefitPlanNameCol" class="width-20-percent">
+                                        {{ 'Name' | i18n }}
+                                    </th>
+                                    <th id="tdBenefitPlanGroupNumberCol" class="width-10-percent">
+                                        {{ 'Plan / Group Number' | i18n }}
+                                    </th>
+                                    <th id="tdBenefitPlanAddressCol" class="width-20-percent">
+                                        {{ 'Carrier' | i18n }}
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="benefitPlan__body">
+                                <tr ng-show="duplicates.length > 0" ng-repeat="duplicate in duplicates | orderBy: ['Name', 'PlanGroupNumber']">
+                                    <td id="tdBenefitPlanName" title="{{ benefitPlan.Name }}">
+                                        {{ duplicate.Name }}
+                                    </td>
+                                    <td id="tdBenefitPlanGroupNumber" title="{{ benefitPlan.PlanGroupNumber }}">
+                                        {{ duplicate.PlanGroupNumber }}
+                                    </td>
+                                    <td id="tdBenefitPlanCarrier" title="{{ duplicate.CarrierName }}">
+                                        {{ duplicate.CarrierName }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <button data-qa="dental-ben-plan-form-btn-cnt-info" class="btn btn-link" ng-click="showContactInfoSection()">
+                        {{ contactInfoLabel }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="row" ng-hide="!displayFlags.showContactInfo">
+                <div class="col-xs-12 col-sm-12">
+                    <label class="benefitPlanCrud__section">
+                        {{ 'Contact Information' | i18n }}
+                    </label>
+                </div>
+
+                <div class="row  form-horizontal" collapse="!displayFlags.showContactInfo">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <!-- Address Line 1 & 2 -->
+                            <label class="col-sm-4 control-label" for="inpAddressLine1">{{ 'Address' | i18n }}</label>
+                            <div class="col-sm-8">
+                                <input data-qa="dental-ben-plan-form-inp-add-ln1" id="inpAddressLine1" class="form-control" name="inpAddressLine1" type="text" placeholder="{{ 'Street address' | i18n }}" ng-model="benefitPlan.AddressLine1" maxlength="128" alpha-numeric tabindex="12" />
+                            </div>
+                            <div class="col-sm-offset-4 col-sm-8">
+                                <input data-qa="dental-ben-plan-form-inp-add-ln2" id="inpAddressLine2" class="form-control" name="inpAddressLine2" type="text" placeholder="{{ 'Address 2' | i18n }}" ng-model="benefitPlan.AddressLine2" maxlength="128" alpha-numeric tabindex="12" />
+                            </div>
+
+                            <!-- City -->
+                            <label class="col-sm-4 control-label" for="inpCity">{{ 'City' | i18n }}</label>
+                            <div class="col-sm-8">
+                                <input data-qa="dental-ben-plan-form-inp-city" id="inpCity" class="form-control" name="inpCity" type="text" placeholder="{{ 'City' | i18n }}" ng-model="benefitPlan.City" maxlength="64" tabindex="12" alpha-only char-pattern="[^a-zA-Z-'. ]" />
+                            </div>
+
+                            <!-- State -->
+                            <label class="col-sm-4 control-label" for="inpState">{{ 'State' | i18n }}</label>
+                            <div class="col-sm-8">
+                                <state-list data-qa="dental-ben-plan-form-sel-state" state-list-id="inpState" name="inpState" source="benefitPlan.State" tabindex="12"></state-list>
+                            </div>
+
+                            <!-- Zip -->
+                            <label class="col-sm-4 control-label" for="inpZip">{{ 'ZIP Code' | i18n }}</label>
+                            <div class="col-sm-8">
+                                <div ng-class="{error: hasErrors && !frmPlan.inpZip.$valid}">
+                                    <!--zip 9 numeric-->
+                                    <input data-qa="dental-ben-plan-form-inp-zip" id="inpZip" zip-field="benefitPlan.ZipCode" type="text" onfocus="this.value = this.value;"
+                                           class="form-control benefitPlanCrud__zip" name="inpZip" placeholder="{{'ZIP Code' | i18n }}"
+                                           ng-model="benefitPlan.ZipCode" maxlength="10" minlength="5" tabindex="12" />
+                                    <label id="errZipCode" class="help-text" ng-show="hasErrors && !frmPlan.inpZip.$valid">
+                                        {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <!-- Phone Numbers -->
+                            <label for="inpPhones" class="col-sm-4 control-label benefitPlanCrud__phonesLabel">{{'Phone' | i18n }}</label>
+                            <div class="col-sm-8">
+                                <insurance-phone-info class="benefitPlanCrud__phones" show-label="false" phones="benefitPlan.PhoneNumbers" max-limit="5"
+                                                      valid-phones="validPhones" valid-form="!hasErrors" has-notes="false" has-texts="false" tabindex="12" custom-type-only="true"></insurance-phone-info>
+                            </div>
+
+                            <!-- Email -->
+                            <label for="inpEmail" class="col-sm-4 control-label">{{'Email' | i18n }}</label>
+                            <div class="col-sm-8">
+                                <div ng-class="{error:hasErrors &&  !frmPlan.inpEmail.$valid}">
+                                    <input data-qa="dental-ben-plan-form-inp-email" id="inpEmail" name="inpEmail" type="text" placeholder="{{ 'Email address' | i18n }}" class="form-control"
+                                           ng-model="benefitPlan.Email" valid-email maxlength="256" tabindex="12">
+                                    <label id="errEmail" class="help-text" ng-show="hasErrors && !frmPlan.inpEmail.$valid">
+                                        {{ 'This field requires a valid email address.'| i18n }}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Website -->
+                            <label class="col-sm-4 control-label" for="inpWebsite">{{ 'Website' | i18n }}</label>
+                            <div class="col-sm-8">
+                                <input data-qa="dental-ben-plan-form-inp-website" id="inpWebsite" class="form-control" name="inpWebsite" type="text" placeholder="{{ 'Website' | i18n }}" ng-model="benefitPlan.Website" maxlength="500" tabindex="12" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 col-sm-6">
+                    <label class="benefitPlanCrud__section">
+                        {{ 'Deductibles' | i18n }}
+                    </label>
+                </div>
+
+                <div class="col-xs-6 col-sm-6">
+                    <label class="benefitPlanCrud__section">
+                        {{ 'Maximums' | i18n }}
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="row  form-horizontal">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpPlanName">{{ 'Individual Deductible' | i18n }}</label>
+                        <div class="col-sm-4">
+                            <div ng-class="{'error':hasErrors && (benefitPlan.IndividualDeductible && (benefitPlan.IndividualDeductible <= 0 || benefitPlan.IndividualDeductible > 999999.99))}">
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input data-qa="dental-ben-plan-form-inp-ind-deduct" id="inpPlanIndividualDeductible" ng-model="benefitPlan.IndividualDeductible" class="form-control" placeholder="0.00"
+                                           tabindex="12" type="text" model-format="currencyNoSymbol" maxlength="12" ng-change="amountHasChanged('Individual Deductible', benefitPlan.$originalIndividualDeductible, benefitPlan.IndividualDeductible)" />
+                                </div>
+                                <label class="help-text" ng-show="hasErrors && (benefitPlan.IndividualDeductible && (benefitPlan.IndividualDeductible <= 0 || benefitPlan.IndividualDeductible > 999999.99))">{{ 'Must be between $0.00 to $999,999.99' | i18n }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpFamilyDeductible">{{ 'Family Deductible' | i18n }}</label>
+                        <div class="col-sm-4">
+                            <div ng-class="{'error':hasErrors && (benefitPlan.FamilyDeductible && (benefitPlan.FamilyDeductible <= 0 || benefitPlan.FamilyDeductible > 999999.99))}">
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input data-qa="dental-ben-plan-form-inp-fam-deduct" id="inpFamilyDeductible" ng-model="benefitPlan.FamilyDeductible" class="form-control" placeholder="0.00"
+                                           tabindex="12" type="text" model-format="currencyNoSymbol" maxlength="12" ng-change="amountHasChanged('Family Deductible', benefitPlan.$originalFamilyDeductible, benefitPlan.FamilyDeductible)" />
+                                </div>
+                                <label class="help-text" ng-show="hasErrors && (benefitPlan.FamilyDeductible && (benefitPlan.FamilyDeductible <= 0 || benefitPlan.FamilyDeductible > 999999.99))">{{ 'Must be between $0.00 to $999,999.99' | i18n }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpAnnualBenefitMaxPerIndividual">{{ 'Annual Benefit Max Per Individual' | i18n }}</label>
+                        <div class="col-sm-4">
+                            <div ng-class="{'error':hasErrors && (benefitPlan.AnnualBenefitMaxPerIndividual && (benefitPlan.AnnualBenefitMaxPerIndividual <= 0 || benefitPlan.AnnualBenefitMaxPerIndividual > 999999.99))}">
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input data-qa="dental-ben-plan-form-inp-ben-max" id="inpAnnualBenefitMaxPerIndividual" ng-model="benefitPlan.AnnualBenefitMaxPerIndividual" class="form-control" placeholder="0.00"
+                                           tabindex="12" type="text" model-format="currencyNoSymbol" maxlength="12" ng-change="amountHasChanged('Annual Benefit Max Per Individual', benefitPlan.$originalAnnualBenefitMaxPerIndividual, benefitPlan.AnnualBenefitMaxPerIndividual)" />
+                                </div>
+                                <label class="help-text" ng-show="hasErrors && (benefitPlan.AnnualBenefitMaxPerIndividual && (benefitPlan.AnnualBenefitMaxPerIndividual <= 0 || benefitPlan.AnnualBenefitMaxPerIndividual > 999999.99))">{{ 'Must be between $0.00 to $999,999.99' | i18n }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <label class="benefitPlanCrud__section">
+                        {{ 'Coverages' | i18n }}
+                    </label>
+                </div>
+            </div>
+            <no-results loading="coveragesLoading" ng-hide="!coveragesLoading"></no-results>
+            <div ng-hide="coveragesLoading">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button data-qa="dental-ben-plan-form-btn-apply" id="btnApplySetAll" class="btn btn-default pull-right" ng-click="applySetAllNumber(values.SetAllNumber);">{{ 'Apply' | i18n }}</button>
+                        <div class="col-sm-2 pull-right">
+                            <input data-qa="dental-ben-plan-form-inp-setall-num" id="inpSetAllNumber" class="form-control benefitPlanCrud__setAllNumber" name="inpSetAllNumber" type="text" maxlength="3" ng-model="values.SetAllNumber" />
+                            <div ng-class="{'error':true }">
+                                <label class="help-text " ng-show="coverageAmtError">{{ 'Must be between 0 to 100' }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!-- Set All Select List -->
+                            <label id="inpSetAll" class="control-label pull-right">{{ 'Set All Coverage % to' | i18n }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <table id="tableCarriers" class="table benefitPlanCrud__table">
+                            <thead class="benefitPlanCrud__tableHeader">
+                                <tr>
+                                    <td id="tdServiceTypeCol" class="width-30-percent">
+                                        <span>{{ 'Service Type' | i18n }}</span>
+                                    </td>
+                                    <td id="tdDeductibleCol" class="benefitPlanCrud__tableHeader-deductible">
+                                        <span>{{ 'Included in Deductible' | i18n }}</span>
+                                    </td>
+                                    <td id="tdCoverageCol" class="benefitPlanCrud__tableHeader-coverage">
+                                        <span>{{ 'Coverage %' | i18n }}</span>
+                                    </td>
+                                    <td id="tdCopayCol" class="benefitPlanCrud__tableHeader-copay">
+                                        <span>{{ 'Copay Amount' | i18n }}</span>
+                                    </td>
+                                    <td class="width-50-percent"></td>
+                                </tr>
+                            </thead>
+
+                            <tbody class="benefitPlanCrud__tableBody">
+                                <!-- filter is set by insurance controller input -->
+                                <tr ng-repeat="coverage in benefitPlan.CoverageList | orderBy:'$serviceTypeName'">
+                                    <td id="tdServiceType">{{ coverage.$serviceTypeName }}</td>
+                                    <td class="text-align-center">
+                                        <checkbox checkbox-id="inpDeductible" checkbox-value="coverage.Deductible" tabindex="12"></checkbox>
+                                    </td>
+                                    <td class="text-align-center">
+                                        <div ng-class="{'error':hasErrors &&  coverage.CoveragePercent * 100 > 100 }">
+                                            <div class="input-group">
+                                                <input id="inpCoverage" ng-model="coverage.CoveragePercent" class="form-control" placeholder="0"
+                                                       maxlength="3" tabindex="12" type="text" percent-formatter numeric-only />
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                            <label class="help-text" ng-show="hasErrors &&  coverage.CoveragePercent * 100 > 100">{{ 'Must be between 0 to 100' }}</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-align-center">
+                                        <div ng-class="{'error':hasErrors && (coverage.Copay && (coverage.Copay <= 0 || coverage.Copay > 999999.99))}">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input id="inpCopay" ng-model="coverage.Copay" class="form-control" placeholder="0.00"
+                                                       tabindex="12" type="text" model-format="currencyNoSymbol" maxlength="12" />
+                                            </div>
+                                            <label class="help-text" ng-show="hasErrors && (coverage.Copay && (coverage.Copay <= 0 || coverage.Copay > 999999.99))">{{ 'Must be between $0.00 to $999,999.99' }}</label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Service Code Exception Section-->
+            <div id="serviceCodeExceptionHeader" class="row">
+                <div class="col-xs-12" ng-click="toggleServiceCodeExceptions = !toggleServiceCodeExceptions">
+                    <label class="benefitPlanCrud__section">
+                        <i ng-class="toggleServiceCodeExceptions ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'"></i>
+                        {{ 'Service Code Exceptions' | i18n }}
+                    </label>
+                </div>
+            </div>
+
+            <div ng-show="toggleServiceCodeExceptions">
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <table id="tableExceptions" class="table benefitPlanCrud__table" ng-if="benefitPlan.ServiceCodeExceptions.length > 0">
+                            <thead class="benefitPlanCrud__tableHeader">
+                                <tr>
+                                    <td id="tdServiceCodeCol" class="width-30-percent">
+                                        <span>{{ 'Service Code Name' | i18n }}</span>
+                                    </td>
+                                    <td id="tdCdtCodeCol">
+                                        <span>{{ 'CDT Code' | i18n }}</span>
+                                    </td>
+                                    <td id="tdDeductibleCol2" class="benefitPlanCrud__tableHeader-deductible">
+                                        <span>{{ 'Included in Deductible' | i18n }}</span>
+                                    </td>
+                                    <td id="tdCoverageCol2" class="benefitPlanCrud__tableHeader-coverage">
+                                        <span>{{ 'Coverage %' | i18n }}</span>
+                                    </td>
+                                    <td id="tdCopayCol2" class="benefitPlanCrud__tableHeader-copay">
+                                        <span>{{ 'Copay Amount' | i18n }}</span>
+                                    </td>
+                                    <td class="width-50-percent"></td>
+                                </tr>
+                            </thead>
+
+                            <tbody class="benefitPlanCrud__tableBody">
+                                <!-- filter is set by insurance controller input -->
+                                <tr ng-repeat="exception in benefitPlan.ServiceCodeExceptions | filter:search | orderBy:'Name'">
+                                    <td id="tdServiceCodeException">{{ exception.Name }}</td>
+                                    <td>{{ exception.CdtCode }}</td>
+                                    <td class="text-align-center">
+                                        <checkbox checkbox-id="excDeductible" checkbox-value="exception.Deductible"></checkbox>
+                                    </td>
+                                    <td class="text-align-center">
+                                        <div ng-class="{'error':hasErrors &&  exception.CoveragePercent * 100 > 100 }">
+                                            <div class="input-group">
+                                                <input id="excCoverage" ng-model="exception.CoveragePercent" class="form-control" placeholder="0"
+                                                       maxlength="3" tabindex="12" type="text" percent-formatter numeric-only />
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                            <label class="help-text" ng-show="hasErrors &&  exception.CoveragePercent * 100 > 100">{{ 'Must be between 0 to 100' }}</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-align-center">
+                                        <div ng-class="{'error':hasErrors && (exception.Copay && (exception.Copay <= 0 || exception.Copay > 999999.99))}">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input id="expCopay" ng-model="exception.Copay" class="form-control" placeholder="0.00"
+                                                       tabindex="12" type="text" model-format="currencyNoSymbol" maxlength="12" />
+                                            </div>
+                                            <label class="help-text" ng-show="hasErrors && (exception.Copay && (exception.Copay <= 0 || exception.Copay > 999999.99))">{{ 'Must be between $0.00 to $999,999.99' }}</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <button class="btn btn-link"
+                                                    ng-click="removeServiceCodeException(exception)"
+                                                    check-auth-z="">
+                                                {{ 'remove' | i18n }}
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button data-qa="dental-ben-plan-form-btn-add-ser-code-ex" class="btn btn-link"
+                                icon="fa-plus"
+                                ng-click="addServiceCodeException()"
+                                check-auth-z="">
+                            {{ 'Add A Service Code Exception' | i18n }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <alternative-benefits ng-if="!loading"
+                                  service-code-exceptions="benefitPlan.ServiceCodeExceptions"
+                                  alternative-benefits="benefitPlan.AlternativeBenefits"
+                                  all-service-codes="allServiceCodes">
+            </alternative-benefits>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="benefitPlanCrud__section">
+                        {{ 'Plan Settings' | i18n }}
+                    </label>
+                </div>
+            </div>
+
+            <!-- Plan Settings Form -->
+            <div class="row benefitPlanCrud__planSettings">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label" for="inpClaimMethod">{{ 'Submit Claims by:' | i18n }}</label>
+                        <radiogroup unique-id="inpClaimMethod" value="benefitPlan.ClaimMethod" labels="['eClaims - Dental', 'ADA 2019 - Paper', 'CMS 1500 - Paper', 'Do not submit']" options="['1', '2', '3', null]"></radiogroup>
+                    </div>
+
+                    <div class="form-group" ng-hide="!benefitPlan.ClaimMethod">
+                        <label class="control-label" for="inpTrackClaims">{{ 'Track Claims?' | i18n }}</label>
+                        <radiogroup unique-id="inpTrackClaims" value="benefitPlan.TrackClaims" labels="['Yes', 'No']" options="[true, false]"></radiogroup>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="inpAuthorizePaymentToOffice">{{ 'Authorize Payment to Office?' | i18n }}</label>
+                        <radiogroup unique-id="inpAuthorizePaymentToOffice" value="benefitPlan.AuthorizePaymentToOffice" labels="['Yes', 'No']" options="[true, false]"></radiogroup>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label" for="inpSecondaryCalcMethod">{{ 'Secondary Calculation Method:' | i18n }}</label>
+                        <div ng-repeat="option in calculationMethodsOptions">
+                            <button id="btnRadioInpSecondaryCalcMethod{{$index}}" class="utilRadio__ctrl" ng-click="benefitPlan.SecondaryCalculationMethod = calculationMethodsOptions[$index];">
+                                <span ng-class="{ 'active': benefitPlan.SecondaryCalculationMethod == option, 'inactive': benefitPlan.SecondaryCalculationMethod != option }" class="utilRadio__label" ng-show="calculationMethods.length > 0">{{calculationMethods[$index] | i18n }}</span>
+                            </button>
+                            <span ng-show="calculationMethodDescriptions.length > 0">{{ calculationMethodDescriptions[$index] | i18n }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="inpIdentifyPolicyHolder">{{ 'Identify Policy Holder by:' | i18n }}</label>
+                        <radiogroup unique-id="inpIdentifyPolicyHolder"
+                                    value="benefitPlan.UseMemberIdOnClaim" labels="['Policy Holder ID', 'Member ID']" options="[false, true]">
+                        </radiogroup>
+                    </div>
+
+
+                </div> <!-- End Left Column -->
+
+                <div class="col-sm-6">
+                    <!-- Right column for default insurance payment, negative adjustment, and notes fields -->
+
+                    <div class="form-group">
+                        <label class="col-sm-6 control-label" for="inpFeesIns">{{ 'Difference between fees and insurance:' | i18n }}</label>
+                        <radiogroup class="col-sm-10" unique-id="inpFeesIns" value="benefitPlan.FeesIns" labels="['Apply to Patient Balance', 'Adjust Off']" options="['1', '2']"></radiogroup>
+                    </div>
+
+                    <div class="form-group" ng-show="benefitPlan.FeesIns == 2">
+                        <label class="col-sm-6 control-label" for="inpApplyAdjustments">{{ 'Apply Adjustments at:' | i18n }}</label>
+                        <radiogroup class="col-sm-10" unique-id="inpApplyAdjustments" value="benefitPlan.ApplyAdjustments" labels="['Time of Charge', 'Receipt of Payment']" options="['1','2']"></radiogroup>
+                    </div>
+
+                    <div class="form-group">
+                        <!-- Default Negative Adjustment Type -->
+                        <label class="col-sm-6 control-label" for="inpDefaultNegativeAdj">{{ 'Set Default Negative Adjustment Type' | i18n }}</label>
+                        <div class="col-sm-10" ng-class="{error: hasErrors && (benefitPlan.FeesIns == '2' ? !benefitPlan.AdjustmentTypeId : false)}">
+                            <div class="no-padding-left">
+                                <soar-select-list id="inpDefaultNegativeAdj"
+                                                  name="inpDefaultNegativeAdj"
+                                                  data-qa="dental-ben-plan-form-select-neg-adj"
+                                                  class="benefitPlanCrud__defaultNegativeAdj"
+                                                  text-field="Description"
+                                                  value-field="AdjustmentTypeId"
+                                                  placeholder="{{ 'Adjustment Type' | i18n }}"
+                                                  option-list="negativeAdjustmentTypes"
+                                                  ng-model="benefitPlan.AdjustmentTypeId">
+                                </soar-select-list>
+                            </div>
+                            <label id="lblDefaultNegativeAdjRequired" class="help-text col-sm-5" ng-show="hasErrors && (benefitPlan.FeesIns == '2' ? !benefitPlan.AdjustmentTypeId : false)">
+                                {{ 'This field is required.' | i18n }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <!-- Default Insurance Payment Type -->
+                        <label class="col-sm-6 control-label" for="inpDefaultInsurance">{{ 'Set Default Insurance Payment Type' | i18n }}</label>
+                        <div class="col-sm-10">
+                            <soar-select-list id="inpDefaultInsurance"
+                                              name="inpDefaultInsurance"
+                                              data-qa="dental-ben-plan-form-select-def-ins"
+                                              class="benefitPlanCrud__defaultInsurance"
+                                              text-field="Description"
+                                              value-field="PaymentTypeId"
+                                              option-list="insurancePaymentTypes"
+                                              placeholder="{{ 'Insurance Payment' | i18n }}"
+                                              ng-model="benefitPlan.InsurancePaymentTypeId">
+                            </soar-select-list>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!-- Location Additional Identifier-->
+                        <label class="col-sm-6 control-label" for="inpLocationIdentifier">{{ 'Billing Location Additional Identifier on Claims' | i18n }}</label>
+                        <div class="col-sm-10">
+                            <soar-select-list id="inpLocationIdentifier"
+                                              name="inpLocationIdentifier"
+                                              data-qa="dental-ben-plan-form-select-loc-id"
+                                              class="benefitPlanCrud__locationIdentfier"
+                                              text-field="Description"
+                                              value-field="MasterLocationIdentifierId"
+                                              placeholder="{{ 'None' | i18n }}"
+                                              option-list="locationIdentifiers"
+                                              ng-model="benefitPlan.BillingLocationAdditionalIdentifierId">
+                            </soar-select-list>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!-- Service Location Additional Identifier-->
+                        <label class="col-sm-10 control-label" for="inpLocationIdentifier">{{ ::('Service Location Additional Identifier on Claims (CMS - 1500 only)' | i18n) }}</label>
+                        <div class="col-sm-10">
+                            <soar-select-list id="inpServiceLocationIdentifier"
+                                              name="inpServiceLocationIdentifier"
+                                              class="benefitPlanCrud__serviceLocationIdentfier"
+                                              text-field="Description"
+                                              value-field="MasterLocationIdentifierId"
+                                              placeholder="{{ 'None' | i18n }}"
+                                              option-list="locationIdentifiers"
+                                              ng-model="benefitPlan.ServiceLocationAdditionalIdentifierId">
+                            </soar-select-list>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!-- Provider Additional Identifier -->
+                        <label class="col-sm-6 control-label" for="inpProviderIdentifier">{{ 'Treating Provider Additional Identifier on Claims' | i18n }}</label>
+                        <div class="col-sm-10">
+                            <soar-select-list id="inpProviderIdentifier"
+                                              name="inpProviderIdentifier"
+                                              data-qa="dental-ben-plan-form-select-prov-id"
+                                              class="benefitPlanCrud__providerIdentifier"
+                                              text-field="Description"
+                                              value-field="MasterUserIdentifierId"
+                                              placeholder="{{ 'None' | i18n }}"
+                                              option-list="userIdentifiers"
+                                              ng-model="benefitPlan.AdditionalProviderAdditionalIdentifierId">
+                            </soar-select-list>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-6 control-label" for="inpTaxCalculationStrategy">{{ 'Calculate Tax Using' | i18n }}</label>
+                        <div id="radioGroup-TaxCalculation" class="radioGroup col-sm-10">
+                            <button data-qa="dental-ben-plan-form-btn-tax-cal" class="radioGroup__ctrl" ng-disabled="!benefitPlan" ng-click="benefitPlan.TaxCalculation = 1">
+                                <span class="radioGroup__label" ng-class="{ 'active': benefitPlan.TaxCalculation == 1, 'inactive': benefitPlan.TaxCalculation != 1 }">{{ ::(TaxCalculationStrategies[0] | i18n) }}</span>
+                            </button>
+                            <button data-qa="dental-ben-plan-form-btn-fee-sch" class="radioGroup__ctrl" ng-disabled="!benefitPlan || !benefitPlan.FeeScheduleId" ng-click="benefitPlan.TaxCalculation = 2" title="{{(!benefitPlan || !benefitPlan.FeeScheduleId) ? 'No fee schedule assigned to this benefit plan.' : ''}}">
+                                <span class="radioGroup__label" ng-class="{ 'active': benefitPlan.TaxCalculation == 2, 'inactive': benefitPlan.TaxCalculation != 2 }">{{ ::(TaxCalculationStrategies[1] | i18n) }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-6 control-label" for="inpTaxAssignmentStrategy">{{ 'Assign Tax to' | i18n }}</label>
+                        <div id="radioGroup-TaxAssignment" class="radioGroup col-sm-10">
+                            <button data-qa="dental-ben-plan-form-btn-tax-assign1" class="radioGroup__ctrl" ng-disabled="!benefitPlan" ng-click="benefitPlan.TaxAssignment = 1">
+                                <span class="radioGroup__label" ng-class="{ 'active': benefitPlan.TaxAssignment == 1, 'inactive': benefitPlan.TaxAssignment != 1 }">{{ ::('be estimated as part of the charge' | i18n) }}</span>
+                            </button>
+                            <button data-qa="dental-ben-plan-form-btn-tax-assign3" class="radioGroup__ctrl" ng-disabled="!benefitPlan" ng-click="benefitPlan.TaxAssignment = 3">
+                                <span class="radioGroup__label" ng-class="{ 'active': benefitPlan.TaxAssignment == 3, 'inactive': benefitPlan.TaxAssignment != 3 }">{{ ::('Patient Portion' | i18n) }}</span>
+                            </button>
+                            <button data-qa="dental-ben-plan-form-btn-tax-assign4" class="radioGroup__ctrl" ng-disabled="!benefitPlan" ng-click="benefitPlan.TaxAssignment = 4">
+                                <span class="radioGroup__label" ng-class="{ 'active': benefitPlan.TaxAssignment == 4, 'inactive': benefitPlan.TaxAssignment != 4 }">{{ ::('the estimated insurance portion after the coverage is applied' | i18n) }}</span>
+                            </button>
+                            <button data-qa="dental-ben-plan-form-btn-tax-assign2" class="radioGroup__ctrl" ng-disabled="!benefitPlan || !benefitPlan.FeeScheduleId" ng-click="benefitPlan.TaxAssignment = 2" title="{{(!benefitPlan || !benefitPlan.FeeScheduleId) ? 'No fee schedule assigned to this benefit plan.' : ''}}">
+                                <span class="radioGroup__label" ng-class="{ 'active': benefitPlan.TaxAssignment == 2, 'inactive': benefitPlan.TaxAssignment != 2 }">{{ ::('the fee schedule adjustment amount' | i18n) }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-6 control-label" for="inpTaxPreference">{{ 'Tax Preference on Claims:' | i18n }}</label>
+                        <radiogroup class="col-sm-10" unique-id="inpTaxPreference" value="benefitPlan.TaxPreference" labels="['Include in Service Code Fee', 'Show Separately']" options="['1', '2']"></radiogroup>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpSubmitClaims">{{ 'Notes' | i18n }}</label>
+                        <div class="col-xs-12">
+                            <textarea data-qa="dental-ben-plan-form-txt-notes" unique-id="inpNotes" class="planSettingNotes" rows="8" value="benefitPlan.Notes" ng-model="benefitPlan.Notes" maxlength="3000"></textarea>
+                        </div>
+                    </div>
+                </div> <!-- End Right Column -->
+            </div> <!-- End Plan Setting Form -->
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#inpClaimMethod').click(function () {
+        alert($(this).val());
+    });
+</script>

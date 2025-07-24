@@ -1,0 +1,42 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Transactions.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Transactions.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-1 cell">{{'Date' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Provider' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Patient' | i18n}}</th>
+                    <th class="col-sm-2 cell text-center">{{'Tooth' | i18n}}</th>
+                    <th class="col-sm-1 cell text-center">{{'Area' | i18n}}</th>
+                    <th class="col-sm-2 cell text-right">{{'Fee' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Location' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripOdd'" ng-class-Even="'stripEven'" ng-repeat="tran in data.Transactions track by $index">
+                <tr>
+                    <td class="col-sm-1 cell">{{tran.Date | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-2 cell">{{tran.Provider}}</td>
+                    <td class="col-sm-2 cell">{{tran.Patient}}</td>
+                    <td class="col-sm-2 cell text-center">{{tran.Tooth | convertToothRangeToQuadrantOrArchCode}}</td>
+                    <td class="col-sm-1 cell text-center">{{tran.Area}}</td>
+                    <td class="col-sm-2 cell text-right">{{tran.Fee | currency}}</td>
+                    <td class="col-sm-2 cell">{{tran.Location}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven">
+                <tr class="reportGrid__footer">
+                    <td class="col-sm-3 cell  reportGrid__label" colspan="2">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-5 cell" colspan="3"></td>
+                    <td class="col-sm-2 cell text-right">{{data.TotalFee | currency}}</td>
+                    <td class="col-sm-2 cell"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="7">{{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

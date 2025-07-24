@@ -1,0 +1,633 @@
+<!--<div style="margin:10px;">
+    <app-color-picker [setColor]="color" (colorChanged)="colorChanged($event)"></app-color-picker>
+    <div class="colorPickerPreview" [style.backgroundColor]="color"></div>
+    <button type="button" (click)="changeTheColor()">Change color to green</button>
+</div>-->
+<app-button buttonLabel="Test Primary Button" variation="primary" (onClick)="fakeButtonEvent()"></app-button>
+<app-button buttonLabel="Test Secondary Button" variation="secondary" (onClick)="fakeButtonEvent()"></app-button>
+<app-button buttonLabel="Test Empty Button" (onClick)="fakeButtonEvent()"></app-button>
+<app-button (onClick)="fakeButtonEvent()" buttonLabel="Test disabled primary Button" isDisabled=true
+    variation="primary"></app-button>
+<app-button (onClick)="fakeButtonEvent()" buttonLabel="Test disabled secondary Button" isDisabled=true
+    variation="secondary"></app-button>
+<hr />
+<h2>Voice Recognition</h2>
+<app-textarea-with-voice></app-textarea-with-voice>
+<hr />
+<h2>Icons</h2>
+<div class="svg-display-grid">
+    <svg-icon name="ovalOutlineIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="ovalOutlineIcon"</span>
+    <svg-icon name="ovalSolidIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="ovalSolidIcon"</span>
+    <svg-icon name="txPlanIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="txPlanIcon"</span>
+    <svg-icon name="toothIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="toothIcon"</span>
+    <svg-icon name="timeIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="timeIcon"</span>
+    <svg-icon name="srIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="srIcon"</span>
+    <svg-icon name="searchIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="searchIcon"</span>
+    <svg-icon name="personIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="personIcon"</span>
+    <svg-icon name="noteIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="noteIcon"</span>
+    <svg-icon name="messageIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="messageIcon"</span>
+    <svg-icon name="kabobMenuIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="kabobMenuIcon"</span>
+    <svg-icon name="helpIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="helpIcon"</span>
+    <svg-icon name="filterIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="filterIcon"</span>
+    <svg-icon name="downArrowIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="downArrowIcon"</span>
+    <svg-icon name="newFolderIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="newFolderIcon"</span>
+    <svg-icon name="contactIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="contactIcon"</span>
+    <svg-icon name="closeIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="closeIcon"</span>
+    <svg-icon name="chevronIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="chevronIcon"</span>
+    <svg-icon name="calendarCheckmarkIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="calendarCheckmarkIcon"</span>
+    <svg-icon name="addIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="addIcon"</span>
+    <svg-icon name="arrowRightIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="arrowRightIcon"</span>
+    <svg-icon name="cartIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="cartIcon"</span>
+    <svg-icon name="checkmarkIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="checkmarkIcon"</span>
+    <svg-icon name="tooltipIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="tooltipIcon"</span>
+    <svg-icon name="dragHandleIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="dragHandleIcon"</span>
+    <svg-icon name="individualScheduleIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="individualScheduleIcon"</span>
+    <svg-icon name="familyScheduleIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="familyScheduleIcon"</span>
+    <svg-icon name="basketIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+    <span>name="basketIcon"</span>
+</div>
+
+<hr />
+<h3>Icons can be passed a color in two ways</h3>
+<p>First option: the svg-icon component can be given a color and hover color using a class:</p>
+<div
+    style="height: 50px; width: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid red;">
+    <svg-icon class="svg-test" name="txPlanIcon" iconHeight="40px" iconWidth="40px"></svg-icon>
+</div>
+<p>
+    Second option: the svg-icon can be passed a color directly using the iconColor property. If no iconColor is
+    provided,
+    the icon will default to the color of the parent elements.
+</p>
+<div
+    style="height: 50px; width: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid red;">
+    <svg-icon class="svg-test" name="txPlanIcon" iconHeight="40px" iconWidth="40px" iconColor="blue"></svg-icon>
+</div>
+
+<hr />
+<h2>Basic Input</h2>
+<div class="basic-input-example">
+    <form [formGroup]="fakeFormGroup">
+        <app-basic-input [id]="'basicInputId'" formControlName="fakeControl" [isDisabled]="true"
+            (blur)="blurFunction($event)" [labelText]="'Basic Input Component'" [placeholderText]="'Write something'"
+            [validationErrorText]="'Something went wrong'"></app-basic-input>
+        <app-basic-input [id]="'basicInputId2'" formControlName="fakeControl2" [isRequired]="true"
+            (blur)="blurFunction($event)" [labelText]="'Basic Input Component'" [placeholderText]="'Write something'"
+            [validationErrorText]="'Something went wrong'"></app-basic-input>
+        <app-basic-input [id]="'basicInputId3'" formControlName="fakeControl3" [hasErrors]="true"
+            (blur)="blurFunction($event)" [labelText]="'Basic Input Component'" [placeholderText]="'Write something'"
+            [validationErrorText]="'Something went wrong'"></app-basic-input>
+    </form>
+    <app-button [variation]="'primary'" [buttonLabel]="'testing tooltip'" [tooltip]="'Testing tooltip'"
+        placement="top-error" delay="500"></app-button>
+</div>
+<hr />
+<h2>Tooltip</h2>
+
+<p>Top:</p>
+<div class="tooltip-example">
+    <app-button [variation]="'primary'" [buttonLabel]="'top-error tooltip'" [tooltip]="'Testing tooltip'"
+        placement="top-error" delay="500"></app-button>
+    <app-button [variation]="'primary'" [buttonLabel]="'top tooltip'" [tooltip]="'Testing tooltip'" placement="top"
+        delay="500"></app-button>
+    <app-button [variation]="'primary'" [buttonLabel]="'(non standard) tooltip'" [tooltip]="'Testing tooltip'"
+        placement="top-black" delay="500"></app-button>
+</div>
+<p>Left:</p>
+<div class="tooltip-example">
+    <app-button [variation]="'primary'" [buttonLabel]="'left-error tooltip'" [tooltip]="'Testing tooltip'"
+        placement="left-error" delay="500"></app-button>
+    <app-button [variation]="'primary'" [buttonLabel]="'left tooltip'" [tooltip]="'Testing tooltip'" placement="left"
+        delay="500"></app-button>
+    <app-button [variation]="'primary'" [buttonLabel]="'testing tooltip'"
+        [tooltip]="'Testing tooltip that is very large with lots of text'" placement="left" delay="500"></app-button>
+</div>
+<p>right:</p>
+<div class="tooltip-example">
+    <app-button [variation]="'primary'" [buttonLabel]="'right-error tooltip'" [tooltip]="'Testing tooltip'"
+        placement="right-error" delay="500"></app-button>
+    <app-button [variation]="'primary'" [buttonLabel]="'right tooltip'" [tooltip]="'Testing tooltip'" placement="right"
+        delay="500"></app-button>
+    <app-button [variation]="'primary'" [buttonLabel]="'testing tooltip'"
+        [tooltip]="'Testing tooltip that is very large with lots of text'" placement="right" delay="500"></app-button>
+</div>
+
+<hr />
+<h2>Textarea Component</h2>
+Storybook is not liking the directive that the tooltip uses, so the example is here for now until the angular migration
+is completed.
+<div class="textareaExample">
+    <h3>default</h3>
+    <app-textarea fieldId="textareaID" placeholderText="Placeholder Text" label="Label"></app-textarea>
+    <h3>no-resize</h3>
+    <app-textarea fieldId="textareaID2" placeholderText="Placeholder Text" label="Label" [noResize]="true">
+    </app-textarea>
+    <h3>with validation</h3>
+    <app-textarea fieldId="textareaID3" placeholderText="Placeholder Text" label="Label" [isValid]="false"
+        [validationText]="'This is an error'"></app-textarea>
+    <h3>label on the left</h3>
+    <app-textarea fieldId="textareaID4" placeholderText="Placeholder Text" label="Label" labelDirection="left">
+    </app-textarea>
+    <h3>left label with validation</h3>
+    <app-textarea fieldId="textareaID5" placeholderText="Placeholder Text" label="Label" labelDirection="left"
+        [isValid]="false" [validationText]="'This is an error'"></app-textarea>
+</div>
+
+
+<hr />
+<div style="margin-right:20px;">
+    Chips Component
+    <app-chips variation="primary" chipsText="Primary Chips" style="margin-right:20px;"></app-chips>
+    <app-chips variation="secondary" chipsText="Secondary Chips" style="margin-right:20px;"></app-chips>
+    <app-chips variation="primary" chipsText="Primary Chips With Icon" showIcon="true" style="margin-right:20px;">
+    </app-chips>
+    <app-chips variation="secondary" chipsText="Secondary Chips With Icon" showIcon="false" style="margin-right:20px;">
+    </app-chips>
+</div>
+<div style="padding:20px;">
+    Multi-select
+    <app-multiselect [listItems]="listItems" [id]="'multiselect-default'" [placeholder]="'Placeholder Text'">
+    </app-multiselect>
+</div>
+<div style="padding:20px;">
+    Multi-select With Chips
+    <app-multiselect [listItems]="listItems" [id]="'multiselect-default'" [model]="selectedList"
+        (modelChange)="getSelectedList($event)"></app-multiselect>
+    <div>
+        <app-chips variation="primary" [chipsText]="item.text" style="margin-right:20px;"
+            [tooltip]="item.IsDisabled? 'Item is disabled and here is a really long description because I want to know what the tooltip is going to do':''"
+            placement="top-error" delay="500" [showIcon]="!item.IsDisabled" (removeChips)="removeChips($event,rowId)"
+            [attr.id]="'appchip'+ rowId" *ngFor="let item of selectedList;let rowId= index"></app-chips>
+    </div>
+</div>
+
+
+<div style="padding:20px;">
+    Select List
+    <app-select [listItems]="listItems"></app-select>
+    <app-select [listItems]="listItems" [placeholder]="'Custom Placeholder'"></app-select>
+    <app-select [listItems]="listItems" [placeholder]="'xsmall'" [size]="'xsmall'"></app-select>
+    <app-select [listItems]="listItems" [placeholder]="'small'" [size]="'small'"></app-select>
+    <app-select [listItems]="listItems" [placeholder]="'large'" [size]="'large'"></app-select>
+
+</div>
+<div style="display:block;">
+    <p>
+        <button type="button" color="primary" (click)="openConfirmationModal(confirmationModalData)">
+            Confirmation
+            modal
+        </button>
+    </p>
+</div>
+<div style="display:block; width:200px">
+    <app-date-picker [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" [label]="'Date'" [minDate]="minDate"
+        [maxDate]="maxDate"> </app-date-picker>
+    <app-date-picker [label]="'Date With Default Placeholder'" [minDate]="minDate" [maxDate]="maxDate">
+    </app-date-picker>
+    <app-date-picker [label]="'Date With No Min Date'" [maxDate]="maxDate"> </app-date-picker>
+    <app-date-picker [label]="'Date With No Max Date'" [minDate]="minDate"> </app-date-picker>
+</div>
+
+<div style="padding:20px;">
+    Radio Button
+    <form [formGroup]="frm">
+        <app-radio-button id="rc1" label="Yes" [value]="'Yes'" formControlName="radioOptions"
+            [checked]="frm.get('radioOptions').value==='Yes'"></app-radio-button>
+        <app-radio-button id="rc2" label="No" [value]="'No'" formControlName="radioOptions"
+            [checked]="frm.get('radioOptions').value==='No'"></app-radio-button>
+    </form>
+    <hr>
+    <h3>
+        >F
+        orm Data
+    </h3>
+    >F
+    <!--<pre>{{frm.value | json}}</pre>-->
+
+</div>
+
+<div style="padding: 20px;">
+    <rot-teeth-selector customid="testing123"></rot-teeth-selector>
+    <br />
+    <br />
+    <br />
+</div>
+<div style="padding: 20px;">
+    <h3>Appointment Status Selector Hover</h3>
+    <appointment-status-hover [(appointment)]="appointment"></appointment-status-hover>
+</div>
+
+
+<div style="padding: 20px;">
+    <appointment-status-selector [(appointment)]="appointment"></appointment-status-selector>
+    <appointment-status-selector [(appointment)]="appointment"></appointment-status-selector>
+    <appointment-status-selector [(appointment)]="appointment"></appointment-status-selector>
+    <appointment-status-selector [(appointment)]="appointment"></appointment-status-selector>
+    <appointment-status-selector [(appointment)]="appointment"></appointment-status-selector>
+    <span>statusId: {{appointment.Data.Status}}</span>
+</div>
+
+<div style="padding: 20px;">
+    <h3>Patient Secondary Navigation</h3>
+    <patient-secondary-navigation></patient-secondary-navigation>
+</div>
+
+<div style="padding: 20px;">
+    <h3>Color Picker Component</h3>
+    <app-color-picker [setColor]="color" (colorChanged)="colorChanged($event)"></app-color-picker>
+    <div class="colorPickerPreview" [style.backgroundColor]="color"></div>
+    <button type="button" (click)="changeTheColor()">Change color to green</button>
+</div>
+
+
+<div style="padding: 20px;">
+    <h3>Button Menu Component</h3>
+    <button-menu id="perioStartMenu" class="perioLanding" buttonText="ExampleButton" [isPrimButton]="true"
+        [options]="optionList">
+
+    </button-menu>
+</div>
+<div>
+    <responsible-party-search></responsible-party-search>
+</div>
+
+
+<div style="padding: 20px;">
+    <h3>Toast Component</h3>
+    <app-button buttonLabel="Success toast" variation="primary" (onClick)="showToast('success')" style="padding: 20px;">
+    </app-button>
+    <app-button buttonLabel="Error toast" variation="primary" (onClick)="showToast('error')" style="padding: 20px;">
+    </app-button>
+    <app-button buttonLabel="Warning toast" variation="primary" (onClick)="showToast('warning')" style="padding: 20px;">
+    </app-button>
+    <app-button buttonLabel="Template and Manual Close" variation="primary"
+        (onClick)="showToastManualClose(toasterContent,'success')" style="padding: 20px;"></app-button>
+</div>
+<ng-template #toasterContent>
+    <h1>Something</h1>
+    <ul>
+        <li>Blah</li>
+        <li>Blah</li>
+        <li>Blah</li>
+    </ul>
+    <p>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus similique
+        commodi, tempora explicabo molestiae minima nesciunt est repellat
+        recusandae, natus nulla eos sapiente et hic sequi exercitationem quia at?
+        Accusamus.
+    </p>
+</ng-template>
+
+
+<div class="col-md-12">
+    <div class="form-group">
+        <p>
+            Description : This Input Box Accept Only Alpha and Numeric Value and space rather than (any Special
+            Character
+            )
+        </p>
+        <label class="control-label" for="alphNumeric"> Input box for Alpha Numeric value</label>
+        <input id="alphNumeric" alphaNumericText autocomplete="off" type="text" formControlName="alphNumeric"
+            class="form-control fuse_input">
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="form-group">
+        <p>Description : This Input Box is used to check whether email format is valid or invalid</p>
+        <label>
+            Input Box for Email
+            <input type="text" class="form-control" name="email" [(ngModel)]="email" #emailNgModel="ngModel" validEmail
+                [class.is-invalid]="(emailNgModel.touched || emailNgModel.dirty)
+             && emailNgModel.errors?.emailInvalid">
+        </label>
+        <span class="invalid-feedback" *ngIf="(emailNgModel.touched || emailNgModel.dirty)
+             && emailNgModel.errors?.emailInvalid">
+            Please Enter a valid Email.
+        </span>
+
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group">
+        <p>
+            Description : This Input Box is used to convert the number in tax rate format(apply decimal after 2 digits)
+        </p>
+        <p>Description : new pattern added which accept 3 values afer decimal(2,3) </p>
+        <label>Input box for Tax Rate</label>
+        <input type="text" class="form-control" taxrate [taxRatePattern]="defaultFinanceChargePattern">
+    </div>
+</div>
+
+
+
+<div class="col-md-12">
+    <div class="form-group">
+        <p>Description : This Input Box is used to convert input value into curreny format ($ currency) </p>
+        <label>Input box for Model Format</label>
+        <input type="text" class="form-control" modelformat>
+    </div>
+</div>
+
+<div class="form-group">
+    <form [formGroup]="zipFieldFormGroup">
+        <label>Input field for Zip Field Directive</label>
+        <input type="text" formControlName="zipField" zipField maxlength="10" minlength="5" mask="00000-0000"
+            [validation]="false" />
+        <p *ngIf="!zipFieldFormGroup.valid">
+            ZIP code must be 5 to 9 numeric characters.
+        </p>
+    </form>
+</div>
+<div class="form-group">
+    <form [formGroup]="uiMaskFormGroup">
+        <label>Input field for Phone Number</label>
+        <input type="text" formControlName="uiMask" mask="(000) 000-0000" placeholder="(___) ___-____" uiMask />
+        <!-- <p *ngIf="!uiMaskFormGroup.valid">
+            Phone Number must be contains 10 numeric characters.
+        </p> -->
+    </form>
+</div>
+<div class="form-group">
+    <label>
+        Input Box for Email
+        <input type="text" class="form-control" name="email" [(ngModel)]="email" #emailNgModel="ngModel" validEmail
+            [class.is-invalid]="(emailNgModel.touched || emailNgModel.dirty)
+         && emailNgModel.errors?.emailInvalid">
+    </label>
+    <span class="invalid-feedback" *ngIf="(emailNgModel.touched || emailNgModel.dirty)
+         && emailNgModel.errors?.emailInvalid">
+        Please Enter a valid Email.
+    </span>
+</div>
+
+<div class="form-group">
+    <label>
+        Input Box for Focus Enter
+        <input type="text" class="form-control" focusEnter name="email" [(ngModel)]="email" #emailNgModel="ngModel"
+            validEmail [class.is-invalid]="(emailNgModel.touched || emailNgModel.dirty)
+         && emailNgModel.errors?.emailInvalid">
+    </label>
+    <span class="invalid-feedback" *ngIf="(emailNgModel.touched || emailNgModel.dirty)
+         && emailNgModel.errors?.emailInvalid">
+        Please Enter a valid Email.
+    </span>
+
+    <label>
+        Input Box for Focus Enter
+        <input type="text" class="form-control" focusEnter name="email" [(ngModel)]="email" #emailNgModel="ngModel"
+            validEmail [class.is-invalid]="(emailNgModel.touched || emailNgModel.dirty)
+         && emailNgModel.errors?.emailInvalid">
+    </label>
+    <span class="invalid-feedback" *ngIf="(emailNgModel.touched || emailNgModel.dirty)
+         && emailNgModel.errors?.emailInvalid">
+        Please Enter a valid Email.
+    </span>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group">
+        <label for="numericOnly"> Input box for show Focus</label>
+        <input id="numericOnly" numericOnly showFocus="true" autocomplete="off" tabindex="10" type="text" maxlength="10"
+            minlength="5">
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group">
+        <label for="numericOnly"> Input box for Set Focus If</label>
+        <input id="numericOnly" numericOnly setFocusIf="true" autocomplete="off" tabindex="10" type="text"
+            maxlength="10" minlength="5">
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group">
+        <label for="numericOnly"> Dropdown for SetFocusIf</label>
+        <kendo-dropdownlist setFocusIf="true">
+        </kendo-dropdownlist>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group">
+        <label for="numericOnly"> Input box for Numeric Only Directive</label>
+        <input id="numericOnly" numericOnly autocomplete="off" tabindex="10" type="text" maxlength="10" minlength="5">
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="form-group">
+        <p>
+            Description : - This input box accept only alpha value and Space rather than any ( numeric and special
+            character )
+        </p>
+        <label class="control-label" for="alphaOnly">Alpha Only</label>
+        <input id="alphaOnly" alphaOnly autocomplete="off" type="text" formControlName="alphaOnly"
+            class="form-control fuse_input">
+
+        <label>Minimum Finance Charge Mask</label>
+        <input id="inpMinimumFinanceCharge" class="form-control" placeholder="$0.00" name="inpMinimumFinanceCharge"
+            type="text" mask="separator.2" prefix="$" thousandSeparator="," [clearIfNotMatch]="false"
+            [showMaskTyped]="false" maxlength="12" />
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="form-group">
+        <button class="btn" (click)="ShowPopup()">View Fees</button>
+        <service-fees-by-location *ngIf="IsShowPopUp" (ClosePopup)="OnPopupClose($event)"></service-fees-by-location>
+    </div>
+</div>
+
+<div>
+    <button type="button" (click)="openServiceCodesModal()">Service Code Modal</button>
+    <service-codes-picker-modal (closeModal)="onServiceCodeModalClose($event)"></service-codes-picker-modal>
+</div>
+
+<div>
+    <select class='select-option' #mySelect (change)='onOptionsSelected(mySelect.value)'>
+        <option class='option' value="3">Root</option>
+        <option class='option' value="5">Tooth</option>
+        <option class='option' value="4">Surface</option>
+    </select>
+
+    <smart-code-setup [serviceCodeInputData]="smartCodeData" (ClosePopup)="closeSmartCode($event)"
+        *ngIf="isSmartCodeDisplay"></smart-code-setup>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group">
+        <button type="button" class="btn" (click)="openCTDCodePickerModal()">CDT Codepicker Modal</button>
+        <cdt-code-picker-modal *ngIf="showCTDCodePickerModal"
+            (closeModal)="onCTDCodePickerModalClose($event)"></cdt-code-picker-modal>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <h4>Phone Info & Phone Info Item (Max limit 5)</h4>
+    <phone-info [showLabel]="false" [phones]="" [maxLimit]="5" [hasTexts]="false" [hasNotes]="false" area="'user-crud'">
+    </phone-info>
+</div>
+
+<div class="row" style="padding: 30px;">
+    <div *ngFor="let palette of palettes" class="col-md-3 box">
+        <h4>{{ palette.toUpperCase() }}</h4>
+        <kendo-colorpalette [tileSize]="16" palette="{{ palette }}"></kendo-colorpalette>
+    </div>
+</div>
+<div class="row" style="padding: 30px;">
+    <p [ngStyle]="{ 'background-color': selected}">This is a Provider Type Demo</p>
+    <div>
+        <kendo-colorpalette [palette]="palette" [value]="selected" [tileSize]="20" (valueChange)="onChange($event)">
+        </kendo-colorpalette>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6 p-1">
+        <h3>Arc Gauge </h3>
+        <gauge [gaugeChartData]="gaugeChartData" [gaugeChartType]="grossProduction"
+            [gaugeFiltersTypes]="gaugeFiltersTypes" (drilldown)="onClickGaugeChart"> </gauge>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Half Donut </h3>
+        <simple-half-donut [simpleHalfDonutChartData]="simpleHalfDonutChartData"
+            [simpleHalfDonutFiltersTypes]="simpleHalfDonutFiltersTypes"> </simple-half-donut>
+    </div>
+</div>
+
+<h3>Date Range Selector </h3>
+
+<div class="row date-ranger-picker-mlb">
+    <div class="col-md-6">
+        <div>
+            <div class="row date-ranger-picker-width">
+                <div class="col-md-12 ">
+                    <app-date-range-selector (onApply)="applyAction($event)" [startDate]="fromDate" [endDate]="toDate"
+                        [dateFormat]="'MM/dd/yyyy'"></app-date-range-selector>
+                </div>
+            </div>
+            <br>
+            <b>Inputs:</b><br>
+            <ul>
+                <li><b> Default Start Date :</b> 08/11/2023 </li>
+                <li><b> Default End Date :</b> 08/31/2023 </li>
+            </ul>
+        </div>
+        <b>Selected Date Range:</b><br>
+        {{displayFullDateRange}}
+    </div>
+    
+
+</div>
+<hr>
+<div>
+    <h4>Tool tip with print for grid</h4>
+</div>
+
+    <a><span class="fa fa-print fa-2x" data-toggle="tooltip" title="Print" (click)="print()"></span></a> 
+<kendo-grid [data]="gridData" [resizable]="true" #grid class="grid-dimensions" [scrollable]="scrollable">
+    <kendo-grid-column field="PatienttName" title="Name" width="250">
+    </kendo-grid-column>
+    <kendo-grid-column field="TreatmentPlanTotalBalance" title="Treatment Plans">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="popover-container" style="font-weight:bold;color:blueviolet" (mouseover)="showTooltip($event, dataItem)" (mouseleave)="hideTooltip()">
+                {{ dataItem.TreatmentPlanTotalBalance }}
+                <ng-container *ngTemplateOutlet="templateReference"></ng-container>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+
+
+<ng-template #templateReference>
+    <div class="tx-plans-hover" [ngStyle]="{ 'top': mouseY, 'left': mouseX }" *ngIf="showTooltipFlag">
+        <table>
+            <tr class="tx-plans-header">
+                <th class="tx-plans-item-name">{{ 'Tx Plan Name' | translate }}</th>
+                <th class="tx-plans-item-date">{{ 'Create Date' | translate }}</th>
+                <th class="tx-plans-item-total">{{ 'Total' | translate }}</th>
+                <th class="tx-plans-item-status">{{ 'Status' | translate }}</th>
+            </tr>
+            <tr class="tx-plans-item-cursor" *ngFor="let tx of txPlansHover"
+                (click)="navToPatientTxPlan(tx.PatientId, tx.TreatmentPlanId)">
+                <td class="tx-plans-item-name">{{ tx.TreatmentPlanName }}</td>
+                <td class="tx-plans-item-date">{{ tx.TreatmentPlanCreatedDate | date: 'MM/dd/yyyy' }}</td>
+                <td class="tx-plans-item-total">{{ tx.TreatmentPlanTotalBalance | currency }}</td>
+                <td class="tx-plans-item-status" style="padding: inherit;">{{ tx.TreatmentPlanStatus }}<i
+                        class="fa fa-question-circle"></i></td>
+            </tr>
+        </table>
+    </div>
+</ng-template>
+<hr>
+
+<div class="row numeric-ranger-picker-mlb">
+    <div class="col-md-6">
+        <kendo-grid [data]="filteredData" [filterable]="true" [height]="250">
+            <kendo-grid-column field="Quantity" title="Numeric range filter" [width]="200">
+                <ng-template kendoGridFilterCellTemplate let-filter="filter" let-column="column"
+                    let-filterService="filterService">
+                    <numeric-range-selector [gridDataNumeric]="gridDataNumeric"
+                        (filterChange)="onFilterChange($event)"></numeric-range-selector>
+                </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+    </div>
+</div>
+
+<div>
+    <h4>App UIB Modal Popup Demo</h4>
+    <form [formGroup]="frmAppUIBModal" name="frmAppUIBModal" role="form">
+        <div class="form-group col-xs-6">
+            <label class="control-label">HTML path</label>
+            <div>
+                <input formControlName="HTMLPath" class="form-input required valid" id="inpHTMLPath"
+                    placeholder="HTML Path" name="inpHTMLPath" type="text" maxlength="120" required />
+                'e.g {{templateUrlPath}}'
+            </div>
+        </div>
+        <div class="form-group col-xs-6">
+            <label class="control-label">Controller Name</label>
+            <div>
+                <input formControlName="ControllerName" class="form-input required valid" id="inpControllerName"
+                    placeholder="Controller Name" name="inpControllerName"  maxlength="120" type="text" />
+                    'e.g  {{controllerName}}'
+
+            </div>
+        </div>
+        <button (click)="toggleVisibility()">Show UIB Popup</button>
+        <!-- ToDo  - Once appointment view created we have to replace below app-uib-modal with appoitnment view-->
+        <app-uib-modal [isVisible]="isVisiblePopup" [controllerName]="controllerName"
+            [templateUrlPath]="templateUrlPath"></app-uib-modal>
+    </form>
+</div>

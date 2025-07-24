@@ -1,0 +1,44 @@
+﻿<div ng-init="initialize()" >    
+    <!--openList is false-->
+    <soar-select-list 
+                      id="btnStatus"
+                      name="appointmentStatusList"
+                      text-field="description"
+                      value-field="id"
+                      option-list="statusList"
+                      ng-model="appointment.Status"
+                      sb-change="selectedStatusChange"
+                      list-template="displayTemplate"
+                      value-template="valueTemplate"
+                      sb-tab="1"
+                      ng-show="openList != true"
+                      disable-input="disableControl">
+    </soar-select-list>
+
+    <!--openList is true-->
+    <ul class="schedule-appointment-status-dropdown dropdown-menu" aria-labelledby="btnAppointmentStatus" ng-show="openList == true">
+        <li ng-repeat="status in statusList"
+            ng-class="{ 'text-muted': (((appointment.StartTime >= tomorrow && status.id != statuses.Unconfirmed && status.id != statuses.Confirmed && status.id != statuses.ReminderSent && status.id != statuses.Unschedule && status.id != statuses.Remove) || person == null))
+                                        || (status.id == statuses.Late && appointmentIsLate(status))
+                                        || (status.id == statuses.InReception && !isAppointmentDate(appointment.StartTime))
+                                        || (selectedStatus.id == statuses.InReception && status.id == statuses.InReception)
+                                        || (selectedStatus.id == statuses.InTreatment && status.id == statuses.InTreatment)
+                                        || (selectedStatus.id == statuses.InTreatment && appointment.ActualStartTime && status.id == statuses.StartAppointment)
+                                        || (hasRunningAppointment === true  && status.id === statuses.StartAppointment)
+                                        || (checkIfFutureAppointment(appointment) && (status.id == statuses.StartAppointment || status.id == statuses.Completed))
+                                        }"
+            ng-hide="(status.id == statuses.Late && !appointmentIsLate(status))
+                        || (selectedStatus.id === statuses.Completed && status.id === statuses.CheckOut)
+                        || (selectedStatus.id != statuses.ReadyForCheckout && status.id == statuses.ReadyForCheckout)
+                        || (selectedStatus.id == statuses.ReadyForCheckout && status.id != statuses.ReadyForCheckout && status.id != statuses.CheckOut)
+                        || (status.id == statuses.AddToClipboard)" title="{{ (hasRunningAppointment === true  && status.id === statuses.StartAppointment) ? 'Patient already has a running appointment' : ''}}">
+            <a id="btnStatus{{$index}}" ng-click="selectedStatusChanged($event, status, (((appointment.StartTime >= tomorrow && status.id != statuses.Unconfirmed && status.id != statuses.Confirmed && status.id != statuses.ReminderSent && status.id != statuses.Unschedule && status.id != statuses.Remove) || person == null))
+                                        || (status.id == statuses.Late && appointmentIsLate(status))|| (status.id == statuses.InReception && !isAppointmentDate(appointment.StartTime))||(selectedStatus.id == statuses.InReception && status.id == statuses.InReception)||(selectedStatus.id == statuses.InTreatment && status.id == statuses.InTreatment)||(selectedStatus.id == statuses.StartAppointment && status.id == statuses.StartAppointment))">
+                <span class="appointment-status-icon fa" ng-class="status.icon"></span>
+
+                <span class="appointment-status-description">{{ status.descriptionTranslation }}</span>
+            </a>
+            <div ng-show="status.sectionEnd" class="appointment-status-line"></div>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,11 @@
+<ng-container ng-if="migrationFeatureFlagsLoaded && useConverted">
+    <patient-dashboard-ng [person]="$parent.person" [service-codes]="$parent.serviceCodes" (active-url-path)="activeUrlPath($event)"></patient-dashboard-ng>
+    
+    <div ng-if="activeUrlTab != activeTemplateUrl.overview" ng-controller="PatientDashboardController">
+        <ng-include src="activeUrlTab"></ng-include>
+    </div>
+
+</ng-container>
+<ng-container ng-if="migrationFeatureFlagsLoaded && (!useConverted)">
+    <patient-dashboard-template-original person="$parent.person" service-codes="$parent.serviceCodes"></patient-dashboard-template-original>
+</ng-container>

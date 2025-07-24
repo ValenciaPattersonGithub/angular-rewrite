@@ -1,0 +1,12 @@
+﻿<div class="modal-header"><h4 id="lblModalHeader">{{ item.Title | i18n }}</h4></div>
+<div class="modal-body">
+    <label id="lblModalMessage">{{ item.Message }}</label>
+    <label ng-if="item.Message2" id="lblModalMessage2">{{ item.Message2 }}</label>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button id="btnYes" ng-click="confirm(true);" class="btn btn-primary form-btn-save-new">{{ item.Button1Text | i18n }}</button>
+        <button id="btnNo" ng-show="item.Button2Text" ng-click="confirm(false);" class="btn form-btn-save-new">{{ item.Button2Text | i18n }}</button>
+        <button id="btnCancel" ng-show="item.Button3Text" ng-click="close();" class="btn form-btn-cancel-new">{{ item.Button3Text | i18n }}</button>
+    </div>
+</div>

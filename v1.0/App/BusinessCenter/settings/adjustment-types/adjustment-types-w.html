@@ -1,0 +1,7 @@
+﻿ <ng-container ng-if="migrationFeatureFlagsLoaded && useConverted"> 
+    <adjustment-types-ng></adjustment-types-ng>
+ </ng-container>
+<ng-container ng-if="migrationFeatureFlagsLoaded && (! useConverted)">
+    <adjustment-types-template-original></adjustment-types-template-original>
+</ng-container>
+

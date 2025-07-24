@@ -1,0 +1,20 @@
+﻿<div class="row">
+    <div class="imaging">
+        <div ng-show="!loading && !imagingPatientNotFound">
+            <button class="btn btn-link pull-right" ng-click="launchFullscreen()">{{ 'Go Fullscreen' | i18n }}</button>
+            <button class="btn btn-link pull-right" ng-if="showCaptureButton" ng-click="blueCapture()">Capture</button>
+            <iframe ng-src="{{frameSource}}" id="imagingFrame" class="imaging__frame" referrerpolicy="strict-origin"></iframe>
+        </div>
+        <div ng-if="loading && imagingPatientNotFound" class="imaging__empty">
+            <div>{{ notFoundMessage }}</div>
+            <div>{{ 'Would you like to ' | i18n }}
+                <a ng-click="launchCapture()" href="">{{ 'Launch Capture' | i18n }}</a>{{ ' or ' | i18n }}
+                <a ng-click="refreshNewPatient()" href="">{{ 'Retrieve Recently Captured Images' | i18n }}?</a>
+            </div>
+        </div>
+        <div class="imaging__loader" ng-show="loading && !imagingPatientNotFound" title="{{loadingMessage}}">
+            <!--<no-results loading="loadingExam"></no-results>-->
+            <span class="fa fa-spinner fa-spin fa-4x"></span>
+        </div>
+    </div>
+</div>

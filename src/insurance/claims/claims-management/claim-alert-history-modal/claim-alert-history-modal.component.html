@@ -1,0 +1,26 @@
+<div class="claim-alert-history-modal">
+    <div class="app-modal md-modal">
+        <div id="app-modal-header" class="app-modal-header">
+            {{dialogHeader | translate}}
+        </div>
+        <div class="app-modal-body">
+            <div class="claim-alert-history-modal__card-container">
+                <div class="claim-alerts-history-grid">
+                    <div class="claim-alerts-history-grid-header">
+                        <div >{{'Event Date' | translate}} </div>
+                        <div >{{'Message' | translate}} </div>
+                    </div>
+
+                    <div *ngFor="let alert of claimAlertHistory ; let i=index;">                 
+                        <div id="tdDate{{ i }}" > {{ alert.FormattedEventTime | date: 'M/d/yyyy, h:mm:ss a ' }}</div>
+                        <div id="tdMessage{{ i }}" > {{ alert.Message }}</div>            
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-modal-footer"> 
+            <app-button id="btnCancel" buttonLabel="{{data.cancel}}" *ngIf="data.cancel" variation="secondary"
+                [isDisabled]="false" (onClick)="cancel($event)" ></app-button>        
+        </div>
+    </div>
+</div>

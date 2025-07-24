@@ -1,0 +1,66 @@
+a.deleteTooltip {
+  text-decoration: none;
+  color: $disabledLink;
+  border-bottom: 1px solid $disabled-grey;
+}
+a.deleteTooltip:hover {
+  position: relative
+}
+a.deleteTooltip span {
+  display: none;
+}
+a.deleteTooltip:hover span {
+  padding: 5px 5px 5px 5px;
+  display: block;
+  background-color: $Tooltip-backrground-color;
+  color: $Tooltip-text-color;
+  left: -120px;
+  margin-top: 12px;
+  position: absolute;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+}
+a.deleteTooltip:before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid $page-form-input-color;
+  border-right: 0px solid $page-form-input-color;
+  border-left: 1px solid $page-form-input-color;
+  border-bottom: 0px solid $page-form-input-color;
+  bottom: -40%;
+  left: 10%;
+  transform: rotate(45deg);
+  background-color: $page-form-input-color;
+  visibility: hidden;
+}
+a.hideTooltipArrow:after {
+  visibility: hidden;
+}
+a.deleteTooltip:hover:before {
+  visibility: visible;
+}
+a.disabled {
+  color: $disabledLink !important;
+  cursor: not-allowed;
+}
+
+a.minus_zindex{
+  color: $page-content-grid-header;
+  border-bottom: 1px solid $page-search-input-color;
+}
+a.deleteTooltip:hover + .minus_zindex{
+  z-index: -1;
+}
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus{
+  background-color: transparent;
+  color: $page-content-grid-header;
+}
+.dropdown-menu{
+  padding: 0px 0px;
+}
+.dropdown-menu li a:last-child{
+  border-bottom: none !important;
+}

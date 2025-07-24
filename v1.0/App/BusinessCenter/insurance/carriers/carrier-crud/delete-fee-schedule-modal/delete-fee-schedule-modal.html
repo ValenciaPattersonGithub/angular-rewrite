@@ -1,0 +1,19 @@
+﻿<div>
+    <div class="modal-header">
+        <h1>The fee schedule cannot be removed because it is attached to the following plan(s):</h1>
+        <h4>Please remove the fee schedule from the plan(s) and try again.</h4>
+    </div>
+    <div class="modal-body">
+        <table>
+            <tbody>
+            <tr ng-repeat="abp in affectedBenefitPlans">
+                <td>{{abp.Name}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-link" ng-click="cancel()">{{ 'OK' | i18n }}</button>
+        <button class="btn btn-primary" ng-click="removeFeeScheduleFromAllBenefitPlans()">{{ 'Remove From Benefit Plans Now' | i18n }}</button>
+    </div>
+</div>

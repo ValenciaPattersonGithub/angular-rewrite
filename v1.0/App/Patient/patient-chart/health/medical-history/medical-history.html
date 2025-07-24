@@ -1,0 +1,40 @@
+﻿<div id="grp{{id}}" class="panel">
+    <div class="panel-heading">
+        <span class="panel-title">
+            <h4>{{ title | i18n }}</h4>
+        </span>
+        <span class="panel-title">
+            {{ medicalHistoryFormDateModified | toShortDisplayDateLocal }}
+        </span>
+        <div class="panel-btn" style="display: flex; align-items: center;">
+            <a data-qa="medical-history-v2-link" class="btn btn-link" style="margin-right: 0.5rem" ng-if="showMedicalHistoryV2 && EnableClinicalMedHxV2Navigation" ng-click="openClinicalHealthV2()">Clinical V2</a>
+            <span style="margin-right: 1rem" ng-if="EnableClinicalMedHxV2Navigation">
+                <app-toggle id="medicalHxV2Toggle" data-qa="medical-hx-v2-toggle" label="V2" label-direction="right" [is-checked]="showMedicalHistoryV2" (toggled)="toggleMedicalHistoryV2($event)"></app-toggle>
+            </span>
+            <span class="editPanel__view" >
+                <a tabindex="2" id="btn{{id}}ViewPanel" class="btn btn-default" check-auth-z="soar-per-perhst-view"
+                   ng-disabled="!canViewForm || expandForm"  ng-click="viewMedicalHistory()">{{'View' | i18n }}</a>
+            </span>
+            <span class="editPanel__update" >
+                <a tabindex="2" id="btn{{id}}UpdatePanel" class="btn btn-default" check-auth-z="soar-per-perhst-add"
+                   ng-disabled="!canUpdateForm || expandForm" ng-click="updateMedicalHistory()">
+                   {{ (hasForm ? 'Update' : 'New' )  |  i18n }}
+                </a>
+            </span>
+            <span class="editPanel__print" >
+                <a tabindex="2" id="btn{{id}}PrintPanel" class="btn btn-default" check-auth-z="soar-per-perhst-view"
+                   ng-disabled="expandForm" ng-click="printMedicalHistory()">{{'Print Blank' | i18n }}</a>
+            </span>
+        </div>
+    </div>
+
+    <!--animation-->
+    <div class="panel-body">
+        <div ng-hide="hasMedicalHistoryFormOnFile">
+            <no-results loading-message="loadingMedicalHistoryMessage" loading="loadingMedicalHistoryForm"></no-results>
+        </div>
+        <div ng-hide="!expandForm">
+            <no-results loading-message="'Loading Medical History Form.'" loading="expandForm"></no-results>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,180 @@
+<ng-template #confirmationRef>
+  <div class="popup_heading">
+    <h4>Delete Payment Type</h4>
+  </div>
+  <div class="confirmationMessage">
+    <hr />
+    <p>Are you sure you want to delete this {{ dialogBoxSelectedTab }} Payment Type?</p>
+    <hr />
+  </div>
+</ng-template>
+<ng-template #dialogActions>
+  <button class="secondary_button"
+    (click)="dialog.close()">No</button>
+  <button class="primary_button secondary_button"
+    (click)="dialog.close({ primary: true })">Yes</button>
+</ng-template>
+<div class="filter_status">
+  Status
+  <span>
+    <select (change)="filterPaymentTypes($event)">
+      <option value="all">Show All</option>
+      <option value="active">Active</option>
+      <option value="inActive">Inactive</option>
+    </select>
+  </span>
+</div>
+<hr class="hr" />
+<kendo-grid class="kendoNewStyle"
+  [data]="paymentTypes | search: { Description: searchText, CurrencyTypeName: searchText, Prompt: searchText } | orderBy: { sortColumnName: sortColumnName, sortDirection: sortDirection }"
+  [height]="455"
+  [sortable]="true">
+  <kendo-grid-column field="Description"
+    title="Description"
+    width="220">
+    <ng-template kendoGridCellTemplate
+      let-dataItem>
+      <div [innerHtml]="dataItem.Description | highlightTextIfContains: searchText"></div>
+    </ng-template>
+    <ng-template kendoGridHeaderTemplate
+      let-dataItem>
+      <span>
+        {{ "Description" | translate }}
+        <div class="icon-right">
+          <span *ngIf="(!isDescending && sortColumnName === 'Description') || sortColumnName !== 'Description'"
+            class="fa fa-caret-up fa-sm sort-icon"
+            (click)="sortPaymentTypes('Description')"></span>
+          <span *ngIf="(isDescending && sortColumnName === 'Description') || sortColumnName !== 'Description'"
+            class="fa fa-caret-down fa-sm sort-icon"
+            (click)="sortPaymentTypes('Description')"></span>
+        </div>
+      </span>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="CurrencyTypeName"
+    title="Currency Type"
+    width="150"
+    [sortable]="true">
+    <ng-template kendoGridCellTemplate
+      let-dataItem>
+      <div [innerHtml]="dataItem.CurrencyTypeName | highlightTextIfContains: searchText"></div>
+    </ng-template>
+    <ng-template kendoGridHeaderTemplate
+      let-dataItem>
+      <span>
+        {{ "Currency Type" | translate }}
+        <div class="icon-right">
+          <span
+            *ngIf="(!isDescending && sortColumnName === 'CurrencyTypeName') || sortColumnName !== 'CurrencyTypeName'"
+            class="fa fa-caret-up fa-sm sort-icon"
+            (click)="sortPaymentTypes('CurrencyTypeName')"></span>
+          <span *ngIf="(isDescending && sortColumnName === 'CurrencyTypeName') || sortColumnName !== 'CurrencyTypeName'"
+            class="fa fa-caret-down fa-sm sort-icon"
+            (click)="sortPaymentTypes('CurrencyTypeName')"></span>
+        </div>
+      </span>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Prompt"
+    title="Prompt"
+    width="150">
+    <ng-template kendoGridCellTemplate
+      let-dataItem>
+      <div [innerHtml]="dataItem.Prompt | highlightTextIfContains: searchText"></div>
+    </ng-template>
+    <ng-template kendoGridHeaderTemplate
+      let-dataItem>
+      <span>
+        {{ "Prompt" | translate }}
+        <div class="icon-right">
+          <span *ngIf="(!isDescending && sortColumnName === 'Prompt') || sortColumnName !== 'Prompt'"
+            class="fa fa-caret-up fa-sm sort-icon"
+            (click)="sortPaymentTypes('Prompt')"></span>
+          <span *ngIf="(isDescending && sortColumnName === 'Prompt') || sortColumnName !== 'Prompt'"
+            class="fa fa-caret-down fa-sm sort-icon"
+            (click)="sortPaymentTypes('Prompt')"></span>
+        </div>
+      </span>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="IsActive"
+    title="Status"
+    width="150">
+    <ng-template kendoGridCellTemplate
+      let-dataItem>
+      <div>{{ dataItem.IsActive ? "Active" : "Inactive" | translate }}</div>
+    </ng-template>
+    <ng-template kendoGridHeaderTemplate
+      let-dataItem>
+      <span>
+        {{ "Status" | translate }}
+        <div class="icon-right">
+          <span *ngIf="(!isDescending && sortColumnName === 'IsActive') || sortColumnName !== 'IsActive'"
+            class="fa fa-caret-up fa-sm sort-icon"
+            (click)="sortPaymentTypes('IsActive')"></span>
+          <span *ngIf="(isDescending && sortColumnName === 'IsActive') || sortColumnName !== 'IsActive'"
+            class="fa fa-caret-down fa-sm sort-icon"
+            (click)="sortPaymentTypes('IsActive')"></span>
+        </div>
+      </span>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column title="Action"
+    width="50">
+    <ng-template kendoGridCellTemplate
+      let-dataItem>
+      <div class="overflow-inherit menu-center">
+        <div class="btn-group">
+          <button class="btn-link dropdown-toggle padding-right-10"
+            data-toggle="dropdown">
+            <i class="fa fa-ellipsis-v"></i>
+          </button>
+          <ul class="pull-right dropdown-menu col-md-12">
+            <li>
+              <a (click)="editPaymentType(dataItem)"
+                class="minus_zindex"
+                (mouseover)="toolTipText(dataItem, 'Edit')"
+                [ngClass]="{
+                  'disabled deleteTooltip': !hasEditAccess || (hasEditAccess && dataItem.IsSystemType) || (hasEditAccess && dataItem.IsUsedInCreditTransactions) || (hasEditAccess && dataItem.IsDefaultTypeOnBenefitPlan)
+                }">{{ "Edit" | translate }}
+                <span
+                  *ngIf="(toolTipButton === 'Edit' && !hasEditAccess) || dataItem.IsUsedInCreditTransactions || dataItem.IsSystemType || dataItem.IsDefaultTypeOnBenefitPlan">
+                  {{ toolTipMessage | translate }}
+                </span>
+              </a>
+
+              <a [ngClass]="{
+                  'disabled deleteTooltip': (hasDeleteAccess && dataItem.IsSystemType) || (hasDeleteAccess && dataItem.IsUsedInCreditTransactions) || (hasDeleteAccess && dataItem.IsDefaultTypeOnBenefitPlan) || !hasDeleteAccess,
+                  hideTooltipArrow: !dataItem.IsSystemType || !dataItem.IsUsedInCreditTransactions || !dataItem.IsDefaultTypeOnBenefitPlan || hasDeleteAccess
+                }"
+                (click)="deletePaymentType(dataItem, confirmationRef, dialogActions)"
+                (mouseover)="toolTipText(dataItem, 'Delete')"
+                class="minus_zindex">
+                {{ "Delete" | translate }}
+                <span
+                  *ngIf="(toolTipButton === 'Delete' && !hasDeleteAccess) || (hasDeleteAccess && dataItem.IsSystemType) || (hasDeleteAccess && dataItem.IsUsedInCreditTransactions) || (hasDeleteAccess && dataItem.IsDefaultTypeOnBenefitPlan)">{{
+                  toolTipMessage| translate }} </span>
+              </a>
+
+              <a [ngClass]="{ 'disabled deleteTooltip': !hasEditAccess || dataItem.IsDefaultTypeOnBenefitPlan }"
+                (click)="updatePaymentTypeStatus(dataItem)"
+                (mouseover)="toolTipText(dataItem, 'Inactivate_Activate')"
+                class="minus_zindex">
+                {{ dataItem.IsActive ? "Inactivate" : "Activate" | translate }}
+                <span
+                  *ngIf="(toolTipButton === 'Inactivate_Activate' && !hasEditAccess) || dataItem.IsDefaultTypeOnBenefitPlan">
+                  {{ toolTipMessage| translate }}
+                </span>
+              </a>
+
+              <a *ngIf="(autoApplyPartnerPaymentsIsEnabled$ | async) && (hasWeavePaymentsIntegration$ | async) && dataItem.isVendorPaymentType"
+                [class.disabled]="!hasEditAccess || !dataItem.IsActive"
+                class="minus_zindex"
+                (click)="editPaymentOptions(dataItem)">Options</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid>

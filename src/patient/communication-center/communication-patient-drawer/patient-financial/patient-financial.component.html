@@ -1,0 +1,16 @@
+<div class="financialheader" id="financial-header">
+    <div class="financialheader-title" id="financial-header-title">
+        <span class="financialheader-main-title" id="financial-header-main-title">{{ 'Financial' | translate }}</span>
+    </div>
+    <div class="financialdetail" id="financial-detail">
+        <span class="financialdetail-statementidlabel" id="financial-detail-statementidlabel">{{ 'Account Number:' | translate }}</span>
+        <span class="financialdetail-statementid" id="financial-detail-statementid">{{patientProfile.DisplayStatementAccountId}}</span>
+        <span class="financialdetail-discountslabel" id="financial-detail-discounts-label">{{ 'Discounts:' | translate }}</span>
+        <span class="financialdetail-discounts" id="financial-detail-discounts">{{patientDiscount}}</span>
+        <span class="financialdetail-statementslabel" id="financial-detail-statements-label">{{ 'Account Receives Statements?' | translate }}</span>
+        <span class="financialdetail-statements" id="financial-detail-statements">{{patientProfile.ReceivesStatements ? 'Yes' : 'No' | translate}}</span>
+        <span class="financialdetail-financechargeslabel" id="financial-detail-finance-charges-label">{{ 'Account Receives Finance Charges?' | translate }}</span>
+        <span class="financialdetail-financecharges" id="financial-detail-finance-charges">{{patientProfile.ReceivesFinanceCharges? 'Yes' : 'No' | translate}}</span>
+    </div>
+
+</div>

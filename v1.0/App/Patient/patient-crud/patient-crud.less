@@ -1,0 +1,138 @@
+﻿//#region patProfile
+.patProfile {
+    .formLayout;
+
+    &__formBox {
+        padding-top: 20px;
+        padding-bottom: 0px;
+    }
+
+    &__body {
+        margin-top: 50px;
+    }
+}
+
+
+//#region
+
+//#endregion
+// #region Referred By
+.referred-selected {
+    background: @gray-lightest;
+
+    > i {
+        font-size: 24px;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        z-index: 1001;
+    }
+}
+
+.referred-media {
+    cursor: pointer;
+    margin: 10px 0 5px 0;
+    padding: 5px 10px 5px 10px;
+    height: 60px;
+}
+
+.referred-media-icon {
+    position: relative;
+    top: 6px;
+}
+
+.referred-media-selected-body {
+    margin-top: 18px;
+    font-size: 13px;
+
+    p {
+        margin: 0;
+    }
+
+    label {
+        margin: 0;
+    }
+}
+
+.referred-media-body {
+    font-size: 13px;
+
+    p {
+        margin: 0;
+    }
+
+    label {
+        margin: 0;
+    }
+}
+
+.referred-patients-container {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.referred-patients {
+    padding: 5px 10px 5px 10px;
+    height: 60px;
+    background: @gray-lighter;
+}
+
+.referred-patients-even {
+    background: @gray-lightest;
+}
+// #endregion
+
+// #region Duplicate Patient Results
+
+// #region Patient Previous Dental Office
+
+#lblPatPrevDentalOfficeModifiedBy, #lblPatPrevDentalOfficeModifiedOn {
+    color: @gray-lighter;
+}
+
+#lblPatPrevDentalOfficeModifiedOn {
+    margin-left: 50px;
+}
+
+// #region Patient Group Types
+
+.group-type-list-item {
+    border: thin solid;
+    border-radius: 5px;
+    margin: 10px;
+    padding-left: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    max-width: 98%;
+}
+
+.group-type-tag {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.group-type-text {
+    flex: 1 1 0;
+}
+
+.group-type-remove {
+    flex: 0 1 auto;
+}
+
+.carousel-container {
+    padding-left: 5%;
+}
+
+.duplicate-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+}
+
+.secondaryNavigationFixed.secondaryNavigationFixedIE{
+    position: fixed;
+    top: 65px;
+}
+

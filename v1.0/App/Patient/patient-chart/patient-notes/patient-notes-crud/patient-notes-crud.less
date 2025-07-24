@@ -1,0 +1,210 @@
+﻿.patNoteCrud {
+    .clearfix;
+    /*min-height: 100%;*/
+    background-color: @brand-color_white;
+    padding: 0px 0px;
+
+    &__primary {
+        .make-xs-column(12);
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    &__details {
+        padding: 0 15px;
+    }
+
+    .edit {
+        .make-xs-column(9);
+        padding-right: 0;
+    }
+
+    &__secondary {
+        .make-xs-column(3);
+        padding: 0;
+    }
+
+    &__providerSelector {
+        display: inline-block;
+        padding-left: 10px;
+
+        .k-dropdown-wrap {
+            height: 26px
+        }
+
+        .k-input {
+            padding: 0px !important;
+        }
+
+        .k-icon {
+            position: initial;
+        }
+    }
+
+    &__typeTitle {
+        display: block;
+        width: 100%;
+        padding: @brand-padding_sm 0;
+        font-size: 1.6em;
+        font-weight: 200;
+        text-align: left;
+    }
+
+    &__typeCtrl {
+        display: block;
+        width: 100%;
+        padding: @brand-padding_sm;
+        border-top: 1px solid @brand-color_dark-gray;
+        background-color: @brand-color_white;
+        text-align: left;
+
+        &.active {
+            background-color: @brand-color_light-gray;
+            font-weight: 700;
+        }
+    }
+
+    &__editor {
+        .clearfix;
+        display: none;
+
+        .spacing {
+            padding-left: 4px;
+        }
+
+        &.active {
+            display: block;
+        }
+
+        #btnCancel {
+            .btn;
+            .btn-default;
+        }
+    }
+
+    &__note {
+        margin: @brand-margin_xl;
+        .clearfix;
+    }
+
+    &__finalize {
+        margin-top: 20px;
+        .clearfix;
+    }
+
+    &__noteText {
+        margin-top: @brand-padding_lg;
+        overflow-wrap: break-word;
+        color: @brand-color_black;
+
+        table.k-editor {
+            background-color: transparent;
+            border: none;
+            box-shadow: none;
+
+            .k-editable-area {
+                height:450px;
+            }
+        }
+    }
+
+    &.note_history {
+        color: @brand-color_lighter-gray;
+    }
+
+    &.note_history_icon {
+        color: @brand-color_black !important;
+    }
+
+    &__title {
+        display: inline-block;
+        margin-top: 0;
+        margin-bottom: 5px;
+        line-height: 1;
+        transform: translateY(2px);
+        padding: 5px 2px 5px 2px;
+        font-weight: 700;
+        max-width: 50%;
+        overflow: hidden;
+        white-space: nowrap;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+
+    &__titleInput {
+        margin-bottom: 3px; //spacing issue
+        width: 100%;
+        border-radius: @borderRadius3;
+    }
+
+    &__date {
+        margin-top: 6px;
+    }
+
+    &__share,
+    &__delete,
+    &__print,
+    &__editMode,
+    &__showHistory,
+    &__close {
+        .btn;
+        .btn-link;
+        float: right;
+        padding-top: 0;
+    }
+
+    &__showHistory_color {
+        .btn;
+        .btn-link;
+        float: right;
+        padding-top: 0;
+        color: @brand-color_black !important;
+    }
+
+    &__footer {
+        .clearfix;
+        margin-top: @brand-margin_lg;
+        text-align: right;
+    }
+
+    &__toothImg {
+        margin: 0 5px 5px 0;
+        padding: 5px;
+        text-align: center;
+        width: 30px;
+    }
+
+    &__notebody {
+        background: white;
+        padding: 1px 20px;
+        margin-top: 11px;
+        overflow: auto;
+        height: 513px;
+    }
+
+    &__noteOptions {
+        padding: 10px;
+        float: right;
+    }
+
+    &__titleWrapper {
+        margin-top: 20px;
+        margin-left: -6px;
+    }
+
+    &__titleNote {
+        display: inline-block;
+        width: 40%;
+    }
+
+    &__providerWrapper {
+        display: inline-block;
+    }
+
+    &__providerLabel,
+    &__noteTitleLabel{
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+}

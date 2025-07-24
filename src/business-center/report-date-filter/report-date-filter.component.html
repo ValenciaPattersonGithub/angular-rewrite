@@ -1,0 +1,99 @@
+<div class="panel-heading collapseExpand">
+    <a data-toggle="collapse" attr.data-target="#{{dateFilterModel?.FilterId}}" class="soar-link font-weight-bold padding-2">
+        <i class="indicator fa fa-chevron-up"></i>
+        {{dateFilterModel?.Name}}
+    </a>
+</div>
+<div class="filter-option panel-collapse collapse reports-slideout report-date-filter" attr.id="{{dateFilterModel?.FilterId}}">
+    <div *ngIf="dateFilterModel?.UseOptions && dateFilterModel?.Name != 'Original Transaction Date Range'">
+        <ul id="{{dateFilterModel?.Name}}">
+            <li *ngFor="let item of radioOptions" [hidden]="!item.isVisible"><input type="radio"
+                attr.id="{{item?.Value}}" class="rprtsFilters" attr.name="{{dateFilterModel?.FilterId}}"
+                attr.data-field="{{item?.Field}}" attr.data-key="{{item?.Key}}" [checked]="item?.Checked"
+                (click)="toggleRadio(item.Id)" /> {{item?.Value}}
+            </li>
+                <li>
+                    <input type="radio" attr.id="{{customOption?.Value}}" class="rprtsFilters" attr.name="{{dateFilterModel?.FilterId}}" attr.data-field="{{customOption?.Field}}" attr.data-key="{{customOption.Key}}" [checked]="customOption.Checked" (change)="toggleRadio(customOption.Id)" />
+                    {{textDateRange}} <br />
+                    <div *ngIf="customOption?.Checked" id="dateRangeElem">
+                        {{startDate.Name}}
+                        <app-date-picker [value]="dateFilterModel.StartDate" [minDate]="minDate" [maxDate]="maxDate" 
+                        [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" name="startDate" id="startDate1"
+                        (dateChanged)="watchStartDate($event);"
+                        ></app-date-picker>
+                            {{endDate.Name}}
+                        <app-date-picker [value]="dateFilterModel.EndDate" [minDate]="minDate" [maxDate]="maxDate" 
+                        [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" name="endDate1"  id="endDate1" 
+                        (dateChanged)="watchEndDate($event);"
+                        ></app-date-picker>
+                    </div>   
+                </li>
+        </ul>
+        <div class="errorMsg" *ngIf="customOption.Checked">
+            <span class="error" *ngIf="!hasValidDates">{{errorRequiredDate}}</span>
+            <span class="error" *ngIf="!isValidDateRange && hasValidDates">{{errorDateRange}}</span>
+        </div>
+    </div>
+
+    <div *ngIf="!dateFilterModel.UseOptions && dateFilterModel?.Name != 'Original Transaction Date Range'">
+
+        <ul id="{{dateFilterModel?.Name}}">
+            <li>
+                {{textDateRange}} <br />
+                {{startDate.Name}}
+                <br />
+                <app-date-picker [value]="dateFilterModel.StartDate" [minDate]="minDate" [maxDate]="maxDate" 
+                [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" name="startDate2" id="startDate2"
+                (dateChanged)="watchStartDate($event);"
+                ></app-date-picker>
+            </li>
+            <li>
+                {{endDate.Name}}
+                <br />
+                <app-date-picker [value]="dateFilterModel.EndDate" [minDate]="minDate" [maxDate]="maxDate" 
+                [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" name="endDate" id="endDate2"
+                (dateChanged)="watchEndDate($event);"
+                ></app-date-picker>
+            </li>
+        </ul>
+        <div class="errorMsg">
+            <span class="error" *ngIf="!hasValidDates">{{errorRequiredDate}}</span>
+            <span class="error" *ngIf="!isValidDateRange && hasValidDates">{{errorDateRange}}</span>
+        </div>
+    </div>
+
+    <div *ngIf="dateFilterModel?.Name === 'Original Transaction Date Range'">
+        <ul id="Patients">
+            <li>
+                <input type="radio" id="allInput" check-auth-z="soar-report-custom-update" value="1" class="patientFilter" [(ngModel)]="dateFilterModel.Ignore"  (change)="initializeDateRangeElements();changeDefault();" /> {{ 'Ignore' | translate }}
+            </li>
+            <li>
+                <input type="radio" id="patientInput" check-auth-z="soar-report-custom-update" value="0" class="patientFilter" [(ngModel)]="dateFilterModel.Ignore" (change)="changeDefault();" /> {{ 'Date Range' | translate }}
+            </li>
+        </ul>
+
+        <ul id="{{dateFilterModel?.Name}}"  *ngIf="dateFilterModel.Ignore != '1'">
+            <li>
+                {{startDate.Name}}
+                <br />
+                <app-date-picker [value]="dateFilterModel.StartDate" [minDate]="minDate" [maxDate]="maxDate" 
+                [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" name="startDate2" id="originalStartDate"
+                (dateChanged)="watchStartDate($event);"
+                ></app-date-picker>
+
+            </li>
+            <li>
+                {{endDate.Name}}
+                <br />
+                <app-date-picker [value]="dateFilterModel.EndDate" [minDate]="minDate" [maxDate]="maxDate" 
+                [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" name="endDate" id="originalEndDate"
+                (dateChanged)="watchEndDate($event);" name="endDate"
+                ></app-date-picker>
+            </li>
+        </ul>
+        <div class="errorMsg">
+            <span class="error" *ngIf="!hasValidDates">{{errorRequiredDate}}</span>
+            <span class="error" *ngIf="!isValidDateRange && hasValidDates">{{errorDateRange}}</span>
+        </div>
+    </div>
+</div>

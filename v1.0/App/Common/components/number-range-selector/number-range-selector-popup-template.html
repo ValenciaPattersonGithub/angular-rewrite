@@ -1,0 +1,25 @@
+﻿<div ng-show="visible" class="number-selector-popup" ng-style="position" ng-blur="onBlur($event)">
+    <div class="row" ng-blur="onBlur($event)">
+        <div class="col-xs-6">
+            <label>From</label>
+            <input type="number" placeholder="&gt;=" class="number-selector-input" ng-model="currentFromValue" tabindex="-1" ng-blur="onBlur($event)" />
+        </div>
+        <div class="col-xs-6">
+            <label>To</label>
+            <input type="number" placeholder="&lt;=" class="number-selector-input" ng-model="currentToValue" tabindex="-1" ng-blur="onBlur($event)" />
+        </div>
+    </div>
+    <div class="row" ng-blur="onBlur($event)">
+        <div class="col-xs-12">
+            <label class="text-danger">{{message}}</label>
+        </div>
+    </div>
+    <div class="row" ng-blur="onBlur($event)">
+        <div class="col-xs-offset-2 col-xs-4">
+            <button class="btn btn-link btn-block" type="button" ng-click="clear()"  ng-blur="onBlur($event)">Clear</button>
+        </div>
+        <div class="col-xs-6">
+            <button class="btn btn-primary btn-block" type="button" ng-click="apply($event)" ng-blur="onBlur($event)">Apply</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,828 @@
+@import 'variables';
+
+.panel-body {
+    height: 545px;
+    margin-left: 329px;
+    width: 531px !important;
+
+    ::ng-deep {
+
+        .k-dropdown-wrap {
+            height: 28px;
+        }
+
+        .fui-select-container {
+            width: 170px !important;
+        }
+
+        .k-searchbar {
+            flex-direction: row-reverse;
+        }
+
+        .kendo-autocomplete {
+            width: 351px;
+        }
+    }
+
+    .input-text {
+        height: 30px;
+        padding: 0px 8px;
+        border: 1px solid #dddddd;
+        border-radius: 4px;
+        background-color: #ffffff;
+        background-size: cover;
+        font-family: Open Sans;
+        font-size: 14px;
+        color: #333333;
+        text-decoration: none solid rgb(51, 51, 51);
+        margin-right: 10px;
+
+        &.small {
+            width: 244px;
+        }
+
+        &.large {
+            width: 515px !important;
+        }
+
+        &.text-area {
+            width: 515px;
+            height: 140px;
+            padding: 10px;
+        }
+    }
+
+    .textlimit {
+        width: 50px;
+        height: 15px;
+        font-family: Open Sans;
+        font-size: 11px;
+        color: #333333;
+        text-decoration: none solid rgb(51, 51, 51);
+        float: right;
+        padding: 3px 0px;
+        margin-right: 27px;
+    }
+}
+
+
+.source-name-container {
+    ::ng-deep {
+        .fui-select-container {
+            width: 532px !important;
+        }
+    }
+}
+
+.source-name-container-add-patient {
+    ::ng-deep {
+        .fui-select-container {
+            width: 515px !important;
+        }
+    }
+}
+
+.required {
+    color: $alert-red;
+}
+
+.validation-required {
+    border-color: $alert-red !important;
+}
+
+.col-no-padding {
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-top: 2px;
+}
+
+span.required.ng-star-inserted {
+    position: absolute;
+    padding: 2px;
+    word-break: break-word;
+}
+
+span.used-paymentType-warning {
+    padding: 2px;
+    word-break: break-word;
+    color: $alert-red;
+}
+
+.add-referral-container {
+    width: 900px;
+    height: 675px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    background-size: cover;
+    padding: 17px 0px 0px 0px;
+}
+
+.popup_heading {
+    width: 160px;
+    font-family: Open Sans;
+    font-size: 18px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+    line-height: 18px;
+    padding: 0px 0px 0px 15px;
+    font-weight: bold;
+}
+
+.control-label {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 14px;
+    color: $text-black;
+}
+
+.radio-inline {
+    padding-top: 0px;
+}
+
+.fuse_input {
+    width: 449px;
+    height: 30px;
+    padding: 0px 8px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-size: cover;
+    font-family: Open Sans;
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+    border-color: $page-search-input-border-color;
+}
+
+.fuse_small_input {
+    width: 211px;
+    height: 30px;
+    padding: 0px 8px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-size: cover;
+    font-family: Open Sans;
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+    margin-right: 10px;
+    border-color: $page-search-input-border-color;
+}
+
+
+.fuse_input_xs {
+    width: 151px;
+    height: 30px;
+    padding: 0px 8px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-size: cover;
+    font-family: Open Sans;
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+    margin-right: 10px;
+    border-color: $page-search-input-border-color;
+}
+
+.fuse_select {
+    height: 25px;
+    padding: 0px;
+    text-align: left;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    border-width: 1px;
+    border-style: solid;
+    background-color: $page-search-input-background;
+    color: $page-form-input-color;
+    border-color: $page-search-input-border-color;
+    width: 170px;
+}
+
+.fuse_select_small {
+    width: 107px;
+    margin-right: 10px;
+    height: 30px;
+    padding: 0px;
+    border: 1px solid #dddddd;
+    font-family: Open Sans;
+    border-radius: 3px !important;
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+}
+
+.add_referral_footer {
+    border-color: #DDDDDD;
+    border-width: 1px 0px 0px 0px;
+    border-style: solid;
+    padding: 15px 15px 15px 15px;
+
+    .saver-referral-tooltipIcon {
+        color: #2dabcb;
+        grid-column: 2;
+        grid-row: 1;
+        top: 3px;
+        left: 5px;
+        position: relative;
+    }
+}
+
+.btn-toolbar {
+    float: right;
+    display: flex;
+    gap: 6px;
+}
+
+::ng-deep {
+    .fuse_button {
+        background-size: cover;
+        border-radius: 5px;
+        border: none;
+        padding: 0;
+        width: 100px;
+        height: 25px;
+        background-color: #2dabcb;
+    }
+
+
+    .fuse_button :hover {
+        background-color: #27bfe6;
+    }
+}
+
+.fuse_submit_button {
+    border-color: none;
+    border-width: 0px;
+}
+
+.btn-default {
+    color: $breadcrumbs-active;
+    background-color: $page-primary-button-color;
+    border-color: $page-content-select-border-color;
+    height: 7px;
+    width: 75px;
+    line-height: 2px !important;
+    font-size: 12px !important;
+}
+
+.required_text {
+    color: $page-header-color;
+}
+
+.radiocontainer {
+    ::ng-deep {
+        label {
+            margin: 0px 10px 0px 0px;
+        }
+
+        span {
+            font-weight: normal;
+            margin: 1px;
+        }
+    }
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+
+    &-spacing {
+        margin-right: 10px;
+    }
+
+    >div {
+        margin-bottom: 0px;
+    }
+}
+
+.referring-from-container {
+        width: 200px !important;
+}
+
+::ng-deep {
+
+    .form-control {
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+    }
+
+    .form-control :focus {
+        border-color: #DDDDDD;
+        /* Set the focused border color */
+        box-shadow: 0 0 5px #B3D7FE, 0 0 3px #B3D7FE inset;
+        /* Add focused shadow with spread */
+        outline: none;
+        /* Remove the default focus outline */
+    }
+
+    .k-popup.k-popup.k-list-container {
+
+        // width: 100px;
+        .autocomplete-header-text {
+            width: auto;
+            padding: 6px 20px 6px 8px;
+            border-top-width: 1px;
+            border-bottom-width: 1px;
+            border-style: solid;
+            border-color: #dddddd;
+            background-color: #fafafa;
+            background-size: cover;
+            font-family: Open Sans;
+            font-size: 12px;
+            color: #333333;
+            text-decoration: none solid rgb(51, 51, 51);
+            font-weight: bold;
+        }
+
+        .patient-list {
+            width: 386px;
+            height: 33px;
+            padding: 0px 0px 0px 15px;
+            border-top-width: 1px;
+            border-bottom-width: 1px;
+            border-style: solid;
+            border-color: #dddddd;
+            background-color: #2dabcb;
+            background-size: cover;
+            font-family: Open Sans;
+            font-size: 12px;
+            color: #ffffff;
+            text-decoration: none solid rgb(255, 255, 255);
+        }
+    }
+
+    .k-dialog .k-content {
+        overflow: hidden !important;
+        padding: 0px;
+    }
+
+    .providerSelector {
+        .k-dropdown {
+            height: 27px !important;
+            border-radius: 5px !important;
+            top: 2px !important;
+            font-size: 12px;
+            font-family: 'Open Sans';
+
+            .k-input {
+                padding: 3px 0px 6px 2px !important;
+            }
+        }
+
+        .k-dropdown-wrap {
+            color: #333333 !important;
+            height: unset !important;
+        }
+    }
+
+    .k-popup {
+        .k-list {
+            .k-item {
+                font-size: 12px;
+                font-family: 'Open Sans';
+            }
+        }
+    }
+}
+
+.patient-profile-age {
+    margin-left: 3px;
+}
+
+.help-text {
+    color: #ff0500;
+    font-size: 12px;
+    font-weight: 500 !important;
+}
+
+::ng-deep {
+    label.switch {
+        margin-top: 5px;
+    }
+}
+
+.error-message {
+    padding: 0px;
+    color: red;
+}
+
+.error-icon {
+    padding: 3px;
+    float: right;
+    color: #cc0000;
+    cursor: pointer;
+    margin-left: 2px;
+}
+
+.invalid {
+    border: 1px #CC0000 solid !important;
+}
+
+.ng-tooltip-show {
+    z-index: 100005 !important;
+}
+
+::ng-deep {
+    label.label {
+        font-family: "Open Sans", sans-serif;
+        font-weight: normal !important;
+        font-size: 14px !important;
+        color: #333333 !important;
+        padding: 0;
+        margin: 0;
+        margin-top: 5px !important;
+    }
+}
+
+::ng-deep {
+    .btn-toolbar .btn {
+        font-size: 12px !important;
+    }
+}
+
+::ng-deep {
+    .panel-body {
+        padding: 0px 20px 20px 20px !important;
+    }
+
+    kendo-dropdownlist {
+        height: 30px !important;
+    }
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+}
+
+
+.patient-profile {
+
+    &-initial {
+        grid-area: initialBadge;
+        display: flex;
+        margin: auto;
+        align-items: center;
+        justify-content: center;
+        margin-top: 18px;
+
+        &-badge {
+            width: 82px;
+            height: 74px;
+            border: 1px solid $badge-color;
+            background-color: $background-color;
+            background-size: cover;
+            font-family: $global-font-family;
+            font-size: 14px;
+            font-weight: normal;
+            color: $badge-color;
+            text-align: center;
+            border-radius: $brand-initial-badge_border-radius;
+            padding-top: 9px;
+            line-height: 4.5;
+        }
+
+        &-patientPhoto {
+            width: 82px;
+            height: 74px;
+            border: 1px solid $badge-color;
+            background-color: $background-color;
+            background-size: cover;
+            font-family: $global-font-family;
+            font-size: 14px;
+            font-weight: normal;
+            color: $badge-color;
+            text-align: center;
+            border-radius: $brand-initial-badge_border-radius;
+            overflow: hidden;
+
+            &-photoCover {
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+            }
+
+            &-photo {
+                width: 80px;
+                height: auto;
+                border-radius: 50%;
+                align-items: center;
+            }
+        }
+    }
+}
+
+.patient-profile {
+    position: relative;
+    grid-template: 1fr / 100%;
+    grid-template-areas:
+        "InitialsAndName" "ContentRow";
+
+    & * {
+        box-sizing: border-box;
+    }
+
+    &-initialsname {
+        grid-area: InitialsAndName / 1;
+        text-align: center;
+
+        &-wrapper {
+            display: grid;
+            grid-template: 1fr / 100%;
+            grid-gap: 5px;
+            grid-template-areas:
+                "initialrow" "namerow" "dobrow";
+
+            // 100% = Column
+            // initialrow = First Row
+            // namerow = Second Row
+            // dobrow = Third Row
+            &-badgeinitial {
+                grid-area: initialrow / 1;
+                justify-self: center;
+                overflow: hidden;
+                display: grid;
+                justify-content: center;
+                padding-top:18px;
+            }
+        }
+    }
+}
+
+.initialBadge {
+    width: 80px;
+    height: 80px;
+    border: 1px solid $badge-color;
+    background-color: $background-color;
+    background-size: cover;
+    font-family: $global-font-family;
+    font-size: 22px;
+    color: $badge-color;
+    text-align: center;
+    border-radius: $brand-initial-badge_border-radius;
+    overflow: hidden;
+    align-items: center;
+}
+
+.patientPhotoCover {
+    width: 80px;
+    height: 80px;
+    align-items: center;
+    display: flex;
+}
+
+.patientPhoto {
+    border-radius: 50%;
+    width: 80px;
+    height: auto;
+    align-items: center;
+}
+
+.patient-profile {
+    width: 312px;
+    height: 550px;
+    margin-left: 15px;
+    -moz-box-shadow: 0px 5px 10px rgba(112, 144, 176, 0.3);
+    -webkit-box-shadow: 0px 5px 10px rgba(112, 144, 176, 0.3);
+    box-shadow: 0px 5px 10px rgba(112, 144, 176, 0.3);
+    border-radius: 5px;
+    background-color: #ffffff;
+    background-size: cover;
+
+    &-name {
+        margin: 10px auto auto auto;
+        align-items: center;
+        justify-content: center;
+        font-size: $global-h2-size;
+    }
+
+    &-dob {
+        margin: 5px auto 10px auto;
+        align-items: center;
+        justify-content: center;
+        font-size: $global-h3-size;
+    }
+
+    &-age {
+        font-weight: 700;
+    }
+
+    &-phone-details-value {
+        width: 140px;
+        height: 20px;
+    }
+
+    &-email {
+        &-value {
+            width: 200px;
+            padding-left: 15px;
+        }
+    }
+
+    &-details {
+
+        &-value {
+            width: 140px;
+            height: 20px;
+        }
+
+        &-spacing {
+            width: 130px;
+        }
+    }
+
+    &-phone-label {
+        height: 20px;
+        font-size: $global-h4-size;
+        margin-top: 2px;
+        padding-left: 15px;
+    }
+
+    &-other-label {
+        height: 20px;
+        font-size: $global-h4-size;
+        margin-top: 2px;
+    }
+
+    &-label {
+        font-weight: 700;
+        display: flex;
+        float: left;
+        width: 100%;
+        padding-top: 5px;
+        font-size: $global-h4-size;
+        padding-left: 15px;
+    }
+
+    &-label-value {
+        display: flex;
+        float: left;
+        width: 100%;
+        font-size: $global-h4-size;
+        padding-left: 15px;
+
+        &-alerts {
+            height: 68px;
+            width: 285px;
+            font-size: $global-h4-size;
+            padding-left: 15px;
+            z-index: 1;
+            position: relative;
+        }
+    }
+
+
+    &-label-spacing {
+        padding-left: 24px;
+        width: 130px;
+    }
+}
+
+.select-list-wrapper {
+    width: 155px !important;
+}
+
+.referral-form-container {
+    width: 100%;
+    position: absolute;
+
+    &-ref-directions {
+        height: 30px;
+    }
+
+    &-providers {
+        width: 170px;
+        height: 30px;
+    }
+
+    &-referringTo {
+        width: 170px;
+        margin-right:0px!important;
+    }
+
+    &-print-tx {
+        margin: 27px 0px 0px 11px;
+    }
+
+    ::ng-deep .k-clear-value {
+        opacity: 1 !important;
+    }
+
+    ::ng-deep .k-icon.k-clear-value.k-i-close {
+        display: inline;
+    }
+}
+
+.lbl_reequired {
+    position: relative;
+    top: 5px;
+}
+
+.main-hr-spacing {
+    margin-top: 15px !important;
+}
+
+.other-hr-spacing {
+    margin-right: 22px;
+    margin-left: 18px;
+    margin-bottom: 15px !important;
+}
+
+.text-area-container {
+    width: 515px;
+}
+
+.validation-error-msg {
+    color: red;
+    font-size: 11px;
+    font-style: italic;
+}
+
+.patient-referral-crud-hr {
+    margin-top: 15px !important;
+}
+
+    .lbl-padding {
+        ::ng-deep {
+            padding-top: 0px !important;
+        }
+    }
+.remainingTextContainer{
+    margin-top:5px;
+}
+.patientInitialsContainer{
+    padding-top:22px;
+}
+.app-tooltip {
+    z-index: 3 !important;
+    font-size: $tooltip-font-size !important;
+    font-weight: bold !important;
+    color: $tooltip-default-font-color !important;
+}
+.return-date-margin{
+    margin-left: 7px !important;
+}
+.next-appointment-control {
+    border: none !important; 
+    padding: 0 !important;
+}
+::ng-deep {.fui-datepicker-control {
+    width: 95% !important;
+}
+}
+
+.tableTX {
+    border-collapse: collapse;
+
+    td, th {
+        border: 1px solid #e8e8e8;
+        font-size: 12px !important;
+    }
+}
+
+.tx-service-div {
+    max-height: 150px;
+    overflow: auto;
+    margin-bottom: 10px;
+    border: 1px solid #e8e8e8;
+    ::-webkit-scrollbar {
+        width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}
+
+::ng-deep .k-popup {
+    min-width: 300px !important;
+    max-width: none !important;
+    width: auto !important;
+}
+
+.margin-left-pp {
+    margin-left: 32px;
+}
+
+.ac-value-selected {
+    ::ng-deep #kendoSearchId .k-searchbar::before {
+        content: "" !important;
+    }
+}

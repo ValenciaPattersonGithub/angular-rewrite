@@ -1,0 +1,38 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{ setFiltersMessage }}</div>
+    <div ng-if="data.PatientGroups.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.PatientGroups.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-2 cell">{{ 'Patient Group' | i18n }}</th>
+                    <th class="col-sm-4 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Location' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Account Balance' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Last Visit Date' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'" ng-repeat="patientGroup in data.PatientGroups">
+                <tr class="reportGrid__row">
+                    <td class="cell" colspan="1">{{ patientGroup.PatientGroupName }}</td>
+                    <td class="cell" colspan="4"></td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat="patient in patientGroup.Patients">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-4 cell">{{ patient.PatientName }}</td>
+                    <td class="col-sm-2 cell">{{ patient.PreferredLocation }}</td>
+                    <td class="col-sm-2 cell">{{ patient.AccountBalance | currency }}</td>
+                    <td class="col-sm-2 cell">{{ patient.LastVisitDate | date : 'M/d/yyyy' }}</td>
+                </tr>
+                <tr class="reportGrid__row reportGrid__label">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-4 cell text-right ">{{ patientGroup.PatientGroupName }} {{ ::'Totals' | i18n }}: {{ patientGroup.Patients.length }}</td>
+                    <td class="col-sm-2 cell text-right">{{ ::'Total' | i18n }}:</td>
+                    <td class="col-sm-2 cell">{{ patientGroup.TotalBalance | currency }}</td>
+                    <td class="col-sm-2 cell"></td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

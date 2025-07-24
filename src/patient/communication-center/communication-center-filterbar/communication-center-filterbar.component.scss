@@ -1,0 +1,97 @@
+@import "variables";
+@import '/src/patient/communication-center/communication-center-variables';
+.filterbar_wrapper {
+  display: grid;
+  grid-template-columns: 200px 200px 120px 15px 120px;
+  margin-bottom: 15px;
+  grid-gap: 10px;
+}
+.sort_wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column: 1;
+  grid-row: 1;
+  row-gap: 5px;
+}
+.sort_element {
+  grid-column: 1;
+  grid-row: 1;
+}
+.category_wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column: 2;
+  grid-row: 1;
+  row-gap: 5px;
+}
+.category_element {
+  grid-column: 1;
+  grid-row: 1;
+}
+.start_wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column: 3;
+  grid-row: 1;
+  row-gap: 5px;
+}
+.startDate_picker {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: $communication-filter-font-size;
+  font-weight: $communication-center-semi-bold-font-size;
+  font-family: $global-font-family;
+  color: $communication-center-subheading-color;
+}
+.startDate_error {
+  grid-column: 1;
+  grid-row: 2;
+}
+.startDate_error_wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column: 3;
+  grid-row: 2;
+  row-gap: 5px;
+}
+.endDate_error_wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column: 5;
+  grid-row: 2;
+  row-gap: 5px;
+}
+.end_wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column: 5;
+  grid-row: 1;
+  row-gap: 5px;
+}
+.end_label {
+  grid-column: 1;
+  grid-row: 1;
+  font-weight: $communication-center-semi-bold-font-size;
+  font-family: $global-font-family;
+  color: $communication-center-subheading-color;
+}
+.end_element {
+  grid-column: 1;
+  grid-row: 2;
+}
+.error {
+  font-weight: $communication-center-semi-bold-font-size;
+  font-family: $global-font-family;
+  color:  $communication-center-error-color;
+  font-size: 10px;
+  word-break: break-word;
+}
+.to_label {
+  grid-column: 4;
+  grid-row: 1;
+  font-size: $communication-filter-font-size;
+  font-weight: $communication-center-semi-bold-font-size;
+  font-family: $global-font-family;
+  color: $communication-center-subheading-color;
+  margin-top: 20px;
+}

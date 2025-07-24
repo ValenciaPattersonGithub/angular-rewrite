@@ -1,0 +1,27 @@
+﻿body {
+    .lblFileTransfer {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .flex-container {
+        display: flex;
+        flex-wrap: nowrap;
+
+        .child-1 {
+            flex-grow: 2;
+
+            .loading-spinner {
+                margin-right: 20px;
+            }
+        }
+
+        .child-2 {
+            flex-grow: 8;
+
+            .lblAvoidRefreshing {
+                margin-top: 10px;
+            }
+        }
+    }
+}

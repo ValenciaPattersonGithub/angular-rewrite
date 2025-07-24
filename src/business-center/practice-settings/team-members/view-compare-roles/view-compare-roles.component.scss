@@ -1,0 +1,313 @@
+.roleSettingsview {
+  ::ng-deep {
+    .k-window {
+      left: 5%;
+      top: 10%;
+      right: 5%;
+      width: auto;
+      height: auto;
+      overflow: auto;
+    }
+
+    .close-btn {
+      margin: 1rem 3rem 0px 0px;
+      cursor: pointer;
+    }
+
+    .view-role-container {
+      width: 100%;
+      overflow-y: hidden;
+      overflow-x: scroll;
+    }
+
+    .view-role-sub-container {
+      width: 132%;
+    }
+
+    .roles-heading-row {
+      display: flex;
+      height: auto;
+      width: 98%;
+    }
+
+    .roles-heading-col-1 {
+      width: 15%;
+      height: auto;
+      padding: 0px 0px 0px 35px;
+    }
+
+    .roles-heading-col-2 {
+      width: 85%;
+      height: auto;
+    }
+
+    .d-flex {
+      display: flex;
+    }
+
+    .role-heading-div {
+      width: 120px;
+      padding: 3px;
+    }
+
+    .modules-container {
+      max-height: 450px;
+      overflow-y: scroll;
+      width: auto;
+      overflow-x: hidden;
+      border-top: solid 1px #ADB4B9;
+    }
+
+    .accordion {
+      padding-left: 5px;
+    }
+
+    .width-98 {
+      width: 98%;
+    }
+
+    .module-name-label {
+      position: relative;
+      cursor: pointer;
+      vertical-align: middle;
+      background-color: #ADB4B9;
+      color: white;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      width: 100%;
+      padding: 8px 12px;
+      color: white;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    .modules-div {
+      padding: 15px 5px 15px 15px;
+      border: solid 2px #ADB4B9;
+      width: 100%;
+    }
+
+    .function-heading {
+      background-color: #002247;
+      color: #FFF;
+    }
+
+    .funcions-columns-1 {
+      width: 40%;
+    }
+
+    .funcions-columns-2 {
+      width: 10%;
+      text-align: center;
+    }
+
+    .role-permitted {
+      color: #168016;
+    }
+
+    .role-not-permitted {
+      color: #E43122;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
+    .accordion li i {
+      transition: all 0.4s ease;
+    }
+
+    .accordion li i.fa-chevron-down {
+      right: 1rem;
+      left: auto;
+    }
+
+    .mt-0 {
+      margin-top: 0px;
+    }
+
+    .pl-15px {
+      padding-left: 15px;
+    }
+
+    @media (min-width: 980px) {
+      .k-window {
+        max-height: 85vh;
+        margin: 2rem;
+      }
+
+      .roles-heading-col-1 {
+        width: 17vw;
+        padding: 0px 0px 0px 5px;
+      }
+
+      .modules-container {
+        width: 112vw;
+        border-top: solid 1px #ADB4B9;
+      }
+
+      .funcions-columns-1 {
+        width: 36%;
+      }
+
+      .funcions-columns-2 {
+        width: 18%;
+      }
+
+      .ng-star-inserted {
+        word-break: normal;
+      }
+    }
+  }
+}
+.roleSettingsCompare {
+  ::ng-deep {
+    .k-window {
+      left: 20%;
+      top: 10%;
+      right: 5%;
+      overflow-y: auto;
+      height: auto;
+    }
+
+    .k-dropdown {
+      width: 100% !important;
+
+      > .k-dropdown-wrap {
+        width: inherit;
+        outline: none;
+      }
+    }
+
+    .ng-star-inserted {
+      word-break: normal;
+    }
+
+    .k-window-content {
+      overflow: visible !important;
+    }
+
+    .k-widget,
+    .k-dialog .k-window-content {
+      box-sizing: border-box;
+    }
+
+    .k-widget {
+      box-sizing: border-box !important;
+    }
+
+    .chips {
+      margin: 2px;
+    }
+
+    .close-btn {
+      margin-right: 4%;
+      cursor: pointer;
+    }
+
+    .modules-container {
+      max-height: 450px;
+      overflow-y: scroll;
+      width: 90%;
+      overflow-x: hidden;
+      border-top: solid 1px #ADB4B9;
+    }
+
+    .accordion {
+      padding-left: 5px;
+    }
+
+
+    .module-name-label {
+      position: relative;
+      cursor: pointer;
+      vertical-align: middle;
+      background-color: #ADB4B9;
+      color: white;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      width: 100%;
+      padding: 8px 12px;
+      color: white;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    .modules-div {
+      border: solid 2px #ADB4B9;
+      width: 100%;
+    }
+
+    .modules-div-close {
+      display: none;
+    }
+
+    .function-heading {
+      background-color: #002247;
+      color: #FFF;
+    }
+
+    .d-flex {
+      display: block;
+      padding-right: 8rem;
+    }
+
+    .funcions-columns-1 {
+      width: 100%;
+      font-weight: 600;
+    }
+
+    .funcions-columns-2 {
+      width: 100%;
+      ;
+      text-align: inherit;
+      display: block;
+      padding: 10px 10px 2px 0px;
+    }
+
+    .role-permitted {
+      color: #2dabcb;
+    }
+
+    #sectionSelect > .k-dropdown-wrap {
+      background-color: #FFFFFF;
+      border: 1px solid #2dabcb;
+    }
+
+    #sectionSelect .k-dropdown-wrap > .k-select {
+      color: #2babcb;
+    }
+
+    #sectionSelect .k-dropdown-wrap > .k-input {
+      color: #2babcb;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
+    .accordion li i {
+      transition: all 0.4s ease;
+    }
+
+    .accordion li i.fa-chevron-down {
+      right: 1rem;
+      left: auto;
+    }
+
+    .compareRoles__accordion .check {
+      float: right !important;
+      width: 68.2%;
+      color: #2dabcb;
+    }
+
+    .mt-0 {
+      margin-top: 0px;
+    }
+
+    .pl-15px {
+      padding-left: 0px;
+      display: flex;
+    }
+  }
+}

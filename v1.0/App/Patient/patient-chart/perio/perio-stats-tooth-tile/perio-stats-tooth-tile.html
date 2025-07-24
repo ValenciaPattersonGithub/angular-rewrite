@@ -1,0 +1,35 @@
+﻿<div class="proStatTthTile" >
+    <div class="timelineTile" ng-class="{timelineTileBorder : true}">
+        <div class="timelineTile__row">
+            <div class="timelineTile__iconContainer">
+                <img class="timelineTile__icon" ng-src="{{ 'Images/TimelineFilterIcons/perio.svg' }}" />
+            </div>
+            <div class="timelineTile__content">
+
+                <div class="col-xs-2">
+                    {{'tooth'|i18n}}
+                    <div id="lblToothId" class="proStatTthTile__tthNum">{{perioStatsToothExam.ToothId}}</div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="proStatTthTile__num" id="lblDepthPocket{{$index}}" ng-class="{'proStatTthTile__redColor': item >= 4}" ng-repeat="item in perioStatsToothExam.DepthPocket.slice(0, 3) track by $index">{{ ' ' + item + ' ' }}</div>
+                    <div class="proStatTthTile__name" id="lblDepthPocket">{{'PD' | i18n}}</div>
+                    <div class="proStatTthTile__num" id="lblDepthPocket{{$index}}" ng-class="{'proStatTthTile__redColor': item >= 4}" ng-repeat="item in perioStatsToothExam.DepthPocket.slice(3, 6) track by $index">{{ ' ' + item + ' ' }}</div>
+
+                </div>
+                <div class="col-xs-3">
+                    <div class="proStatTthTile__num" id="lblGMPocket{{$index}}" ng-class="{'proStatTthTile__redColor': item >= 4}" ng-repeat="item in perioStatsToothExam.GingivalMarginPocket.slice(0, 3) track by $index">{{ ' ' + item + ' ' }}</div>
+                    <div class="proStatTthTile__name">{{'GM' | i18n}}</div>
+                    <div class="proStatTthTile__num" id="lblGMPocket{{$index}}" ng-class="{'proStatTthTile__redColor': item >= 4}" ng-repeat="item in perioStatsToothExam.GingivalMarginPocket.slice(3, 6) track by $index">{{ ' ' + item + ' ' }}</div>
+
+                </div>
+                <div class="col-xs-3">
+                    <div class="proStatTthTile__num" id="lblAttachLvl{{$index}}" ng-class="{'proStatTthTile__redColor': item >= 4}" ng-repeat="item in AttachmentLevel.slice(0, 3) track by $index">{{ ' ' + item + ' ' }}</div>
+                    <div class="proStatTthTile__name">{{'CAL' | i18n}}</div>
+                    <div class="proStatTthTile__num" id="lblAttachLvl{{$index}}" ng-class="{'proStatTthTile__redColor': item >= 4}" ng-repeat="item in AttachmentLevel.slice(3, 6) track by $index">{{ ' ' + item + ' ' }}</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

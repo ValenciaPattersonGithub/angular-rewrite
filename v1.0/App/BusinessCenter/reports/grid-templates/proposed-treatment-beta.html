@@ -1,0 +1,98 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr class="reportGrid__row">
+                    <th class="cell text-center" colspan="12">
+                        <h4>{{location.Location}}</h4>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Date Proposed' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Treatment Plan' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Original Location' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Current Location' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Description' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Tooth - Area' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Status' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Appointment Date' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Fee' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripOdd'" ng-class-Even="'stripEven'" ng-repeat="pat in location.Patients">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-2 cell">{{ pat.Patient }}</td>
+                    <td class="col-sm-10 cell" colspan="10"></td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat-start="plan in pat.Plans">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{ plan.DateProposed | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-1 cell">{{ plan.TreatmentPlan }}</td>
+                    <td class="col-sm-1 cell">{{ plan.Services[0].OriginalLocation }}</td>
+                    <td class="col-sm-1 cell">{{ plan.Services[0].CurrentLocation }}</td>
+                    <td class="col-sm-2 cell">{{ plan.Services[0].Description |  date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell text-center">{{ plan.Services[0].ToothArea }}</td>
+                    <td class="col-sm-1 cell">{{ plan.Services[0].Status }}</td>
+                    <td class="col-sm-1 cell">{{ plan.Services[0].Provider }}</td>
+                    <td class="col-sm-1 cell text-center" ng-if="plan.Services[0].AppointmentDate == null"></td>
+                    <td class="col-sm-1 cell text-center" ng-if="plan.Services[0].AppointmentDate != null">{{ plan.Services[0].AppointmentDate | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-1 cell text-right">{{ plan.Services[0].Fee | currency }}</td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat-end ng-repeat="serv in plan.Services |  startFrom : 1">
+                    <td class="col-sm-3 cell" colspan="3"></td>
+                    <td class="col-sm-1 cell">{{ serv.OriginalLocation }}</td>
+                    <td class="col-sm-1 cell">{{ serv.CurrentLocation }}</td>
+                    <td class="col-sm-2 cell">{{ serv.Description |  date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell text-center">{{ serv.ToothArea }}</td>
+                    <td class="col-sm-1 cell">{{ serv.Status }}</td>
+                    <td class="col-sm-1 cell">{{ serv.Provider }}</td>
+                    <td class="col-sm-1 cell text-center" ng-if="serv.AppointmentDate == null"></td>
+                    <td class="col-sm-1 cell text-center" ng-if="serv.AppointmentDate != null">{{ serv.AppointmentDate | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-1 cell text-right">{{ serv.Fee | currency }}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-8 cell" colspan="7"></td>
+                    <td class="col-sm-3 cell reportGrid__label" colspan="3">{{pat.Patient}} {{'Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{pat.Amount | currency}}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-8 cell" colspan="7"></td>
+                    <td class="col-sm-3 cell reportGrid__label" colspan="3">{{'Number of Services' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{pat.NumberOfServices}}</td>
+                </tr>
+            </tbody>
+            <tr class="reportGrid__row">
+                <td class="col-sm-8 cell" colspan="7"></td>
+                <td class="col-sm-3 cell reportGrid__label" colspan="3">{{location.Location}} {{'Totals' | i18n}}</td>
+                <td class="col-sm-1 cell text-right reportGrid__label">{{location.Amount | currency}}</td>
+            </tr>
+            <tr class="stripEven">
+                <td class="col-sm-8 cell" colspan="7"></td>
+                <td class="col-sm-3 cell reportGrid__label" colspan="3">{{'Number of Services' | i18n}}</td>
+                <td class="col-sm-1 cell text-right reportGrid__label">{{location.NumberOfServices}}</td>
+            </tr>
+
+            <tbody class="reportGrid__footer" ng-if="data.Locations.length > 0 && !showFilterMessage && data.Locations.length === $index+1">
+                <tr class="reportGrid__row"></tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-8 cell" colspan="7"></td>
+                    <td class="col-sm-3 cell reportGrid__label" colspan="3">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label" colspan="3">{{ data.Amount | currency}}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-8 cell" colspan="7"></td>
+                    <td class="col-sm-3 cell reportGrid__label" colspan="3">{{'Number of Services' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label" colspan="3">{{ data.NumberOfServices}}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell text-align-center" colspan="12">{{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}</td>
+                </tr>
+            </tbody>
+            <tbody ng-show="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

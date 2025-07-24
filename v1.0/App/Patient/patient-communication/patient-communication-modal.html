@@ -1,0 +1,162 @@
+﻿<div>
+    <div class="patient-communication-model modal-content" draggable-modal>
+        <form name="frmPatientCommunication" class="patCommunicationModal" ng-init="initialize()">
+            <div class="pat-communication-close">
+                <button class="btn soar-link icon-button font-size-20" ng-click="closeModal()"><b>x</b></button>
+            </div>
+            <div class="pat-communication-patient-header">
+                <patient-header patient-data="patient" hide-tabs="true" disable-comm-icons="true"></patient-header>
+            </div>
+            <div class="pat-communication-title" >
+                <h1>{{ ::('Patient Communication' | i18n) }}</h1>
+            </div>
+            <div class="padding-left-20"><button class="btn btn-primary" ng-click="closeModal()"><span class="fa fa-chevron-left"></span> Return to Patient List</button></div>
+            <div class="pat-communication-modal-body">
+                <div>
+                    <div class="pat-communication-column-left" id="newcommunicationbox">
+                        <div>
+                            <new-communication patient-id="patientId" appointment-id="appointmentId" tab-identifier="tabIdentifier" active-fltr-tab="activeFltrTab"></new-communication>
+                        </div>
+                    </div>
+                    <div class="pat-communication-column-right">
+                        <div class="panel divTimelineDetailRow">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h4 id="collapseCommDetail" class="ng-binding">
+                                        {{ communicationDetailHeaderText | i18n }}
+                                    </h4>
+                                </div>
+                            </div>
+                            <!-- Patient's communication DETAILS -->
+                            <div class="panel-body filter-option" id="communication-detail">
+                                <div class="panel-body">
+                                    <div class="col-xs-12">
+                                        <span class="col-xs-2 no-padding-right" ng-bind="Type"></span>
+                                        <div ng-show="!isOtherTodo">
+                                            <span class="col-xs-4 no-padding-right" ng-bind="Reason"></span>
+                                            <span class="col-xs-4 no-padding-left"> {{ CommunicationDate | date: 'MM/dd/yyyy' }}</span>
+                                        </div>
+                                        <div ng-show="isOtherTodo">
+                                            <span class="col-xs-3 no-padding-right" ng-bind="Reason"></span>
+                                            <span class="col-xs-4 no-padding-right">Due: {{ DueDate | date: 'MM/dd/yyyy'}}</span>
+                                            <span class="col-xs-3 no-padding-left set-to-center">
+                                                <span ng-click="updateCommunicationStatus(PatientId, selectedPatientCommunicationId, selectedIsComplete, objectIndex)"
+                                                      id="{{'toDo_' + selectedPatientCommunicationId}}" class="clickable" ng-class="(selectedIsComplete) ? 'far fa-check-square comm-item-to-do-active' : 'far fa-square'" aria-hidden="true">
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                &nbsp;
+                                <div class="divNotesDetail">
+                                   <span>{{Notes}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pat-communication-column-left">
+                    <div>
+                        <patient-details-modal selected-patient-id="selectedPatientId" phones="phones" active-url="activeTemplate"></patient-details-modal>
+                    </div>
+                    <div>
+                        <!--Align to information-->
+                        <!--<div class="padding-right-10 padding-left-10">-->
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h4 data-toggle="collapse" id="collapsePvt" data-target="#appointment-content" class="text-left" onclick="return false;" aria-expanded="true">
+                                        <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                                        Appointment ({{patient.appointmentCount}})
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="panel-body filter-option panel-collapse collapse in" id="appointment-content">
+                                <patient-appointments ng-if="patient" patient="patient" show-appointments="All" layout="2" tab-identifier="tabIdentifier"></patient-appointments>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="pat-communication-column-right">
+                    <div class="panel padding-right-10">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <h4>{{ ::('Communications Timeline' | i18n) }}</h4>
+                            </div>
+                        </div>
+                        <div class="panel-body margin-bottom10">
+
+                            <div class="communicationFltr__btnContainer">
+                                <div class="communicationFltr__item" ng-repeat="filterButton in filterButtons">
+                                    <button ng-if="filterButton.ID"
+                                            class="communicationFltr__btn"
+                                            ng-class="{active: (filterButton.Active)}"
+                                            ng-click="addOrRemoveFilter($event, filterButton)"
+                                            uib-tooltip="{{ ::filterButton.Description }}"
+                                            tooltip-placement="top"
+                                            tooltip-append-to-body="true">
+                                        <img class="communicationFltr__btnIcon" ng-src="Images/PatientCommunication/{{ ::filterButton.IconName }}.svg" ng-if="filterButton.IconName" />
+                                    </button>
+                                    <div ng-if="filterButton.Description" class="communicationFltr__btnTitle">{{ ::filterButton.Description }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Patient's communication -->
+                    <div class="panel padding-right-10">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <h4>{{ firstCommunicationDate }}</h4>
+                            </div>
+                        </div>
+                        <div class="divTimelineRow">
+                            <div ng-repeat="cm in communications">
+
+                                <div class="relativeHeader" ng-hide="$index===0">
+                                    <span>{{ formatDate(cm.CommunicationDate) }}</span>
+                                </div>
+
+                                <div class="hoverme comm-item" ng-repeat="ci in cm.ComItems" ng-class="{clicked:rowClicked==ci}" ng-init="(isFirstLoad()) ? displayCommunicationDetails(cm, ci,cm.$index) : ''" 
+                                     ng-click="displayCommunicationDetails(cm, ci,ci.PatientCommunicationId)"  >
+                                    <div class="col-xs-12" ng-class="{'comm-unread-sms' : ci.IsRead ===false &&  ci.Status === 'Received'}" >
+                                        <div class="col-xs-3">
+                                            <communication-type-icon id="{{ci.PatientCommunicationId}}" communication-type="{{ci.CommunicationType}}" display-type="displayType()"> </communication-type-icon>
+                                            <h5> {{displayType(ci.CommunicationType) }} </h5>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <div class="row">
+                                                <span ng-if="ci.Reason !== 5" class="col-xs-10 no-padding"> {{displayReason(ci.Reason)}}</span>
+                                                <span ng-if="ci.Reason === 5" class="col-xs-10 no-padding"> {{'Reason Other '}}</span>
+                                            </div>
+                                            <div class="row">
+                                                <span  class="pat-communication-notes">
+                                                    {{ci.Notes | truncate: 35:'...'}}
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                        <div ng-if="ci.Reason == 5" class="col-xs-4">
+                                            <div class="row">
+                                                <span class="col-xs-5 no-padding" ng-show="ci.Reason == 5">Due: {{ci.DueDate | date: 'MM/dd/yyyy'}}</span>
+                                                <span id="{{'status_' + cm.PatientCommunicationId}}" ng-show="ci.Reason == 5" ng-class="(ci.IsComplete) ? 'far fa-check-square comm-item-to-do-active' : 'far fa-check-square'" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                        <div ng-hide="ci.Reason == 5" class="col-xs-2">
+                                            {{ ci.Status }}
+                                        </div>
+                                        <div class="col-xs-2 set-to-center" ng-if="(displayType(ci.CommunicationType) == 'US Mail' || displayType(ci.CommunicationType) == 'Text' || displayType(ci.CommunicationType) == 'Email') && ci.LetterTemplate !== ''">
+                                            <i class="fa fa-eye" ng-click=previewLetter(ci.LetterTemplate,ci.TemplateTitle)></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

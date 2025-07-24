@@ -1,0 +1,25 @@
+﻿<div class="tpUpload">
+    <div class="form-row">
+        <div class="form-col-16">
+            <label class="control-label">{{::('File' | i18n)}}</label>
+            <input type="file"
+                   ng-model="vm.imageName"
+                   kendo-upload
+                   k-multiple="false"
+                   k-select="onSelect"
+                   k-remove="remove"
+                   k-localization="localizationObject" />
+        </div>
+    </div>
+    <div class="form-row error">
+        {{errorMessage}}
+    </div>
+    <div class="form-footer">
+        <button class="btn btn-primary" ng-click="cancel()">
+            {{::('Cancel' | i18n)}}
+        </button>
+        <button class="btn btn-primary" ng-click="createDirectory()" ng-disabled="selectedFile === null || errorMessage || saving" check-auth-z="soar-per-perhst-add">
+            {{::('Save' | i18n)}}
+        </button>
+    </div>
+</div>

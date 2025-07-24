@@ -1,0 +1,82 @@
+<div class="patientDocuments-container" id="pdoc-container">
+    <div class="patientDocuments-header" id="pdoc-header">
+        <span id="pdoc-title" class="patientDocuments-header-title">{{'Documents'| translate}}</span>
+        <div class="patientDocuments-header-actionButtons" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+            <app-button id="btnNewForms" class="ml-10" buttonLabel="{{'Print New Patient Forms' | translate }}"
+                variation="secondary" (onClick)="generateNewForms()" ></app-button>
+            <app-button id="btnAddDocument" buttonLabel="{{'Add' | translate }}" variation="secondary" class="ml-10"
+                (onClick)="addDocument()" *ngIf="patientProfile" [isDisabled]='!hasClinicalDocumentsAddAccess'></app-button>
+            <app-button id="btnMoveDocuments" buttonLabel="{{'Move' | translate }}" variation="secondary" class="ml-10"
+                (onClick)="openMoveDocsModal()" *ngIf="patientProfile" [isDisabled]='patientDocuments?.length==0'></app-button>
+        </div>
+    </div>
+    <hr>
+    <div class="patientDocuments-section" *ngIf="patientProfile">
+        <div class="patientDocuments-grid">
+            <div *ngFor="let column of gridHeaders" class="patientDocuments-grid-header"
+                (click)="sortColumn(column.click ? column.click : '')">
+                <app-label class="patientDocuments-label"  [labelClass]="'patientDocuments-label'" [label]="column.label"></app-label>
+                <span *ngIf="column.label === 'Date'" class="fa fas"
+                    [ngClass]="sortcss(column.click ? column.click : '')"></span>
+            </div>
+        </div>
+        <div class="patientDocuments-grid" *ngFor="let document of patientDocuments; let rowId= index">
+            <div class="patientDocuments-grid-item" (click)="viewDocument(document)">
+                {{document.Name}}
+            </div>
+            <div class="patientDocuments-grid-item">
+                {{document.DocumentGroupName}}
+            </div>
+            <div class="patientDocuments-grid-item">
+                {{document.MimeType}}
+            </div>
+            <div class="patientDocuments-grid-item">
+                {{ document.DateUploaded | date:'MM/dd/yyyy' }}
+            </div>
+            <div class="patientDocuments-grid-item">
+                <div class="btn-group">
+                    <button class="btn-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="pull-right dropdown-menu">
+                        <li>
+                            <a id="document-editLink" class="menuLink"
+                                [ngClass]="{'disabled' : (document.MimeType === 'Digital')}"
+                                (click)="editDocument(document)"
+                                tooltip="{{document.MimeType === 'Digital'? 'Digital Document Cannot be Edited': ''}}"
+                                placement="top" delay="500">
+                                {{ 'Edit' | translate }}
+
+                            </a>
+
+
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+
+
+<ng-template #templateRef>
+    <div class="doc-modal">
+        <div class="btnFlexContainer">
+            <p id="modal-header" class="doc-modal-header">
+                {{'Upload a document' | translate}}
+            </p>
+            <div class="closeModal" (click)="closeModal()">
+                <svg-icon [name]="'closeIcon'" [iconHeight]="'24px'" [iconWidth]="'24px'"></svg-icon>
+            </div>
+        </div>
+        <div class="doc-modal-body">
+            <div class="containerPadding">
+                <doc-uploader [patientId]="patientId" (uploadCancel)="onUploadCancel($event)"
+                    (uploadSuccess)="onUploadSuccess($event)"></doc-uploader>
+            </div>
+        </div>
+    </div>
+
+
+</ng-template>

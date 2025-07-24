@@ -1,0 +1,107 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="proposedtreatmentreport grid header">
+        <div class="col-sm-1-migration">{{ 'Patient' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Date Proposed' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Treatment Plan' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Original Location' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Current Location' | translate }}</div>
+        <div class="col-sm-2-migration pl-0">{{ 'Description' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Tooth - Area' | translate }}</div>
+        <div class="col-sm-1-migration pl-0">{{ 'Status' | translate }}</div>
+        <div class="col-sm-1-migration pl-0">{{ 'Provider' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Appointment Date' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Fee' | translate }}</div>
+    </div>
+    <div class="proposedtreatmentreportgroupHeader groupheader">
+        <div class="col-sm-12-migration text-center" id="headerLocationDiv">
+            <h4>{{ ofcLocation }}</h4>
+        </div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+            (scrolledIndexChange)="nextItem($event)">
+            <div *cdkVirtualFor="let rowdata of reportData; index as i" class="{{rowdata.Class}}">
+                <input type="hidden" value="{{rowdata.LocationHeader}}" id="proposedTreatment{{i}}" />
+                <div class="proposedtreatmentreportgroupHeader" *ngIf="i>0 && rowdata.IsLocationHeader == true"
+                    id="divLocation{{i}}">
+                    <div class="col-sm-12-migration text-center" id="subHeaderLocationDiv{{i}}">
+                        <h4>{{ rowdata.LocationHeader }}</h4>
+                    </div>
+                </div>
+                <div class="proposedtreatmentreport grid" *ngIf="rowdata.IsPatientHeader == true"  id="divMainInfo{{i}}">
+                    <div class="col-sm-1-migration">{{ rowdata.Patient }}</div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="proposedtreatmentreport grid item" >
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration" *ngIf="rowdata.IsFirst == true">{{ rowdata.DateProposed | date:
+                        'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-1-migration" *ngIf="rowdata.IsFirst == true">{{ rowdata.TreatmentPlan }}</div>
+                    <div class="col-sm-1-migration" *ngIf="rowdata.IsFirst == false"></div>
+                    <div class="col-sm-1-migration" *ngIf="rowdata.IsFirst == false"></div>
+                    <div class="col-sm-2-migration">{{ rowdata.OriginalLocation }}</div>
+                    <div class="col-sm-2-migration">{{ rowdata.CurrentLocation }}</div>
+                    <div class="col-sm-2-migration">{{ rowdata.Description | translate }}</div>
+                    <div class="col-sm-1-migration  text-center">{{ rowdata.ToothArea }}</div>
+                    <div class="col-sm-1-migration pl-5">{{ rowdata.Status }}</div>
+                    <div class="col-sm-1-migration pl-5">{{ rowdata.Provider }}</div>
+                    <div class="col-sm-1-migration text-center" *ngIf="rowdata.AppointmentDate == null"></div>
+                    <div class="col-sm-1-migration text-center" *ngIf="rowdata.AppointmentDate != null">
+                        {{ rowdata.AppointmentDate | date: 'MM/dd/yyyy' }}
+                    </div>
+                    <div class="col-sm-1-migration text-right"> {{rowdata.Fee | currency}}</div>
+                </div>
+
+                <div class="proposedtreatmentreportsubfooter grid" *ngIf="rowdata.IsSubFooter == true">
+                    <div class="col-sm-8-migration"></div>
+                    <div class="col-sm-3-migration reportGrid__label">{{rowdata.Patient}} {{'Totals' | translate}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"> {{rowdata.PatientAmount | currency}}
+                    </div>
+                </div>
+                <div class="proposedtreatmentreportsubfooter grid" *ngIf="rowdata.IsSubFooter == true">
+                    <div class="col-sm-8-migration"></div>
+                    <div class="col-sm-3-migration reportGrid__label">{{'Number of Services' | translate}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"> {{rowdata.PatientNumberOfServices}}</div>
+                </div>
+                <div class="proposedtreatmentreportsubfooter grid" *ngIf="rowdata.IsLocationSubFooter == true">
+                    <div class="col-sm-8-migration"></div>
+                    <div class="col-sm-3-migration reportGrid__label">{{rowdata.Location}} {{'Totals' | translate}}
+                    </div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"> {{rowdata.LocationAmount | currency}}</div>
+                </div>
+                <div class="proposedtreatmentreportsubfooter grid" *ngIf="rowdata.IsLocationSubFooter == true"  id="locationTotalDiv{{i}}" >
+                    <div class="col-sm-8-migration"></div>
+                    <div class="col-sm-3-migration reportGrid__label">{{'Number of Services' | translate}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"> {{rowdata.LocationNumberOfServices}}</div>
+                </div>
+
+                <div class="proposedtreatmentreportfooter grid reportGrid__footer" *ngIf="rowdata.IsFooter == true">
+                    <div class="col-sm-8-migration"></div>
+                    <div class="col-sm-3-migration reportGrid__label">{{'Report Totals' | translate}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"> {{data.Amount | currency}}</div>
+                </div>
+
+                <div class="proposedtreatmentreportfooter grid" *ngIf="rowdata.IsFooter == true">
+                    <div class="col-sm-8-migration"></div>
+                    <div class="col-sm-3-migration reportGrid__label">{{'Number of Services' | translate}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"> {{data.NumberOfServices}}</div>
+                </div>
+
+
+                <div class="col-sm-12 text-center margin-top-footer" *ngIf="rowdata.IsFooter == true">
+                    {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright ©
+                    American Dental Association (ADA). All rights reserved.' | translate}}
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

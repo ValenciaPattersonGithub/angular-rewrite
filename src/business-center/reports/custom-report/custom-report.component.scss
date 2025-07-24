@@ -1,0 +1,86 @@
+@import 'variables';
+
+::ng-deep .customReport .k-dropdown {
+    width: 100%;
+
+    > .k-dropdown-wrap {
+        
+        &.k-state-default {
+            width: 70%;
+        }
+    }
+}
+
+.kendoCustomStyle {
+    width: 100%;
+}
+::ng-deep {
+     .kendoCustomStyle .k-widget.k-dateinput {
+    width: 100%;
+ }
+ .k-select{
+     background: #f6f6f6;
+ }
+ .k-picker-wrap{
+    display: block;
+    width: 100%;
+}
+}
+
+.btn-mar{
+    margin: 0 3px 0 0;
+}
+
+.overFlowClass {
+    overflow-x: hidden;
+}
+.customReport {
+    margin-top:10px;
+    // &__body {
+    //     .containerStandard;
+    // }
+
+    // &__report {
+    //     margin-bottom: @brand-margin_md;
+    // }
+
+    &__title {
+        h1 {
+            display: inline-block;
+            float: left;
+        }
+    }
+    
+    &__header{
+        width: 99%;
+        padding: 0 20px 0 20px;
+        margin: 0 auto;
+    }
+
+   
+    #filterMenu.hiddenFilters {
+        width: auto;
+    }
+
+    .header-container {
+        margin-top: 20px;
+    }
+
+    .fuseGrid {
+
+        .header {
+            display: block;
+            padding: 0;
+            margin-left: 0;
+        }
+    }
+
+    .fusePrintGrid {
+
+        .header {
+            display: block;
+            padding: 0;
+            margin-left: 0;
+        }
+    }
+}

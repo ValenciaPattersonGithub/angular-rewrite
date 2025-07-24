@@ -1,0 +1,75 @@
+<div class="patDuplicate" *ngIf="!isPersonalDetail && (checkingForDuplicates || showDuplicatePatients)">
+    <button id="btnCloseDuplicatePatient" class="patDuplicate__close" (click)="closeDuplicatePatient()">
+        <span class="fa fa-times"></span>
+    </button>
+    <div *ngIf="checkingForDuplicates" class="patDuplicate__load">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span> {{ 'Checking For Duplicates...' | translate | uppercase }}</span>
+    </div>
+
+    <div *ngIf="checkingForDuplicates === false" class="patDuplicate__header">
+        <h5>{{ duplicatePatients.length }} {{ 'Possible Matches Found' | translate }}</h5>
+    </div>
+
+    <!-- Duplicate Patient Search Results -->
+    <div *ngIf="duplicatePatients.length" class="patDuplicate__body">
+        <a class="patDuplicate__link" [class.disabled]="disableClick === true" check-auth-z="soar-per-perdem-view"
+            *ngFor="let result of duplicatePatients" (click)="duplicateClicked(result)">
+            <div class="patDuplicate__linkName">
+                <span id="lblLastName{{ result.index }}" class="fName" [innerHTML]="result.LastName"></span>,
+                <span id="lblFirstName{{ result.index }}" class="lName" [innerHTML]="result.FirstName"></span>
+                <span id="lblPreferredName{{ result.index }}" class="prefName"
+                    [innerHTML]="result.PreferredName?'('+result.PreferredName+')':''"></span>
+            </div>
+            <div class="patDeuplicate__linkDetails">
+                <span id="lblDOB{{ result.index }}" class="dob" *ngIf="result.DateOfBirth"
+                    [innerHTML]="result.DateOfBirthDisplay"></span>
+                <span id="age" class="detAge" *ngIf="result.Age">&nbsp;({{ result.Age }} {{'yo' | translate }})</span>
+                <span id="lblLocation{{ result.index }}" class="loc" *ngIf="result.Location"> {{ result.Location
+                    }}</span>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="patient-duplicate"
+    *ngIf="isPersonalDetail && (duplicatePatients.length) && (checkingForDuplicates || showDuplicatePatients)">
+    <div *ngIf="checkingForDuplicates" class="patient-duplicate-load">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span> {{ 'Checking For Duplicates...' | translate | uppercase }}</span>
+    </div>
+
+    <kendo-panelbar>
+        <kendo-panelbar-item [title]="null" expanded="true">
+            <ng-template kendoPanelBarItemTitle>
+                <div *ngIf="checkingForDuplicates === false" class="patient-duplicate-header">
+                    <h5 class="patient-duplicate-title">{{ duplicatePatients.length }} {{ 'Possible Duplicate Profiles'
+                        | translate }}</h5>
+                </div>
+            </ng-template>
+            <ng-template kendoPanelBarContent>
+                <div *ngIf="duplicatePatients.length" class="patient-duplicate-body">
+                    <a class="patient-duplicate-link" [class.disabled]="disableClick === true"
+                        check-auth-z="soar-per-perdem-view" *ngFor="let result of duplicatePatients"
+                        (click)="duplicatePatientClicked(result)">
+                        <div class="patient-duplicate-linkName">
+                            <span id="lblLastName{{ result.index }}" class="lastName"
+                                [innerHTML]="result.LastName"></span>,
+                            <span id="lblFirstName{{ result.index }}" class="firstName"
+                                [innerHTML]="result.FirstName"></span>
+                            <span id="lblPreferredName{{ result.index }}" class="preferredName"
+                                [innerHTML]="result.PreferredName?'('+result.PreferredName+')':''"></span>
+                            <span id="lblPipe{{ result.index }}" class="pipe" *ngIf="result.DateOfBirth">{{'|'}}</span>
+                            <span id="lblDOB{{ result.index }}" class="dateOfBirth" *ngIf="result.DateOfBirth"
+                                [innerHTML]="result.DateOfBirthDisplay"></span>
+                            <span id="age" class="detAge" *ngIf="result.Age">({{'Age: ' | translate }}{{ result.Age
+                                }})</span>
+                            <span id="lblLocation{{ result.index }}" class="location" *ngIf="result.Location"> {{
+                                result.Location
+                                }}</span>
+                        </div>
+                    </a>
+                </div>
+            </ng-template>
+        </kendo-panelbar-item>
+    </kendo-panelbar>
+</div>

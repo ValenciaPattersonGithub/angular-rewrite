@@ -1,0 +1,22 @@
+﻿<div class="bg-area">
+    <div ng-if="isPostcard" class="postcard-body-preview">
+        <div class="postcard-template-page">
+            <div class="page-content">
+                <div ng-repeat="index in postcardIndex" class="postcard">
+                    <div ng-bind-html="postcardDto.Content" class="postcard-message">
+                    </div>
+                    <div class="postcard-content">
+                        <div class="postcard-stamp"></div>
+                        <div class="postcard-address">
+                            {{postcardDto.PatientName}}
+                            <br /> {{postcardDto.AddressLine1}}
+                            <br /> {{postcardDto.LocationCityStateZip}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="!isPostcard">
+    </div>
+</div>

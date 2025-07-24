@@ -1,0 +1,309 @@
+@import 'variables';
+// These kendo files do not contain imports of Kendo, they merely overwrite kendo css
+@import 'toolTip.scss';
+
+.input-kendo {
+    height: 30px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    width: 260px !important;
+    padding: 0 8px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    margin-top: 10px !important;
+
+    &-left-margin {
+        margin-left: 9px !important;
+    }
+}
+
+.select-kendo {
+    margin-top: 10px !important;
+    height: 30px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    width: 260px !important;
+    padding: 0 8px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 8px;
+
+    ::ng-deep {
+        .select-list-wrapper {
+            .fui-select-container {
+                top: 7px;
+
+                .fui-select {
+                    height: 30px !important;
+                }
+            }
+        }
+
+        .fui-check-box {
+            top: 13px;
+        }
+    }
+}
+
+.check-kendo {
+    margin-top: 10px !important;
+    height: 30px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    width: 100px !important;
+}
+
+ul.dropdown-menu a.minus_zindex {
+    z-index: 0;
+    position: relative;
+    
+}
+
+.dropdown-menu li a:last-child {
+    border-bottom: none !important;
+    position: initial;
+}
+
+.icon-right {
+    top: calc(40% - 6px);
+    float: right;
+}
+
+.sort-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 7px;
+}
+
+.disableMenu {
+    color: $disabled-grey;
+}
+.toolTipText {
+    background-color: $Tooltip-backrground-color;
+    color: $Tooltip-text-color;
+    text-align: left;
+    padding: 5px 5px 5px 5px;
+    position: absolute;
+    z-index: 1;
+    width: 200px;
+    display: none;
+}
+
+.parentCell:hover span.toolTipText {
+    display: block;
+}
+
+.referraltypelist-hr {
+    border-top: 1px solid #dddddd !important;
+    margin-top: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+input::placeholder {
+    color: $placeholder-grey;
+}
+
+::ng-deep {
+    .kendoNewStyle.k-grid .k-grid-content {
+        height: auto !important;
+        margin-bottom: 0px !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-header .k-grid-header-wrap .k-header {
+        border-right: 1px solid $grid-separator-color !important;
+    }
+
+
+    // .k-grid-content {
+    //     max-height: calc(100vh - 418px) !important
+    // }
+
+    .dropdown-menu {
+        min-width: 130px !important;
+    }
+
+    .k-grid-header {
+        border: 1px solid $grid-separator-color !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-header .k-grid-header-wrap .k-header {
+        color: #2dabcb !important;
+    }
+
+    .k-grid-email {
+        color: #2dabcb !important;
+    }
+
+    .k-grid .k-grid-content tr td {
+        border-bottom: 1px solid #eeeeee !important;
+        border-right: 1px solid #eeeeee !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-content tr td {
+        border-right: 1px solid #eeeeee !important;
+    }
+
+    .k-grid-content tr {
+        background-color: #ffffff !important;
+    }
+
+    .k-grid-content .k-alt {
+        background-color: #fafafa !important;
+    }
+}
+
+.confirmationMessage > p {
+    padding-left: 10px !important;
+}
+
+.popup_heading {
+    padding: 0px 0px 0px 10px !important;
+}
+.noContent {
+    height: calc(100vh - 580px) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999999;
+    font-weight:bold;
+}
+.noContentLink {
+    color: #2dabcb;
+    font-weight: bold;
+    margin-left: 5px;
+}
+.addresswrap{
+    word-wrap:break-word;
+}
+.app-tooltip {
+    z-index: 3 !important;
+    font-size: $tooltip-font-size !important;
+    font-weight: bold !important;
+    color: $tooltip-default-font-color !important;
+}
+
+.statusActive {
+    color: #28a745;
+}
+
+.statusInActive {
+    color: #cc0000;
+}
+
+::ng-deep {
+    #div-referralType-noContent app-button button {
+        font-weight: 700 !important;
+        color: #2dabcb;
+        padding-left: 0px;
+        border: none !important;
+        background-color: #ffffff !important;
+    }
+
+    #div-referralType-noContent app-button button:disabled {
+        font-weight: 700 !important;
+        padding-left: 0px;
+        border: none !important;
+        background-color: #ffffff !important;
+        color: #cccccc
+    }
+
+    #div-referralType-noContent app-button {
+        border: none !important;
+        background-color: #ffffff !important;
+    }
+}
+
+::ng-deep {
+    .kendoNewStyle.k-grid .k-grid-header .k-grid-header-wrap .k-header .k-link {
+        color: #2DABCB !important;
+    }
+}
+
+::ng-deep {
+    .fui-check-box .label {
+        color: #333333 !important;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 5px 5px 0.3em !important;
+    }
+}
+
+::ng-deep {
+    .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+        background-color: transparent;
+        color: #FFFFFF !important;
+    }
+
+    .pgr-pager {
+        width: 100%; 
+        text-align: center !important;
+        padding: 20px;
+    }
+
+    .pgr-active-page-nm {
+        padding: 5px 10px;
+        border-radius: 50%;
+        background-color: lightblue;
+        color: black;
+        margin: 5px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .pgr-page-nm {
+        color: gray;
+        margin: 5px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .pgr-page-nxt-prev {
+        color: #2dabcb;
+        margin: 5px;
+        cursor: pointer;
+        font-weight: bolder;
+    }
+
+    .txt-mgnifying-icon {
+        margin-top: 6px; 
+        color: #ccc;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-header .k-grid-header-wrap .k-header {
+        padding: 10px !important;
+        border: transparent;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-content tr td {
+        padding-left: 10px !important;
+        // border: none !important;
+        border: transparent;
+    }
+
+    .k-grid td {
+        line-height: normal !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-content {
+        overflow-y: hidden !important;
+    }
+
+    .k-grid .k-grid-header {
+        padding: 0px !important;
+    }
+
+    .fa-pencil:before {
+        width: 18px;
+        height: 18px;
+        display: block;
+    }
+
+    .k-grid table {
+        border-collapse: collapse !important;
+    }
+}

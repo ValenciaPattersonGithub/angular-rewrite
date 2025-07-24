@@ -1,0 +1,241 @@
+<div class="encounter-cart-card">
+    <div class="form-row">
+        <div class="col-sm-12 service-desc">
+            <button id="cartRemoveService" class="icon-button float-right" (click)="openRemoveServiceModal()">
+                <span class="icon-button fal fa-times"></span>
+            </button>
+            <div><span id="serviceCodeCode" class="text-left page_sub_title">{{ serviceCode.Code }}:</span><span id="serviceCodeDescription" class="page_sub_title_description">{{serviceCode.Description}}</span></div>
+        </div>
+        <div class="input-row">
+            <div class="col-sm-1 date">
+                <ul>
+                    <li>
+                        <label class="control-label">{{ 'Service Date' | translate }}</label>
+                    </li>
+                    <li>
+                        <app-date-picker [(value)]="serviceDate"
+                                         [maxDate]="maxServiceDate"
+                                         [minDate]="minServiceDate"
+                                         (dateChanged)="onServiceDateChanged($event)">
+                        </app-date-picker>
+                        <p class="error" *ngIf="!isValidDateRange">{{invaliDate}}</p>
+                    </li>
+                </ul>
+            </div>
+            <teeth-area-scope [template]="toothAreaScopeTemplate" [service]="service" >
+                <ng-template #toothAreaScopeTemplate>
+                    <div class="col-sm-1 tooth">
+                        <ul>
+                            <li>
+                                <label class="control-label">{{ 'Tooth' | translate }}</label>
+                            </li>
+                            <li>
+                                <div *ngIf="!serviceCode.UseCodeForRangeOfTeeth">
+                                    <teeth-selector [serviceTransaction]="service"
+                                                    (inputModelChange)="toothChanged($event)"
+                                                    [tooltip]="service.providerToothError === true? 'Invalid Tooth selection': ''"
+                                                    placement="right-error"
+                                                    delay="500"
+                                                    [isDisabled]="serviceCode.AffectedAreaId === 1">
+                                    </teeth-selector>
+                                </div>
+
+                                <div *ngIf="serviceCode.UseCodeForRangeOfTeeth">
+                                    <rot-teeth-selector [(input)]="service.Tooth" [(service)]="service" (inputModelChange)="toothChanged($event)">
+                                    </rot-teeth-selector>
+                                </div>                                                              
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-1 area">
+                        <ul>
+                            <li>
+                                <label class="control-label">{{ 'Area' | translate }}</label>
+                            </li>
+                            <li>
+                                <root-surface-selector [id]="test"
+                                                       [name]="'area'"
+                                                       ngDefaultControl
+                                                       [serviceTransaction]="service"
+                                                       (inputModelChange)="areaChanged($event)"
+                                                       [tooltip]="service.providerAreaError === true? 'Invalid Area selection': ''"
+                                                       placement="right-error"
+                                                       delay="500"
+                                                       [isDisabled]="serviceCode.AffectedAreaId === 1 || serviceCode.AffectedAreaId === 5">
+                                </root-surface-selector>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </ng-template>
+            </teeth-area-scope>
+            <div class="col-sm-2 provider">
+                <ul>
+                    <li>
+                        <label class="control-label">{{ 'Provider' | translate }}</label>
+                    </li>
+                    <li [ngClass]="service.ProviderUserId ? '' : 'providerUserIdError'">
+                        <provider-selector id="cardProviderOnService"
+                                           [(selectedProvider)]="service.ProviderUserId"
+                                           [providerTypeIds]="[1,2,3,5]"
+                                           [patientInfo]="patientData"
+                                           (providerChanged)="onProviderOnServicesChanged($event)"
+                                           [tooltip]="service.providerServicesError === true? 'Must have a Provider selected': ''"
+                                           placement="right-error"
+                                           delay="500">
+                        </provider-selector>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-2 providerOnClaims">
+                <ul>
+                    <li>
+                        <label class="control-label">{{ 'Provider (Claims)' | translate }}</label>
+                    </li>
+                    <li [ngClass]="service.ProviderOnClaimsId ? '' : 'providerUserIdError'">
+                        <practice-provider-selector id="cardProviderOnClaim"
+                                                    [(selectedProviderId)]="service.ProviderOnClaimsId"
+                                                    [providerOnClaimsOnly]="true"
+                                                    (selectedProviderIdChange)="onProviderOnClaimsChanged($event)"
+                                                    [tooltip]="service.providerClaimsError === true? 'Must have a Provider (Claims) selected': ''"
+                                                    placement="right-error"
+                                                    delay="500">
+                        </practice-provider-selector>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="amountsRow">
+            <div *ngIf="service.InsuranceEstimates && service.InsuranceEstimates.length > 1" class="plans">
+                <div [ngClass]="showInsuranceEstimates ? 'header' : 'headerCollapsed'">({{service.InsuranceEstimates.length}}) {{service.InsuranceEstimates.length != 1 ? "Plans" : "Plan"}}</div>
+                <div class="value">
+                    <a id="toggleInsuranceMenu" (click)="toggleInsuranceMenu()">
+                        <i [ngClass]="showInsuranceEstimates ? 'fa fa-caret-down' : 'fa fa-caret-right'"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="locationFee">
+                <div class="header">Location Fee</div>
+                <div class="value">
+                    <currency-input id="cardFee" [(amount)]="service.Fee" (amountChange)="onFeeChanged($event)" (amountChanging)="onAmountChanging()"></currency-input>
+                </div>
+            </div>
+            <div class="discounts">
+                <div class="header">Discount</div>
+                <div class="value" id="cardDiscount" >{{service.Discount | currency}}</div>
+            </div>
+            <div class="tax">
+                <div class="header">Tax</div>
+                <div class="value" id="cardTax">{{service.Tax | currency}}</div>
+            </div>
+            <div class="charges">
+                <div class="header">Charges</div>
+                <div class="value" id="cardAmount">{{service.Amount | currency}}</div>
+            </div>
+            <div class="allowedAmount">
+                <div class="header">Allowed Amount</div>
+                <div *ngIf="service.AllowedAmount != null && service.InsuranceEstimates.length > 1">
+                    <div class="value" id="cardAllowedAmount">{{service.AllowedAmount | currency}}</div>
+                </div>
+                <div *ngIf="service.AllowedAmount != null && service.InsuranceEstimates.length === 1">
+                    <div class="value">
+                        <ng-container >
+                            <div class="est-ins-wrapper float-right">
+                                <currency-input  id="allowedAmountInputSingle" [(amount)]="service.AllowedAmount" (amountChange)="onAllowedAmountChanged($event, 0)" (amountChanging)="onAmountChanging()"></currency-input>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="estInsAdj">
+                <div class="header">Est Ins Adj</div>
+                <div class="value" id="cardEstInsAdjTotal">{{service | serviceAdjEstTotal:triggerInsuranceUpdate | currency}}</div>
+            </div>
+
+            <div class="estIns">
+                <div class="header">Est Ins</div>
+                <div *ngIf="service.InsuranceEstimates && service.InsuranceEstimates.length == 1 && serviceCode && serviceCode.SubmitOnInsurance === true && serviceCode.CdtCodeId != null  && benefitPlans.length > 0; else displayInsEstimate">
+                    <div class="value">
+                        <ng-container *ngFor="let estimate of service.InsuranceEstimates ; index as ii">
+                            <div class="est-ins-wrapper float-right">
+                                <currency-input  id="cardEstInsSingleInput"
+                                                 #estIns{{ii}}
+                                                 [tooltip]="service.InsuranceEstimates[ii].$showEstInsError != null && service.InsuranceEstimates[ii].$showEstInsError == true && showEstInsError == true? 'Est. Ins. cannot be greater than Charge/Allowed Amount. Value has been reset to previous amount.': ''"
+                                                 placement="left-error"
+                                                 delay="500"
+                                                 [(amount)]="service.InsuranceEstimates[ii].EstInsurance"
+                                                 (amountChange)="onEstimateChanged($event, ii)"
+                                                 (amountChanging)="onAmountChanging()">
+                                </currency-input>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <ng-template #displayInsEstimate>
+                    <div class="value"  id="cardEstInsTotal">{{service | serviceEstInsTotal:triggerInsuranceUpdate | currency}}</div>
+                </ng-template>
+            </div>
+
+            <div class="patBal">
+                <div class="header">Pt. Bal</div>
+                <div class="value"id="cardPatBal">{{service.Balance | currency}}</div>
+            </div>
+        </div>
+
+        <!--Collapsible Insurance Table-->
+        <div *ngIf="showInsuranceEstimates && service.InsuranceEstimates && service.InsuranceEstimates.length > 1" class="insuranceCollapsableMenu">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{'Plan' | translate}}</th>
+                        <th class="text-right">{{'Allowed Amount' | translate}}</th>
+                        <th class="text-right">{{'Est Ins Adj' | translate}}</th>
+                        <th class=" text-right">{{'Est Ins' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let estimate of service.InsuranceEstimates ; index as ii">
+                        <tr>
+                            <td id="tdPlan{{ii}}">
+                                <div id="cardPlanName{{ii}}">{{getPlanNameString(service.InsuranceEstimates[ii], ii) | truncateText: 40}}</div>
+                            </td>
+                            <td id="tdAllowedAmount{{ii}}">
+                                <div *ngIf="service.InsuranceEstimates[ii].AllowedAmount != null && service.InsuranceEstimates.length > 1">
+                                    <div class="est-ins-wrapper float-right">
+                                        <currency-input id="allowedAmountInput{{ii}}" [(amount)]="service.InsuranceEstimates[ii].AllowedAmountDisplay" (amountChange)="onAllowedAmountChanged($event, ii)"></currency-input>
+                                    </div>
+                                </div>
+                            </td>
+                            <td id="tdEstInsAdj{{ii}}">
+                                <div id="cardEstInsAdj{{ii}}" class="float-right">{{service.InsuranceEstimates[ii].AdjEst | currency}}</div>
+                            </td>
+                            <td id="tdEstIns{{ii}}">
+
+                                <div *ngIf="serviceCode && serviceCode.SubmitOnInsurance === true && serviceCode.CdtCodeId != null && benefitPlans.length > 0; else displayInsurance">
+                                    <div class="est-ins-wrapper float-right">
+                                        <currency-input id="estInsInput{{ii}}"
+                                            #estIns{{ii}}
+                                            [tooltip]="service.InsuranceEstimates[ii].$showEstInsError != null && service.InsuranceEstimates[ii].$showEstInsError == true && showEstInsError == true? 'Est. Ins. cannot be greater than Charge/Allowed Amount. Value has been reset to previous amount.': ''"
+                                            placement="left-error"
+                                            delay="500"
+                                            [(amount)]="service.InsuranceEstimates[ii].EstInsurance"
+                                            (amountChange)="onEstimateChanged($event, ii)"></currency-input>
+                                    </div>
+                                </div>
+                                <ng-template #displayInsurance>
+                                    <div id="lblEstIns{{ii}}" class="float-right">{{service.InsuranceEstimates[ii].EstInsurance | currency}}</div>
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+    </div>
+</div>

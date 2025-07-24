@@ -1,0 +1,42 @@
+﻿<div>
+  <div [ngClass]="styles?.wrapperClass">
+    <div class="rowFull white">
+      <div [ngClass]="styles?.headerClass">
+        <!--breakcrumb-->
+        <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+
+        <!--header-->
+        <div [ngClass]="styles?.titleClass">
+          <h1>{{ title | translate }}</h1>
+        </div>
+
+      </div>
+    </div>
+    <!-- body -->
+    <div [ngClass]="styles?.bodyClass">
+      <textarea [ngClass]="styles?.textareaClass" 
+                [id]="styles?.textareaId" 
+                [(ngModel)]="consentMessage"
+                (ngModelChange)="onConsentMessageChange()"
+                [name]="styles?.textareaName"
+                maxlength="500">
+      </textarea>
+
+      <div class="pull-right">
+        <button [id]="styles?.cancelButtonId" 
+                class="btn btn-default" 
+                (click)="cancelConsentChanges()">
+          {{ 'Cancel' | translate }}
+        </button>
+        <button [id]="styles?.saveButtonId"
+                class="btn btn-primary"
+                [disabled]="!dataHasChanged"
+                (click)="saveConsentMessage()"
+                attr.check-auth-z="{{checkAuthZ}}">
+          {{ 'Save' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

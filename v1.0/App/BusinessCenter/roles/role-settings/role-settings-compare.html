@@ -1,0 +1,74 @@
+﻿<div class="roleSettings col-md-12">
+    <div class="pull-right closeButton" id="closeModal" ng-click="close()"><i class="fa fa-times fa-2x"></i></div>
+    <h2>{{::'{0} {1}' | i18n:['Compare', 'Roles']}}</h2>
+    <div class="col-md-12 roleSettings__filters">
+        <div class="col-md-12">
+            <div class="col-md-12 filterRow">
+                <div class="col-md-2">
+                    <label class="">{{ ::'Display Roles' | i18n }}</label>
+                </div>
+                <div class="col-md-5">
+                    <ui-select multiple id="roleSelect" ng-model="selectedRoles.roles" theme="bootstrap" close-on-select="true" on-select="addSelectedRole($item)" ng-disabled="selectedRoles.roles.length === 3">
+                        <ui-select-match placeholder="{{::'Select Roles' | i18n}}">{{::selectedRoles.roles.RoleName}}</ui-select-match>
+                        <ui-select-choices repeat="role in (roles | filter:{ RoleName: c.search } | filter: $select.search | limitTo: 500) track by role.RoleId">
+                            {{::role.RoleName}}
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="error" ng-show="selectedRoles.roles.length === 3">{{ ::'Only three roles can be displayed at once.' | i18n }}</span>
+                </div>
+                <div class="col-sm-5">
+                    <tag class="pull-left"
+                         ng-repeat="role in selectedRoles.roles"
+                         ng-if="selectedRoles.roles.length > 0 && selectedRoles.roles.length < 4"
+                         title="{{ ::role.RoleName }}"
+                         remove-function="removeSelectedRole(role)"
+                         hide-remove="false"
+                         is-primary="true"></tag>
+
+                </div>
+            </div>
+            <div class="col-md-12 filterRow">
+                <div class="col-md-2" uib-tooltip="">
+                    <label class="">{{ ::'Display Section' | i18n }}</label>
+                </div>
+                <div class="col-md-5">
+                    <ui-select id="sectionSelect" on-select="filterSections(selectedSection.Name)" ng-model="selectedSection" theme="bootstrap" close-on-select="true">
+                        <ui-select-match placeholder="{{::'Select Section' | i18n}}">{{::selectedSection.Name}}</ui-select-match>
+                        <ui-select-choices repeat="section in roleMatrix.Modules | filter: $select.search | limitTo: 500">
+                            {{::section.Name}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+        <hr class="clearfix col-md-12" />
+        <div class="col-md-12 " ng-if="subSections.length == 0">
+            <h4>{{'Please select a section to get started' | i18n}}</h4>
+        </div>
+        <div class="col-md-12 roleSettings__accordion" ng-if="subSections.length > 0" ng-class="{ 'overflow': subSections.length > 6 }">
+            <div class="noRoleSelected" ng-if="selectedRoles.roles.length == 0">{{ ::'You must select a role to view the permissions' | i18n }}</div>
+            <uib-accordion>
+                <div uib-accordion-group id="subSection-{{::subSection.Name}}-{{::$index}}" is-open="subSection.isCustomHeaderOpen" ng-repeat="subSection in subSections" ng-click="subSection.isCustomHeaderOpen = !subSection.isCustomHeaderOpen">
+                    <div class="panel panel-default">
+                        <uib-accordion-heading ng-click="filterRoles(subSection)">
+                            <i class="fa fa-chevron-right" ng-class="{'fa fa-chevron-down': subSection.isCustomHeaderOpen, 'fa fa--chevron-right': !subSection.isCustomHeaderOpen}"></i> {{::subSection.Name}}
+                        </uib-accordion-heading>
+                    </div>
+                    <div class="compareContainer col-md-12">
+                        <div class="cell noRoleSelected" ng-if="selectedRoles.roles.length == 0">No Role Selected</div>
+                        <div id="compareGrid{{$index}}" class="roleMatrix fuseGrid" ng-repeat="selectedRole in selectedRoles.roles" ng-class="{'col-md-12': selectedRoles.roles.length == 1, 'col-md-6': selectedRoles.roles.length == 2, 'col-md-4': selectedRoles.roles.length == 3}">
+                            <div class="row header">
+                                <div class="cell" ng-if="selectedRoles.roles.length > 0">
+                                    {{::selectedRole.RoleName}}
+                                </div>
+                            </div>
+                            <div class="row body" ng-repeat="action in subSection.Actions">
+                                <div class="cell">{{action.Name}}<span class="check pull-right" ng-if="checkSelectedRolePermissions(action.Roles, selectedRole.RoleName)"><i class="fa fa-check"></i></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </uib-accordion>
+        </div>
+    </div>
+</div>

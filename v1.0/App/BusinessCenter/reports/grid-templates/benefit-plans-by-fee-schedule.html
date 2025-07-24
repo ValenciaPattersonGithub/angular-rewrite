@@ -1,0 +1,25 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.FeeSchedules.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.FeeSchedules.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-4 cell"> {{ 'Fee Schedule' | i18n }}</th>
+                    <th class="col-sm-4 cell">{{ 'Benefit Plan' | i18n }}</th>
+                    <th class="col-sm-4 cell">{{ 'Plan/Group Number' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="feeschedule in data.FeeSchedules" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-12 cell" colspan="3">{{ feeschedule.Name }}</td>
+                </tr>
+                <tr ng-repeat="benefitPlan in feeschedule.BenefitPlans">
+                    <td class="col-sm-4 cell"></td>
+                    <td class="col-sm-4 cell">{{benefitPlan.BenefitPlanName}}</td>
+                    <td class="col-sm-4 cell">{{benefitPlan.PlanGroupNumber}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="text-align-center text-muted" *ngIf="loader"
+    style="z-index: 2;position: absolute; left: 0px; top: 0px; right: 0px; bottom:0px; text-align: center;">
+    <i id="iDefaultMessage" class="fa fa-spinner fa-spin fa-2x loading"></i>
+</div>
+<div class="selectItem">
+    <hr id="widgetDdlAbvLineBar" class="line-bar">
+</div>
+<div *ngIf="locationEnrolledInEra && (openEras && openEras !== 0) && !loader">
+
+    <div attr.id="ERAopenTotal-{{widgetData.ItemId}}" class="eraCenter eraBottom">
+        <span attr.id="ERAtotalVal-{{widgetData.ItemId}}" class="eraHeading"><b>{{openEras}}</b></span>
+        <span attr.id="ERlabell-{{widgetData.ItemId}}" class="eraHeading"> Open ERAs</span>
+    </div>
+    <div attr.id="ERAtotalArea-{{widgetData.ItemId}}" class="eraCenter eraTotalBottom">
+        <span attr.id="ERAtotalAmount-{{widgetData.ItemId}}"><a class="eraTotal">{{totalEras | currency}}</a></span>
+    </div>
+
+    <div id="ERAtotaldoller" class="eraCenter eraViewBottom">
+        <p attr.id="totalDollar-{{widgetData.ItemId}}" class="eraDollarTotal"> Total dollar amount of ERAs.</p>
+    </div>
+
+    <div attr.id="ERAviewBtn-{{widgetData.ItemId}}" class="eraCenter">
+        <button class="btn btnView eraViewColor" attr.id="btnView-{{widgetData.ItemId}}"  (click)="gotoEra();">{{'View' | translate}}</button>
+    </div>
+</div>
+
+<div *ngIf="locationEnrolledInEra && openEras === 0 && !loader" class="no-dataValue">
+    No Data
+  </div>
+
+<div *ngIf="locationEnrolledInEra === false && !loader" class="notEntolled" attr.id="notEnrolled-{{widgetData.ItemId}}">
+    <ul class="eraMsg">
+        <li class="no-data">
+            {{ 'Call Patterson Sales'}}
+        </li>
+        <li class="no-data">
+            {{'at 800.294.8504' }}
+        </li>
+        <li class="no-data">
+            {{'to enroll in the eRA service' }}
+        </li>
+    </ul>
+</div>

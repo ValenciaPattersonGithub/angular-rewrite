@@ -1,0 +1,283 @@
+<div class="col-md-3" id="filterMenu" [hidden]="allData.$$childTail.hideMenu === true">
+    <div id="reports-slideout-wrapper">
+        <div class="text-align-right">
+            <button class="btn soar-link icon-button font-14" title="Hide Filters" (click)="callParent()">
+                X
+            </button>
+        </div>
+        <div class="margin-left-5">
+            <label *ngIf="!userDefinedFilter">({{ appliedFiltersCount }}) Filters Selected </label>
+            <label *ngIf="userDefinedFilter">({{ appliedFiltersCount }}) Filters Selected (User Defined)</label>
+        </div>
+        <div>
+            <button (click)="collapsePanel()" id="btnExpandCollapse" ngDefaultControl [className]="classExpandCollapse" >
+                <span [innerHtml]="textExpandCollapse"></span>
+            </button>
+        </div>
+        <div id="filterbox">
+            <div class="slideOutReportFilter">
+                <div class="panel-group" id="reportFilters">
+                    <div *ngIf="showReportView">
+                        <report-radio-filter [(filterModels)]="filterModels[ReportViewName]" (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+                    <div *ngIf="showMultipleLocation">
+                        <report-checkbox-filter [(filterModels)]="filterModels[LocationsName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="false"> </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showSingleLocation">
+                        <report-radio-filter [(filterModels)]="filterModels[LocationsName]" (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+                    <div *ngIf="showDistributedLocation">
+                        <report-checkbox-filter [(filterModels)]="filterModels[DistributedLocationsName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="false"> </report-checkbox-filter>
+                    </div>
+
+                    <div *ngIf="showPatientStatus">
+                        <report-checkbox-filter [(filterModels)]="filterModels[PatientStatusName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showTreatmentPlanStatus">
+                        <report-checkbox-filter [(filterModels)]="filterModels[TreatmentPlanStatusName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+
+                    <div *ngIf="showMonths">
+                        <report-checkbox-filter [(filterModels)]="filterModels[MonthName]" (onChanged)="onChangedFromChild($event)"
+                                                (showMoreParent)="setPartialList($event)" useAllOptionInDto="true"></report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showProviders">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ProvidersName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="false">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showUsers">
+                        <report-checkbox-filter [(filterModels)]="filterModels[UsersName]" (onChanged)="onChangedFromChild($event)"
+                                                (showMoreParent)="setPartialList($event)" useAllOptionInDto="true"></report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showCarriers">
+                        <report-checkbox-filter [(filterModels)]="filterModels[CarrierName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showPayerId">
+                        <report-radio-filter [(filterModels)]="filterModels[PayerIdName]" (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+                    <div *ngIf="showActivityAreas">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ActivityAreaName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showActivityTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ActivityTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showActivityActions">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ActivityActionName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showPatients">
+                        <report-patient-filter [(filterModels)]="filterModels[PatientIdName]" [userDefinedPatinets]="userDefinedPatinets"
+                                               (onChanged)="checkModelValidity($event)" (changeData)="checkFilterdto($event)"></report-patient-filter>
+                    </div>
+
+                    <div *ngIf="showPaymentType">
+                        <report-checkbox-filter [(filterModels)]="filterModels[PaymentTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="'true'">
+                        </report-checkbox-filter>
+                    </div>
+
+
+                    <div *ngIf="showDateRange">
+                        <report-date-filter (onChanged)="checkValidDates($event)" (changeData)="checkFilterdto($event)" [(filterModels)]="filterModels[StartDateName]">
+                        </report-date-filter>
+                    </div>
+                    <div *ngIf="showViewDeletedTransaction">
+                        <report-checkbox-filter [(filterModels)]="filterModels[this.ViewDeletedTransactionName]" (onChanged)="onChangedFromChild($event)"
+                                                [useAllOptionInDto]="false" (showMoreParent)="setPartialList($event)">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showViewTransactionsByOrder && showDateRange">
+                        <report-radio-filter [(filterModels)]="filterModels[ViewTransactionsByName]" (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+                    <div *ngIf="showOrigDateRange && showViewTransactionsByOrder">
+                        <report-date-filter (onChanged)="checkValidDates($event)" (changeData)="checkFilterdto($event)" [(filterModels)]="filterModels[OrigStartDateName]">
+                        </report-date-filter>
+                    </div>
+                    <div *ngIf="showAdditionalIdentifiers">
+                        <report-checkbox-filter [(filterModels)]="filterModels[AdditionalIdentifiersName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showFeeSchedules">
+                        <report-checkbox-filter [(filterModels)]="filterModels[FeeSchedulesName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showReferralSources && showNewReferralFilter === false">
+                        <patient-referrals-filter [(filterModels)]="filterModels[ReferralSourceIdName]" [userDefinedFilter]='this.userDefinedFilter'
+                                                  [options]="refferedPatientsOptions" (onChanged)="updateFilterCount($event)" (changeData)="checkFilterdto($event)"></patient-referrals-filter>
+                    </div>
+                    <div *ngIf="showReferralSources && showNewReferralFilter === true">
+                        <patient-referrals-beta-filter [(filterModels)]="filterModels[ReferralSourceIdName]" [userDefinedFilter]='this.userDefinedFilter'
+                                                       [options]="refferedPatientsOptions" (onChanged)="updateFilterCount($event)" (changeData)="checkFilterdto($event)"></patient-referrals-beta-filter>
+                    </div>
+                    <div *ngIf="showDisplayOptions">
+                        <report-checkbox-filter [(filterModels)]="filterModels[DisplayOptionsName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showTransactionTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[TransactionTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showServiceTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ServiceTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showTaxableServiceTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[TaxableServiceTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showPatientGroupTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[PatientGroupTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showServiceCode">
+                        <search-filter [(filterModels)]="filterModels[ServiceCodeName]" [includeAll]="includeAll" [userDefinedFilter]="userDefinedFilter" (changeData)="checkFilterdto($event)"></search-filter>
+                    </div>
+
+                    <div *ngIf="showServiceCodes">
+                        <report-service-code-filter [(filterModels)]="filterModels[ServiceCodeName]" [includeAll]="includeAll" [userDefinedFilter]="userDefinedFilter" (changeData)="checkFilterdto($event)"></report-service-code-filter>
+
+                    </div>
+
+                    <div *ngIf="showNegativeAdjustmentTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[NegativeAdjustmentTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="'true'">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showPositiveAdjustmentTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[PositiveAdjustmentTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="'true'">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showInsurancePaymentType">
+                        <report-checkbox-filter [(filterModels)]="filterModels[InsurancePaymentTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="'true'">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showReferralAffiliate">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ReferralAffiliateName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="'true'">
+                        </report-checkbox-filter>
+                    </div>
+
+                    <div *ngIf="showInsurance">
+                        <report-checkbox-filter [(filterModels)]="filterModels[InsuranceName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showImpactions">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ImpactionName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showAppointmentTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[AppointmentTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showViewTransactionsBy">
+                        <report-radio-filter [(filterModels)]="filterModels[ViewTransactionsByName]"
+                                             (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+                    <div *ngIf="showOrigDateRange && showViewTransactionsBy">
+                        <report-date-filter (onChanged)="checkValidDates($event)" (changeData)="checkFilterdto($event)" [(filterModels)]="filterModels[OrigStartDateName]">
+                        </report-date-filter>
+                    </div>
+                    <div *ngIf="showServiceDate">
+                        <report-radio-filter [(filterModels)]="filterModels[ServiceDateName]" (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+                    <div *ngIf="showDiscountTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[DiscountTypeName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showCollectionDateRange">
+                        <report-date-filter (onChanged)="checkValidDates($event)" (changeData)="checkFilterdto($event)"
+                                            [(filterModels)]="filterModels[CollectionStartDateName]"></report-date-filter>
+                    </div>
+                    <div *ngIf="showProductionDateRange">
+                        <report-date-filter (onChanged)="checkValidDates($event)"
+                                            (changeData)="checkFilterdto($event)"
+                                            [(filterModels)]="filterModels[ProductionStartDateName]"></report-date-filter>
+                    </div>
+                    <div *ngIf="showViewTransactionsByOrder && showProductionDateRange">
+                        <report-radio-filter [(filterModels)]="filterModels[ViewTransactionsByName]" (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+                    <div *ngIf="showMasterPatientAlerts">
+                        <report-checkbox-filter [(filterModels)]="filterModels[MasterPatientAlertName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="false">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showMedicalHistoryAlerts">
+                        <report-checkbox-filter [(filterModels)]="filterModels[MedicalHistoryAlertName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="false">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showTreatmentPlan">
+                        <report-checkbox-filter [(filterModels)]="filterModels[TreatmentPlanName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showServiceCodeStatus">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ServiceCodeStatusName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showAging">
+                        <report-radio-filter [(filterModels)]="filterModels[AgingName]" (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+                    <div *ngIf="showAgingOption">
+                        <report-numeric-filter [(filterModels)]="filterModels[AgingOptionName]" [angingOption]="angingOption"
+                                               (onChanged)="checkModelValidity($event)" (changeData)="checkFilterdto($event)"></report-numeric-filter>
+                    </div>
+                    <div *ngIf="showClaimTypes">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ClaimTypesName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="showClaimStatus">
+                        <report-checkbox-filter [(filterModels)]="filterModels[ClaimStatusName]"
+                                                (onChanged)="onChangedFromChild($event)" (showMoreParent)="setPartialList($event)" [useAllOptionInDto]="true">
+                        </report-checkbox-filter>
+                    </div>
+                    <div *ngIf="ShowInsuranceAdjustmentMode">
+                        <report-radio-filter [(filterModels)]="filterModels[InsuranceAdjustmentModeName]" (changeData)="checkFilterdto($event)"></report-radio-filter>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="text-align-right padding-right-10">
+            <button tabindex="1" class="btn btn-default btn-mar" (click)="saveFilters();"
+                    [disabled]="buttonDisabled || !isValid || !isValidDates"
+                    id="btnSaveFilters"
+                    >{{'Save Filters' | translate }}</button>
+            <button tabindex="2" class="btn btn-default btn-mar" (click)="resetFilters();"  [disabled]="buttonDisabled"
+                    id="btnReset">{{'Reset' | translate }}</button>
+            <button tabindex="3" class="btn btn-primary" [disabled]="(!isValidDates || !isValid || filtersLoading) || (buttonDisabled && (fromType !== 'fromReports' && fromType !== 'fromInsurance'))"
+                    (click)="filtersLoading || applyFilters()" id="btnApplyFilters">{{'Apply Filters' | translate }}</button>
+        </div>
+    </div>
+</div>

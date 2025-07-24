@@ -1,0 +1,71 @@
+
+<form class="form-horizontal" [formGroup]="addCommunicationCenter" (ngSubmit)="addCommunication()">
+  <div class="addrecord_wrapper">
+    <div class="type_wrapper">
+      <label class="control-label" for="communicationtype"> {{ 'Type' | translate }} <span
+        class="required">*</span> </label>
+      <select id="communicationtype" (change)='onTypeSelected()' formControlName="CommunicationType"
+        class="form-control addrecord_selectlist" >
+        <option value="0" selected>{{'Select Options' | translate}}</option>
+        <option [value]='communicationtype.value' *ngFor="let communicationtype of communicationConstants.CommunicationTypes">
+          {{communicationtype.text}}</option>
+      </select>
+    </div>
+    <div class="category_wrapper">
+      <label class="control-label" for="communicationCategory"> {{ 'Category' | translate }} <span
+        class="required">*</span> </label>
+      <select id="communicationCategory" (change)='onCategorySelected($event)' formControlName="CommunicationCategory"
+        class="form-control addrecord_selectlist" >
+        <option value="0" selected>{{'Select Options' | translate}}</option>
+        <option [value]='communicationCategory.value' kendoTooltip position="top" tooltipClass="app-tooltip"
+          title="{{!isResponsiblePerson && communicationCategory.text == 'Account' ? 'A Responsible Party for this patient does not exist' : ''}}"
+          [attr.disabled]="!isResponsiblePerson && communicationCategory.text == 'Account' ? 'disabled' : null"
+          *ngFor="let communicationCategory of communicationConstants.CommunicationCategories">
+          {{communicationCategory.text}}
+        </option>
+      </select>
+    </div>
+    <div class="reason_wrapper">
+      <label class="control-label" for="communicationReason"> {{ 'Reason' | translate }} <span
+        class="required">*</span> </label>
+      <select id="communicationReason" (change)='onReasonChange()' formControlName="Reason"
+         class="form-control addrecord_selectlist">
+        <option value="0">{{'Select Options' | translate}}</option>
+        <option [value]='communicationReason.value' *ngFor="let communicationReason of communicationReasons">
+          {{communicationReason.text}}</option>
+      </select>
+    </div>
+    
+    <div id="rdbCommunication" class="communication_wrapper">
+      <label class="control-label"> {{ 'Communication' | translate }} </label>
+      <div class="rdb_wrapper">
+        <app-radio-button id="rdbOther" (change)='onRbChange()' formControlName="Status"
+          label="{{ 'Other' | translate }}" [value]="'0'" [checked]="getCheckedStatus('0')"></app-radio-button>
+        <app-radio-button id="rdbStatus" (change)='onRbChange()' formControlName="Status"
+          label="{{ 'Sent' | translate }}" [value]="'1'" [checked]="getCheckedStatus('1')"></app-radio-button>
+        <app-radio-button id="rdbReceived" (change)='onRbChange()' formControlName="Status"
+          label="{{ 'Received' | translate }}" [value]="'2'" [checked]="getCheckedStatus('2')"></app-radio-button>
+      </div>
+    </div>
+    <div class="notes_wrapper">
+      <label class="control-label"> {{ 'Notes' | translate }} <span
+        class="required">*</span> </label>
+      <textarea [style.height.px]="height" (window:resize)="onResize($event)" #note id="communicationNotes" formControlName="Notes"  (change)='onNotesChange()'
+        class="form-input form-textarea" (blur)='updateNotes($event)' onkeyup="this.value = this.value.replace(/[<>]/g, '')" 
+        maxlength="{{accountNoteMaxLength}}"></textarea>
+    </div>
+    <div class="editedby_wrapper" id="drawer-editedby" *ngIf="isModified">
+      <label class="control-label"> {{ 'Edited By:' | translate }} </label>
+      {{editedBy}}
+    </div>
+    <div class="btn_wrapper">
+      <button id="btnSave" class="btn btn-primary btn_addrecord btn_submit_addrecord" type="submit"
+        [ngClass]="{'disabled' : (!hasCreateAccess)}" (mouseover)="toolTipText()"
+        [disabled]="!(addCommunicationCenter.valid && addCommunicationCenter.dirty)" kendoTooltip position="top"
+        tooltipClass="app-tooltip"
+        title="{{!hasCreateAccess ? toolTipMessage : ''}}">
+        {{ 'Save' | translate }}
+      </button>
+    </div>
+  </div>
+</form>

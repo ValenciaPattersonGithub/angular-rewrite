@@ -1,0 +1,51 @@
+﻿<div ng-controller="OpenClinicalNotesController" class="soarWidget openClinicalNotes">
+    <div class="widget-handle panel-heading landingContainer__heading soarWidget__header openClinicalNotes__header">
+        <label class="note-count">{{openClinicalNotes.length}}</label>
+        <label>  -  </label>
+        <label>{{data.Title}}</label>
+        <div class="filterRow">
+            <div class="dropdownWrapper">
+                <soar-select-list id="inpOpenClinNoteWidgetLocation"
+                                  name="inpOpenClinNoteWidgetLocation"                                  
+                                  text-field="Text"
+                                  value-field="Value"
+                                  sb-tab="12"
+                                  option-list="locationOptions"
+                                  ng-model="selectedLocation.LocationId">
+                </soar-select-list>                
+            </div>
+            <div class="dropdownWrapper">
+                <provider-selector input-id="inpOpenClinNoteWidgetProvider"
+                                   filter-by-multiple-locations="locationIdsForProviderDropdown" 
+                                   exception-provider-id="currentUserId"
+                                   set-preferred="false"
+                                   required="false"
+                                   provider-type-ids="[1,2,3,5]"
+                                   filter-inactive-providers="true"
+                                   selected-provider="selectedProvider.ProviderId"
+                                   sb-change="assignedProviderChanged"
+                                   sort-for-clinical-notes="false"
+                                   place-holder="providerPlaceHolder">
+                </provider-selector>
+            </div>            
+        </div>
+    </div>
+    <div class="soarWidget__body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="patient">Patient</th>
+                    <th class="note">Note</th>
+                    <th class="time-left">Time Left</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in openClinicalNotes">
+                    <td title="{{x.PatientName}}" class="patient">{{x.PatientName}}</td>
+                    <td title="{{x.NoteTitle}}" class="note" ng-click="openPatientTab(x.PatientId);">{{x.NoteTitle}}</td>
+                    <td title="{{x.TimeLeft}}" class="time-left">{{x.TimeLeft}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

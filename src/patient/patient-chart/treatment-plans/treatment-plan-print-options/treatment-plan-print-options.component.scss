@@ -1,0 +1,50 @@
+@import 'variables';
+
+.txPlanPrintOptions {
+    width: 100%;
+
+    .app-modal {
+        height: 100%;
+        display: grid;
+        grid-template: 40px 1fr auto / auto;
+        grid-template-areas: 'header' 'content' 'footer';
+    }
+
+    .app-modal-header {
+        grid-area: header;
+        font-size: $app-modal-header-font-size;
+        font-weight: $app-modal-header-font-weight;
+        font-family: $global-font-family;
+        border-bottom: $app-modal-header-border;
+        display: flex;
+        align-items: center;
+        padding-left: 15px;
+    }
+
+    .app-modal-body {
+        grid-area: content;
+        padding: 15px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .app-modal-footer {
+        grid-area: footer;
+        padding: 15px;
+        border-top: $app-modal-header-border;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .app-modal-bold-text {
+        font-weight: bold;
+    }
+
+    .app-modal-text {
+        font-weight: normal;
+    }
+
+    .options-container {
+        width: 100%;
+    }
+}

@@ -1,0 +1,41 @@
+﻿
+<div class="row">
+    <div class="col-xs-12 truncate">
+        <button class="btn btn-link pull-right padding-none" style="margin-right:10px;" id="btnDragArrow"><span><i class="fas fa-arrows-alt fa-lg"></i></span></button>
+        <button class="btn btn-link pull-left padding-none" id="btnSearchBino"><span><i class="fa fa-binoculars fa-lg"></i></span></button>
+        <span id="lbl{{uniqueId}}UnscheduledName{{$index}}">
+            <!-- Change this to a single property before putting on the view the format can be derived and changed before hand if it is not on the view like this. -->
+            <strong style="margin-left: 10px;">{{ data.Patient.FirstName }}{{ data.Patient.MiddleName ? ' ' + data.Patient.MiddleName + '.' : '' }} {{ data.Patient.LastName }}{{ data.Patient.Suffix ? ', ' + data.Patient.Suffix : '' }}{{ data.Patient.PreferredName ? ' (' + data.Patient.PreferredName + ')' : '' }}</strong>
+        </span>
+    </div>
+    <div class="col-xs-12 truncate">
+        <span style="margin-left: 30px;" id="lbl{{uniqueId}}UnscheduledAppointmentType{{$index}}" ng-if="data.AppointmentType">
+            {{ data.AppointmentType.Name }}
+        </span>
+        <span style="margin-left: 30px;" id="lbl{{uniqueId}}NoAppointmentType{{$index}}" class="text-muted" ng-if="!data.AppointmentType">
+            {{ ::('No Appointment Type' | i18n) }}
+        </span>
+        <span id="lbl{{uniqueId}}UnscheduledAppointmentTypeDuration{{$index}}" ng-if="data.ProposedDuration">
+            ({{ data.ProposedDuration }} {{ ::('minutes' | i18n) }})
+        </span>
+    </div>
+    <div class="col-xs-12 truncate">
+        <span style="margin-left: 30px;" id="lbl{{uniqueId}}ExaminingDentist{{$index}}" ng-if="data.ExaminingDentist">
+            {{ providerFunction(data.ExaminingDentist) }}
+        </span>
+    </div>
+    <div class="col-xs-12 truncate">
+        <span style="margin-left: 30px;" id="lbl{{uniqueId}}UnscheduledProvider{{$index}}" ng-if="data.UserId">
+            {{ providerFunction(data.UserId) }},
+        </span>
+        <span style="margin-left: 30px;" id="lbl{{uniqueId}}AnyProvider{{$index}}" ng-if="!data.UserId">{{ ::('Any Provider' | i18n) }},</span>
+        <span id="lbl{{uniqueId}}UnscheduledAppointmentAmount{{$index}}">{{ data.amount | currency }}</span>
+        <span ng-repeat="alert in data.Alerts" class="pull-right">
+            <span id="lbl{{uniqueId}}UnscheduledAlert{{$index}}" ng-if="$index < 4" class="error fa {{ alerts.getClassById(alert.SymbolId) }}" title="{{ alert.Description }}"></span>
+            <span id="lbl{{uniqueId}}UnscheduledAlertTotal" ng-if="$index >= 4 && $last">+{{ $last - 4 }}</span>
+        </span>
+    </div>
+    <div class="col-xs-12 truncate">
+        <button check-auth-z="soar-sch-sptapt-delete" id="btn{{uniqueId}}UnscheduledAppointmentDelete" ng-click="deleteFunction(data)" class="btn btn-link pull-right padding-none" style="margin-right:10px;"><span><i class="far fa-times-circle fa-lg"></i></span></button>
+    </div>
+</div>

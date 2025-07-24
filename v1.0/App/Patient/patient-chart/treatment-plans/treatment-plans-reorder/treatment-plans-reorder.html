@@ -1,0 +1,45 @@
+﻿<div class="txPlanReorder">
+    <div class="txPlanReorder__header">
+        <div class="txPlanReorder__nav">
+            <div class="txPlanReorder__navPrimary">
+                <div class="txPlanReorder__navPrimaryGroup">
+                    <button ng-click="close()" class="btn btn-link txPlanReorder__navIcon pull-right" uib-tooltip="{{ ::('Close' | i18n) }}">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <h2 class="txPlanReorder__title">
+                        <span title="{{ treatmentPlanName }}">
+                            {{ treatmentPlanName }}
+                        </span>
+                    </h2>
+                </div>
+                <hr style="margin: 10px 0 10px 0;">
+                <div class="txPlanReorder__headerInfo">
+                    <div class="pull-left">
+                        <span class="txDetailLabel" style="font-size: 14px;">{{::('Created:' | i18n)}} </span> {{displayCreatedDate | date:'shortDate' }} ({{daysAgo}} {{::('days ago' | i18n) }})
+                        <span style="margin: 0 10px 0 10px;"> | </span>
+                    </div>
+
+                    <div class="pull-left">
+                        <span class="txDetailLabel" style="font-size: 14px;"> {{::('Proposed at:' | i18n)}} </span> {{ proposedAtLocationName }}
+                    </div>
+                </div>
+                <br /><br />
+                <div class="txPlanReorder__body padding-15" style="clear: both;">
+                    <button id="txPlanReorderServicesSave" class="btn txPlan-btn btn-primary" ng-click="save()"
+                            ng-if="activeTreatmentPlan.TreatmentPlanHeader.Status !='Completed'"
+                            uib-tooltip="{{ ::('Save Order' | i18n) }}" tooltip-append-to-body="true" tooltip-placement="top-right"
+                            ng-disabled="hasChanges===false"
+                            check-auth-z="soar-clin-cplan-edit">
+                        {{ ::('Save Order' | i18n) }}
+                    </button>
+                    <button id="txPlanReorderServicesCancel" class="btn txPlan-btn btn-default" ng-click="close() "
+                            uib-tooltip="{{ ::('Cancel' | i18n) }}" tooltip-append-to-body="true" tooltip-placement="top-right"
+                            check-auth-z="soar-clin-cplan-edit">
+                        {{ ::('Cancel' | i18n) }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <old-treatment-plan-services-reorder-view></old-treatment-plan-services-reorder-view>
+</div>

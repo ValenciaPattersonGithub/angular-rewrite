@@ -1,0 +1,107 @@
+//Used all kendo class for kendo dialog design and visibility
+// ::ng-deep will apply the change to kendo popup and :host will apply these changes to current pages only
+
+:host ::ng-deep {
+	.k-window {
+		left: 90px;
+		top: 12%;
+		right: 4%;
+		z-index: 1000 !important;
+	}
+
+	.k-overlay {
+		z-index: 1000 !important;
+	}
+
+	.k-window-content,
+	.k-prompt-container {
+		padding: 0px !important;
+		overflow: hidden;
+	}
+
+	.k-dialog .k-content {
+		padding: 0px !important;
+	}
+
+	.modal-body {
+		.pull-right {
+			button {
+				font-family: 'Font Awesome 5 Pro';
+				font-weight: 900;
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+.modal-body.setScroll {
+	max-height: 500px;
+    overflow: auto;
+    padding: 8px;
+    overflow-x: hidden;
+}
+
+.modal-body {
+    position: relative;
+    padding: unset;
+}
+
+.btn-margin-right {
+	margin-right: 4px;
+}
+
+.modal-header {
+    position: relative;
+    bottom: 12px;
+}
+
+#formgrp{
+	position: relative;
+    bottom: 6px;
+}
+
+.table {
+    width: 96%;
+    max-width: 98%;
+    margin-bottom: 20px;
+}
+
+.pull-right{
+	margin-right: 18px;
+}
+
+.swiftPickFooter__btn {
+    display: inline-block;
+    margin-right: 16px;
+    float: right;
+    margin-top: -38px;
+    margin-bottom: 0px;
+    padding-top: 20px !important;
+}
+
+#swiftWidth {
+	width: 86% !important;
+}
+.swiftPickCode {
+	::ng-deep .k-autocomplete .k-input {
+		height: 33px !important;
+	}
+	::ng-deep #kendoSearchId .k-searchbar::after {
+		font-family: 'Font Awesome 5 Pro';
+		content: "\f002";
+		margin-right: 5px;
+		margin-left: 5px;
+		margin-top: 12px !important;
+	}
+	::ng-deep #kendoSearchId .k-searchbar::before {
+		content: "" !important;
+	}
+	::ng-deep .k-icon.k-clear-value.k-i-close {
+		padding-right: 20px;
+		opacity: 1;
+	}
+	.btnServiceCodeSelect{
+		margin-left: -50px;
+		padding-left: 0px;
+	}
+}

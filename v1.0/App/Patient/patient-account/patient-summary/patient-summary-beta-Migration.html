@@ -1,0 +1,66 @@
+<div class="patient-summary">
+    <div ng-class="'fade-in'"
+        ng-controller="patientSummaryBetaMigrationController">
+
+        <balance-detail-row data="dataForBalanceDetailRow"
+            selected-patient-id="filterObject.members"
+            get-latest-details="doRefresh"
+            refresh-summary-page="reloadPage"
+            filtered-account-members="selectedAccountMembers"></balance-detail-row>
+
+        <div class="encounterActions row">
+            <div class="encounterActions__add">
+                <div class="row">
+                    <button id="btnAddNewEncounterPage"
+                        class="btn btn-default btn-new-encounter"
+                        check-auth-z="{{::soarAuthEnctrAddKey}}"
+                        ng-click='addNewEncounter(patient.Data.PatientId, patient.Data.PersonAccount.AccountId)'>
+                        {{ 'Add New Encounter' | i18n }}
+                    </button>
+                    <!-- temporarily we are proceeding with development without filters, This should be resolved later -->
+                    <!--<button id="btnShowFilters" type="button" class="btn btn-default" ng-click="showFilters()">
+                        <span ng-show="!filtersApplied">{{ 'Filter' | i18n }}</span>
+                        <span ng-show="filtersApplied">{{ 'Filters: ON' | i18n }}</span>
+                    </button>-->
+                    <unapplied-menu id="totalUnappliedMenu"
+                        unapplied-transactions="unappliedTransactions"
+                        current-patient-id="currentPatientId"
+                        refresh-data="refreshSummaryPageDataForGrid"
+                        show-unapplied-total="true"></unapplied-menu>
+                </div>
+                <div class="row"
+                    tooltip-enable="!checkoutAllIsAllowed"
+                    uib-tooltip="{{disableAllPendingEncountersTooltip}}"
+                    tooltip-placement="top-right">
+                    <a ng-if="PendingEncounters.length > 1"
+                        check-auth-z="{{::soarAuthEnctrChkOutKey}}"
+                        ng-class="{'disabled': !checkoutAllIsAllowed}"
+                        ng-click="checkoutAllPendingEncounters();"
+                        id="btnCheckoutAllEncounters">
+                        {{:: 'Check out All Pending Encounters' | i18n }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <patient-account-summary-grid [patient]="patient"
+            [locations]="locations"
+            [pending-encounters]="PendingEncounters"
+            [rows]="Rows"
+            [current-patient-id]="currentPatientId"
+            (refresh-data-tx)="refreshSummaryPageDataForGrid($event)"
+            (edit-account-summary-row-detail)="editAccountSummaryRowDetail($event)"
+            (delete-insurance-payment)="deleteInsurancePayment($event)"
+            (edit-acct-payment-or-neg-adjustment-modal)="editAcctPaymentOrNegAdjustmentModal($event)"
+            (delete-acct-payment-or-neg-adjustment-modal)="deleteAcctPaymentOrNegAdjustmentModal($event)"
+            (apply-payment)="applyPayment($event)"
+            (apply-adjustment)="applyAdjustment($event)"
+            (create-claim)="createClaim($event)"
+            (view-account-note)="viewAccountNote($event)"
+            (edit-account-note)="editAccountNote($event)"
+            (delete-account-note)="deleteAccountNote($event)"
+            (view-eob)="viewEob($event)"
+            (view-invoice)="viewInvoice($event)"
+            (create-current-invoice)="createCurrentInvoice($event)">
+        </patient-account-summary-grid>
+    </div>
+</div>

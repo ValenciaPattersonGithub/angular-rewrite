@@ -1,0 +1,14 @@
+﻿<div class="confModalWithInc">
+    <div class="modal-header"><h4 id="lblWarningModalHeader">{{ item.Title | i18n }}</h4></div>
+    <div class="modal-body confModalWithInc__modalBody">
+        <label id="lblWarningModalUpperMessage">{{ item.UpperMessage }}</label>
+        <ng-include src=item.SourceUrl></ng-include>
+            <label id="lblWarningModalLowerMessage">{{ item.LowerMessage }}</label>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right">
+            <button id="btnCancelNo" ng-show="item.Button2Text?true:false" ng-click="close();" class="btn btn-link">{{ item.Button2Text | i18n }}</button>
+            <button id="btnOK" ng-click="confirm();" class="btn btn-primary">{{ item.Button1Text | i18n }}</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+﻿<div>
+    <div ng-if="!loading" class="modal-content ">
+        <div id="createNote" class="createNote-modal">
+            <div class="modal-header">
+                <button class="prevCare__secClose" icon="fa-times" ng-click="cancelChanges()"></button>
+                <h4 class="modal-title">{{getTitle()}}</h4>
+            </div>
+
+            <div class="modal-body">
+                <label class="control-label">{{'Date' | i18n}}</label>
+                <div class="form-row">
+                    <div class="form-group form-col-4">
+                        <div class="date-selector-container">
+                            <date-selector input-id="inpDate" date-var="dataPersonAccountNote.Date"
+                                           disable-date-input="isAddmode"
+                                           min-date="minDate"
+                                           max-date="maxDate"
+                                           valid="dateIsValid"
+                                           format="MM/dd/yyyy"
+                                           tab-index="1"
+                                           ng-model="dataPersonAccountNote.Date">
+                            </date-selector>
+                        </div>
+                    </div>
+                </div>
+                <label class="control-label">{{'Patient' | i18n}}</label>
+                <div class="form-row">
+                    <div class="form-group form-col-8">
+                        <soar-select-list id="selectAcctMember"
+                                          name="selectAcctMember"
+                                          text-field="PatientDetailedName"
+                                          value-field="index"
+                                          option-list="accountMemberLists"
+                                          disable-input="!isAddmode"
+                                          sb-required="required"
+                                          sb-change="patientChanged"
+                                          ng-model="patientIndex">
+                        </soar-select-list>
+                    </div>
+                </div>
+                <label class="control-label">{{'Location' | i18n}}</label>
+                <div class="form-row">
+                    <div class="form-group form-col-8">
+                        <soar-select-list id="selectLocation"
+                                          name="selectLocation"
+                                          text-field="NameLine1"
+                                          value-field="LocationId"
+                                          option-list="locations"
+                                          disable-input="!isAddmode"
+                                          sb-required="required"
+                                          sb-change="locationChanged"
+                                          ng-model="dataPersonAccountNote.LocationId">
+                        </soar-select-list>
+                    </div>
+                </div>
+                <label class="control-label">{{'Description' | i18n}}</label>
+                <div class="form-row">
+                    <div class="form-group form-col-12">
+                        <textarea ng-disabled="!isAddmode" id="inpDesc" ng-model="dataPersonAccountNote.Description" ng-change="descriptionChanged()" required class="form-control required valid" placeholder="{{ 'Description' | i18n }}"
+                                  maxlength="2000" rows="5"> </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnNoteModalCancel" type="button" class="btn btn-default" ng-click="cancelChanges()">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSave" ng-disabled="disableSave || !isAddmode || !validChange" ng-click="save()">Save </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

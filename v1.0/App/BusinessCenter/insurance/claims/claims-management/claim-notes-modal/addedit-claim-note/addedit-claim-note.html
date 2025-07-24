@@ -1,0 +1,24 @@
+﻿<div class="addeditnote">
+    <div class="modal-header">
+        <h4>{{ modalTitle | i18n }}</h4>
+        <div class="pull-right">
+            <button id="btnClose" ng-click="close()" class="btn btn-link fa fa-times icon-click"></button>
+        </div>
+    </div>
+    <div class="col-xs-12 modal-body addeditnote__fullBorderBottom">
+        <div class="form-row">
+            <div class="form-group form-col-12" ng-class="{'has-error': hasErrors && ! isValid.Note }">
+                <textarea id="inpDesc" rows="6" required ng-model="claimNote.Note" class="form-control required valid" maxlength="500">
+                        </textarea>
+                <span id="lblDescRequired" class="help-block" ng-show="!isValid.Note ">
+                    {{ 'This field is required.' | i18n }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="close()">{{ 'Cancel' | i18n }}</button>
+        <button type="button" ng-disabled="claimNote.Note === undefined || (claimNote.isEditClaim ? isSaveDisabled() : claimNote.Note.length == 0)"
+            class="btn btn-primary" ng-click="save()">{{ 'Save' | i18n }} </button>
+    </div>
+</div>

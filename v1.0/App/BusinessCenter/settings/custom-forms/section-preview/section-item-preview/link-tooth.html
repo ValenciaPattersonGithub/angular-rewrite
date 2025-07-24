@@ -1,0 +1,24 @@
+﻿<div ng-form="frmLinkToothSectionItem{{sectionIndex}}" ng-class="{'form-group' : !sectionItem.$$isMHF}">
+    <div ng-class="{'has-error':hasErrors && sectionItem.$$InvalidAnswer===true}">
+        <div class="row">
+            <div ng-class="{'col-md-11' : !sectionItem.$$isMHF, 'col-md-6' : sectionItem.$$isMHF}">
+                <label id="lblSectionItemText{{sectionIndex}}_{{sectionItemPreviewIndex}}" class="control-label">
+                    {{ sectionItem.FormBankItem.ItemText }}
+                    <span id="sectionItemIsRequired{{sectionIndex}}_{{sectionItemPreviewIndex}}" ng-show="sectionItem.IsRequired" class="bold padding5 size-h4">*</span>
+                </label>
+                <skip-prompt></skip-prompt>
+            </div>
+           
+            <div ng-class="{'col-md-6' : !sectionItem.$$isMHF, 'col-md-4' : sectionItem.$$isMHF}">
+                <select id="kendoSelect{{sectionIndex}}_{{sectionItemPreviewIndex}}"
+                        kendo-multi-select ng-disabled="inputIsDisabled || sectionItem.$$Skip" 
+                        k-options="sectionItem.$$TeethSelectOptions"
+                        k-ng-model="sectionItem.$$activeTeeth"></select>
+            </div>
+        </div>
+        <label id="lblSectionFormBankItemRequired_{{sectionItemPreviewIndex}}" class="help-block"
+               ng-show="hasErrors && sectionItem.$$InvalidAnswer===true">
+            {{ 'This field is required.' | i18n }}
+        </label>
+    </div>
+</div>

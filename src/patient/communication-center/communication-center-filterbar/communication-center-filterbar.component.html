@@ -1,0 +1,35 @@
+<div class="filterbar_wrapper">
+        <div id="comm-filterbar-sort" class="sort_wrapper">
+                <div class="sort_element">
+                        <app-select id="sortList" [listItems]="sortList" [value]="selectedSortItem" [label]="'Sort'"
+                                (selectionChange)='onSortSelected($event)'></app-select>
+                </div>
+        </div>
+        <div id="comm-filterbar-category" class="category_wrapper">
+                <div class="category_element">
+                        <app-select id="categoryList" [listItems]="categoryList" [value]="selectedCategoryItem" [label]="'Category'"
+                                (selectionChange)='onCategorySelected($event)'></app-select>
+                </div>
+        </div>
+        <div id="comm-filterbar-startdate" class="start_wrapper">
+                <div class="startDate_picker">
+                        <app-date-picker [label]="'Start'" [maxDate]="maxDate" [id]="'cs_startdate'" [value]="minDate"
+                                [placeholder]="dateplaceHolder" (dateChanged)="OnStartDateChanged($event)">
+                        </app-date-picker>
+                </div>
+        </div>
+        <div class="startDate_error_wrapper">
+                <span *ngIf="startDateError" class="error">{{'Start date should not be greater than End date' |
+                        translate}}</span>
+        </div>
+        <div class="to_label">{{'To' | translate}}</div>
+        <div id="comm-filterbar-enddate" class="end_wrapper">
+                <app-date-picker [label]="'End'" [maxDate]="maxDate" [id]="'cs_enddate'" [value]="maxDate"
+                        [placeholder]="dateplaceHolder" (dateChanged)="OnEndDateChanged($event)">
+                </app-date-picker>
+        </div>
+        <div class="endDate_error_wrapper">
+                <span *ngIf="endDateError" class="error">{{'End date should not be less than Start date' |
+                        translate}}</span>
+        </div>
+</div>

@@ -1,0 +1,44 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-12 cell" colspan="2">
+                        <div class="text-center">
+                            <h4>{{location.Name}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-5 cell">{{ 'Flag' | i18n }}</th>
+                    <th class="col-sm-7 cell">{{ 'Patient' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="flag in location.Flags" class="stripOdd">
+                <tr ng-repeat="patient in flag.Patients">
+                    <td class="col-sm-5 cell" ng-if="$index === 0">{{ flag.Name }}</td>
+                    <td class="col-sm-5 cell" ng-if="$index !== 0"></td>
+                    <td class="col-sm-7 cell">{{ patient }}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-5 cell"></td>
+                    <td class="col-sm-7 cell reportGrid__label">{{ 'Total' | i18n }}: {{ flag.Patients.length }}</td>
+                </tr>
+            </tbody>
+            <tbody ng-if="location.CustomFlags && location.CustomFlags.length !== 0" class="stripOdd">
+                <tr>
+                    <th class="col-sm-5 cell">{{ 'Custom Flag' | i18n }}</th>
+                    <th class="col-sm-7 cell">{{ 'Patient' | i18n }}</th>
+                </tr>
+                <tr ng-repeat-start="customFlag in location.CustomFlags"></tr>
+                <tr ng-repeat-end ng-repeat="patient in customFlag.Patients">
+                    <td class="col-sm-5 cell">{{ customFlag.Name }}</td>
+                    <td class="col-sm-7 cell">{{ patient }}</td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

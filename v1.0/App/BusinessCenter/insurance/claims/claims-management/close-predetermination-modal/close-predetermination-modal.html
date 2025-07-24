@@ -1,0 +1,13 @@
+﻿<div class="modal-header"><h4 id="lblAreYouSureHeader">{{ 'Are you sure you want to {0}' | i18n:['close this predetermination?'] }}</h4></div>
+
+<div class="col-xs-12 modal-body">
+    <label for="closePredNotes">{{ 'Note' | i18n }}</label>
+    <textarea id="closePredNotes" rows="4" ng-model="note" maxlength="500"></textarea>
+</div>
+
+<div class="modal-footer">
+    <div>
+        <button id="btnCancel" ng-disabled="disableCancel" ng-click="cancelClosePredetermination();" class="btn btn-default">{{ 'Cancel' | i18n }}</button>
+        <button id="btnContinue" ng-click="closePredetermination();" class="btn btn-primary">{{ 'Continue' | i18n }}</button>
+    </div>
+</div>

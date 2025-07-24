@@ -1,0 +1,143 @@
+﻿<div class="closeClaimModal">
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>
+                    {{'Close Claim'| i18n}}
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="closeClaim__body">
+        <div class="closeClaim__patientName" ng-hide="isFromInsurancePayment">
+            {{'Patient ' + patientName | i18n}}
+        </div>
+        <div class="closeClaim__patientName" ng-show="isFromInsurancePayment">
+            {{claimInformationSummary}}
+        </div>
+		<div class="col-sm-12 row two-col">
+			<div class="col-sm-6 border-right">
+				<i id="idBalanceSpinner" ng-if="!showEstInsurance" class="fa fa-spinner fa-spin loading"></i>
+				<div class="closeClaim__formAgg" ng-if="showEstInsurance">
+					<div class="form-inline col-sm-12">
+						<div class="form-group col-sm-5" ng-class="{'has-error': hasErrorStatement}">
+							<label data-qa="close-claim-lbl-est-total" class="control-label">{{ 'Estimated Total' | i18n }}:</label>
+						</div>
+						<div class="form-group col-sm-7">
+							<input class="form-control" type="text" unique-id="inpEstimatedTotal" name="estInsurance" value="{{ totalEstimatedInsurance | currency }}" disabled />
+							<span class="control-span" ng-if="hasError"></span> <!-- Whatever the error message is -->
+						</div>
+					</div>
+					<div class="form-inline col-sm-12">
+						<div class="form-group col-sm-5" ng-class="{'has-error': hasErrorStatement}">
+							<label data-qa="close-claim-lbl-total-paid"  class="control-label">{{ 'Total Paid' | i18n }}:</label>
+						</div>
+						<div class="form-group col-sm-7">
+							<input data-qa="close-claim-inp-less-tot-paid"  class="form-control" type="text" unique-id="inpLessTotalPaid" name="lessTotalPaid" value="{{ estInsurancePaid | currency }}" disabled />
+							<span class="help-block" ng-if="hasError"></span> <!-- Whatever the error message is -->
+						</div>
+					</div>
+					<hr />
+					<div class="form-inline col-sm-12">
+						<div class="form-group col-sm-5" ng-class="{'has-error': hasErrorStatement}">
+							<label data-qa="close-claim-lbl-unpaid-est-ins"  class="control-label">{{ 'Unpaid Est. Ins.' | i18n }}:</label>
+						</div>
+						<div class="form-group col-sm-7">
+							<span class="inputIconGroup">
+								<input data-qa="close-claim-inp-total-unpaid-amt" class="form-control" type="text" unique-id="inpEstimatedTotal" name="inpUnpaidAmount" value="{{ totalUnpaidAmount < 0 ? 0 : totalUnpaidAmount | currency }}" disabled />
+								<i class="info fa fa-info-circle fa-1x" uib-tooltip="{{ 'Insurance paid more than estimated.' | i18n }}" ng-show="totalUnpaidAmount < 0"></i>
+							</span>
+							<span class="help-block" ng-if="hasError"></span> <!-- Whatever the error message is -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row col-sm-6">
+				<div class="col-sm-12">
+					<checkbox checkbox-id="closeClaimUpdateAgingDates" type="checkbox" checkbox-value="updateAgingDates" ng-model="updateAgingDates" checkbox-label="'Assign services to current balance'" />
+				</div>
+				<div class="col-sm-12" ng-hide="isFromInsurancePayment">
+					<checkbox data-qa="close-claim-chk-no-ins-pmnt"  checkbox-id="ckbNoInsurancePayment" ng-model="noInsurancePayment" checkbox-value="noInsurancePayment" checkbox-label="'No insurance payment'"></checkbox>
+				</div>
+				<div class="col-sm-12" ng-hide="removeCancel" tooltip-placement="auto top" tooltip-enable="patientBenefitPlan[0].IsDeleted" uib-tooltip="{{ 'This benefit plan is no longer attached to the patient' | i18n }}">
+					<checkbox data-qa="close-claim-chk-recreate-claim" checkbox-id="ckbRecreateClaim" checkbox-value="recreateClaimSelected" ng-model="recreateClaimSelected" checkbox-label="'Recreate Claim'" ng-show="canReCreateClaim" checkbox-disabled="patientBenefitPlan[0].IsDeleted"></checkbox>
+				</div>
+				<div class="col-sm-12 closeClaim__radio">
+                    <label > {{ 'Would you like to:' | i18n }} </label>
+					<radiogroup unique-id="inpClaimActions"
+								ng-show="!recreateClaimSelected"
+								value="claimActionsValue"
+								options="claimActionsOptions"
+								labels="claimActionsLabels"
+								disabled="recreateClaimSelected">
+					</radiogroup>
+                    <radiogroup unique-id="inpEstimateInsuranceOption"  
+                        ng-show="recreateClaimSelected"                      
+                        value="estimateInsuranceOption" 
+                        options="[true, false]" 
+                        labels="estimateInsuranceOptionLabels"                        
+                        disabled="!recreateClaimSelected">
+                    </radiogroup>
+				</div>
+			</div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <label> {{ 'Update Individual Deductible Remaining' | i18n }} </label>
+                <input type="text"
+                       id="indvDeductibleRemaining"
+                       data-qa="close-claim-inp-ind-ded-rem" 
+                       name="indvDeductibleRemaining"
+                       ng-model="individualDeductibleRemaining"
+                       class="form-control"
+                       maxlength="12"
+                       placeholder="{{'0'|currency}}"
+                       model-format="currency"
+                       tabindex="-1"
+                       ng-blur="validateIndvDeductible()"
+                       ng-disabled="patientBenefitPlansDto.length === 0" />
+            </div>
+            <div class="form-group col-sm-4">
+                <label> {{ 'Update Family Deductible Remaining' | i18n }} </label>
+                <input type="text"
+                       id="familyDeductibleRemaining"
+                       data-qa="close-claim-inp-fam-ded-rem"
+                       name="familyDeductibleRemaining"
+                       ng-model="familyDeductibleRemaining"
+                       class="form-control"
+                       maxlength="12"
+                       placeholder="{{'0'|currency}}"
+                       model-format="currency"
+                       tabindex="-1"
+                       ng-blur="validateFamDeductible()"
+                       ng-disabled="patientBenefitPlansDto.length === 0" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <span ng-if="(individualDeductibleRemaining > patientBenefitPlan[0].PolicyHolderBenefitPlanDto.BenefitPlanDto.IndividualDeductible)" class="error help-text">{{'Individual Deductible Remaining may not be greater than the Individual Deductible of ' | i18n}} {{patientBenefitPlan[0].PolicyHolderBenefitPlanDto.BenefitPlanDto.IndividualDeductible | currency}}</span>
+                <span ng-if="(familyDeductibleRemaining > patientBenefitPlan[0].PolicyHolderBenefitPlanDto.BenefitPlanDto.FamilyDeductible)" class="error help-text">{{'Family Deductible Remaining may not be greater than the Family Deductible of ' | i18n}} {{patientBenefitPlan[0].PolicyHolderBenefitPlanDto.BenefitPlanDto.FamilyDeductible | currency}}</span>
+            </div>
+        </div>
+       
+        <div class="row">       
+            <div class="col-xs-12">
+                <label for="inpClosingClaims">{{ 'Notes' | i18n }}</label>
+                <textarea data-qa="close-claim-txt-note" unique-id="closeClaimNotes" name="reason" rows="4" ng-model="note" maxlength="500"></textarea>
+            </div>
+
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-sm-12">
+                <div ng-hide="hideAppliedPaymentWarning" class="closeClaim__redColor">
+                    <span class="glyphicon glyphicon-warning-sign"></span><label>{{'This transaction has a payment or negative adjustment applied to it, deleting it will result in an unapplied amount.'|i18n }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button data-qa="close-claim-btn-cancel" class="btn btn-link" ng-hide="{{hideCancel || isFromInsurancePayment}}" ng-disabled="closing" ng-click="cancel()">{{'Cancel' | i18n}}</button>
+        <button data-qa="close-claim-btn-close-claim" class="btn btn-primary" ng-click="closeClaim()" ng-disabled="closing" ng-if="showEstInsurance">{{closeClaimButtonName}}</button>
+    </div>
+</div>

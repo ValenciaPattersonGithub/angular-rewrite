@@ -1,0 +1,28 @@
+﻿<div class="modal-header" ng-class="'fade-in'">
+    <form name="frmAppointmentTypesCrud" role="form" action="javascript:;" novalidate>
+        <!--Are you sure message-->
+        <div class="modal-header">
+            <div class="row">
+                <h4>{{ ::('Delete Appointment Type' | i18n) }}</h4>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <span id="deleteWarningMessage">
+                    {{ ::('Deleting this appointment type will remove it from all associated appointments and schedule templates.' | i18n) }}
+                    {{ ::('Are you sure you want to delete ' | i18n) }}<b>{{ appointmentType.Name }}</b>?
+                </span>
+            </div>
+        </div>
+        <div class="apptTypesDelDialog">
+            <div class="apptTypesDelDialog__btn">
+                <button id="btnCancelRemove" class="btn btn-link" ng-click="deleteDialogCancel()">
+                    {{ ::('Cancel' | i18n) }}
+                </button>
+                <button id="btnConfirmRemove" check-auth-z="soar-sch-sapttp-delete" class="btn btn-primary" ng-click="deleteDialogOk()">
+                    {{ ::('Yes' | i18n) }}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,368 @@
+﻿.slidePanelLeft {
+    position: fixed;
+    max-width: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    opacity: 0;
+    background-color: @brand-color_white;
+    z-index: 999;
+    padding: 16px 0 16px 16px;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    left: auto;
+    box-shadow: initial;
+
+    .disabled {
+        color: @brand-color_darker-gray;
+        background-color: @brand-color_dark-gray;
+        opacity: 1.0;
+        cursor: not-allowed;
+
+        button {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        &:hover {
+            opacity: 1.0;
+        }
+    }
+
+    &.open {
+        max-width: 100%;
+        opacity: 1;
+    }
+
+    &__close {
+        position: absolute;
+        top: 0;
+        right: 10px;
+    }
+
+    &__header {
+        position: relative;
+        width: 100%;
+
+        h4 {
+            margin-top: 0;
+        }
+    }
+
+    &__header__btns {
+        padding: 12px;
+    }
+
+    &__filteringMask {
+        background: none;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 100;
+    }
+
+    &__filteringMessage {
+        font-weight: bold;
+        position: absolute;
+        right: 200px;
+        top: 7px;
+    }
+
+    &__body {
+        position: relative;
+        width: 100%;
+    }
+
+    &.tabView {
+        margin-top: -456px;
+        margin-left: 13px;
+        height: 400px;
+        max-width: 64.7%;
+    }
+
+    .k-grid-content {
+        height: 458px;
+    }
+
+    .service {
+        margin-top: 13px;
+    }
+
+    .scheduledicon {
+        margin-top: 12px;
+        padding: 0px;
+        margin-left: 15.5px;
+        margin-right: 5px;
+    }
+
+    .insest {
+        padding: 0px;
+    }
+
+    .stage,
+    .txplan {
+        margin-top: 0px;
+        margin-right: 12px;
+        vertical-align: middle;
+    }
+
+    #treatmentKendoGrid {
+        i.inactive-service-warning {
+            color: #f7b82d;
+            vertical-align: text-top;
+            margin-top: 13px;
+            margin-right: -12px;
+            margin-left: -20px;
+        }
+
+        i.inactive-service-warning + div.popover {
+            background: #106c90;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        i.inactive-service-warning ~ .scheduledicon {
+            margin-right: 5px;
+            margin-left: -5px;
+        }
+    }
+}
+.treatmentSelectorEncounter{
+    position: absolute;
+    top: 0%;
+    height: 570px;
+    max-width: 0;
+    opacity: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: @brand-color_white;
+    z-index: 999;
+    padding: 16px;
+    width: 98%;
+    box-shadow: initial;
+
+    &__body {
+        overflow-y: scroll;
+        overflow-x: scroll;
+        max-height: 400px;
+        position: relative;
+        width: 100%;
+    }
+
+    &__bodyHeader {
+        background-color: #eeeeee;
+    }
+    
+    &__row {
+        min-width: 1000px
+    }
+
+
+    &__grid {
+        width: 100%;
+        // margin-left:50px;
+    }
+
+
+    .disabled {
+        color: @brand-color_darker-gray;
+        background-color: @brand-color_dark-gray;
+        opacity: 1.0;
+        cursor: not-allowed;
+
+        button {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        &:hover {
+            opacity: 1.0;
+        }
+    }
+
+    &.open {
+        max-width: 100%;
+        opacity: 1;
+    }
+
+    .closebtn {
+        position: absolute;
+        right: 6px;
+    }
+
+    .k-grid-content {
+        height: 458px;
+    }
+
+    .scheduledicon {
+        margin-top: 12px;
+        padding: 0px;
+        margin-left: 17.5px;
+        margin-right: 5px;
+    }
+
+    .service {
+        margin-top: 13px;
+    }
+
+    .insest {
+        padding: 0px !important;
+    }
+
+    .stage,
+    .txplan {
+        margin-top: 0px;
+        margin-right: 12px;
+        vertical-align: middle;
+    }    
+}
+.treatmentSelectorAppointment {
+    position: absolute;
+    top: 0%;
+    height: 570px;
+    max-width: 0;
+    opacity: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: @brand-color_white;
+    z-index: 999;
+    width: 98%;
+    box-shadow: initial;
+    margin: auto;
+
+    &__body {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        max-height: 400px;
+        position: relative;
+        width: 100%;
+    }
+
+    &__bodyHeader {
+        background-color: #eeeeee;
+    }    
+
+    &__grid {
+        width: 100%;
+        // margin-left:50px;
+    }
+
+
+    .disabled {
+        color: @brand-color_darker-gray;
+        background-color: @brand-color_dark-gray;
+        opacity: 1.0;
+        cursor: not-allowed;
+
+        button {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        &:hover {
+            opacity: 1.0;
+        }
+    }
+
+    &.open {
+        max-width: 100%;
+        opacity: 1;
+        padding: 16px;
+    }
+
+    .closebtn {
+        position: absolute;
+        right: 6px;
+    }
+
+    .k-grid-content {
+        height: 458px;
+    }
+
+    .scheduledicon {
+        margin-top: 12px;
+        padding: 0px;
+        margin-left: 17.5px;
+        margin-right: 5px;
+    }
+
+    .service {
+        margin-top: 13px;
+    }
+
+    .insest {
+        padding: 0px !important;
+    }
+
+    .stage,
+    .txplan {
+        margin-top: 0px;
+        margin-right: 12px;
+        vertical-align: middle;
+    }
+
+    #treatmentKendoGrid {
+        i.inactive-service-warning {
+            color: #f7b82d;
+            vertical-align: text-top;
+            margin-top: 13px;
+            margin-right: -12px;
+            margin-left: -20px;
+        }
+
+        i.inactive-service-warning + div.popover {
+            background: #106c90;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        i.inactive-service-warning ~ .scheduledicon {
+            margin-right: 5px;
+            margin-left: -5px;
+        }
+    }
+}
+.treatmentSelectorRunning{
+    height: 380px;
+    overflow: hidden;
+    background-color: @brand-color_white;
+
+    .disabled {
+        color: @brand-color_darker-gray;
+        background-color: @brand-color_dark-gray;
+        opacity: 1.0;
+        cursor: not-allowed;
+
+        button {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        &:hover {
+            opacity: 1.0;
+        }
+    }
+    .k-grid-content{
+        height: 260px;
+    }
+    .stage,
+    .txplan{
+        margin-top: 0px;
+        margin-right: 12px;
+        vertical-align: middle;
+    }
+    .scheduledicon{
+        margin-top: 12px;
+        padding:0px;
+    }
+    .service{
+        margin-top: 13px;
+    }
+    .insest{
+        padding:0px !important;
+    }
+}
+
+.cbIndent{
+    margin-left: 58%;
+}

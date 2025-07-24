@@ -1,0 +1,168 @@
+﻿.appointmentsGridWidget {
+    height: 100%;
+
+    &__header {
+        height: 23%;
+        min-height: 65px;
+        width: 100%;
+    }
+
+    &__title {
+
+        #appointmentWidgetCalendarInput {
+            visibility: hidden;
+            width: 0px;
+        }
+
+        .dropdown {
+            right: 40px;
+            top: 0px;
+            position: absolute;
+        }
+
+        date-selector {
+            .datepicker {
+                display: inline-block;
+                height: 0;
+            }
+
+            p {
+                display: inline;
+                left: 8px;
+                top: -8px;
+                padding: 0 3px;
+
+                i {
+                    font-size: 24px;
+                }
+            }
+        }
+
+        .widget-handle {
+            display: inline;
+
+            label {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__filters {
+        line-height: 32px;
+        width: 50%;
+
+        div {
+            padding: 0;
+
+            div {
+                padding-left: 5px;
+
+                label {
+                    font-size: 14px;
+                }
+            }
+
+            &:first-child {
+                div:first-child {
+                    padding-left: 0;
+                }
+            }
+        }
+
+        soar-select-list {
+            margin-right: 0;
+        }
+
+        .k-dropdown {
+            width: 100%;
+
+            > .k-dropdown-wrap {
+                height: 32px;
+
+                .k-input {
+                    line-height: normal;
+                }
+            }
+        }
+    }
+
+    multi-select {
+        .multi-select__button {
+            height: 28px;
+            padding: 4px;
+        }
+
+        .multi-select__repeater {
+            max-height: 200px;
+        }
+    }
+
+    .fuseGrid {
+        padding: 0 29px 0 12px;
+
+        .row.header {
+            div {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__body {
+        display: inline-block;
+        height: 68%;
+        width: 100%;
+        overflow-y: scroll;
+
+        .fuseGrid {
+            padding-right: 12px;
+
+            .row {
+                display: table-row;
+            }
+
+            .appointmentsGridWidget__patientLink {
+                white-space: normal;
+            }
+
+            .appointmentWidget__Status {
+                float: right;
+                padding-top: 3px;
+            }
+
+            .iconContainer {
+                div {
+                    display: inline-block;
+                }
+
+                .medicalAlert {
+                    margin-right: -10px;
+                }
+
+                .allergyAlert {
+                    margin-right: 10px;
+                }
+
+                .premedAlert {
+                    margin-right: 14px;
+                }
+
+                .medicalAlertIcon__notificationBadge {
+                    left: -10px;
+                }
+
+                .medicalAlertIcon__svgNotificationBadge {
+                    left: 10px;
+                }
+
+                .fa {
+                    color: @patient-medical-history-flag-color;
+                }
+
+                .fa.appointmentWidgetNoteIcon {
+                    font-size: 20px;
+                    color: @brand-color_font-regular;
+                }
+            }
+        }
+    }
+}

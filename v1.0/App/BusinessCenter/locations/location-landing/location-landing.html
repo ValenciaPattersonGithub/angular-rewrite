@@ -1,0 +1,37 @@
+﻿<!-- // TODO - need to remove this later
+    <div ng-class="'fade-in'" class="locMgmt">
+    <form name="frmLocationLanding" role="form" action="javascript:;" novalidate>
+        <div class="rowFull">
+            <div class="locMgmt__header">
+                <ul class="locIdentifier__breadcrumb">
+                    <li ng-repeat="breadcrumb in dataForCrudOperation.BreadCrumbs">
+                        <ng-switch on="$last">
+                            <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+                            <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePageState(breadcrumb)"><a href="">{{breadcrumb.name | i18n }}</a></span>
+                        </ng-switch>
+                    </li>
+                </ul>
+
+                <div class="locMgmt__title">
+                    <h1>
+                        {{ 'Locations' | i18n }}
+                    </h1>
+                </div>
+                <div class="locMgmt__actions">
+                    <a id="btnEditLocation" check-auth-z="soar-biz-bizloc-edit" ng-click="onEditBtnClicked()" ng-hide="isAdding || isEditing" class="btn btn-default" href="">{{ 'Edit Location' | i18n }}</a>
+                    <a id="btnAddLocation" check-auth-z="soar-biz-bizloc-add" ng-hide="isAdding || isEditing" ng-click="addLocation()" class="btn btn-primary" icon="fa-plus" href="">{{ 'Add a {0}' | i18n:['Location'] }}</a>
+                    <a id="btnCancel" ng-click="onCancelBtnClicked()" ng-show="isAdding || isEditing" class="btn btn-default" href="">{{ 'Cancel' | i18n }}</a>
+                    <a id="btnSaveLocation" ng-click="onSaveBtnClicked()" ng-show="isAdding || isEditing" class="btn btn-primary" href="">{{ 'Save' | i18n }}</a>
+                </div>
+            </div>
+            <div class="section-divider"></div>
+        </div>
+        <div class="rowFull">
+            <div class="locMgmt__body">
+                <location-search selected-location="selectedLocation" locations="locations" loading-locations="loadingLocations" has-changes="dataForCrudOperation.DataHasChanged"></location-search>
+                <location-crud location="selectedLocation" locations="locations" save-func="saveLocation" edit-func="editLocation" cancel-func="cancelAddEdit" cancel-confirmed="onCancelConfirm" save-successful="onSaveSuccess" loading-locations="loadingLocations" has-changes="dataForCrudOperation.DataHasChanged" ></location-crud>
+             </div>
+         </div>
+    </form>
+</div>
+ -->

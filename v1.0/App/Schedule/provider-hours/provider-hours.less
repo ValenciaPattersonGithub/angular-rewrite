@@ -1,0 +1,101 @@
+﻿.provider-hours {
+    margin: @brand-margin_lg;
+
+    .alwaysOnTop {
+        z-index: 10000000 !important;
+    }
+
+
+    &__breadcrumb {
+        .breadcrumb;
+        margin-bottom: 0;
+        padding: @brand-padding_sm 0 0;
+    }
+
+    &__title {
+        h1 {
+            font-size: @brand-font_h1;
+            margin-top: @brand-margin_sm;
+        }
+    }
+
+    h4 {
+        margin: 0 0 @brand-margin_sm 0;
+    }
+
+    &__customHeader {
+        font-weight: @brand-font_heavy;
+    }
+
+    &__providerList {
+        height: 730px;
+        margin-top: @brand-margin_sm;
+        overflow-y: scroll;
+    }
+
+    .fa-eye {
+    }
+
+    &__showOnSchedule {
+        align-items: center;
+        padding: @brand-padding_sm;
+        display: flex;
+        margin-bottom: @brand-margin_xs;
+        min-height: 60px;
+    }
+
+    &__showOnScheduleInActive {
+        color: grey;
+        align-items: center;
+        padding: @brand-padding_sm;
+        display: flex;
+        margin-bottom: @brand-margin_xs;
+        min-height: 60px;
+    }
+
+    &__providerContainer {
+        align-items: center;
+        color: @brand-color_white;
+        cursor: move;
+        display: flex;
+        margin-bottom: @brand-margin_xs;
+        min-height: 60px;
+        padding: @brand-padding_sm;
+
+        > div {
+            .concatString;
+            flex: 1;
+
+            > span:first-of-type {
+                font-weight: @brand-font_heavy;
+            }
+        }
+    }
+
+    &__eventTemplate {
+        height: 100%;
+    }
+
+    .k-scheduler-toolbar {
+        // showing the toolbar here for date picking / navigation (it is hidden by kendo overrrides for the rest of the app)
+        display: block;
+        height: 48px;
+        padding: 18px 18px 0;
+    }
+
+    .k-scheduler-views {
+        // hides the default views (day, month, etc.) buttons in the upper right
+        display: none;
+    }
+
+    .k-scheduler .k-today:not(.k-nonwork-hour) {
+        // making todays background color match other days
+        background: inherit;
+    }
+
+    .ellipsis-overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

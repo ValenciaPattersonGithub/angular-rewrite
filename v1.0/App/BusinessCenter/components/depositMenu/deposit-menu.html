@@ -1,0 +1,21 @@
+﻿<div class="depositMenu">
+    <div id="btnGroupDeposit{{depositId}}" class="btn-group ">
+        <button id="btnActionMenu{{depositId}}"  data-toggle="{{'dropdown'}}"   class="btn btn-link dropdown-toggle padding-right-10" >
+            <i class="fa fa-ellipsis-v"></i>
+        </button>
+        <ul class="pull-right dropdown-menu col-md-12">
+            <li>
+                <div class="row">
+                    <a id="lnkPrintDeposit" class="margin-left-5 col-md-12" check-auth-z="soar-biz-dep-view" ng-click="printDeposit()">{{ 'Print' | i18n }}</a>
+                </div>
+                <div class="row">
+                    <a id="lnkEditDeposit" class="margin-left-5 col-md-12" check-auth-z="soar-biz-dep-edit" ng-click="editDeposit()">{{ 'Edit' | i18n }}</a>
+                </div>
+                <div class="row">
+                    <a id="lnkdeleteDeposit" class="margin-left-5 col-md-12" check-auth-z="soar-biz-dep-delete" ng-click="deleteDeposit()">{{ 'Delete' | i18n }}</a>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</div>

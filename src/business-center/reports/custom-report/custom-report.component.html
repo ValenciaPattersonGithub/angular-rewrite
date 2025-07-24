@@ -1,0 +1,498 @@
+<style>
+    @media print {
+        @page {
+            margin: 20px 20px auto 20px;
+            size: auto;
+        }
+    }
+</style>
+<ng-container #container></ng-container>
+<!-- <business-navv class="no-print"></business-navv> -->
+<top-navigation [menuType]="'Business'"></top-navigation>
+<div class="customReport" *ngIf="reportId === 'Create' || showGrid" >
+    <div class="rowFull no-print overFlowClass">
+        <div class="rowFull no-print">
+            <div class="customReport__header">
+                <div class="reportPage__title">
+                    <h1>{{originalReport?.Name}}
+                    </h1>
+                </div>
+                <div>
+                    <button class="btn soar-link icon-button font-14" icon="fa-filter" id="showHideBtn"
+                        (click)="showFilters = !showFilters">{{ showFilters ? 'Hide Filters' : 'Show Filters' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form #customReportBody="ngForm" class="rowFull customReport__header" id="customForm">
+        <div [ngClass]="{'col-xs-3': showFilters}" [hidden]="!showFilters" id="filterMenu">
+            <div id="reports-slideout-wrapper" class="no-print" [hidden]="!showFilters">
+                <div class="text-align-right">
+                    <button class="btn soar-link icon-button font-14" title="Hide Filters" (click)="showFilters = !showFilters">
+                      X
+                    </button>
+                  </div>
+                <div class="margin-left-5">
+                    <label>({{filerCount()}}) {{'Filters Selected' | translate}}</label>
+                </div>
+                <div>
+                    <button (click)="toggleAll(!filterExpanded)" class="btn soar-link icon-button font-14"
+                        id="btnExpandCollapse">{{ (filterExpanded ? 'Collapse All' : 'Expand All') | translate}}</button>
+                </div>
+                <div id="filterbox">
+                    <div class="slideOutReportFilter">
+                        <div class="panel-group" id="reportFilters">
+                            <div>
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#reportFilters" data-target="#locationDiv"
+                                        class="soar-link font-weight-bold padding-2 text-left"
+                                        (click)="toggleExpanded(0)">
+                                        <i class="indicator fa"
+                                            [ngClass]="{'fa-chevron-up': !expanded[0], 'fa-chevron-down': expanded[0]}"></i>
+                                        {{ 'Location' | translate}}*
+                                    </a>
+                                </div>
+                                <div class="filter-option panel-collapse collapse reports-slideout" id="locationDiv">
+                                    <ul id="Locations">
+                                        <li>
+                                            <input type="radio" name="Includelocatons" id="IncludeAllLocations"
+                                                check-auth-z="soar-report-custom-update" [value]="true"
+                                                class="locationFilter" [(ngModel)]="report.IncludeAllLocations"
+                                                (change)="selectAllLocations()"> {{ ' All ' | translate }}
+                                        </li>
+                                        <li>
+                                            <input type="radio" name="Includelocatons" id="IncludeSelectedLocations"
+                                                check-auth-z="soar-report-custom-update" [value]="false"
+                                                class="locationFilter" [(ngModel)]="report.IncludeAllLocations">
+                                            {{ ' Selected ' | translate }}
+                                        </li>
+                                        <ng-container *ngFor="let item of locations">
+                                            <li *ngIf="item?.isVisible && report.IncludeAllLocations != 'true'">
+                                                <input type="checkbox" check-auth-z="soar-report-custom-update"
+                                                    attr.id="{{ item?.LocationId }}" class="rprtsFilters"
+                                                    attr.name="{{item?.NameLine1}}"
+                                                    [checked]="report?.LocationIds?.indexOf(item?.LocationId) > -1"
+                                                    (click)="toggleSelect('Location', item?.LocationId)" />{{item?.NameLine1}}
+                                            </li>
+                                        </ng-container>
+                                    </ul>
+                                    <span class="showMore"
+                                        *ngIf="locations.length > showMoreMax && isVisibleShowMorebuttonLocation"
+                                        (click)="showMoreButton(locations, 'Location')" type="button">Show More</span>
+                                    <span class="showMore"
+                                        *ngIf="locations.length > showMoreMax && !isVisibleShowMorebuttonLocation"
+                                        (click)="showLessButton(locations, 'Location')" type="button">Show Less</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#reportFilters" data-target="#providers"
+                                        class="soar-link font-weight-bold padding-2" (click)="toggleExpanded(1)">
+                                        <i class="indicator fa"
+                                            [ngClass]="{'fa-chevron-up': !expanded[1], 'fa-chevron-down': expanded[1]}"></i>
+                                        {{ 'Providers' | translate }}*
+                                    </a>
+                                </div>
+                                <div class="filter-option panel-collapse collapse reports-slideout" id="providers">
+                                    <ul id="Providers">
+                                        <li>
+                                            <input type="radio" name="IncludeProviders" id="IncludeAllProviders"
+                                                check-auth-z="soar-report-custom-update" [value]="true"
+                                                class="providerFilter" [(ngModel)]="report.IncludeAllProviders"
+                                                (change)="selectAllProviders()"> {{ ' All ' | translate }}
+                                        </li>
+                                        <li>
+                                            <input type="radio" name="IncludeProviders" id="IncludeSelectedProviders"
+                                                check-auth-z="soar-report-custom-update" [value]="false"
+                                                class="providerFilter" [(ngModel)]="report.IncludeAllProviders">
+                                            {{ ' Selected ' | translate }}
+                                        </li>
+                                        <ng-container *ngFor="let item of filteredProviders">
+                                            <li *ngIf="item.isVisible && report.IncludeAllProviders != true ">
+                                                <input type="checkbox" check-auth-z="soar-report-custom-update"
+                                                    attr.id="{{ item.UserId }}" class="rprtsFilters" attr.name="{{ item.UserId }}"
+                                                    [checked]="report.ProviderIds.indexOf(item.UserId) > -1"
+                                                    (click)="toggleSelect('Provider', item.UserId)" />{{item.LastName +', '+ item.FirstName + (item.UserCode ? ' - ' + item.UserCode : '')}}
+                                            </li>
+                                        </ng-container>
+                                    </ul>
+                                    <span class="reportPage__showMore"
+                                        *ngIf="providers.length > showMoreMax && isVisibleShowMorebuttonProvider"
+                                        (click)="showMoreButton(providers, 'Provider')" type="button">Show More</span>
+                                    <span class="reportPage__showMore"
+                                        *ngIf="providers.length > showMoreMax && !isVisibleShowMorebuttonProvider"
+                                        (click)="showLessButton(providers, 'Provider')" type="button">Show Less</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#reportFilters" data-target="#patientGroups"
+                                        class="soar-link font-weight-bold padding-2" (click)="toggleExpanded(2)">
+                                        <i class="indicator fa"
+                                            [ngClass]="{'fa-chevron-up': !expanded[2], 'fa-chevron-down': expanded[2]}"></i>
+                                        {{ 'Patient Groups' | translate }}*
+                                    </a>
+                                </div>
+                                <div class="filter-option panel-collapse collapse reports-slideout" id="patientGroups">
+                                    <ul id="PatientGroups">
+                                        <li>
+                                            <input type="radio" name="IncludePatientGroups" id="IncludeAllPatientGroups"
+                                                check-auth-z="soar-report-custom-update" [value]="true"
+                                                class="patientGroupFilter" [(ngModel)]="report.IncludeAllPatientGroups"
+                                                (change)="selectAllPatientGroups()"> {{ ' All ' | translate }}
+                                        </li>
+                                        <li>
+                                            <input type="radio" name="IncludePatientGroups" id="IncludeSeletedPatientGroups"
+                                                check-auth-z="soar-report-custom-update" [value]="false"
+                                                class="patientGroupFilter" [(ngModel)]="report.IncludeAllPatientGroups">
+                                            {{ ' Selected ' | translate }}
+                                        </li>
+                                        <ng-container *ngFor="let item of patientGroups">
+                                            <li *ngIf="item.isVisible && report.IncludeAllPatientGroups != true ">
+                                                <input type="checkbox" check-auth-z="soar-report-custom-update"
+                                                    class="rprtsFilters" name="{{item.GroupTypeName}}" 
+                                                    [checked]="report.PatientGroupIds.indexOf(item.MasterPatientGroupId) > -1"
+                                                    (click)="toggleSelect('PatientGroup', item.MasterPatientGroupId)" />{{item.GroupTypeName}}
+                                            </li>
+                                        </ng-container>
+                                    </ul>
+                                    <span class="reportPage__showMore"
+                                        *ngIf="patientGroups?.length > showMoreMax && isVisibleShowMorebuttonPatientGroup"
+                                        (click)="showMoreButton(patientGroups, 'PatientGroup')" type="button">Show
+                                        More</span>
+                                    <span class="reportPage__showMore"
+                                        *ngIf="patientGroups?.length > showMoreMax && !isVisibleShowMorebuttonPatientGroup"
+                                        (click)="showLessButton(patientGroups, 'PatientGroup')" type="button">Show
+                                        Less</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#reportFilters" data-target="#dateRange"
+                                        class="soar-link font-weight-bold padding-2" (click)="toggleExpanded(3)">
+                                        <i class="indicator fa"
+                                            [ngClass]="{'fa-chevron-up': !expanded[3], 'fa-chevron-down': expanded[3]}"></i>
+                                        {{ 'Date Range' |translate }}
+                                    </a>
+                                </div>
+                                <div class="filter-option panel-collapse collapse reports-slideout" id="dateRange">
+                                    <ul id="DateRange">
+                                        <app-select id="dateRangesDropdown" [value]="report.DateFilter" [listItems]="dateCategories" [label]="" name="dateCategory" [size]="'medium'"
+                                             (selectionChange)="changeOption($event,'DR')"></app-select>
+                                        <li *ngIf="report?.DateFilter === 4">
+                                            <app-date-picker [value]="report.FromDate" [minDate]="minDate" [maxDate]="currentDate" 
+                                            [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"   name="fromDate" id="fromDate"
+                                            (dateChanged)="updateDate($event,'FromDate');"
+                                            ></app-date-picker>
+                                            <p class="error" *ngIf="!report.FromDate">{{invaliDate}}</p>
+                                        </li>
+                                        <li *ngIf="report?.DateFilter === 4">
+                                            <app-date-picker [value]="report.ToDate" [minDate]="minDate" [maxDate]="currentDate" 
+                                            [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"   name="toDate" id="toDate"
+                                            (dateChanged)="updateDate($event,'ToDate');"
+                                            ></app-date-picker>
+                                            <p class="error" *ngIf="!report.ToDate">{{invaliDate}}</p>
+                                        </li>
+                                    </ul>
+                                    <div class="reportPage__errorMsg">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#reportFilters"
+                                        data-target="#originalDateRange" class="soar-link font-weight-bold padding-2"
+                                        (click)="toggleExpanded(4)">
+                                        <i class="indicator fa"
+                                            [ngClass]="{'fa-chevron-up': !expanded[4], 'fa-chevron-down': expanded[4]}"></i>
+                                        {{ 'Original Transaction Date Range' |translate }}
+                                    </a>
+                                </div>
+                                <div class="filter-option panel-collapse collapse reports-slideout"
+                                    id="originalDateRange">
+
+                                    <ul id="ignore">
+                                        <li>
+                                            <input type="radio" name="Ignore" id="ignoreSelect"
+                                                check-auth-z="soar-report-custom-update" [value]="1" class="patientFilter"
+                                                [(ngModel)]="report.Ignore" (change)="changeOption(1, 'OTD')" />
+                                            {{ 'Ignore' | translate }}
+                                        </li>
+                                        <li>
+                                            <input type="radio" name="Ignore" id="selectDate"
+                                                check-auth-z="soar-report-custom-update" [value]="0" class="patientFilter"
+                                                [(ngModel)]="report.Ignore" (change)="changeOption(0, 'OTD')" />
+                                            {{ 'Date Range' | translate }}
+                                        </li>
+                                    </ul>
+
+                                    <ul id="OriginalDateRange" *ngIf="report.Ignore != 1">
+
+                                        <li>
+                                            <app-date-picker [value]="report.origStartDate" [minDate]="minDate" [maxDate]="currentDate" 
+                                            [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"   name="origStartDate" id="origStartDate"
+                                            (dateChanged)="updateDate($event,'origStartDate');"
+                                            ></app-date-picker>
+                                            <p class="error" *ngIf="!report.origStartDate">{{invaliDate}}</p>
+                                        </li>
+                                        <li>
+                                            <app-date-picker [value]="report.origEndtDate" [minDate]="minDate" [maxDate]="currentDate" 
+                                            [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"   name="origEndtDate" id="origEndtDate"
+                                            (dateChanged)="updateDate($event,'origEndtDate');"
+                                            ></app-date-picker>
+                                            <p class="error" *ngIf="!report.origEndtDate">{{invaliDate}}</p>
+                                        </li>
+                                    </ul>
+                                    <div class="reportPage__errorMsg">
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#reportFilters" data-target="#items"
+                                        class="soar-link font-weight-bold padding-2" (click)="toggleExpanded(4)">
+                                        <i class="indicator fa"
+                                            [ngClass]="{'fa-chevron-up': !expanded[5], 'fa-chevron-down': expanded[5]}"></i>
+                                        {{ 'Items to include in report' | translate }}*
+                                    </a>
+                                </div>
+                                <div class="filter-option panel-collapse collapse reports-slideout" id="items">
+                                    <ul id="Items">
+                                        <li>
+                                            <input type="checkbox" name="IncludeProduction" class="rprtsFilters" id="production"
+                                                check-auth-z="soar-report-custom-update"
+                                                [(ngModel)]="report.IncludeProduction" />{{'Production'}}
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="IncludeCollections" id="collections" class="rprtsFilters"
+                                                check-auth-z="soar-report-custom-update"
+                                                [(ngModel)]="report.IncludeCollections"  />{{'Collections'}}
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="IncludeAdjustments" id="adjustments" class="rprtsFilters"
+                                                check-auth-z="soar-report-custom-update"
+                                                [(ngModel)]="report.IncludeAdjustments" />{{'Adjustments'}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="text-align-right padding-right-10">
+                    <button tabindex="1" class="btn btn-default btn-mar" check-auth-z="soar-report-custom-update"
+                        (click)="reset()" id="btnReset">{{'Reset' | translate }}</button>
+                    <button tabindex="2" class="btn btn-default" (click)="applyFilters()" id="btnApplyFilters">
+                        {{'Apply Filters' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div [ngClass]="{'col-xs-9': showFilters, 'col-xs-11': !showFilters}">
+            <div class="row no-print">
+                <div class="col-xs-12">
+                    <h4>{{originalReport.Name && originalReport.Name != '' ? originalReport.Name : 'Create a New Report' | translate}}
+                    </h4>
+                </div>
+            </div>
+            <div class="row no-print">
+                <label for="reportName" class="col-xs-12">{{'Name of Report' | translate}}*</label>
+            </div>
+            <div class="row no-print">
+                <div id="reportName" class="col-xs-8">
+                    <input class="form-control" id="customName" name="Name" check-auth-z="soar-report-custom-update" type="text"
+                        placeholder="Name" maxlength="50" [(ngModel)]="report.Name" />
+                </div>
+            </div>
+            <div class="row no-print" *ngIf="nameError">
+                <div id="reportNameError" class="col-xs-8 error">
+                    {{nameError}}
+                </div>
+            </div>
+            <div class="row no-print">
+                <label for="reportDescription" class="col-xs-12">{{'Description of Report' | translate}}</label>
+            </div>
+            <div class="row no-print">
+                <div id="reportDescription" class="col-xs-8">
+                    <input class="form-control" id="customDescription" name="Description" check-auth-z="soar-report-custom-update" type="text"
+                        placeholder="Optional" maxlength="500" [(ngModel)]="report.Description" />
+                </div>
+            </div>
+            <div class="row no-print">
+                <label for="reportCategory" class="col-xs-8">{{'Report Category' | translate}}*</label>
+            </div>
+            <div class="row no-print">
+                <div class="col-xs-4">
+                    <app-select id="reportCategory" [listItems]="reportCategories" [value]="report.Category" [label]="" name="reportCategory" [size]="'auto'"
+                    (selectionChange)="updateCategory($event)"></app-select>
+                </div>
+            </div>
+            <div class="row error no-print">
+                <div class="col-xs-12" *ngIf="showNameError">{{ 'Name is Required' | translate }}</div>
+                <div class="col-xs-12" *ngIf="showCategoryError">{{ 'Category is Required' | translate }}</div>
+                <div class="col-xs-12" *ngIf="showItemsError">
+                    {{ 'At least one item to include must be selected' | translate }}</div>
+                <div class="col-xs-12" *ngIf="showPatientGroupError">
+                    {{ 'At least one patient group must be selected' | translate }}</div>
+                <div class="col-xs-12" *ngIf="showLocationError">
+                    {{ 'At least one location must be selected' | translate }}</div>
+                <div class="col-xs-12" *ngIf="showProviderError">
+                    {{ 'At least one provider must be selected' | translate }}</div>
+            </div>
+            <div class="row no-print">
+                <div class="col-xs-12 text-right">
+                    <button class="btn btn-default btn-mar" id="cancelBtn" (click)="cancel()">{{ 'Cancel' | translate }}</button>
+                    <button class="btn btn-default btn-mar"
+                        (click)="applyFilters()" id="applyFilterBtn">{{ 'Apply Filters' | translate }}</button>
+
+                    <button class="btn btn-primary" id="saveBtn" check-auth-z="soar-report-custom-update" (click)="saveReport()"
+                        [disabled]="isEdit && !customReportBody.dirty && !isformDirty">{{ 'Save' | translate }}</button>
+                </div>
+            </div>
+            <div *ngIf="showGrid">
+                <div class="header-container">
+                    <div class="row">
+                        <div class="col-sm-4 text-left">
+                            {{time | toShortDisplayDate}} -
+                            {{time | toDisplayTime}}
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            {{data.LocationOrPracticeName}} {{data.LocationOrPracticePhone}}
+                            {{data.LocationOrPracticeEmail}}
+                        </div>
+                        <div class="col-sm-4 text-right">{{userCode}}</div>
+                    </div>
+                    <div class="reportPage__reportTitle row">
+                        <div class="text-center">
+                            <h4>{{originalReport.Name}}</h4>
+                            {{ 'From '| translate }}{{ data.fromDate | toShortDisplayDate  }} -
+                            {{' To ' | translate}}{{ data.toDate | toShortDisplayDate  }}
+                        </div>
+                        <div id="ReportActions" class="hidden-print pull-right">
+                            <a><span class="fa fa-print fa-2x" data-toggle="tooltip" title="Print"
+                                    (click)="print()"></span></a>
+                            <report-exportt [reportId]="reportId" [isCustomReport]="true" [parentData]="data"
+                                [originalReport]="originalReport"></report-exportt>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+                <div class="reportGrid" id="reportGrid">
+                    <div class="fusePrintGrid avoidPageBreak" id="reportHead">
+                        <table id="reportTable">
+                            <thead id="reportTableHead">
+                                <tr class="stripOdd">
+                                    <th class="col-sm-1 cell">{{'Provider' | translate}}</th>
+                                    <th class="col-sm-1 cell">{{'Date' | translate}}</th>
+                                    <th class="col-sm-1 cell">{{'Location' | translate}}</th>
+                                    <th class="col-sm-1 cell">{{'Transaction Type' | translate}}</th>
+                                    <th class="col-sm-2 cell">{{'Patient' | translate}}</th>
+                                    <th class="col-sm-2 cell">{{'Description' | translate}}</th>
+                                    <th class="col-sm-1">{{'Original Transaction Date (voids)' | translate}}</th>
+                                    <th class="col-sm-1 cell text-right">{{'Production' | translate}}</th>
+                                    <th class="col-sm-1 cell text-right">{{'Collection' | translate}}</th>
+                                    <th class="col-sm-1 cell text-right">{{'Adjustment' | translate}}</th> 
+                                </tr>
+                            </thead>
+                                 <tbody *ngFor=" let provider of data?.Providers; let isOdd=odd;let isEven=even" 
+                                 [class.stripOdd]="isOdd" id="reportBody">
+                                    <tr>
+                                        <td class="col-sm-1 cell">{{provider.Provider}}</td>
+                                        <td class="col-sm-11 cell" colspan="9"></td>
+                                    </tr>
+                                    <tr *ngFor="let transaction of provider?.ProviderDetails">
+                                        <td class="col-sm-1 cell"></td>
+                                        <td class="col-sm-1 cell">{{transaction.Date | date: 'MM/dd/yyyy' }}</td>
+                                        <td class="col-sm-1 cell">{{transaction.Location}}</td>
+                                        <td class="col-sm-1 cell">{{transaction.TransactionType}}</td>
+                                        <td class="col-sm-2 cell">{{transaction.Patient}}</td>
+                                        <td class="col-sm-2 cell">{{transaction.Description}}</td>
+                                        <td class="col-sm-1">{{transaction.OriginalTransactionDate | date: 'MM/dd/yyyy' }}</td>
+                                        <td class="col-sm-1 cell text-right" *ngIf="transaction.Production >= 0">{{transaction.Production | currency}}</td>
+                                        <td class="col-sm-1 cell text-right" *ngIf="transaction.Production < 0">({{transaction.Production * -1 | currency}})</td>
+                                        <td class="col-sm-1 cell text-right" *ngIf="transaction.Collection >= 0">{{transaction.Collection | currency}}</td>
+                                        <td class="col-sm-1 cell text-right" *ngIf="transaction.Collection < 0">({{transaction.Collection *-1 | currency}})</td>
+                                        <td class="col-sm-1 cell text-right" *ngIf="transaction.Adjustment >= 0">{{transaction.Adjustment | currency}}</td>
+                                        <td class="col-sm-1 cell text-right" *ngIf="transaction.Adjustment < 0">({{transaction.Adjustment  * -1 | currency}})</td>
+                                    </tr>
+                                <tr>
+                                    <td class="col-sm-7 cell" colspan="6"></td>
+                                    <td class="col-sm-2 cell reportGrid__label"  >Totals for {{provider.Provider}}</td>
+                                    <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="provider.TotalProduction >= 0">{{provider.TotalProduction | currency }}</td>
+                                    <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="provider.TotalProduction < 0">({{provider.TotalProduction * -1 | currency}})</td>
+                                    <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="provider.TotalCollection >= 0">{{provider.TotalCollection | currency}}</td>
+                                    <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="provider.TotalCollection < 0">({{provider.TotalCollection *-1 | currency}})</td>
+                                    <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="provider.TotalAdjustment >= 0">{{provider.TotalAdjustment | currency}}</td>
+                                    <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="provider.TotalAdjustment < 0">({{provider.TotalAdjustment  * -1| currency}})</td>
+                                </tr>
+                            </tbody>
+                            <tbody id="reportFooter" class="reportGrid__footer">
+                                <tr>
+                                        <td class="col-sm-8 cell reportGrid__label" colspan="6"></td>
+                                        <td class="col-sm-1 cell reportGrid__label" >{{'Totals for Report' | translate}}</td>
+                                        <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="data?.TotalProductionForReport >= 0">{{ data.TotalProductionForReport | currency}}</td>
+                                        <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="data?.TotalProductionForReport < 0">({{ data.TotalProductionForReport * -1 | currency}})</td>
+                                        <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="data?.TotalCollectionsForReport >= 0">{{ data.TotalCollectionsForReport | currency}}</td>
+                                        <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="data?.TotalCollectionsForReport < 0">({{ data.TotalCollectionsForReport  * -1 | currency}})</td>
+                                        <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="data?.TotalAdjustmentsForReport >= 0">{{ data.TotalAdjustmentsForReport | currency}}</td>
+                                        <td class="col-sm-1 cell text-right reportGrid__label" *ngIf="data?.TotalAdjustmentsForReport < 0">({{ data.TotalAdjustmentsForReport * -1 | currency}})</td>
+                                </tr>
+                            </tbody>
+                            <tbody class="appendFooter"></tbody>
+                        </table>
+                    </div>
+                    </div> 
+                <div class="reportPage__reportFilterSection rowFull" id="reportSelectedFilters">
+                    <div class="text-center">
+                        <h4>Filters</h4>
+                    </div>
+                    <div *ngIf="appliedReport.IncludeAllLocations === true">
+                        <div class="col-sm-12"><b><i>Locations: </i></b>{{ 'All' | translate}}</div>
+                    </div>
+                    <div *ngIf="appliedReport.IncludeAllLocations === false && reportLocations.length > 0">
+                        <div class="col-sm-12"><b><i>Location: </i></b>{{displayedLocations}}</div>
+                    </div>
+                    <div *ngIf="appliedReport.IncludeAllLocations === false && reportLocations.length == 0">
+                        <div class="col-sm-12"><b><i>Location: </i></b>{{ 'No Filters Applied' | translate }}</div>
+                    </div>
+
+                    <div *ngIf="appliedReport.IncludeAllProviders === true">
+                        <div class="col-sm-12"><b><i>Providers: </i></b>{{ 'All' | translate}}</div>
+                    </div>
+                    <div *ngIf="appliedReport.IncludeAllProviders === false && reportProviders.length > 0">
+                        <div class="col-sm-12"><b><i>Providers: </i></b>{{displayedProviders}}</div>
+                    </div>
+                    <div *ngIf="appliedReport.IncludeAllProviders === false && reportProviders.length == 0">
+                        <div class="col-sm-12"><b><i>Providers: </i></b>{{ 'No Filters Applied' | translate }}</div>
+                    </div>
+
+                    <div *ngIf="appliedReport.IncludeAllPatientGroups === true">
+                        <div class="col-sm-12"><b><i>Patient Groups: </i></b>{{ 'All' | translate}}</div>
+                    </div>
+                    <div *ngIf="appliedReport.IncludeAllPatientGroups === false && reportPatientGroups.length > 0">
+                        <div class="col-sm-12"><b><i>Patient Groups: </i></b>{{displayedPatientGroups}}</div>
+                    </div>
+                    <div *ngIf="appliedReport.IncludeAllPatientGroups === false && reportPatientGroups.length == 0">
+                        <div class="col-sm-12"><b><i>Patient Groups: </i></b>{{ 'No Filters Applied' | translate }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-sm-12"><b><i>Date Range: </i></b>{{ data.fromDate | toShortDisplayDate  }} -
+                            {{ data.toDate | toShortDisplayDate  }}</div>
+                    </div>
+                    <div>
+                        <div class="col-sm-12">
+                            <b><i>Original Transaction Date Range: </i></b>
+                            <span *ngIf="report.Ignore === 0">{{ data.origStartDate | toShortDisplayDate }} -
+                                {{ data.origEndtDate | toShortDisplayDate }}</span>
+                            <span *ngIf="report.Ignore === 1">{{ data.IgnoreSelected | translate }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

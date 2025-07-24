@@ -1,0 +1,152 @@
+﻿@using System.Configuration
+@inherits System.Web.Mvc.WebViewPage
+window.walkmeUrl= '@ConfigurationManager.AppSettings["walkmeUrl"]';
+<!-- FYI - Details added in confluence page for URL setup in higher environments, we need to add environments in Azure deployment variables once provided by DevOps team. -->
+<!-- https://pdco-sw.atlassian.net/wiki/spaces/AM/pages/1315766350/URL+configuration+setup+for+MFE+in+Fuse+Application -->
+window.mfeConfig= {
+   patientOverviewMfeUrl : '@ConfigurationManager.AppSettings["PatientOverviewMFEUrl"]',
+   scheduleMfeUrl : '@ConfigurationManager.AppSettings["@@ScheduleMFEUrl"]',
+   scheduleMfeAltUrl : '@ConfigurationManager.AppSettings["@@ScheduleMFEAltUrl"]',
+   insuranceMfeUrl:'@ConfigurationManager.AppSettings["InsuranceMFEUrl"]',
+   clinicalMfeUrl:'@ConfigurationManager.AppSettings["ClinicalMFEUrl"]',
+   practiceSettingsMfeUrl:'@ConfigurationManager.AppSettings["PracticeSettingsMFEUrl"]',
+   contractsMfeUrl:'@ConfigurationManager.AppSettings["ContractsMFEUrl"]'
+};
+window.TurnOffSingleSpa = '@ConfigurationManager.AppSettings["TurnOffSingleSpa"]';
+window.IamLaunchDarklyClientId = '@ConfigurationManager.AppSettings["IamLaunchDarklyClientId"]';
+
+(function () {
+    'use strict';
+    var app = angular.module('PatWebCoreConstants', []);
+    app.constant('CLIENT_ID', '@ConfigurationManager.AppSettings["@@azureApplicationId"]');
+    app.constant('TENANT', '@ConfigurationManager.AppSettings["idaTenant"]');
+    app.constant('POST_LOGOUT_REDIRECT_URI', '@ConfigurationManager.AppSettings["@@rootUrl"]');
+    app.constant('ENTERPRISE_URL','@ConfigurationManager.AppSettings["@@VersionedEnterpriseUrl"]');
+    app.constant('ENTERPRISE_SETTING_URL','@ConfigurationManager.AppSettings["@@EnterpriseSettingsApiUrl"]');
+    app.constant('PDCO_ENTERPRISE_URL','@ConfigurationManager.AppSettings["@@EnterpriseApiUrl"]');
+    app.constant('ROOT_URL', '@ConfigurationManager.AppSettings["@@rootUrl"]');
+    app.constant('APPLICATION_ABBREVIATION','@ConfigurationManager.AppSettings["applicationAbbreviation"]');
+    app.constant('PLATFORM_USER_SERVICE_URL','@ConfigurationManager.AppSettings["@@PlatformUserServiceUrl"]');
+    app.constant('WEB_API_URL', '@ConfigurationManager.AppSettings["@@VersionedEnterpriseUrl"]');
+    app.constant('INACTIVITY_TIMEOUT', '@ConfigurationManager.AppSettings["inactivitytimeout"]');
+    app.constant('INACTIVITY_AUTO_TIMEOUT', '@ConfigurationManager.AppSettings["inactivityautotimeout"]');
+    app.constant('DISPLAY_AS', '@ConfigurationManager.AppSettings["displayAs"]');
+    app.constant('DOMAIN_API_URL', '@ConfigurationManager.AppSettings["@@DomainUrl"]');   // TEMPORARILY swapped here for prod mitigation
+    app.constant('CLINICAL_API_URL', '@ConfigurationManager.AppSettings["@@FuseClinicalUrl"]');  // TEMPORARILY swapped here for prod mitigation
+    app.constant('SAPI_SCHEDULING_API_URL', '@ConfigurationManager.AppSettings["@@FuseSAPISchedulingUrl"]');  // TEMPORARILY swapped here for prod mitigation
+    app.constant('INSURANCE_SAPI_URL', '@ConfigurationManager.AppSettings["@@FuseInsuranceSapiUrl"]');
+    app.constant('PAYMENT_PAY_PAGE_URL', '@ConfigurationManager.AppSettings["@@PaymentGatewayPaymentPageUrl"]');
+    app.constant('CLAIM_API_URL', '@ConfigurationManager.AppSettings["@@ClaimApiUrl"]');
+    app.constant('ERA_API_URL', '@ConfigurationManager.AppSettings["@@EraApiUrl"]');
+    app.constant('FILE_API_URL', '@ConfigurationManager.AppSettings["@@FileShareApiUrl"]');
+    app.constant('RTE_API_URL', '@ConfigurationManager.AppSettings["@@RteApiUrl"]');
+    app.constant('RX_API_URL', '@ConfigurationManager.AppSettings["@@RxApiUrl"]');
+    app.constant('PREVENT_VERSIONED_APP_REDIRECT', '@ConfigurationManager.AppSettings["@@preventVersionedAppRedirect"]');
+    app.constant('FORCE_SSL', '@ConfigurationManager.AppSettings["ForceSSL"]');
+    app.constant('TOPAZ_URL', '@ConfigurationManager.AppSettings["TopazUrl"]');
+    app.constant('RESET_PASSWORD_URL', '@ConfigurationManager.AppSettings["ResetPasswordUrl"]');
+    app.constant('APP_VERSION', '@ViewBag.Version');
+    app.constant('ENVIRONMENT_NAME', '@ConfigurationManager.AppSettings["@@EnvironmentName"]');
+    app.constant('AUTH_TOKEN_NAMES', ['fuseLogin', 'apteryx-imaging', 'apteryx-imaging2']);
+    app.constant('SHOW_TOAST_ERROR', '@ConfigurationManager.AppSettings["showToastError"]');
+    app.constant('FUSE_NEW_REPORTING_API_URL', '@ConfigurationManager.AppSettings["@@FuseNewReportingApiUrl"]');
+    app.constant('FUSE_EXPORT_API_URL', '@ConfigurationManager.AppSettings["@@FuseExportApiUrl"]');
+    app.constant('FUSE_REFERRAL_MANAGEMENT_API_URL', '@ConfigurationManager.AppSettings["@@FuseReferralManagementApiUrl"]');
+    app.constant('PRMUrl', '@ConfigurationManager.AppSettings["@@PRMUrl"]');
+    app.constant('FULLSTORY_ORG_ID', '@ConfigurationManager.AppSettings["FullstoryOrgId"]');
+    app.constant('FUSE_NOTIFICATION_GATEWAY_SERVICE_URL','@ConfigurationManager.AppSettings["@@FuseNotificationGatewayServiceUrl"]');
+    app.constant('DUENDE_ROOT_URL','@ConfigurationManager.AppSettings["idm:duendeRootUrl"]');
+    app.constant('MFA_SETTINGS_URL','@ConfigurationManager.AppSettings["idm:mfaSettingsUrl"]');
+    app.constant('MFA_PRACTICE_SETTINGS_URL','@ConfigurationManager.AppSettings["idm:mfaPracticeSettingsUrl"]');
+    app.constant('MFA_MANAGEMENT_PRACTICE_SETTINGS_URL','@ConfigurationManager.AppSettings["idm:mfaManagementPracticeServiceUrl"]');
+    app.constant('SSO_DOMAIN_SERVICE_URL', '@ConfigurationManager.AppSettings["idm:ssoDomainServiceUrl"]');
+
+    // for future organization of all the application variables
+    app.constant('ApplicationVariableConfig', {
+    });
+
+    // for micro service urls
+    app.constant('MicroServiceApiUrlConfig', {
+    enterpriseApiUrl: '@ConfigurationManager.AppSettings["@@VersionedEnterpriseUrl"]',
+    enterpriseSettingApiUrl: '@ConfigurationManager.AppSettings["@@EnterpriseSettingsApiUrl"]',
+    pdcoEnterpriseApiUrl: '@ConfigurationManager.AppSettings["@@EnterpriseApiUrl"]',
+    stsApiUrl: '@ConfigurationManager.AppSettings["@@rootUrl"]',
+    domainApiUrl: '@ConfigurationManager.AppSettings["@@DomainUrl"]',   // TEMPORARILY swapped here for prod mitigation
+    claimApiUrl: '@ConfigurationManager.AppSettings["@@ClaimApiUrl"]',
+    eraApiUrl: '@ConfigurationManager.AppSettings["@@EraApiUrl"]',
+    fileApiUrl: '@ConfigurationManager.AppSettings["@@FileShareApiUrl"]',
+    rteApiUrl: '@ConfigurationManager.AppSettings["@@RteApiUrl"]',
+    rxApiUrl: '@ConfigurationManager.AppSettings["@@RxApiUrl"]',
+    schedulingApiUrl: '@ConfigurationManager.AppSettings["@@FuseSchedulingUrl"]',
+    practicesApiUrl: '@ConfigurationManager.AppSettings["@@FusePracticesUrl"]',
+    practicesApimUrl: '@ConfigurationManager.AppSettings["@@FusePracticesApimUrl"]',
+    schedulingApimUrl: '@ConfigurationManager.AppSettings["@@FuseSchedulingApimUrl"]',
+    insuranceApiUrl: '@ConfigurationManager.AppSettings["@@FuseInsuranceUrl"]',
+    treatmentPlansApiUrl: '@ConfigurationManager.AppSettings["@@TreatmentPlansApiUrl"]',
+    serverlessSignalRApiUrl: '@ConfigurationManager.AppSettings["@@ServerlessSignalRApiUrl"]',
+    reportingApiUrl: '@ConfigurationManager.AppSettings["@@FuseReportingUrl"]',
+    pdcoEnterpriseApiUrl: '@ConfigurationManager.AppSettings["@@EnterpriseApiUrl"]',
+    prescriptionsApiUrl: '@ConfigurationManager.AppSettings["@@PrescriptionApiUrl"]',
+    blueImagingApiUrl: '@ConfigurationManager.AppSettings["@@BlueImagingApiUrl"]',
+    clinicalApiUrl: '@ConfigurationManager.AppSettings["@@FuseClinicalUrl"]',
+    sapiSchedulingApiUrl: '@ConfigurationManager.AppSettings["@@FuseSAPISchedulingUrl"]',
+    insuranceSapiUrl: '@ConfigurationManager.AppSettings["@@FuseInsuranceSapiUrl"]',
+    newReportingApiUrl: '@ConfigurationManager.AppSettings["@@FuseNewReportingApiUrl"]',
+    exportApiUrl: '@ConfigurationManager.AppSettings["@@FuseExportApiUrl"]',
+    referralManagementApiUrl: '@ConfigurationManager.AppSettings["@@FuseReferralManagementApiUrl"]',
+    fuseNotificationGatewayServiceUrl:'@ConfigurationManager.AppSettings["@@FuseNotificationGatewayServiceUrl"]'
+    });
+
+    app.constant('IdmConfig', {
+    domainUrl: '@ConfigurationManager.AppSettings["DomainUrl"]',   // TEMPORARILY swapped here for prod mitigation
+    rootUrl: '@ConfigurationManager.AppSettings["@@idm:rootUrl"]',
+    clientId: '@ConfigurationManager.AppSettings["idm:applicationClientId"]',
+    loginRedirectUrl: location.origin + '/',
+    logoutRedirectUrl: '@ConfigurationManager.AppSettings["@@rootUrl"]',
+    scope: 'pattersonuniversalid pat.platform.api pat.soar.api',
+    applicationVariableForLoginToken: '@ConfigurationManager.AppSettings["@@ApplicationVariableForLoginToken"]',
+    newApplicationVariableForLoginToken: '@ConfigurationManager.AppSettings["@@NewApplicationVariableForLoginToken"]',
+    apteryxUsePracticeIdForSiteName: '@ConfigurationManager.AppSettings["apteryxUsePracticeIdForSiteName"]',
+    apteryxUrlPart: '@ConfigurationManager.AppSettings["apteryxUrlSegment"].ToString()',
+    apteryx2UrlPart: '@ConfigurationManager.AppSettings["apteryx2UrlSegment"].ToString()',
+    apteryxHostName: '@ConfigurationManager.AppSettings["apteryxHostName"]',
+    apteryx2HostName: '@ConfigurationManager.AppSettings["apteryx2HostName"]',
+    apteryxClientId: '@ConfigurationManager.AppSettings["idm:apteryxClientId"].ToString()',
+    apteryx2ClientId: '@ConfigurationManager.AppSettings["idm:apteryx2ClientId"].ToString()',
+    apteryx3ClientId: '@ConfigurationManager.AppSettings["idm:apteryx3ClientId"].ToString()',
+    apteryxUrlSiteName: '@ConfigurationManager.AppSettings["apteryxDefaultSiteName"]',
+    apteryx2UrlSiteName: '@ConfigurationManager.AppSettings["apteryx2DefaultSiteName"]',
+    schedulingAPIUrl: '@ConfigurationManager.AppSettings["@@FuseSchedulingUrl"]',
+    practicesAPIUrl: '@ConfigurationManager.AppSettings["@@FusePracticesUrl"]',
+    schedulingApimUrl: '@ConfigurationManager.AppSettings["@@FuseSchedulingApimUrl"]',
+    practicesApimUrl: '@ConfigurationManager.AppSettings["@@FusePracticesApimUrl"]',
+    useSchedulingAPI: '@ConfigurationManager.AppSettings["useSchedulingAPI"]',
+    insuranceApiUrl: '@ConfigurationManager.AppSettings["@@FuseInsuranceUrl"]',
+    serverlessSignalRApiUrl: '@ConfigurationManager.AppSettings["@@ServerlessSignalRApiUrl"]',
+    reportingApiUrl: '@ConfigurationManager.AppSettings["@@FuseReportingUrl"]',
+    clinicalApiUrl: '@ConfigurationManager.AppSettings["@@FuseClinicalUrl"]',
+    sapiSchedulingApiUrl: '@ConfigurationManager.AppSettings["@@FuseSAPISchedulingUrl"]',
+    insuranceSapiUrl: '@ConfigurationManager.AppSettings["@@FuseInsuranceSapiUrl"]',
+    newReportingApiUrl: '@ConfigurationManager.AppSettings["@@FuseNewReportingApiUrl"]',
+    exportApiUrl: '@ConfigurationManager.AppSettings["@@FuseExportApiUrl"]',
+    referralManagementApiUrl: '@ConfigurationManager.AppSettings["@@FuseReferralManagementApiUrl"]',
+    duendeRootUrl: '@ConfigurationManager.AppSettings["idm:duendeRootUrl"]',
+    fuseNotificationGatewayServiceUrl:'@ConfigurationManager.AppSettings["@@FuseNotificationGatewayServiceUrl"]'
+    });
+
+    app.constant('SUPPORT_CHAT_URL', '@ConfigurationManager.AppSettings["SupportChatUrl"]');
+    app.constant('SUPPORT_EMAIL_URL', '@ConfigurationManager.AppSettings["SupportEmailUrl"]');
+    app.constant('SUPPORT_LIVECHAT_URL', '@ConfigurationManager.AppSettings["SupportLiveChatUrl"]');
+    app.constant('Status_Page_Url', '@ConfigurationManager.AppSettings["StatusPageUrl"]');
+    app.constant('SUPPORT_LIVECHAT_PRODUCT_CODE', '@ConfigurationManager.AppSettings["SupportLiveChatProductCode"]');
+
+    app.constant('DcaConfig', {
+    dcaUrl: '@ConfigurationManager.AppSettings["soar:dca:baseUrl"]',
+    sidexisPluginName: '@ConfigurationManager.AppSettings["soar:dca:sidexisPluginName"]'
+    });
+
+    app.constant('ENABLE_ULT', '@ConfigurationManager.AppSettings["Feature:enableUserLoginTimesCheck"]');
+    app.constant('ENABLE_BLUE', '@ConfigurationManager.AppSettings["enableBlue"]');
+    app.constant('LAUNCH_DARKLY_CLIENT_ID', '@ConfigurationManager.AppSettings["LaunchDarklyClientId"]');
+    app.constant('ENABLE_SET_PracticeId_FROM_TOKEN', '@ConfigurationManager.AppSettings["Feature:PracticePickerInToken"]');
+    })();

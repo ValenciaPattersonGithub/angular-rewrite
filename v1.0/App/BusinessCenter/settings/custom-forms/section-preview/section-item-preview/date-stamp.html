@@ -1,0 +1,14 @@
+﻿<div class="form-group">
+    <div class="row">
+        <div class="col-md-12">
+            <label id="lblFormItemTypeHeader{{sectionIdex}}_{{sectionIdexPreviewIndex}}" for="{{'Date' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}">
+                {{ 'Date of Completion:' |i18n }}
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <input type="text" class="form-control border-solid-black" id="{{'Date' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}" ng-disabled="inputIsDisabled" />
+        </div>
+    </div>
+</div>

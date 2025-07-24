@@ -1,0 +1,215 @@
+﻿.txPlanTile {
+    .clearfix;
+    position: relative;
+    padding: 0px;
+    background-color: @brand-color_white;
+    transition: all 0.5s ease 0s;
+    width: 100%;
+
+    &__txPlanTileBorder {
+        border-bottom: 1px solid @brand-color_dark-gray;
+    }
+
+    &.groupedTop {
+        border-left: 5px solid @brand-color_darker-gray;
+        border-right: 5px solid @brand-color_darker-gray;
+        border-top: 25px solid @brand-color_darker-gray;
+        margin-bottom: -1px;
+    }
+
+    &.grouped {
+        border-left: 5px solid @brand-color_darker-gray;
+        border-right: 5px solid @brand-color_darker-gray;
+        margin-bottom: -1px;
+    }
+
+    &.groupedBottom {
+        border-left: 5px solid @brand-color_darker-gray;
+        border-right: 5px solid @brand-color_darker-gray;
+        border-bottom: 5px solid @brand-color_darker-gray;
+    }
+
+    &__iconLink {
+        position: relative;
+        top: -20px;
+        float: right;
+    }    
+
+    &.active {
+        background-color: @brand-color_gray;
+    }
+
+    &__status {
+        color: @brand-color_white;
+        padding: 5px 10px;
+        font-weight: bold;
+
+        &.accepted, &.completed {
+            background: @brand-color_green;
+        }
+
+        &.proposed {
+            background: @brand-color_orange;
+        }
+
+        &.rejected {
+            background: @brand-color_gray;
+        }
+    }
+
+    &__actions {
+        position: absolute;
+        top: 14px;
+        transform: translateY(50%);
+    }
+
+    &__pref {
+        position: absolute;
+        right: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: @brand-color_success;
+        opacity: 0;
+
+        &.active {
+            opacity: 1;
+        }
+    }
+
+    &__recommend {
+        position: absolute;
+        left: 70%;
+        top: 38px;
+        transform: translateY(-50%);
+
+        .statusIcon {
+            color: @brand-color_font-dark;
+            padding-left: 8px;
+            font-size: 20px;
+        }
+    }
+
+    &__predetermination {
+        font-size: 20px;
+        padding-left: 8px;
+        color: @brand-color_font-dark;
+    }
+
+    &__recommend2 {
+        & > *:first-child {
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+        }
+
+        .statusIcon2 {
+            color: @brand-color_font-dark;
+            padding-left: 8px;
+            font-size: 20px;
+        }
+    }
+
+    &__predetermination2 {
+        font-size: 20px;
+        padding-left: 8px;
+        color: @brand-color_font-dark;
+    }
+
+    &__tileBox {
+        position: relative;
+
+        .ellipsisMenu {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        &.tileBoxPadding {
+            padding: 12px;
+        }
+    }
+
+    &__icon {
+        float: right;
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+    }
+
+    &__details {
+        .clearfix;
+        margin-left: 42px;
+
+        &.timelineDetails {
+            margin-left: 0;
+        }
+    }
+
+    &__title {
+        color: @brand-color_font-dark;
+        display: inline-block;
+        max-width: 80%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1;
+        transform: translateY(2px);
+        font-weight: 700;
+        max-width: 220px;
+    }
+
+    &__edit, &__expand {
+        margin-left: 4px;
+        padding: 0 2px;
+    }
+
+    &__date,
+    &__provider {
+        display: block;
+    }
+
+    &__body {
+        height: auto;
+        max-height: 0px;
+        overflow: hidden;
+        opacity: 0;
+        transition: all 0.5s ease 0s;
+
+        &.active {
+            opacity: 1;
+            max-height: 9999px;
+            overflow: visible;
+            padding-bottom: 24px;
+        }
+
+        > div:first-child {
+            margin-top: 24px;
+        }
+    }
+
+    &__menu {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 99999;
+    }
+
+    &__close {
+        display: block;
+        position: absolute;
+        width: 30%;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+
+        .fa {
+            font-size: 1.4em;
+        }
+    }
+
+    &__RecommendedTrue {
+        height: 30px;
+    }
+}

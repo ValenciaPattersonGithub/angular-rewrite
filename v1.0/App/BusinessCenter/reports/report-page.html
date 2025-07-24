@@ -1,0 +1,147 @@
+﻿<!-- this hides the browser print default header, keeping this here to keep from affecting other areas -->
+<style>
+    @media print {
+        @page {
+            margin: 20px 20px auto 20px;
+            size: auto;
+        }
+    }
+</style>
+
+<!-- <business-nav class="no-print"></business-nav> -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div class="reportPage">
+    <div class="rowFull no-print">
+        <div class="reportPage__header">
+            <div class="reportPage__title">
+                <h1>{{data.ReportTitle}}</h1>
+            </div>
+            <div>
+                <button class="btn soar-link icon-button font-14" icon="fa-filter" ng-if="requestBodyProperties"
+                    ng-click="hideDiv()">{{ slideOutText | i18n }}</button>
+            </div>
+        </div>
+    </div>
+    <div class="reportPage__body">
+        <report-filter-box class="no-print" [(filter-models)]="filterModels" [after-Filter-Init]="afterFilterInit"
+            [request-body-properties]="requestBodyProperties" [patient-referral-types-data]="patientReferralTypesData"
+            [all-data]="allData" (hide-div)="hideDiv($event)" (get-report)="getReport($event)"
+            (user-filters)="userFilters($event)" (after-init)="afterFilterInit($event)"
+            (obj-changed)="objChanged($event)"></report-filter-box>
+        <div ng-class="columnWidth">
+            <div class="reportPage__reportHeader">
+                <div class="col-sm-4 text-left" id="divReportHeaderRunDateTime" name="divReportHeaderRunDateTime">
+                    {{ isNewReportingAPI === true ? data.generatedAtDateTime : data.GeneratedAtDateTime |
+                    toDisplayDateMMDDYY}} - {{ isNewReportingAPI === true ? data.generatedAtDateTime :
+                    data.GeneratedAtDateTime | toDisplayTime}}
+                </div>
+                <div class="col-sm-4 text-center">
+                    {{ isNewReportingAPI === true ? data.locationOrPracticeName : data.LocationOrPracticeName}} {{
+                    isNewReportingAPI === true ? data.locationOrPracticePhone : data.LocationOrPracticePhone }} {{
+                    isNewReportingAPI === true ? data.locationOrPracticeEmail : data.LocationOrPracticeEmail }}
+                </div>
+                <div class="col-sm-4 text-right">{{ isNewReportingAPI === true ? data.generatedByUserCode :
+                    data.GeneratedByUserCode}}</div>
+            </div>
+            <div class="reportPage__reportTitle">
+                <div class="col-sm-12 text-center">
+                    <div id="dateRange" class="text-center">
+                        <h4>{{ isNewReportingAPI === true ? data.reportTitle : data.ReportTitle }}</h4>
+                        <div ng-repeat="range in dateRangeTitle">
+                            {{range}}
+                        </div>
+                    </div>
+                    <div id="displaybanner" ng-if="data.DisplayMessage !== null && data.DisplayMessage.length > 0"
+                        class="text-center">
+                        <h4 class="displaybanner"><span class="fa fa-info-circle"></span>&nbsp;{{data.DisplayMessage}}
+                        </h4>
+                    </div>
+                    <div id="ReportActions" class="hidden-print pull-right">
+                        <button ng-show="isMigratedReport && !printDisabled" class="btn btn-link"
+                            uib-popover-template="'viewFilters.html'" popover-placement="left" popover-trigger="click"
+                            popover-is-open="isFiltersOpen" ng-click="toggleViewFilters($event)"
+                            uib-tooltip="{{('View applied filters') | i18n}}" ng-click="viewAppliedFilters()">
+                            <span class="fa fa-info-circle fa-2x"></span>
+                        </button>
+                        <button ng-class="{disabled: printDisabled || isNoData || (data.CustomMessage != null && data.CustomMessage != '')}" ng-if="isMigratedReport"
+                            class="btn btn-link"
+                            uib-tooltip="{{(printDisabled ? 'Apply filters before attempting to download' : ( isNoData ? 'No data to download' : 'Download')) | i18n}}"
+                            ng-click="savePdf()">
+                            <span class="fa fa-file-pdf fa-2x"></span>
+                        </button>
+                        <button ng-class="{disabled: printDisabled || isNoData || (data.CustomMessage != null && data.CustomMessage != '')}" ng-if="isMigratedReport"
+                            class="btn btn-link"
+                            uib-tooltip="{{(printDisabled ? 'Apply filters before attempting to print' : (isNoData ?  'No data to print' : 'Print')) | i18n}}"
+                            ng-click="downloadPdf()">
+                            <span class="fa fa-print fa-2x"></span>
+                        </button>
+                        <button ng-class="{disabled: printDisabled}" ng-if="!isMigratedReport" class="btn btn-link"
+                            uib-tooltip="{{(printDisabled ? 'Apply filters before attempting to print' : 'Print') | i18n}}"
+                            ng-click="print()">
+                            <span class="fa fa-print fa-2x"></span>
+                        </button>
+                        <button ng-class="{notActive: (true), disabled: exportDisabled || isNoData}"
+                            ng-if="isMigratedReport && (isNewReportingAPI || blobId) && reportId != reportIds.PerformanceByProviderDetailsReportId
+                                && reportId != reportIds.NetCollectionByProviderReportId" class="btn btn-link"
+                            uib-tooltip="{{(exportDisabled ? 'Apply filters before attempting to export' : 'Export') | i18n}}"
+                            ng-click="downloadCSV()">
+                            <span class="far fa-share-square fa-2x"></span>
+                        </button>
+                        <report-export ng-if="!(isNewReportingAPI || blobId || (data.CustomMessage != null && data.CustomMessage != '')) 
+                                       || reportId == reportIds.PerformanceByProviderDetailsReportId 
+                                       || reportId == reportIds.NetCollectionByProviderReportId" get-all-data="getAllMissingData" report-id="reportId"
+                            is-custom-report=false ng-model="filterModels" export-disabled="printDisabled"
+                            export-new-api="exportNewApi"></report-export>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="rowFull" id="divSlideoutRow">
+                <div class="reportPage__reportGrid">
+                    <report-grid data="data" show-filter-message="showFilterMessage"
+                        template="gridTemplate"></report-grid>
+                </div>
+            </div>
+            <div class="reportPage__reportFilterSection rowFull" id="reportFilterInfo" name="reportFilterInfo"
+                ng-show="requestBodyProperties && !showFilterMessage && !isMigratedReport">
+                <div class="text-center">
+                    <h4>Filters</h4>
+                </div>
+                <div ng-repeat="model in filterData">
+                    <div ng-if="model.FilterFilterModel" class="col-sm-12">
+                        <b>
+                            <i>{{model.FilterFilterModel.Name}}{{':' | i18n}} </i>
+                        </b>{{model.FilterFilterModel.ActualFilterString}}
+                    </div>
+                    <div ng-if="model.Name" class="col-sm-12">
+                        <b>
+                            <i>{{model.Name}}{{':' | i18n}} </i>
+                        </b>{{model.ActualFilterString}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="viewFilters.html">
+        <div ng-click="$event.stopPropagation()" ng-mouseleave="closePopover()" class="filterinfo">
+             <div class="row">
+                <div class="col-md-12 text-center">
+                    <h4>Applied Filters</h4>
+                </div>
+                <div class="col-md-12" ng-repeat="model in filterData">
+                    <span ng-if="model.FilterFilterModel">
+                        <b>
+                            <i>{{model.FilterFilterModel.Name}}{{':' | i18n}} </i>
+                        </b>{{model.FilterFilterModel.ActualFilterString}} <br></span>
+                      
+                    <span ng-if="model.Name">
+                        <b>
+                            <i>{{model.Name}}{{':' | i18n}} </i>
+                        </b>{{model.ActualFilterString}}  </span>
+                   
+                </div>
+            </div>
+        </div>
+    </script>
+</div>

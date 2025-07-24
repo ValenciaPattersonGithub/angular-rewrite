@@ -1,0 +1,34 @@
+<div class="basic-input-wrapper"  [ngClass]="{'label-left' : labelDirection=='left'}">
+    <app-label
+            [label]="labelText"
+            class="basic-input-label"
+            [ngClass]="{'required': isRequired, 'disabled': isDisabled}"
+            [fieldId]="fieldId"
+    ></app-label>
+    <input
+            [attr.id]="fieldId"
+            [attr.disabled]="isDisabled"
+            [attr.required]="isRequired"
+            [placeholder]="placeholderText"
+            [attr.type]="inputType"
+            class="basic-input"
+            (blur)=blurEvent($event)
+            [ngClass]="{'error': hasErrors}"
+    >
+    <div *ngIf="hasErrors"
+         class="basic-input-error"
+         [tooltip]="validationErrorText"
+         placement="top-error"
+         delay="500">
+        <svg-icon
+                [id]="fieldId + 'Icon'"
+                class="error-icon"
+                name="tooltipIcon"
+                iconHeight="15px"
+                iconWidth="15px"
+        ></svg-icon>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,136 @@
+<div class="registration-landing-container">
+    <div class="registration-landing-header">
+        <registration-header [patientProfile]="this.personInfo.Profile"></registration-header>
+    </div>
+    <div class="registration-landing-content">
+        <div class="registration-landing-content-toc">
+            <table-of-content></table-of-content>
+        </div>
+        <div class="registration-landing-content-person-detail">
+            <!-- <kendo-tabstrip>
+            <kendo-tabstrip-tab *ngFor="let tab of personTabs" [selected]="tab.selected">
+                <ng-template kendoTabTitle>
+                    <div class="tab-title">
+                        <span class="tab-title-text">{{tab.Title}}</span>
+                        <span class="tab-title-icon"></span><svg version="1.2" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" overflow="visible" preserveAspectRatio="none"
+                            viewBox="0 0 24 24" width="18" height="18">
+                            <g>
+                                <path xmlns:default="http://www.w3.org/2000/svg"
+                                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                                    style="fill: rgb(45, 171, 203);" vector-effect="non-scaling-stroke" />
+                            </g>
+                        </svg>
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent> -->
+            <form [formGroup]="personGroup" class="form-horizontal" id="person-form">
+                <div class="person-container" (scroll)="onScroll($event)">
+                    <div id="personalDetail" class="person-section person-personal-details" #personalDetail>
+                        <personal-details [personalDetails]="personGroup.controls.personalDetailsForm">
+                        </personal-details>
+                    </div>
+                    <div class="person-section person-contact-details" id="contactDetail" #contactDetail>
+                        <contact-details [contactDetails]="personGroup.controls.contactDetailsForm"
+                                         [phoneTypes]="phoneTypes" [states]="states"></contact-details>
+                    </div>
+                    <div id="insurance" class="person-section person-insurance" #insurance>
+                        <app-patient-insurance *ngIf="route.patientId"></app-patient-insurance>
+                        <insurance-details [insuranceDetails]="personGroup.controls.insuranceDetailsForm"
+                                           *ngIf="!route.patientId">
+                        </insurance-details>
+                    </div>
+                    <div id="prefrence" class="person-section person-prefrences" #prefrence>
+                        <preferences [patientPreference]="personGroup.controls.preferencesForm" [onlyActive]="true">
+                        </preferences>
+                    </div>
+                    <div id="dentalRecord" class="person-section person-dental-record" #dentalRecord>
+                        <dental-records [dentalRecords]="personGroup.controls.dentalRecordsForm">
+                        </dental-records>
+                    </div>
+                    <div id="referrals" class="person-section person-referrals" #referrals *ngIf="!route.patientId && enableNewReferral">
+                        <div class="referrals-header">Referrals</div>
+                        <hr class="referral-hr"/>
+                        <div style="height: auto;">
+                            <patient-referral-crud [fromAddPatientProfile]="true"></patient-referral-crud>
+                        </div>
+                    </div>
+                    <div class="person-section person-identifiers" id="identifiers" #identifiers>
+                        <additional-identifiers *ngIf="route.patientId && (personInfo.patientIdentifierDtos && personInfo.patientIdentifierDtos.length)"
+                                                [additionalIdentifiers]="personGroup.controls.identifiresForm"
+                                                [patientIdentifiers]="personInfo.patientIdentifierDtos">
+                        </additional-identifiers>
+                        <additional-identifiers *ngIf="!route.patientId"
+                                                [additionalIdentifiers]="personGroup.controls.identifiresForm">
+                        </additional-identifiers>
+                    </div>
+                    <div class="person-section person-documents" id="documents" #documents>
+                        <app-patient-documents *ngIf="route.patientId && personInfo.Profile"
+                                               [patientProfile]="personInfo.Profile"></app-patient-documents>
+                        <app-patient-documents *ngIf="!route.patientId"></app-patient-documents>
+                    </div>
+                    <div class=" person-section person-account-members" id="accountMembers" #accountMembers>
+                        <app-patient-account-members [featureName]="route.patientId?'PatientProfile':'PatientRegistration'">
+                        </app-patient-account-members>
+                    </div>
+                    <!--                     non-breaking space added to create space at the bottom of the scroll area after the last section   -->
+                    &nbsp;
+                </div>
+            </form>
+            <!-- </ng-template>
+            </kendo-tabstrip-tab>
+        </kendo-tabstrip> -->
+        </div>
+    </div>
+</div>
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="isOpen"
+    [cdkConnectedOverlayPanelClass]="'overlay-pane'" id="modalPatientRegistration">
+
+    <div class="reg-modal">
+        <div class="btnFlexContainer">
+            <p id="modal-header" class="reg-modal-header">
+                {{!isCancelled ? 'Is everything correct? Do you want to continue?':'Cancel now and you will lose the
+                changes below. Do you want to continue?' | translate}}
+            </p>
+            <div class="closeModal" (click)="closeModal()">
+                <svg-icon [name]="'closeIcon'" [iconHeight]="'24px'" [iconWidth]="'24px'"></svg-icon>
+            </div>
+        </div>
+        <div class="reg-modal-body">
+            <div class="containerPadding">
+                <table class="fuseGrid fuseTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                {{'Category/Field' | translate}}
+                            </th>
+                            <th>
+                                {{'New Content' | translate }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let field of fieldList;index as i">
+                            <td id="fieldName" class="field">
+                                {{field.Field}}
+                            </td>
+                            <td id="fieldValue" class="field">
+                                {{field.Value}}
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="reg-modal-footer containerPadding">
+            <app-button id="btnRegisterNo" variation="secondary" class="reg-btn" (onClick)="closeModal()"
+                buttonLabel="No">
+            </app-button>
+            <app-button id="btnRegisterYes" variation="primary" class="reg-btn" buttonLabel="Yes"
+                (onClick)="isCancelled?initializePersonForm():savePerson()">
+            </app-button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,79 @@
+<div class="perioKeypad">
+    <div class="row">
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[3][0])"
+                ng-disabled="isButtonDisabled(values[3][0])">
+                {{ values[3][0] }}
+        </button>
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[3][1])"
+                ng-disabled="isButtonDisabled(values[3][1])">
+                {{ values[3][1]  }}
+        </button>
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[3][2])"
+                ng-disabled="isButtonDisabled(values[3][2])">
+                {{ values[3][2]  }}
+        </button>
+    </div>
+    <div class="row">
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[2][0])"
+                ng-disabled="isButtonDisabled(values[2][0])">
+                {{ values[2][0]  }}
+        </button>
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[2][1])"
+                ng-disabled="isButtonDisabled(values[2][1])">
+                {{ values[2][1] }}
+        </button>
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[2][2])"
+                ng-disabled="isButtonDisabled(values[2][2])">
+                {{  values[2][2] }}
+        </button>
+    </div>
+    <div class="row">
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[1][0])"
+                ng-disabled="isButtonDisabled(values[1][0])">
+                {{ values[1][0]  }}
+        </button>
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[1][1])"
+                ng-disabled="isButtonDisabled(values[1][1])">
+                {{ values[1][1] }}
+        </button>
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[1][2])"
+                ng-disabled="isButtonDisabled(values[1][2])">
+                {{  values[1][2] }}
+        </button>
+    </div>
+    <div class="row">
+        <button class="btn btn-default"
+                onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.text.bleed)"
+                ng-disabled="keypadModel.pocketInputRestricted">
+            {{values[0][0]}}            
+        </button>
+            <button class="btn btn-default"
+                    onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.values[0][1])"
+                    ng-disabled="isButtonDisabled(values[0][1])">
+                    {{ values[0][1] }}
+            </button>
+            <button class="btn btn-default"
+                    onclick="PerioKeypadController.prototype.onValueSelected(event, PerioKeypadController.prototype.$scope.text.supp)"
+                    ng-disabled="keypadModel.pocketInputRestricted">
+                {{values[0][2]}}
+            </button>
+        </div>
+        <div class="row">
+            <div class="perioKeypad__inputElement"></div>
+            <button class="btn btn-default center"
+                        ng-click="onValuesMutation()"
+                        ng-disabled="keypadModel.incrementationLimit">
+                        {{ valuesMutationSymbol }}10
+            </button>
+            <div class="perioKeypad__inputElement"></div>
+        </div>
+</div>

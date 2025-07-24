@@ -1,0 +1,16 @@
+﻿<ng-form name="questionSignatureBox">
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="row">
+                {{ 'Please Sign Below:' |i18n }}
+            </div>
+
+            <div class="row">
+                <div class="margin-left-minus16 form-checkbox">
+                    <input type="checkbox" ng-value="true" ng-selected ng-model="sectionItem.IsRequired" id="questionSignatureBoxCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="lblQuestionSignatureBox{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionSignatureBoxCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This question is required' | i18n }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-form>

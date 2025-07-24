@@ -1,0 +1,59 @@
+﻿.accountMembersWidget {
+    &__list {
+        .unsetList;
+        .clearfix;
+    }
+
+    &__list-item {
+        .clearfix;
+        position: relative;
+    }
+    &__link {
+        width: 100%;
+        font-weight: 400;
+        padding:0;
+        &.disabled{
+            color: @brand-color_font-regular;
+            position: relative;
+        }
+        &.disabled-link{
+            color: @brand-color_font-regular;
+            position: relative;
+        }
+
+    }
+
+    &__name {
+        /*display: inline-block;*/
+        float: left;
+        width: auto;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        max-width:100%;
+    }
+    &__disabled {
+        cursor: default;
+        color: @brand-color_font-regular;
+        text-decoration:none;
+    }
+
+    &__rp {
+        font-weight: 500;
+    }
+
+    &__date {
+        /*display: inline-block;*/
+        /* float: right;*/
+        width: 20%;
+        text-align: right;        
+        word-break: normal;
+    }
+    &__transfer{
+        width: 20%;
+        text-align: right;
+    }
+}

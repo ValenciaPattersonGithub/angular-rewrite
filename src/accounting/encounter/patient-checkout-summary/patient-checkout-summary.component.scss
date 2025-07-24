@@ -1,0 +1,458 @@
+@import 'variables';
+// These kendo files do not contain imports of Kendo, they merely overwrite kendo css
+@import 'toolTip.scss';
+
+// some of this can be dropped after testing
+.patient-checkout-summary {
+  font-family: $global-font-family !important;
+  font-size: 14px;
+  display: flex;
+  width: 95%;
+  position: sticky;
+  top: 75px;
+  
+
+  @media (min-width: 1200px) {
+    .container {
+      width: 100%;
+    }
+    body {
+      height: 100vh;
+    }
+  }
+
+  .row {
+    padding: 0 0 15px;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto 125px;
+  }
+  
+  .grid-container > div {    
+    text-align: center;
+  }
+ 
+  .col-sm-8,
+  .col-sm-4  {
+    padding: 15px 15px 0 15px;
+  }
+  .col-sm-12 {
+     padding: 0 0 0 15px;
+  }
+
+  .claims-area {
+    min-height:50px;
+  }
+
+  .claims-count {
+    font-size: 14px;
+  }
+
+
+
+  .claims-row {
+    margin:15px 15px 0;
+  }
+
+  .totals-row {    
+    background-color: $bg-grey;
+    border-left: 1px solid $border-light-grey;
+    border-right: 1px solid $border-light-grey;
+    margin-top:15px;
+  }
+
+  .panel {
+    margin-top: 20px;
+    width: 100%;     
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+    border-color: $border-light-grey;
+    
+  }
+
+  .panel-heading {
+    padding:15px;
+    background-color: $polar-white;
+    border: none;
+    font-size: 16px;    
+    margin-bottom: 25px;  
+    height: 35px;
+  }
+
+  .panel-body {
+    border: none;
+    background-color: $polar-white;
+    border-radius: 0;
+    border: 1px solid $border-light-grey;
+    padding: 15px 15px 0 15px;    
+    margin: 0 15px 0 15px;
+  }
+
+  .panel-footer {
+    border: 1px solid $border-light-grey;
+    padding:15px;
+    background-color: $polar-white;
+  }
+
+  .panel_header {    
+    border-bottom: 1px solid $page-content-divider-color;  
+    margin-bottom: 15px;  
+    height: 35px;
+  }  
+
+  .panel_heading_title {
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    border-bottom: 1px solid $page-content-divider-color;  
+    color: $page-content-header;
+    line-height: 18px;
+  }
+  
+  .panel_sub_title {       
+    font-size: 16px;
+    color: $text-black;
+    text-decoration: none solid rgb(51, 51, 51);
+    padding-bottom:15px;    
+  }
+
+  .card {
+    background-color: $alert-red;
+    background-size: cover;
+  }
+
+  .card-body {
+    background-color: yellow;
+    padding:15px;
+  }
+
+  .card-border {    
+    border: 1px solid $border-light-grey;
+  }
+
+  .card-footer {
+    background-color: $bg-grey;
+    background-size: cover;
+    height: 43px;
+    padding: 15px;        
+  }
+
+  .card-header {
+    font-size: 16px;
+    color: $text-black;
+    text-decoration: none solid rgb(51, 51, 51);
+    line-height: 18px;
+  }
+
+  .card-row {
+    height:43px;
+    padding-left:10px;
+  }
+  
+  .balance-row {
+    height: 48px;
+    font-size: 14px;
+    color:#faf6f6;
+    background-color: $fuse-purple;
+    text-decoration: none solid rgb(45, 171, 203);
+  }
+
+  .unassigned-row {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 70px;      
+    background-color: $border-grey;
+  }
+
+  .unassigned-row-left { 
+    height: 70px;
+    width: 70%;
+    padding: 10px 0 0 10px;
+  }
+
+  .unassigned-row-right {       
+    width: 30%; 
+    height: 70px;
+    border: 1px solid $warning-orange;
+    background-color: $warning-orange;
+    background-size: cover;  
+    text-align: center;    
+    color: $polar-white;
+    position: relative;
+  }
+
+  .unassigned-row-right:before {       
+    content: "";
+    position: absolute;
+    width: 0; 
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right:10px solid $warning-orange;
+    top: 25px;
+    left: -10px;
+  }
+
+  .unassigned-amount-text {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .unassigned-amount-currency {
+    padding-top: 12px; 
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .button-margin {
+     margin-left: 10px; 
+     margin-top: 3px;
+  }
+
+  .provider-selector {    
+    height: 25px;
+    border: 1px solid $action-blue;
+    border-radius: 5px;
+    background-color: $bg-grey;
+    font-size: 12px;    
+    color: $action-blue;
+    text-decoration: none solid rgb(45, 171, 203);
+    text-align: center;
+    min-width: 150px;
+    padding-left: 0px;
+    padding-right: 10px;
+    padding-bottom: 20px;
+  }
+
+  .collapse-expand{
+    font-size: 24px;
+    color: $action-blue;
+    padding-right:5px;
+  }
+
+  .checkout-totals {
+    > tr {
+      background-color: $bg-grey;
+    }
+    
+  }
+
+  .checkout-table {
+    width:100%;    
+    > tbody{
+      > tr {
+        > td {
+          padding:15px;  
+        }
+      }
+    }
+  }
+  
+  .table {
+    margin-top: 15px;
+    border: 1px solid #eeeeee;        
+    // Cells
+    > thead,
+    > tbody,
+    > tfoot {
+      > tr {
+        > th,
+        > td {
+          padding: 10px;
+          line-height: 18px;
+          vertical-align: middle; 
+          color: $text-black;
+          text-decoration: none solid rgb(85, 85, 85);          
+        }
+      }
+    }
+    // Bottom align for column headings
+    > thead > tr > th { 
+      padding: 10px;
+      line-height: 18px;
+      vertical-align: middle; 
+      text-decoration: none solid rgb(45, 171, 203);
+    }
+    // Remove top border from thead by default
+    > caption + thead,
+    > colgroup + thead,
+    > thead:first-child {
+      > tr:first-child {
+        > th,
+        > td {
+          // placeholder
+        }
+      }
+    }    
+    > tbody + tbody {
+      
+    }   
+  }
+
+  .hidden {
+    display:none;
+  }
+
+  .table-hover {
+    > tbody > tr:hover {
+      background-color: #f5f5f5;
+    }
+  }    
+  
+  // Nesting
+  .table {
+    background-color: transparent;
+  }
+    
+  .table-striped {
+    > tbody > tr[data-index="0"]:nth-of-type(odd) {    
+       background-color: #f4f3f5;
+     }
+   }
+
+   .encounter-summary {
+     font-size: 14px;
+     font-weight: bold;
+     background-color: $polar-white;
+   }
+   
+  // custom checkbox replicated from reports
+  /* The checkbox container */
+  .cbxcontainer {
+    display: block;
+    position: relative;  
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-family: $global-font-family;
+    font-size: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .cbxcontainer:hover {
+    color: $action-blue;
+  }
+
+  /* Hide the browser's default checkbox */
+  .cbxcontainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark.disabled {
+    cursor: not-allowed;         
+    border: 1px solid $disabled-grey;
+    color: $disabled-grey;
+    text-decoration: none solid rgb(204, 204, 204);        
+  } 
+
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 16px;
+    width: 16px;
+    background-color: $polar-white;
+    box-sizing: border-box;
+    border: 2px solid $action-blue;
+    border-radius: 3px;
+  }
+
+  /* On mouse-over, add a grey background color */
+  .cbxcontainer:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+
+  /* When the checkbox is checked, add a blue background */
+  .cbxcontainer input:checked ~ .checkmark {
+    background-color: $action-blue;
+  }
+
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  } 
+
+  /* Show the checkmark when checked */
+  .cbxcontainer input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  /* Style the checkmark/indicator */
+  .cbxcontainer .checkmark:after {
+    left: 4px;
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  .cbx-column  {
+    padding-left: 15px !important;
+    margin-left: 15px;    
+    width: 40px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-size: cover;    
+    color: #555555;
+    font-weight: 700;
+    text-decoration: none solid rgb(85, 85, 85);
+  }
+
+  .unassigned-amount-select {
+    padding: 5px 0 0 0;
+    width: 92%;
+  }
+
+  button-menu::ng-deep .sub-menu {
+    right: auto ;
+    left: 0px;
+    bottom: 25px;
+  }
+
+  // overriding the button so that it fits in the summary space
+  ::ng-deep app-button .button {    
+    padding-left: 15px;
+    padding-right: 15px;
+    min-width: 50px;
+    margin-top: 3px;
+  }
+
+  ::ng-deep .k-dropdown {
+    width: 100%;
+
+    > .k-dropdown-wrap {
+        width: inherit;
+        height: 25px;
+        font-family: $global-font-family;
+        font-size: 12px;
+        border-radius: 5px;
+        border-color: $border-grey;
+
+        > .k-input {
+            line-height: 24px;
+            padding: 0px 8px;
+        }
+    }
+}
+
+
+
+}
+

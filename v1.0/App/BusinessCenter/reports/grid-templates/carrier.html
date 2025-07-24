@@ -1,0 +1,6 @@
+﻿<div class="reportGrid">
+    <div ng-if="data.feeSchedulesBenefitPlans.length === 0">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid avoidPageBreak">
+        <carrier-report [data]="data"></carrier-report>
+    </div>
+</div>

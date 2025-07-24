@@ -1,0 +1,21 @@
+<form name="frmfeeListLocation">
+    <div *ngIf="editMode">
+        <label id="lblFeeListLocationView" class="col-xs-4 control-label" for="lstFeeListLocation">{{'Location Fee List' | translate  }}</label>
+       
+        <div class="col-sm-8" style="z-index:3;">
+            <kendo-dropdownlist id="lstFeeListLocation" name="lstFeeListLocation" [data]="feeListList" [textField]="'Name'"
+                [valueField]="'FeeListId'" [(ngModel)]="selectedItem" (valueChange)="onFeeListChanged($event)"
+                [popupSettings]="{ animate:false }" [tabindex]="sbTab"
+                [defaultItem]="{ Name: 'None', FeeListId: null }">
+            </kendo-dropdownlist>    
+            <label id="lblNoFeeListSelected" class="help-text " *ngIf="showFeeListWarning">
+                <span *ngIf="!location?.LocationId">{{ 'Please select a Location Fee List or all Service Codes will have a fee of $0.00.' | translate }}</span>
+                <span *ngIf="location?.LocationId">{{ 'Please select a Location Fee List or all Service Codes will have a fee of $0.00. In addition, fees for any proposed services for this location will be set to $0.00.' |translate }}</span>
+            </label>
+        </div>
+    </div>
+    <div *ngIf="!editMode">
+        <label id="lblFeeListLocationView" class="col-xs-12 control-label" for="lstFeeListLocation">{{'Location Fee List' |translate }}</label>
+        <span class="col-xs-12" id="lblSelectedFeeList"> {{locationFeeListName  }} </span>
+    </div>
+</form>

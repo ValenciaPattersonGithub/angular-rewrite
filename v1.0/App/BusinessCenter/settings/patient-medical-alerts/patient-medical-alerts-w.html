@@ -1,0 +1,6 @@
+﻿<ng-container ng-if="migrationFeatureFlagsLoaded && useConverted">
+    <patient-medical-alerts-ng [alerts]="$parent.alertsShared"></patient-medical-alerts-ng>
+</ng-container>
+<ng-container ng-if="migrationFeatureFlagsLoaded && (! useConverted)">
+    <patient-medical-alerts-template-original alerts="$parent.alertsShared"></patient-medical-alerts-template-original>
+  </ng-container>

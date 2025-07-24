@@ -1,0 +1,373 @@
+@import "variables";
+
+.bulk-payment {
+    margin: 0 15px 15px 15px;
+    font-family: $global-font-family;
+    min-width: 1200px;
+    &.bulk-payment-era {
+        margin: 20px;
+    }
+
+    .unapplied-payments {
+        padding-bottom: 20px;
+    }
+
+    .unapplied-payments-grid {
+        font-size: $global-table-font-size;
+        max-height: 500px;
+        overflow: auto;
+
+        > div {
+            display: grid;
+            grid-template-columns: 100px 250px 150px 100px 100px;
+            border: 1px solid $grid-separator-color;
+            grid-gap: 1px;
+            background-color: $grid-separator-color;
+
+            > div {
+                padding: 10px;
+            }
+
+            &:not(:first-child) {
+                border-top: 0px;
+            }
+        }
+    }
+
+    .unapplied-payments-grid-row-odd > div {
+        background-color: $bg-grey;
+    }
+
+    .unapplied-payments-grid-row-even > div {
+        background-color: $polar-white;
+    }
+
+    .unapplied-payments-grid-header {
+        font-weight: bold;
+        position: sticky;
+        top: 0;
+
+        > div {
+            background-color: $polar-white;
+        }
+    }
+
+    .unapplied-payment-info-amount {
+        color: $success-green;
+        font-weight: bold;
+    }
+
+    .unapplied-payment-info-heading {
+        font-weight: bold;
+    }
+
+    .unapplied-payment-carrier {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    // app-date-picker overrides
+    .date-picker-override {
+        ::ng-deep {
+            .fui-datepicker-wrapper {
+                grid-gap: 0px 0px;
+            }
+                        
+            .k-datepicker {
+                height: 30px;
+            }
+
+            .k-input { 
+                height: 28px;
+            }
+        }
+    }
+
+    // access-based-location-selector overrides
+    .location-selector-override {
+        width: 210px;
+
+        ::ng-deep {
+            .k-multiselect {
+                width: 200px;
+            }
+
+            .k-button {
+                width: 170px;
+                overflow: hidden;
+                display: inline-block;
+                text-overflow: ellipsis;
+                text-align: left;
+            }
+
+            .k-multiselect-wrap {
+                padding-right: 0px;
+            }
+        }
+    }
+
+    // search-bar-autocomplete overrides
+    .carrier-override {
+        ::ng-deep {
+            .search-bar-autocomplete {
+                width: 360px;
+            }
+
+            .k-autocomplete {
+                height: 30px;
+            }
+
+            .k-input {
+                height: 24px;
+            }
+        }
+    }
+
+    // insurance-payment-types-dropdown overrides
+    .insurance-payment-types-dropdown {
+        ::ng-deep {
+            .k-dropdown {
+                height: 30px;
+                min-width: 200px;
+
+                &:hover {
+                    background-color: $polar-white;
+                }
+
+                > .k-dropdown-wrap {
+                    height: 30px;
+                    min-width: 200px;
+                    border: none;
+                }
+
+                .k-input {
+                    min-width: 200px;
+                    padding: 0px 8px;
+                    border: 1px solid $border-grey;
+                    border-radius: 5px;
+                    background-color: $polar-white;
+                    background-size: cover;
+                    color: $text-black;
+                    text-decoration: none solid rgb(51, 51, 51);
+                    line-height: 30px;
+                }
+            }
+        }
+    }
+
+    ::ng-deep .claims {
+        width: 100%;
+        max-width: inherit;
+    }
+
+    .currency-input-override {
+        ::ng-deep {
+            .currency-input-wrapper {
+                grid-gap: 0px 0px;
+            }
+
+            .currencyInput {
+                height: 30px;
+            }
+
+            .amountInput {
+                vertical-align: middle;
+                padding: 15px 10px;
+            }
+        }
+    }
+
+    .input-error {
+        border: 1px solid $alert-red;
+    }
+
+    .control-label {
+        height: 17px;
+        font-size: 12px;
+    }
+
+    .bulk-payment-header-label {
+        height: 20px;
+        text-decoration: none solid rgb(51, 51, 51);
+        line-height: 18px;
+        margin: 0 15px 10px 0;
+        font-size: 16px;
+        font-weight: bold;
+        float: left;
+    }
+
+    .bulk-payment-header-line-primary {
+        border-top-width: thin;
+        border-style: solid;
+        border-color: $text-black;
+        margin: 10px 0 0 0;
+    }
+
+    .bulk-payment-header-line-secondary {
+        border-top-width: thin;
+        border-style: solid;
+        border-color: $border-grey;
+        margin: 5px 0 15px 0;
+    }
+
+    .bulk-payment-card-container {
+        padding: 15px;
+        border-radius: 5px;
+        background-color: $polar-white;
+        background-size: cover;
+        box-shadow: 0px 5px 10px rgba(112,144,176,0.3);
+    }
+
+    .multi-selector__button {
+        margin-top: 7px;
+        width: 20%;
+        height: 30px;
+        padding: 0px 10px;
+        //border: 1px solid @patient-profile_header_border_color;
+        border-radius: 5px;
+        background-color: $polar-white;
+        background-size: cover;
+        font-size: 14px;
+        // color: @brand-color_font-header; ;
+        text-decoration: none solid rgb(51, 51, 51);
+    }
+
+    bulk-payment-row {
+        margin: 0 15px;
+    }
+
+    .form-row {
+        display: flex;
+        margin-bottom: 5px;
+    }
+
+    .form-group {
+        margin: 0 5px 0 0;
+        padding: 5px;
+    }
+
+    .bulk-payment-form-control {
+        min-width: 200px;
+        height: 30px;
+        padding: 0px 10px;
+        border: 1px solid $border-grey;
+        border-radius: 5px;
+        background-color: $polar-white;
+        background-size: cover;
+        color: $text-black;
+        text-decoration: none solid rgb(51, 51, 51);
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .footer {
+        background-color: $polar-white;
+        position: sticky;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        height: auto;
+        margin-bottom: 0px;
+        // padding: 0px, 10px, 0p, 20px;
+        // padding-right: 20px;
+    }
+
+    .service {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: white;
+
+        div:first-of-type {
+            text-align: right;
+        }
+    }
+
+    .payment {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #f5f5f5;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+.header-container {
+    margin-bottom: 5px;
+    height: 20px;
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+
+.mr-15 {
+    margin-right: 15px;
+    float: right;
+}
+
+.btnFlexContainer {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.doc-modal {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-areas: "header" "content" "footer";
+    margin: 0;
+    border: 1px solid $short-input-text-color;
+    border-radius: 4px;
+    outline: 0;
+    background-color: $background-color;
+    border-radius: 5px;
+    box-shadow: $global-drop-shadow;
+    max-width: 80vw;
+    max-height: 80vh;
+    min-height: 1px;
+    min-width: 300px;
+}
+
+.doc-modal-body {
+    grid-area: content;
+    border-top: $app-modal-header-border;
+    border-bottom: $app-modal-header-border;
+    overflow: auto;
+}
+
+.doc-modal-header {
+    font-size: $app-modal-header-font-size;
+    font-weight: $app-modal-header-font-weight;
+    font-family: $global-font-family;
+    color: $text-black;
+    height: 18px;
+}
+
+.closeModal {
+    cursor: pointer;
+    color: $action-blue;
+
+    &:hover {
+        color: $light-action-blue;
+    }
+}
+
+.containerPadding {
+    padding: 15px;
+}
+
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.modified-allowed-amount {
+    background-color:#fef9e7;
+}

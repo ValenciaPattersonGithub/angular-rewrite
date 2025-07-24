@@ -1,0 +1,47 @@
+﻿.prevCareApptPanel {
+
+    &__grid {
+
+    }
+
+    .k-grid-content {
+        border-bottom: 1px solid @brand-color_darker-gray;
+        border-left: none;
+        border-right: none;
+
+            .grid-checkbox {
+                text-align: left;
+            }
+    }
+
+    .k-grid {
+
+       .k-grid-toolbar {
+           padding: @brand-padding_horizontal;
+        }
+
+       .k-grouping-row {   
+               
+            > td {
+                padding: @brand-heading_padding;
+                    > p,
+
+                    > .k-reset {
+                    display: none;
+                }
+            }
+
+            .k-group-custom-header {
+                display: inline-block;
+                position: relative;
+
+                > table {
+
+                    .k-reset {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+}

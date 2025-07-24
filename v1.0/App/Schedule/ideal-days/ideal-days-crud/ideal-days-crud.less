@@ -1,0 +1,94 @@
+﻿.idealDaysCrud {
+    width: 100%;
+
+    .k-marquee-text .k-label-top,
+    .k-marquee-text .k-label-bottom {
+        display: none;
+    }
+
+    .k-scheduler {
+        .k-scheduler-table td, .k-scheduler-table th {
+            height: .02em;
+            //padding: .334em .5em;
+            font-size: 100%;
+        }
+    }
+
+    .panel-body {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding-top: 0px;
+        border-bottom: none;
+    }
+
+    .panel-default > .panel-heading {
+        background-color: @brand-color_white;
+        color: @brand-color_black;
+
+        .panel-title {
+            color: @brand-color_black;
+        }
+    }
+
+    .cell {
+        .concatString;
+    }
+
+    &__sticky {
+        top: 10px;
+        position: sticky;
+    }
+
+    &__apptTypes {
+        overflow-y: scroll;
+        max-width: 305px;
+        max-height: 500px;
+    }
+
+    &__actions {
+        .containerStandard;
+        float: right;
+        padding-bottom: @brand-padding_horizontal;
+        margin-top: 16px;
+
+        .btn {
+            transform: translateY(-50%);
+            margin-left: 5px;
+            float: right;
+            position: relative;
+            padding-bottom: @brand-padding_sm;
+        }
+    }
+
+    &__content {
+        max-height: 550px;
+        overflow: auto;
+        
+        .hoursLabel {
+            padding: 3px;
+            margin: 0px;
+        }
+    }
+
+    &__footer {
+        .containerStandard;
+        .clearfix;
+        padding-right: @brand-padding_sm;
+    }
+
+    .drag-container {
+        border: none;
+        padding: 2px;
+        border-radius: 2px;
+        max-width: 300px;
+    }
+
+    .drag-hint {
+        height: 40px;
+        width: 100%;
+        padding: 5px;
+        cursor: move;
+    }
+
+}

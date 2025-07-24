@@ -1,0 +1,113 @@
+<div id="grp{{id}}" class="panel">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h4>{{ title | i18n }}</h4>
+        </div>
+        <div class="pull-right panel-btn">
+            <span class="editPanel__save" ng-show="editing">
+                <button id="btn{{id}}Cancel" ng-click="cancelPanelEdit();" class="btn btn-default">{{ (flags.autoSave ? 'Done' : 'Cancel') | i18n }}</button>
+                <button id="btn{{id}}Save" ng-click="savePanelEdit();" ng-disabled="!HeightWeightForm.$valid " class="btn btn-primary" check-auth-z="{{access.Value}}">{{ 'Save' | i18n }}</button>
+            </span>
+            
+            <span ng-hide="editing">
+                <button tabindex="2" id="btn{{id}}EditPersonalPanel"  ng-click="editHeightWeight();" class="btn btn-default" >{{'Edit' | i18n }}</button>
+            </span>
+        </div>
+    </div>
+
+    <div class="panel-body editPanel__body" ng-disabled="flags.cancelling == true">
+        <div class="heightWeightPanel">
+            <div class="heightWeightPanel__divTable" style="width: 100%;" ng-hide="editing">
+                <div class="heightWeightPanel__divTableBody">
+                    <div class="heightWeightPanel__divTableRow">
+                        <div class="heightWeightPanel__divTableCell"><label class="control-label">{{'Weight' | i18n }}</label></div>
+                        <div class="heightWeightPanel__divTableCell"><label class="control-label">{{'Height' | i18n }}</label></div>
+                    </div>
+                    <div class="heightWeightPanel__divTableRow">
+                        <div class="heightWeightPanel__divTableCell" >  
+                            <input type="text" class="heightWeightPanel__form-control-noborder-wide" ng-model="user.Weight" maxlength="5" readonly disabled  /> 
+                            <label class="control-label">{{'Pounds' | i18n }}</label>
+                        </div>
+                        <div class="heightWeightPanel__divTableCell" >
+                            <input type="text" class="heightWeightPanel__form-control-noborder" ng-model="user.HeightFeet"   tabindex="-1" readonly  disabled/>
+                            <label class="control-label">{{'Feet' | i18n }}</label>
+                        </div>
+                        <div class="heightWeightPanel__divTableCell" >
+                            <input type="text" class="heightWeightPanel__form-control-noborder" ng-model="user.HeightInches" tabindex="-1"readonly  disabled/> 
+                            <label class="control-label">{{'Inches' | i18n }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body-new" ng-form="HeightWeightForm">
+                <div class="heightWeightPanel__divTable" style="width: 100%;" ng-show="editing">
+                    <div class="heightWeightPanel__divTableBody">
+                        <div class="heightWeightPanel__divTableRow" >
+                            <div class="heightWeightPanel__divTableCell"><label class="control-label">{{'Weight' | i18n }}</label></div>
+                            <div class="heightWeightPanel__divTableCell"><label class="control-label">{{'Height' | i18n }}</label></div>
+                            <div class="heightWeightPanel__divTableCell"><label class="control-label">{{'Height' | i18n }}</label></div>
+                        </div>
+                        <div class="heightWeightPanel__divTableRow" >
+                             <div class="heightWeightPanel__divTableCell" ng-class="{'has-error': hasErrors && !HeightWeightForm.Weight.$valid}">
+                                <input id="inpWeight"
+                                    ng-show="editing"
+                                    class="heightWeightPanel__form-control-wide"                                  
+                                    type="text"
+                                    onfocus="this.value = this.value;"
+                                    name="Weight" placeholder="{{'Pounds' | i18n }}"
+                                    ng-model="user.Weight"
+                                    maxlength="5"
+                                    minlength="1"
+                                    min-value="0.0"
+                                    max-value="999.9"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" 
+                                    ng-blur = "roundMyNumber();"
+                                    focus-on-show/> 
+                                <label class="control-label">{{'Pounds' | i18n }}</label>
+                                <span id="errWeight" class="help-block" ng-show="hasErrors && !HeightWeightForm.Weight.$valid">
+                                    {{ 'valid range (0 - 999.9 lbs)' | i18n  }}
+                                </span>
+                            </div>
+                            <div class="heightWeightPanel__divTableCell" ng-class="{'has-error': hasErrors && !HeightWeightForm.HeightFeet.$valid}">
+                                <input id="inpHeightFeet"
+                                        class="heightWeightPanel__form-control"
+                                        type="text"
+                                        onfocus="this.value = this.value;"
+                                        name="HeightFeet" placeholder="{{'Feet' | i18n }}"
+                                        ng-model="user.HeightFeet"
+                                        maxlength="1"
+                                        minlength="1"
+                                        min-value="0"
+                                        max-value="8"
+                                        oninput="this.value=this.value.replace(/[^\d]/,'')"
+                                        />
+                                <label class="control-label">{{'Feet' | i18n }}</label>
+                                <span id="errHeightFeet" class="help-block" ng-show="hasErrors && !HeightWeightForm.HeightFeet.$valid">
+                                    {{ 'valid range (0 - 8 ft.)' | i18n  }}
+                                </span>
+                            </div>
+                            <div class="heightWeightPanel__divTableCell" ng-class="{'has-error': hasErrors && !HeightWeightForm.HeightInches.$valid}">
+                                <input id="inpHeightInches"
+                                        class="heightWeightPanel__form-control"
+                                        type="text"
+                                        onfocus="this.value = this.value;"
+                                        name="HeightInches" placeholder="{{'Inches' | i18n }}"
+                                        ng-model="user.HeightInches"
+                                        maxlength="2"
+                                        minlength="1"
+                                        min-value="0"
+                                        max-value="11" 
+                                        oninput="this.value=this.value.replace(/[^\d]/,'')"
+                                        />
+                                <label class="control-label">{{'Inches' | i18n }}</label>
+                                <span id="errHeightInches" class="help-block" ng-show="hasErrors && !HeightWeightForm.HeightInches.$valid">
+                                    {{ 'valid range (0 - 11 in.)' | i18n  }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>

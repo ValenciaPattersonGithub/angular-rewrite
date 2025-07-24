@@ -1,0 +1,93 @@
+﻿<div style="z-index:999; float:left; " class="nav_caret">
+    <i class="fa fa-caret-left fa-2x" ng-show="expanded" ng-click="toggleNav(expanded)"></i>
+    <i class="fa fa-caret-right fa-2x" ng-show="!expanded" ng-click="toggleNav(expanded)"></i>
+</div>
+<ul class="mainNav__list" ng-click="clearStoredFilters()">
+    <li class="mainNav__list-item">
+        <a id="btnSideNavDashboard" class="mainNav__link" href="#/Dashboard/" ng-model="selected"
+            btn-radio="'dashboard'" ng-class="{'left':expanded == true,'no-left':expanded}" close-off-canvas
+            uncheckable>
+            <span class="font_awesome_icon text-center">
+                <i class="far fa-chart-bar fa-1x"></i>
+            </span>
+            <span ng-if="expanded" class="expanded_link">
+                <span ng-if="expanded">{{ ::('Dashboard' | i18n) }}</span>
+            </span>
+        </a>
+    </li>
+    <li class="mainNav__list-item">
+        <a id="btnSideNavSchedule" class="mainNav__link" href="#/Schedule/" ng-model="selected" btn-radio="'schedule'"
+            ng-class="{'left':expanded == true,'no-left':expanded}" close-off-canvas uncheckable>
+            <span class="font_awesome_icon text-center">
+                <i class="far fa-calendar-alt fa-1x"></i>
+            </span>
+            <span ng-if="expanded" class="expanded_link">
+                <span ng-if="expanded">{{ ::('Schedule' | i18n) }}</span>
+            </span>
+        </a>
+    </li>
+    <li class="mainNav__list-item">
+        <!-- Using a href in stead of a ng-href until monday, may 1st when Ryan Whitaker is back. It seems there is something wrong with the user auth amfa. -->
+        <a id="btnSideNavPeople" href="#/Patient/" class="{{patientClass}} mainNav__link" title="{{patientTitle}}"
+            ng-model="selected" btn-radio="'patient'" ng-class="{'left':expanded == true,'no-left':expanded}"
+            close-off-canvas uncheckable>
+            <span class="font_awesome_icon text-center">
+                <i class="fa fa-users fa-1x"></i>
+            </span>
+            <span ng-if="expanded" class="expanded_link">
+                <span ng-if="expanded">{{ ::('Patients' | i18n) }}</span>
+            </span>
+        </a>
+    </li>
+    <li class="mainNav__list-item">
+        <a id="btnSideNavBusiness" class="mainNav__link" href="#/BusinessCenter/PracticeSettings" ng-model="selected"
+            btn-radio="'business'" ng-class="{'left':expanded == true,'no-left':expanded}" close-off-canvas uncheckable>
+            <span class="font_awesome_icon text-center">
+                <i class="fa fa-briefcase fa-1x"></i>
+            </span>
+            <span ng-if="expanded" class="expanded_link">
+                <span ng-if="expanded">{{ ::('Business' | i18n) }}</span>
+            </span>
+        </a>
+    </li>
+    <li class="mainNav__list-item" ng-show="isSRHEnabled">
+        <a id="btnSideNavSolutionReach" class="mainNav__link" ng-click="navigate('#/Engagement/')"  target="_blank"
+            ng-model="selected" btn-radio="'business'" ng-class="{'left':expanded == true,'no-left':expanded}"
+            close-off-canvas uncheckable>
+            <span class="font_awesome_icon text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2"
+                    overflow="visible" preserveAspectRatio="none" viewBox="0 0 24 24" width="18" height="18">
+                    <g>
+                        <path xmlns:default="http://www.w3.org/2000/svg"  d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" 
+                         style="fill: white;"></path>
+                    </g>
+                </svg>
+            </span>
+            <span ng-if="expanded" class="expanded_link">
+                <span ng-if="expanded">{{ ::('Engagement' | i18n) }}</span>
+            </span>
+        </a>
+    </li>
+    <li class="mainNav__list-item">
+        <a id="btnSideNavLearn" class="mainNav__link" ng-click="navigate('#/Help/')" ng-model="selected" btn-radio="'help'"
+            ng-class="{'left':expanded == true,'no-left':expanded}" close-off-canvas uncheckable>
+            <span class="font_awesome_icon text-center">
+                <i class="fa fa-question fa-1x"></i>
+            </span>
+            <span ng-if="expanded" class="expanded_link">
+                <span ng-if="expanded">{{ ::('Help' | i18n) }}</span>
+            </span>
+        </a>
+    </li>
+    <li class="mainNav__list-item">
+        <a id="btnSideNavSettings" class="mainNav__link" href="#/BusinessCenter/PracticeSettings" ng-model="selected"
+            btn-radio="'learn'" ng-class="{'left':expanded == true,'no-left':expanded}" close-off-canvas uncheckable>
+            <span class="font_awesome_icon text-center">
+                <i class="fas fa-cog fa-1x"></i>
+            </span>
+            <span ng-if="expanded" class="expanded_link">
+                <span ng-if="expanded">{{ ::('Settings' | i18n) }}</span>
+            </span>
+        </a>
+    </li>
+</ul>

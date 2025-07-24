@@ -1,0 +1,103 @@
+<div id="notificationsDialog" 
+     class="notification-container">
+    <div class="notification-header">
+        <label class="notification-header-title margin-top-5">Notifications</label>   
+        <button (click)="close()" data-testid="btnClose" ngDefaultControl id="btnClose" class="btn btn-link fa fa-times pull-right">
+        </button>     
+    </div>
+    <hr class="notifications-line-bar">
+    <div class="notifications-list-options">
+        <app-toggle ngDefaultControl id="checkBoxStatus" data-testid="checkBoxStatus" label="Show Unread Only" labelDirection="right"
+                    [isChecked]="showUnread" (toggled)="showUnreadOnly($event)">
+        </app-toggle>
+        <span class="notification-mark-all-read" (click)="markAllNotifications()" data-testid="markAllAsRead" >Mark all as Read</span>
+    </div>
+    <hr class="notifications-line-bar">
+    <div *ngIf="rxUser" class="notifications-show-recent fuse-shadow-color">Pinned</div>
+    <hr *ngIf="rxUser" class="notifications-line-bar">
+    <div *ngIf="rxUser" class="notification-body-dosespot-text">
+        <span class="dosespot-notifications-margin">
+            <i class="fa fa-syringe dosespot-notifications-icon"></i>
+            <i *ngIf="notifications.counts>0" class="fas fa-circle notifications-unread-dosespot"></i>
+        </span>
+        <div>
+            <p>
+                <strong class="icon-report">Dose Spot</strong>
+            </p>
+           <a *ngIf="notifications.counts>0" class="dosespot-notification-link" href="{{notifications.url}}" target="_blank"><span class="dosespot-notifications-count"> {{notifications.counts}}</span> pending prescriptions are available.</a>
+           <span *ngIf="notifications.counts==0" class="dosespot-notification-link">No pending prescription available</span>
+        </div>
+
+    </div>
+    <hr *ngIf="rxUser" class="notifications-line-bar">
+    <div class="notifications-show-recent fuse-shadow-color" data-testid="recentList" >Recents</div>
+    <hr class="notifications-line-bar">
+    <div class="notification-messages" data-testid="notificationList" >
+        <div *ngFor="let message of messages" class="notification-full-body">          
+            <div *ngIf="message?.DeliveryStatus=='Completed'" class="notification-body notification-body-top">
+                <div class="notification-body-text" (click)="openReport(message)">
+                    <span [ngClass]="{'notification-body-unread-icon':message?.NotificationReadStatus=='Unread','notification-body-icon':message?.NotificationReadStatus=='Read'}">
+                        <img class="icon-report img-business-icon" src="Images/IconBusiness.svg">
+                        <i *ngIf="message?.NotificationReadStatus=='Unread'" class="fas fa-circle notifications-unread"></i>
+                    </span>
+                    <div>
+                        <p class="fuse-blue-color">
+                            <span class="notification-body-unread-title fuse-blue-color" title="{{message?.Title}}"> {{ message?.Title }}</span>
+                            <span class="notifications-list-item-details fuse-shadow-color notifications-show-unread timespan"> {{message?.Timespan}} ago</span>
+                        </p>
+                    </div>
+
+                </div>
+
+                <ul class="dropdown-menu" [ngClass]="{ 'd-block': openDropdownId === message?.NotificationId }">
+                    <li>
+                        <a id="document-editLink" class="menuLink dropdown-menu-notifications"
+                           (click)="markOneNotification(message?.NotificationId,message?.NotificationReadStatus)" placement="top" delay="500">
+                            {{ message?.NotificationReadStatus=="Read" ? 'Mark as Unread':'Mark as Read' | translate }}
+                        </a>
+                        <a id="document-editLink" class="menuLink dropdown-menu-notifications"
+                           (click)="markOneNotification(message?.NotificationId,'Deleted')" placement="top"
+                           delay="500">
+                            {{ 'Delete' | translate }}
+                        </a>
+                    </li>
+                </ul>
+                <button class="btn-link dropdown-toggle btn-right" data-toggle="dropdown" (click)="toggleDropdown($event, message?.NotificationId)">
+                    <i class="fa fa-ellipsis-v"></i>
+                </button>
+            </div>
+                <div *ngIf="message?.DeliveryStatus=='Completed'" (click)="openReport(message)" class="notification-body notification-body-bottom">
+                    <span class="notifications-list-item-details">{{ message?.Body }}</span>
+                </div>        
+                <div *ngIf="message?.DeliveryStatus=='Pending'" class="notification-body-unread notification-body-top">
+                    <div class="notification-body-text">
+                        <span class="notification-body-icon">
+                            <img class="icon-notif-proc" src="/src/assets/Images/notif-inpro-icon.png" aria-hidden="true">
+                        </span>
+                        <p class="notification-body-unread-title" title="{{message?.Title}}">
+                            {{message?.Title}}
+                            <span class="notifications-list-item-details notifications-show-unread"> Started at {{message?.Timespan}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div *ngIf="message?.DeliveryStatus=='Pending'" class="notification-body notification-body-bottom">
+                    <span class="notifications-list-item-details">Processing...</span>
+                </div>
+                <div *ngIf="message?.DeliveryStatus=='Failed'" class="notification-body-unread notification-body-top">
+                    <div class="notification-body-text">
+                        <span class="notification-body-icon">
+                            <img class="icon-notif-proc" src="/src/assets/Images/notif-inpro-icon.png" aria-hidden="true">
+                        </span>
+                        <p class="notification-body-unread-title" title="{{message?.Title}}">
+                            {{message?.Title}}
+                            <span class="notifications-list-item-details notifications-show-unread"> Started at {{message?.Timespan}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div *ngIf="message?.DeliveryStatus=='Failed'" class="notification-body notification-body-bottom">
+                    <span class="notifications-list-item-details">Failed</span>
+                </div>
+            <hr class="notifications-line-bar">
+        </div>
+    </div>
+</div>

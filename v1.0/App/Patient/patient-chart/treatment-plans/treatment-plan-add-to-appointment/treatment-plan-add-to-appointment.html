@@ -1,0 +1,23 @@
+﻿<div class="txPlanAddToAppointment">
+    <div class="txPlanAddToAppointment__content panel">
+        <div class="panel-heading">
+            <span class="panel-title">{{'Add Service ({0}) to Stage' | i18n:[serviceToAdd.Description]}}</span>
+        </div>
+        <div class="panel-body">
+            <div>{{::('This stage contains services in appointments.' | i18n)}}</div>
+            <div class="activeAppointments" ng-repeat="appointment in appointmentChoices">
+                <input id="appointment{{index}}" type="radio" name="appointmentId" ng-click="handleRadioClick(appointment.AppointmentId, appointment.ServiceTransaction.AppointmentId)" value="{{appointment.AppointmentId}}" />
+                <span ng-if="appointment.StartTime === null">{{::('Add this service to an Unscheduled Appointment' | i18n) }}  {{appointment.Description}}</span>
+                <span ng-if="appointment.ServiceTransaction.ScheduledStatus === 'Unscheduled'">{{::('Add this service to an Unscheduled Appointment ' | i18n)}}  {{appointment.Description}}</span>
+                <span ng-if="((appointment.StartTime !== null)  && (appointment.ServiceTransaction.ScheduledStatus !== 'Unscheduled'))">{{::('Add this service to appointment on' | i18n)}} <span>{{ appointment.StartTime ? appointment.StartTime : appointment.ServiceTransaction.ScheduledStatus | date: 'MM/dd/yyyy'}} </span> {{appointment.Description}}</span>
+            </div>
+            <input type="radio" name="appointmentId" id="doNotAdd" value="" /> {{::('Do not add this service to any existing appointments' | i18n)}}
+            <div class="txPlanAddToStage__footer">
+                <div class="txPlanAddToStage__btn pull-right">
+                    <button class="btn btn-default" type="button" ng-click="saveService('Close')">{{ ::('Close' | i18n) }}</button>
+                    <button class="btn btn-primary" type="button" ng-click="saveService('Save')">{{ ::('Save' | i18n) }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+﻿<div id="previousDentalOfficeSection" class="form-body" ng-form="frmPreviousDentalOffice">
+    <!-- Name-->
+    <div class="form-row">
+        <div class="form-group form-col-12" ng-class="{ 'has-error': hasErrors && !frmPreviousDentalOffice.inpPreviousDentistName.$valid}">
+            <label class="control-label">{{'Previous Dentist' | i18n }}</label>
+            <input id="inpPreviousDentistName" name="inpPreviousDentistName" ng-required="nameRequired" class="form-control" placeholder="{{ 'Name' | i18n }}" ng-model="previousDentalOffice.Name"
+                    capitalize-first-with-override maxlength="64"  char-pattern="[^a-zA-Z-'. ]" />
+            <span id="lblNameRequired" class="help-block " ng-show="hasErrors && !frmPreviousDentalOffice.inpPreviousDentistName.$valid">
+                {{ 'This field is required.' | i18n }}
+            </span>
+            <a id="btnPreviousDentistContactInfo" class="btn btn-link" icon="fa-plus" ng-click="isContactCollapsed = !isContactCollapsed" ng-show="isContactCollapsed">{{ 'Add {0}' | i18n:['Contact Information'] }}</a>
+        </div>
+    </div>
+    <div class="form-row" collapse="isContactCollapsed">
+        <!--Address 1-->
+        <div class="form-group form-col-12">
+            <label class="control-label">{{'Address' | i18n }}</label>
+            <input id="inpDentalOfficeAddressLine1" type="text" placeholder="{{ 'Street address' | i18n }}" class="form-control"
+                    ng-model="previousDentalOffice.Address.AddressLine1" maxlength="128" char-pattern="[^a-zA-Z0-9-'.\\()# ]" />
+        </div>
+    </div>
+        
+    <div class="form-row">
+        <!--Address 2-->
+        <div class="form-group form-col-12">
+            <label class="control-label">{{'Address 2' | i18n }}</label>
+            <input id="inpDentalOfficeAddressLine2" type="text" placeholder="{{ 'Address 2' | i18n }}" class="form-control"
+                    ng-model="previousDentalOffice.Address.AddressLine2" maxlength="128" char-pattern="[^a-zA-Z0-9-'.\\()# ]" />
+        </div>
+    </div>
+        
+    <div class="form-row">
+        <!--City-->
+        <div class="form-group form-col-6">
+            <label class="control-label">{{'City' | i18n }}</label>
+            <input id="inpDentalOfficeCity" type="text" placeholder="{{ 'City' | i18n }}" class=" form-input"
+                    ng-model="previousDentalOffice.Address.City"
+                    capitalize-first-with-override maxlength="64" alpha-only />
+        </div>
+        <!--State-->
+        <div class="form-group form-col-4">
+            <label class="control-label">{{'State' | i18n }}</label>
+            <state-list state-list-id="inpDentalOfficeState" source="previousDentalOffice.Address.State"></state-list>
+        </div>
+        <div class="form-group form-col-2" ng-class="{'has-error': hasErrors && !frmPreviousDentalOffice.inpDentalOfficeZip.$valid}">
+            <label class="control-label">{{'Zip' | i18n }}</label>
+            <!--zip 9 numeric-->
+            <input id="inpDentalOfficeZip" zip-field="previousDentalOffice.Address.ZipCode" type="text" onfocus="this.value = this.value;" class="form-control"
+                    name="inpDentalOfficeZip" placeholder="{{ 'Zip Code' | i18n }}" ng-model="previousDentalOffice.Address.ZipCode"
+                    maxlength="10" minlength="5" />
+            <span id="errDentalOfficeZipCode" class="help-block" ng-show="hasErrors && !frmPreviousDentalOffice.inpDentalOfficeZip.$valid">
+                {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n  }}
+            </span>
+        </div>
+    </div>
+    <!--Notes-->
+    <div class="form-row">
+        <div class="form-group form-col-12">
+            <label class="control-label">{{'Notes' | i18n }}</label>
+            <a id="btnRecordsRequestNotes" class="btn btn-link" icon="fa-plus" ng-click="isNoteCollapsed = !isNoteCollapsed"
+                ng-show="isNoteCollapsed">{{'Add {0}' | i18n:['a Note'] }}</a>
+            <textarea id="inpRecordsRequestNotes"
+                      class="form-control form-textarea"
+                      name="inpRecordsRequestNotes"
+                      ng-show="!isNoteCollapsed"
+                      maxlength="500"
+                      rows="5" cols="50"
+                      ng-model="previousDentalOffice.Notes"
+                      placeholder="{{'Notes' | i18n }}"></textarea>
+        </div>
+    </div>
+
+    <!--Section Save buttons-->
+    <!--<div class="form-footer">
+        <button id="btnSaveDentalRecords" class="btn btn-primary">{{ 'Save Dental Records' | i18n }}</button>
+        <button id="btnClear" class="btn btn-default">{{ 'Clear' | i18n }}</button>
+        
+    </div>-->
+</div>
+
+

@@ -1,0 +1,66 @@
+<div id="toothFilter" tabindex="0" (blur)="chartPopoverActive = false">
+	<button id="toothFilterBtn" class="btn dropdown-link dropdown-toggle" data-toggle="dropdown" (click)="chartPopoverActive = !chartPopoverActive" [disabled]="this.disabled">
+		<div class="dropdown-text"><span>{{'(' + this.getSelectedCount() + ') '}}{{ this.label + ' Selected' }}</span></div>
+		<div class="dropdown-caret"><span class="fa fa-caret-down"></span></div>
+	</button>
+	<div class="toothFilterContent" [ngClass]="{active: chartPopoverActive}">
+		<div class="teethSection">
+			<div class="teethSection__row">
+				<button id="{{tooth.USNumber}}"
+						class="btn"
+						(click)="selectTooth(tooth, true)"
+						[ngClass]="{'selected btn-primary': tooth.$$selected, 'btn-default': !tooth.$$selected}"
+						[disabled]="disableSelection"
+						*ngFor="let tooth of this.allTeeth | toothDefinitions: 'Upper': 'Permanent' : false">
+					{{tooth.USNumber}}
+				</button>
+			</div>
+			<div class="teethSection__row">
+				<button id="{{tooth.USNumber}}"
+						class="btn"
+						(click)="selectTooth(tooth, true)"
+						[ngClass]="{'selected btn-primary': tooth.$$selected, 'btn-default': !tooth.$$selected}"
+						[disabled]="disableSelection"
+						*ngFor="let tooth of this.allTeeth  | toothDefinitions: 'Lower': 'Permanent' : true">
+					{{tooth.USNumber}}
+				</button>
+			</div>
+		</div>
+		<div class="bottomSection">
+			<div class="bottomSection__regions">
+				<button id="UA" class="btn" (click)="selectArch('Upper', 'UA')" [ngClass]="{'btn-default': !this.buttons['UA'], 'btn-primary': this.buttons['UA']}">UA</button>
+				<button id="LA" class="btn" (click)="selectArch('Lower', 'LA')" [ngClass]="{'btn-default': !this.buttons['LA'], 'btn-primary': this.buttons['LA']}">LA</button>
+				<button id="Prm" class="btn" (click)="this.permToggle = !this.permToggle" [ngClass]="{'btn-default': this.permToggle, 'btn-primary': !this.permToggle}">Prm</button>
+				<button id="Clr" class="btn btn-default" (click)="clearTeeth()" [disabled]="!this.selectedTeeth || this.selectedTeeth.length === 0">Clr</button>
+			</div>
+			<div class="teethSection">
+				<div class="teethSection__row">
+					<button id="{{tooth.USNumber}}"
+							class="btn"
+							(click)="selectTooth(tooth, true)"
+							[ngClass]="{'selected btn-primary': tooth.$$selected, 'btn-default': !tooth.$$selected}"
+							[disabled]="disableSelection"
+							*ngFor="let tooth of this.allTeeth | toothDefinitions: 'Upper': 'Primary' : false">
+						{{tooth.USNumber}}
+					</button>
+				</div>
+				<div class="teethSection__row">
+					<button id="{{tooth.USNumber}}"
+							class="btn"
+							(click)="selectTooth(tooth, true)"
+							[ngClass]="{'selected btn-primary': tooth.$$selected, 'btn-default': !tooth.$$selected}"
+							[disabled]="disableSelection"
+							*ngFor="let tooth of this.allTeeth | toothDefinitions: 'Lower' : 'Primary' : true">
+						{{tooth.USNumber}}
+					</button>
+				</div>
+			</div>
+			<div class="bottomSection__regions">
+				<button id="UR" class="btn" (click)="selectQuadrant('Upper Right', 'UR')" [ngClass]="{'btn-default': !this.buttons['UR'], 'btn-primary': this.buttons['UR']}">UR</button>
+				<button id="UL" class="btn" (click)="selectQuadrant('Upper Left', 'UL')" [ngClass]="{'btn-default': !this.buttons['UL'], 'btn-primary': this.buttons['UL']}">UL</button>
+				<button id="LR" class="btn" (click)="selectQuadrant('Lower Right', 'LR')" [ngClass]="{'btn-default': !this.buttons['LR'], 'btn-primary': this.buttons['LR']}">LR</button>
+				<button id="LL" class="btn" (click)="selectQuadrant('Lower Left', 'LL')" [ngClass]="{'btn-default': !this.buttons['LL'], 'btn-primary': this.buttons['LL']}">LL</button>
+			</div>
+		</div>
+	</div>
+</div>

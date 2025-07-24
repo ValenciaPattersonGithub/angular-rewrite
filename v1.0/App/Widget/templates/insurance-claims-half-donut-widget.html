@@ -1,0 +1,20 @@
+﻿<div ng-controller="InsuranceClaimsHalfDonutWidgetController" class="soarWidget">
+    <div class="panel-heading soarWidget__header">
+        <div class="widget-handle w_row">
+            <label>{{ data.Title | i18n }}</label>
+        </div>
+        <div>
+            <soar-select-list id="insuranceClaimsFilter"
+                              name="insuranceClaimsFilter"
+                              text-field="display"
+                              value-field="value"
+                              option-list="displayTypeOptions"
+                              ng-model="selectedDisplayType"
+                              sb-change="filterChanged">
+            </soar-select-list>
+        </div>
+    </div>
+    <div class="soarWidget__body">
+        <simple-half-donut data="insuranceClaimsData"></simple-half-donut>
+    </div>
+</div>

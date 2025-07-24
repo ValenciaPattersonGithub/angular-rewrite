@@ -1,0 +1,90 @@
+﻿.comingSoon {
+    
+    h1 {
+        font-family: @global-font-family;
+        text-align: center;
+    }
+    #universe {
+        .clearfix;
+        position: relative;
+        width: 100%;
+        min-height: 400px;
+    }
+
+    #planet {
+        position: absolute;
+        /* Positions the top-left corner of the image to be *
+        /* in the middle of the box */
+        top: 50%;
+        left: 50%;
+    
+        /* Play with these numbers to see what it does */
+        height: 200px;
+        width: 200px;
+        margin-top: -100px; 
+        margin-left: -100px;
+        color: #002247;
+        font-size: 200px;
+        text-align: center;
+    }
+
+    #rocket {
+        /* Style your earth */
+        position: absolute;
+        top: 0;
+        left: 50%;
+    
+        height: 50px;
+        width: 50px;
+        margin-left: -25px;
+        margin-top: -25px;
+        font-size: 50px;
+        color: #749e00;
+        transform: rotate(50deg);
+    }
+
+    #rocket-orbit {
+        /* For Section #2 */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        width: 300px;
+        height: 300px;
+        margin-top: -150px;
+        margin-left: -150px;
+
+        border-width: 0px;
+        border-style: dotted;
+        border-color: white;
+        border-radius: 50%;
+    
+        -webkit-animation: spin-right 5s linear infinite;
+        -moz-animation: spin-right 5s linear infinite;
+        -ms-animation: spin-right 5s linear infinite;
+        -o-animation: spin-right 5s linear infinite;
+        animation: spin-right 5s linear infinite;
+    }
+
+
+    @-webkit-keyframes spin-right {
+      100% {
+        -webkit-transform: rotate(360deg);
+           -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+             -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin-right {
+      100% {
+        -webkit-transform: rotate(360deg);
+           -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+             -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+      }
+    }
+
+}

@@ -1,0 +1,101 @@
+﻿.soarTable {
+    &__sort-toggle {
+        display: inline-block;
+        float: left;
+        text-align: left;
+        .fa {
+            color: lighten(@brand-color_font-regular, 20);
+        }
+        &.active {
+            .fa {
+                color: @brand-color_font-regular;
+            }
+        }
+        &.inactive {
+            .fa {
+                display: none;
+            }
+        }
+       
+        
+        
+    }
+}
+.column-heading {
+    margin: 0 0 0 15px;
+    padding: 2px 5px 0 0;
+}
+
+.column-sort-carets {
+    height: 19px;
+}
+
+.td-btns {
+    width: 10%;
+
+    > div {
+        display: flex;
+        flex-direction: row;
+        margin: -10px;
+        height: 39px;
+
+        > i {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+    }
+}
+
+
+.table-header {
+    background-color: #cccccc;
+    color: #fff;
+    font-size: 14px;
+    line-height: 38px;
+    margin-bottom: 1px;
+    padding-left: 12px;
+}
+
+
+.table-width-fix{
+border-collapse:inherit;
+table-layout: fixed;
+}
+
+.table-width-fix-border-collapse{
+border-collapse:collapse;
+table-layout: fixed;
+}
+
+.resizable tr td{
+overflow: hidden;
+}
+
+.resizable  td{
+overflow: hidden;
+}
+
+ .table-col-50 {
+    width: 50%;
+}
+
+/* to have one column use ellipsis, non-shrinking columns need to be declared */
+.ellipsis-column {
+    max-width: 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.no-wrap-column {
+    white-space: nowrap;
+    width: 1px;
+}
+
+/* New table styling */
+.fuseTable {
+    td, th {
+        padding: 5px;
+    }
+}

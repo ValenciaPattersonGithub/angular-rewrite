@@ -1,0 +1,434 @@
+﻿//NEW FORM STYLES
+
+//Form Column Layout
+.form {
+    &-body {
+        .clearfix;
+        display: block;
+        width: 100%;
+        max-width: @brand-form_width;
+        margin: 0 auto;
+
+        // Misc form controls
+        .checkbox-control {
+            // for inline checkboxes, apply class to checkbox directive
+            .utilCheckbox {
+                .make-form-col(4);
+            }
+            
+        }
+    }
+    &-row {
+        .make-form-row;
+
+        .form-control,
+        [class*="form-col"] {
+            box-sizing: border-box;
+        }
+
+        .k-dropdown {
+            width: 100%;
+        }
+        
+        .control-label {
+            width: 100%;
+
+            &-spacer {
+                width: 100%;
+                opacity: 0;
+            }
+        }
+
+        input[disabled] {
+            background-color: @brand-form_disabled-bg;
+        }
+
+        .typeahead {
+            width: 100%;
+        }
+    }
+    &-list {
+        .clearfix;
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+
+        > li {
+            display: inline-block;
+            float: left;
+            padding-right: @brand-padding_sm;
+            margin-right: @brand-margin_sm;
+            border-right: @brand-border;
+
+            &:last-child {
+                padding-right: 0;
+                margin-right: 0;
+                border-right: none;
+            }
+        }
+    }
+    &-checkbox {
+        //Removes padding from checkbox in header rows
+        .utilCheckbox {
+            &__ctrl {
+                padding: 0;
+            }
+            &__label {
+                line-height: @line-height-base;
+            }
+        }
+    }
+    &-footer {
+        .make-form-row;
+        text-align: right;
+        * {
+            float: right;
+            margin-left: @brand-margin_sm;
+        }
+    }
+    &-btn {
+        &-remove {
+            .make-form-icon-btn();
+        }
+    }
+}
+
+.control-span {
+    display: inline-block;
+    padding: @brand-padding_sm 0;
+    border: 1px solid transparent;
+}
+
+// We only use grid widths: 12, 10, 9, 8, 6, 4, 3, 2
+.form-col-12 {
+    .make-form-col(12);
+}
+.form-col-10 {
+    .make-form-col(10)
+}
+.form-col-9 {
+    .make-form-col(9);
+}
+.form-col-8 {
+    .make-form-col(8);
+}
+.form-col-6 {
+    .make-form-col(6);
+}
+.form-col-5 {
+    .make-form-col(5);
+}
+.form-col-4 {
+    .make-form-col(4);
+}
+.form-col-3 {
+    .make-form-col(3);
+}
+.form-col-2 {
+    .make-form-col(2);
+}
+
+// Form Utility Classes
+.alert {
+
+}
+.error {
+    color: @brand-color_error;
+    .soar-typeahead {
+        color: @text-color;
+    }
+}
+.success {
+
+}
+
+//Because IE SUUUUUCKS
+*::-ms-clear  {
+    display: none; 
+    width:0; 
+    height:0; 
+}
+
+* {
+
+
+    &::-webkit-input-placeholder {
+       color: @brand-color_form-placeholder !important;
+    }
+
+    &:-moz-placeholder { /* Firefox 18- */
+       color: @brand-color_form-placeholder !important;  
+    }
+
+    &::-moz-placeholder {  /* Firefox 19+ */
+       color: @brand-color_form-placeholder !important;  
+    }
+
+    &:-ms-input-placeholder {  
+       color: @brand-color_form-placeholder !important;  
+    }
+}
+textarea {
+    resize: none;
+    width: 100%;
+}
+
+.checkbox-group {
+    padding-left: 20px;
+}
+
+.form-group {
+    > div {
+        margin-bottom: 8px;
+    }
+}
+
+.soar-form-group {
+    > div {
+        margin-bottom: 8px;
+    }
+}
+
+// Form control Feedback Font Awesome Mod
+.form-control-feedback.fa {
+    width: auto;
+    height: auto;
+    right: @brand-margin_sm;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.4em;
+}
+
+/*
+// #region btn-link override
+button[disabled="disabled"] {
+    color: @brand-color_disabled;
+
+    &:hover {
+        cursor: default;
+        color: @brand-color_disabled;
+    }
+}
+.btn-link {
+    color: @brand-color_link;
+    font-size: @font-size-normal;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 0;
+
+    btn-link:active {
+        font-weight: bold;
+        }
+
+    btn-link:disabled {
+        font-weight: bold;
+        color: @bg-disabled;
+        }
+}*/
+// #endregion
+
+.btn-add-o {
+    background: #fff;
+    border-radius: 0;
+    color: @add-color;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 55px 5px 55px;
+    border: 1px solid @add-color;
+}
+.select-list {
+    position: relative;
+
+    > i {    
+        position: absolute;
+        right: 10px;
+        top: 5px;
+        z-index: 1001;
+        font-size: 20px;
+   }
+}
+
+
+.select-disabled {
+    height: 30px;
+    background-color: #EBEBE4;
+}
+
+
+.error > input,
+.error > input:focus,
+.error > p > input,
+.error > div > p > input,
+.error > p > input:focus,
+.error > select,
+.error > select:focus,
+.error > .soar-typeahead > form.typeahead-form > input,
+.error > .soar-typeahead > form.typeahead-form > input:focus,
+.error > textarea,
+.error > textarea:focus,
+.error span.k-combobox > span.k-dropdown-wrap,
+.error span.k-dropdown > span.k-dropdown-wrap,
+.error > div > div > form > input,
+.error > date-selector > div > p > input {
+    border-color: @state-soar-error-text;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.error > .help-text {
+    color: #ff0500;
+}
+
+.warn > input,
+.warn > input:focus,
+.warn > select,
+.warn > select:focus,
+.warn > .soar-typeahead > form.typeahead-form > input,
+.warn > .soar-typeahead > form.typeahead-form > input:focus {
+    border-color: #9f8639;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.warn > .help-text {
+    color: #9f8639;
+}
+
+.invalid {
+    border-color: #ca674c !important;
+}
+
+
+// KENDO UI
+// **********************************
+
+// COMBO BOX
+
+
+
+.k-combobox {
+    height: auto;
+    background-color: @brand-color_white;
+
+    .k-dropdown-wrap {
+        position: relative;
+        padding: (@brand-form_padding - 4);
+        border-radius: 2px;
+
+        .k-input {
+            position: absolute;
+            height: 100%;
+            top: 0;
+            left: 0;
+            padding: 0 @brand-padding_xs;
+            box-sizing: border-box;
+        }
+    }
+    .k-select {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        border-color: transparent;
+
+        .k-icon {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            padding-right: @brand-padding_sm;
+            transform: translateY(-50%);
+            height: 100%;
+            margin: 0;
+            background-image: none;
+        }
+    }
+    
+    .k-i-arrow-s:before {
+        // fa-chevron-down
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: 'Font Awesome 5 Pro';
+        content: @fa-var-caret-down;
+        font-size: 14px;
+        color: @panel-btn-color;
+    }
+    
+}
+
+
+
+
+
+// Form elements
+// **********************************
+
+.form-header {
+   background-color: @gray-light;   
+   padding: 5px 20px 5px 20px;
+   font-weight: bold;
+   font-size: @heading-input-size;
+   color: @white;
+
+   > div > button {
+       border-radius: 0;
+       width: 100px; 
+   }
+ }
+
+.form-container {
+    @media only screen and (min-width:320px) and (max-width:768px) {
+        position: relative;
+        padding-left: 0;
+    }
+    
+    @media only screen and (min-width:768px) {
+        position: relative;
+        padding-left: 15px;
+    }
+}
+
+
+.form-section-header {
+    background-color: @form-section-header-color;
+    width: 80%;
+    font-size: @section-input-size;
+    color: @form-section-color;
+    > button {
+        margin: 1em .5em 0 0;
+        padding: 1px 6px;
+    }
+}
+
+
+.form-section-container {
+    @media only screen and (min-width:320px) and (max-width:768px) {
+            position: relative;
+            padding-left: 10px;
+            padding-right: 10px;
+    }
+}
+
+.form-label {    
+    cursor: auto;
+    font-size: @font-size-form-label;
+}
+
+.form-input {
+    padding: @brand-form_padding;
+    font-size: @font-size-normal;
+    width: 100%;
+    border: @brand-form_border;
+    border-radius: 2px;
+}
+
+.form-input-min-width {
+    width: 100px;
+}
+
+// This is a workaround to kill all of the stray clear icons that have no purpose
+.k-icon {
+    &.k-clear-value {
+        display: none;
+    }
+}

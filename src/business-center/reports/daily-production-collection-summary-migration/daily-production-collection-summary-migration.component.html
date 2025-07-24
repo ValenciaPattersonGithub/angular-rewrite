@@ -1,0 +1,66 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="prodcollectionsummaryreport grid header">
+        <div class="col-sm-6-migration">{{ 'Date' | translate }}</div>
+        <div class="col-sm-2-migration text-right">{{ 'Production' | translate }}</div>
+        <div class="col-sm-2-migration text-right">{{ 'Collections' | translate }}</div>
+        <div class="col-sm-2-migration text-right">{{ 'Adjustments' | translate }}</div>
+    </div>
+    <div class="prodcollectionsummaryreportgroupheader groupheader" style="padding-right: 0.5%;">
+        <div class="col-sm-12-migration text-center" id="headerLocationDiv"><h4>{{ ofcLocation }}</h4></div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="35" tabindex="0" (scrolledIndexChange)="nextItem($event)">
+            <div *cdkVirtualFor="let location of reportData; index as i" class="{{location.Class}}">
+                <input type="hidden" value="{{location.Location}}" id="prodcollectionsummary{{i}}"/>
+                <div class="prodcollectionsummaryreportgroupheader" *ngIf="i>0 && location.IsLocationHeader == true" >
+                    <div class="col-sm-12-migration text-center" id="subHeaderLocationDiv{{i}}"><h4>{{ location.Location }}</h4></div>
+                </div>
+                <div class="prodcollectionsummaryreport grid item" id="divMainInfo{{i}}" [ngClass]="{'reportGrid__footer':location.IsFooter == true}">
+                    
+                    <div *ngIf="location.IsFooter == false" class="col-sm-6-migration">  <input type="hidden" value="{{location.Location}}" id="prodcollectionsummary{{i}}"/> {{ location.Date | date: 'MM/dd/yyyy' }}</div>
+                    <div *ngIf="location.IsFooter == true" class="col-sm-6-migration reportGrid__label" id="divLocation{{i}}">Totals for {{location.Location}}  
+                    </div>
+                    <div *ngIf="location.Production >= 0" class="text-right col-sm-2-migration"  [ngClass]="{'reportGrid__label':location.IsFooter == true}">
+                        {{ location.Production | currency}}
+                    </div>
+                    <div *ngIf="location.Production < 0" class="text-right col-sm-2-migration" [ngClass]="{'reportGrid__label':location.IsFooter == true}">
+                        ({{ location.Production * -1 | currency}})
+                    </div>
+                    <div *ngIf="location.Collections >= 0" class="text-right col-sm-2-migration" [ngClass]="{'reportGrid__label':location.IsFooter == true}">
+                        {{ location.Collections | currency }}
+                    </div>
+                    <div *ngIf="location.Collections < 0" class="text-right col-sm-2-migration" [ngClass]="{'reportGrid__label':location.IsFooter == true}">
+                        ({{location.Collections * -1 | currency }})
+                    </div>
+                    <div *ngIf="location.Adjustments >= 0" class="text-right col-sm-2-migration" [ngClass]="{'reportGrid__label':location.IsFooter == true}">
+                        {{ location.Adjustments | currency }}</div>
+                    <div *ngIf="location.Adjustments < 0" class="text-right col-sm-2-migration" [ngClass]="{'reportGrid__label':location.IsFooter == true}">
+                        ({{location.Adjustments * -1 | currency }})
+                    </div>
+                </div>
+                <div class="prodcollectionsummaryreportgroupfooter grid reportGrid__footer" *ngIf="location.IsReportTotals == true" >
+                    <div class="col-sm-6-migration reportGrid__label">{{'Total Production' | translate}}</div>
+                    <div class="col-sm-2-migration reportGrid__label text-right" *ngIf="location.TotalProduction >= 0">{{location.TotalProduction | currency}}</div>
+                    <div class="col-sm-2-migration reportGrid__label text-right" *ngIf="location.TotalProduction < 0">({{location.TotalProduction *-1 | currency}})</div>
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-2-migration"></div>
+               </div>
+               <div class="prodcollectionsummaryreportgroupfooter grid" *ngIf="location.IsReportTotals == true" >
+                   <div class="col-sm-6-migration reportGrid__label">{{'Total Collections' | translate}}</div>
+                   <div class="col-sm-2-migration reportGrid__label text-right"  *ngIf="location.TotalCollections >= 0">{{location.TotalCollections | currency}}</div>
+                   <div class="col-sm-2-migration reportGrid__label text-right"  *ngIf="location.TotalCollections < 0">({{location.TotalCollections * -1 | currency}})</div>
+                   <div class="col-sm-2-migration"></div>
+                   <div class="col-sm-2-migration"></div>
+              </div>
+
+              <div class="prodcollectionsummaryreportgroupfooter grid" *ngIf="location.IsReportTotals == true" >
+                   <div class="col-sm-6-migration reportGrid__label">{{'Total Adjustments' | translate}}</div>
+                   <div class="col-sm-2-migration reportGrid__label text-right" *ngIf="location.TotalAdjustments >= 0">{{location.TotalAdjustments | currency}}</div>
+                   <div class="col-sm-2-migration reportGrid__label text-right" *ngIf="location.TotalAdjustments < 0">({{location.TotalAdjustments *-1 | currency}})</div>
+                   <div class="col-sm-2-migration"></div>
+                   <div class="col-sm-2-migration"></div>
+             </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

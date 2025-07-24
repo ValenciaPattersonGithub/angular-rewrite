@@ -1,0 +1,60 @@
+﻿.patientAppointmentsNav {
+    .containerStandard;
+}
+
+.patientAppointmentsPanels {
+    .containerStandard;
+
+    &__primary {
+        .make-md-column(8);
+    }
+
+    &__secondary {
+        .make-md-column(4);
+    }
+}
+
+.for-label {
+    display: inline-block;
+    float: left;
+    font-size: @brand-font_h3;
+    margin-left: @brand-margin_md;
+}
+
+.dropdownNav {
+    display: inline-block;
+    width: auto;
+    float: left;
+    outline: none;
+
+    &__toggle {
+        .btn;
+        .btn-link;
+        .btn-lg;
+        font-size: @brand-font_h3;
+        line-height: 1;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:after {
+            display: inline-block;
+            font-family: 'Font Awesome 5 Pro';
+            content: @fa-var-caret-down;
+            color: @panel-btn-color;
+            margin-left: 6px;
+        }
+    }
+
+    &__accountMember {
+        float: left;
+        max-width: 550px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+}

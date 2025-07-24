@@ -1,0 +1,282 @@
+<div class="add-patient-benefit-plan">
+    <ng-container>
+        <div class="add-patient-benefit-plan__card-container card-container grid">
+
+            <!-- Policy Priority -->
+            <div id="inpPriority" class="add-patient-benefit-plan__policy-number">
+                <span>{{ planName | translate }} {{ 'Dental Benefit Plan'| translate }}</span>
+            </div>
+
+            <!-- PolicyHolderID -->
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="apbp-error-wrapper" [ngClass]="{'label-left' : labelDirection=='left'}">
+                        <div class="app-select-override apbp-error-control">
+                            <app-select id="inpPolicyHolder" size="large" name="inpPolicyHolder" [label]="'Policy Holder *'" [isDisabled]="activeBenefitPlans.length===0"
+                                        [ngClass]="{'red-border': true }" [listItems]="policyHolderList"
+                                        [value]="selectedPolicyHolderId" [hasError]="hasErrors === true && !patientBenefitPlan.PolicyHolderId && showPatientSearch===false"
+                                        (selectionChange)='policyHolderChanged($event, patientBenefitPlan)'>
+                            </app-select>
+                            <!--loading spinner-->
+                            <no-results style="text-align: center;" *ngIf="activeBenefitPlans.length===0" [loading]="activeBenefitPlans.length===0"></no-results>
+                        </div>
+                        <div [id]="inpSelectedPolicyHolderError" *ngIf="hasErrors === true && !patientBenefitPlan.PolicyHolderId && showPatientSearch===false"
+                             class="apbp-control-error-20"
+                             [tooltip]="'This field is required.'" placement="top-error" delay="500">
+                            <svg-icon [id]="inpSelectedPolicyHolderIdIcon" class="error-icon" name="tooltipIcon" iconHeight="15px"
+                                      iconWidth="15px"></svg-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Note, this is for use with 'Other' selection for policy holder and allows the user
+    to select a person for PolicyHolder -->
+
+            <div class="form-row" *ngIf="showPatientSearch===true">
+                <div class="form-group person-search-wrapper-override">
+                    <label class="control-label" for="lblPlanName">{{'Find a Person '| translate}}<span
+                            *ngIf="true">*</span></label>
+
+                    <span id="btnSelectedPerson" class="selectedPerson" *ngIf="selectedPerson" >{{
+                        selectedPerson.FirstName}} {{selectedPerson.LastName}}
+                    </span>
+
+                    <a id="btnClearSelectedPerson" *ngIf="selectedPerson" class="btn btn-link"
+                       (click)="clearSelectedPerson(patientBenefitPlan)">
+                        <svg-icon class="clear-icon" name="closeIcon" iconHeight="20px" iconWidth="20px" id="rp-clear-icon">
+                        </svg-icon>
+                    </a>
+                    <div class="rp-error-wrapper" id="dd-responsible-person-search" > 
+                        <responsible-party-search *ngIf="!selectedPerson" [componentName]="'Insurance'"
+                                                  (selectedInsuranceValueChanged)="onPersonSearch($event)" [isDisabled]="false"
+                                                  [isValid]="hasErrors===true && showPatientSearch===true && selectedPerson"
+                                                  [responsibleParty]="responsiblePersonName" [errorToolTipMessage]="'This field is required.'">
+                        </responsible-party-search>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!--Relationship to policy holder-->
+            <div class="form-row " *ngIf="showRelationshipToPolicyHolder===true">
+                <div class="form-group">
+                    <div class="apbp-error-wrapper" [ngClass]="{'label-left' : labelDirection=='left'}">
+                        <div class="app-select-override apbp-error-control">
+                            <app-select id="inpPolicyHolderRelationship" size="large" name="inpPolicyHolderRelationship"
+                                        [label]="'Relationship to Policy Holder*'" [listItems]="relationships"
+                                        placeholder="Relationship" [value]="patientBenefitPlan.RelationshipToPolicyHolder"
+                                        (selectionChange)='relationshipToPolicyHolderChanged($event, patientBenefitPlan)'>
+                            </app-select>
+                            <div id="inpPolicyHolderRelationshipError" *ngIf="hasErrors === true && showRelationshipToPolicyHolder===true &&!patientBenefitPlan.RelationshipToPolicyHolder"
+                                 class="apbp-control-error"
+                                 [tooltip]="'This field is required.'" placement="top-error" delay="500">
+                                <svg-icon [id]="inpPolicyHolderRelationshipRequiredIcon" class="error-icon" name="tooltipIcon" iconHeight="15px"
+                                          iconWidth="15px"></svg-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Select Plan when self -->
+            <div class="form-row" *ngIf="showPlanSearch===true">
+                <div class="form-group">
+                    <!-- Plan -->
+                    <label class="control-label" for="lblPlanName">{{'Plan Name '| translate}}<span>*</span></label>
+
+                    <a id="btnViewSelectedPlan" *ngIf="patientBenefitPlan.BenefitPlanId && selectedPlan"
+                       class="btn btn-link" (click)="openBenefitPlanTab(patientBenefitPlan.BenefitPlanId)"
+                        check-auth-z="soar-per-pbplan-view">{{ selectedPlan.BenefitPlanName}}
+                    </a>
+
+                    <a id="btnClearSelectedPlan" *ngIf="selectedPlan" class="btn btn-link"
+                       (click)="clearSelectedPlan(patientBenefitPlan)">
+                        <svg-icon class="clear-icon" name="closeIcon" iconHeight="20px" iconWidth="20px" id="rp-clear-icon">
+                        </svg-icon>
+                    </a>
+
+
+                    <div class="add-patient-benefit-plan__autocomplete-override">
+                        <autocomplete *ngIf="!selectedPlan" [aria-label]="'Search for a Benefit Plan'" [disabled]="planSearchDisabled"
+                                      [maxLength]=100 [placeholderText]="'Search for a Benefit Plan'" [id]="autocompleteBenefitPlans"
+                                      [hasError]="hasErrors===true && showPlanSearch===true && !selectedPlan"
+                                      [errorTooltipMessage]="'This field is required.'" [showResultsForEmptySearch]="false" [autoActiveFirstOption]="true"
+                                      [items]="filteredBenefitPlans" [(selectedItem)]="selectedPlan" [itemFilter]="planSearch"
+                                      [displayFn]="onSelectPlan" (onSearch)="filteredItems = $event.filteredResults; searchText = $event.searchTerm;">
+                            <autocomplete-option *ngFor="let item of filteredItems| slice:0:20  ; index as ndx "  [ngClass]="{'option-disabled' : item.PatientHasPlan}" (onSelected)="selectBenefitPlan($event)"
+                                                 [item]="item">
+                                <div class="autocomplete-option-container" id="option{{ndx}}"  [ngClass]="{'option-disabled' : item.PatientHasPlan}">
+                                    <div class="autocomplete-option-container__search-result" [ngClass]="{'option-disabled' : item.PatientHasPlan}">
+                                        <b>Benefit Plan:</b>&nbsp;<span [innerHtml]="item.BenefitPlanName | highlightTextIfContains: searchText" title="{{item.BenefitPlanName}}"></span><br />
+                                        <b>Carrier:</b>&nbsp;<span [innerHtml]="item.CarrierName | highlightTextIfContains: searchText" title="{{item.CarrierName}}"></span><br />
+                                        <b>Group #:</b>&nbsp;<span [innerHtml]="item.BenefitPlanGroupNumber | highlightTextIfContains: searchText"></span><br />
+                                        <b>Group Name:</b>&nbsp;<span [innerHtml]="item.BenefitPlanGroupName | highlightTextIfContains: searchText"></span><br />
+                                    </div>
+                                    <div class="autocomplete-option-container__search-result-secondary">
+                                        <span [innerHtml]="item.CarrierAddressLine1 | highlightTextIfContains: searchText"></span><br />
+                                        <span [innerHtml]="item.CarrierAddressLine2 | highlightTextIfContains: searchText"></span><br />
+                                        <span [innerHtml]="item.CarrierCity | highlightTextIfContains: searchText"></span>
+                                        <span *ngIf="item.CarrierCity">,&nbsp;</span>
+                                        <span [innerHtml]="item.CarrierState | highlightTextIfContains: searchText"></span>&nbsp;
+                                        <span *ngIf="item.CarrierZipCode && item.CarrierZipCode.length >= 5" [innerHtml]="item.CarrierZipCode.slice(0, 5) | highlightTextIfContains: searchText"></span>
+                                        <span *ngIf="item.CarrierZipCode && item.CarrierZipCode.length >= 9">{{"-"}}</span>
+                                        <span *ngIf="item.CarrierZipCode && item.CarrierZipCode.length >= 9" [innerHtml]="item.CarrierZipCode.slice(5, 9) | highlightTextIfContains: searchText"></span>
+                                    </div>
+                                    <div *ngIf="item.PatientHasPlan" class="autocomplete-option-container__alert">
+                                        {{'This plan may not be selected because it is already attached' | translate}}
+                                    </div>
+                                </div>
+                            </autocomplete-option>
+                        </autocomplete>
+                    </div>
+                </div>
+            </div>
+
+            <!-- show policyholder has no plans -->
+            <div class="form-row" *ngIf="showPolicyOptions===true">
+                <div class="form-group">
+                    <!-- Plan -->
+                    <label class="control-label" for="lblPlanName">{{'Plan Name '| translate}}<span>*</span></label>
+                    <div class="add-patient-benefit-plan__autocomplete-override">
+                        <autocomplete *ngIf="!selectedPlan" [aria-label]="'Search for a Benefit Plan'" [id]="autocompleteNoBenefitPlans"
+                                      [disabled]="disableSearch" [maxLength]=0
+                                      [hasError]="hasErrors===true && showPolicyOptions===true && !selectedPlan"
+                                      [errorTooltipMessage]="'This field is required.'" [showResultsForEmptySearch]="true"
+                                      [autoActiveFirstOption]="false" [items]="policyHolderOptions" [(selectedItem)]="selectedOption"
+                                      [itemFilter]="noOptionsFilter" [displayFn]="onSelectPolicyHolderPlan"
+                                      (onSearch)="filteredItems = policyHolderOptions; searchText = '';">
+                            <autocomplete-option *ngFor="let item of policyHolderOptions" (onSelected)="selectPolicyOption($event)" [item]="item">
+                                <div class="add-policy-option-container" *ngIf="item.option==='None'">
+                                    <div class="add-policy-option-container-no-result" >
+                                        <span class="no-plans-option"> {{ 'No Attached Plans' | translate }} </span>
+                                    </div>
+                                </div>
+                                <div class="add-policy-option-container" *ngIf="item.option==='Add'">
+                                    <div class="add-policy-option-container-no-result">
+                                        <div class="add-policy-option" id="btnAddNewPolicy1">
+                                            <svg-icon class="add-policy-option-icon" name="ovalSolidIcon" iconHeight="20px" iconWidth="20px" role="button">
+                                            </svg-icon>
+                                            <svg-icon class="add-policy-option-icon-add" name="addIcon" iconHeight="20px" iconWidth="20px" role="button">
+                                            </svg-icon>
+                                            <div class="add-policy-option-icon-label" id="selectPolicyHolderOption2">
+                                                <label class="add-policy-option-label"> {{ 'Add a New Policy' | translate }} </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </autocomplete-option>
+                        </autocomplete>
+                    </div>
+                </div>
+            </div>
+
+            <!-- select plan when policy holder is other than self -->
+            <div class="form-row" *ngIf="showPolicyHolderPlans===true">
+                <div class="form-group">
+                    <!-- Plan -->
+                    <label class="control-label" for="lblPlanName">{{'Plan Name '| translate}}<span>*</span></label>
+
+                    <a id="btnViewSelectedPlan" *ngIf="patientBenefitPlan.BenefitPlanId && selectedPlan"
+                       class="btn btn-link btn-override" (click)="openBenefitPlanTab(patientBenefitPlan.BenefitPlanId)"
+                        check-auth-z="soar-per-pbplan-view">{{selectedPlan.Name}}
+                    </a>
+
+                    <a id="btnClearSelectedPlan" *ngIf="selectedPlan" class="btn btn-link"
+                       (click)="clearSelectedPlan(patientBenefitPlan)">
+                        <svg-icon class="clear-icon" name="closeIcon" iconHeight="20px" iconWidth="20px" id="rp-clear-icon">
+                        </svg-icon>
+                    </a>
+
+                    <div class="add-patient-benefit-plan__autocomplete-override">
+                        <autocomplete *ngIf="!selectedPlan" [aria-label]="'Search for a Benefit Plan'" [disabled]="planSearchDisabled"
+                                      [maxLength]=100 [placeholderText]="'Search for a Benefit Plan'" [id]="autocompletePolicyHolderPlans"
+                                      [hasError]="hasErrors===true && showPolicyHolderPlans===true && !selectedPlan"
+                                      [errorTooltipMessage]="'This field is required.'" [showResultsForEmptySearch]="true"
+                                      [autoActiveFirstOption]="false" [items]="policyHolderPlans" [(selectedItem)]="selectedPlan" [itemFilter]="policyHolderPlanSearch"
+                                      [displayFn]="onSelectPolicyHolderPlan" (onSearch)="filteredItems = $event.filteredResults; searchText = $event.searchTerm;">
+                            <autocomplete-option *ngFor="let item of filteredItems| slice:0:20 ; index as ndx "  [ngClass]="{'option-disabled' : item.PolicyHolderBenefitPlanDto.PatientHasPlan}"
+                                                 (onSelected)="selectPolicyHolderBenefitPlan($event)" [item]="item">
+                                <div class="autocomplete-option-container" [ngClass]="{'option-disabled' : item.PolicyHolderBenefitPlanDto.PatientHasPlan}">
+                                    <div class="autocomplete-option-container__search-result" id="phoption{{ndx}}" [ngClass]="{'option-disabled' : item.PolicyHolderBenefitPlanDto.PatientHasPlan}">
+                                        <b>Priority:</b>&nbsp;
+                                        <span >{{ planName | translate}}</span><br />
+                                        <b>BenefitPlan:</b>&nbsp;<span [innerHtml]="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Name | highlightTextIfContains: searchText"></span><br />
+                                        <b>Carrier:</b>&nbsp;<span [innerHtml]="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.CarrierName | highlightTextIfContains: searchText"></span><br />
+                                        <b>Carrier
+                                            Address:</b>&nbsp;<span [innerHtml]="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.AddressLine1 | highlightTextIfContains: searchText"></span>&nbsp;
+                                        <span [innerHtml]="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.AddressLine2 | highlightTextIfContains: searchText"></span>&nbsp;
+                                        <span [innerHtml]="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.City | highlightTextIfContains: searchText"></span>
+                                        <span *ngIf="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.City">,&nbsp;</span>
+                                        <span [innerHtml]="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.State | highlightTextIfContains: searchText"></span>&nbsp;
+                                        <span *ngIf="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode && item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode.length >= 5"
+                                              [innerHtml]="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode.slice(0, 5) | highlightTextIfContains: searchText"></span>
+                                        <span *ngIf="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode && item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode.length >= 9">{{"-"}}</span>
+                                        <span *ngIf="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode && item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode.length >= 9"
+                                              [innerHtml]="item.PolicyHolderBenefitPlanDto.BenefitPlanDto.Carrier.ZipCode.slice(5, 9) | highlightTextIfContains: searchText"></span>
+                                        <br />
+                                    </div>
+                                    <div class="autocomplete-option-container__search-result-secondary"  >
+                                        <b>Policy Holder Name:</b>&nbsp;<span [innerHtml]="item.PolicyHolderDetails.FirstName | highlightTextIfContains: searchText"></span>
+                                        <span [innerHtml]="item.PolicyHolderDetails.LastName | highlightTextIfContains: searchText"></span><br />
+                                        <b>Policy Holder DOB:</b>&nbsp;<span >{{item.PolicyHolderDetails.DateOfBirth | date:'MM/dd/yyyy'}}</span><br />
+                                        <b>Policy Holder ID:</b>&nbsp;<span [innerHtml]="item.PolicyHolderStringId | highlightTextIfContains: searchText"></span><br />
+                                    </div>
+                                    <div *ngIf="item.PolicyHolderBenefitPlanDto.PatientHasPlan" class="autocomplete-option-container__alert">
+                                        {{'This plan may not be selected because it is already attached' | translate}}
+                                    </div>
+                                </div>
+                            </autocomplete-option>
+                        </autocomplete>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PolicyHolderStringId -->
+            <div class="two-column" *ngIf="selectedPlan">
+                <div class="form-group">
+                    <div class="apbp-input-wrapper-override" [ngClass]="{'label-left' : labelDirection=='left'}"
+                         [tooltip]="disablePolicyHolderIdMessage" placement="top" delay="500">
+                        <label class="" for="inpPolicyHolderStringId">{{'Policy Holder ID '| translate}}</label>
+                        <input id="inpPolicyHolderStringId" [ngClass]="{'disabled' : disablePolicyHolderStringId}"
+                               [readonly]="disablePolicyHolderStringId"
+                               placeholder="{{'Policy Holder ID'| translate}}"
+                               [(ngModel)]="patientBenefitPlan.PolicyHolderStringId" type="text"
+                               class="apbp-input"
+                               (ngModelChange)="policyHolderStringIdChanged($event, patientBenefitPlan)">
+
+                    </div>
+                </div>
+                <!-- Member Id -->
+                <div class="form-group">
+                    <div class="apbp-input-wrapper-override" [ngClass]="{'label-left' : labelDirection=='left'}">
+                        <label class="" for="inpMemberId">{{'Member ID '| translate}}</label>
+                        <input id="inpMemberId"
+                               placeholder="{{'Member ID'| translate}}"
+                               [(ngModel)]="patientBenefitPlan.MemberId" type="text"
+                               class="apbp-input">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="selectedPlan">
+                <div class="apbp-error-wrapper" [ngClass]="{'label-left' : labelDirection=='left'}">
+                    <div class="date-picker-override apbp-error-control">
+                        <app-date-picker id="inpEffectiveDate" [maxDate]="maxDate"
+                                         (dateChanged)="effectiveDateChanged($event, patientBenefitPlan)"
+                                         [isValidDate]="validEffectiveDate"
+                                         [value]="patientBenefitPlan.EffectiveDate" placeholder="MM/DD/YYYY" label="Effective Date *"
+                                         labelDirection="top"></app-date-picker>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-row" *ngIf="showPolicyHolderMessage===true">
+                <span>{{addPolicyHolderPlanMessage}}</span>
+            </div>
+
+        </div>
+    </ng-container>
+</div>

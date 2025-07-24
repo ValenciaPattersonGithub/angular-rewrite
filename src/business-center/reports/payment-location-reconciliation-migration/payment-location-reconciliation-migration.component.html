@@ -1,0 +1,69 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="paymentlocreconreport grid header">
+        <div class="col-sm-1-migration">{{ 'Payment Type' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Service Date' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Posted Date' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Posted By' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Responsible Party' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Description' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Distributed Location' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Distributed Amount' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Amount' | translate }}</div>
+    </div>
+    <div class="paymentlocreconreportgroupHeader groupheader" style="padding-right: 0.5%;">
+        <div class="col-sm-12-migration text-center" id="headerLocationDiv"><h4>{{ ofcLocation }}</h4></div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="40" tabindex="0" (scrolledIndexChange)="nextBatch($event)">
+            <div *cdkVirtualFor="let rowdata of reportData; index as i" class="{{rowdata.Class}}">
+                <div class="paymentlocreconreportgroupHeader" *ngIf="i>0 && rowdata.IsLocationHeader == true"  id="divLocation{{i}}">
+                    <div class="col-sm-12-migration text-center"  id="subHeaderLocationDiv{{i}}"><h4>{{ rowdata.Location }}</h4></div>
+                </div>
+                <div class="paymentlocreconreport grid" *ngIf="rowdata.IsPaymentTypeHeader == true && !data.isSummaryView">
+                    <div class="col-sm-2-migration">{{ rowdata.PaymentType }}</div>
+                    <div></div> <div></div> <div></div> <div></div> 
+                    <div></div> <div></div> <div></div>
+                </div>
+                <input type="hidden" value="{{rowdata.Location}}" id="paymentlocReconLocation{{i}}" />
+                <div class="paymentlocreconreport grid item" id="divMainInfo{{i}}" *ngIf="rowdata.IsDistributed == false  && !data.isSummaryView">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">{{ rowdata.ServiceDate | date: 'MM/dd/yyyy' }}</div> 
+                    <div class="col-sm-1-migration">{{ rowdata.PostedDate | date: 'MM/dd/yyyy' }}</div> 
+                    <div class="col-sm-2-migration">{{ rowdata.PostedBy }}</div> 
+                    <div class="col-sm-2-migration">{{ rowdata.ResponsibleParty }}</div> 
+                    <div class="col-sm-2-migration">{{ rowdata.Description | translate }}</div> 
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration text-right" *ngIf="rowdata.Amount >= 0"> {{rowdata.Amount | currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="rowdata.Amount < 0">({{rowdata.Amount * -1 | currency}})</div>
+                </div>
+                <div class="paymentlocreconreportsubfooter grid" *ngIf="rowdata.IsDistributed == true  && !data.isSummaryView">
+                    <div  class="col-sm-9-migration"></div>
+                    <div class="col-sm-1-migration">{{ rowdata.DistributedLocation }}</div>  
+                    <div class="col-sm-1-migration text-right" *ngIf="rowdata.DistributedAmount >= 0"> {{rowdata.DistributedAmount | currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="rowdata.DistributedAmount < 0">({{rowdata.DistributedAmount * -1 | currency}})</div>
+                    <div class="col-sm-1-migration"></div>
+                </div>
+                <div class="paymentlocreconreportfooter grid" *ngIf="rowdata.IsFooter == true">
+                    <div  class="col-sm-7-migration reportGrid__label"></div>
+                    <div class="col-sm-4-migration reportGrid__label">{{ rowdata.PaymentType }} Totals:</div>  
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="rowdata.PaymentTypeTotal >= 0"> {{rowdata.PaymentTypeTotal | currency}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="rowdata.PaymentTypeTotal < 0">({{rowdata.PaymentTypeTotal * -1 | currency}})</div>
+                </div>
+                <div class="paymentlocreconreportfooter grid" id="locationTotalDiv{{i}}" *ngIf="rowdata.IsLocationFooter == true">
+                    <div  class="col-sm-7-migration reportGrid__label"></div>
+                    <div class="col-sm-4-migration reportGrid__label">{{ rowdata.Location }} Totals:</div>  
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="rowdata.LocationTotals >= 0"> {{rowdata.LocationTotals | currency}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="rowdata.LocationTotals < 0">({{rowdata.LocationTotals * -1 | currency}})</div>
+                </div>
+                <div class="paymentlocreconreportfooter grid reportGrid__footer" *ngIf="rowdata.IsReportTotals == true">
+                    <div  class="col-sm-7-migration reportGrid__label"></div>
+                    <div class="col-sm-4-migration reportGrid__label">Report Totals:</div>  
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="rowdata.ReportTotals >= 0"> {{rowdata.ReportTotals | currency}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="rowdata.ReportTotals < 0">({{rowdata.ReportTotals * -1 | currency}})</div>
+                </div>
+
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

@@ -1,0 +1,24 @@
+﻿<div id="room{{ inputId }} " class="room-dropdown dropdown" >
+    <button id="btnDropDown{{inputId}}" ng-click="btnClick()" ng-blur="onBlur()"
+            ng-disabled="controlDisabled"
+            ng-class="{'errorBorder': required && (selectedRoom === null || selectedRoom === undefined || selectedRoom === '')}">
+        <span ng-if="!selectedRoom" id="defaultSelectedDescription{{inputId}}" class="selected-description">{{ ::(placeHolder) }}</span>
+        <span ng-if="selectedRoom" id="lblSelectedName{{inputId}}" class="selected-description" ng-style="{'font-weight': selectedItem.Assigned ? 'bold' : 'normal' }">
+            {{ selectedItem.Name }}
+        </span>
+        <span class="arrow"></span>
+    </button>
+    <div id="dropdownListBox{{inputId}}" class="dropdownListBox" ng-if="isOpen">
+        <div id="default{{inputId}}" class="option" ng-mousedown="selectItem(null)"> {{ ::(placeHolder) }}
+        </div>
+        <div id="dropdownListItems{{inputId}}{{$index}}" ng-repeat="dataItem in rooms track by $index">
+            <span id="lblOptionName{{inputId}}{{$index}}" ng-mousedown="selectItem(dataItem)"
+                  class="option" ng-class="{'active': selectedRoom === dataItem.RoomId}"
+                  ng-style="{'font-weight': dataItem.Assigned ? 'bold' : 'normal' }">
+                {{ dataItem.Name }}
+            </span>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,33 @@
+.benefit-plans-by-insurance-payment-type-report {
+    grid-template-columns: 1fr 3fr 1fr 3fr 1fr 3fr;
+}
+.benefit-plans-by-insurance-payment-type-report-header {
+    grid-template-columns: 12fr;
+    background: transparent;
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.benefit-plans-by-insurance-payment-type-report {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+        }
+      }
+}

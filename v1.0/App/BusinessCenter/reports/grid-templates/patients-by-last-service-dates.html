@@ -1,0 +1,40 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr class="stripEven">
+                    <th class="col-sm-12 cell" colspan="8">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{ 'Service Date' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Responsible Person' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Last Appointment' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Next Appointment' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Account Balance' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="date in location.Dates"  class="stripOdd">
+                <tr>
+                    <td class="col-sm-1 cell">{{ date.Date }}</td>
+                    <td class="col-sm-11 cell" colspan="5"></td>
+                </tr>
+                <tr ng-repeat="patient in date.Patients">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell">{{ patient.Patient}}</td>
+                    <td class="col-sm-2 cell">{{ patient.ResponsiblePerson}}</td>
+                    <td class="col-sm-3 cell">{{ patient.LastAppointment }}</td>
+                    <td class="col-sm-3 cell">{{ patient.NextAppointment }}</td>
+                    <td class="col-sm-1 cell text-right">{{ patient.Balance | currency }}</td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿<div *ngIf="!isDisabled" class="rootSurfaceSelector surfaces areaMultiSelect multiselect fui-select-container" id="{{customid}}">
+    <div id="dropdown" #areaDropdown tabindex="0" class="fui-select"
+         [ngClass]="{'redBorder' : (!toothAreaService.toothAreaData.areaSelection || toothAreaService.toothAreaData.areaSelection.length === 0) && !isDisabled}"         
+         (keydown)="toggleDropdownKeypress($event)"
+         (click)="toggleDropdown(null)">
+        <div *ngIf="toothAreaService.toothAreaData.serviceCode.AffectedAreaId === 4" class="rootSurfaceSelector__displayedTeeth">
+            {{formatSurfaces(toothAreaService.toothAreaData.areaSelection)}}
+        </div>
+        <div *ngIf="toothAreaService.toothAreaData.serviceCode.AffectedAreaId === 3" class="rootSurfaceSelector__displayedTeeth">
+            {{formatRoots(toothAreaService.toothAreaData.areaSelection)}}
+        </div>        
+
+    </div>
+    <div id="dropdownArea" class="rootSurfaceSelector__toothDropdown" *ngIf="showDropdown">
+        <div class="rootSurfaceSelector__toothInput">
+            <form (keydown.enter)="enter($event)" autocomplete="off">
+                <input (keydown)="inputKeydown($event)" id="toothInput" type="text" placeholder="Type Area" [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" (ngModelChange)="inputChanged($event, inputValue)"
+                       #areaInput isAlphaNumericWithDashAndComma maxlength="10"/>
+                <i class="fa fa-search"></i>
+            </form>
+        </div>
+        <div class="rootSurfaceSelector__teethList">
+            <div class="teethListRow" *ngFor="let area of toothAreaService.toothAreaData.availableAreas | areaSelectorDisplay:inputValue; let i = index">                
+
+                <label class="fui-check-box">
+                    <input #areaDropdownOption id="areaDropdownOption{{i}}" type="checkbox"
+                           [value]="area"
+                           [checked]="isItemSelected(toothAreaService.toothAreaData.areaSelection, area)"
+                           [disabled]="false"
+                           (change)="onChange($event)"                           
+                           (keydown.arrowup)="navigateToNextOption($event, i-1)" (keydown.arrowdown)="navigateToNextOption($event, i+1)"                     
+                           (keydown.enter)="select(i)"
+                           (keydown.tab)="tabbedOnOption($event, i)"
+                           />
+                    <span class="checkmark"></span>
+                    <span class="label">{{area}}</span>
+                </label>
+            </div>
+                                   
+        </div>
+
+    </div>
+</div>
+
+<div class="fui-select" *ngIf="isDisabled" [attr.disabled]="isDisabled ? 'disabled' : null">
+    <!--Placeholder space for when this field doesn't apply-->
+</div>

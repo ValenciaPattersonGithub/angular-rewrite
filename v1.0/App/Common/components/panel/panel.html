@@ -1,0 +1,38 @@
+﻿<div id="grp{{id}}" class="panel">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h4>{{ title | i18n }}</h4>
+        </div>
+        <div class="pull-right panel-btn">
+            <span class="editPanel__save" ng-show="flags.editing == true && flags.cancelling == false">
+                <button id="btn{{id}}Cancel" ng-click="cancelPanelEdit();" class="btn btn-default">{{ (flags.autoSave ? 'Done' : 'Cancel') | i18n }}</button>
+                <button id="btn{{id}}Save" ng-click="savePanelEdit() ;" ng-show="functions.save" ng-disabled="flags.valid == false || isSaveButtonDisabled" class="btn btn-primary" check-auth-z="{{access.Value}}">{{ 'Save' | i18n }}</button>
+            </span>
+            <span ng-hide="flags.editing == true">
+                <button ng-show="!editPersonalAndContactInfo && !editAccountMembers" tabindex="2" id="btn{{id}}EditPanel" ng-click="activateEdit();" class="btn btn-default" check-auth-z="{{access.Value}}">{{'Edit' | i18n }}</button>
+            </span>
+            
+            <span ng-hide="flags.editing == true">
+                <button ng-show="editPersonalAndContactInfo" tabindex="2" id="btn{{id}}EditPersonalPanel" ng-click="openEditPersonalModal();" class="btn btn-default" check-auth-z="{{access.Value}}">{{'Edit Personal' | i18n }}</button>
+            </span>
+            <span ng-hide="flags.editing == true">
+                <button ng-show="editPersonalAndContactInfo" tabindex="2" id="btn{{id}}EditContactPanel" ng-click="openEditContactModal();" class="btn btn-default" check-auth-z="{{access.Value}}">{{'Edit Contact' | i18n }}</button>
+            </span>
+            <span ng-hide="flags.editing == true">
+                <button ng-show="editAccountMembers" tabindex="2" id="btn{{id}}TransferPatient" ng-click="transferPatient();" class="btn btn-default" check-auth-z="{{access.Value}}">{{'Edit' | i18n }}</button>
+            </span>
+            
+            <span class="editPanel__save-alert" ng-show="flags.cancelling == true">
+                <span class="editPanel__save-message">{{ 'Discard changes?' | i18n }}</span>
+                <button id="btn{{id}}CancelYes" ng-click="confirmCancel();" class="btn btn-primary">{{ 'Yes' | i18n }}</button>
+                <button id="btn{{id}}CancelNo" ng-click="declineCancel();" class="btn btn-default">{{ 'No' | i18n }}</button>
+            </span>
+        </div>
+    </div>
+
+    <div class="panel-body editPanel__body" ng-disabled="flags.cancelling == true">
+        <ng-include src="template"></ng-include>
+    </div>
+
+
+</div>

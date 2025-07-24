@@ -1,0 +1,353 @@
+<div class="era-display-migrated" *ngIf="era">
+    <div class="row" *ngIf="era && (era | eraHasPayerDetails)">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 header">{{'Payer Details' }}</div>
+            </div>
+            <div class="row" *ngIf="era.PayerName">
+                <div class="col-sm-2">{{ 'Payer Name'  }}</div>
+                <div class="col-sm-2 value">{{ era.PayerName }}</div>
+            </div>
+            <div class="row" *ngIf="era.PayerAddressLine">
+                <div class="col-sm-2">{{ 'Address' }}</div>
+                <div class="col-sm-2 value">{{ era.PayerAddressLine }}</div>
+            </div>
+            <div class="row" *ngIf="era.PayerAddressLine2">
+                <div class="col-sm-2">{{ 'Address 2' }}</div>
+                <div class="col-sm-2 value">{{ era.PayerAddressLine2 }}</div>
+            </div>
+            <div class="row" *ngIf="(era | eraPayerCityState)">
+                <div class="col-sm-2">{{ 'City, State, Zip'  }}</div>
+                <div class="col-sm-2 value">{{ era | eraPayerCityState }}</div>
+            </div>
+            <div class="row" *ngIf="era.PayerBusinessContactName">
+                <div class="col-sm-2">{{ 'Claim Office Contact' }}</div>
+                <div class="col-sm-2 value">{{ era.PayerBusinessContactName }}</div>
+            </div>
+            <div class="row" *ngIf="era | eraPayerClaimOfficeFax">
+                <div class="col-sm-2">{{ 'Claim Office Fax' }}</div>
+                <div class="col-sm-2 value">{{ era | eraPayerClaimOfficeFax }}</div>
+            </div>
+            <div class="row" *ngIf="era | eraPayerClaimOfficeTelephone">
+                <div class="col-sm-2">{{ 'Claim Office Telephone' }}</div>
+                <div class="col-sm-2 value">{{ era | eraPayerClaimOfficeTelephone }}</div>
+            </div>
+            <ng-container *ngIf="era.TechnicalContactInfos">
+                <ng-container *ngFor="let techInfo of era.TechnicalContactInfos | eraContactInfosWithTelephone">
+                    <div class="row">
+                        <div class="col-sm-2">{{ 'Tech Contact' }}</div>
+                        <div class="col-sm-2 value">{{ techInfo.ContactName }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">{{ 'Tech Telephone' }}</div>
+                        <div class="col-sm-2 value">{{ techInfo | eraContactInfoTelephone }}</div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <div class="row" *ngIf="era.WebsiteCommunicationNumber1">
+                <div class="col-sm-2">{{ 'General Info URL'  }}</div>
+                <div class="col-sm-2 value">{{ era.WebsiteCommunicationNumber1 }}</div>
+            </div>
+            <div class="row" *ngIf="era.AdditionalPayerIdentifications | eraHasPayerId">
+                <div class="col-sm-2">{{ 'Payer ID'  }}</div>
+                <div class="col-sm-2 value">{{ era.AdditionalPayerIdentifications | eraPayerId }}</div>
+            </div>
+            <div class="row" *ngIf="era.PayerId">
+                <div class="col-sm-2">{{ 'Tax ID'  }}</div>
+                <div class="col-sm-2 value">{{ era.PayerId }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="era && (era | eraHasPayeeDetails)">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 header">{{'Payee Identification' }}</div>
+            </div>
+            <div class="row" *ngIf="era.BillingDentistName">
+                <div class="col-sm-2">{{ 'Payee Name'  }}</div>
+                <div class="col-sm-2 value">{{ era.BillingDentistName }}</div>
+            </div>
+            <div class="row" *ngIf="(era | eraPayeeAddress)">
+                <div class="col-sm-2">{{ 'Address'  }}</div>
+                <div class="col-sm-2 value">{{ era | eraPayeeAddress }}</div>
+            </div>
+            <div class="row" *ngIf="(era | eraPayeeCityState)">
+                <div class="col-sm-2">{{ 'City, State, Zip'  }}</div>
+                <div class="col-sm-2 value">{{ era | eraPayeeCityState }}</div>
+            </div>
+            <div class="row" *ngIf="era.BillingDentistId">
+                <div class="col-sm-2">{{ 'NPI'  }}</div>
+                <div class="col-sm-2 value">{{ era.BillingDentistId }}</div>
+            </div>
+            <div class="row" *ngIf="era.PayeeAdditionalIdentifications | eraHasPayeeTaxId">
+                <div class="col-sm-2">{{ 'Tax ID'  }}</div>
+                <div class="col-sm-2 value">{{ era.PayeeAdditionalIdentifications | eraPayeeTaxId }}</div>
+            </div>
+            <div class="row" *ngIf="era.PayeeEntityIdentifierCode">
+                <div class="col-sm-2">{{ 'State License Number'  }}</div>
+                <div class="col-sm-2 value">{{ era.PayeeEntityIdentifierCode }}</div>
+            </div>
+            <div class="row" *ngIf="era.PayeeAdditionalIdentifications | eraHasPayeeId">
+                <div class="col-sm-2">{{ 'Payee ID'  }}</div>
+                <div class="col-sm-2 value">{{ era.PayeeAdditionalIdentifications | eraPayeeId }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="era && (era | eraHasFinancialInformation)">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 header">{{'Financial Information' }}</div>
+            </div>
+            <div class="row" *ngIf="era.TransactionType">
+                <div class="col-sm-2">{{ 'Description'  }}</div>
+                <div class="col-sm-4 value">{{ era.TransactionType | eraTransactionType }}</div>
+            </div>
+            <div class="row" *ngIf="era.PaymentMethod">
+                <div class="col-sm-2">{{ 'Payment Method'  }}</div>
+                <div class="col-sm-2 value">{{ era.PaymentMethod | eraPaymentMethod }}</div>
+            </div>
+            <div class="row" *ngIf="era.TotalProviderPayment || era.TotalProviderPayment === 0">
+                <div class="col-sm-2">{{ 'Payment Amount'  }}</div>
+                <div class="col-sm-2 value text-right">{{ era.TotalProviderPayment | currency }}</div>
+            </div>
+            <div class="row" *ngIf="era.PaymentDate"> 
+                <div class="col-sm-2">{{ 'Check/EFT Date'  }}</div>
+                <div class="col-sm-2 value">{{ era.PaymentDate | toShortDisplayDateUtc }}</div>
+            </div>
+            <div class="row" *ngIf="era.ReassociationCheckOrEFTTraceNumber">
+                <div class="col-sm-2">{{ 'Check/EFT Number'  }}</div>
+                <div class="col-sm-2 value">{{ era.ReassociationCheckOrEFTTraceNumber }}</div>
+            </div>
+            <div class="row" *ngIf="era.SenderBankNumber">
+                <div class="col-sm-2">{{ 'Payer Routing Number'  }}</div>
+                <div class="col-sm-2 value">{{ era.SenderBankNumber }}</div>
+            </div>
+            <div class="row" *ngIf="era.SenderAccountNumber">
+                <div class="col-sm-2">{{ 'Payer Account Number'  }}</div>
+                <div class="col-sm-2 value">{{ era.SenderAccountNumber }}</div>
+            </div>
+            <div class="row" *ngIf="era.ReceiverBankNumber">
+                <div class="col-sm-2">{{ 'Provider Bank ID Number'  }}</div>
+                <div class="col-sm-2 value">{{ era.ReceiverBankNumber }}</div>
+            </div>
+            <div class="row" *ngIf="era.ReceiverAccountNumber">
+                <div class="col-sm-2">{{ 'Provider Account Number'  }}</div>
+                <div class="col-sm-2 value">{{ era.ReceiverAccountNumber }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="!singleClaim && era && era.HeaderNumbers && era.HeaderNumbers.length > 0">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 header">{{'Provider Summary Information' }}</div>
+            </div>
+            <div *ngFor="let number of era.HeaderNumbers">
+                <div class="row">
+                    <div class="col-sm-2">{{ 'Provider Identifier'  }}</div>
+                    <div class="col-sm-2 value">{{ number.ProviderIdentifier }}</div>
+                    <div class="col-sm-2">{{ 'Fiscal Period Date'  }}</div>
+                    <div class="col-sm-2 value">{{ number.FiscalPeriodDate | toShortDisplayDateUtc }}</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">{{ 'Total Claim Count'  }}</div>
+                <div class="col-sm-2 value">{{ era | eraTotalClaimCount }}</div>
+                <div class="col-sm-2">{{ 'Total Charge Amount'  }}</div>
+                <div class="col-sm-2 value text-right">{{ (era | eraTotalChargeAmount) | currency }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="!singleClaim && era && era.ProviderAdjustments && era.ProviderAdjustments.length > 0">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 header">{{ 'Provider Level Adjustments'  }}</div>
+            </div>
+            <div class="row gridHeader">
+                <div class="col-sm-2">{{ 'Provider Identifier'  }}</div>
+                <div class="col-sm-1">{{ 'Amount'  }}</div>
+                <div class="col-sm-3">{{ 'Reason Code'  }}</div>
+                <div class="col-sm-3">{{ 'Adjustment Identifier'  }}</div>
+            </div>
+            <div class="row gridBody" *ngFor="let providerAdjustment of era.ProviderAdjustments">
+                <div class="col-sm-12">
+                    <div class="row" *ngFor="let index of [1,2,3,4,5,6]">
+                        <ng-container *ngIf="providerAdjustment | eraProviderAdjustmentIndexHasData : index">
+                            <div class="col-sm-2">{{ index === 1 ? providerAdjustment.ProviderIdentifier : '' }}&nbsp;</div>
+                            <div class="col-sm-1 text-right">{{ providerAdjustment['ProviderAdjustmentAmount' + index] ? (providerAdjustment['ProviderAdjustmentAmount' + index] | currency) : '' }}&nbsp;</div>
+                            <div class="col-sm-3">{{ providerAdjustment['AdjustmentIdentifier' + index] | eraAdjustmentIdentifierReasonCode }}&nbsp;</div>
+                            <div class="col-sm-3">{{ providerAdjustment['AdjustmentIdentifier' + index] | eraAdjustmentIdentifier }}&nbsp;</div>
+                        </ng-container> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngFor="let number of era.HeaderNumbers">
+        <div *ngFor="let claim of number.ClaimPaymentInfos">
+            <div class="row" *ngIf="claim | eraHasClaimPaymentInfo">
+                <div class="col-sm-12 header">{{'Claim Payment Information' }}</div>
+            </div>
+            <div class="flex-container" *ngIf="claim | eraHasClaimPaymentInfo">
+                <div class="column">
+                    <div class="field" *ngIf="(claim | eraPatientName)">{{ 'Patient Name'  }}</div>
+                    <div class="value" *ngIf="(claim | eraPatientName)">{{ claim | eraPatientName }}</div>
+                    <div class="field" *ngIf="(claim | eraInsuredName)">{{ 'Insured Name'  }}</div>
+                    <div class="value" *ngIf="(claim | eraInsuredName)">{{ claim | eraInsuredName }}</div>
+                    <div class="field" *ngIf="claim.PatientId">{{ 'Insured ID'  }}</div>
+                    <div class="value" *ngIf="claim.PatientId">{{ claim.PatientId }}</div>
+                    <div class="field" *ngIf="(claim | eraCorrectedInsuredName)">{{ 'Corrected Insured'  }}</div>
+                    <div class="value" *ngIf="(claim | eraCorrectedInsuredName)">{{ claim | eraCorrectedInsuredName }}</div>
+                    <div class="field" *ngIf="claim.CorrectedId">{{ 'Corrected Insured ID'  }}</div>
+                    <div class="value" *ngIf="claim.CorrectedId">{{ claim.CorrectedId }}</div>
+                    <div class="field" *ngIf="claim.PolicyHolderId">{{ 'Group or Policy Number'  }}</div>
+                    <div class="value" *ngIf="claim.PolicyHolderId">{{ claim.PolicyHolderId }}</div>
+                    <div class="field" *ngIf="(claim.OtherClaimRelatedIdentifications | eraClaimClassOfContractCode)">{{ 'Class of Contract Code'  }}</div>
+                    <div class="value" *ngIf="(claim.OtherClaimRelatedIdentifications | eraClaimClassOfContractCode)">{{ claim.OtherClaimRelatedIdentifications | eraClaimClassOfContractCode }}</div>
+                    <div class="field" *ngIf="claim.ClaimId">{{ 'Claim Control Number'  }}</div>
+                    <div class="value" *ngIf="claim.ClaimId">{{ claim.ClaimId }}</div>
+                    <ng-container *ngIf="claim.ClaimContactInformations">
+                        <ng-container *ngFor="let info of claim.ClaimContactInformations | eraContactInfosWithTelephone">
+                            <div class="field">{{ 'Claim Office Telephone' }}</div>
+                            <div class="value">{{ info | eraContactInfoTelephone }}</div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <div class="column">
+                    <div class="field" *ngIf="claim.StatementDates && claim.StatementDates.length > 0">{{ 'Claim Date'  }}</div>
+                    <div class="value" *ngIf="claim.StatementDates && claim.StatementDates.length > 0">{{ claim.StatementDates | eraClaimDates }}</div>
+                    <div class="field" *ngIf="claim.ClaimReceivedDate">{{ 'Claim Received'  }}</div>
+                    <div class="value" *ngIf="claim.ClaimReceivedDate">{{ claim.ClaimReceivedDate | toShortDisplayDateUtc }}</div>
+                    <div class="field" *ngIf="claim.TotalClaimChargeAmount || claim.TotalClaimChargeAmount === 0">{{ 'Billed Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.TotalClaimChargeAmount || claim.TotalClaimChargeAmount === 0">{{ claim.TotalClaimChargeAmount  | currency }}</div>
+                    <div class="field" *ngIf="claim.ClaimPaymentAmount || claim.ClaimPaymentAmount === 0">{{ 'Claim Payment Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.ClaimPaymentAmount || claim.ClaimPaymentAmount === 0">{{ claim.ClaimPaymentAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.PatientResponsibilityAmount || claim.PatientResponsibilityAmount === 0">{{ 'Patient Resp Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.PatientResponsibilityAmount || claim.PatientResponsibilityAmount === 0">{{ claim.PatientResponsibilityAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.ClaimSupplementalInformations | eraAmountData:'AU'">{{ 'Coverage Amount' }}</div>
+                    <div class="value text-right" *ngIf="claim.ClaimSupplementalInformations | eraAmountData:'AU'">{{ (claim.ClaimSupplementalInformations | eraAmountData:'AU') | currency }}</div>
+                    <div class="field" *ngIf="claim.ClaimSupplementalInformations | eraAmountData:'F5'">{{ 'Patient Amount Paid' }}</div>
+                    <div class="value text-right" *ngIf="claim.ClaimSupplementalInformations | eraAmountData:'F5'">{{ (claim.ClaimSupplementalInformations | eraAmountData:'AU') | currency }}</div>
+                    <div class="field" *ngIf="claim.ClaimStatusCode">{{ 'Claim Status'  }}</div>
+                    <div class="value" *ngIf="claim.ClaimStatusCode">{{ claim.ClaimStatusCode | eraClaimStatus }}</div>
+                    <div class="field" *ngIf="claim.PayerClaimControlNumber">{{ 'Payer Reference Number'  }}</div>
+                    <div class="value" *ngIf="claim.PayerClaimControlNumber">{{ claim.PayerClaimControlNumber }}</div>
+                </div>  
+            </div>
+            <div class="row" *ngIf="claim | eraHasInpatientAdjudicationInfo">
+                <div class="col-sm-12 header">{{'Inpatient Adjudication Information' }}</div>
+            </div>
+            <div class="flex-container" *ngIf="claim | eraHasInpatientAdjudicationInfo">
+                <div class="column">
+                    <div class="field" *ngIf="claim.InpatientCoveredDaysOrVisitsCount || claim.PatientResponsibilityAmount === 0">{{ 'Covered Days Or Visits Count'  }}</div>
+                    <div class="value" *ngIf="claim.InpatientCoveredDaysOrVisitsCount || claim.PatientResponsibilityAmount === 0">{{ claim.InpatientCoveredDaysOrVisitsCount }}</div>
+                    <div class="field" *ngIf="claim.InpatientPPSOperatingOutlierAmount || claim.InpatientPPSOperatingOutlierAmount === 0">{{ 'PPS Operating Outlier Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientPPSOperatingOutlierAmount || claim.InpatientPPSOperatingOutlierAmount === 0">{{ claim.InpatientPPSOperatingOutlierAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientLifetimePsychiatricDaysCount || claim.InpatientLifetimePsychiatricDaysCount === 0">{{ 'Lifetime Psychiatric Days Count'  }}</div>
+                    <div class="value" *ngIf="claim.InpatientLifetimePsychiatricDaysCount || claim.InpatientLifetimePsychiatricDaysCount === 0">{{ claim.InpatientLifetimePsychiatricDaysCount }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimDRGAmount || claim.InpatientClaimDRGAmount === 0">{{ 'Claim DRG Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientClaimDRGAmount || claim.InpatientClaimDRGAmount === 0">{{ claim.InpatientClaimDRGAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimPaymentRemarkCode">{{ 'Claim Payment Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.InpatientClaimPaymentRemarkCode">{{ claim.InpatientClaimPaymentRemarkCode }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimDisproportionateShareAmount || claim.InpatientClaimDisproportionateShareAmount === 0">{{ 'Claim Disproportionate Share Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientClaimDisproportionateShareAmount || claim.InpatientClaimDisproportionateShareAmount === 0">{{ claim.InpatientClaimDisproportionateShareAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimMSPPassthroughAmount || claim.InpatientClaimMSPPassthroughAmount === 0">{{ 'Claim MSP Passthrough Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientClaimMSPPassthroughAmount || claim.InpatientClaimMSPPassthroughAmount === 0">{{ claim.InpatientClaimMSPPassthroughAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimPPSCapitalAmount || claim.InpatientClaimPPSCapitalAmount === 0">{{ 'Claim PPS Capital Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientClaimPPSCapitalAmount || claim.InpatientClaimPPSCapitalAmount === 0">{{ claim.InpatientClaimPPSCapitalAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientPPSCapitalFSPDRGAmount || claim.InpatientPPSCapitalFSPDRGAmount === 0">{{ 'PPS Capital FSP DRG Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientPPSCapitalFSPDRGAmount || claim.InpatientPPSCapitalFSPDRGAmount === 0">{{ claim.InpatientPPSCapitalFSPDRGAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientPPSCapitalHSPDRGAmount || claim.InpatientPPSCapitalHSPDRGAmount === 0">{{ 'PPS Capital HSP DRG Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientPPSCapitalHSPDRGAmount || claim.InpatientPPSCapitalHSPDRGAmount === 0">{{ claim.InpatientPPSCapitalHSPDRGAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientPPSCapitalDSHDRGAmount || claim.InpatientPPSCapitalDSHDRGAmount === 0">{{ 'PPS Capital DSH DRG Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientPPSCapitalDSHDRGAmount || claim.InpatientPPSCapitalDSHDRGAmount === 0">{{ claim.InpatientPPSCapitalDSHDRGAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientOldCapitalAmount || claim.InpatientOldCapitalAmount === 0">{{ 'Old Capital Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientOldCapitalAmount || claim.InpatientOldCapitalAmount === 0">{{ claim.InpatientOldCapitalAmount | currency }}</div>
+                </div>
+                <div class="column">
+                    <div class="field" *ngIf="claim.InpatientPPSCapitalIMEAmount || claim.InpatientPPSCapitalIMEAmount === 0">{{ 'PPS Capital IME Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientPPSCapitalIMEAmount || claim.InpatientPPSCapitalIMEAmount === 0">{{ claim.InpatientPPSCapitalIMEAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientPPSOperatingHospitalSpecificDRGAmount || claim.InpatientPPSOperatingHospitalSpecificDRGAmount === 0">{{ 'PPS Operating Hospital Specific DRG Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientPPSOperatingHospitalSpecificDRGAmount || claim.InpatientPPSOperatingHospitalSpecificDRGAmount === 0">{{ claim.InpatientPPSOperatingHospitalSpecificDRGAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientCostReportDayCount || claim.InpatientCostReportDayCount === 0">{{ 'Cost Report Day Count'  }}</div>
+                    <div class="value" *ngIf="claim.InpatientCostReportDayCount || claim.InpatientCostReportDayCount === 0">{{ claim.InpatientCostReportDayCount }}</div>
+                    <div class="field" *ngIf="claim.InpatientPPSOperatingFederalSpecificDRGAmount || claim.InpatientPPSOperatingFederalSpecificDRGAmount === 0">{{ 'PPS Operating Federal Specific DRG Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientPPSOperatingFederalSpecificDRGAmount || claim.InpatientPPSOperatingFederalSpecificDRGAmount === 0">{{ claim.InpatientPPSOperatingFederalSpecificDRGAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimPPSCapitalOutlierAmount || claim.InpatientClaimPPSCapitalOutlierAmount === 0">{{ 'Claim PPS Capital Outlier Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientClaimPPSCapitalOutlierAmount || claim.InpatientClaimPPSCapitalOutlierAmount === 0">{{ claim.InpatientClaimPPSCapitalOutlierAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimIndirectTeachingAmount || claim.InpatientClaimIndirectTeachingAmount === 0">{{ 'Claim Indirect Teaching Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientClaimIndirectTeachingAmount || claim.InpatientClaimIndirectTeachingAmount === 0">{{ claim.InpatientClaimIndirectTeachingAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientNonpayableProfessionalComponentAmount || claim.InpatientNonpayableProfessionalComponentAmount === 0">{{ 'Nonpayable Professional Component Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientNonpayableProfessionalComponentAmount || claim.InpatientNonpayableProfessionalComponentAmount === 0">{{ claim.InpatientNonpayableProfessionalComponentAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimPaymentRemarkCode1">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.InpatientClaimPaymentRemarkCode1">{{ claim.InpatientClaimPaymentRemarkCode1 }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimPaymentRemarkCode2">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.InpatientClaimPaymentRemarkCode2">{{ claim.InpatientClaimPaymentRemarkCode2 }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimPaymentRemarkCode3">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.InpatientClaimPaymentRemarkCode3">{{ claim.InpatientClaimPaymentRemarkCode3 }}</div>
+                    <div class="field" *ngIf="claim.InpatientClaimPaymentRemarkCode4">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.InpatientClaimPaymentRemarkCode4">{{ claim.InpatientClaimPaymentRemarkCode4 }}</div>
+                    <div class="field" *ngIf="claim.InpatientPPSCapitalExceptionAmount || claim.InpatientPPSCapitalExceptionAmount === 0">{{ 'PPS Capital Exception Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.InpatientPPSCapitalExceptionAmount || claim.InpatientPPSCapitalExceptionAmount === 0">{{ claim.InpatientPPSCapitalExceptionAmount | currency }}</div>
+                </div>
+            </div>
+            <div class="row" *ngIf="claim | eraHasOutpatientAdjudicationInfo">
+                <div class="col-sm-12 header">{{'Outpatient Adjudication Information' }}</div>
+            </div>
+            <div class="flex-container" *ngIf="claim | eraHasOutpatientAdjudicationInfo">
+                <div class="column">
+                    <div class="field" *ngIf="claim.OutpatientReimbursementRate || claim.OutpatientClaimHCSPCSPayableAmount === 0">{{ 'Reimbursement Rate'  }}</div>
+                    <div class="value text-right" *ngIf="claim.OutpatientReimbursementRate || claim.OutpatientClaimHCSPCSPayableAmount === 0">{{ claim.OutpatientReimbursementRate | currency }}</div>
+                    <div class="field" *ngIf="claim.OutpatientClaimHCSPCSPayableAmount || claim.OutpatientClaimHCSPCSPayableAmount === 0">{{ 'Claim HCS PCS PayableAmount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.OutpatientClaimHCSPCSPayableAmount || claim.OutpatientClaimHCSPCSPayableAmount === 0">{{ claim.OutpatientClaimHCSPCSPayableAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.OutpatientClaimPaymentRemarkCode1">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.OutpatientClaimPaymentRemarkCode1">{{ claim.OutpatientClaimPaymentRemarkCode1 }}</div>
+                    <div class="field" *ngIf="claim.OutpatientClaimPaymentRemarkCode2">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.OutpatientClaimPaymentRemarkCode2">{{ claim.OutpatientClaimPaymentRemarkCode2 }}</div>
+                    <div class="field" *ngIf="claim.OutpatientClaimPaymentRemarkCode3">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.OutpatientClaimPaymentRemarkCode3">{{ claim.OutpatientClaimPaymentRemarkCode3 }}</div>
+                </div>
+                <div class="column">
+                    <div class="field" *ngIf="claim.OutpatientClaimPaymentRemarkCode4">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.OutpatientClaimPaymentRemarkCode4">{{ claim.OutpatientClaimPaymentRemarkCode4 }}</div>
+                    <div class="field" *ngIf="claim.OutpatientClaimPaymentRemarkCode5">{{ 'Remark Code'  }}</div>
+                    <div class="value" *ngIf="claim.OutpatientClaimPaymentRemarkCode5">{{ claim.OutpatientClaimPaymentRemarkCode5 }}</div>
+                    <div class="field" *ngIf="claim.OutpatientClaimESRDPaymentAmount || claim.OutpatientClaimESRDPaymentAmount === 0">{{ 'Claim ESRD Payment Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.OutpatientClaimESRDPaymentAmount || claim.OutpatientClaimESRDPaymentAmount === 0">{{ claim.OutpatientClaimESRDPaymentAmount | currency }}</div>
+                    <div class="field" *ngIf="claim.OutpatientNonpayableProfessionalComponentAmount || claim.OutpatientNonpayableProfessionalComponentAmount === 0">{{ 'Nonpayable Professional Component Amount'  }}</div>
+                    <div class="value text-right" *ngIf="claim.OutpatientNonpayableProfessionalComponentAmount || claim.OutpatientNonpayableProfessionalComponentAmount === 0">{{ claim.OutpatientNonpayableProfessionalComponentAmount | currency }}</div>
+                </div>
+            </div>
+            <div class="row" *ngIf="claim.ServicePaymentInfos && claim.ServicePaymentInfos.length > 0">
+                <div class="col-sm-12 header">{{'Service Payment Information' }}</div>
+            </div>
+            <div class="row gridHeader" *ngIf="claim.ServicePaymentInfos && claim.ServicePaymentInfos.length > 0">
+                <div class="col-sm-2">{{ 'Date'  }}</div>
+                <div class="col-sm-2">{{ 'Procedure Code'  }}</div>
+                <div class="col-sm-2">{{ 'Charge Amount'  }}</div>
+                <div class="col-sm-2">{{ 'Payment Amount'  }}</div>
+            </div>
+            <div class="row gridBody" *ngFor="let service of claim.ServicePaymentInfos">
+                <div class="col-sm-12">
+                    <div class="row ">
+                        <div class="col-sm-2">{{ service && service.ServiceDates && service.ServiceDates.length > 0 ? (service.ServiceDates[0].Date | toShortDisplayDateUtc) : '' }}&nbsp;</div>
+                        <div class="col-sm-2">{{ service.CompositeMedicalProcedureIdentifier }}&nbsp;</div>
+                        <div class="col-sm-2 text-right">{{ service.LineItemChargeAmount | currency }}&nbsp;</div>
+                        <div class="col-sm-2 text-right">{{ service.LineItemProviderPaymentAmount | currency }}&nbsp;</div>
+                    </div>
+                    <div class="row" *ngFor="let adjustment of service.ServiceAdjustments">
+                        <div class="col-sm-12">
+                            <div class="row" *ngFor="let index of [1,2,3,4,5,6]">
+                                <ng-container *ngIf="adjustment | eraServiceAdjustmentIndexHasData : index">
+                                    <div class="col-sm-2">&nbsp;</div>
+                                    <div class="col-sm-2">{{ adjustment['AdjustmentReasonCode' + index] | eraServiceAdjustmentIdentifierReason}}&nbsp;</div>               
+                                    <div class="col-sm-2 text-right">{{ adjustment['AdjustmentAmount' + index] ? (adjustment['AdjustmentAmount' + index] | currency) : '' }}&nbsp;</div>
+                                    <div class="col-sm-2">{{ adjustment['AdjustmentQuantity' + index] }}&nbsp;</div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,154 @@
+﻿<div id="contact-details-panel">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4>{{ panelTitle | i18n  }}</h4>
+            </div>            
+            <div class="panel-btn switch_main_toggle_border">
+                <!--<label class="switch switch_main">
+                    <input name="allCommunication" type="checkbox" ng-model="optOutAllCommunications">
+                    <span class="slider round"></span>
+                </label>-->
+                <div class="onoffswitch mainToggle">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="optOutAll" ng-model="optOutAllCommunications" ng-change="opOutAllComms()">
+                    <label class="onoffswitch-label" for="optOutAll" style="margin-bottom:0px;"></label>
+                </div>
+            </div>
+            <div class="panel-btn switch_main_label_border">
+                <h4 class="switch_main_label" for="allCommunication">Opt out of all communications </h4>
+            </div>
+        </div>
+        <div class="panel-body">            
+            <!--TODO: revert back contactDetailsFrm to frmContactDetails when phone and email gets implemented-->
+            <div class="form-body-new" ng-form="contactDetailsFrm">
+                <div class="persInfoFrm" id="contactDetailsSection">
+                    <div class="mailing-address-section">
+                        <div class="form-row">
+                            <div class="form-group form-col-5">
+                                <label class="control-label">{{"Use Account Member's Address" | i18n }}</label>
+                                <select kendo-drop-down-list
+                                        id="inpAccountMember"
+                                        k-option-label="'{{'No Selection' | i18n }}'"
+                                        k-data-text-field="'Name'"
+                                        k-data-value-field="'PatientId'"
+                                        k-data-source="accountMembers"
+                                        k-value-template="accountMembersValueTemplate"
+                                        k-change="accountMembersChanged"
+                                        k-ng-model="selectedAccountMember"
+                                        ng-disabled="accountMembers.length == 0"
+                                        tabindex="1"></select>
+                            </div>
+                        <!--Opt out mail reminders-->
+                            <div class="form-group form-col-5 opt-out-mail-reminders-padding">
+                                <label class="control-label opt-out-mail-reminders-label">{{'Opt out of mail reminders' | i18n }}</label>
+                            </div>
+                            <div class="form-group form-col-2 opt-out-mail-reminders-padding">
+                                <!--<label class="switch switch-mail-reminders">
+                                    <input name="mailReminders" type="checkbox" ng-model="optOutMailReminders">
+                                    <span class="slider round"></span>
+                                </label>-->
+                                <div class="onoffswitch mailReminderToggle">
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="optOutMail" ng-model="patientData.Profile.MailAddressRemindersOK" ng-change="optOutMailComms()">
+                                    <label class="onoffswitch-label" for="optOutMail" style="margin-bottom:0px;"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Address-->
+                        <div class="form-row">
+                            <div class="form-group form-col-12">
+                                <label class="control-label">{{'Street Address' | i18n }}</label>
+                                <input id="inpAddressLine1"
+                                       class="form-control"
+                                       type="text"
+                                       placeholder="{{ 'Street address' | i18n }}"
+                                       ng-model="patientData.Profile.AddressLine1"                                                                                                                                      
+                                       maxlength="128" char-pattern="[^ -;=?-~]" 
+                                       ng-disabled="useAccountMemberAddress" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group form-col-12">
+                                <label class="control-label">{{'Address 2' | i18n }}</label>
+                                <input id="inpAddressLine2"
+                                       class="form-control"
+                                       type="text"
+                                       placeholder="{{ 'Address 2' | i18n }}"
+                                       ng-model="patientData.Profile.AddressLine2"
+                                       maxlength="128" char-pattern="[^ -;=?-~]"
+                                ng-disabled="useAccountMemberAddress" />
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <!-- City -->
+                            <div class="form-group form-col-6">
+                                <label class="control-label">{{'City' | i18n }}</label>
+                                <input id="inpCity"
+                                       type="text" placeholder="{{ 'Enter city' | i18n }}"
+                                       class="form-control"
+                                       ng-model="patientData.Profile.City"
+                                       maxlength="64" char-pattern="[^a-zA-Z-'. ]"
+                                       ng-disabled="useAccountMemberAddress"
+                                       capitalize-first-with-override />
+                            </div>
+                            <!-- State -->
+                            <div class="form-group form-col-4">
+                                <label class="control-label">{{'State' | i18n }}</label>
+                                <div>
+                                    <state-list state-list-id="inpState"
+                                                source="patientData.Profile.State"
+                                                disable-input="useAccountMemberAddress ? true : false">
+                                    </state-list>
+                                </div>
+                            </div>
+                            <!-- Zip -->
+                            <div class="form-group form-col-2" ng-class="{'has-error': hasErrors && !contactDetailsFrm.inpZip.$valid}">
+                                <label class="control-label">{{'Zip' | i18n }}</label>
+                                <input id="inpZip"
+                                       class="form-control"
+                                       zip-field="patientData.Profile.ZipCode"
+                                       type="text"
+                                       onfocus="this.value = this.value;"
+                                       name="inpZip" placeholder="{{'ZIP Code' | i18n }}"
+                                       ng-model="patientData.Profile.ZipCode"
+                                       maxlength="10"
+                                       minlength="5"
+                                       ng-disabled="useAccountMemberAddress" />
+                                <span id="errZipCode" class="help-block" ng-show="hasErrors && !contactDetailsFrm.inpZip.$valid">
+                                    {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n  }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">&nbsp;</div>
+                    <div class="form-row">&nbsp;</div>
+
+                    <div class="form-row">
+                        <div class="form-group form-col-12">
+                            <!--<label class="control-label">{{'Phone' | i18n }}</label>-->
+                            <phone-info show-label="false"
+                                        phones="phones" max-limit="5"
+                                        show-is-primary="true"
+                                        valid-phones="validPhones"
+                                        valid-form="!hasErrors" has-notes="true" has-texts="true" patient-info="patientData"></phone-info>
+                        </div>
+                    </div>
+
+                    <div class="form-row">&nbsp;</div>
+                    <div class="form-row">&nbsp;</div>
+
+                    <div class="form-row">
+                        <div class="form-group form-col-12">                            
+                            <patient-email-info emails="emails"
+                                                show-is-primary="true"
+                                                valid-phones="validEmails"
+                                                valid-form="!hasErrors"
+                                                patient-info="patientData"></patient-email-info>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

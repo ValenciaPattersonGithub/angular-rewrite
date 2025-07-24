@@ -1,0 +1,85 @@
+﻿/*
+ 
+ *** SOAR ANIMATIONS ***
+
+    1. Register your animation to the object located in soarAnimate-factory.js
+         - If possible, parameterize variables (such as color) to allowthe function 
+           to expand it's use to differnt states such as success, error, etc.
+
+    2. Register any CSS associated with the animation to soarAnimate.less
+        - Add a Title to your CSS code that matches the JS function name
+        - If possible, use the same name for the JS function, CSS class, and animation
+          to promote continuity and standardization
+        - If possible, create the animation as a mixin to allow it to be expand
+          it's use to different states such as success, error, warning, etc.
+        - Follow BEM naming conventions
+        - 
+
+*/
+
+// ** START soarFlashBG **
+.soarMix__flashBGKeyframes(@bgColor, @fontColor) {
+    0% { 
+        background-color: @bgColor;
+        color: @fontColor;
+    }
+    100% {
+        background-color: inherit;
+        color: inherit;
+    }
+}
+
+@-webkit-keyframes soarAnimate__flashBG--success { .soarMix__flashBGKeyframes( @brand-color_success, @brand-color_white); }
+@-moz-keyframes soarAnimate__flashBG--success { .soarMix__flashBGKeyframes( @brand-color_success, @brand-color_white); }
+@-ms-keyframes soarAnimate__flashBG--success { .soarMix__flashBGKeyframes( @brand-color_success, @brand-color_white); }
+@-o-keyframes soarAnimate__flashBG--success { .soarMix__flashBGKeyframes( @brand-color_success, @brand-color_white); }
+@keyframes soarAnimate__flashBG--success { .soarMix__flashBGKeyframes( @brand-color_success, @brand-color_white); }
+
+@-webkit-keyframes soarAnimate__flashBG--warning { .soarMix__flashBGKeyframes( @brand-color_warning, @brand-color_white); }
+@-moz-keyframes soarAnimate__flashBG--warning { .soarMix__flashBGKeyframes( @brand-color_warning, @brand-color_white); }
+@-ms-keyframes soarAnimate__flashBG--warning { .soarMix__flashBGKeyframes( @brand-color_warning, @brand-color_white); }
+@-o-keyframes soarAnimate__flashBG--warning { .soarMix__flashBGKeyframes( @brand-color_warning, @brand-color_white); }
+@keyframes soarAnimate__flashBG--warning { .soarMix__flashBGKeyframes( @brand-color_warning, @brand-color_white); }
+
+@-webkit-keyframes soarAnimate__flashBG--error { .soarMix__flashBGKeyframes( @brand-color_error, @brand-color_white); }
+@-moz-keyframes soarAnimate__flashBG--error { .soarMix__flashBGKeyframes( @brand-color_error, @brand-color_white); }
+@-ms-keyframes soarAnimate__flashBG--error { .soarMix__flashBGKeyframes( @brand-color_error, @brand-color_white); }
+@-o-keyframes soarAnimate__flashBG--error { .soarMix__flashBGKeyframes( @brand-color_error, @brand-color_white); }
+@keyframes soarAnimate__flashBG--error { .soarMix__flashBGKeyframes( @brand-color_error, @brand-color_white); }
+
+@-webkit-keyframes soarAnimate__flashBG--alert { .soarMix__flashBGKeyframes( @brand-color_alert, @brand-color_white); }
+@-moz-keyframes soarAnimate__flashBG--alert { .soarMix__flashBGKeyframes( @brand-color_alert, @brand-color_white); }
+@-ms-keyframes soarAnimate__flashBG--alert { .soarMix__flashBGKeyframes( @brand-color_alert, @brand-color_white); }
+@-o-keyframes soarAnimate__flashBG--alert { .soarMix__flashBGKeyframes( @brand-color_alert, @brand-color_white); }
+@keyframes soarAnimate__flashBG--alert { .soarMix__flashBGKeyframes( @brand-color_alert, @brand-color_white); }
+
+.soarFlashBG {
+
+    &--success {
+        -webkit-animation: soarAnimate__flashBG--success 900ms ease-in-out 1;
+        -moz-animation: soarAnimate__flashBG--success 900ms ease-in-out 1;
+        -o-animation: soarAnimate__flashBG--success 900ms ease-in-out 1;
+        animation: soarAnimate__flashBG--success 900ms ease-in-out 1;
+    }
+    &--error {
+        -webkit-animation: soarAnimate__flashBG--error 900ms ease-in-out 1;
+        -moz-animation: soarAnimate__flashBG--error 900ms ease-in-out 1;
+        -o-animation: soarAnimate__flashBG--error 900ms ease-in-out 1;
+        animation: soarAnimate__flashBG--error 900ms ease-in-out 1;
+    }
+    &--warning {
+        -webkit-animation: soarAnimate__flashBG--warning 900ms ease-in-out 1;
+        -moz-animation: soarAnimate__flashBG--warning 900ms ease-in-out 1;
+        -o-animation: soarAnimate__flashBG--warning 900ms ease-in-out 1;
+        animation: soarAnimate__flashBG--warning 900ms ease-in-out 1;
+    }
+    &--alert {
+        -webkit-animation: soarAnimate__flashBG--alert 900ms ease-in-out 1;
+        -moz-animation: soarAnimate__flashBG--alert 900ms ease-in-out 1;
+        -o-animation: soarAnimate__flashBG--alert 900ms ease-in-out 1;
+        animation: soarAnimate__flashBG--alert 900ms ease-in-out 1;
+    }
+}
+
+
+// ** END soarFlashBG **

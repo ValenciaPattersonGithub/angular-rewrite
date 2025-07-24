@@ -1,0 +1,60 @@
+﻿<div class="perioNavInputs">
+    <div class="perioNavInputs__row" id="{{quadrant + '_' + examType}}" ng-disabled="disabledInputs || disable">
+        <div class="perioNavInputs__title">
+            <div id="{{quadrant + '_' + examType}}_title" >{{::examTitle|i18n }}</div>
+        </div>
+        <div class="perioNavInputs__tooth">
+            <!-- Default -->
+            <input id="{{quadrant}}_{{examTypeAbbrev}}_{{activeTooth}}_{{x}}"
+                   class="perioNavInputs__ctrl"
+                   maxlength="1"
+                   tabindex="-1"
+                   type="text"
+                   ng-keyup="advance($event, x, null, examTypeAbbrev, null)"
+                   ng-blur="inputBlur(toothExam[examType], x)"
+                   ng-click="inputClicked(examType, toothExam.ToothId, x, toothExam.ToothNumber)"
+                   ng-repeat="x in inputArray"
+                   ng-model="toothExam[examType][x]"
+                   ng-disabled="disabledInputs || disable"
+                   ng-if="isVisible('default')" />
+            <!-- BleedingPocket or SuppurationPocket -->            
+            <app-check-box 
+                           id="{{quadrant}}_{{examTypeAbbrev}}_{{activeTooth}}_{{x}}"
+                           ng-if="isVisible('bldg_supp')"
+                           ng-repeat="x in inputArray" 
+                           ng-class="{ 'activeExam': isActiveExam(examType, quadrant) && !isActiveTooth(toothExam.ToothId), 'activeTooth': isActiveTooth(toothExam.ToothId) }"
+                           [(value)]="toothExam[examType][x]"
+                           [is-disabled]="disabledInputs || disable"
+                           [(checked)]="toothExam[examType][x]"
+                           (check-changed)="bleedingSupparationChange(examType, x);inputClicked(examType, toothExam.ToothId, x, toothExam.ToothNumber);">
+            </app-check-box>
+            <!-- Mobility -->
+            <input id="{{quadrant}}_{{examTypeAbbrev}}_{{activeTooth}}_0"
+                   class="perioNavInputs__ctrl mobility"
+                   maxlength="1"
+                   tabindex="-1"
+                   type="text"
+                   ng-keyup="advance($event, x, null, examTypeAbbrev, null)"
+                   ng-blur="inputBlur(toothExam[examType], x)"
+                   ng-click="inputClicked(examType, toothExam.ToothId, 0, toothExam.ToothNumber)"
+                   ng-model="toothExam[examType]"
+                   ng-disabled="disabledInputs || disable"
+                   ng-class="{ 'activeExam': isActiveExam(examType, quadrant) && !isActiveTooth(toothExam.ToothId), 'activeTooth': isActiveTooth(toothExam.ToothId) }"
+                   ng-if="isVisible('mobility')" />
+            <!-- FurcationGradeRoot -->
+            <input id="{{quadrant}}_{{examTypeAbbrev}}_{{activeTooth}}_{{x}}"
+                   class="perioNavInputs__ctrl"
+                   maxlength="1"
+                   tabindex="-1"
+                   type="text"
+                   ng-keyup="advance($event, x, null, examTypeAbbrev, null)"
+                   ng-blur="inputBlur(toothExam[examType], x)"
+                   ng-click="inputClicked(examType, toothExam.ToothId, x, toothExam.ToothNumber)"
+                   ng-repeat="x in inputArrayForFurcation"
+                   ng-model="toothExam[examType][x]"
+                   ng-disabled="disabledInputs || disable"
+                   ng-class="{ 'activeExam': isActiveExam(examType, quadrant) && !isActiveTooth(toothExam.ToothId), 'activeTooth': isActiveTooth(toothExam.ToothId) && readingAllowed(toothExam.$$FurcationReadingsAllowed, x) }"
+                   ng-if="isVisible('furcation')" />
+        </div>
+    </div>
+</div>

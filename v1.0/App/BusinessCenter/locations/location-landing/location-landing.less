@@ -1,0 +1,118 @@
+﻿.locMgmt {
+    .content__row {
+        padding-top: 0;
+    }
+
+    .standardHeader;
+
+    &__body {
+        .containerStandard;
+        padding: 0;
+    }
+    
+    &__searchContainer {
+        .make-xs-column(2);
+
+        padding-left: 0;
+        padding-right: 0;        
+            z-index: 5;
+    }
+
+    &__search-input {
+        .form-control;
+        display: inline-block;
+        max-width: 200px;
+        margin-right: 10px;
+    }
+    &__list {
+        .unsetList;
+        width: 250px;
+        max-width: 250px;
+        overflow: auto;
+        white-space: nowrap;
+        margin-top: 10px;
+    }
+    &__list-item {
+        width: 100%;
+        display: table;
+    }
+    &__name {
+
+        > div {
+            .truncate;
+
+            width: 210px; 
+        /*min-width: 10px;*/ 
+        }
+
+        .active {
+            span {
+                color: black;
+            }
+        }
+    }
+    .section-divider{
+        margin:0;
+        padding-bottom: @brand-padding_horizontal;
+
+    }
+}
+
+.active-icon {
+            i {
+                color: black;
+            }
+        }
+
+.loc-pending-inactive {
+        width: 220px !important;
+        left: -42px !important;
+}
+
+.icon-pending-inactive {
+        color: #2DABCB !important;
+    }
+
+.icon-hovertip {
+    position: absolute;
+    display: inline-block;
+    color: #2DABCB;
+    margin-top:0px;
+    width:35px !important;
+    i {
+        color: #ff9800;
+    }
+}
+
+.icon-hovertip .icon-hovertiptext {
+    visibility: hidden;
+    width: 180px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: -60%;
+    margin-left: -60px;
+    opacity: 1;
+    border-radius: 6px;
+    padding: 5px 0px;
+    transition: opacity 1s;
+}
+
+.icon-hovertip .icon-hovertiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.icon-hovertip:hover .icon-hovertiptext {
+    visibility: visible;
+    opacity: 1;
+}

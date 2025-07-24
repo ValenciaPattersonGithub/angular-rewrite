@@ -1,0 +1,27 @@
+﻿<div class="patAlerts">
+    <div class="patAlerts__alert" ng-show="masterAlerts.length == 0 && customAlerts.length == 0">
+        <no-results loading="loading" loading-message='loadingMessageNoResults'></no-results>
+    </div>
+    <div class="patAlerts__content" ng-hide="alerts.length == 0">        
+        <!--medical history flags-->
+        <div class="patAlerts__alertContent patAlerts__medicalHistoryFlagColor" ng-repeat="flag in patientMedicalHistoryAlerts | orderBy:'MedicalHistoryAlertDescription'" title="{{ flag.MedicalHistoryAlertDescription}}">            
+            <div class="patAlerts__faIcons {{ flag.IconClass }}" ng-if="flag.IconClass != 'fi-allergies' && flag.IconClass != 'fi-premed'"></div>
+            <div class="patAlerts__svgIcon {{ flag.IconClass }}" ng-if="flag.IconClass == 'fi-premed'">&nbsp;</div>
+            <div class="patAlerts__svgIcon {{ flag.IconClass }}" ng-if="flag.IconClass == 'fi-allergies'">&nbsp;</div>
+            <strong class="patAlerts__description">{{ flag.MedicalHistoryAlertDescription | truncate:40}}</strong>
+            <strong class="patAlerts__description" ng-show="{{flag.MedicalHistoryAlertDescription.length > 40}}">...</strong>
+        </div>
+        <!-- account's current flags -->
+        <div class="patAlerts__alertContent" ng-repeat="malert in masterAlerts | orderBy:'Description'" title="{{ malert.Description}}">
+            <div class="patAlerts__faIcons {{ getClass(malert.SymbolId) }}"></div>
+            <strong class="patAlerts__description">{{ malert.Description | truncate:40}}</strong>
+            <strong class="patAlerts__description" ng-show="{{malert.Description.length > 40}}">...</strong>
+        </div>
+        <!-- account's custom flags -->
+        <div class="patAlerts__alertContent" ng-repeat="calert in customAlerts | orderBy:'Description'" title="{{ calert.Description}}">
+            <div class="patAlerts__faIcons {{ getClass(calert.SymbolId) }}"></div>
+            <strong class="patAlerts__description">{{ calert.Description | truncate:40}}</strong>
+            <strong class="patAlerts__description" ng-show="{{calert.Description.length > 40}}">...</strong>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿<div class="btn-group toothQuadrant">
+    <i class="far fa-edit" ng-click="setSelected()"></i>
+    <div ng-class="{'toothQuadrant__list-quadrant': dataForTeeth.quadrantSelectionOnly}"  class="toothQuadrant__list" ng-show="showTeethDetail">
+        <span class="btn btn-link pull-right" ng-click="closeSelected()">
+            <i class="fa fa-times"></i>
+        </span>
+        <div ng-show="!dataForTeeth.quadrantSelectionOnly">
+            <tooth-selector selected-teeth="dataForTeeth.selectedTeeth" quadrant-selection-only="dataForTeeth.quadrantSelectionOnly" active-tooth="activeTooth" multiselect-enabled="dataForTeeth.multiselectEnabled" selected-teeth-changed="selectedTeethChanged"></tooth-selector>
+        </div>
+        <div ng-show="dataForTeeth.quadrantSelectionOnly">
+            <div class="toothQuadrant__quadrant-title">
+                <h3>{{ 'Affected Quadrant' | i18n }}</h3>
+            </div>
+            <div class="toothQuadrant__quadrants">
+                <button id="{{tooth.Desc}}"
+                        class="toothQuadrant__quadrant-button"
+                        ng-click="selectQuadrant(quadrant)"
+                        ng-class="{active: quadrant.Selected}"
+                        ng-repeat="quadrant in allQuadrant">
+                    {{quadrant.Desc}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

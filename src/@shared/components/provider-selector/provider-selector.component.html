@@ -1,0 +1,21 @@
+<div class="providerSelector">
+    <kendo-dropdownlist [data]="providers"
+                        [textField]="'Name'"
+                        [valueField]="'ProviderId'"
+                        [valuePrimitive]="true"
+                        [(ngModel)]="selectedProvider" name="selectedProvider"
+                        (valueChange)="onProviderChanged($event)"
+                        [popupSettings]="{ animate:false }"
+                        [defaultItem]="defaultItem"
+                        [disabled]="isDisabled"
+                        [ngClass]="{'disabledCursor':isDisabled}"
+                        ngDefaultControl  #dropdownlist clickOutside (clickOutside)="clickedOutside(dropdownlist)">
+        <ng-template *ngIf="!openClinicalNotes" kendoDropDownListItemTemplate let-dataItem>
+            <span id="lblListItems" [ngStyle]="{'color': dataItem.IsActive ? 'black' : 'lightgrey', 'font-style': dataItem.IsActive ? 'normal' : 'italic',
+                  'font-weight': dataItem.IsPreferred ? 'bold' : 'normal','display': 'block', 'width': '100%' }">{{ dataItem?.Name }}</span>
+        </ng-template>
+        <ng-template *ngIf="openClinicalNotes" kendoDropDownListItemTemplate let-dataItem>
+            <span id="lblListItems" class="openClinNotes" [ngStyle]="{'font-weight': dataItem.IsPreferred ? 'bold' : 'normal' }">{{ dataItem?.Name }}</span>
+        </ng-template>
+    </kendo-dropdownlist>
+</div>

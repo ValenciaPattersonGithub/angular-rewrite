@@ -1,0 +1,12 @@
+.app-icon {
+  display: block; // tells the browser not to add extra sizing automatically
+
+  & svg {
+    height: inherit;
+    width: inherit;
+    & * {
+      fill: inherit;
+      stroke: inherit;
+    }
+  }
+}

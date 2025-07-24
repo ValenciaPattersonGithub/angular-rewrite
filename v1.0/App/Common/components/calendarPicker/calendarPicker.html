@@ -1,0 +1,32 @@
+﻿<div class="calendar-picker">
+    <div class="calendar-picker-content" tabindex="1">
+        <div class="calendar-picker-body calendar-picker-no-blur" id="calendarPickerBody" tabindex="99">
+            <div id="datePickerCtrl"
+                 uib-datepicker
+                 class="date-picker calendar-picker-unauthorized"
+                 ng-model="calendarPickerDateTemp"
+                 datepicker-options="calPickOpt"
+                 year-range="1"
+                 style="pointer-events:none;"></div>
+            <div class="calendar-table skip-line">
+                <div class="calendar-table-row calendar-table-months">
+                    <div id="btnCalendarPickerJumpTodayNoBlur" class="calendar-table-cell">
+                        <label id="lblCalendarPickerJumpTodayNoBlur" check-auth-z={{authZ}} ng-click="goToToday()" ng-disabled="disableToday" ng-bind="::(calenderText.today)"></label>
+                    </div>
+                    <div id="btnCalendarPickerJump3MonthNoBlur" class="calendar-table-cell">
+                        <label id="lblCalendarPickerJump3MonthNoBlur" check-auth-z={{authZ}} ng-click="jumpMonth(3)" ng-bind="::(calenderText.threeMonth)"></label>
+                    </div>
+                    <div id="btnCalendarPickerJump4MonthNoBlur" class="calendar-table-cell">
+                        <label id="lblCalendarPickerJump4MonthNoBlur" check-auth-z={{authZ}} ng-click="jumpMonth(4)" ng-bind="::(calenderText.fourMonth)"></label>
+                    </div>
+                    <div id="btnCalendarPickerJump6MonthNoBlur" class="calendar-table-cell">
+                        <label id="lblCalendarPickerJump6MonthNoBlur" check-auth-z={{authZ}} ng-click="jumpMonth(6)" ng-bind="::(calenderText.sixMonth)"></label>
+                    </div>
+                    <div id="btnCalendarPickerJump12MonthNoBlur" class="calendar-table-cell">
+                        <label id="lblCalendarPickerJump12MonthNoBlur" check-auth-z={{authZ}} ng-click="jumpMonth(12)" ng-bind="::(calenderText.oneYear)"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="creditdistributionhistoryreport grid header">
+        <div class="col-sm-2-migration summaryHeader">{{ 'Transaction Type' | translate }}</div>
+        <div class="col-sm-2-migration summaryHeader">{{ 'Responsible Party' | translate }}</div>
+        <div class="col-sm-1-migration summaryHeader">{{ 'Location' | translate }}</div>
+        <div class="col-sm-1-migration summaryHeader">{{ 'Amount' | translate }}</div>
+        <div class="col-sm-1-migration summaryHeader p-3">{{ 'Date' | translate }}</div>
+        <div class="col-sm-2-migration summaryHeader p-2">{{ 'Description' | translate }}</div>
+        <div class="col-sm-3-migration summaryHeader p-2">{{ 'Impaction' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+            id="creditDistributionHistory">
+            <div *cdkVirtualFor="let credit of reportData; index as i" class="{{credit.Class}}">
+                <div class="creditdistributionhistoryreport grid item" *ngIf="credit.IsHeader">
+                    <div class="col-sm-2-migration summaryData">{{ credit.TransactionTypeMain | translate }}</div>
+                    <div class="col-sm-2-migration summaryData">{{ credit.ResponsiblePartyMain | translate }}</div>
+                    <div class="col-sm-1-migration summaryData">{{ credit.LocationMain | translate }}</div>
+                    <div class="col-sm-1-migration summaryData">{{ credit.AmountMain | currency }}</div>
+                    <div class="col-sm-1-migration summaryData">{{ credit.DateMain | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-2-migration summaryData">{{ credit.DescriptionMain | translate }} </div>
+                    <div class="col-sm-3-migration summaryData">{{ credit.ImpactionMain | translate }}</div>
+                </div>
+                <div class="summaryRowBorder" *ngIf="credit.IsSubHeader">
+                    <div class="col-sm-12-migration"></div>
+                </div>
+                <div class="creditdistributionhistoryreporttransaction grid" *ngIf="credit.IsSubHeader">
+                    <div class="col-sm-4-migration transactions">{{ 'Distribution Dates' | translate }}</div>
+                    <div class="col-sm-8-migration transactions">{{ 'Applied to Transactions' | translate }}</div>
+                </div>
+                <div class="creditdistributionhistoryreportsubheader grid header p-5" *ngIf="credit.IsSubHeader">
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Posted Date' | translate }}</div>
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Service Date' | translate }}</div>
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Date of Service' | translate }}</div>
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Patient' | translate }}</div>
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Provider' | translate }}</div>
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Location' | translate }}</div>
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Team Member' | translate }}</div>
+                    <div class="col-sm-2-migration summaryHeader">{{ 'Description' | translate }}</div>
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Tooth' | translate }}</div>
+                    <div class="col-sm-1-migration summaryHeader">{{ 'Area' | translate }}</div>
+                    <div class="col-sm-1-migration tableHeader text-right ">{{ 'Amount' | translate }}</div>
+                </div>
+
+                <div class="creditdistributionhistoryreportsubheader grid item {{credit.ClassData}} {{credit.Class}}"
+                    *ngIf="credit.IsData">
+                    <div class="col-sm-1-migration">{{ credit.PostedDate | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-1-migration">{{ credit.ServiceDate | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-1-migration" *ngIf="credit.DateOfService !== null">{{ credit.DateOfService |
+                        date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-1-migration" *ngIf="credit.DateOfService === null">{{ 'N/A' | translate }}</div>
+                    <div class="col-sm-1-migration">{{ credit.Patient | translate }}</div>
+                    <div class="col-sm-1-migration">{{ credit.Provider | translate }}</div>
+                    <div class="col-sm-1-migration">{{ credit.Location | translate }}</div>
+                    <div class="col-sm-1-migration">{{ credit.TeamMember | translate }} </div>
+                    <div class="col-sm-2-migration">{{ credit.Description | translate }}</div>
+                    <div class="col-sm-1-migration">{{ credit.Tooth | translate }}</div>
+                    <div class="col-sm-1-migration">{{ credit.Area | translate }}</div>
+                    <div *ngIf="credit.Amount >= 0" class="text-right col-sm-1-migration">{{
+                        credit.Amount | currency }}
+                    </div>
+                    <div *ngIf="credit.Amount < 0" class="text-right col-sm-1-migration">
+                        ({{credit.Amount * -1 | currency}})
+                    </div>
+                </div>
+                <div class="stripEven totalEmptyRowOne" *ngIf="credit.IsFooter"></div>
+                <div class="stripEven creditdistributionhistoryreport grid item reportGrid__row summaryRowBorder"
+                    *ngIf="credit.IsFooter">
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration reportGrid__label grandTotal">{{'Total' | translate}}</div>
+                    <div class="col-sm-1-migration reportGrid__label text-right grandTotal">{{
+                        credit.Total | currency
+                        }}
+                    </div>
+                </div>
+                <tr class="stripEven totalEmptyRowOne" *ngIf="credit.IsFooter"></tr>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

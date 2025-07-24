@@ -1,0 +1,202 @@
+﻿
+.statements {
+
+    .processedDateColumn {
+        width: 10%
+    }
+
+    .processedDateTextColumn {
+        width: 3%
+    }
+
+    .processedDateRow {
+        padding: 10px;
+    }
+    .fuse_table{
+        table-layout: fixed;
+        width: 100%;
+    }
+    .fuse_table thead tr{
+        border: 1px solid @border-color-Statements;
+    }
+    .fuse_table tbody tr{
+        border: 1px solid @border-color-Statements;
+        border-top: 0;
+    }
+    .fuse_table tbody tr:nth-child(odd){
+        background-color: @brand-color_white;
+    }
+    .fuse_table tbody tr:nth-child(even){
+        background-color: @table-row-even;
+    }
+    .fuse_table thead th{
+        border-right: 1px solid @border-color-Statements;
+        color: @thead-color;
+    }
+    .fuse_table tbody td{
+        border-right: 1px solid @border-color-Statements;
+        word-break: break-all;
+        padding: 5px;
+    }
+    .fuse_table thead th{
+        padding: 10px 5px;
+    }
+    .btnProgress {
+        padding: 0px !important;
+    }
+    .w3{
+        width: 3%;
+    }
+    .w12{
+        width: 12%;
+    }
+    .w15{
+        width: 15%;
+    }
+    .w18{
+        width: 18%;
+    }
+    .labelsMargin{
+        margin-top: 8px;
+    }
+    .fuse_tableSavedBatches{
+        table-layout: fixed;
+        width: 72%;
+    }
+    .fuse_tableSavedBatches thead tr{
+        border: 1px solid @border-color-Statements;
+    }
+    .fuse_tableSavedBatches tbody tr{
+        border: 1px solid @border-color-Statements;
+        border-top: 0;
+    }
+    .fuse_tableSavedBatches tbody tr:nth-child(odd){
+        background-color: @brand-color_white;
+    }
+    .fuse_tableSavedBatches tbody tr:nth-child(even){
+        background-color: @table-row-even;
+    }
+    .fuse_tableSavedBatches thead th{
+        border-right: 1px solid @border-color-Statements;
+        color: @thead-color;
+    }
+    .fuse_tableSavedBatches tbody td{
+        border-right: 1px solid @border-color-Statements;
+        word-break: break-all;
+        padding: 5px;
+    }
+    .fuse_tableSavedBatches thead th{
+        padding: 10px 5px;
+    }
+    .alignCenter{
+    margin-top: 10px;
+    }
+    .error {
+        color: @remove-color;
+    }
+
+    #statementBackToTop {
+        position: fixed;
+        bottom: 50px;
+        right: 40px;
+        z-index: 10;
+    }
+
+    .statementButton {
+        //need this padding so the tooltip will appear
+        //disabled elements don't trigger the tooltip, so some
+        //padding will force the cursor to hit the enclosing div
+        padding: 10px 10px 10px 0px;
+    }
+
+    .balanceGreaterThan {
+        max-width: 175px
+    }
+    .ml15 {margin-left: 15px;}
+    .claimRadioButton 
+    {
+        margin-top: 5px;
+        margin-left: -16px;
+    }
+    hr{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .displayAccountsSelects {
+        max-width: 72px;
+        display: inline;
+    }
+
+    .pdf-content {
+        width: 100%;
+        height: 700px;
+    }
+
+    .financeCharge {
+        height: 40px;
+    }
+
+    .radiolabel{
+      font-weight: normal !important;
+      cursor: pointer !important;
+      display: inline !important;
+    }
+   
+    &__slider {
+        cursor: pointer;
+        padding: 5px 5px 5px 15px;
+
+        i.active {
+            color: @toggle-switch-color;
+        }
+
+        i.inactive {
+            color: lightgrey;
+        }
+
+        label {
+            vertical-align: bottom;
+            padding-left: 5px;
+        }
+    }
+
+    &__faInfoCircle {
+        display: inline-block;
+    }
+    .rightAlign
+    {
+        text-align: right;
+    }
+    .fuseGridSavedBatches{
+        height: auto;
+    padding: 0 0 0 0px;
+    display: table;
+    width: 70%;
+    }
+    .row.body {
+        background-color: @brand-color_white;
+    }
+    .utilCheckbox{
+        margin-left: -16px;
+        margin-top: 10px;
+    }
+    .utilCheckbox__ctrl:focus {
+        outline: none;
+    }
+
+    .statement-nav-container {
+        width: 100%;
+        display: flex;
+
+        .location-selector-container {
+            width: calc(100% - 250px);
+        }
+        .nse-nav-container {
+            // This is the approximate width needed to
+            // contain all of the text on a single line
+            width: 250px;
+            text-align: center;
+        }
+    }
+}
+

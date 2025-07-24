@@ -1,0 +1,61 @@
+﻿.feesByLocation {
+    width: 100%;
+    margin-bottom: 5px;
+
+    &__heading-main {
+        padding-bottom: @brand-padding_sm;
+        font-size: 24px;
+        font-weight: bold;
+
+        .title {
+            padding: @brand-padding_sm;
+        }
+    }
+
+    &__locationSearch {
+
+        .remove {
+            cursor: pointer;
+            margin-left: -25px;
+            margin-top: 10px;
+            display: inline;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .search {
+            width: 85%;
+            display: inline;
+            padding-right: 22px; 
+        }
+    }
+
+    &__feesEditPanel {
+        width: 90%;
+        padding-top: @brand-padding_sm;
+        margin-left: 5%;
+
+        &.heading-loc {
+            padding: 0px;
+        }
+    }
+
+    &__locationList {
+
+        &.setScroll {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            max-height: 620px;
+        }
+    }
+
+    &__footer {
+        .containerStandard;
+        padding-right: @brand-padding_sm;
+    }
+
+    &__btn {
+        float: right;
+        padding-bottom: @brand-padding_lg;
+    }
+}

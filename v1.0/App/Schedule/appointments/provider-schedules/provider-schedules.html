@@ -1,0 +1,73 @@
+﻿
+<div ng-show="validStartAndEndTime && multipleProviders.selectedProviders.length > 0" class="row" style="overflow-x: scroll; width: auto; overflow-y: scroll; height: 150px">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th ng-repeat="prov in multipleProviders.selectedProviders">
+                    <button class="btn icon-button" type="button" ng-click="deleteProvider($index, prov.UserId)" style="position:relative; right:-10px">
+                        <i class="far fa-times-circle"></i>
+                    </button>
+                    {{prov.FirstName.charAt(0)}}. {{prov.LastName}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="slot in slots">
+                <th>{{slot.Start | date: 'h:mm a'}}</th>
+                <td ng-repeat="prov in multipleProviders.selectedProviders">
+                    <input type="checkbox" id="{{prov.UserId}}_{{slot.Name}}" class="chk_{{slot.Name}} providerSchedules_chkbox" ng-click="validateSelectedTime(prov, slot, $event)" ng-if="isSelected(prov,slot)" checked="checked" ng-disabled="readOnly" />
+                    <input type="checkbox" id="{{prov.UserId}}_{{slot.Name}}" class="chk_{{slot.Name}} providerSchedules_chkbox" ng-click="validateSelectedTime(prov, slot, $event)" ng-if="!isSelected(prov,slot)" ng-disabled="readOnly" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--<div class="clearfix">&nbsp;</div>-->
+<div ng-if="!loadingAppointments && appointment.Data.Classification == 0">
+    <!--<div ng-show="!validStartAndEndTime">
+        <p class="error">Please select a valid time range.</p>
+    </div>
+    <div ng-show="!appointment.Valid && multipleProviders.selectedProviders.length == 0">
+        <p class="error">Please select at least one provider.</p>
+    </div>
+    <div ng-show="!appointment.Valid && providerSchedules.length == 0 && multipleProviders.selectedProviders.length > 0">
+        <p class="error">Please select a time for the provider.</p>
+    </div>
+    <div ng-show="!selectedProvidersAndSelectedTimeSlotMatched">
+        <p class="error">Skipping time is not allowed.</p>
+    </div>-->
+    <!--<div ng-if="providerValidation && hasProviderOutsideWorkingHours()" class="multiple-provider-warning">
+        <div ng-repeat="item in providerValidation | filter:{WithinHours : false}">
+            <label id="lblProviderWarning" class="warning">{{ 'You are scheduling {0} outside of scheduled hours.' | i18n:[item.ProviderName] }}</label>
+            {{ 'The examining dentist is already scheduled at {0} during this time!' | i18n:[examiningDentistLocationConflictName] }}
+        </div>
+    </div>-->
+    <!--<div ng-show="providerValidationMissingHours && providerValidationMissingHours.length>0" class="multiple-provider-warning">
+        <div ng-repeat="item in providerValidationMissingHours">
+            <label id="lblProviderWarning" class="error">{{ 'Please select a time for the provider: {0}' | i18n:[item.ProviderName] }}</label>
+        </div>
+    </div>-->
+    <!--<div ng-show="unavailableProviders && unavailableProviders.length>0" class="multiple-provider-warning">
+        <div ng-repeat="item in unavailableProviders">
+            <label id="lblProviderWarning" class="warning">{{ 'Provider {0} {1} is not available in this location. Please select another provider.' | i18n:[item.FirstName, item.LastName] }}</label>
+        </div>
+    </div>-->
+</div>
+<!--<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div ng-show="providerConflicts && (providerConflicts.LocationConflicts.length > 0 || providerConflicts.AppointmentConflicts.length > 0)">
+            <div ng-repeat="conflict in providerConflicts.LocationConflicts | orderBy : 'From'">
+                <label id="lblProviderLocationConflictWarning" class="error">
+                    {{ ' The provider has another appointment at {0} from {1} to {2} {3}!' | i18n:[conflict.Location, conflict.From, conflict.To, conflict.Tz]  }}
+                </label>
+            </div>
+            <div ng-repeat="conflict in providerConflicts.AppointmentConflicts | orderBy : 'From'">
+                <label id="lblProviderLocationConflictWarning" class="warning">
+                    {{ ' The provider has another appointment from {0} to {1} {2}!' | i18n:[conflict.From, conflict.To, conflict.Tz]  }}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>-->

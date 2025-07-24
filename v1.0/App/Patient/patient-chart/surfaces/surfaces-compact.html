@@ -1,0 +1,5 @@
+﻿<div class="surfCmpct">
+    <button ng-disabled="disableInput" ng-repeat="surface in data" class="btn btn-default btnStateReset" id="tdRootValue{{surface.SurfaceAbbreviation}}" ng-click="selectSurface(surface)" ng-class="{active: surface.selected}">
+        {{surface.SurfaceText | i18n}}
+    </button>
+</div>

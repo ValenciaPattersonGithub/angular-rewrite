@@ -1,0 +1,117 @@
+﻿<div id="modalSelectServiceCode" class="srcvCodePicker">
+  <!--Service Codes-->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-md-4">
+          <label class="control-label font-24">{{ 'Service Codes' | i18n }}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Input Box-->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="inner-addon right-addon">
+          <input class="form-control border-solid-black col-xs-10 width-90-percent" id="searchBoxServiceCodes" placeholder="{{'Search service code, CDT code, description, fee...'|i18n}}" type="text" ng-model="searchServiceCodesKeyword" />
+          <span class="glyphicon glyphicon-search col-xs-1"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="serv-code-picker">
+    <!--Table Header-->
+    <div class="row serv-table">
+      <div class="col-md-12 serv-table-header">
+        <table ng-hide="serviceCodes.length==undefined" id="tableServiceCodes" class="table table-striped border-solid-black table-hover">
+          <thead>
+            <tr class="blue">
+              <td id="tdSelect" class="serv-button">
+                <div class="pull-left">
+                  <button id="lblAddServiceCodes" class="btn btn-primary" ng-click="onSelectedCodes()">{{ '+ Add {0}' | i18n:['Services'] }}</button>
+                </div>
+              </td>
+              <td id="tdServiceCode" class="serv-field serv-code">
+                <div id="columnServiceCode" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Code')">
+                  <div class="col-md-11">{{'Service Code' | i18n}}</div>
+                  <column-sort sort-field="orderBy.field" col="Code" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdCdtCode" class="serv-field serv-cdt">
+                <div id="columnCdtCode" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('CdtCodeName')">
+                  <div class="col-md-11">{{'CDT Code' | i18n}}</div>
+                  <column-sort sort-field="orderBy.field" col="CdtCodeName" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdDescription" class="serv-field serv-desc">
+                <div id="columnDescription" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Description')">
+                  <div class="col-md-11">{{'Description' | i18n}}</div>
+                  <column-sort sort-field="orderBy.field" col="Description" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdServiceType" class="serv-field serv-type">
+                <div id="columnServiceType" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('ServiceTypeDescription')">
+                  <div class="col-md-11">{{'Service Type' | i18n}}</div>
+                  <column-sort sort-field="orderBy.field" col="ServiceTypeDescription" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdMasterFee" class="serv-field serv-fee">
+                <div id="columnMasterFee" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Fee')">
+                  <div class="col-md-9">{{'Fee' | i18n}}</div>
+                  <column-sort sort-field="orderBy.field" col="Fee" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <!--Table-->
+    <div class="row serv-table">
+      <div class="scroll-y-400 col-md-12">
+        <table ng-hide="serviceCodes.length==undefined" id="tableServiceCodes" class="table table-striped border-solid-black table-hover">
+          <tbody>
+            <tr
+              ng-show="serviceCodes.length!=undefined"
+              ng-repeat="serviceCode in filteredServiceCodes=(serviceCodes | orderBy:orderBy.field:!orderBy.asc |filter: {IsSwiftPickCode:false}| searchOnParticularColumn:searchServiceCodesKeyword:['Code','CdtCodeName','Description','ServiceTypeDescription'])"
+            >
+              <td id="tdActionButtons{{$index}}" class="serv-button">
+                <div>
+                  <button id="quickAdd{{$index}}" ng-disabled="quickAddStatus()" ng-click="quickAddService(serviceCode)" class="btn btn-link ng-binding width-70-percent quick-add-btn">+ quick add</button>
+                  <input class="width-15-percent serv-checkbox" id="chkServiceCode{{$index}}" type="checkbox" ng-model="checked" ng-change="selectedService(checked,serviceCode)" />
+                  <i
+                    ng-if="!serviceCode.IsActive"
+                    class="fa fa-exclamation-triangle inactive-service-warning"
+                    popover-trigger="mouseenter"
+                    popover-placement="auto bottom"
+                    popover-append-to-body="false"
+                    uib-popover="Inactive as of {{serviceCode.InactivationDate|date:'MM/dd/yyyy'}}"
+                  ></i>
+                </div>
+              </td>
+              <td id="tdCode{{$index}}" class="serv-field serv-code preserve-white-space overflow-hidden media-middle" title="{{serviceCode.Code}}" ng-bind-html="serviceCode.Code  | highlightTextIfContains:searchServiceCodesKeyword"></td>
+              <td id="tdCdtCodeName{{$index}}" class="serv-field serv-cdt overflow-hidden" title="{{serviceCode.CdtCodeName}}" ng-bind-html="serviceCode.CdtCodeName  | highlightTextIfContains:searchServiceCodesKeyword"></td>
+              <td id="tdDescription{{$index}}" class="serv-field serv-desc preserve-white-space overflow-hidden" title="{{serviceCode.Description}}" ng-bind-html="serviceCode.Description  | highlightTextIfContains:searchServiceCodesKeyword:65 "></td>
+              <td
+                id="tdServiceTypeDescription{{$index}}"
+                class="serv-field serv-type preserve-white-space overflow-hidden"
+                title="{{serviceCode.ServiceTypeDescription}}"
+                ng-bind-html="serviceCode.ServiceTypeDescription  | highlightTextIfContains:searchServiceCodesKeyword:35"
+              ></td>
+              <td id="tdFee{{$index}}" class="serv-field serv-fee overflow-hidden" title="{{serviceCode.$$locationFee | currency}}" ng-bind-html="serviceCode.$$locationFee | currency "></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!--Error Message For No Results-->
+    <div class="row">
+      <div class="col-xs-12">
+        <div ng-show="serviceCodes.length==0 || filteredServiceCodes.length==0">
+          <no-results loading-message="loadingMessageNoResults" loading="loadingServices==true" filtering="filteringServices" filtering-message="filteringMessageNoResults"></no-results>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

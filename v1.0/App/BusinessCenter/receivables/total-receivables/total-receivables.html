@@ -1,0 +1,245 @@
+﻿<div ng-class="'fade-in'" ng-controller="TotalReceivablesController">
+    <div class="receivablesAllLoc">
+        <div class="row">
+            <div class="col-xs-1 col-sm-1 col-md-1">
+                
+                <multi-selector ng-if="!locationsLoading" id="ddLocation" open="false" list="locations.masterLocations" 
+                                selected-list="locations.selectedLocations" display-field="NameLine1" id-field="LocationId" 
+                                auth-z="'soar-biz-bizrcv-view'" type="Location" on-blur-fn="updateContents()"
+                                class="locMenu" is-grouped-by-location-status="true">
+
+                </multi-selector>
+            </div>
+            <div class="col-xs-11 col-sm-11 col-md-11">
+                <div class="row margin-left-30 padding-8">
+                    <span ng-if="locations.selectedLocations.length === 0 && !locationsLoading" class="receivablesAllLoc__notification">
+                        Please select a location
+                    </span>
+                    <span ng-repeat="location in locations.selectedLocations">
+                        <tag title="{{ location.NameLine1 }}" remove-function="removeLocation(location)"></tag>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="receivablesAllLoc__panel" id="gridTotals">
+            <ul>
+                <li class="tab">
+                    <div class="box-info">
+                        <strong><span>{{'Receivables' | i18n }}</span></strong>
+                    </div>
+                    <div class="box-info">
+                        <span class="lblTotalBalance" ng-hide="calculatingBalance">{{ ReceivablesAmount | currency}} </span>
+                        <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                        <div class="glyphicon glyphicon-minus difference-equal-icon">
+                         <svg class="minusIcon" display="none"><rect id="svg_1" height="5" width="15" fill="#000000" /></svg>
+                        </div>
+
+                    </div>
+                    <div class="box-info">
+                        <span class="breakdown-balance">
+                            <span ng-hide="calculatingBalance"> {{ReceivablesPatientAmount | currency }}  </span>
+                            <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                            {{'pat' | i18n }}
+                            {{' | '}}
+                            <span ng-hide="calculatingBalance"> {{ReceivablesInsuranceAmount | currency }} </span>
+                            <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                            {{'ins' | i18n }}
+                        </span>
+                    </div>
+                </li>
+                <li class="tab">
+                    <div class="box-info">
+                        <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                        <strong>
+                            <span>
+                                {{ 'Est. Ins. Adjustments' | i18n }}
+                            </span>
+                        </strong>
+                    </div>
+                    <div class="box-info">
+                        <span class="lblTotalBalance" ng-hide="calculatingBalance">{{ EstimatedAdjustmentAmount | currency}} </span>
+                        <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                        <div class="est-ins-adj-equal">=</div>
+                    </div>
+
+                </li>
+                <li class="tab">
+                    <div class="box-info">
+                        <strong>
+                            <span>
+                                {{ 'Net Receivables' | i18n }}
+                            </span>
+                        </strong>
+                    </div>
+                    <div class="box-info">
+                        <span class="lblTotalBalance" ng-hide="calculatingBalance">{{ NetReceivablesAmount | currency}} </span>
+                        <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                    </div>
+                    <div class="box-info">
+                        <span class="breakdown-balance">
+                            <span ng-hide="calculatingBalance"> {{ReceivablesPatientAmount | currency }} </span>
+                            <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                            {{'pat' | i18n }}
+                            {{' | '}}
+                            <span ng-hide="calculatingBalance">
+                                {{NetReceivablesInsuranceAmount | currency }}
+                            </span>
+                            <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                            {{'ins' | i18n }}
+                        </span>
+                    </div>
+                </li>
+                <li class="tab HideOnPrint">
+                    <div>&nbsp;</div>
+                </li>
+                <li class="tab HideOnPrint">
+                    <div class="box-info">
+                        <strong><span>{{ '> 90 Days' | i18n }}</span></strong>
+                    </div>
+                    <div class="box-info">
+                        <span class="lblTotalBalance" ng-hide="calculatingBalance">
+                            {{PastDueAmount | currency}}
+                        </span>
+                        <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                    </div>
+                    <div class="box-info">
+                        <span class="breakdown-balance">
+                            <span ng-hide="calculatingBalance"> {{PastDuePatientAmount | currency }} </span>
+                            <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                            {{'pat' | i18n }}
+                            {{' | '}}
+                            <span ng-hide="calculatingBalance">
+                                {{PastDueInsuranceAmount | currency }}
+                            </span>
+                            <i class="idBalanceSpinner fa fa-spinner fa-spin loading spinnerClass" ng-show="calculatingBalance"></i>
+                            {{'ins' | i18n }}
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="secondaryFilterNavigation__tiles receivablesAllLoc__tiles" id="tabTiles">
+            <div id="tiles">
+                <div class="tab">
+                    <div class="header">
+                        {{ receivablesTab.allAccountsCount }}
+                    </div>
+                    <div class="body">
+                        <button class="selected" id="allAccounts" ng-click="activateTab($event)">
+                            <h4>{{ receivablesTab.allAccountsBalance | currency:"$" }}</h4>
+                            <h6>All Accounts</h6>
+                        </button>
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="header">
+                        {{ receivablesTab.balanceCurrentCount }}
+                    </div>
+                    <div class="body">
+                        <button id="balanceCurrent" ng-click="activateTab($event)">
+                            <h4>{{ receivablesTab.balanceCurrent | currency:"$" }}</h4>
+                            <h6>0-30 Days</h6>
+                        </button>
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="header">
+                        {{ receivablesTab.balance30Count }}
+                    </div>
+                    <div class="body">
+                        <button id="balance30" ng-click="activateTab($event)">
+                            <h4>{{ receivablesTab.balance30 | currency:"$" }}</h4>
+                            <h6>31-60 Days</h6>
+                        </button>
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="header">
+                        {{ receivablesTab.balance60Count }}
+                    </div>
+                    <div class="body">
+                        <button id="balance60" ng-click="activateTab($event)">
+                            <h4>{{ receivablesTab.balance60 | currency:"$" }}</h4>
+                            <h6>61-90 Days</h6>
+                        </button>
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="header">
+                        {{ receivablesTab.balance90Count }}
+                    </div>
+                    <div class="body">
+                        <button id="balance90" ng-click="activateTab($event)">
+                            <h4>{{ receivablesTab.balance90 | currency:"$" }}</h4>
+                            <h6>90+ Days</h6>
+                        </button>
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="header red ">
+                        {{ receivablesTab.inCollectionsCount }}
+                    </div>
+                    <div class="body">
+                        <button id="inCollections" ng-click="activateTab($event)">
+                            <h4>{{ receivablesTab.inCollections| currency:"$" }}</h4>
+                            <h6>In Collections</h6>
+                        </button>
+                    </div>
+                </div>
+                <div class="tab"></div>
+                <div class="tab"></div>
+                <div class="tab"></div>
+            </div>
+        </div>
+        <div class="receivablesAllLoc__actions-link">
+            <button class="btn soar-link icon-button font-14 margin-left-5" icon="fa-filter" ng-click="showHideFilter()">{{ showHideFilterLabel | i18n }}</button>
+            <a tabindex="4" class="btn btn-primary" ng-disabled="disablePrintMailing || (disableMailing || disablePrint)" ng-class="{notActive: (disablePrint)}" ng-click="printMailinglabels()" id="btnSendmailing">{{'Send Mailing' | i18n }}</a>
+            <span ng-show="showFilterByLocation">
+                <label class="padding-5">{{ 'View Receivables By' | i18n }}</label>
+                <soar-select-list id="inpViewGrid"
+                                  name="inpViewGrid"
+                                  text-field="Name"
+                                  value-field="Id"
+                                  tooltip-class=""
+                                  option-list="viewOptions"
+                                  ng-model="selectedView"></soar-select-list>
+            </span>
+            <button class="btn soar-link icon-button pull-right margin-right-5 padding-top-2" ng-class="{notActive: (disablePrint)}" ng-disabled="disablePrint" ng-click="exportCSV()"><i class="far fa-share-square fa-2x"></i></button>
+            <button class="btn soar-link icon-button pull-right" ng-class="{notActive: (disablePrint)}" ng-disabled="disablePrint" ng-click="printGrid()"><i class="fa fa-print fa-2x"></i></button>
+        </div>
+        <div class="row">
+            <div ng-show="showFilter" class="col-xs-3 col-sm-3 col-md-3 pull-left">
+                <slide-out-filter filters="additionalFilters" hide-expand-collapse-btn='true' reset-filters-fn="resetFilters()" apply-filters-fn="applyFilters(filters)" hide-filters-fn="showHideFilter()" collapse="collapseSlideout"></slide-out-filter>
+            </div>
+            <div id="gridGroup" class="col-xs-12 col-sm-12 col-md-12 pull-right">
+                <div class="receivablesAllLoc__grid" ng-show="currentTab == 'allAccounts'">
+                    <grid class="receivablesGrid" id="allAccountsGrid" options="receivablesAllAccountsGridOptions" ng-show="!filteredByLocation"></grid>
+                    <grid class="receivablesGrid" id="allAccountsByLocationGrid" options="receivablesAllAccountsByLocationGridOptions" ng-show="filteredByLocation"></grid>
+                </div>
+                <div class="receivablesAllLoc__grid" ng-show="currentTab == 'balanceCurrent'">
+                    <grid class="receivablesGrid" id="balanceCurrentGrid" options="receivablesBalanceCurrentGridOptions" ng-show="!filteredByLocation"></grid>
+                    <grid class="receivablesGrid" id="balanceCurrentByLocationGrid" options="receivablesBalanceCurrentByLocationGridOptions" ng-show="filteredByLocation"></grid>
+                </div>
+                <div class="receivablesAllLoc__grid" ng-show="currentTab == 'balance30'">
+                    <grid class="receivablesGrid" id="balance30Grid" options="receivablesBalance30GridOptions" ng-show="!filteredByLocation"></grid>
+                    <grid class="receivablesGrid" id="balance30ByLocationGrid" options="receivablesBalance30ByLocationGridOptions" ng-show="filteredByLocation"></grid>
+                </div>
+                <div class="receivablesAllLoc__grid" ng-show="currentTab == 'balance60'">
+                    <grid class="receivablesGrid" id="balance60Grid" options="receivablesBalance60GridOptions" ng-show="!filteredByLocation"></grid>
+                    <grid class="receivablesGrid" id="balance60ByLocationGrid" options="receivablesBalance60ByLocationGridOptions" ng-show="filteredByLocation"></grid>
+                </div>
+                <div class="receivablesAllLoc__grid" ng-show="currentTab == 'balance90'">
+                    <grid class="receivablesGrid" id="balance90Grid" options="receivablesBalance90GridOptions" ng-show="!filteredByLocation"></grid>
+                    <grid class="receivablesGrid" id="balance90ByLocationGrid" options="receivablesBalance90ByLocationGridOptions" ng-show="filteredByLocation"></grid>
+                </div>
+                <div class="receivablesAllLoc__grid" ng-show="currentTab == 'inCollections'">
+                    <grid class="receivablesGrid" id="inCollectionsGrid" options="receivablesInCollectionsGridOptions" ng-show="!filteredByLocation"></grid>
+                    <grid class="receivablesGrid" id="inCollectionsByLocationGrid" options="receivablesInCollectionsByLocationGridOptions" ng-show="filteredByLocation"></grid>
+                </div>
+            </div>
+        </div>
+        <div class="btn soar-link icon-button">
+            <a tabindex="2" ng-href="" id="btnReceivablesPageScrollTop" class="btn btn-primary" icon="fa-arrow-circle-up" ng-click="scrollToTop()">Top</a>
+        </div>
+    </div>
+</div>

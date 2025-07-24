@@ -1,0 +1,332 @@
+﻿<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<div class="txPlanPrint" ng-if="document">
+    <div style="width:100%;padding:10px, 10px, 0px, 10px;text-align:left;">
+        <table style="width:100%;padding:5px;">
+            <tr style="font-weight:bold;">
+                <td style="width:45%;overflow: hidden;text-overflow:ellipsis;max-width:100px;">
+                    {{ document.header.PatientName }}
+                </td>
+                <td style="width:45%;">
+                    {{ document.header.LocationName }}
+                </td>
+            </tr>
+            <tr>
+                <td style="width:45%;padding-left:10px;">
+                    <a id="printLink" onclick="window.print();" class="no-print">{{ ::('Print this plan' | i18n) }}</a>
+                    <span class="no-print" style="padding:0 8px 0 8px;"> | </span>
+                    <a id="cancelPrintLink" onclick="window.close();" class="no-print">Close</a>
+                </td>
+                <td style="width:45%;font-weight:bold;">
+                    {{ document.header.LocationAddress }}
+                </td>
+            </tr>
+            <tr>
+                <td style="width:45%;font-weight:bold; padding-left:50%" colspan="2">
+                    {{ document.header.PrimaryPhone }}
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <div>
+            <table style="width:100%;margin:10px 0px 40px 0px;">
+                <thead>
+                    <tr style="width:100%; padding:10px 0 10px 0">
+                        <td style="width:45%;">
+                            <h4>{{ document.title }}</h4>
+                        </td>
+                        <td ng-if="document.recommendedOption" style="width:45%;">
+                            <img id="txPlanTileRecommendTrue" style="width:40px;" src="Images/PatientClinical/insignia.svg" />
+                        </td>
+                        <td ng-if="!document.recommendedOption" style="width:45%;"></td>
+                    </tr>
+                    <tr style="width:100%;padding:10px 0 40px 0;">
+                        <td style="width:45%;">
+                            {{ document.date }}
+                        </td>
+                        <td ng-if="document.recommendedOption" style="width:40%;padding:5px;font-weight:bold;">
+                            {{ ::('Best Option' | i18n) }}
+                        </td>
+                        <td ng-if="!document.recommendedOption" style="width:45%;"></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- This shoould be uncommented when the following section is removed
+        <div ng-bind-html="document.content" ng-if="document.content"></div>
+        -->
+        <div id="txPlanReport" ng-if="document.content">
+            <div ng-repeat="stage in planStages|orderBy:'stageno' ">
+                <!--stage-->
+                <div style="font-weight:bold; margin: 10px 0 0 0;" ng-class="{'lg': lgBtn}"> {{ 'Stage '+ stage.stageno  | i18n }}</div>
+                <!-- Begin Table -->
+                <table class="fuseGrid fuseTable container details-table">
+                    <tr class="row-headers treatment-plan-service-row">
+                        <th class="grid-column-placeholder" ng-if="columnCountLeftOfTotals < 0">
+                        </th>
+                        <th class="grid-column-desc" ng-if="showOptions.showDescription==true">
+                            {{ ::('Description' | i18n) }}
+                        </th>
+                        <th class="grid-column-teeth" ng-if="showOptions.showTooth==true">
+                            {{ ::('Tooth' | i18n) }}
+                        </th>
+                        <th class="grid-column-surface" ng-if="showOptions.showSurface==true">
+                            {{ ::('Surface' | i18n ) }}
+                        </th>
+                        <th class="no-wrap-column grid-column-status" ng-if="showOptions.showStatus==true">
+                            {{ ::('Status' | i18n) }}
+                        </th>
+                        <th class="grid-column-location" ng-if="showOptions.showLocation==true">
+                            {{ ::('Location' | i18n) }}
+                        </th>
+                        <th class="grid-column-provider" ng-if="showOptions.showProvider==true">
+                            {{ ::('Provider' | i18n) }}<br />{{ ::('(Services)' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money" ng-if="showOptions.showCharges==true">
+                            {{ ::('Charges' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money" ng-if="showOptions.showAllowedAmount==true">
+                            {{ ::('Allowed' | i18n) }}<br />{{ ::('Amount' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap grid-column-money" ng-if="showOptions.showEstAdjIns==true">
+                            {{ ::('Est' | i18n) }}<br />{{ ::('Ins Adj' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money" ng-if="showOptions.showEstIns==true">
+                            {{ ::('Est' | i18n) }}<br />{{ ::('Insurance' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money" ng-if="showOptions.showPatBalance==true">
+                            {{ ::('Est Pat' | i18n) }}<br />{{ ::('Balance' | i18n) }}
+                        </th>
+                    </tr>
+                    <tr class="row-details treatment-plan-service-row" ng-repeat="proposedService in treatmentPlanDto.TreatmentPlanServices | orderBy: ['TreatmentPlanServiceHeader.TreatmentPlanGroupNumber','TreatmentPlanServiceHeader.Priority'] | filter: { TreatmentPlanServiceHeader: { TreatmentPlanGroupNumber: stage.stageno } } :true track by $index">
+                        <td ng-if="columnCountLeftOfTotals < 0"></td>
+                        <td class="tx-row text-table-column" id="colDescription{{$index}}" ng-if="showOptions.showDescription==true">{{proposedService.ServiceTransaction.Description}}</td>
+                        <td class="tx-row text-table-column" id="colTooth{{$index}}" ng-if="showOptions.showTooth==true">{{proposedService.ServiceTransaction.Tooth | convertToothRangeToQuadrantOrArchCode}}</td>
+                        <td class="tx-row text-table-column" id="colArea{{$index}}" ng-if="showOptions.showSurface==true">{{proposedService.ServiceTransaction.$$Area}}</td>
+                        <td class="no-wrap-column tx-row" id="colStatus{{$index}}" ng-if="showOptions.showStatus==true">{{proposedService.ServiceTransaction.$$statusName}}</td>
+                        <td class="tx-row text-table-column" id="colLocation{{$index}}" ng-if="showOptions.showLocation==true">{{proposedService.ServiceTransaction.DisplayName}}</td>
+                        <td class="tx-row text-table-column" id="colUserCode{{$index}}" ng-if="showOptions.showProvider==true">{{proposedService.ServiceTransaction.ProviderFullName}}</td>
+                        <td class="text-align-right no-wrap-column tx-row" id="colFee{{$index}}" ng-if="showOptions.showCharges==true">{{proposedService.ServiceTransaction.Fee - proposedService.ServiceTransaction.Discount + proposedService.ServiceTransaction.Tax | currency}}</td>
+                        <td class="text-align-right no-wrap-column tx-row" id="colFee{{$index}}" ng-if="showOptions.showAllowedAmount==true">{{proposedService.ServiceTransaction.AllowedAmount | currency}}</td>
+                        <!-- hide ServiceTransaction.TotalAdjEstimate if completed or deleted or Rejected or Referred  serviceTransaction -->
+                        <td ng-if="showOptions.showEstAdjIns==true && (proposedService.ServiceTransaction.IsDeleted !== true && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 4 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 3 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 2 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 8)"
+                            class="text-align-right no-wrap-column tx-row">
+                            <input type="text" class="align-text-right" ng-model-options="{updateOn: 'blur'}" ng-change="recalculateTotals(proposedService.ServiceTransaction, 'AdjEst')" ng-model="proposedService.ServiceTransaction.$$AdjEst" model-format="currency" size="11" />
+                        </td>
+                        <td ng-if="showOptions.showEstAdjIns==true && (proposedService.ServiceTransaction.IsDeleted === true || proposedService.ServiceTransaction.ServiceTransactionStatusId === 4 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 3 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 2 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 8)"
+                            class="text-align-right no-wrap-column tx-row">
+                            {{ "0.00" | currency }}
+                        </td>
+                        <!-- hide ServiceTransaction.TotalEstInsurance if completed or deleted or Rejected or Referred  serviceTransaction -->
+                        <td ng-if="showOptions.showEstIns==true && (proposedService.ServiceTransaction.IsDeleted !== true && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 4 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 3  && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 2 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 8)"
+                            class="text-align-right no-wrap-column tx-row">
+                            <input type="text" class="align-text-right" ng-model-options="{updateOn: 'blur'}" ng-change="recalculateTotals(proposedService.ServiceTransaction, 'EstInsurance')" ng-model="proposedService.ServiceTransaction.$$EstInsurance" model-format="currency" size="11" />
+                        </td>
+                        <td ng-if="showOptions.showEstIns==true && (proposedService.ServiceTransaction.IsDeleted === true || proposedService.ServiceTransaction.ServiceTransactionStatusId === 4 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 3 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 2 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 8)"
+                            class="text-align-right no-wrap-column tx-row">
+                            {{ "0.00" | currency }}
+                        </td>
+
+                        <!-- hide ServiceTransaction.PatientBalance if completed or deleted or Rejected or Referred serviceTransaction -->
+                        <td ng-if="showOptions.showPatBalance==true && (proposedService.ServiceTransaction.IsDeleted !== true && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 4 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 3 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 2 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 8)"
+                            class="text-align-right no-wrap-column tx-row">
+                            {{proposedService.ServiceTransaction.PatientBalance | currency}}
+                        </td>
+                        <td ng-if="showOptions.showPatBalance==true && (proposedService.ServiceTransaction.IsDeleted === true || proposedService.ServiceTransaction.ServiceTransactionStatusId === 4 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 3 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 2 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 8)"
+                            class="text-align-right no-wrap-column tx-row">
+                            {{ "0.00" | currency }}
+                        </td>
+                    </tr>
+                    <!-- Sum totals go below.-->
+                    <tr class="treatment-plan-service-footer-row">
+                        <td ng-if="columnCountLeftOfTotals > 0"></td>
+                        <td ng-if="columnCountLeftOfTotals > 1"></td>
+                        <td ng-if="columnCountLeftOfTotals > 2"></td>
+                        <td ng-if="columnCountLeftOfTotals > 3"></td>
+                        <td ng-if="columnCountLeftOfTotals > 4"></td>
+
+                        <td class="no-wrap-column">
+                            {{ getStageTotals(stage.stageno).ServiceCountForStage}} {{ ::('Service(s)' | i18n) }}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showCharges==true">
+                            <!-- Charge Total -->{{ getStageTotals(stage.stageno).TotalFeesForStage | currency}}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showAllowedAmount==true">
+                            <!-- Charge Total -->{{ getStageTotals(stage.stageno).TotalAllowedAmountForStage | currency}}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showEstAdjIns==true">
+                            <!-- Est Ins Adj Total -->{{ getStageTotals(stage.stageno).AdjEstTotalForStage | currency}}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showEstIns==true">
+                            <!-- Est Insurance Sum Total -->{{ getStageTotals(stage.stageno).InsuranceEstTotalForStage | currency}}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showPatBalance==true">
+                            <!-- Est Pat Balance Sum Total -->{{ getStageTotals(stage.stageno).PatientPortionTotalForStage | currency}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- End of ins edit table -->
+        <div ng-if="!document.content">
+            <div ng-repeat="stage in document.planStages">
+                <div> {{ ::('Stage' | i18n) }} {{$index + 1}}</div>
+                <table class="fuseGrid fuseTable container details-table">
+                    <tr class="row-headers treatment-plan-service-row">
+                        <th class="grid-column-placeholder" ng-if="columnCountLeftOfTotals < 0">
+                        </th>
+                        <th class="grid-column-desc" ng-if="showOptions.showDescription==true">
+                            {{ ::('Description' | i18n) }}
+                        </th>
+                        <th class="grid-column-teeth" ng-if="showOptions.showTooth==true">
+                            {{ ::('Tooth' | i18n) }}
+                        </th>
+                        <th class="grid-column-surface" ng-if="showOptions.showSurface==true">
+                            {{ ::('Surface' | i18n ) }}
+                        </th>
+                        <th class="no-wrap-column grid-column-status" ng-if="showOptions.showStatus==true">
+                            {{ ::('Status' | i18n) }}
+                        </th>
+                        <th class="grid-column-location" ng-if="showOptions.showLocation==true">
+                            {{ ::('Location' | i18n) }}
+                        </th>
+                        <th class="grid-column-provider" ng-if="showOptions.showProvider==true">
+                            {{ ::('Provider' | i18n) }}<br />{{ ::('(Services)' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money" ng-if="showOptions.showCharges==true">
+                            {{ ::('Charges' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money" ng-if="showOptions.showAllowedAmount==true">
+                            {{ ::('Allowed Amount' | i18n) }}
+                        </th>
+                        <th class="text-align-right optional-no-wrap grid-column-money" ng-if="showOptions.showEstAdjIns==true">
+                            {{ ::('Est' | i18n) }}<br />{{ ::('Ins Adj' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money" ng-if="showOptions.showEstIns==true">
+                            {{ ::('Est' | i18n) }}<br />{{ ::('Insurance' | i18n) }}
+                        </th>
+                        <th class="text-align-right no-wrap-column grid-column-money" ng-if="showOptions.showPatBalance==true">
+                            {{ ::('Est Pat' | i18n) }}<br />{{ ::('Balance' | i18n) }}
+                        </th>
+                        <!--<th class="grid-column-provider" ng-if="columnCountLeftOfTotals < 0">
+    </th>-->
+                    </tr>
+                    <tr class="row-details treatment-plan-service-row" ng-repeat="detail in stage.Details">
+                        <td ng-if="columnCountLeftOfTotals < 0"></td>
+                        <td class="tx-row text-table-column" ng-if="showOptions.showDescription==true">{{detail.Description}}</td>
+                        <td class="tx-row text-table-column" ng-if="showOptions.showTooth==true">{{detail.Tooth | convertToothRangeToQuadrantOrArchCode}}</td>
+                        <td class="tx-row text-table-column" ng-if="showOptions.showSurface==true">{{detail.Area}}</td>
+                        <td class="no-wrap-column tx-row" ng-if="showOptions.showStatus==true">{{detail.StatusName}}</td>
+                        <td class="tx-row text-table-column" ng-if="showOptions.showLocation==true">{{detail.LocationName}}</td>
+                        <td class="tx-row text-table-column" ng-if="showOptions.showProvider==true">{{detail.ProviderFullName}}</td>
+                        <td class="text-align-right no-wrap-column tx-row" ng-if="showOptions.showCharges==true">{{detail.Charges | currency}}</td>
+                        <td class="text-align-right no-wrap-column tx-row" ng-if="showOptions.showAllowedAmount==true">{{detail.AllowedAmount | currency}}</td>
+                        <td class="text-align-right no-wrap-column tx-row" ng-if="showOptions.showEstAdjIns==true">{{detail.AdjustmentEstimated | currency}}</td>
+                        <td class="text-align-right no-wrap-column tx-row" ng-if="showOptions.showEstIns==true">{{detail.InsuranceEstimated | currency}}</td>
+                        <td class="text-align-right no-wrap-column tx-row" ng-if="showOptions.showPatBalance==true">{{detail.PatientBalance | currency}}</td>
+                    </tr>
+                    <!-- Sum totals go below.-->
+                    <tr class="treatment-plan-service-footer-row">
+                        <td ng-if="columnCountLeftOfTotals > 0"></td>
+                        <td ng-if="columnCountLeftOfTotals > 1"></td>
+                        <td ng-if="columnCountLeftOfTotals > 2"></td>
+                        <td ng-if="columnCountLeftOfTotals > 3"></td>
+                        <td ng-if="columnCountLeftOfTotals > 4"></td>
+
+                        <td class="no-wrap-column">
+                            {{ (stage.Details||[]).length}} {{ ::('Service(s)' | i18n) }}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showCharges==true">
+                            <!-- Est Charges Sum Total -->{{ stage.Charges | currency}}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showAllowedAmount==true">
+                            <!-- Est AllowedAmount Sum Total -->{{ stage.AllowedAmount | currency}}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showEstAdjIns==true">
+                            <!-- Est Insurance Adjustment Sum Total -->{{ stage.AdjustmentEstimated | currency}}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showEstIns==true">
+                            <!-- Est Insurance Sum Total -->{{ stage.InsuranceEstimated | currency}}
+                        </td>
+                        <td class="text-align-right" ng-if="showOptions.showPatBalance==true">
+                            <!-- Est Pat Balance Sum Total -->{{ stage.PatientBalance | currency}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="txPlanPrint footer">
+            <div class="notes">
+                <label class="control-label">{{::('Provider Notes' | i18n)}}</label>
+                <div class="txPlanPrint__note" readonly>{{ document.notes }}</div>
+            </div>
+            <div class="totals">
+                <table ng-if="document.footer">
+                    <tr class="tx-total-row" ng-if="showOptions.showTotalCharges==true">
+                        <td class="highlight">{{ ::('Total Charges' | i18n) }}:</td>
+                        <td class="text-align-right no-wrap-column highlight money-column">{{serviceAmountTotal(treatmentPlanDto.TreatmentPlanServices) | currency}}</td>
+                    </tr>
+                    <tr class="tx-total-row" ng-if="showOptions.showEstInsurance==true">
+                        <td>{{ ::('Estimated Insurance' | i18n) }}:</td>
+                        <td class="text-align-right no-wrap-column money-column">{{ insuranceEstimateTotal | currency}}</td>
+                    </tr>
+                    <tr class="tx-total-row" ng-if="showOptions.showEstInsAdj==true">
+                        <td>{{ ::('Estimated Insurance Adjustments' | i18n) }}:</td>
+                        <td class="text-align-right no-wrap-column money-column">{{ adjustedEstimateTotal | currency}}</td>
+                    </tr>
+                    <tr class="tx-total-row" ng-if="showOptions.showEstPatBal==true">
+                        <td class="highlight">{{ ::('Estimated Patient Balance' | i18n) }}:</td>
+                        <td class="text-align-right no-wrap-column highlight money-column">{{ patientPortionTotal | currency}}</td>
+                    </tr>
+                </table>
+                <table ng-if="!document.footer">
+                    <tr class="tx-total-row" ng-if="showOptions.showTotalCharges==true" uib-tooltip-template="'txPlanTooltipByPlanTemplate.html'" tooltip-append-to-body="true" tooltip-placement="top">
+                        <td class="highlight">{{ ::('Total Charges' | i18n) }}:</td>
+                        <td class="text-align-right no-wrap-column highlight money-column">{{document.charges | currency}}</td>
+                    </tr>
+                    <tr class="tx-total-row" ng-if="showOptions.showEstInsurance==true">
+                        <td>{{ ::('Estimated Insurance' | i18n) }}:</td>
+                        <td class="text-align-right no-wrap-column money-column">{{ document.insuranceEstimateTotal | currency}}</td>
+                    </tr>
+                    <tr class="tx-total-row" ng-if="showOptions.showEstInsAdj==true">
+                        <td>{{ ::('Estimated Insurance Adjustments' | i18n) }}:</td>
+                        <td class="text-align-right no-wrap-column money-column">{{ document.adjustedEstimateTotal | currency}}</td>
+                    </tr>
+                    <tr class="tx-total-row" ng-if="showOptions.showEstPatBal==true">
+                        <td class="highlight">{{ ::('Estimated Patient Balance' | i18n) }}:</td>
+                        <td class="text-align-right no-wrap-column highlight money-column">{{ document.patientBalance | currency}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="txPlanPrint__signatureGroup">
+            <hr>
+            {{ document.signatureConsent }}
+            <div ng-if="document.signatureFileAllocationId">
+                <h4>{{ signatureTitle }}</h4>
+                <canvas id="existing-signature-cnv" width="450" height="100" style="border:1px solid #000000;"></canvas>
+            </div>
+            <div ng-if="document.signatureFileAllocationId" width="450" class="row">
+                <span style="text-align:left;padding:0px 320px 0px 20px;">
+                    {{ ::('Patient' | i18n) }}
+                </span>
+                <span style="text-align:right;">
+                    {{ document.snapshotDate | toShortDisplayDateLocal }}
+                </span>
+            </div>
+            <div ng-if="!document.signatureFileAllocationId && document.status !== 'Completed'">
+                <signature-capture sig-title="signatureTitle" file-allocation-id="document.newSignatureFileAllocationId" signature-date="document.signatureDate" patient-info="patientInfo"></signature-capture>
+            </div>
+            <span class="no-print" ng-if="document.content">*{{ ::('Changes made to the estimates are for printing purposes only and will not update the treatment plan' | i18n) }}</span>
+            <div ng-if="document.newSignatureFileAllocationId" width="450">
+                <span style="text-align:left;padding:0px 330px 0px 40px;">
+                    {{ ::('Patient' | i18n) }}
+                </span>
+                <span style="text-align:right;">
+                    {{ document.signatureDate | toShortDisplayDateLocal }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

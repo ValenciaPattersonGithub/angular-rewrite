@@ -1,0 +1,515 @@
+﻿<div class="srvcCodeCrud">
+    <div class="srvcCodeCrud__header">
+        <div class="headerborder" keep-top>
+            <div class="headertitle col-md-12">
+                <h1>
+                    <span id="lblAddServiceCodeHeader" ng-show="!editMode" class="modal-title">&nbsp;{{ 'Add {0}' | i18n:['a Service Code'] }}</span>
+                    <span id="lblEditServiceCodeHeader" ng-show="editMode" class="modal-title">&nbsp;{{ 'Edit {0}' | i18n:['a Service Code'] }}</span>
+                </h1>
+            </div>
+            <div class="headerbuttons col-md-12">
+                <div class="srvcCodeCrud__btn" ng-click="cancelOnClick()">
+                    <a id="btnCancel" class="btn btn-default" ng-disabled="serviceCode.Saving">{{ 'Discard'|i18n }}</a>
+                </div>
+                <div class="srvcCodeCrud__btn" ng-click="saveServiceCode()">
+                    <button id="btnConfirm" class="btn btn-primary" type="button" ng-disabled="serviceCode.Saving || !data.DataHasChanged">{{ 'Save' |i18n }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="srvcCodeCrud__body">
+        <form name="addServiceCodeForm" role="form" action="javascript:void(0);" novalidate>
+            <!-- code information header -->
+            <div>
+            <div id="codeInformationHeader">
+            <profile-section [base-id]="'codeInformationHeader'" [section-title]="'Code Information'">
+                <ng-container layout1>
+                    <!-- code information section -->
+                    <div id="codeInfo">
+                    <div class="row">
+                    <div class="col-md-5">
+
+                    <div class="form-group">
+                        <div class="row">
+                            <!-- Service Code -->
+                            <div class="col-sm-4" ng-show="editMode">
+                                <label id="lblServiceCode" for="inpServiceCode" class="col-sm-12 srvcCodeCrud__noSidePadding control-label">{{ 'Service Code'| i18n }} *</label>
+                                <div class="col-sm-12 srvcCodeCrud__noSidePadding">
+                                    <span id="labeledServiceCode" class="span-text">{{ serviceCode.Data.Code }}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-show="!editMode">
+                                <label id="lblServiceCode" for="inpServiceCode" class="col-sm-12 srvcCodeCrud__noSidePadding control-label">{{ 'Service Code'| i18n }} *</label>
+                                <div class="col-sm-12 srvcCodeCrud__noSidePadding" ng-class="{error: (!serviceCode.Valid && addServiceCodeForm.inpServiceCode.$error.required) || (serviceCode.IsDuplicate && serviceCode.Data.Code)}">
+                                    <input class="form-input required valid" ng-class="{error: !serviceCode.Valid && addServiceCodeForm.inpServiceCode.$error.required}" ng-model="serviceCode.Data.Code" name="inpServiceCode" id="inpServiceCode" maxlength="8" required ng-blur="checkUniqueServiceCode()" ng-change="serviceCodeOnChange()" />
+                                </div>
+                                <div class="col-sm-12 srvcCodeCrud__noSidePadding">
+                                    <label id="lblServiceCodeRequired" class="error font-weight-normal" ng-show="!serviceCode.Valid && addServiceCodeForm.inpServiceCode.$error.required">{{ 'This field is required.'|i18n }}</label>
+                                    <label id="lblUniqueServiceCodeServerMessage" class="error font-weight-normal" ng-show="serviceCode.IsDuplicate">{{ uniqueServiceCodeServerMessage }}</label>
+                                </div>
+                            </div>
+                            <!-- CDT Code -->
+                            <div class="col-sm-4" ng-show="editMode && serviceCode.IsServiceCodeUsed">
+                                <label class="col-sm-12 srvcCodeCrud__noSidePadding control-label" for="cdtCodeTypeAhead">{{ 'CDT Code'| i18n }}</label>
+                                <div class="col-md-6 srvcCodeCrud__noSidePadding">
+                                    <span id="lblCdtCode" class="span-text">{{serviceCode.Data.CdtCodeName}} </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-show="editMode && !serviceCode.IsServiceCodeUsed">
+                                <label class="col-sm-12 srvcCodeCrud__noSidePadding control-label padding-top-10" for="cdtCodeTypeAhead">{{ 'CDT Code'| i18n }}</label>
+                                <div class="col-md-8 srvcCodeCrud__noSidePadding">
+                                    <typeahead auth-z="soar-biz-bsvccd-selcdt" class="typeahead soar-typeahead typeaheadResults" id="cdtCodeTypeAhead" cancel="cancelSearch()" appearance="form-input" search="search(term)" select="selectResult(item)" items="searchResults" term="searchParams.searchTerm" loading="searchIsQueryingServer" placeholder="{{ 'Search by code, description...'|i18n }}" tab-index="0" clear-content="clear()">
+                                        <ul id="lstCdtCodes" soar-infinite-scroll="search()">
+                                            <li ng-repeat="cdtCode in searchResults" typeahead-item="cdtCode" ng-animate="'animate'" ng-hide="false">
+                                                <div class="row">
+                                                    <div class="col-xs-3">
+                                                        <span id="lblCdtCode{{ $index }}">{{ cdtCode.Code }}</span>
+                                                    </div>
+                                                    <div class="col-xs-9">
+                                                        <span id="lblDescription{{ $index }}">
+                                                            {{ cdtCode.Description }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li ng-show="noSearchResults">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <span class="text-muted" id="noResultMessage">
+                                                            {{ 'No {0}' | i18n:['Results Found'] }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </typeahead>
+
+                                    <div id="validCdtCodeServerMessage" ng-if="!isValidCdtCode" class="error">
+                                        {{validCdtCodeServerMessage}}
+                                    </div>
+                                </div>
+                                <button class="btn btn-link col-md-4" id="btnCdtCodeSelectFromList" check-auth-z="soar-biz-bsvccd-view" ng-show="editMode && !serviceCode.IsServiceCodeUsed" type="button" ng-click="showCdtCodePicker()">{{ 'Select {0}' | i18n:['from list'] }}</button>
+                            </div>
+                            <div class="col-sm-12" ng-show="!editMode">
+                                <label class="col-sm-12 srvcCodeCrud__noSidePadding control-label" for="cdtCodeTypeAhead">{{ 'CDT Code'| i18n }}</label>
+                                <div class="col-md-8 srvcCodeCrud__noSidePadding">
+                                    <typeahead auth-z="soar-biz-bsvccd-selcdt" class="typeahead soar-typeahead typeaheadResults" id="cdtCodeTypeAhead" cancel="cancelSearch()" appearance="form-input" search="search(term)" select="selectResult(item)" items="searchResults" term="searchParams.searchTerm" loading="searchIsQueryingServer" placeholder="{{ 'Search by code, description...'|i18n }}" tab-index="0" clear-content="clear()">
+                                        <ul id="lstCdtCodes" soar-infinite-scroll="search()">
+                                            <li ng-repeat="cdtCode in searchResults" typeahead-item="cdtCode" ng-animate="'animate'" ng-hide="false">
+                                                <div class="row">
+                                                    <div class="col-xs-3">
+                                                        <span id="lblCdtCode{{ $index }}">{{ cdtCode.Code }}</span>
+                                                    </div>
+                                                    <div class="col-xs-9">
+                                                        <span id="lblDescription{{ $index }}">
+                                                            {{ cdtCode.Description }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li ng-show="noSearchResults">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <span class="text-muted" id="noResultMessage">
+                                                            {{ 'No {0}' | i18n:['Results Found'] }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </typeahead>
+
+                                    <div id="validCdtCodeServerMessage" ng-if="!isValidCdtCode" class="error">
+                                        {{validCdtCodeServerMessage}}
+                                    </div>
+                                </div>
+                                <button class="btn btn-link col-md-4" id="btnCdtCodeSelectFromList" check-auth-z="soar-biz-bsvccd-view" ng-show="!editMode" type="button" ng-click="showCdtCodePicker()">{{ 'Select {0}' | i18n:['from list'] }}</button>
+                            </div>
+                            <!-- Chart Icon -->
+                            <div class="col-sm-4 srvcCodeCrud__noSidePadding" ng-show="editMode">
+                                <img class="srvcCodeCrud__chartIcon center-block" ng-src="Images/ChartIcons/{{serviceCode.Data.$$IconFileName}}">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Display As -->
+                    <div class="form-group">
+                        <div class="row">
+                            <label id="lblDisplayAs" class="col-sm-12 control-label" for="inpDisplayAs">{{ 'Display As'| i18n }}</label>
+                            <div class="col-sm-12">
+                                <input class="form-input" ng-disabled="!serviceCode.Data.IsActive" ng-model="serviceCode.Data.DisplayAs" name="inpDisplayAs" id="inpDisplayAs" maxlength="16" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <div class="form-group">
+                        <div class="row">
+                            <label id="lblDescription" class="col-sm-12 control-label" for="inpDescription">{{ 'Description' | i18n }} *</label>
+                            <div class="col-sm-12" ng-class="{'error': (serviceDescriptionError===true)}">
+                                <input ng-disabled="!serviceCode.Data.IsActive" class="form-input required valid" ng-model="serviceCode.Data.Description" name="inpDescription" id="inpDescription" maxlength="256" required />
+                            </div>
+                            <div class="col-sm-12" ng-if="serviceDescriptionError===true">
+                                <label id="lblDescriptionRequired" class="error font-weight-normal" ng-show="serviceDescriptionError===true">{{ 'This field is required.'|i18n }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service Type -->
+                    <div class="form-group">
+                        <div class="row">
+                            <label id="lblServiceType" class="col-sm-12 control-label" for="lstServiceType">{{'Service Type' | i18n }} *</label>
+                            <div class="col-sm-12" ng-class="{'error': (serviceTypeIdError===true)}">
+                                <soar-select-list id="lstServiceType"
+                                                name="lstServiceType"
+                                                class-name="fill-width required"
+                                                placeholder="{{ 'Select {0}' | i18n:['Service Type'] }}"
+                                                text-field="Description"
+                                                required
+                                                value-field="Description"
+                                                option-list="serviceTypes"
+                                                disable-input="!serviceCode.Data.IsActive"
+                                                ng-model="serviceCode.Data.ServiceTypeDescription"
+                                                sb-blur="serviceTypeBlur"
+                                                sb-change="validateServiceTypeChange"
+                                                sb-required="true"></soar-select-list>
+                            </div>
+                            <div class="col-sm-12" ng-class="{error: !serviceTypeIdError===true}" ng-if="serviceTypeIdError===true">
+                                <label id="lblServiceTypeRequired" class="error font-weight-normal" ng-show="serviceTypeIdError===true">{{ 'This field is required.'|i18n }}</label>
+                                <label id="lblServiceTypeFailedToLoad" class="error font-weight-normal" ng-show="serviceTypes == null || serviceTypes.length == 0">{{'Failed to load the {0} list.' | i18n:['service types'] }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!-- Affected Area -->
+                        <div class="row">
+                            <label id="lblAffectedArea" class="col-sm-12 control-label" for="lstAffectedArea">{{'Affected Area' | i18n }} *</label>
+                            <div class="col-sm-12" ng-class="{'error': (affectedAreas == null || affectedAreas.length == 0) || (affectedAreaIdError===true)}">
+                                <soar-select-list id="lstAffectedArea"
+                                                name="lstAffectedArea"
+                                                class-name="fill-width required"
+                                                placeholder="{{ 'Select {0}' | i18n:['Affected Area'] }}"
+                                                text-field="Name"
+                                                required
+                                                value-field="Name"
+                                                option-list="affectedAreas"
+                                                disable-input="!serviceCode.Data.IsActive"
+                                                ng-model="serviceCode.Data.AffectedAreaName"
+                                                sb-change="validateAffectedAreaChange"
+                                                sb-blur="affectedAreaBlur"
+                                                sb-required="true"></soar-select-list>
+                            </div>
+                            <div class="col-sm-12" ng-class="{error: affectedAreas == null || affectedAreas.length == 0}" ng-if="affectedAreas == null || affectedAreas.length == 0">
+                                <label id="lblAffectedAreaFailedToLoad" class="error font-weight-normal" ng-show="affectedAreas == null || affectedAreas.length == 0">{{ 'Failed to load the {0} list.' | i18n:['affected area'] }}</label>
+                            </div>
+                            <div class="col-sm-12" ng-class="{error: affectedAreaIdError === true}" ng-if="affectedAreaIdError===true">
+                                <label id="lblServiceTypeRequired" class="error font-weight-normal" ng-show="affectedAreaIdError===true">{{ 'This field is required.'|i18n }}</label>
+                            </div>
+                        </div>
+                        <div class="smartCodeSetup" ng-if="serviceCode.Data.AffectedAreaId == 5 || serviceCode.Data.AffectedAreaId == 3 || serviceCode.Data.AffectedAreaId == 4">
+                            <button class="btn btn-link" ng-click="openSmartCodeSetup()">{{ 'Smart Code Setup' | i18n}}</button>
+                        </div>
+                        <div class="row" ng-if="serviceCode.Data.AffectedAreaId == 5">
+                            <!-- Missing Tooth -->
+                            <div class="col-xs-4 pull-right">
+                                <label id="lblSetsToothAsMissing" class="control-label" for="inpSetsToothAsMissing">
+                                    {{ 'Sets Tooth as Missing' | i18n }}
+                                </label>
+                            </div>
+                            <div class="col-xs-1 pull-right">
+                                <div class="onoffswitch" disabled>
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="setsToothAsMissing" ng-disabled="serviceCode.Data.AffectedAreaId != 5" ng-model="serviceCode.Data.SetsToothAsMissing">
+                                    <label ng-class="{'not-allowed': !serviceCode.Data.IsActive}" class="onoffswitch-label" for="setsToothAsMissing"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Draw Type -->
+                    <div class="form-group">
+                        <div class="row">
+                            <label id="lblDrawType" class="col-sm-12 control-label" for="lstDrawType">{{'Draw Type' | i18n }} </label>
+                            <div class="col-sm-12" ng-class="{'error': (drawTypes == null || drawTypes.length == 0)}">
+                                <soar-select-list id="lstDrawType"
+                                                name="lstDrawType"
+                                                class-name="fill-width"
+                                                placeholder="{{ 'Select {0}' | i18n:['Draw Type'] }}"
+                                                text-field="Description"
+                                                value-field="Description"
+                                                option-list="filteredDrawTypes"
+                                                ng-model="serviceCode.Data.DrawTypeDescription"
+                                                sb-blur="drawTypeBlur"
+                                                disable-input="filteredDrawTypes == null || filteredDrawTypes.length == 0 || !serviceCode.Data.IsActive"></soar-select-list>
+                            </div>
+                            <div class="col-sm-12" ng-class="{error: drawTypes == null || drawTypes.length == 0}" ng-if="drawTypes == null || drawTypes.length == 0">
+                                <label id="lblDrawTypeFailedToLoad" class="error font-weight-normal" ng-show="drawTypes == null || drawTypes.length == 0">{{'Failed to load the {0} list.' | i18n:['draw types'] }}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Usually Performed By -->
+                    <div class="form-group">
+                        <div class="row">
+                            <label id="lblUsuallyPerformedBy" class="col-sm-12 control-label" for="lstUsuallyPerformedBy">{{'Usually Performed By' | i18n }}</label>
+                            <div class="col-sm-12">
+                                <soar-select-list id="lstUsuallyPerformedBy"
+                                                name="lstUsuallyPerformedBy"
+                                                class-name="fill-width"
+                                                placeholder="{{ 'Select {0}' | i18n:['Usually Performed By'] }}"
+                                                text-field="Name"
+                                                value-field="Name"
+                                                option-list="providerTypes"
+                                                disable-input="!serviceCode.Data.IsActive"
+                                                ng-model="serviceCode.Data.UsuallyPerformedByProviderTypeName"
+                                                sb-blur="usuallyPerformedByProviderTypeBlur"></soar-select-list>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AMA Diagnosis Code -->
+                    <div class="form-group">
+                        <div class="row">
+                            <label id="lblDiagnosisCode" class="col-sm-12 control-label" for="inpDiagnosisCode">{{ 'AMA Diagnosis Code'| i18n }}</label>
+                            <div class="col-sm-12">
+                                <input ng-disabled="!serviceCode.Data.IsActive" class="form-input" ng-model="serviceCode.Data.AmaDiagnosisCode" name="inpDiagnosisCode" id="inpDiagnosisCode" maxlength="20" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CPT -->
+                    <div class="form-group">
+                        <div class="row">
+                            <label id="lblCPT" class="col-sm-12 control-label" for="inpCPT">{{ 'CPT'| i18n }}</label>
+                            <div class="col-sm-12">
+                                <input ng-disabled="!serviceCode.Data.IsActive" class="form-input" ng-model="serviceCode.Data.CPT" name="inpCPT" id="inpCPT" maxlength="6" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modifier -->
+                    <div class="form-group">
+                        <div class="row">
+                            <label id="lblModifier" class="col-sm-12 control-label" for="inpModifier">{{ 'Modifier'| i18n }}</label>
+                            <div class="col-sm-12">
+                                <input ng-disabled="!serviceCode.Data.IsActive" class="form-input" ng-model="serviceCode.Data.Modifier" name="inpModifier" id="inpModifier" maxlength="2" />
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <!-- Submit on Insurance -->
+                                    <div class="col-xs-12">
+                                        <label id="lblActive" class="control-label" for="inpSubmitOnInsurance">{{ 'Submit on Insurance' | i18n }} </label>
+                                    </div>
+
+                                    <div class="col-xs-12">
+                                        <div class="onoffswitch" disabled>
+                                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSubmitOnInsurance" ng-disabled="!serviceCode.Data.IsActive" ng-model="serviceCode.Data.SubmitOnInsurance">
+                                            <label ng-class="{'not-allowed': !serviceCode.Data.IsActive}" class="onoffswitch-label" for="chkSubmitOnInsurance"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <!-- Is Eligible For Discount -->
+                                    <div class="col-xs-12">
+                                        <label id="lblActive" class="control-label" for="inpIsEligibleForDiscount">{{ 'Eligible for Discount' | i18n }} </label>
+                                    </div>
+
+                                    <div class="col-xs-12">
+                                        <div class="onoffswitch" disabled>
+                                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkIsEligibleForDiscount" ng-disabled="!serviceCode.Data.IsActive" ng-model="serviceCode.Data.IsEligibleForDiscount">
+                                            <label ng-class="{'not-allowed': !serviceCode.Data.IsActive}" class="onoffswitch-label" for="chkIsEligibleForDiscount"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <!-- Is Active -->
+                                    <div class="col-xs-12">
+                                        <label id="lblActive" class="control-label" for="inpActive">{{ 'Active' | i18n }} </label>
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <div class="onoffswitch" disabled>
+                                            <input check-auth-z="soar-biz-bsvccd-delete" ng-change="serviceCodeIsActiveOnChange()" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkIsActive" ng-model="serviceCode.Data.IsActive">
+                                            <label class="onoffswitch-label" for="chkIsActive"></label>
+                                        </div>
+                                    </div>
+                                    <div ng-show="!serviceCode.Data.IsActive">
+                                        <!--<are-you-sure message="{{'Are you sure you want to {0}' | i18n:['inactivate the service code?'] }}" if-yes="okStatusConfirmation()" if-no="cancelStatusConfirmation()"></are-you-sure>-->
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- Inactive Message -->
+                        <div class="form-group">
+                            <div class="row" ng-if="serviceCode.Data && !serviceCode.Data.IsActive">
+                                <div class="col-sm-12">
+                                    <div class="panel">
+                                        <div class="panel-heading warning-inactivate-service">
+                                            <div class="panel-title">
+                                                <i class="fa fa-exclamation-triangle"></i>
+                                                <h4 class="ng-binding">Inactivating Service Code<span class="ng-binding"></span></h4>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <label>Inactivation Date</label>
+                                                    <date-selector disable-date-input="false" name="inpInactivationDate" input-id="inpInactivationDate" date-var="serviceCode.Data.InactivationDate" min-date="minDate" max-date="maxDate" tab-index="1" valid="inactivationDateIsValid"></date-selector>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 margin-top-10">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" ng-model="serviceCode.Data.InactivationRemoveReferences" name="inpInactivationRemoveReferences" id="inpInactivationRemoveReferences" />
+                                                                    Remove service code from all Applicable Swift Code and Preventive Care Categories
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Chart Icon -->
+                        <div class="col-sm-12" ng-show="!editMode">
+                            <img class="srvcCodeCrud__chartIcon center-block" ng-src="Images/ChartIcons/{{serviceCode.Data.$$IconFileName}}">
+                        </div>
+
+                        <!-- Service Code Categories -->
+                        <div ng-if="!data.IsCreateOperation && (data.SwiftCodes.$$state.status != 1 || data.PreventiveServices.$$state.status != 1)">
+                            refreshing...
+                        </div>
+                        <div class="fuseGrid pull-left col-md-12 form-group svc-code-cat">
+                            <!--<grid-actions></grid-actions>-->
+                            <div class="row header">
+                                <div ng-class="column.size" ng-repeat="column in header">
+                                    <div ng-if="column.sortable" ng-click="sort(column.label)">
+                                        <i class="fa fa-caret-down" ng-if="column.sorted && sortedColumn[0]=='-'"></i>
+                                        <i class="fa fa-caret-up" ng-if="column.sorted && sortedColumn[0]!='-'"></i>
+                                        {{column.label}}
+                                    </div>
+                                    <div ng-if="!column.sortable">
+                                        {{column.label}}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <!--Set up new categorys on the js. Pass the info from Service-code-search-controller into this controller-->
+                            <!--Use headerCategories in the controller to set up this section-->
+                            <div class="row body" infinite-scroll="search()" ng-repeat="header in headerCategories">
+                                <div class="col-sm-1 cell" ng-if="data[header.data].values.length" ng-click="header.show = !header.show">
+                                    <i class="fa fa-lg fa-angle-right" ng-if="!header.show"></i>
+                                    <i class="fa fa-lg fa-angle-down" ng-if="header.show"></i>
+                                </div>
+                                <div class="col-sm-1 cell" ng-if="!data[header.data].values.length">
+                                    <i class="fa fa-lg fa-angle-right" ng-if="!header.show"></i>
+                                </div>
+                                <div class="col-sm-5 cell">
+                                    {{header.label}}
+                                </div>
+                                <div class="col-sm-6 cell">
+                                    {{data[header.data].values.length}}
+                                </div>
+                                <div class="col-md-12 svc-code-body" ng-show="header.show">
+                                    <div class="fuseGrid pull-left col-md-offset-1 col-md-11 svc-code-primary">
+                                        <!--<grid-actions></grid-actions>-->
+                                        <div class="row header">
+                                            <div ng-class="column.size" ng-repeat="column in header.header">
+                                                <div ng-if="column.sortable" ng-click="sort(column.label)">
+                                                    <i class="fa fa-caret-down" ng-if="column.sorted && sortedColumn[0]=='-'"></i>
+                                                    <i class="fa fa-caret-up" ng-if="column.sorted && sortedColumn[0]!='-'"></i>
+                                                    {{column.label}}
+                                                </div>
+                                                <div ng-if="!column.sortable">
+                                                    {{column.label}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="service-grid-scroll">
+                                            <div class="body" ng-repeat="code in data[header.data].values">
+                                                <div class="col-xs-1 cell">
+                                                    {{$index + 1}}
+                                                </div>
+                                                <div class="col-sm-10 pull-left cell" ng-if="header.data == 'PreventiveServices'">
+                                                    {{::getName(code)}}
+                                                </div>
+                                                <div class="col-sm-10 pull-left cell" ng-if="header.data == 'SwiftCodes'">
+                                                    {{code[header.field]}}
+                                                </div>
+                                                <div class="col-sm-10 pull-left cell" ng-if="header.data == 'Favorites'">
+                                                    {{::getUserName(code)}}
+                                                </div>
+                                                <div class="col-sm-1 cell">
+                                                    <i class="fa fa-lg fa-times-circle" ng-if="header.data != 'Favorites'" ng-click="deleteReference(code,header)"></i>
+                                                </div>
+
+                                                <hr />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <hr />
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <textarea class="form-input" placeholder="Notes" ng-disabled="!serviceCode.Data.IsActive" ng-model="serviceCode.Data.Notes" name="inpNotes" id="inpNotes" maxlength="500" rows="6" spellcheck="true"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </ng-container>
+            </profile-section>
+            <!-- fees header -->
+            <profile-section [base-id]="'feesHeader'" [section-title]="'Fees'">
+                <ng-container layout1>
+                    <!-- fees section -->
+                    <div id="fees" class="form-section-container collapse in">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Fee -->
+                                <div class="form-group">
+                                    <div class="row">
+                                        <span ng-disabled="true" class="">
+                                            <button auth-z="soar-biz-feelst-view" class="btn btn-link pull-left" type="button" ng-click="openFeesByLocation()">
+                                                {{ 'View {0}' | i18n: ["Fees"] }}
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Fees By Location-->
+                                <div class="row" ng-if="feesByLocation">
+                                    <service-fees-by-location data="serviceCode.Data"></service-fees-by-location>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </profile-section>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>

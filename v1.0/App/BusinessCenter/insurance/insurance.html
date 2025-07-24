@@ -1,0 +1,34 @@
+﻿<!-- <business-nav></business-nav> -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div ng-class="'fade-in'" ng-controller="InsuranceController" class="insurance">
+    <form name="frmInsurance" role="form" action="javascript:;" novalidate>
+        <div class="rowFull insurance__contentwidth">
+            <div class="insurance__container">
+                <div class="insurance__header" ng-if="claimInfo!= null">
+                    <div class="insurance__nav">
+                        <span id="lblFor" class="for-display" ng-if="claimInfo!= null">
+                            {{ 'for' | i18n}}
+                        </span>
+                        <div id="divAccountMembers" class="dropdown list-header-dropdown" ng-if="claimInfo!= null">
+                            <button id="accountMembersButton" class="soar-link" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-if="claimInfo!= null">
+                                {{selectedAccountMemberName}}
+                                <span class="fas fa-sort-down" ng-if="claimInfo.accountMembers.length>1"></span>
+                            </button>
+                            <input id="accountMembersSelected" class="dropdownNav__val" type="hidden" ng-model="selectedAccountMemberOption" />
+                            <ul class="dropdown-menu" role="menu" ng-if="claimInfo.accountMembers.length>1">
+                                <li ng-repeat="option in accountMemberOptions">
+                                    <a id="accountMembersOption{{$index}}" ng-click="accountMemberOptionClicked(option)">{{option.responsiblePerson}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a class="btn btn-primary" ng-if="specificAccountClaims" ng-click="specificAccountClaimsClicked()"> Return back to the account </a>
+                    </div>
+                </div>
+            </div>
+            <ng-include ng-if="selectedView.Name !== 'ERA'" src="selectedView.Template"></ng-include>
+        </div>
+        <div ng-if="selectedView.Name === 'ERA'" class="rowFull white insurance__contentwidthera">
+            <app-era-landing></app-era-landing>
+        </div>
+    </form>
+</div>

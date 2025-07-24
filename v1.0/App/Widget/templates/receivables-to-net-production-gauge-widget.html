@@ -1,0 +1,17 @@
+﻿<div ng-controller="ReceivablesToNetProductionGaugeWidgetController" class="soarWidget">
+	<div class="soarWidget__header panel-heading">
+		<div class="widget-handle w_row">
+			<label>{{ data.Title | i18n }}</label>
+		</div>
+        <div>
+            <soar-select-list text-field="Value"
+                              value-field="Value"
+                              option-list="dateFilterOptions"
+                              ng-model="dateFilterRec"
+                              sb-change="onDateFilterChange"></soar-select-list>
+        </div>
+	</div>
+	<div class="gaugeWidget__body">
+		<gauge data="gaugeData" drilldown="drilldown"></gauge>
+	</div>
+</div>

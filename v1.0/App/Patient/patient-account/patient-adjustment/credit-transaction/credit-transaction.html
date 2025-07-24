@@ -1,0 +1,391 @@
+﻿<!--credit-transaction.html-->
+        <form id="adjustmentForm" class="creditTrans">
+            <div id="negativeAdjustmentControl" class="creditTrans__form">
+                <div class="creditTrans__actions" ng-if="!data.IsAdjustmentOnUnappliedAmount && !data.IsChangingAdjustmentOrPayment">
+                    <!--Date-->
+                    <div class="col-md-2 no-padding-left">
+                        <div class="form-group">
+                            <label id="lblNegativeAdjustmentDate">{{'Date' | i18n}}</label>*
+                            <ng-form name="negativeDateForm">
+                                <date-selector id="inpNegativeAdjustmentDate" input-id="inpNegativeAdjustmentDate" name="inpNegativeAdjustmentDate" ng-class="{'error': (negativeDateForm.inpNegativeAdjustmentDate.$error.required && data.ErrorFlags.hasError  && !( data.CreditTransactionDto.DateEntered !=undefined && data.CreditTransactionDto.DateEntered !=null))}"
+                                               class="creditTrans__datepicker vertical-align-top" date-var="data.CreditTransactionDto.$$DateEntered"" valid="data.CreditTransactionDto.ValidDate" ng-model="data.CreditTransactionDto.$$DateEntered"
+                                               format="MM/dd/yyyy" mode="day" max-date="transactionMaxDate" placeholder="00/00/0000" required></date-selector>
+
+                                <div class="error" ng-if="(negativeDateForm.inpNegativeAdjustmentDate.$error.required && data.ErrorFlags.hasError  && !( data.CreditTransactionDto.$$DateEntered !=undefined && data.CreditTransactionDto.DateEntered !=null))">
+                                    <span class="help-text" id="lblRequiredNegativeAdjustmentDate">{{ 'Date {0}' | i18n:['Required'] }}</span>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <!--Amount-->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label id="lblNegativeAdjustmentAmount">{{'Amount' | i18n}}</label>*
+                            <ng-form name="negativeAmountForm">
+                                <div>
+                                    <input type="text"
+                                           ng-class="{'creditTrans__amount-error': ((data.CreditTransactionDto.Amount <= 0 || data.CreditTransactionDto.Amount > 999999.99) && data.ErrorFlags.hasError) || (data.IsFeeScheduleAdjustment && (parseFloat(data.CreditTransactionDto.Amount.toFixed(2)) > SumOfAdjustedEstimates || AmountAndServicesMisMatch))}"
+                                           class="form-input text-align-right"
+                                           name="inpNegativeAdjustmentAmount"
+                                           id="inpNegativeAdjustmentAmount"
+                                           ng-model="data.CreditTransactionDto.Amount"
+                                           maxlength="12"
+										   min-value="0.00"
+										   max-value="999999.99"
+                                           placeholder="{{'0'|currency}}"
+                                           model-format="currency"
+                                           ng-focus="disableApply()"
+                                           ng-blur="negativeAdjustmentAmountOnBlur()" />
+                                           <!--ng-keyup="checkAmount($event)"--> 
+                                    <i id="iDefaultMessage" ng-show="distributedDetailsLoading" class="fa fa-spinner fa-spin loading"></i>
+                                    <i id="iValidationMessage" ng-show="isIncorrect" class="error">{{ validationMsg}}</i>
+                                </div>
+                                <div class="error" ng-if="((data.CreditTransactionDto.Amount <= 0 || data.CreditTransactionDto.Amount > 999999.99) && data.ErrorFlags.hasError )">
+                                    <span class="help-text" id="lblRequiredNegativeAdjustmentAmount">{{ 'Amount must be greater than $0.00' | i18n }}</span>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <!--Type-->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label id="lblNegativeAdjustmentType">{{ 'Type'| i18n}}</label>*
+                            <div>
+                                <ng-form name="negativeAdjustmentTypeForm">
+                                    <div class="form-group vertical-align-top" ng-if="data.SelectedAdjustmentTypeIndex == 1">
+                                        <div ng-class="{'error': (negativeAdjustmentTypeForm.lstNegativeAdjustmentTypeSelector.$error.required && data.ErrorFlags.hasError)}">
+                                            <soar-select-list id="lstNegativeAdjustmentTypeSelector"
+                                                              name="lstNegativeAdjustmentTypeSelector"
+                                                              placeholder="{{ 'Select Type' | i18n }}"
+                                                              text-field="Description"
+                                                              value-field="AdjustmentTypeId"
+                                                              option-list="filteredAdjustmentTypes"
+                                                              ng-model="data.CreditTransactionDto.AdjustmentTypeId"
+                                                              sb-required="required"></soar-select-list>
+
+                                        </div>
+                                        <div class="error creditTrans__margin-top-minus4-percent" ng-if="(negativeAdjustmentTypeForm.lstNegativeAdjustmentTypeSelector.$error.required && data.ErrorFlags.hasError)">
+                                            <span class="help-text" id="lblNegativeRequiredPositiveAdjustmentType">{{ 'Type {0}' | i18n:['Required'] }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group vertical-align-top" ng-if="data.SelectedAdjustmentTypeIndex == 2">
+                                        <div ng-class="{'error': (negativeAdjustmentTypeForm.lstPaymentType.$error.required && data.ErrorFlags.hasError)}">
+                                            <soar-select-list id="lstPaymentType"
+                                                              name="lstPaymentType"
+                                                              placeholder="{{ 'Payment Type' | i18n }}"
+                                                              text-field="Description"
+                                                              value-field="PaymentTypeId"
+                                                              option-list="paymentTypes"
+                                                              ng-model="data.CreditTransactionDto.PaymentTypeId"
+                                                              sb-change="paymentTypeOnChange"
+                                                              sb-required="required"></soar-select-list>
+                                        </div>
+                                        <div class="error creditTrans__margin-top-minus4-percent" ng-if="(negativeAdjustmentTypeForm.lstPaymentType.$error.required && data.ErrorFlags.hasError)">
+                                            <span class="help-text" id="lblRequiredPaymentType">{{ 'Type {0}' | i18n:['Required'] }}</span>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Payment Card Readers-->
+                    <div class="col-md-2" ng-if="data.SelectedAdjustmentTypeIndex == 2 && showPaymentCardReaders && cardReaders.length > 0">
+                        <div class="form-group">
+                            <label data-qa="card-reader-lbl" id="lblCardReader">{{ 'Card Readers'| i18n }}</label>*
+                            <div class="form-group"
+                            ng-show="cardReaders.length == 1">
+                            <soar-select-list data-qa="card-reader-selector" id="lstCardReaderSelector" name="lstAdjCardReaderSelector" ng-model="selectedCardReader"
+                                           text-field="DeviceFriendlyName" value-field="PartnerDeviceId"
+                                           option-list="cardReaders" >
+                            </soar-select-list>
+                           </div>
+                            <div  ng-show="cardReaders.length != 1">
+                                <ng-form name="cardReaderSelectForm">
+                                    <div class="form-group vertical-align-top">
+                                        <div
+                                            ng-class="{ 'error': (cardReaderSelectForm.lstCardReaderSelector.$error.required && data.ErrorFlags.hasError) }">
+                                            <soar-select-list data-qa="card-reader-selector" id="lstCardReaderSelector" name="lstCardReaderSelector" ng-model="selectedCardReader"
+                                                placeholder="{{ 'Select Options' | i18n }}" text-field="DeviceFriendlyName" value-field="PartnerDeviceId"
+                                                option-list="cardReaders" sb-change="cardReaderOnChange" sb-required="required">
+                                            </soar-select-list>
+                                        </div>
+                                        <div class="error creditTrans__margin-top-minus4-percent"
+                                            ng-if="(cardReaderSelectForm.lstCardReaderSelector.$error.required && data.ErrorFlags.hasError)">
+                                            <span class="help-text" id="lblCardReaderRequiredPaymentType">{{ 'Card Reader {0}' | i18n:['Required'] }}</span>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Prompt-->
+                    <div class="col-md-2" ng-if="!hidePrompt && data.SelectedAdjustmentTypeIndex == 2 && data.CreditTransactionDto.PaymentTypeId > ''">
+                        <div class="form-group">
+                            <label id="lblPrompt">{{ data.CreditTransactionDto.PromptTitle }}</label>
+                            <ng-form name="paymentPromptForm">
+                                <div class="padding-top-2">
+                                    <div class="form-group">
+                                        <div>
+                                            <input type="text" class="form-input" id="inpPrompt" ng-model="data.CreditTransactionDto.PaymentTypePromptValue" maxlength="25" placeholder="{{'Enter {0}' |i18n:[{skip:data.CreditTransactionDto.PromptTitle}]}}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <!--Note-->
+                    <div class="col-md-4" ng-class="{ 'col-md-2': (showPaymentCardReaders && cardReaders.length > 0) || (!hidePrompt && data.SelectedAdjustmentTypeIndex == 2 && data.CreditTransactionDto.PaymentTypeId > '') }">
+                        <div class="form-group">
+                            <label id="lblNegativeAdjustmentNote">{{'Note' | i18n}}</label>
+                            <div>
+                                <ng-form name="negativeAdjustmentNoteForm">
+                                    <div>
+                                        <textarea input type="text" id="inpNegativeAdjustmentNotes" class="form-input form-textarea creditTrans__negative-note-col" name="inpNegativeAdjustmentNotes" maxlength="500" rows="1" cols="30" ng-disabled="disableInput" ng-model="data.CreditTransactionDto.Note" placeholder="{{'Enter note...' | i18n }}"></textarea>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Assignment Type-->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label id="lblNegativeAdjustmentTypeAssignment">{{ data.SelectedAdjustmentTypeIndex === 2 ? 'Apply Payment' : 'Apply Adjustment' | i18n}}</label>
+                            <div>
+                                <ng-form name="negativeAdjustmentTypeAssignmentForm">
+                                    <div class="form-group vertical-align-top">
+                                        <div ng-class="{'error': (negativeAdjustmentTypeAssignmentForm.lstNegativeAdjustmentTypeAssignSelector.$error.required && data.ErrorFlags.hasError)}">
+                                            <soar-select-list id="lstNegativeAdjustmentTypeAssignSelector"
+                                                              name="lstNegativeAdjustmentTypeAssignSelector"
+                                                              text-field="AssignmentTypeName"
+                                                              value-field="AssignmentTypeId"
+                                                              option-list="assignmentTypes"
+                                                              ng-model="data.CreditTransactionDto.AssignedAdjustmentTypeId"
+                                                              sb-change="assignmentTypesChange"
+                                                              disable-input="data.IsFeeScheduleAdjustment ? true : false">
+                                            </soar-select-list>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="creditTrans__unapplied" ng-if="data.IsAdjustmentOnUnappliedAmount || data.IsChangingAdjustmentOrPayment">
+                <!--Date-->
+                <div class="date-label">
+                    <span class="unapplied-transaction-label">
+                            {{ data.UnappliedTransaction.displayDate }}
+                        </span>                      
+                </div>
+                <!--Transaction Type-->
+                <div class="type-label">
+                    <span class="unapplied-transaction-label">
+                            {{ data.UnappliedTransaction.TransactionType}}
+                        </span>                       
+                </div>
+                <!--Adjustment Type-->
+                <div class="desc-label">
+                    <span title="{{data.UnappliedTransaction.Description}}" class="unapplied-transaction-label">
+                            {{ data.UnappliedTransaction.Description | truncate:43 }}
+                    </span>
+                </div>
+                <!--Full Amount-->
+                <div class="amount-label">
+                    <span class="unapplied-transaction-label">
+                            {{ (data.UnappliedTransaction.Amount) | currency}} <span ng-if="data.UnappliedTransaction.TransactionTypeId == 2">{{'Payment Amount' | i18n}}</span><span ng-if="data.UnappliedTransaction.TransactionTypeId != 2">{{'- Negative Adjustment Amount' | i18n}}</span>
+                    </span>
+                </div>
+                <!--Unapplied Amount-->
+                <div class="unapplied-amount-label">
+                    <span class="unapplied-transaction-label" ng-if="(data.UnappliedTransaction.UnassignedAmount > 0)">
+                            {{ (data.UnappliedTransaction.UnassignedAmount) | currency}} {{'Unapplied' | i18n}}
+                    </span>
+                </div>
+            </div>
+                <div class="creditTrans__empty-row" ng-if="data.IsAdjustmentOnUnappliedAmount || data.IsChangingAdjustmentOrPayment"></div>
+				<div class="fuseGrid pull-left">
+					<div class="header col-xs-12">
+						<div class="col-xs-1">
+							{{ 'Date' | i18n }}
+						</div>
+						<div class="col-xs-1">
+							{{ 'Patient' | i18n }}
+						</div>
+						<div class="col-xs-1">
+							{{ 'Provider' | i18n }}
+						</div>
+						<div class="col-xs-1">
+							{{ 'Description' | i18n }}
+						</div>			
+							<div class="col-xs-1">
+								{{ 'Tooth' | i18n }}
+							</div>
+							<div class="col-xs-1">
+								{{ 'Area' | i18n }}
+							</div>
+							<div class="col-xs-1 header-right">
+								{{ 'Charges' | i18n }}
+							</div>
+							<div class="col-xs-1 header-right">
+								{{ 'Est. Ins.' | i18n }}
+							</div>
+							<div class="col-xs-1 header-right">
+								{{ 'Est. Adj.' | i18n }}
+							</div>
+							<div class="col-xs-1 header-right">
+								{{ 'Patient Bal' | i18n }}
+							</div>
+							<div class="col-xs-2 header-right">
+								<div id="columnAmount" class="cursor-pointer">
+									<span ng-if="data.IsChangingAdjustmentOrPayment">{{ 'Applied Amount' | i18n }}</span>
+									<span ng-if="data.IsAdjustmentOnUnappliedAmount">{{ data.CreditTransactionDto.TransactionTypeId == 2 ? 'Apply Payment' : 'Apply Adjustment' | i18n }}</span>
+									<span ng-if="!data.IsChangingAdjustmentOrPayment && !data.IsAdjustmentOnUnappliedAmount">{{ data.SelectedAdjustmentTypeIndex === 2 ? 'Apply Payment' : 'Apply Adjustment' | i18n }}</span>
+								</div>
+							</div>
+						</div>
+					<div class="body col-xs-12">
+                        <div class="row" ng-if="!writeOffDetails" ng-repeat="transactionData in (data.ServiceAndDebitTransactionDtos) track by $index">
+							<div class="date col-xs-1 cell" id="lblTransactionDate{{$index}}" title="{{transactionData.displayDate }}">{{ transactionData.displayDate }}</div>
+							<div class="patient col-xs-1 cell" id="lblPatientName{{$index}}" title="{{transactionData.PatientName}}">{{transactionData.PatientName}}</div>
+							<div class="providerCode col-xs-1 cell" id="lblProviderId{{$index}}" title="{{ getProviderName(transactionData.ProviderUserId) }}">{{ getProviderName(transactionData.ProviderUserId)}}</div>
+							<div class="description col-xs-1 cell" id="lblDescription{{$index}}" uib-tooltip-template="'creditTransactionDescriptionTooltip.html'" tooltip-append-to-body="true" tooltip-placement="top">{{transactionData.Description | truncate:5}}<span ng-show="transactionData.Description.length > 5">...</span></div>
+							<div class="tooth col-xs-1 cell" id="lblTooth{{$index}}" uib-tooltip-template="'creditTransactionToothTooltip.html'" tooltip-enable="transactionData.Tooth.length > 6" tooltip-append-to-body="true" tooltip-placement="top">{{transactionData.Tooth | truncate:6}}<span ng-show="transactionData.Tooth.length > 6">...</span></div>
+							<div class="area col-xs-1" id="lblArea{{$index}}" uib-tooltip-template="'creditTransactionAreaTooltip.html'" tooltip-enable="transactionData.$$area.length > 6" tooltip-append-to-body="true" tooltip-placement="top">{{transactionData.$$area | truncate:6}}<span ng-show="transactionData.$$area.length > 6">...</span></div>
+							<div class="charges col-xs-1 right cell" id="lblCharges{{$index}}" title="{{transactionData.Amount | currency}}">{{transactionData.Amount | currency}} </div>
+							<div class="insurance col-xs-1 right cell" id="lblInsurancePayment" title="{{transactionData | totalRemainingEstimateForServiceTransaction | currency}}">{{transactionData | totalRemainingEstimateForServiceTransaction | currency}}</div>
+							<div class="adjustment col-xs-1 right cell" id="lblAdjustmentEstimate" title="{{transactionData | serviceAdjEstFilter | currency}}">{{transactionData | serviceAdjEstFilter | currency}}</div>
+							<div class="balance col-xs-1 right cell" id="lblBalance{{$index}}" title="{{transactionData.Balance | currency}}">{{transactionData.Balance| currency}} </div>
+							<div class="amount amount-col col-xs-2 cell">
+								<ng-form name="servicefeeForm{{$index}}">
+                                    <div class="amount-col">
+                                        <input type="text" ng-class="{'creditTrans__amount-error': ((!data.IsFeeScheduleAdjustment && transactionData.IsForClosingClaim) ? (transactionData.AdjustmentAmount > transactionData.TotalUnpaidBalance):(transactionData.Amount < transactionData.AdjustmentAmount)) || transactionData.HasValidationError===true || (data.IsFeeScheduleAdjustment && transactionData.AdjustmentAmount > transactionData.TotalAdjEstimate)}" class="form-input text-align-right pull-right serviceTransSnglEntry__ServiceAmt right" id="inpFee{{$index}}" name="inpFee" min-value="0.00" max-value="999999.99"
+                                               ng-init="setAssignedAdjustmentType(transactionData,false)"
+                                               ng-keypress="setAssignedAdjustmentType(transactionData,true)"
+                                               ng-keydown="setAssignedAdjustmentType(transactionData,true)"
+                                               ng-change="recalculateUnassignedAmount(transactionData)"
+                                               ng-model="transactionData.AdjustmentAmount" maxlength="12" placeholder="{{'0'|currency}}" model-format="currency"
+                                               ng-focus="scrollServiceAmountInputIntoView($index)"
+                                               ng-disabled="data.IsFeeScheduleAdjustment && transactionData.TotalAdjEstimate === 0" />
+                                        <div class="error" ng-if="!transactionData.IsForClosingClaim && !data.IsFeeScheduleAdjustment && (transactionData.AdjustmentAmount > transactionData.Amount || transactionData.AdjustmentAmount > transactionData.TotalUnpaidBalance || transactionData.AdjustmentAmount > transactionData.Balance || transactionData.AdjustmentMoreThanBalanceError === true)">
+                                            <span class="help-text" id="lblNegativeRequiredServiceAmount">{{ 'Cannot apply more than the patient balance.' | i18n }}</span>
+                                        </div>
+                                        <div class="error" ng-if="!data.IsFeeScheduleAdjustment && transactionData.HasValidationError===true">
+                                            <span class="help-text" id="lblNegativeRequiredServiceAmount">{{ transactionData.ValidationErrorMessage | i18n }}</span>
+                                        </div>
+                                        <div class="error" ng-if="data.IsFeeScheduleAdjustment && transactionData.AdjustmentAmount > transactionData.TotalAdjEstimate">
+                                            <span class="help-text" id="lblNegativeRequiredServiceAmount">{{ 'Cannot assign more than the Adjusted Estimate.' | i18n }}</span>
+                                        </div>
+                                    </div>
+								</ng-form>
+							</div>
+						</div>
+						<div class="row" ng-if="writeOffDetails" ng-repeat="transactionData in writeOffDetails track by $index">
+							<div class="date col-xs-1 cell" id="lblTransactionDate{{$index}}" title="{{transactionData.displayDate }}">{{ transactionData.displayDate }}</div>
+							<div class="patient col-xs-1 cell" id="lblPatientName{{$index}}" title="{{transactionData.PatientName}}">{{transactionData.PatientName}}</div>
+							<div class="providerCode col-xs-1 cell" id="lblProviderId{{$index}}" title="{{ getProviderName(transactionData.ProviderUserId) }}">{{ getProviderName(transactionData.ProviderUserId)}}</div>
+							<div class="description col-xs-1 cell" id="lblDescription{{$index}}" uib-tooltip-template="'creditTransactionDescriptionTooltip.html'" tooltip-append-to-body="true" tooltip-placement="top">{{transactionData.Description | truncate:5}}<span ng-show="transactionData.Description.length > 5">...</span></div>
+							<div class="tooth col-xs-1 cell" id="lblTooth{{$index}}" uib-tooltip-template="'creditTransactionToothTooltip.html'" tooltip-enable="transactionData.Tooth.length > 6" tooltip-append-to-body="true" tooltip-placement="top">{{transactionData.Tooth | truncate:6}}<span ng-show="transactionData.Tooth.length > 6">...</span></div>
+							<div class="area col-xs-1" id="lblArea{{$index}}" uib-tooltip-template="'creditTransactionAreaTooltip.html'" tooltip-enable="transactionData.$$area.length > 6" tooltip-append-to-body="true" tooltip-placement="top">{{transactionData.$$area | truncate:6}}<span ng-show="transactionData.$$area.length > 6">...</span></div>
+							<div class="charges col-xs-1 right cell" id="lblCharges{{$index}}" title="{{transactionData.Amount | currency}}">{{transactionData.Amount | currency}} </div>
+							<div class="insurance col-xs-1 right cell" id="lblInsurancePayment" title="{{transactionData | totalRemainingEstimateForServiceTransaction | currency}}">{{transactionData | totalRemainingEstimateForServiceTransaction | currency}}</div>
+							<div class="adjustment col-xs-1 right cell" id="lblAdjustmentEstimate" title="{{transactionData | serviceAdjEstFilter | currency}}">{{transactionData | serviceAdjEstFilter | currency}}</div>
+							<div class="balance col-xs-1 right cell" id="lblBalance{{$index}}" title="{{transactionData.Balance | currency}}">{{transactionData.Balance| currency}} </div>
+							<div class="amount amount-col col-xs-2 cell">
+								<ng-form name="servicefeeForm{{$index}}">
+                                    <div class="amount-col">
+                                        <input type="text" ng-class="{'creditTrans__amount-error': ((!data.IsFeeScheduleAdjustment && transactionData.IsForClosingClaim) ? ( transactionData.AdjustmentAmount > parseFloat((transactionData.Amount - transactionData.TotalInsurancePaidAmount).toFixed(2))):(transactionData.Amount < transactionData.AdjustmentAmount)) || transactionData.HasValidationError===true ||(data.IsFeeScheduleAdjustment && transactionData.AdjustmentAmount > transactionData.TotalAdjEstimate)}" class="form-input text-align-right pull-right serviceTransSnglEntry__ServiceAmt right" id="inpFee{{$index}}" name="inpFee" min-value="0.00" max-value="999999.99"
+                                               ng-init="setAssignedAdjustmentType(transactionData,false)"
+                                               ng-keypress="setAssignedAdjustmentType(transactionData,true)"
+                                               ng-keydown="setAssignedAdjustmentType(transactionData,true)"
+                                               ng-change="recalculateUnassignedAmount(transactionData)"
+                                               ng-model="transactionData.AdjustmentAmount" maxlength="12" placeholder="{{'0'|currency}}" model-format="currency"
+                                               ng-focus="scrollServiceAmountInputIntoView($index)"
+                                               ng-disabled="data.CreditTransactionDto && data.CreditTransactionDto.IsFeeScheduleWriteOff" />
+                                        <div class="error" ng-if="!transactionData.IsForClosingClaim && !data.IsFeeScheduleAdjustment && ((transactionData.Amount < transactionData.AdjustmentAmount) || (transactionData.AdjustmentAmount > transactionData.TotalUnpaidBalance))">
+                                            <span class="help-text" id="lblNegativeRequiredServiceAmount">{{ 'Cannot apply more than the balance.' | i18n }}</span>
+                                        </div>
+                                        <div class="error" ng-if="!data.IsFeeScheduleAdjustment && transactionData.HasValidationError===true">
+                                            <span class="help-text" id="lblNegativeRequiredServiceAmount">{{ transactionData.ValidationErrorMessage | i18n }}</span>
+                                        </div>
+                                        <div class="error" ng-if="data.IsFeeScheduleAdjustment && transactionData.AdjustmentAmount > transactionData.TotalAdjEstimate">
+                                            <span class="help-text" id="lblNegativeRequiredServiceAmount">{{ 'Cannot assign more than the Adjusted Estimate.' | i18n }}</span>
+                                        </div>
+                                    </div>
+								</ng-form>
+							</div>
+						</div>
+						<div class="serviceTransSnglEntry__row alert col-md-12" ng-show="data.ServiceAndDebitTransactionDtos.length === 0">
+							<div id="defaultMsg" class="alert text-align-center">{{'No records found' | i18n}}</div>
+						</div>
+						<div class="clearfix"></div>
+						</div>
+						<div class="footer row">
+							<div ng-if="data.ServiceAndDebitTransactionDtos.length > 0" class="totals col-xs-12">
+								<div class="cell col-xs-5"></div>
+								<div class="cell col-xs-1 right"><span id="lblTot"><strong>{{'Totals' | i18n}}</strong></span></div>
+								<div class="cell col-xs-1 right"><span id="lblChrg">{{ data.ServiceAndDebitTransactionDtos | totalFilter:'Amount' | currency }}</span></div>
+								<div class="cell col-xs-1 right"><span id="lblInsur">{{ data.ServiceAndDebitTransactionDtos | encounterBalanceEstimatedInsuranceFilter:'EstInsurance' | currency }}</span></div>
+								<div class="cell col-xs-1 right"><span id="lblAdj">{{ data.ServiceAndDebitTransactionDtos | encounterAdjEstFilter | currency }}</span></div>
+								<div class="cell col-xs-1 right"><span id="lblBal">{{ data.ServiceAndDebitTransactionDtos | totalBalanceForCreditPaymentFilter | currency }}</span></div>
+								<div class="amount amount-col cell col-xs-2 right" id="txtAmount">
+									<input type="text" name="inpTotalAmount" ng-class="{'error creditTrans__amount-error':((((data.SelectedAdjustmentTypeIndex == -1 && data.IsAdjustmentOnUnappliedAmount) || data.SelectedAdjustmentTypeIndex != -1) && data.UnassignedAmount < 0) || throwError)}" id="inpTotalAmount" min-value="0.00" max-value="999999.99" maxlength="12" placeholder="{{'0'|currency}}" class="form-input text-align-right pull-right" ng-disabled="true" ng-model="totalAdjustmentAmount" model-format="currency" />
+								</div>
+							</div>
+							<div ng-if="data.UnassignedAmount > 0" class="col-xs-12">
+								<div class="totalLabel col-xs-8 right" id="lblUnAssignedAmount" title="{{'Unapplied Amount - Assign to' | i18n}}"><strong>{{'Unapplied Amount - Assign to' | i18n}}</strong></div>
+                                <div class="col-xs-2">                                   
+                                    <ng-form name="negativeProviderForm">
+                                        <div ng-class="{'error': (negativeProviderForm.lstNegativeProvider.$error.required && data.ErrorFlags.providerMissing)}">
+                                            <provider-selector 
+                                                               place-holder= "defaultPlaceHolder" 
+                                                               input-id="lstNegativeProvider"
+                                                               class-name="fill-width creditTrans__provider"
+                                                               sb-change="providerOnChange"                                                              
+                                                               provider-type-ids="[1,2,3,5]"                                                                                                                           
+                                                               patient-info="data.PatientInfo"
+                                                               selected-provider="data.CreditTransactionDto.ProviderUserId">
+                                            </provider-selector>
+                                        </div>
+                                    </ng-form>
+                                </div>
+								<div class="amount col-xs-2 text-align-right cell">
+									<input type="text" class="form-input text-align-right totalAmount" name="inpUnassignedAmount" id="inpUnassignedAmount" ng-disabled="true" ng-model="data.UnassignedAmount" maxlength="12" min-value="0.00" max-value="999999.99" placeholder="{{'0'|currency}}" model-format="currency" />
+								</div>
+							</div>
+							<div class="col-md-12 text-align-right">
+                                <div class="error" ng-if="(((data.SelectedAdjustmentTypeIndex == -1 && data.IsAdjustmentOnUnappliedAmount) || data.SelectedAdjustmentTypeIndex != -1) && data.UnassignedAmount < 0) || throwError">
+									<span class="help-text" id="lblTotalAdjustmentRequired">{{ 'The sum of the distributed amounts and the unassigned amount must equal the {0} amount.' | i18n:[data.SelectedAdjustmentTypeIndex == 1 ? 'adjustment' : 'payment' ] }}</span>
+								</div>
+								<div class="error" ng-if="data.IsFeeScheduleAdjustment && (parseFloat(data.CreditTransactionDto.Amount.toFixed(2)) > SumOfAdjustedEstimates)">
+									<span class="help-text" id="lblTotalAdjustmentRequired">{{ 'The total amount must not be greater than the sum of the service adjusted estimates.' }}</span>
+								</div>
+								<div class="error" ng-if="data.IsFeeScheduleAdjustment && AmountAndServicesMisMatch">
+									<span class="help-text" id="lblTotalAdjustmentRequired">{{ 'The sum of the distributed amounts must equal the adjustment amount.' }}</span>
+								</div>
+							</div>
+					</div>
+				</div>
+            </div>
+        </form>
+    <!-- tooltip templates -->
+    <script type="text/ng-template" id="creditTransactionDescriptionTooltip.html">
+        <div class="creditTransactionDescriptionTooltip">
+            <div class="creditTransactionDescriptionTooltip__row">
+                <div class="creditTransactionDescriptionTooltip__content">{{transactionData.Description}}</div>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="creditTransactionToothTooltip.html">
+        <div class="creditTransactionToothTooltip">
+            <div class="creditTransactionToothTooltip__row">
+                <div class="creditTransactionToothTooltip__content">{{transactionData.Tooth}}</div>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="creditTransactionAreaTooltip.html">
+        <div class="creditTransactionAreaTooltip">
+            <div class="creditTransactionAreaTooltip__row">
+                <div class="creditTransactionAreaTooltip__content">{{transactionData.$$area}}</div>
+            </div>
+        </div>
+    </script>

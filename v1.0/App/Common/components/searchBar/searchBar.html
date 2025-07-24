@@ -1,0 +1,110 @@
+﻿<div class="searchBar" ng-show="true" ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <!--NOTES placeholder should probably change
+            Columns will need to be controlled by type of result...for now just patient -->
+
+        <typeahead auth-z="{{amfa}}" class="typeahead soar-typeahead " id="{{baseId}}Typeahead" cancel="cancelSearch()" search="search(term)" b-focus="bFocus"
+            select="onSelect(item)" items="searchResults" term="searchTerm" loading="searchIsQueryingServer" click-function="displayRecents()" enter-function="viewResults(searchString)"
+            placeholder="{{placeholder}}" tab-index=" tabindex" appearance="{{ header ? 'form-control' : 'form-input' }}"
+            show-search-button="showSearchButton" show-clear-button="showClearButton" clear-content="clear()">
+
+     <!--NOTES results section-->
+        <ul id="list{{baseId}}Results" soar-infinite-scroll="search(searchString, true)">
+
+            <li ng-show="showAddPerson==true" class="soar-typeahead" ng-if="!documentPatients && PatientWorkFlowEnabled">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <a id="{{baseId}}addPersonLinkOld" class="text-muted center-block" ng-click="addPerson()">
+                            {{ ::'Add a Person' | i18n }}
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li ng-show="showAddPerson==true" class="soar-typeahead" ng-if="!documentPatients ">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <a id="{{baseId}}addPersonLink" data-dtname="{{baseId}}addPersonLink" class="btn btn-primary add-button" ng-click="addAPerson()">
+                            {{ ::'Add A Person' | i18n }}
+                        </a>
+                    </div>
+                </div>
+            </li>
+
+            <li ng-show="showRecents==true" class="soar-typeahead" ng-if="!documentPatients">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="{{baseId}}showRecents" class="text-muted center-block">
+                            {{ ::'Recent Selections' | i18n }}  <i ng-show="loadingMostRecent==true" class="fa fa-spinner fa-spin loading"></i>
+                        </span>
+
+                    </div>
+                </div>
+            </li>
+
+            <li ng-show="globalSearch==true && searchString.length>0" ng-animate="'animate'" tabindex="0" role="button" ng-click="viewResults(searchString)" ng-if="!documentPatients">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="{{baseId}}displayResultsFor" class="italic">
+                            {{ ::'Display Results for' | i18n }}
+                            <span id="lblSearchString" role="button" class="font-weight-bold">{{ searchString}}</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+            <li ng-repeat="result in searchResults | limitTo:limit " ng-animate="'animate'" typeahead-item="result" ng-hide="false" ng-click="viewResult(result)">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="flex flex-center">
+                            <div class="flex-grow-1 flex flex-stretch">
+                                <!--Icon by result type-->
+                                <div class="flex-shrink-1 padding-left-10 padding-right-10" ng-show="true" ng-if="!documentPatients">
+                                    <span class="fa fa-user " id="{{baseId}}personIcon{{ $index }}"></span>
+                                </div>
+                                <!--Result by type-->
+                                <div class="flex-grow-1 padding-left-5 padding-right-10 searchBar__patientInfo" ng-show="true" ng-class="{searchBar__inactiveItem: result.IsActive===false}">
+                                    <span id="{{baseId}}firstName{{$index}}" ng-bind-html="result.FirstName | boldTextSearchCriteriaSpecialCharacters:searchString"></span>
+                                    <span id="{{baseId}}MiddleName{{$index}}" ng-bind-html="result.MiddleName | boldTextSearchCriteriaSpecialCharacters:searchString"></span>
+                                    <span id="{{baseId}}lastName{{$index}}" ng-bind-html="result.LastName | boldTextSearchCriteriaSpecialCharacters:searchString"></span>
+                                    <span id="{{baseId}}preferredName{{$index}}" ng-bind-html="result.PreferredName | boldTextSearchCriteriaSpecialCharacters:searchString"></span>
+                                    <span id="{{baseId}}Suffix{{$index}}" ng-bind-html="result.Suffix | boldTextSearchCriteriaSpecialCharacters:searchString"></span>
+                                    <span >
+                                        (<span id="{{baseId}}patientCode{{$index}}" ng-bind-html="result.PatientCode | boldTextSearchCriteriaSpecialCharacters:searchString"></span>)
+                                        <span id="{{baseId}}pipe{{$index}}" ng-if="result.DateOfBirth">&#124;</span>
+                                        <span id="{{baseId}}dateOfBirth{{$index}}" ng-bind-html="result.DateOfBirth | toShortDisplayDateUtc| boldTextSearchCriteriaDate:searchString"></span>
+                                        <span id="{{baseId}}pipe{{$index}}" ng-if="result.DisplayStatementAccountId">&#124;</span>
+                                        <span id="{{baseId}}displayStatementAccountId{{$index}}" ng-if="result.DisplayStatementAccountId" >
+                                                {{accountNumberlabel}} <span ng-bind-html="result.DisplayStatementAccountId | boldTextSearchCriteriaSpecialCharacters:searchString"></span>
+                                          </span>
+                                    </span>                                    
+                                </div>
+                            </div>
+                            <div class="flex-shrink-1" ng-if="!documentPatients">
+                                <a class="soar-link no-wrap" ng-click="openPatientTab(result.PatientId)">
+                                    <span class="glyphicon glyphicon-new-window"></span>
+                                    <span>{{ ::'New Tab' | i18n }}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="soar-typeahead" ng-show="limitResults && resultCount > limit" ng-if="!documentPatients">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <span id="{{baseId}}viewAll" class="text-muted center-block" ng-click="viewAll();">{{ viewAllMessage | i18n }}</span>
+                    </div>
+                    <div class="col-xs-6">
+                        <!--<span id="{{baseId}}addNewPtient" class="text-muted center-block pull-right" ng-click="addNewPatient();">{{ ::'+Add New Patient' | i18n }}</span>-->
+                    </div>
+                </div>
+            </li>
+            <li ng-show="noSearchResults">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span class="text-muted" id="{{baseId}}noResultsMessage">{{ ::'No results.' | i18n }}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </typeahead>
+</div>

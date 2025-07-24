@@ -1,0 +1,12 @@
+﻿<div>
+    <div class="modal-header">
+        <h4>Edit Message</h4>
+    </div>
+    <div class="modal-body">
+        <textarea ng-model="accountStatementMessage" rows="5" maxlength="180"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-link" ng-click="close()">{{ 'Close' | i18n }}</button>
+        <button class="btn btn-primary" ng-click="save(accountStatementMessage)">{{ 'Save' | i18n }}</button>
+    </div>
+</div>

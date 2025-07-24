@@ -1,0 +1,13 @@
+﻿<!-- TODO: Where is the controller for this component? -->
+
+<div id="workArea">
+    <div ng-if="isAppointmentViewVisible" class="appointment-view-full-screen">
+        <appointment-view time-increment="TimeIncrement"></appointment-view>
+    </div>
+    <!-- need a second window to handle clicking on unscheduled appointments in view opening a new view while closing the existing one -->
+    <div ng-if="isSecondaryAppointmentViewVisible" class="appointment-view-full-screen">
+        <appointment-view time-increment="TimeIncrement"></appointment-view>
+    </div>
+    <patient-header patient-data="patient.Data" phones="phones" active-url="activeTemplate"></patient-header>
+    <ng-include src="activeTemplate"></ng-include>
+</div>

@@ -1,0 +1,29 @@
+﻿<div class="slSrFilter">
+    <div class="form-row slSrFilter__rowPad">
+        <div class="slSrFilter__srvTypCl" >
+            <div class="slSrFilter__formGroup">
+                <soar-select-list id="lstServiceType"
+                                  name="lstServiceType"
+                                  sb-tab="15"
+                                  placeholder="{{'Show All Service Types' | i18n}}"
+                                  option-list="serviceTypes"
+                                  text-field="Description"
+                                  value-field="Description"
+                                  ng-model="filterServiceType"
+                                  sb-required=""></soar-select-list>
+            </div>
+        </div>
+        <div class="slSrFilter__svrKey">
+            <div class="slSrFilter__frm">
+                <input class="slSrFilter__frmInput"  id="inpSearchServiceCodes"
+                       placeholder="{{'Search Fees by Services' | i18n }}" type="text" ng-model="searchServiceCodesKeyword" ng-model-options="{ debounce: 1000 }" tabindex="16"/>
+                <span id="lblFeedback"  class="slSrFilter__frmSpan border-solid-black"></span>
+            </div>
+        </div>
+
+        <!--<div class="form-group form-col-6">
+            <div class="clearfix">&nbsp;</div>
+        </div>-->
+    </div>
+</div>
+

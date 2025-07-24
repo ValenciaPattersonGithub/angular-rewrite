@@ -1,0 +1,223 @@
+<div class="letter-template">
+    <ng-template #templateRef>
+        <div class="modal-header">
+            {{communicationModel.LetterTemplateName}}
+        </div>
+        <div class="modal-body" [innerHtml]="communicationModel.LetterTemplate">
+        </div>
+    </ng-template>
+    <ng-template #dialogActions>
+        <div class="modal-footer">
+            <app-button id="btnCardCancel" buttonLabel="{{'Cancel' | translate }}" variation="secondary" class="mr-8"
+                        (onClick)="dialog.close()">
+            </app-button>
+            <app-button id="btnCardSave" (onClick)=" previewLetterCommunication(null,null)"
+                        buttonLabel="{{'Print' | translate }}" variation="primary">
+            </app-button>
+        </div>
+    </ng-template>
+</div>
+<div kendoDialogContainer></div>
+<div id="comm-card-box" class="communication-card-box" tabindex="0" (focus)="onCardSelection(communicationModel)"
+     #communicationCard [attr.data-index]="index">
+    <div id="comm-card-detail" class="communication-card" *ngIf="!communicationModel.ReferralDirectionTypeId">
+        <div class="titleRow">
+            <span id="comm-card-timeline-title" class="communication-title" style="float:left">
+                {{communicationModel.CommunicationCategory | enumAsString:CommunicationCategory}}
+                ({{communicationModel.CommunicationType | enumAsString:CommunicationType}},
+                {{communicationModel.CommunicationDate | date:'MM/dd/yyyy'}})
+            </span>
+            <span id="comm-card-timeline-status" class="communication-label"
+                  style="float:left">{{communicationModel.Status | enumAsString:CommunicationStatus}}</span>
+            <span id="comm-card-timeline-status-sent" class="communication-sent"
+                  *ngIf="communicationModel.Status===CommunicationStatus.Sent">
+                <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                     overflow="visible" style="overflow:visible" preserveAspectRatio="none" viewBox="0 0 24 24"
+                     width="14" height="14">
+                    <g>
+                        <path xmlns:default="http://www.w3.org/2000/svg"
+                              d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                              style="fill: rgb(51, 51, 51);transform: rotate(-45deg)"
+                              vector-effect="non-scaling-stroke" />
+                    </g>
+                </svg>
+            </span>
+            <span id="comm-card-timeline-status-received" class="communication-received"
+                  *ngIf="communicationModel.Status===CommunicationStatus.Received">
+                <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                     overflow="visible" style="overflow:visible !important ;" preserveAspectRatio="none"
+                     viewBox="0 0 24 24" width="14" height="14">
+                    <g>
+                        <path xmlns:default="http://www.w3.org/2000/svg"
+                              d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                              style="fill: rgb(51, 51, 51);transform: rotate(135deg)"
+                              vector-effect="non-scaling-stroke" />
+                    </g>
+                </svg>
+            </span>
+            <p>
+        </div>
+        <div class="reasonRow">
+            <span id="comm-card-timeline-reason" class="communication-text">
+                <b>
+                    {{ 'Reason: ' | translate }}
+                </b>{{communicationModel.Reason | enumAsString:CommunicationReason}}
+            </span>
+
+        </div>
+        <div class="addedbyRow">
+            <span id="comm-card-timeline-addedby" class="communication-text" *ngIf="this.communicationModel.Reason !== CommunicationReason.ClinicalNote && this.communicationModel.Reason !== CommunicationReason.AccountNote">
+                <b>
+                    {{'Added By: ' | translate }}
+                </b>{{communicationModel.AddedBy}}
+            </span>
+            <span id="comm-card-timeline-addedby" class="communication-text" *ngIf="this.communicationModel.Reason === CommunicationReason.ClinicalNote||this.communicationModel.Reason === CommunicationReason.AccountNote">
+                <b>
+                    {{'Added/Edited By: ' | translate }}
+                </b>{{communicationModel.AddedBy}}
+            </span>
+        </div>
+        <div class="editedbyRow" *ngIf="isModified && (this.communicationModel.Reason !== CommunicationReason.ClinicalNote && this.communicationModel.Reason !== CommunicationReason.AccountNote)">
+            <span id="comm-card-timeline-editedby" class="communication-text">
+                <b>
+                    {{'Edited By: ' | translate}}
+                </b>{{communicationModel.EditedBy}}
+            </span>
+        </div>
+        <div class="noteRow">
+            <span id="comm-card-timeline-notes" class="communication-notes">
+                <span><b>{{'Notes: ' | translate }} </b></span>
+                <span [innerHtml]="communicationModel.Notes">
+                </span>
+            </span>
+        </div>
+        <div id="comm-timeline-menu" class="timeline-menu">
+            <div class="btn-group">
+                <button class="btn-link dropdown-toggle" data-toggle="dropdown"
+                        (click)="onCardSelection(communicationModel)">
+                    <i class="fa fa-ellipsis-v"></i>
+                </button>
+                <ul class="pull-right dropdown-menu">
+                    <li>
+                        <a id="comm-card-editLink" class="menuLink"
+                           [ngClass]="{'disabled deleteTooltip' : (isClinicalNote)}" (mouseover)="toolTipText()"
+                           (click)="editPatientCommunication(communicationModel)">
+                            {{ 'Edit' | translate }}
+                            <span id="comm-card-edittooltip" *ngIf="isClinicalNote">
+                                {{toolTipMessage}}
+                            </span>
+                        </a>
+                        <a id="comm-card-deleteLink" class="menuLink" *ngIf="communicationModel?.Reason != CommunicationReason.Referral"
+                           [ngClass]="{'disabled deleteTooltip' : (isClinicalNote)}" (mouseover)="toolTipText()"
+                           (click)="deleteCommunication(communicationModel.PatientCommunicationId)">
+                            {{ 'Delete' | translate }}
+                            <span id="comm-card-deletetooltip" *ngIf="isClinicalNote">
+                                {{toolTipMessage}}
+                            </span>
+                        </a>
+                        <a id="comm-card-deleteLink" class="menuLink" *ngIf="communicationModel?.Reason == CommunicationReason.Referral"
+                           [ngClass]="{'disabled deleteTooltip' : (isClinicalNote)}" (mouseover)="toolTipText()"
+                           (click)="deleteReferralCommunication(communicationModel.PatientCommunicationId)">
+                            {{ 'Delete' | translate }}
+                            <span id="comm-card-deletetooltip" *ngIf="isClinicalNote">
+                                {{toolTipMessage}}
+                            </span>
+                        </a>
+                        <a id="comm-preview-printLink" *ngIf="communicationModel.LetterTemplate" class="menuLink"
+                           [ngClass]="{'disabled deleteTooltip' : (isClinicalNote)}"
+                           (click)="previewLetterCommunication(templateRef, dialogActions)">
+                            {{ 'Print' | translate }}
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div id="comm-card-detail" class="communication-card" *ngIf="communicationModel.ReferralDirectionTypeId">
+        <div class="titleRow">
+            <span id="comm-card-timeline-title" class="communication-title" style="float:left">
+                {{communicationModel.ReferralDirectionType }} - {{communicationModel.CommunicationDate | date:'MM/dd/yyyy' }}
+            </span>
+            <!-- <span id="comm-card-timeline-status" class="communication-label" style="float:left">{{communicationModel.Status | enumAsString:CommunicationStatus}}</span> -->
+            <span id="comm-card-timeline-status-sent" class="communication-sent"
+                  *ngIf="communicationModel.Status===CommunicationStatus.Sent">
+                <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                     overflow="visible" style="overflow:visible" preserveAspectRatio="none" viewBox="0 0 24 24"
+                     width="14" height="14">
+                    <g>
+                        <path xmlns:default="http://www.w3.org/2000/svg"
+                              d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                              style="fill: rgb(51, 51, 51);transform: rotate(-45deg)"
+                              vector-effect="non-scaling-stroke" />
+                    </g>
+                </svg>
+            </span>
+            <span id="comm-card-timeline-status-received" class="communication-received"
+                  *ngIf="communicationModel.Status===CommunicationStatus.Received">
+                <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                     overflow="visible" style="overflow:visible !important ;" preserveAspectRatio="none"
+                     viewBox="0 0 24 24" width="14" height="14">
+                    <g>
+                        <path xmlns:default="http://www.w3.org/2000/svg"
+                              d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                              style="fill: rgb(51, 51, 51);transform: rotate(135deg)"
+                              vector-effect="non-scaling-stroke" />
+                    </g>
+                </svg>
+            </span>
+            <p>
+        </div>
+        <div class="reasonRow">
+            <span id="comm-card-timeline-reason" class="communication-text">
+                <b *ngIf="communicationModel.ReferralDirectionTypeId==1">
+                    {{ 'Referral from: ' | translate }}
+                </b>
+                <b *ngIf="communicationModel.ReferralDirectionTypeId==2">
+                    {{ 'Referral To: ' | translate }}
+                </b>
+                <span *ngIf="communicationModel.ReferralDirectionTypeId==1 && communicationModel.ReferralCategoryId==1 && communicationModel.ReferralAffiliate.practiceAffiliateName"> {{ communicationModel.ReferralAffiliate.practiceAffiliateName }}</span>
+                    <span *ngIf="communicationModel.ReferralDirectionTypeId==1 && communicationModel.ReferralCategoryId==1 && communicationModel.ReferralAffiliate.practiceAffiliateName && communicationModel.ReferralAffiliateName != ' '"> - </span>
+                    <span *ngIf="communicationModel.ReferralDirectionTypeId==1">{{ communicationModel.ReferralAffiliateName }}</span>
+                    
+                    <span *ngIf="communicationModel.ReferralDirectionTypeId==2 && communicationModel.ReferralAffiliate.practiceAffiliateName"> {{ communicationModel.ReferralAffiliate.practiceAffiliateName }}</span>
+                    <span *ngIf="communicationModel.ReferralDirectionTypeId==2 && communicationModel.ReferralAffiliate.practiceAffiliateName != '' && communicationModel.ReferralAffiliateName != ' '"> - </span>
+                    <span *ngIf="communicationModel.ReferralDirectionTypeId==2">{{  communicationModel.ReferralAffiliateName }}</span>
+            </span>
+
+        </div>
+        <div class="noteRow">
+            <span id="comm-card-timeline-notes" class="communication-notes">
+                <span><b>{{'Notes: ' | translate }} </b></span>
+                <span [innerHtml]="communicationModel.Notes">
+                </span>
+            </span>
+        </div>
+        <div id="comm-timeline-menu" class="timeline-menu">
+            <div class="btn-group">
+                <button class="btn-link dropdown-toggle" data-toggle="dropdown"
+                        (click)="onCardSelection(communicationModel)">
+                    <i class="fa fa-ellipsis-v"></i>
+                </button>
+                <ul class="pull-right dropdown-menu">
+                    <li>
+                        <a id="comm-card-editLink" class="menuLink disabled" 
+                            (mouseover)="toolTipText()">
+                            {{ 'Edit' | translate }}
+                        </a>
+                        <a id="comm-card-deleteLink" class="menuLink disabled"
+                           (mouseover)="toolTipText()">
+                            {{ 'Delete' | translate }}
+                        </a>
+                        <a id="comm-preview-printLink" *ngIf="communicationModel.LetterTemplate" class="menuLink"
+                           [ngClass]="{'disabled deleteTooltip' : (isClinicalNote)}"
+                           (click)="previewLetterCommunication(templateRef, dialogActions)">
+                            {{ 'Print' | translate }}
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+﻿<div class="practiceSetup__item">
+    <div class="practiceSetup__content">
+        <h3>
+            <span id="{{idPrefix + 'icon'}}" class="practiceSetup__icon fa" ng-class="iconClass"></span>
+            <span id="{{idPrefix + 'header'}}" class="practiceSetup__header">{{ header | i18n }}</span>
+        </h3>
+        <ul class="practiceSetup__list">
+            <li ng-hide="list.length > 0">
+                <no-results class="pull-left" loading="listIsLoading"></no-results>
+            </li>
+            <li class="practiceSetup__list-item" ng-repeat="item in list">
+                <a ng-href="{{item.Link}}" ng-if="item.Section != 'Referral Affiliates'" ng-attr-target="{{target ? target : undefined}}" id="{{idPrefix + 'link-' + $index}}" ng-click="openModal(item.Template, getModifierClass(item), item.amfa)" class="practiceSetup__link" ng-class="getModifierClass(item)">
+                    {{ displayName(item) | i18n }} {{ displayAdditionalContent(item) }}
+                </a>
+                <a ng-href="{{item.Link}}" ng-if="item.Section == 'Referral Affiliates'" id="{{idPrefix + 'link-' + $index}}" ng-click="openModal(item.Template, getModifierClass(item), item.amfa)" class="practiceSetup__link" ng-class="getModifierClass(item)">
+                    {{ displayName(item) | i18n }} {{ referralAffiliateCount }}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

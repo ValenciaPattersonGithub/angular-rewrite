@@ -1,0 +1,138 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-12 cell" colspan="12">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="feeSchedule in location.FeeSchedules">
+                <tr>
+                    <td class="col-sm-12 cell reportGrid__label" colspan="12">
+                        <div class="text-center">
+                            <h4>{{feeSchedule.FeeSchedule}}</h4>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="stripOdd">
+                    <td class="col-sm-1 cell reportGrid__label">{{ 'Date' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label">{{ 'Patient' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label">{{ 'DOB' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label">{{ 'Policy Holder' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label">{{ 'PH ID' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label">{{ 'Group #' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label">{{ 'Service Code' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label text-center">{{ 'Tooth' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label text-center">{{ 'Area' | i18n }}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{ 'Fee Charged' | i18n }}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{ 'Allowed Amount' | i18n }}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{ 'Difference' | i18n }}</td>
+                </tr>
+                <tr  ng-class-even="'stripOdd'" ng-class-odd="'stripEven'" ng-repeat-start="date in feeSchedule.Dates">
+                    <td class="col-sm-1 cell">{{date.Date | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell">{{date.Patients[0].Patient}}</td>
+                    <td class="col-sm-1 cell" ng-if="date.Patients[0].DateOfBirth != null">{{date.Patients[0].DateOfBirth | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell" ng-if="date.Patients[0].DateOfBirth == null"></td>
+                    <td class="col-sm-1 cell">{{date.Patients[0].PolicyHolder}}</td>
+                    <td class="col-sm-1 cell">{{date.Patients[0].PolicyHolderId}}</td>
+                    <td class="col-sm-1 cell">{{date.Patients[0].GroupNumber}}</td>
+                    <td class="col-sm-1 cell">{{date.Patients[0].Services[0].Service}}</td>
+                    <td class="col-sm-1 cell text-center">{{date.Patients[0].Services[0].Tooth}}</td>
+                    <td class="col-sm-1 cell text-center">{{date.Patients[0].Services[0].Area}}</td>
+                    <td class="col-sm-1 cell text-right">{{date.Patients[0].Services[0].FeeCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{date.Patients[0].Services[0].AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{date.Patients[0].Services[0].Difference | currency}}</td>
+                </tr>
+                <tr ng-repeat="service in date.Patients[0].Services | startFrom: 1" ng-class="{'stripOdd': $parent.$index % 2 !== 0 }">
+                    <td class="col-sm-6 cell" colspan="6"></td>
+                    <td class="col-sm-1 cell">{{service.Service}}</td>
+                    <td class="col-sm-1 cell text-center">{{service.Tooth}}</td>
+                    <td class="col-sm-1 cell text-center">{{service.Area}}</td>
+                    <td class="col-sm-1 cell text-right">{{service.FeeCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{service.AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{service.Difference | currency}}</td>
+                </tr>
+                <tr ng-repeat-start="patient in date.Patients | startFrom: 1" ng-class="{'stripOdd': $parent.$index % 2 !== 0 }">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{patient.Patient}}</td>
+                    <td class="col-sm-1 cell" ng-if="patient.DateOfBirth != null">{{patient.DateOfBirth | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell" ng-if="patient.DateOfBirth == null"></td>
+                    <td class="col-sm-1 cell">{{patient.PolicyHolder}}</td>
+                    <td class="col-sm-1 cell">{{patient.PolicyHolderId}}</td>
+                    <td class="col-sm-1 cell">{{patient.GroupNumber}}</td>
+                    <td class="col-sm-1 cell">{{patient.Services[0].Service}}</td>
+                    <td class="col-sm-1 cell text-center">{{patient.Services[0].Tooth}}</td>
+                    <td class="col-sm-1 cell text-center">{{patient.Services[0].Area}}</td>
+                    <td class="col-sm-1 cell text-right">{{patient.Services[0].FeeCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{patient.Services[0].AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{patient.Services[0].Difference | currency}}</td>
+                </tr>
+                <tr ng-repeat-end ng-repeat="servc in patient.Services | startFrom: 1" ng-class="{'stripOdd': $parent.$parent.$index % 2 !== 0 }">
+                    <td class="col-sm-6 cell" colspan="6"></td>
+                    <td class="col-sm-1 cell">{{servc.Service}}</td>
+                    <td class="col-sm-1 cell text-center">{{servc.Tooth}}</td>
+                    <td class="col-sm-1 cell text-center">{{servc.Area}}</td>
+                    <td class="col-sm-1 cell text-right">{{servc.FeeCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{servc.AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{servc.Difference | currency}}</td>
+                </tr>
+                <tr ng-repeat-end ng-hide="true"></tr>
+                <tr>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="4">{{'Totals for' | i18n}} {{feeSchedule.FeeSchedule}}{{':' | i18n}}</td>
+                    <td class="col-sm-5 cell" colspan="5"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{feeSchedule.TotalFeeCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{feeSchedule.TotalAllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{feeSchedule.Difference | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="4">{{'Total Patients' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-7 cell" colspan="7"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{feeSchedule.TotalPatients}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven">
+                <tr>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="4">{{'Totals for All Fee Schedules at' | i18n}} {{location.Location}}{{':' | i18n}}</td>
+                    <td class="col-sm-5 cell" colspan="5"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{location.TotalFeeCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{location.TotalAllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{location.Difference | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="4">{{'Total Patients' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-7 cell" colspan="7"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{location.TotalPatients}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.Locations.length > 0 && !showFilterMessage && data.Locations.length === $index+1">
+                <tr class="reportGrid__footer">
+                    <td class="col-sm-12 cell" colspan="12"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="4">{{'Totals for All Fee Schedules' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-5 cell" colspan="5"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{data.TotalFeeCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{data.TotalAllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{data.Difference | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="4">{{'Total Patients' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-7 cell" colspan="7"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{data.TotalPatients}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="12">
+                        {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

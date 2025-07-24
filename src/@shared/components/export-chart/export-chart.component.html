@@ -1,0 +1,71 @@
+﻿<div class="exportChart">
+    <div class="form-row">
+        <label class="control-label">{{'Select the items below you would like to export.'| translate  }}</label>
+    </div>
+    <div class="form-row">
+        <div class="form-check">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   value="chart"
+                   [(ngModel)]="exportChart"
+                   id="exportChartOption"
+                   (ngModelChange)="onOptionChanged()">
+            <label class="form-check-label" for="exportChartOption">
+                Chart
+            </label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-check">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   value="ledger" 
+                   [(ngModel)]="exportLedger"
+                   id="exportLedgerOption"
+                   (ngModelChange)="onOptionChanged()">
+            <label class="form-check-label" for="exportLedgerOption">
+                Ledger
+            </label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-check" style="margin-left:40px">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   value="fees"
+                   [(ngModel)]="exportFees"
+                   id="exportFeesOption"
+                   (ngModelChange)="onOptionChanged()">
+            <label class="form-check-label" for="exportFeesOption">
+                Include Fees
+            </label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-check">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   value="notes"
+                   [(ngModel)]="exportNotes"
+                   id="exportNotesOption"
+                   (ngModelChange)="onOptionChanged()">
+            <label class="form-check-label" for="exportNotesOption">
+                Notes
+            </label>
+        </div>
+    </div>
+    <div class="form-row">
+        <label *ngIf="showError" style="color: red; font-weight: normal !important; display: flex; justify-content: center;">
+            {{ errorMessage }}
+        </label>
+    </div>
+</div>
+
+<div class="form-footer">
+    <button class="btn btn-primary" (click)="onExportChart($event)" [disabled]="exportButtonDisabled">
+        {{'Export'| translate  }}
+    </button>
+    <button class="btn btn-default" (click)="onCancelExport($event)">
+        {{'Cancel'| translate  }}
+    </button>
+</div>

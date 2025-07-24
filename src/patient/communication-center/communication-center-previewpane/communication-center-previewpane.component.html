@@ -1,0 +1,234 @@
+<div class="letter-template">
+   <ng-template #templateRef>
+      <div class="modal-header">
+         {{communicationModel.LetterTemplateName}}
+      </div>
+      <div class="modal-body" [innerHtml]="communicationModel.LetterTemplate">
+      </div>
+   </ng-template>
+   <ng-template #dialogActions>
+      <div class="modal-footer">
+         <app-button id="btnPreviewPaneCancel" buttonLabel="{{'Cancel' | translate }}" variation="secondary"
+            class="mr-8" (onClick)="dialog.close()">
+         </app-button>
+         <app-button id="btnPreviewPaneSave" (onClick)="previewLetterCommunication(null,null)"
+            buttonLabel="{{'Print' | translate }}" variation="primary">
+         </app-button>
+      </div>
+   </ng-template>
+</div>
+<div kendoDialogContainer></div>
+<div class="communication-preview-box">
+   <div id="comm-preview-box-norecord" class="communication-no-preview" *ngIf="!communicationModel">{{ 'No
+      Communications to Preview' | translate }}
+   </div>
+   <div class="communication-preview" *ngIf="communicationModel && !communicationModel?.ReferralDirectionTypeId">
+      <div class="communication-preview-title-row">
+         <span id="comm-preview-title" class="communication-preview-title">
+            {{communicationModel.CommunicationCategory | enumAsString:CommunicationCategory}}
+            ({{communicationModel.CommunicationType | enumAsString:CommunicationType}},
+            {{communicationModel.CommunicationDate | date:'MM/dd/yy'}})
+            ({{communicationModel.Status | enumAsString:CommunicationStatus}})
+         </span>
+      </div>
+      <div class="communication-preview-subtitle-row">
+         <span id="comm-preview-subtitle-reason" class="communication-preview-sub-title">
+            <span class="communication-label">{{ 'Reason: ' | translate }}</span>
+            {{communicationModel.Reason | enumAsString:CommunicationReason}}
+         </span>
+         <span id="comm-preview-subtitle-pipe" class="divider">|</span>
+         <span id="comm-preview-subtitle-addedby" class="communication-preview-sub-title" *ngIf="this.communicationModel.Reason !== CommunicationReason.ClinicalNote && this.communicationModel.Reason !== CommunicationReason.AccountNote">
+            <span class="communication-label">{{'Added By: ' | translate }}</span>
+            {{communicationModel.AddedBy}}
+         </span>         
+         <span id="comm-preview-subtitle-addedby" class="communication-preview-sub-title" *ngIf="this.communicationModel.Reason === CommunicationReason.ClinicalNote||this.communicationModel.Reason === CommunicationReason.AccountNote">
+            <span class="communication-label">{{'Added/Edited By: ' | translate }}</span>
+            {{communicationModel.AddedBy}}
+         </span>
+      </div>
+      <div class="communication-preview-editedby-row" *ngIf="isModified && (this.communicationModel.Reason !== CommunicationReason.ClinicalNote && this.communicationModel.Reason !== CommunicationReason.AccountNote)">
+         <span id="comm-preview-editedby" class="communication-preview-sub-title">
+            <span class="communication-label">{{'Edited By: ' | translate}}</span>
+            {{communicationModel.EditedBy}}
+         </span>
+      </div>
+      <div class="communication-preview-note-row">
+         <span id="comm-preview-subtitle-notes" class="communication-preview-sub-title">
+            <span class="communication-label">{{'Notes: ' | translate }} </span>
+            <span class="communication-preview-note"
+               [innerHtml]="communicationModel.Notes"></span>
+         </span>
+      </div>
+      <div class="communication-preview-lettertemplate-row" *ngIf="communicationModel.LetterTemplate">
+         <span id="comm-preview-subtitle-lettertemplate" class="communication-preview-lettertemplate">
+            <span class="communication-label">{{'Template: ' | translate }} </span>
+            {{communicationModel.LetterTemplateName}}
+         </span>
+         <div>
+            <span id="communication-preview-letterTemplate-content" class="communication-preview-lettertemplate"
+               [innerHtml]="communicationModel.LetterTemplate"></span>
+         </div>
+      </div>
+      <div id="comm-preview-menu" class="preview-menu" *ngIf="!printPreview">
+         <div class="btn-group">
+            <button class="btn-link dropdown-toggle" data-toggle="dropdown">
+               <i class="fa fa-ellipsis-v"></i>
+            </button>
+            <ul class="pull-right dropdown-menu">
+               <li>
+                  <a id="comm-preview-editLink" class="menuLink"
+                      [ngClass]="{'disabled deleteTooltip': isClinicalNote, 'disabled': communicationModel?.ReferralDirectionTypeId}" (mouseover)="toolTipText()"
+                     (click)="editPatientCommunication(communicationModel)">
+                     {{ 'Edit' | translate }}
+                     <span id="comm-preview-edittooltip" *ngIf="isClinicalNote">{{toolTipMessage}}</span>
+                  </a>
+                  <a id="comm-preview-deleteLink" class="menuLink" *ngIf="communicationModel?.Reason != CommunicationReason.Referral"
+                     [ngClass]="{'disabled deleteTooltip': isClinicalNote, 'disabled': communicationModel?.ReferralDirectionTypeId}" (mouseover)="toolTipText()"
+                     (click)="deleteCommunication(communicationModel.PatientCommunicationId)">
+                     {{ 'Delete' | translate }}
+                     <span id="comm-preview-deletetooltip" *ngIf="isClinicalNote">{{toolTipMessage}}</span>
+                  </a>
+                  <a id="comm-preview-deleteLink" class="menuLink" *ngIf="communicationModel?.Reason == CommunicationReason.Referral"
+                     [ngClass]="{'disabled deleteTooltip': isClinicalNote, 'disabled': communicationModel?.ReferralDirectionTypeId}" (mouseover)="toolTipText()"
+                     (click)="deleteReferralCommunication(communicationModel.PatientCommunicationId)">
+                     {{ 'Delete' | translate }}
+                     <span id="comm-preview-deletetooltip" *ngIf="isClinicalNote">{{toolTipMessage}}</span>
+                  </a>
+                  <a id="comm-preview-printLink" *ngIf="communicationModel.LetterTemplate" class="menuLink"
+                     [ngClass]="{'disabled deleteTooltip' : (isClinicalNote)}"
+                     (click)="previewLetterCommunication(templateRef, dialogActions)">
+                     {{ 'Print' | translate }}
+                  </a>
+               </li>
+            </ul>
+
+         </div>
+      </div>      
+   </div>
+   <div class="communication-preview" *ngIf="communicationModel && communicationModel?.ReferralDirectionTypeId">
+      <div class="communication-preview-title-row">
+         <span id="comm-preview-title" class="communication-preview-title">
+            <span *ngIf="communicationModel.ReferralDirectionTypeId != 1">
+               {{ communicationModel.ReferringDoctorName }} at {{ communicationModel.PracticeName }} Referred To {{ communicationModel.ReferringOfficeName }}
+             </span>
+             <span *ngIf="communicationModel.ReferralDirectionTypeId == 1 && communicationModel.ReferringDoctorName != ''">
+               {{ communicationModel.ReferringDoctorName }} Referred To {{ communicationModel.ReferringOfficeName }}
+             </span>
+             <span *ngIf="communicationModel.ReferralDirectionTypeId == 1 && !communicationModel.ReferringDoctorName && communicationModel.ReferralAffiliateName != ''">
+               Referred To {{ communicationModel.ReferringOfficeName }} via {{ communicationModel.ReferralAffiliateName }}
+             </span>
+             <span *ngIf="communicationModel.ReferralDirectionTypeId != 2 && communicationModel.ReferralDirectionTypeId != 1">
+               Referred From {{ communicationModel.ReferringOfficeName }}
+             </span>
+         </span>
+      </div>
+      <div class="communication-preview-subtitle-row">
+         <span id="comm-preview-subtitle-addedby" class="communication-preview-sub-title">
+            <span>{{'Added By: ' | translate }}</span>
+            {{communicationModel.AddedBy}}
+         </span>
+         <span id="comm-preview-subtitle-pipe" class="divider">|</span>                  
+         <span id="comm-preview-subtitle-addedby" class="communication-preview-sub-title">
+            {{communicationModel.CommunicationDate | date: 'fullDate'}}
+         </span>
+      </div>
+      <div class="communication-preview-editedby-row">
+         <span id="comm-preview-subtitle-notes" class="communication-preview-sub-title">
+            <span class="communication-label">{{'Notes: ' | translate }} <br /></span>
+            <span class="communication-preview-note"
+               [innerHtml]="communicationModel.Notes"></span>
+         </span>
+      </div>
+      <div class="communication-preview-note-row" *ngIf="communicationModel.ReferralDirectionTypeId != 1">
+         <span id="comm-preview-subtitle-next-appointment" class="communication-preview-sub-title">
+            <br /><span class="communication-label">{{'Next Appointment: ' | translate }}<br /></span>
+            
+         </span>
+      </div>
+      <div class="communication-preview-lettertemplate-row" *ngIf="communicationModel.ReferralDirectionTypeId != 1">
+         <span id="comm-preview-subtitle-return-date" class="communication-preview-sub-title">
+            <span class="communication-label">{{'Expected Return Date: ' | translate }}<br /></span>
+            {{communicationModel.ReturnDate}}
+         </span>
+      </div>
+      <div class="communication-preview-officeaddress-row" *ngIf="communicationModel.ReferralDirectionTypeId != 1">
+         <span id="comm-preview-subtitle-office-location" class="communication-preview-sub-title">
+            <span class="communication-label">{{'Referred Office Location: ' | translate }}<br /></span>
+            <span>{{ communicationModel.ReferringOfficeName }}</span>
+            <span *ngIf="communicationModel.ReferringOfficeAddress1">
+            <br /> {{ communicationModel.ReferringOfficeAddress1 }}
+            </span>
+            <span *ngIf="communicationModel.ReferringOfficeAddress2">
+            <br /> {{ communicationModel.ReferringOfficeAddress2 }}
+            </span>
+         </span>
+      </div>
+   </div>
+   <div *ngIf="communicationModel?.ReferralDirectionTypeId">
+      <hr>
+   </div>
+   <div class="communication-preview-patientinfo" *ngIf="communicationModel?.ReferralDirectionTypeId">
+      <div class="communication-preview-patientinfo-row1">
+         <div class="communication-preview-title">Patient Info</div>
+      </div>
+      <div class="communication-preview-patientinfo-row2">
+         <span class="communication-preview-sub-title communication-label">Name: </span>{{communicationModel.PatientInfo?.FirstName}} {{communicationModel.PatientInfo?.LastName}}
+      </div>
+      <div class="row communication-preview-patientinfo-row3">
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Date Of Birth: </span><br/>
+            {{communicationModel.PatientInfo?.DateOfBirth | date:'MM/dd/yyyy'}}
+         </div>
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Phone: </span><br/>
+            {{formatPhoneNumber(communicationModel.PatientInfo?.PhoneNumber)}}
+         </div>
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Responsible Party: </span><br/>
+            {{communicationModel.PatientInfo?.ResponsiblePersonName}}
+         </div>
+      </div>
+      <div class="row communication-preview-patientinfo-row4">
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Age: </span><br/>
+            {{calculateAge(communicationModel.PatientInfo?.DateOfBirth)}}
+         </div>
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Work Phone: </span><br/>
+            {{getWorkPhone()}}
+         </div>
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Signiture on File: </span><br/>
+            {{communicationModel.PatientInfo?.SignatureOnFile == true ? 'Yes' : 'No'}}
+         </div>
+      </div>
+      <div class="row communication-preview-patientinfo-row5">
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Gender: </span><br/>
+            {{communicationModel.PatientInfo?.Sex == 'M' ? 'Male' : (communicationModel.PatientInfo?.Sex == 'F' ? 'Female' : '')}}
+         </div>
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Email: </span><br/>
+            {{communicationModel.PatientInfo?.EmailAddress}}
+         </div>
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Alerts: </span><br/>
+            
+         </div>
+      </div>
+      <div class="row communication-preview-patientinfo-row6">
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Height: </span><br/>
+            {{communicationModel.PatientInfo?.HeightFeet + "'" + communicationModel.PatientInfo?.HeightInches}}
+         </div>
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Weight: </span><br/>
+            {{communicationModel.PatientInfo?.Weight}}
+         </div>
+         <div class="col-md-4">
+            <span class="communication-preview-sub-title communication-label">Patient Status: </span><br/>
+            {{communicationModel.PatientInfo?.IsActive == 0 ? 'InActive' : 'Active'}}
+         </div>
+      </div>
+   </div>
+</div>

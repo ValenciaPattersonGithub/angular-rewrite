@@ -1,0 +1,7 @@
+<div id="widgetKendo" class="widgetKendo">
+    <kendo-dropdownlist [data]="selectOptions" id="ddfinancialOptions" name="financialOptions" ngDefaultControl
+        [(ngModel)]="selectedFinanceValue" [textField]="'text'" [valueField]="'value'" [valuePrimitive]="true"
+        (valueChange)="changeOptionValue($event);"
+        [popupSettings]="{ animate:false, width: 'auto', popupClass: 'widget-ddl-font' }">
+    </kendo-dropdownlist>
+</div>

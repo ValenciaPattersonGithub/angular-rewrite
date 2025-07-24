@@ -1,0 +1,294 @@
+﻿<div class="carrierCrud" ng-form="frmCarrier" ng-controller="CarrierCrudController" ng-init="initialize()">
+    <div class="rowFull white">
+        <div class="carrierCrud__header">
+            <div class="carrierCrud__title">
+                <h1 class="carrierCrud__headerName">
+                    <span ng-hide="editing == true">{{ 'Add a {0}' | i18n:['Carrier'] }}</span>
+                    <span ng-show="editing == true">{{ carrierName }}</span>
+                </h1>
+            </div>
+            <div class="row">
+                <div class="carrierCrud__actions col-sm-2">
+                    <button id="btnCancel" ng-click="cancel();" class="btn btn-default" tabindex="1">{{ 'Cancel' | i18n }}</button>
+                    <button check-auth-z="{{editing?'soar-ins-ibcomp-edit':'soar-ins-ibcomp-add'}}" id="btnSave" ng-click="save(carrier);"
+                        ng-disabled="isSaving ? 'disabled' : ''" class="btn btn-primary" data-qa="carrier-crud-save" tabindex="1">{{ 'Save' | i18n }}</button>
+                </div>
+                <div class="col-sm-offset-7 col-sm-3 col-md-2 col-lg-1 toggle-align">
+                    <label>Active</label>
+                    <div class="onoffswitch pull-right">
+                        <input type="checkbox" ng-change="setActiveStatus(carrier)" name="onoffswitch" class="onoffswitch-checkbox" id="inactivateSwitch" ng-model="carrier.IsActive">
+                        <label class="onoffswitch-label" for="inactivateSwitch" style="margin-bottom: 0;"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="section-divider"></div>
+        </div>
+    </div>
+
+    <div class="rowFull white" >
+        <no-results loading="loading" ng-hide="!loading"></no-results>
+        <div class="carrierCrud__body" ng-hide="loading">
+            <div class="row  form-horizontal">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpCompanyName">{{ 'Carrier Name' | i18n }}*</label>
+                        <div class="col-sm-8">
+                            <div ng-class="{error:hasErrors && !frmCarrier.inpCompanyName.$valid}">
+                                <typeahead class="soar-typeahead" placeholder="{{ 'Carrier Name' | i18n }}" items="filteredCHCList" loading="" term="carrier.Name" search="filterCHCList(term)" focused="focus" cancel="" select="selectCarrierName(item)" maxlength="64">
+                                    <ul ng-show="CHCList.length > 0">
+                                        <li typeahead-item="CHCCarrier" ng-repeat="CHCCarrier in filteredCHCList" class="results">
+                                            <div class="row">
+                                                <div class="col-xs-9">
+                                                    <span id="">{{ CHCCarrier.Name }}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </typeahead>
+                                <label id="lblCompanyNameRequired" class="help-text " ng-show="hasErrors && (!$scope.carrier.Name || $scope.carrier.Name === '')">
+                                    {{ 'This field is required.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="inpPayerId">{{ 'Payer ID' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <div ng-class="{error:hasErrors &&  !frmCarrier.inpPayerId.$valid}">
+                                <input id="inpPayerId" class="form-control carrierCrud__payerId" name="inpPayerId" type="text" placeholder="{{ 'Payer ID' | i18n }}" ng-model="carrier.PayerId" ng-change="checkForDuplicates(carrier)" alpha-numeric ng-pattern="/^([a-zA-Z'-. \d]{0}|[a-zA-Z'-. \d]{2,10})$/" maxlength="10" tabindex="12" />
+
+                                <label id="errPayerId" class="help-text" ng-show="hasErrors && !frmCarrier.inpPayerId.$valid">
+                                    {{ 'Payer ID must be between 2 to 10 characters'| i18n }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12" ng-show="checkingDuplicates">
+                    <div class="carrierCrud__duplicates">
+                        <span class="carrierCrud__duplicateMessage">{{ 'Checking for duplicates...' | i18n }}</span>
+                        <span class="carrierCrud__duplicatesLoadingIcon fa fa-spin fa-spinner"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12" ng-show="duplicates.length > 0">
+                    <div class="carrierCrud__duplicates">
+                        <span class="carrierCrud__duplicateMessage" ng-show="duplicates.length > 1">{{ 'There are {0} possible duplicates.' | i18n:[duplicates.length] }}</span>
+                        <span class="carrierCrud__duplicateMessage" ng-show="duplicates.length == 1">{{ 'There is {0} possible duplicate.' | i18n:[duplicates.length] }}</span>
+                        <button id="btnToggleDuplicates" class="carrierCrud__duplicatesShowToggle" ng-click="toggleDuplicateVisibilty()">{{ (showDuplicates ? 'hide' : 'view') | i18n}}</button>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12" ng-show="duplicates.length > 0">
+                    <table id="tableCarriers" class="table carrier__table" ng-show="showDuplicates || duplicates.length == 0">
+                        <thead class="carrier__header">
+                            <tr>
+                                <th id="tdCarrierNameCol" class="width-20-percent">
+                                    {{ 'Carrier' | i18n }}
+                                </th>
+                                <th id="tdCarrierPayerIdCol" class="width-10-percent">
+                                    {{ 'Payer ID' | i18n }}
+                                </th>
+                                <th id="tdCarrierAddressCol" class="width-20-percent">
+                                    {{ 'Address' | i18n }}
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="carrier__body">
+                            <tr ng-show="duplicates.length > 0" ng-repeat="duplicate in duplicates | orderBy: ['Name', 'PayerId']">
+                                <td id="tdCarrierName" title="{{ carrier.Name }}">
+                                    {{ duplicate.Name }}
+                                </td>
+                                <td id="tdCarrierPayerId" title="{{ carrier.PayerId }}">
+                                    {{ duplicate.PayerId }}
+                                </td>
+                                <td id="tdCarrierAddress" title="{{ duplicate.AddressLine1 }} {{ duplicate.AddressLine2 }} {{ duplicate.City }} {{ duplicate.State }} {{ duplicate.Zip }}">
+                                    {{ duplicate.AddressLine1 }} {{ duplicate.AddressLine2 }}
+                                    <br ng-hide="!duplicate.AddressLine1 && !duplicate.AddressLine2" />
+                                    {{ duplicate.City }}{{duplicate.City && duplicate.State ? ', ' : ' '}}{{ duplicate.State }} {{ duplicate.ZipCode }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <label class="carrierCrud__section">
+                        {{ 'Payer Information' | i18n }}
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="row  form-horizontal">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <!-- Address Line 1 & 2 -->
+                        <label class="col-sm-4 control-label" for="inpAddressLine1">{{ 'Address' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <input id="inpAddressLine1" class="form-control" 
+                                   name="inpAddressLine1" 
+                                   type="text" 
+                                   placeholder="{{ 'Street address' | i18n }}" 
+                                   ng-model="carrier.AddressLine1" 
+                                   maxlength="128" 
+                                   tabindex="12"
+                                   char-pattern="[^a-zA-Z0-9-'.\\()# ]" />
+                        </div>
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <input id="inpAddressLine2" class="form-control" 
+                                   name="inpAddressLine2" 
+                                   type="text" 
+                                   placeholder="{{ 'Address 2' | i18n }}" 
+                                   ng-model="carrier.AddressLine2" 
+                                   maxlength="128" 
+                                   tabindex="12"
+                                   char-pattern="[^a-zA-Z0-9-'.\\()# ]" />
+                        </div>
+
+                        <!-- City -->
+                        <label class="col-sm-4 control-label" for="inpCity">{{ 'City' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <input id="inpCity" class="form-control" name="inpCity" type="text" placeholder="{{ 'City' | i18n }}" ng-model="carrier.City" maxlength="64" tabindex="12" alpha-only/>
+                        </div>
+
+                        <!-- State -->
+                        <label class="col-sm-4 control-label" for="inpState">{{ 'State' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <state-list state-list-id="inpState" name="inpState" source="carrier.State" tabindex="12"></state-list>
+                        </div>
+
+                        <!-- Zip -->
+                        <label class="col-sm-4 control-label" for="inpZip">{{ 'ZIP Code' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <div ng-class="{error: hasErrors && !frmCarrier.inpZip.$valid}">
+                                <!--zip 9 numeric-->
+                                <input id="inpZip" zip-field="carrier.ZipCode" type="text" onfocus="this.value = this.value;" class="form-control carrierCrud__zip"
+                                       name="inpZip" placeholder="{{'ZIP Code' | i18n }}" ng-model="carrier.ZipCode" maxlength="10" minlength="5" tabindex="12"/>
+                                <label id="errZipCode" class="help-text" ng-show="hasErrors && !frmCarrier.inpZip.$valid">
+                                    {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Payment Source-->
+                        <label class="col-sm-4 control-label" for="inpPaymentSource">{{ 'Payment Source' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <soar-select-list
+                                id="inpPaymentSource"
+                                name="inpPaymentSource"
+                                option-list="paymentSourceOptions"
+                                text-field="name"
+                                value-field="value"
+                                ng-model="carrier.ClaimFilingIndicatorCode">
+                            </soar-select-list>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <!-- Phone Numbers -->
+                        <label for="inpPhones" class="col-sm-4 control-label carrierCrud__phonesLabel">{{'Phone' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <insurance-phone-info class="carrierCrud__phones" show-label="false" phones="carrier.PhoneNumbers" max-limit="5"
+                                                  valid-phones="validPhones" valid-form="!hasErrors" has-notes="false" has-texts="false" tabindex="12" custom-type-only="true"></insurance-phone-info>
+                        </div>
+
+                        <!-- Fax Number -->
+                        <label class="col-sm-4 control-label" for="inpFax">{{ 'Fax' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <div ng-class="{error:hasErrors && !frmCarrier.inpFax.$valid }">
+                                <input id="inpFax" name="inpFax" type="text" placeholder="{{ 'Fax number' | i18n }}" ui-mask="?{{ '(999) 999-9999'|i18n }}" class="form-control" ng-model="carrier.FaxNumber" tabindex="12"/>
+                                <label id="lblInpFaxError" class="help-text" ng-show="!frmCarrier.inpFax.$valid">
+                                    {{ 'Fax number must be 10 characters.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <label for="inpEmail" class="col-sm-4 control-label">{{'Email' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <div ng-class="{error:hasErrors &&  !frmCarrier.inpEmail.$valid}">
+                                <input id="inpEmail" name="inpEmail" type="text" placeholder="{{ 'Email address' | i18n }}" class="form-control"
+                                       ng-model="carrier.Email" valid-email maxlength="256" tabindex="12">
+                                <label id="errEmail" class="help-text" ng-show="hasErrors && !frmCarrier.inpEmail.$valid">
+                                    {{ 'This field requires a valid email address.'| i18n }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Website -->
+                        <label class="col-sm-4 control-label" for="inpWebsite">{{ 'Website' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <input id="inpWebsite" class="form-control" name="inpWebsite" type="text" placeholder="{{ 'Website' | i18n }}" ng-model="carrier.Website" maxlength="500" tabindex="12"/>
+                        </div>
+
+                        <!-- Notes -->
+                        <label class="col-sm-4 control-label" for="inpNotes">{{ 'Notes' | i18n }}</label>
+                        <div class="col-sm-8">
+                            <textarea id="inpNotes" ng-model="carrier.Notes" class="form-control" maxlength="500" tabindex="12"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 carrierCrud__section">
+                    <label>{{ 'Fee Schedules' | i18n }}</label>
+                </div>
+            </div>
+            <div class="row form-horizontal">
+                <div class="carrierCrud__feeScheduleTable">
+                    <div><label>{{'Available Fee Schedules'}}</label></div>
+                    <div class="k-grid-content carrierCrud__gridFix">
+                        <table role="grid">
+                            <tbody role="rowgroup">
+                                <tr ng-repeat="fs in availFeeSchedules | orderBy: 'FeeScheduleName'" ng-click="setSelectedItem(fs, $index)"
+                                    ng-dblclick="addFeeSchedule()" ng-class="{'carrierCrud__selected':$index == selectedIndex}">
+                                    <td class="carrierCrud__tableElementPad">{{fs.FeeScheduleName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="action-btns">
+                    <button class="btn" icon="fa-arrow-right"  ng-disabled="selectedIndex < 0" data-qa="carrier-crud-add-feeschedule-right-arrow" ng-click="addFeeSchedule()">
+                    </button>
+                    <button class="btn left-arrow" icon="fa-arrow-left"  ng-disabled="removedIndex < 0" data-qa="carrier-crud-remove-feeschedule-left-arrow" ng-click="removeFeeSchedule()">
+                    </button>
+                </div>
+                <div class="carrierCrud__feeScheduleTable">
+                    <div>
+                        <label>{{'Attached Fee Schedules'}}</label>
+                        <button class="btn btn-link" ng-click="removeAllFeeSchedule()" data-qa="carrier-crud-remove-all-feeschedule">Remove All</button>
+                    </div>
+                    <div class="k-grid-content carrierCrud__gridFix">
+                        <table role="grid">
+                            <tbody role="rowgroup">
+                                <tr ng-repeat="fs in carrier.FeeScheduleList | orderBy: 'FeeScheduleName'" ng-dblclick="removeFeeSchedule()"
+                                    ng-click="setRemovedItem(fs, $index)" ng-class="{'carrierCrud__selected':$index == removedIndex}">
+                                    <td class="carrierCrud__tableElementPad">
+                                        {{fs.FeeScheduleName}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

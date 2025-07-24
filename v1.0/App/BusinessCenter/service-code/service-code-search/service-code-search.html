@@ -1,0 +1,191 @@
+﻿<!-- <business-nav></business-nav> -->
+<div id="serviceCodeLanding" class="serviceCodeLanding rowFull white">
+  <div class="rowFull white">
+    <div class="serviceCodeLanding__header">
+      <ul class="serviceCodeLanding__breadcrumb">
+        <li ng-repeat="breadcrumb in dataForCrudOperation.BreadCrumbs">
+          <ng-switch on="$last">
+            <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+            <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePageState(breadcrumb)"><a href="">{{breadcrumb.name | i18n }}</a></span>
+          </ng-switch>
+        </li>
+      </ul>
+      <div class="serviceCodeLanding__title">
+        <h1>{{ 'Service & Swift Codes' | i18n }}</h1>
+      </div>
+      <div class="serviceCodeLanding__actions">
+        <button id="addServiceCodeLblId" check-auth-z="{{addServiceCodeAmfa}}" class="btn btn-primary" icon="fa-plus" ng-click="createServiceCode()" tabindex="1" ng-disabled="dataForCrudOperation.ShowServiceCodesList == false || updatingList == true">
+          {{ 'Add {0}' | i18n:['Service Code'] }}
+        </button>
+        <button id="addSwiftPickCodeLblId" check-auth-z="{{addSwiftCodeAmfa}}" class="btn btn-primary" icon="fa-plus" ng-click="createSwiftPickCode()" tabindex="1" ng-disabled="dataForCrudOperation.ShowServiceCodesList == false || updatingList == true">
+          {{ 'Add {0}' | i18n:['Swift Code'] }}
+        </button>
+        <button id="btnUpdateListUpdate" check-auth-z="soar-biz-bsvccd-aswift" class="btn btn-primary" ng-show="!updatingList" ng-disabled="dataForCrudOperation.ShowServiceCodesList == false || updateDisabled" tabindex="1" ng-click="updatedList()">{{ 'Update' | i18n }}</button>
+        <button id="btnUpdateListCancel" check-auth-z="soar-biz-bsvccd-aswift" class="btn btn-default" ng-show="updatingList" ng-click="cancelUpdatedList()">{{'Cancel' | i18n}}</button>
+        <button id="btnUpdateListSave" check-auth-z="soar-biz-bsvccd-aswift" class="btn btn-primary" ng-show="updatingList" ng-click="saveUpdatedList()" ng-disabled="updatedServiceCodes.length === 0 || updatedServiceCodesWithErrors.length > 0">{{'Save' | i18n}}</button>
+        <soar-select-list id="selectReport" name="selectReport" class="selectReport" placeholder="{{'Reports' | i18n }}" text-field="ReportTitle" value-field="ReportValue" option-list="reports" ng-model="selectedReport.ReportId" ng-if="hasReportAccess && reports.length > 0">
+        </soar-select-list>
+      </div>
+    </div>
+  </div>
+  <!--service code list-->
+  <div class="serviceCodeLanding__body rowFull white" ng-show="dataForCrudOperation.ShowServiceCodesList == false">
+    <div id="serviceCodeCrudWindow" class="serviceCodeCrudWindow">
+      <service-code-crud data="dataForCrudOperation" update-service-code-list="dataForCrudOperation.IsCreateOperation ? serviceCodeCreated : serviceCodeUpdated"> </service-code-crud>
+    </div>
+  </div>
+  <div class="serviceCodeLandingNewGrid" ng-show="dataForCrudOperation.ShowServiceCodesList == true">
+    <!--Input Box-->
+    <div class="row">
+      <div class="form-group">
+        <div class="inner-addon right-addon">
+          <div class="col-xs-4">
+            <input class="form-control border-solid-black" id="searchBoxServiceCodes" placeholder="{{'Search service code, CDT code, description, fee...'|i18n}}" type="text" ng-model="searchServiceCodesKeyword" ng-disabled="updatingList" />
+          </div>
+          <div class="col-xs-1 searchIcon">
+            <span class="glyphicon glyphicon-search"></span>
+          </div>
+          <div class="col-xs-3" ng-if="!loadingServiceTypes">
+            <soar-select-list
+              id="filterList"
+              name="filterList"
+              placeholder="{{'All Service Types' | i18n}}"
+              text-field="Description"
+              value-field="Description"
+              sb-change="changeFilter"
+              option-list="serviceAndSwiftTypes"
+              ng-model="filterServiceList"
+              disable-input="updatingList"
+            ></soar-select-list>
+          </div>
+          <div class="col-xs-2 searchIcon">
+            <input type="checkbox" ng-model="allowInactive" ng-disabled="updatingList" />
+            <label>{{'Show Inactive' | i18n}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Grid -->
+    <div class="fuseGrid container pull-left">
+      <div class="row header">
+        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('Code');">
+          {{'Service Code' | i18n }}
+          <span ng-show="orderBy.field == 'Code' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+          <span ng-show="orderBy.field == 'Code' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+        </span>
+        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('CdtCodeName');">
+          {{'CDT Code' | i18n }}
+          <span ng-show="orderBy.field == 'CdtCodeName' && orderBy.asc == true " class="fa fa-caret-down"></span>
+          <span ng-show="orderBy.field == 'CdtCodeName' && orderBy.asc == false " class="fa fa-caret-up"></span>
+        </span>
+        <span class="col-sm-3 cell gridBody__header" ng-click="changeSortingForGrid('Description');">
+          {{'Description' | i18n }}
+          <span ng-show="orderBy.field == 'Description' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+          <span ng-show="orderBy.field == 'Description' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+        </span>
+        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('ServiceTypeDescription');">
+          {{'Service Type' | i18n }}
+          <span ng-show="orderBy.field == 'ServiceTypeDescription' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+          <span ng-show="orderBy.field == 'ServiceTypeDescription' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+        </span>
+        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('$$AffectedAreaName');">
+          {{'Affected Area' | i18n }}
+          <span ng-show="orderBy.field == '$$AffectedAreaName' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+          <span ng-show="orderBy.field == '$$AffectedAreaName' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+        </span>
+        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('$$UsuallyPerformedByProviderTypeName');">
+          {{'Usually Performed by' | i18n }}
+          <span ng-show="orderBy.field == '$$UsuallyPerformedByProviderTypeName' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+          <span ng-show="orderBy.field == '$$UsuallyPerformedByProviderTypeName' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+        </span>
+        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('$$SubmitOnInsuranceName');">
+          {{'Submit on Insurance' | i18n }}
+          <span ng-show="orderBy.field == '$$SubmitOnInsuranceName' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+          <span ng-show="orderBy.field == '$$SubmitOnInsuranceName' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+        </span>
+        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('$$IsEligibleForDiscountName');">
+          {{'Eligible for Discount' | i18n }}
+          <span ng-show="orderBy.field == '$$IsEligibleForDiscountName' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+          <span ng-show="orderBy.field == '$$IsEligibleForDiscountName' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+        </span>
+        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('$$IsActiveName');">
+          {{'Active' | i18n }}
+          <span ng-show="orderBy.field == '$$IsActiveName' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+          <span ng-show="orderBy.field == '$$IsActiveName' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+        </span>
+      </div>
+
+      <div class="serviceCodeGridBody" ng-class="{'hidden' : updatingList}">
+        <paged-view items="filteredServiceCodes" child-scope-name="serviceCode" items-per-page="10" paged-view-name="nonEditView" ng-class="{'hidden' : updatingList}">
+          <div class="row body" ng-class="{inactive:!serviceCode.IsActive}" ng-class-even="'even'" ng-class-odd="'odd'">
+            <div class="col-sm-1 cell" ng-bind-html="serviceCode.Code  | highlightTextIfContains: controller.searchServiceCodesKeyword"></div>
+            <div class="col-sm-1 cell" ng-bind-html="serviceCode.CdtCodeName  | highlightTextIfContains: controller.searchServiceCodesKeyword"></div>
+            <div class="col-sm-3 cell serviceCodeGridBody__description" ng-bind-html="serviceCode.Description  | highlightTextIfContains: controller.searchServiceCodesKeyword:150" uib-tooltip="{{serviceCode.Description}}"></div>
+            <div class="col-sm-1 cell" ng-bind="serviceCode.ServiceTypeDescription"></div>
+            <div class="col-sm-1 cell" ng-bind="serviceCode.$$AffectedAreaName"></div>
+            <div class="col-sm-1 cell" ng-bind="serviceCode.$$UsuallyPerformedByProviderTypeName"></div>
+            <div class="col-sm-1 cell" ng-bind="serviceCode.$$SubmitOnInsuranceName"></div>
+            <div class="col-sm-1 cell" ng-bind="serviceCode.$$IsEligibleForDiscountName"></div>
+            <div class="col-sm-1 cell" ng-bind="serviceCode.$$IsActiveName"></div>
+            <div class="col-sm-1 cell">
+              <button
+                class="btn btn-default btn-link pull-left visible-md visible-lg hidden-sm hidden-xs cursor-pointer"
+                check-auth-z="{{ serviceCode.IsSwiftPickCode ? controller.editSwiftCodeAmfa : controller.editServiceCodeAmfa }}"
+                ng-hide="controller.allowEdit"
+                ng-click="controller.editOptionClicked(serviceCode)"
+              >
+                <i class="far fa-edit fa-lg"></i>
+              </button>
+            </div>
+          </div>
+        </paged-view>
+      </div>
+      <div class="serviceCodeGridBody" ng-class="{'hidden' : !updatingList}">
+        <paged-view items="filteredServiceCodesForEdit" child-scope-name="serviceCode" items-per-page="10" paged-view-name="nonEditView">
+          <div class="row body" ng-class-even="'even'" ng-class-odd="'odd'">
+            <div class="col-sm-1 cell" ng-bind-html="serviceCode.Code"></div>
+            <div class="col-sm-1 cell" ng-bind-html="serviceCode.CdtCodeName"></div>
+            <div class="col-sm-3 cell" ng-class="{'error' : !serviceCode.Description}">
+              <input class="form-input" id="inlineEditDescription{{$index}}" ng-model="serviceCode.Description" ng-keyup="controller.dataChanged(serviceCode)" maxlength="256" placeholder="{{ 'Description' | i18n }}" />
+            </div>
+            <div class="col-sm-1 cell">
+              <select ng-model="serviceCode.ServiceTypeId" ng-change="controller.dataChanged(serviceCode)">
+                <option class="optionsPlaceholder" value="" ng-selected="x.ServiceTypeId !== serviceCode.ServiceTypeId" disabled>{{ 'Select {0}' | i18n:['Service Type'] }}</option>
+                <option ng-repeat="x in controller.serviceAndSwiftTypes" ng-selected="x.ServiceTypeId == serviceCode.ServiceTypeId" value="{{x.ServiceTypeId}}">{{x.Description}}</option>
+              </select>
+            </div>
+            <div class="col-sm-1 cell">
+              <select ng-model="serviceCode.AffectedAreaId" ng-change="controller.dataChanged(serviceCode)">
+                <option class="optionsPlaceholder" value="" ng-selected="x.Id !== serviceCode.AffectedAreaId" disabled>{{ 'Select {0}' | i18n:['Affected Area'] }}</option>
+                <option ng-repeat="x in controller.dataForCrudOperation.AffectedAreas" ng-selected="x.Id == serviceCode.AffectedAreaId" value="{{x.Id}}">{{x.Name}}</option>
+              </select>
+            </div>
+            <div class="col-sm-1 cell">
+              <select ng-model="serviceCode.UsuallyPerformedByProviderTypeId" ng-change="controller.dataChanged(serviceCode)">
+                <option class="optionsPlaceholder" value="" ng-selected="x.Id !== serviceCode.UsuallyPerformedByProviderTypeId" disabled>{{ 'Select {0}' | i18n:['Usually Performed By'] }}</option>
+                <option ng-repeat="x in controller.dataForCrudOperation.UsuallyPerformedByProviderTypes" ng-selected="x.Id == serviceCode.UsuallyPerformedByProviderTypeId" value="{{x.Id}}">{{x.Name}}</option>
+              </select>
+            </div>
+            <div class="col-sm-1 cell">
+              <checkbox checkbox-value="serviceCode.$$SubmitOnInsuranceYes" checkbox-label="'Yes'" change-function="controller.checkboxChanged(serviceCode, 'SubmitOnInsurance', true)"></checkbox>
+              <checkbox checkbox-value="serviceCode.$$SubmitOnInsuranceNo" checkbox-label="'No'" change-function="controller.checkboxChanged(serviceCode, 'SubmitOnInsurance', false)"></checkbox>
+            </div>
+            <div class="col-sm-1 cell">
+              <checkbox checkbox-value="serviceCode.$$IsEligibleForDiscountYes" checkbox-label="'Yes'" change-function="controller.checkboxChanged(serviceCode, 'IsEligibleForDiscount', true)"></checkbox>
+              <checkbox checkbox-value="serviceCode.$$IsEligibleForDiscountNo" checkbox-label="'No'" change-function="controller.checkboxChanged(serviceCode, 'IsEligibleForDiscount', false)"></checkbox>
+            </div>
+            <div class="col-sm-1 cell">
+              <checkbox checkbox-value="serviceCode.$$IsActiveYes" checkbox-label="'Yes'" change-function="controller.checkboxChanged(serviceCode, 'IsActive', true)"></checkbox>
+              <checkbox checkbox-value="serviceCode.$$IsActiveNo" checkbox-label="'No'" change-function="controller.checkboxChanged(serviceCode, 'IsActive', false)"></checkbox>
+            </div>
+            <div class="col-sm-1 cell">
+              <button class="btn btn-default btn-link pull-left visible-md visible-lg hidden-sm hidden-xs cursor-pointer" ng-disabled="true" ng-hide="controller.allowEdit" ng-click="controller.editOptionClicked(serviceCode)">
+                <i class="far fa-edit fa-lg"></i>
+              </button>
+            </div>
+          </div>
+        </paged-view>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,192 @@
+﻿.patientRegForm {
+    &__body {
+        background-color: #dddddd;
+        padding: 0;
+        border: 0;
+        margin: 0;
+        margin-top: -30px;
+        font-family: @brand-font;
+    }
+
+    &__page {
+        background-color: #ffffff;
+        width: 8.5in;
+        outline: 1px dashed #888888;
+        margin-left: 25%;
+        margin: .25in auto;
+    }
+
+    &__page-area {
+        width: 8.5in;
+        height: 11in;
+        float: left;
+        overflow: hidden;
+        outline: 1px dotted #888888;
+        position: relative;
+        padding-top: 1in;
+        padding-left: .75in;
+        padding-right: .5in;
+    }
+    
+    &__option-square {
+        border: solid 2px black;
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        display: inline-block;
+    }
+
+    &__font-header {
+        font-size: 24px;
+        font-weight: 800;
+        text-align: center;
+        padding-bottom: 30px;
+    }
+    
+    &__font-section {
+        font-size: 18px;
+        font-weight: 600;
+        padding-top: 20px;
+        padding-bottom: 18px;
+    }
+    
+    &__font-title-bold {
+        font-size: 14px;
+        font-weight: 600;
+        padding-bottom: 18px;
+    }
+    
+    &__font-title-normal {
+        font-size: 14px;
+        font-weight: 100;
+        display: inline-block;
+    }
+
+    &__field-name {
+        width: 5px;
+        display: inline;
+    }
+    
+    &__option-field {
+        width: 68px;
+        display: inline-block;
+    }
+}
+
+.printBtn{
+    position:fixed;
+    top:20px;
+}
+
+.form-button {
+    border-color: #0d6ba3;
+    background-color: #0F7BBB;
+    color: #FFF;
+    font-size: 14px;
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    position: absolute;
+    margin-left: .27in;
+    margin-top: .06in;
+}
+
+.page-content {
+}
+
+.page-content::after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+.pad-left-10 {
+    padding-left: 10px;
+}
+
+.pad-left-5 {
+    padding-left: 5px;
+}
+
+.pad-bottom-0 {
+    padding-bottom: 0px !important;
+}
+
+.margin-left-6 {
+    margin-left: 6px;
+}
+
+.patientRegForm__identifier-title {
+    position: absolute;
+    z-index: 99;
+    background-color: white;
+}
+
+
+@media screen {
+    .patientRegForm__identifier-title {
+        position: absolute;
+        z-index: 99;
+        background-color: white;
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+@media print {
+    .patientRegForm {
+        &__body {
+            background-color: transparent;
+            margin: 0;
+            padding-top: 0px;
+        }
+
+        &__page {
+            background-color: transparent;
+            outline: none;
+            page-break-after: always;
+            margin: 0;
+            padding:0;
+        }
+
+        &__font-header {
+            margin-top: -40px !important;
+        }
+
+        &__page-area {
+            padding-top: .75in;
+            outline: none;
+            height: 9.7in;
+            margin-bottom:.75in;
+        }
+            
+        &__field-name {
+            z-index:5;
+        }
+    
+    }
+    .printBtn {
+        display: none;
+    }
+
+    body{
+        padding:0;
+        margin:0;
+    }
+
+    .body-with-alert {
+         padding-top: 0 !important; 
+    }
+
+    .view-container{
+        padding:0;
+        margin:0;
+    }
+
+    .patientRegForm__identifier-title {
+        position: absolute;
+        z-index: 99;
+        background-color: white !important;
+        -webkit-print-color-adjust: exact;
+        display:inline;
+    }
+}

@@ -1,0 +1,98 @@
+<div class="docUploadWrapper">
+    <div class="docUpload">
+        <div class="form-row">
+            <div class="form-col-16">
+                <label class="control-label">{{'File' }} *</label>
+                <label class="btn btn-default btn-file" ng-if="!scanMode && !pasteMode">
+                    {{ 'Select file...'| translate  }}
+                    <input #selectFileInput type="file" name="file" class="fileInput" (change)="onSelectFile($event)" />
+                </label>
+                <button class="btn btn-default margin-left-5" (click)="toggleScanMode()" [disabled]="showLoading">
+                    {{ 'Scan...'| translate   }}
+                </button>
+                <button class="btn btn-default margin-left-5" (click)="togglePasteMode()" [disabled]="showLoading">
+                    {{ 'Paste Image...'| translate  }}
+                </button>
+                <div *ngIf="scanMode === true">
+                    <doc-scanner (scanSuccess)="scanSuccess()" (scanFailure)="scanFailure() "></doc-scanner>
+                </div>
+                <div *ngIf="pasteMode === true">
+                    <doc-paste-image (pasteSuccess)="onPasteSuccess($event)" [pasteActive]="pasteMode"></doc-paste-image>
+                </div>
+                <!-- input for paste or scan -->
+                <div *ngIf="selectedFile && selectedFile.scanComplete === true || selectedFile && pasteComplete === true" class="file">
+                    <input type="text" id="fileName" class="form-input search fileName" [(ngModel)]="selectedFile.name" (change)="onFileNameChange()"
+                           ng-readonly="scanMode !== true && pasteMode !== true" />
+                    <span class="fa fa-times remove" (click)="onRemoveFile()"></span>
+                    <div *ngIf="fileNameValidationMessage" class="message">
+                        <span class="error">{{ fileNameValidationMessage | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- input for file upload -->
+                <div *ngIf="selectedFile && selectedFile.name && selectedFile.scanComplete !== true && pasteComplete !== true" class="file">
+                    <input type="text" id="fileName" class="form-input search fileName" [(ngModel)]="documentName" (change)="onFileNameChange($event)"
+                           ng-readonly="false" />
+                    <span class="fa fa-times remove" (click)="onRemoveFile()"></span>
+                    <div *ngIf="fileNameValidationMessage" class="message">
+                        <span class="error">{{ fileNameValidationMessage | translate }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col-12" *ngIf="documentGroups">
+                <label class="control-label">{{'Document Group'| translate  }} *</label>
+                <kendo-dropdownlist
+                                    [data]="documentGroups"
+                                    [formControl]="selectedDocumentGroupId"
+                                    [textField]="'Description'"
+                                    (valueChange)="validateUpload()"
+                                    [valueField]="'DocumentGroupId'"
+                                    name="selectedDocumentGroupId"
+                                    [defaultItem]="{ Description: 'Select a Document Group', DocumentGroupId: null }"
+                                    [popupSettings]="{ animate:false }"
+                                    [valuePrimitive]="true"
+                                    [ngClass]="{'outline-red': !selectedDocumentGroupId.value && (selectedDocumentGroupId.touched || uploadPressed)}"
+                                    [disabled]="this.isTreatmentPlanDocument || this.isBulkPaymentEob"
+                >
+                </kendo-dropdownlist>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col-12" *ngIf="patTeeth">
+                <label class="control-label">{{'Tooth'| translate  }}</label>
+                <kendo-multiselect
+                                   [data]="patTeeth"
+                                   [textField]="'USNumber'"
+                                   [valueField]="'USNumber'"
+                                   [(ngModel)]="activeTeeth"
+                                   [valuePrimitive]="true"
+                                   [popupSettings]="{ animate: false }">
+                </kendo-multiselect>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="message">
+            <span class="error">{{validationMessage | translate }}</span>
+        </div>
+        <div class="message">
+            <span class="error" *ngIf="!selectedDocumentGroupId.value && (selectedDocumentGroupId.touched || uploadPressed)">{{'Please provide a document group.' | translate }}</span>
+        </div>
+    </div>
+    <div class="form-row" *ngIf="showLoading===true">
+        <i id="iDefaultMessage" class="fa fa-spinner fa-spin loading"></i>
+    </div>
+
+    <div class="form-footer">
+        <button class="btn btn-primary" (click)="cancelUpload($event)" [disabled]="showLoading">
+            {{'Cancel'| translate  }}
+        </button>
+        <button class="btn btn-primary" (click)="processUpload($event)" (mouseover)="uploadPressed = true" [disabled]="showLoading || enableSave===false">
+            {{'Upload'| translate  }}
+        </button>
+    </div>
+</div>

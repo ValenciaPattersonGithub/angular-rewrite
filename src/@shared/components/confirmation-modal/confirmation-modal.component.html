@@ -1,0 +1,33 @@
+<div class="app-modal">
+    <div id="modal-header" class="app-modal-header">
+        {{data.header}}
+    </div>
+    <div id="modal-message" class="app-modal-body">
+        <p>
+            {{data.message}}
+        </p>
+
+        <p *ngIf="data.message2" class="app-modal-text">
+            {{data.message2}}
+        </p>
+        <!-- optional bold text message -->
+        <p *ngIf="data.boldTextMessage" class="app-modal-bold-text">
+            {{data.boldTextMessage}}
+        </p>
+
+        <!-- optional message3 -->
+        <p *ngIf="data.message3" class="app-modal-text">
+            {{data.message3}}
+        </p>
+    </div>
+
+   
+    <div class="app-modal-footer">
+        <app-button id="btn_secondary" buttonLabel="{{data.cancel}}" *ngIf="data.cancel"
+                    variation="secondary"
+                    (onClick)="closeModal($event)" style="padding-right: 10px;"></app-button>
+        <app-button id="btn_primary" buttonLabel="{{data.confirm}}"
+                    variation="primary"
+                    (onClick)="confirmModal($event)"></app-button>
+    </div>
+</div>

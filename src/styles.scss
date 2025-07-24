@@ -1,0 +1,376 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "stylings/variables";
+
+// this allows for default setup for the overlay components
+// all can be customized however this is the start
+@import "~@angular/cdk/overlay-prebuilt.css";
+
+//Angular Material Styles
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+// Kendo stylesheets ========================
+// DO *NOT* import these into components - these stylesheets were from the beginning designed
+// to be used as global imports only, and if you import into components you will
+// explode out bundle sizes, build times and runtime style complexity.
+@import "~@progress/kendo-theme-default/scss/dropdownlist";
+@import 'kendoGrid';
+@import 'kendoTab';
+@import 'kendoDialog';
+
+/* global font Open Sans */
+
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/v1.0/Content/public/fonts/OpenSans-Light.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/v1.0/Content/public/fonts/OpenSans-Regular.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/v1.0/Content/public/fonts/OpenSans-Medium.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/v1.0/Content/public/fonts/OpenSans-SemiBold.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/v1.0/Content/public/fonts/OpenSans-Bold.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/v1.0/Content/public/fonts/OpenSans-ExtraBold.ttf) format("truetype");
+}
+/* end global font */
+
+/* set all fonts to Fuse approved font */
+body {
+  font-family: $global-font-family;
+  color: $text-black;
+}
+
+/* set global ::selection style */
+::selection {
+  background: $text-selection;
+}
+
+/* global label weight */
+label {
+  font-weight: bold !important;
+}
+
+.hide-header {
+  .top-header,
+  .feedback-container,
+  .walkme-player {
+    display: none !important;
+  }
+}
+
+.app-tooltip {
+  color: white;
+  background: black;
+  position: fixed;
+  .k-tooltip {
+    display: flex;
+  }
+  .k-callout {
+    color: black;
+  }
+}
+
+.app-tooltip-truncate {
+  color: white;
+  background: black;
+  position: fixed;
+  max-width: 60%;
+  z-index: 99999;
+  overflow-wrap: break-word;
+
+  .k-tooltip {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .k-callout {
+    color: black;
+  }
+}
+
+// global card component styles
+// card components are style-only, if that changes this should be moved to the appropriate component stylesheet(s).
+.card-container {
+  background-color: $white;
+  border-radius: 5px;
+  box-shadow: $global-drop-shadow;
+  padding: 15px;
+}
+
+.draggable-card {
+  //draggable class required to align drag handle
+  @extend .card-container;
+  display: grid;
+  grid-template: auto / 40px auto;
+  grid-template-areas: "dragHandle cardContent";
+  padding: 0; //override basic card padding to allow for drag handle
+
+  .drag-handle {
+    grid-area: dragHandle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $border-grey;
+    color: $action-blue;
+    cursor: grab;
+    &:hover {
+      color: $light-action-blue;
+    }
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .draggable-card-content {
+    grid-area: cardContent;
+  }
+}
+
+// tooltip styles
+// tooltip directive assigns a class based on the 'placement' parameter.
+// This parameter also includes setting as default or error styling.
+%tooltip-format {
+  position: absolute;
+  max-width: 250px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px 10px;
+  z-index: 1000;
+  opacity: 0;
+  box-shadow: $global-drop-shadow;
+}
+// format arrows
+%tooltip-top-format {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+}
+%tooltip-left-format {
+  content: "";
+  position: absolute;
+  top: calc(50% - 5px);
+  left: calc(100% + 5px);
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+}
+%tooltip-right-format {
+  content: "";
+  position: absolute;
+  top: calc(50% - 5px);
+  left: -5px;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+}
+// format variations
+%tooltip-error {
+  @extend %tooltip-format;
+  color: $polar-white;
+  background: $error-color;
+}
+%tooltip-default {
+  @extend %tooltip-format;
+  color: $polar-white;
+  background: $fuse-purple;
+}
+// TODO: this is not an approved tooltip style and needs to be removed and replaced.
+%tooltip-black {
+  @extend %tooltip-format;
+  color: $polar-white;
+  background: #000000;
+}
+//// concatenated direction and variation ////
+// error top
+.ng-tooltip-top-error {
+  @extend %tooltip-error;
+}
+.ng-tooltip-top-error::after {
+  @extend %tooltip-top-format;
+  border-color: $error-color transparent transparent transparent;
+}
+// default top
+.ng-tooltip-top {
+  @extend %tooltip-default;
+}
+.ng-tooltip-top::after {
+  @extend %tooltip-top-format;
+  border-color: $fuse-purple transparent transparent transparent;
+}
+// black top
+.ng-tooltip-top-black {
+  @extend %tooltip-black;
+}
+.ng-tooltip-top-black::after {
+  @extend %tooltip-top-format;
+  border-color: $fuse-purple transparent transparent transparent;
+}
+// error left
+.ng-tooltip-left-error {
+  @extend %tooltip-error;
+}
+.ng-tooltip-left-error::after {
+  @extend %tooltip-left-format;
+  border-color: transparent transparent transparent $error-color;
+}
+// default left
+.ng-tooltip-left {
+  @extend %tooltip-default;
+}
+.ng-tooltip-left::after {
+  @extend %tooltip-left-format;
+  border-color: transparent transparent transparent $fuse-purple;
+}
+// error right
+.ng-tooltip-right-error {
+  @extend %tooltip-error;
+}
+.ng-tooltip-right-error::after {
+  @extend %tooltip-right-format;
+  border-color: transparent $error-color transparent transparent;
+}
+// default right
+.ng-tooltip-right {
+  @extend %tooltip-default;
+}
+.ng-tooltip-right::after {
+  @extend %tooltip-right-format;
+  border-color: transparent $fuse-purple transparent transparent;
+}
+
+.ng-tooltip-show {
+  opacity: 1;
+  z-index: 1040;
+}
+patient-family-registration .mat-tab-labels :last-child.mat-tab-label {
+  min-width: 0 !important;
+  padding: 0 12px;
+  color: unset;
+  opacity: unset;
+}
+
+patient-family-registration .mat-tab-label {
+  color: #2dabcb;
+  opacity: unset;
+  min-width: 150px !important;
+  padding-right: 0px;
+  padding-left: 3px;
+}
+patient-family-registration .mat-tab-group.mat-primary .mat-ink-bar,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background: #27bfe6;
+}
+patient-profile-family-landing .mat-tab-header {
+  margin-left: 15px;
+}
+patient-profile-family-landing .mat-tab-label-container {
+  z-index: unset;
+}
+patient-profile-family-landing .mat-tab-label {
+  color: #2dabcb;
+  opacity: unset;
+  min-width: 80px !important;
+  padding-right: 0px;
+  padding-left: 3px;
+}
+
+.wait-overlay-backdrop {
+    background-color: #000000;
+    opacity: 0.6 !important;
+    background-size: cover;
+    position: fixed; 
+}
+
+patient-profile-family-landing .mat-tab-group.mat-primary .mat-ink-bar,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background: #27bfe6;
+}
+
+// originally from kendoDropdowns, added globally to fix all non-multiselect kendo dropdowns
+li.k-item > label.k-checkbox-label {
+  display: none;
+}
+
+.k-list .k-item {
+  background-color: $white;
+  border-bottom: 1px solid $multiselect-item-border;
+  display: flex;
+  align-items: center;
+
+  .k-checkbox:checked {
+    border-color: $multiselect-action;
+    color: $polar-white;
+    background-color: $multiselect-action;
+  }
+
+  &:hover {
+    border-radius: 0;
+    border: transparent;
+    background: $multiselect-action;
+    color: $white;
+
+    .k-checkbox:checked {
+      border-color: $white;
+      color: $multiselect-action;
+      background-color: $white;
+    }
+  }
+
+  &focus, &.k-state-focused {
+    box-shadow: none;
+    color: $text-black;
+  }
+}
+
+.k-list .k-item.k-state-selected,
+.k-list-optionlabel.k-state-selected {
+  background: $white;
+  color: $text-black;
+
+  &:hover {
+    border: transparent;
+    background: $multiselect-action;
+    color: $white;
+  }
+}
+
+.k-dropdown .k-dropdown-wrap {
+  background-color: $polar-white;
+}
+// end dropdowns

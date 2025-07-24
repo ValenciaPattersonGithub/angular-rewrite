@@ -1,0 +1,87 @@
+<div class="rowFull">
+    <div class="patient-overview">
+        <div class="patient_overview_primary">
+            <!--Patient pending Overview -->
+            <!--*ngIf="canViewAccountPendingEncounter" ToDo: Add this condition while migration-->
+            <!-- To Do : new-profile-section needs to be used in Patient-pending-encounter component once developed and actions should be handled from that component -->
+            <new-profile-section id="pendingEncounterSection" [baseId]="'PendingEncounter'"
+                [sectionTitle]="'Pending Encounters'">
+                <ng-container layout1>
+                    <patient-pending-encounter [patient]="patient?.Data"></patient-pending-encounter>
+                </ng-container>
+            </new-profile-section>
+
+            <!--Patient Appointments-->
+            <!--*ngIf="canViewAppointments" ToDo: Add this condition while migration-->
+            <!-- To Do : new-profile-section needs to be used in Patient-appointment component once developed and actions should be handled from that component -->
+            <new-profile-section [baseId]="'Appointments'" [sectionTitle]="'Appointments'">
+                <ng-container layout1>
+                    <patient-appointment [patient]="patient?.Data" showAppointments="All"></patient-appointment>
+                </ng-container>
+            </new-profile-section>
+
+            <!--Account Summary-->
+            <!--*ngIf="canViewAccount" ToDo: Add this condition while migration-->
+            <new-profile-section [baseId]="'AccountSummary'" [sectionTitle]="'Account Summary'"
+                [actions]="accountSummaryActions">
+                <ng-container layout1>
+                    <patient-account-summary [person]="person"></patient-account-summary>
+                </ng-container>
+            </new-profile-section>
+
+            <!--Clinical Summary-->
+            <new-profile-section [baseId]="'ClinicalSummary'" [sectionTitle]="'Clinical Summary'"
+                [actions]="clinicalSummmaryActions">
+                <ng-container layout1>
+                    <!-- *ngIf="canViewChart" ToDo: Add this condition while migration-->
+                    <div class="patient-odontogram">
+                        <odontogram-snapshot [personId]="patient?.Data?.PatientId"
+                            [patientDirectoryId]="patient?.Data?.DirectoryAllocationId"></odontogram-snapshot>
+                    </div>
+                    <!-- *ngIf="canViewPreventiveCare" ToDo: Add this condition while migration-->
+                    <div>
+                        <patient-preventive-care [person]="person"></patient-preventive-care>
+                    </div>
+                    <!-- *ngIf="canViewTreatmentPlansCount" ToDo: Add this condition while migration-->
+                    <div>
+                        <treatment-plans-count [person]="person"></treatment-plans-count>
+                    </div>
+                </ng-container>
+            </new-profile-section>
+        </div>
+
+        <div class="patient_overview_secondary">
+            <!--Alerts & Flags-->
+            <new-profile-section [baseId]="'PatAlerts'" [sectionTitle]="'Alerts & Flags'" [actions]="viewFlags">
+                <ng-container layout1>
+                    <patient-alert-flags [person]="person"></patient-alert-flags>
+                </ng-container>
+            </new-profile-section>
+
+            <!--About-->
+            <new-profile-section id="aboutSection" [baseId]="'About'" [sectionTitle]="'About'" [actions]="aboutActions">
+                <ng-container layout1>
+                    <sub-section [sectionTitle]="'Contact Info'">
+                        <!-- To Do - This needs to be migrated later as it is not in scope for now -->
+                        <!-- <patient-contact-info editing="false" [valid]="validPhones" [contactInfo]="contactInfo"
+                                [patient]="patient?.Data">
+                            </patient-contact-info> -->
+
+                        <!-- <patient-preferences [preferences]="patient?.Data" [patient]="patient?.Data" editing="false"></patient-preferences> -->
+                    </sub-section>
+
+                    <sub-section [sectionTitle]="'Account Members'">
+                        <patient-account-members
+                            *ngIf="patient?.Data?.PersonAccount && patient?.Data?.PersonAccount?.AccountId && patient?.Data?.PatientId"
+                            [accountId]="patient?.Data?.PersonAccount?.AccountId"
+                            [patientId]="patient?.Data?.PatientId"></patient-account-members>
+                    </sub-section>
+                </ng-container>
+            </new-profile-section>
+
+            <!-- Patient Documents -->
+            <!-- To Do - This needs to be migrated later as it is not in scope for now -->
+            <!-- <patient-documents ng-if="patient.Data.DirectoryAllocationId != null" id="patientDocuments" section-title="Documents" patient-directory-id="patient.Data.DirectoryAllocationId" patient-data="patient.Data"></patient-documents> -->
+        </div>
+    </div>
+</div>

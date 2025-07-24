@@ -1,0 +1,116 @@
+﻿.patientAcctInsPmt {
+
+    .standardHeader;
+
+    &__body {
+       
+    }
+
+    &__backBtn {
+        float:right;
+        padding-right:2%;
+    }
+
+    &__bckBtn {
+        .btn;
+        .btn-default;
+    }
+
+    &__grid {
+        .containerStandard;
+        padding-top: @brand-padding_horizontal;
+        padding-bottom: @brand-padding_horizontal;
+
+        .truncateText{
+            display: inline-block;
+            float: left;
+            width: 90%;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            -ms-text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+        }
+        .accountPayment {
+            width:120px;
+        }
+
+        .k-grid {
+            .k-grouping-row {       
+                > td {
+                    
+                        > p,
+                        > .k-reset {
+                        display: none;
+                    }
+                }
+                .k-group-custom-header {
+                    display:inline-block;
+                    position: relative;
+                    > table {
+                        .k-reset {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &__payment-type-error {
+        border: 1px solid #E43122;
+        margin: -1px;
+    }
+
+    &__amount-error {
+        border: 1px solid #E43122;
+    }
+
+    &__toolbar {
+        .containerStandard;
+        padding-bottom: @brand-heading_padding;
+        padding-top: @brand-padding_horizontal;
+
+        div {
+            
+            label {
+                display: block;
+                font-weight: @brand-font_heavy;
+            }
+            input {
+                display: inline-table;
+            }
+        }
+    }
+
+    .form-row {
+        max-width: 1600px;
+    }
+
+    &__actions {
+        .containerStandard;
+        
+
+        .btn {
+            float: right;
+            margin-left: @brand-margin_sm;
+        }
+        checkbox {
+            float: right;
+        }
+    }
+
+    .form-group {
+        margin-bottom: @brand-header_margin;
+        padding-bottom: @brand-heading_padding;
+        padding-right: @brand-padding_sm;
+    }
+
+    input[type=number].amountText { -moz-appearance: textfield; }
+    input[type=number].amountText::-webkit-inner-spin-button,
+    input[type=number].amountText::-webkit-outer-spin-button {
+    -webkit-appearance: none;  
+    margin: @brand-header_margin;
+    }
+}

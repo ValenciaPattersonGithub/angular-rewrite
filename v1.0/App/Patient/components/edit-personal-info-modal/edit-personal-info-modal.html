@@ -1,0 +1,11 @@
+﻿<div class="modal-body">
+    <personal-details-panel patient-data="patient" panel-title="Personal Details" 
+        phones="patient.Phones" set-focus-on-input="false" has-changes="hasChanges"></personal-details-panel>
+</div>
+<div class="modal-footer">
+    <div>
+        <button id="btnCancelNo" ng-click="cancelEditPersonalInfoSave();" class="btn btn-default">{{ 'Cancel' | i18n }}</button>
+        <button id="btnCancelYes" ng-click="saveEditPersonalInfo();" class="btn btn-primary" 
+            ng-disabled="saving || patient.Profile.IsValid===false ||hasChanges===false ">{{ 'Save' | i18n }}</button>
+    </div>
+</div>

@@ -1,0 +1,174 @@
+@import 'src/stylings/variables.scss';
+
+//ToDo: While code cleanup for angularjs page we can try to remove ngDeep from this file and check as many classes from less file overriding these classes.
+.appointmentsGridWidget {
+    height: 100%;
+
+    .appointmentsGridWidget__header {
+        height: 23%;
+        min-height: 65px;
+        width: 100%;
+        position: absolute;
+        margin-left: 1rem;
+    }
+
+    .appointmentsGridWidget__title {
+        display: flex;
+
+        .widget-handle {
+            display: inline;
+            margin-top: 1%;
+        }
+
+        ::ng-deep {
+            #appointmentWidgetCalendarInput {
+                visibility: visible !important; //Requried important as less file overriding this property
+                width: 10px;
+                display: inline-table;
+            }
+
+            .k-picker-wrap .k-icon {
+                cursor: pointer;
+                font: 26px/1 'WebComponentsIcons';
+                position: absolute;
+                right: 1px;
+            }
+
+            //to handle ellipsis position
+            .appointmentsMenu {
+                position: fixed;
+                right: 4rem;
+                margin-top: -4px;
+                z-index: 1;
+            }
+        }
+    }
+
+
+    .appointmentsGridWidget__filters {
+        line-height: 32px;
+        width: 96%;
+        position: absolute;
+        right: 5rem;
+
+        ::ng-deep .k-multiselect {
+            //Requried to handle multiselect width
+            width: 14.4em;
+        }
+
+        label {
+            padding-left: 3rem;
+        }
+
+    }
+
+    .appointmentsGridWidgetbody {
+        position: absolute;
+        margin-top: 14%;
+        width: auto;
+        margin-left: 1rem;
+
+        .fuseGrid {
+            padding: 0px;
+        }
+
+        .appointmentWidget__Status {
+            float: right;
+            margin-right: 8px;
+        }
+
+        //to handle grid header in white color
+        ::ng-deep .k-grid .k-grid-header {
+            border: none;
+            background-color: $polar-white;
+        }
+
+        //to handle word break in grid
+        ::ng-deep .k-grid .k-grid-content tr td {
+            padding: 0;
+            border: none;
+            border-bottom: 1px solid #DADCDC;
+            word-break: break-word;
+        }
+
+        ::ng-deep .k-grid-content {
+            height: 100%;
+            max-height: 190px;
+        }
+
+        /* Set the background color for odd rows */
+        ::ng-deep .k-grid tbody>tr:nth-child(odd) {
+            background-color: $gray-lightest;
+        }
+
+        /* Set the background color for even rows */
+        ::ng-deep .k-grid tbody>tr:nth-child(even) {
+            background-color: $polar-white;
+        }
+
+        ::ng-deep .k-cell-inner>.k-link>.k-icon.k-i-sort-desc-sm,
+        ::ng-deep .k-cell-inner>.k-link>.k-icon.k-i-sort-asc-sm {
+            display: none;
+        }
+
+        ::ng-deep .k-grid-norecords {
+            display: none;
+        }
+
+        //required to handle grid header padding
+        ::ng-deep .k-grid-header th.k-header {
+            padding-left: 0rem;
+        }
+
+        .appointmentWidgetNoteIcon {
+            color: #000;
+        }
+
+        .iconContainer {
+            display: inline-block;
+
+            .medicalAlert {
+                margin-right: -10px;
+            }
+
+            .allergyAlert {
+                margin-right: 10px;
+            }
+
+            .premedAlert {
+                margin-right: 14px;
+            }
+
+            .medicalAlertIcon__notificationBadge {
+                left: -10px;
+            }
+
+            .medicalAlertIcon__svgNotificationBadge {
+                left: 10px;
+            }
+
+            .fa {
+                color: #ff0000;
+            }
+
+            .fa.appointmentWidgetNoteIcon {
+                font-size: 20px;
+                color: $breadcrumbs-inactive;
+            }
+
+            .fi-allergies {
+                width: 30px;
+            }
+        }
+    }
+}
+
+//Using ng-deep to override the styles but this will only applicable to this html page .medicalAllergy-alert-tooltip class
+::ng-deep .medicalAllergy-alert-tooltip > .k-popup > .k-tooltip > .k-tooltip-content {
+    text-align: left;
+    font-size: 12px;
+}
+
+::ng-deep .note-tooltip > .k-popup > .k-tooltip > .k-tooltip-content {
+    font-size: 12px;
+}

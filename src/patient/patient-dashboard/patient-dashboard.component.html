@@ -1,0 +1,5 @@
+<div id="workArea">
+    <registration-header [isPatientHeader]="true" [patientProfile]="patient?.Data" (activeUrl)="activeUrl($event)"></registration-header>
+
+    <patient-overview *ngIf="activeUrlTab == templateUrl?.Overview" [person]="person" [serviceCodes]="serviceCodes"></patient-overview>
+</div>

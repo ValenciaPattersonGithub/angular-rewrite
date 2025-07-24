@@ -1,0 +1,6 @@
+<select id="inpPaymentType" class="default-select" name="selectPaymentType" 
+    [(ngModel)]="selectedPaymentTypeId" (change)="onPaymentTypeChange($event)" [disabled]="isDisabled">
+    <option value="0">{{ selectOption | translate}}</option>
+    <option [value]='paymentType.PaymentTypeId' *ngFor="let paymentType of accountPaymentTypes">{{paymentType.Description}}
+    </option>
+</select>

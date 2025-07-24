@@ -1,0 +1,119 @@
+@import "variables";
+
+.preference-header {
+    display: grid;
+    grid-template: 1fr / 50% 50%;
+    grid-template-areas: "title actionbuttons";
+    &-title {
+        font-family: $global-font-family;
+        font-size: 16px;
+        color: $patient-registration-title-color;
+        font-weight: bold;
+        grid-area: title;
+    }
+    &-actionButtons {
+        grid-area: actionbuttons;
+        justify-self: end;
+    }
+}
+.preference-detail-container {
+    padding: 15px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 5px;
+    hr {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border-top: 1px solid #2b144e;
+    }
+}
+.preferenceDetailContent {
+    display: grid;
+    column-gap: 10px;
+    position: relative;
+    grid-template: 1fr / 25% 30% 45%;
+    grid-template-areas:
+        "preferredalternatelocation"
+        "dentisthygienist"
+        "statementsfinancecharges"
+        "alertsgroups";
+    // 25% = 1st Column
+    // 30% = 2nd Column
+    // 45% = 3rd Column
+    // preferredalternatelocation = 1st Row
+    // dentisthygienist = 2nd Row
+    // statementsfinancecharges = 3rd Row
+    // alertsgroups = 4th Row
+    & * {
+        box-sizing: border-box;
+    }
+    & > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    &-preferred-location {
+        grid-area: preferredalternatelocation / 1;
+    }
+    &-alternate-location {
+        grid-area: preferredalternatelocation / 2;
+    }
+    &-preferred-dentist {
+        grid-area: dentisthygienist / 1;
+    }
+    &-preferred-hygienist {
+        grid-area: dentisthygienist / 2;
+    }
+    &-flags {
+        grid-area: alertsgroups / 1;
+    }
+    &-discount {
+        grid-area: preferredalternatelocation / 3;
+    }
+    &-groups {
+        grid-area: alertsgroups / 2;
+    }
+    &-statements {
+        grid-area: statementsfinancecharges / 1;
+    }
+    &-finance-charges {
+        grid-area: statementsfinancecharges / 2;
+    }
+}
+.alerts-info {
+    display: grid;
+    grid-template-columns: 10% 90%;
+    margin: 0px 0px 5px 0px;
+
+    &-sub-title {
+        font-family: $global-font-family;
+        font-size: 12px;
+        color: $label-black;
+        text-decoration: none solid $label-black;
+        line-height: 18px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+}
+.medical-info {
+    display: grid;
+    grid-template-columns: 10% 90%;
+    margin: 0px 0px 5px 0px;
+
+    &-title {
+        font-family: $global-font-family;
+        font-size: 12px;
+        color: $alert-red;
+        text-decoration: none solid rgb(85, 85, 85);
+        line-height: 18px;
+        font-weight: 600;
+    }
+}
+.fa-heart {
+    margin-top: 1px;
+    color: $alert-red;
+}
+::ng-deep {
+    .label {
+        font-size: 14px !important;
+    }
+}
+

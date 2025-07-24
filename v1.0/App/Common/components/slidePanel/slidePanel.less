@@ -1,0 +1,64 @@
+﻿.slidePanel {
+    position: fixed;
+    top: 51px;
+    bottom: 40px;
+    right: 0;
+    max-width: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    opacity: 0;
+    background-color: @brand-color_white;
+    z-index: 1001;
+    border-right: 5px solid @brand-color_primary;
+    box-shadow: -4px 0px 12px rgba(0,0,0,0.5);
+
+    &.marginTop {
+        margin-top: 11px;
+        z-index:99999;
+    }
+
+    &.marginTopExtra {
+        margin-top: 38px;
+    }
+
+    &.open {
+      max-width: 100%;
+      opacity: 1;
+    }
+
+    &__box {
+      padding: 0 10px;
+    }
+
+    &__header {
+      position: relative;
+      width: 600px;
+      h4 { margin-top: 0; }
+    }
+
+    &__close {
+      position: absolute;
+      top: 0;
+      right: -10px;
+    }
+
+    &__filteringMask {
+      background: none;
+      height: 100%;
+      position: absolute;
+      width: 100%;
+      z-index: 100;
+    }
+
+    &__filteringMessage {
+      font-weight: bold;
+      position: absolute;
+      right: 200px;
+      top: 7px;
+    }
+
+    &__body {
+        position: relative;
+        width: 600px;
+    }
+}

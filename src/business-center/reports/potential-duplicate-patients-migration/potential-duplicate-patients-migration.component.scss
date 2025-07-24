@@ -1,0 +1,29 @@
+.claim {
+    grid-template-columns: 1fr 1fr 1fr 1fr 3fr 1fr 1fr 1fr 1fr 1fr;
+} 
+ .grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+
+        margin-right: 7px;
+
+        &.claim {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+            &.locationInactive {
+                top:80px;
+            }
+            padding-left: 3px;
+        }
+        > div {
+        
+            padding: 5px;
+            align-items: center;
+            margin-left: -5px;
+        }
+      }
+  }

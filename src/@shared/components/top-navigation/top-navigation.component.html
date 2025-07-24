@@ -1,0 +1,75 @@
+<div id="mainLt"
+    class="main-lt col-sm-6">
+    <div id="businessTopBoardHeading"
+        class="topnavbar-heading">Business</div>
+</div>
+<div id="mainLt"
+    class="main-lt-market-place col-sm-6">
+    <div id="businessTopBoardPattersnMarket"
+        class="topnavbar-heading-pattersonmarket">
+        <a href="https://www.pattersondental.com/"
+            target="_blank"
+            class="topnavbar-marketplace">
+            <svg-icon name="basketIcon"
+                class="marketPlace"
+                iconHeight="20px"
+                iconWidth="20px"></svg-icon> Patterson Market Place</a>
+    </div>
+
+</div>
+<div class="topnavbar-header-quick-info col-sm-12">
+    <span style="font-weight: bold;margin-left: 20px;">{{dayDateDisplay}} | Welcome</span> {{displayName}}
+</div>
+<div class="topnavbar-mainmenu-container"
+    *ngIf="menuItems">
+    <ul class="topnavbar-dropdown">
+        <ng-container *ngFor="let menuItem of menuItems | search:{Disabled: 'false'}; index as i">
+            <li *ngIf="!menuItem.FeatureFlag || (menuItem.FeatureFlag | featureFlagEnabled | async) === true">
+                <a id="topMenuMenuItem{{i}}">
+                    <span [ngClass]="{'topnavbar-selected': menuItem.Selected}"
+                        (click)="menuClick(menuItem)">{{ menuItem.Text | translate }}</span>
+                    <span *ngIf="menuItem.SubMenuItems">
+                        <svg version="1.2"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            overflow="visible"
+                            preserveAspectRatio="none"
+                            viewBox="0 0 24 24"
+                            width="18"
+                            height="18">
+                            <g>
+                                <path xmlns:default="http://www.w3.org/2000/svg"
+                                    d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"
+                                    style="fill: rgb(45, 171, 203);"
+                                    vector-effect="non-scaling-stroke" />
+                            </g>
+                        </svg>
+                    </span>
+                </a>
+                <ul *ngIf="menuItem.SubMenuItems">
+                    <ng-container
+                        *ngFor="let subMenuItem of menuItem.SubMenuItems | search:{Disabled: 'false'}; index as j">
+                        <li *ngIf="!subMenuItem.FeatureFlag || (subMenuItem.FeatureFlag | featureFlagEnabled | async) === true"
+                            id="top-nav-sublink-{{i}}-{{j}}">
+                            <a (click)="menuClick(subMenuItem)">{{ subMenuItem.Plural | translate }}</a>
+                        </li>
+                    </ng-container>
+                </ul>
+            </li>
+        </ng-container>
+    </ul>
+</div>
+<div *ngIf="subMenuItems && subMenuItems.length>0"
+    class="topnavbar-submenu-container">
+    <ul class="topnavbar-sub-dropdown">
+        <ng-container *ngFor="let subMenuItem of subMenuItems | search:{Disabled: 'false'}; index as i">
+            <li *ngIf="!subMenuItem.FeatureFlag || (subMenuItem.FeatureFlag | featureFlagEnabled | async) === true">
+                <a>
+                    <span [ngClass]="{'top-subnavbar-selected': subMenuItem.Selected}"
+                        (click)="menuClick(subMenuItem)">{{ subMenuItem.Plural | translate }}
+                    </span>
+                </a>
+            </li>
+        </ng-container>
+    </ul>
+</div>

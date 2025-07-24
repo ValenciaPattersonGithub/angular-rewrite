@@ -1,0 +1,166 @@
+<div class="add_referral_box">
+    <div class="popup_heading">
+        {{title}}
+    </div>
+    <hr class="referral-type-crud-hr">
+    <form [formGroup]="addReferralType" (ngSubmit)="saveReferralType()" #addPaymentTypeForm="ngForm">
+        <div class="panel-body">
+            <div class="row">
+                <p *ngIf="isPracticeSelected && !isFormModified" style="color: red;"><span class="glyphicon error glyphicon-exclamation-sign"></span> Please make at least one change to save the affiliate.</p>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label practice-label">{{'Practice Name*' | translate }}</label>
+                    <p class="search-header">(Please enter either the Practice Name OR the Provider's Full Name)</p>
+                    <!-- <input id="practiceName" formControlName="practiceName" class="form-control fuse_input"
+                        autocomplete="off" type="text" placeholder="{{'Practice Name' | translate }}" maxlength="100" /> -->
+                    <kendo-autocomplete id="practiceName" formControlName="practiceName" class="form-control fuse_input"
+                        [data]="practiceList" valueField="practiceAffiliateIdMasked" textField="name" valuePrimitive="true" style="width: 467px;" kendoDropDownFilter
+                        [filterable]="true" (filterChange)="getPractices($event)"
+                        placeholder="{{'' | translate }}" (valueChange)="practiceValueChange($event)"
+                        (close)="closeAutoComplete()">
+                        <ng-template kendoAutoCompleteNoDataTemplate>
+                        </ng-template>
+                        <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                            <div class="practice-ac-item">
+                                {{dataItem.name}}{{dataItem.firstName ? ', ' + dataItem.firstName : ''}}{{dataItem.lastName ? ', ' + dataItem.lastName : ''}}{{dataItem.emailAddress ? ', ' + dataItem.emailAddress : ''}}{{dataItem.phone ? ', ' + formatPhoneNumber(dataItem.phone) : ''}}{{dataItem.address1 ? ', ' + dataItem.address1 : ''}}{{dataItem.address2 ? ', ' + dataItem.address2 : ''}}{{dataItem.city ? ', ' + dataItem.city : ''}}{{dataItem.state ? ', ' + dataItem.state : ''}}{{dataItem.zipCode ? ', ' + dataItem.zipCode : ''}}
+                            </div>
+                        </ng-template>
+                    </kendo-autocomplete>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'First Name' | translate }}
+                    </label>
+                    <input id="firstName"
+                        formControlName="firstName" class="form-control fuse_small_input fuse_x_small_input"
+                        autocomplete="off" type="text" placeholder="{{'First Name' | translate }}" maxlength="100" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'Middle Name' | translate }}
+                    </label>
+                    <input id="middleName" formControlName="middleName"
+                        class="form-control fuse_small_input fuse_x_small_input" autocomplete="off" type="text"
+                        placeholder="{{'Middle Name' | translate }}" maxlength="100" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'Last Name' | translate }}
+                    </label>
+                    <input id="lastName"
+                        formControlName="lastName" class="form-control fuse_small_input fuse_x_small_input"
+                        autocomplete="off" type="text" placeholder="{{'Last Name' | translate }}" maxlength="100" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'Phone' | translate }}
+                    </label>
+                    <input id="phone" formControlName="phone"
+                        class="form-control fuse_input" autocomplete="off" type="text"
+                        placeholder="{{'Phone' | translate }}" mask="(000) 000-0000" [showMaskTyped]="true"
+                        [clearIfNotMatch]="false" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'Email' | translate }}
+                    </label>
+                    <input id="email" formControlName="email"
+                        class="form-control fuse_input" autocomplete="off" type="text"
+                        placeholder="{{'Email' | translate }}" maxlength="50" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'Address 1' | translate }}
+                    </label>
+                    <input id="address1" formControlName="address1" class="form-control fuse_input" autocomplete="off"
+                        type="text" placeholder="{{'Address 1' | translate }}" maxlength="250" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">{{'Address 2' | translate }}</label>
+                    <input id="address2" formControlName="address2" class="form-control fuse_input" autocomplete="off"
+                        type="text" placeholder="{{'Address 2' | translate }}" maxlength="250" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'City' | translate }}
+                    </label>
+                    <input id="city" formControlName="city" class="form-control fuse_input_xs" autocomplete="off"
+                        type="text" placeholder="{{'City' | translate }}" maxlength="64" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'State' | translate }}
+                    </label>
+                    <state-list ngDefaultControl [stateListId]="'inpRemitInsToState'"
+                        class="form-control fuse_select_small" formControlName="state">
+                    </state-list>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        {{'Zip Code' | translate }}
+                    </label><input id="zipcode" formControlName="zipCode" minlength="5" autocomplete="new-ZipCode"
+                        placeholder="Zip Code" type="text" class="form-control fuse_input_xs" minlength="5"
+                        maxlength="10" mask="00000-0000" OnlyNumber NumberType="zipCode" [validation]="false">
+                </div>
+            </div>
+            <div class="row" *ngIf="editReferralType != null">
+                <div class="form-group status-label">
+                    <label class="control-label">{{'Active Status' | translate }}</label>
+                    <app-toggle ngDefaultControl id="checkBoxStatus" label="{{setActive}}" labelDirection="right"
+                        [isChecked]="addReferralType.controls.status.value" formControlName="status"
+                        (toggled)="toggleStatus($event)">
+                    </app-toggle>
+                </div>
+            </div>
+        </div>
+        <div class="add_referral_footer">
+            <span class="lbl_reequired">*<span class="required_text">{{'Required' | translate }}</span></span>
+            <div class="btn-toolbar">
+                <button class="btn btn-default" (click)="CancelAddReferralType()" type="button">{{'Cancel' | translate
+                    }}</button>
+                <button class="btn btn-primary fuse_button fuse_submit_button" type="submit" [disabled]="addReferralType.invalid || (isPracticeSelected && !isFormModified)">
+                    {{'Save' | translate }}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Available Referral Affiliate</b></h4>
+            </div>
+            <div class="modal-body">
+                <h4 style="font-size: 16px; color: red; font-weight: bold;"><span class="glyphicon error glyphicon-exclamation-sign"></span> {{this.f.practiceName.value}} already exists.</h4>
+                <p><b>Are you sure you want to duplicate this affiliate?</b></p>
+                <p>To avoid duplication, please enter a different 'Practice Name', or alternate info like email, phone number or address. </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                    (click)="closeDuplicateModal()">
+                    Back to Edit
+                </button>
+                <button type="button" class="btn btn-primary fuse_button fuse_submit_button"
+                    (click)="saveDuplicateAffiliate()">
+                    Yes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

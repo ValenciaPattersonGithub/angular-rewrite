@@ -1,0 +1,104 @@
+﻿<div id="viewClaimsContainer">
+    <a ng-show="encounterClaimsList.length == 0"
+       class="margin-left-5 col-md-12"
+       ng-class="{ 'disabled': true }"
+       title="{{'No Claim' | i18n}}">
+        {{'View Claim' | i18n }}
+    </a>
+    <a ng-show="encounterClaimsList.length == 0"
+       class="margin-left-5 col-md-12"
+       ng-class="{ 'disabled': true }"
+       title="{{'No Claim' | i18n}}">
+        {{'Claim Notes' | i18n }}
+    </a>
+    <a ng-show="(encounterClaimsList.length == 1 && encounterClaimsList[0].TransactionType == undefined)"
+       class="margin-left-5 col-md-12"
+       ng-click="previewPdf(encounterClaimsList[0])">
+        {{'View Claim ' | i18n }} ({{encounterClaimsList[0].PlanName}})
+    </a>
+    <a class="margin-left-5 col-md-12" ng-show="(encounterClaimsList.length == 1 && encounterClaimsList[0].TransactionType == undefined && encounterClaimsList[0].TransactionTypeId == 1)"
+       ng-click="openClaimNotes(encounterClaimsList[0])">
+        {{'Claim Notes' | i18n}}
+    </a>
+
+    <a ng-show="(encounterClaimsList.length == 1 && encounterClaimsList[0].TransactionType == 'Account Note')"
+       class="margin-left-5 col-md-12"
+       ng-click="previewPdf(encounterClaimsList[0])">
+        {{optionTitle}} {{claimStatus(encounterClaimsList[0].Status)}}
+    </a>
+    <a ng-show="encounterClaimsList.length > 1"
+       id="viewMultipleClaimLink"
+       class="btn btn-link margin-left-5"
+       uib-popover-template="'viewClaimsPopup.html'"
+       popover-placement="left"
+       popover-trigger="click"
+       popover-is-open="isClaimsMenuOpen"
+       ng-click="toggleClaimsView($event)">
+        {{'View Claims ' | i18n }} ({{encounterClaimsList.length}})
+    </a>
+
+    <script type="text/ng-template" id="viewClaimsPopup.html">
+        <div ng-click="$event.stopPropagation()"
+             ng-mouseleave="closePopover()">
+            <div class="view-claims-popup-header row">
+                <div class="col-md-2"><strong>Plan Name</strong></div>
+                <div class="col-md-2 center"><strong>Notes</strong></div>
+                <div class="col-md-2"><strong>Priority</strong></div>
+                <div class="col-md-3"><strong>Amount Submitted</strong></div>
+                <div class="col-md-3"><strong>Status</strong></div>
+            </div>
+            <div ng-repeat="claim in encounterClaimsList | orderBy: 'PatientBenefitPlanPriority' track by $index" class="view-claims-popup-body row">
+                <div class="col-md-2">
+                    <a style="padding:0;" ng-click="previewPdf(claim)">{{claim.PlanName}}</a>
+                </div>
+                <div class="col-md-2 center"><span ng-click="openClaimNotes(claim)"><i class="far fa-file-alt icon-click color-blue size-h4 cursor-pointer"></i></span></div>
+                <div class="col-md-2">{{claim.PatientBenefitPlanPriority | priorityLabel}}</div>
+                <div class="col-md-3">{{claim.TotalFee | currency}}</div>
+                <div class="col-md-3">{{claimStatus(claim.Status)}}</div>
+            </div>
+        </div>
+    </script>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

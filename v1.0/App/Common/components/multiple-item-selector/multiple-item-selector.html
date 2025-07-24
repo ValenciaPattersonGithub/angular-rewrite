@@ -1,0 +1,26 @@
+﻿<div class="multipleItemSelector">
+    <soar-select-list id="multiItemSelector{{displayName}}"
+                      name="multiItemSelector{{displayName}}"
+                      placeholder="{{placeholderText}}"
+                      text-field="Text"
+                      value-field="Value"
+                      option-list="fullList"
+                      ng-model="selectedItemValue"
+                      disable-input="loadingStatus.fullListLoaded === false"></soar-select-list>
+    <div class="multipleItemSelector__controls">
+        <span ng-hide="fullList.length === 0 && loadingStatus.fullListLoaded === true && loadingStatus.selectedItemsLoaded === true">
+            <a id="multiItemSelectorAdd{{displayName}}" class="btn btn-link" ng-click="addItemToSelectedItemsList(selectedItemValue)" ng-disabled="!selectedItemValue">{{addLinkText}}</a>|
+            <a id="multiItemSelectorSelectAll{{displayName}}" class="btn btn-link" ng-click="selectAll()">{{ 'Select All' | i18n }}</a>
+        </span>
+    </div>
+    <div ng-show="loadingStatus.selectedItemsLoaded === false">
+        <no-results loading="loadingStatus.selectedItemsLoaded === false"></no-results>
+    </div>
+    <div class="multipleItemSelector__content" ng-show="loadingStatus.selectedItemsLoaded === true && selectedItems.length > 0">
+        <ul class="multipleItemSelector__list">
+            <li id="multiItemSelectorRemove{{displayName}}{{$index}}" ng-repeat="item in selectedItems" ng-click="removeItemFromSelectedItemsList(item)">
+                {{item.Text}}
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿.delIns {
+    .standardHeader;
+    &__header {
+        .containerStandard;
+        padding-top: 0;
+    }
+    &__body {
+        .containerStandard;
+    }
+    &__form {
+        padding: @brand-padding_md;
+        background-color: @brand-color_white;
+    }
+
+    &__bckBtn {
+        .btn;
+        .btn-default;
+    }
+    &__actions {
+        .containerStandard;
+
+        .btn {
+            float: right;
+            margin-left: @brand-margin_sm;
+        }
+        checkbox {
+            float: right;
+        }
+    }
+    &__formAgg {
+        .control-label {
+            text-align: right;
+            margin-top: @brand-margin_sm;
+        }
+
+        .form-row:last-child {
+
+            .form-group {
+                padding-top: @brand-margin_md;
+                border-top: @brand-border;
+            }
+        }
+    }
+    &__patientName {
+        font-weight: bold;
+        padding-bottom: 10px;
+    }
+}

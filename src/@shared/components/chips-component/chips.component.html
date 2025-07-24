@@ -1,0 +1,8 @@
+<div class="chips" [ngClass]="variation" *ngIf="!IsRemoved">
+    <div title="{{chipsText}}" class="chips-content">
+        {{chipsText}}
+    </div>
+    <svg-icon class="chips-remove-icon" name="closeIcon" iconHeight="20px" role="button" (click)="remove($event)"
+    *ngIf="showIcon"
+    iconWidth="20px" id="rp-clear-icon"></svg-icon>
+</div>

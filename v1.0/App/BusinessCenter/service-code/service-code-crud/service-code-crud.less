@@ -1,0 +1,126 @@
+﻿.srvcCodeCrud {
+
+    .btn-link {
+        white-space: normal;
+    }
+
+    .span-text {
+        display: inline-block;
+        margin-bottom: 0;
+        padding-top: 7px;
+        text-align: right;
+    }
+    &__header{
+        .containerStandard;
+        .clearfix;
+        padding-top: 0px;
+        padding-bottom:@brand-padding_horizontal;
+        .keepTop{
+                position:fixed;
+                background-color:white;
+                width:96%;
+                z-index:1001;
+                max-width: 1600px;
+                top: @brand-header_height;
+        }
+        .headerborder{
+            border-left: @brand-snf_nav_actions_border;
+            border-right: @brand-snf_nav_actions_border;
+            border-bottom: @brand-snf_nav_actions_border;
+            border-top: @brand-snf_nav_actions_border;
+            border-bottom-left-radius: @brand-snf_border_radius;
+            border-bottom-right-radius: @brand-snf_border_radius;     
+            border-top-left-radius: @brand-snf_border_radius;
+            border-top-right-radius: @brand-snf_border_radius;     
+            padding: @brand-snf_nav_actions_padding;
+            .clearfix;
+        }
+        .headertitle{
+            display: inline-block;
+            float: left;
+
+            h1 {
+                font-size: @brand-font_h1;
+                margin: 0;
+                padding-top: @brand-padding_horizontal;
+                padding-bottom: @brand-padding_horizontal;
+            }
+
+        }
+    }
+
+    &__title {
+        display: inline-block;
+        float: left;
+
+        h1 {
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_sm;
+            padding-bottom: @brand-padding_sm;
+        }
+    }
+    
+    &__body {
+        .containerStandard;
+        .clearfix;
+        padding-top: 0;
+    }
+
+
+    &__btn {
+        float: left;
+        padding-bottom: @brand-padding_sm;
+        padding-right: @brand-padding_sm;
+    }
+
+    &__chartIcon {
+        height: 200px;
+    }
+    &__noSidePadding{
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .onoffswitch-label{
+        margin-bottom: 0px;
+        &.not-allowed{
+            cursor: not-allowed;
+        }
+    }
+    .svc-code-cat{
+        .svc-code-body{
+            padding-right: 0px;
+            background-color: @brand-color_dark-gray;
+        }
+        .svc-code-primary{
+            margin-top:16px;
+            margin-bottom:16px;
+            padding-right:8px;
+            width:91.67% !important;
+            .body{
+                display:block;
+            }
+            .service-grid-scroll{
+                max-height:160px;
+                overflow-y:scroll;
+                overflow-x:hidden;
+            }
+        }
+
+    }
+    .warning-inactivate-service {
+        background-color: #f7b82d;
+
+        i {
+            float:left;
+            padding-top: 12px;
+            margin-right: 4px;
+        }
+        .panel-title {
+            width: 100%;
+        }
+        #inpInactivationRemoveReferences {
+            transform: scale(1.5);
+        }
+    }
+}

@@ -1,0 +1,157 @@
+﻿<!-- <business-nav></business-nav> -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div id="formDiv" class="feeSchedEdit" ng-form="frmFeeSchdl">
+    <div class="rowFull white">
+        <div class="feeSchedEdit__header">
+            <div id="lbladdFeeSchedule" class="feeSchedEdit__title">
+                <h1>
+                    <span ng-hide="editing == true || IsCopy == true">{{ 'Add a {0}' | i18n:['Fee Schedule'] }}</span>
+                    <span id="lblFeeSchdNm" ng-show="editing == true">{{ feeScheduleName }}{{' Fee Schedule' | i18n }}</span>
+                    <span id="lblFeeSchdNm" ng-show="IsCopy">{{ feeScheduleName }}</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="rowFull">
+        <div class="feeSchedEdit__body">
+            <div class="feeSchedEdit__form">
+                <div class="feeSchedEdit__fieldset">
+                    <div keep-top>
+                        <div class="form-row">
+                            <div class="form-group form-col-6" ng-class="{error: ((hasErrors && !frmFeeSchdl.inpFeeSchdlName.$valid) || duplicateFeeScheduleName)}">
+                                <label class="control-label">{{'Fee Schedule Name ' | i18n }}*</label>
+                                <input id="inpFeeSchdlName" tabindex="12" maxlength="64" class="form-control" name="inpFeeSchdlName" type="text" ng-model="feeScheduleName" required ng-blur="checkForDuplicates()" set-focus />
+                                <span id="lblFeeScheduleNameRequired" class="help-text " ng-show="hasErrors && !frmFeeSchdl.inpFeeSchdlName.$valid">
+                                    {{ 'This field is required.' | i18n }}
+                                </span>
+                                <span id="lblFeeScheduleNameDuplicate" class="help-text " ng-show="duplicateFeeScheduleName">
+                                    {{ uniqueFeeScheduleServerMessage }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-10 form-group">
+                                <soar-select-list class="col-xs-2 no-padding-left feeSchedEdit__serviceType-select-list"
+                                                  id="ddServiceTypes"
+                                                  name="selectList"
+                                                  placeholder="{{'Show All Service Types' | i18n}}"
+                                                  option-list="serviceTypes"
+                                                  text-field="Description"
+                                                  value-field="ServiceTypeId"
+                                                  ng-model="selectedServiceType">
+                                </soar-select-list>
+                                <div class="col-xs-5">
+                                    <div class="feeSchedEdit__frm">
+                                        <input class="col-xs-6 feeSchedEdit__frmInput" id="inpSearchServiceCodes"
+                                               placeholder="{{'Search Fees by Services' | i18n }}" type="text" ng-model="searchServiceCodesKeyword" ng-model-options="{ debounce: 1000 }" tabindex="16" />
+                                        <span id="lblFeedback" class="feeSchedEdit__frmSpan border-solid-black"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <button ng-disabled="locations.length < 2" class="btn btn-primary" ng-click="addNewColumn()">{{ '+ Add Location Column' | i18n }}</button>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <button id="btnCancel" ng-click="cancel();" class="btn btn-default" tab-index="1">{{ 'Cancel' | i18n }}</button>
+                                <button id="btnSave" class="btn btn-primary" ng-click="save()" tab-index="1" check-auth-z="{{editing?'soar-ins-ifsch-edit':'soar-ins-ifsch-add'}}">{{ 'Save' | i18n }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="serviceCodeGridDisplayData && serviceCodeGridDisplayData.length && serviceCodeGridDisplayData.length > 0">
+                        <div class="text-bottom" ng-class="{'col-sm-9': LocationGroups.length == 1, 'col-sm-8': LocationGroups.length > 1 }">
+                            <div class="row">
+                                <div class="col-xs-2 dataColumn cell sortCursor bold" ng-click="changeGridSorting('Code')">{{'Service Code' | i18n }}<span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.column == 'Code'"></span></div>
+                                <div class="col-xs-2 dataColumn cell sortCursor bold" ng-click="changeGridSorting('CdtCodeName')">{{'CDT Code' | i18n }}<span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.column == 'CdtCodeName'"></span></div>
+                                <div class="dataColumn cell sortCursor bold" ng-click="changeGridSorting('Description')" ng-class="{'col-xs-6' : LocationGroups.length > 1, 'col-xs-4': LocationGroups.length <= 1}">{{ 'Description' | i18n }}<span class="fa fas fa-lg" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.column == 'Description'"></span></div>
+                                <div class="col-xs-2 dataColumn cell text-align-center bold">
+                                    {{'Managed Care' | i18n}}
+                                    <input type="checkbox" id="inpManagedAll" ng-click="ToggleIsManagedCare()" ng-checked="IsManagedCareAll" />
+                                </div>
+                                <div class="col-xs-2 dataColumn cell sortCursor bold" ng-if="LocationGroups.length == 1" ng-click="changeGridSorting('LocationFee')">{{ 'Location Fee' | i18n }}<span class="fa fas fa-lg" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.column == 'LocationFee'"></span></div>
+                            </div>
+                        </div>
+                        <div id="allowed-amount-header" class="text-bottom" ng-class="{'col-sm-2': LocationGroups.length == 1, 'col-sm-4': LocationGroups.length > 1}">
+                            <div class="row">
+                                <div class="col-xs-1 allowed-amount-column" ng-repeat="group in LocationGroups">
+                                    <select class="form-control"
+                                            ng-if="locations && locations.length > 1"
+                                            ng-change="updateGroup(group)"
+                                            ng-model="group.selectorValue">
+                                        <option value="">Location</option>
+                                        <option ng-repeat="item in allowedLocations" value="{{item.LocationId}}">{{item.NameLine1}}</option>
+                                    </select>
+                                    <div  ng-if="locations && locations.length > 1">
+                                        <div class="row tags" ng-disabled="!location.CanEdit" ng-class="{'disabled': !location.CanEdit}">
+                                            <span ng-repeat="location in group.Locations">
+                                                <tag title="{{ location.NameLine1 }}" is-Primary="true" remove-function="removeLocation(group, location.LocationId)" hide-Remove="!location.CanEdit"></tag>
+                                            </span>
+                                        </div>
+                                        <div ng-if="group.Locations.length === 0 && !loading" class="error location-select-error">
+                                            {{'Select at least one location to use this allowed amount' | i18n }}
+                                        </div>
+                                        <div ng-if="group.missingAmount" class="error location-select-error">
+                                            {{'Must associate at least one service code with this Allowed Amount' | i18n }}
+                                        </div>
+                                    </div>
+                                    <span class="bold">{{ 'Allowed Amount' | i18n }}&nbsp;</span><i id="btn{{baseId}}Remove" class="fa fa-times-circle remove-column-icon" ng-class="{'disabled': !group.CanEdit}" ng-if="LocationGroups.length > 1" ng-disabled="group.CanEdit" ng-click="removeGroup(group)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1 text-bottom" ng-if="LocationGroups.length == 1">
+                            <div class="row">
+                                <div class="col-xs-2 dataColumn cell sortCursor bold" ng-click="changeGridSorting('Difference')">{{ 'Difference' | i18n }}<span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.column == 'Difference'"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row details-row" ng-if="serviceCodeGridDisplayData && serviceCodeGridDisplayData.length && serviceCodeGridDisplayData.length > 0">
+                        <div class="service-row-col" ng-class="{'col-sm-9': LocationGroups.length == 1, 'col-sm-8': LocationGroups.length > 1 }">
+                            <div class="row body service-row" ng-repeat="row in serviceCodeGridDisplayData | orderBy:orderBy.column:!orderBy.asc">
+                                <div class="col-sx-12">
+                                    <div class="inner-row" >
+                                        <div class="col-xs-2 dataColumn cell service-row-column-padding">{{row.Code}}</div>
+                                        <div class="col-xs-2 dataColumn cell service-row-column-padding">{{row.CdtCodeName}}</div>
+                                        <div class="dataColumn cell" ng-class="{'col-xs-6' : LocationGroups.length > 1, 'col-xs-4': LocationGroups.length <= 1, 'service-row-column-padding': LocationGroups.length > 1}">{{row.Description.length > 65 ? (row.Description | truncate:65) + '...' : row.Description }}</div>
+                                        <div class="col-xs-2 dataColumn cell text-align-center service-row-column-padding">
+                                            <input type="checkbox" id="inpManaged" ng-model="row.IsManagedCare" isChecked="{{row.IsManagedCare}}" typeof="bool" />
+                                        </div>
+                                        <div ng-if="LocationGroups.length == 1" class="col-xs-2 dataColumn cell service-row-column-padding">{{row.LocationFee | currency}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="allowed-amount-body" ng-class="{'col-sm-2': LocationGroups.length == 1, 'col-sm-4': LocationGroups.length > 1}">
+                            <div class="row body" ng-repeat="row in serviceCodeGridDisplayData | orderBy:orderBy.column:!orderBy.asc ">
+                                <div class="col-sx-12 allowed-amount" ng-repeat="group in row.ServiceGroupDetails">
+                                    <input class="form-control text-align-right" id="inpAmount" ng-disabled="!group.CanEdit" model-format="currency" ng-model="group.AllowedAmount" min="0" max="999999.99" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1 white service-row-col" ng-if="LocationGroups.length == 1">
+                            <div class="row body service-row" ng-repeat="row in serviceCodeGridDisplayData | orderBy:orderBy.column:!orderBy.asc">
+                                <div class="col-sx-12">
+                                    <div class="inner-row">
+                                        <div class="col-xs-2 dataColumn cell service-row-column-padding">
+                                            {{serviceAmtForRow(row) | currency}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row scroller-row" ng-show="serviceCodeGridDisplayData && serviceCodeGridDisplayData.length && serviceCodeGridDisplayData.length > 1 && LocationGroups.length > 2">
+                        <div ng-class="{'col-sm-7': LocationGroups.length == 1, 'col-sm-8': LocationGroups.length > 1 }"></div>
+                        <div id="allowed-amount-scroller" class="col-sm-4">
+                            <div class="row">
+                                <div class="col-xs-1 placeholder" ng-repeat="group in LocationGroups">
+                                    <div>placeholder</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1" ng-if="LocationGroups.length == 1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

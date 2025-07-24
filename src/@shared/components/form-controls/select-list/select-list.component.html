@@ -1,0 +1,17 @@
+﻿<div class="select-list-wrapper" [ngClass]="{'label-left' : labelDirection=='left'}">
+    <app-label class="fui-select-label" ng-if="label" [label]="label" [fieldId]="fieldId"></app-label>
+    <div class="fui-select-container" [ngClass]="{
+                                            'default': size == 'default',
+                                            'xsmall': size == 'xsmall',
+                                            'small': size == 'small',
+                                            'medium': size == 'medium',
+                                            'large': size == 'large',
+                                            'auto': size == 'auto',
+                                            'disabled': isDisabled}">
+        <select [id]="fieldId" class="fui-select" [ngClass]="{'haserror':hasError}" [(ngModel)]=value [disabled]=isDisabled (change)='onSelection($event)'>
+            <option value="" disabled selected hidden>{{ placeholder }}</option>
+            <option *ngFor="let item of listItems" value="{{ item.value }}">{{ item.text }}</option>
+        </select>
+    </div>
+</div>
+

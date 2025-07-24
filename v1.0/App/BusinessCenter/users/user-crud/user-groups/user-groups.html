@@ -1,0 +1,199 @@
+﻿<!--groups section header-->
+<div class="panel">
+    <div class="panel-heading">
+        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+            <h4 class="panel-title">
+                {{ 'Groups' | i18n }}
+                <button ng-click="userGroupsSectionOpen = !userGroupsSectionOpen" class="pull-right icon-button fa fa-lg" ng-class="{'fa-minus': userGroupsSectionOpen, 'fa-plus': !userGroupsSectionOpen}" id="btnToggleUserGroups" data-toggle="collapse" data-target="#userGroups"></button>
+            </h4>
+        </div>
+    </div>
+    <div id="userGroups" class="panel-body">
+        <div class="row">
+            <div ng-form="userGroupsFrm">
+
+                <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                    <div class="clearfix">&nbsp;</div>
+
+                    <!-- Department  -->
+                    <!--<div class="row">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                            <label class="label form-label-newer">{{'Department' | i18n }} </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+                            <div ng-class="{error: userGroupsFrm.inpDepartmentType.$invalid}">
+                                <soar-select-list id="inpDepartmentType"
+                                                  name="inpDepartmentType"
+                                                  placeholder="{{ 'Select {0}' | i18n:['Department'] }}"
+                                                  text-field="Name"
+                                                  value-field="DepartmentId"
+                                                  option-list="departmentTypes"
+                                                  ng-model="user.DepartmentId"></soar-select-list>
+
+                                <label id="lblDepartmentTypeInvalid" class="help-text" ng-show="userGroupsFrm.inpDepartmentType.$error.comboBox">
+                                    {{ 'This entry is invalid.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>-->
+
+                    <div class="clearfix">&nbsp;</div>
+
+                    <!-- Provider Type k-value sets default -->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                            <label class="label form-label-newer">{{ 'Provider {0}' | i18n:['Type'] }} </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-md-3 col-lg-3">
+                            <!--placeholder="{{ 'Select {0}' | i18n:['Provider'] }}"-->
+                            <div ng-class="{error: userGroupsFrm.inpProviderType.$invalid}" ng-mouseover="setProviderLoaded()">
+                                <soar-select-list id="inpProviderType"
+                                                  placeholder="{{'Select a {0}' | i18n:['Provider']}}"
+                                                  name="inpProviderType"
+                                                  text-field="Name"
+                                                  value-field="Id"
+                                                  option-list="providerTypes"
+                                                  sb-change="providerTypeIdChanged"
+                                                  ng-model="user.ProviderTypeId"></soar-select-list>
+                                                  
+                                <label id="lblProviderTypeInvalid" class="help-text" ng-show="userGroupsFrm.inpProviderType.$error.comboBox">
+                                    {{ 'This entry is invalid.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+                        <div ng-show="displayProviderQualifier">
+                            <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                                <label class="label form-label-newer">{{ 'Employment {0}' | i18n:['Status'] }} </label>
+                            </div>
+                            <radiogroup unique-id="inpProviderQualifier"
+                                        value="ProviderQualifier"
+                                        options="providerQualifierOptions"
+                                        labels="providerQualifierLabels"
+                                        change-function="providerQualifierChanged()">
+                            </radiogroup>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">&nbsp;</div>
+
+                    <div class="row" ng-show="showProviderOnClaims">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                            <label class="label form-label-newer" id="lblProviderOnClaims">{{'Provider on Claims *' | i18n }} </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+
+                            <radiogroup unique-id="inpProviderOnClaims"
+                                        value="user.ProviderOnClaimsRelationship"
+                                        options="providerOnClaimsOptions"
+                                        labels="providerOnClaimsLabels"
+                                        change-function="providerChange()">
+                            </radiogroup>
+                            <div class="row" ng-show="user.ProviderOnClaimsRelationship==2">
+                                <!-- Provider on Claims -->
+                                <div class="col-xs-12 ">
+                                    <label id="lblProviderOnClaimsIs" class="form-label">{{'Provider on Claims Is' | i18n }}: </label>
+                                    <div ng-class="{error:providerError && hasErrors}">
+                                        <typeahead class="typeahead soar-typeahead typeaheadResults"
+                                                   id="userTypeAhead"
+                                                   cancel="cancelSearch()"
+                                                   clear-content="clearProviderClaimUser()"
+                                                   disable-input="disableProviderOnClaims"
+                                                   show-clear-button="!disableProviderClaim"
+                                                   scroll-view="true"
+                                                   appearance="form-input"
+                                                   select="selectResult(item)"
+                                                   items="searchResults"
+                                                   term="searchTerm"
+                                                   search="search(term)"
+                                                   loading="searchIsQueryingServer"
+                                                   placeholder="{{ ' Search by First or Last Name'|i18n }}"
+                                                   click-function="displayResults()"
+                                                   tab-index="0"
+                                                   ng-required="user.ProviderOnClaimsRelationship==2">
+                                            <ul id="lstPerson" soar-infinite-scroll="search(searchTerm, true)">
+                                                <li ng-repeat="person in searchResults | orderBy:'UserDto.LastName'" typeahead-item="person" ng-animate="'animate'" ng-hide="false">
+                                                    <div class="row">
+                                                        <div class="col-sm-4 col-md-4" ng-show="true">
+                                                            <span id="lblFirstName{{ $index }}" ng-bind-html="person.UserDto.FirstName | boldTextSearchCriteria:searchTerm"></span> <span id="lblMiddleName{{ $index }}" ng-bind-html="person.MiddleName "></span> <span id="lblLastName{{ $index }}" ng-bind-html="person.UserDto.LastName | boldTextSearchCriteria:searchTerm"></span> <span id="lblSuffix{{ $index }}" ng-bind-html="person.UserDto.Suffix"></span>
+                                                            <!--<span ng-show="person.PreferredName" id="lblPreferredName{{ $index }}" ng-bind-html="'('+person.PreferredName+')' | boldTextSearchCriteria:searchTerm "></span>-->
+
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3" ng-show="true">
+                                                            <span ng-show="person.DateOfBirth" id="lblDateOfBirth{{ $index }}" ng-bind-html="person.DateOfBirth | toShortDisplayDate| boldTextSearchCriteriaDate:searchString  "></span>
+                                                        </div>
+
+                                                        <div class="col-sm-5 col-md-5" ng-show="true">
+                                                            <div class="row" ng-repeat="phoneInfo in person.PatientPhoneInformationDtos | limitTo:1">
+                                                                <div>
+                                                                    <span id="lblPhoneNumber{{ $index }}" ng-bind-html="phoneInfo.PhoneNumber | boldTextSearchCriteriaPhone:searchString | tel "></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li ng-show="noSearchResults && searchResults.length==0">
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <span class="text-muted" id="lblResultMessage">
+                                                                {{ 'No Provider Available.'|i18n }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </typeahead>
+                                        <label id="lblProviderOnClaimsRequired" class="help-text error" ng-show="providerError && hasErrors">
+                                            {{ 'Please enter the Provider On Claims.' | i18n }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                <label id="lblProviderColor" class="label form-label-newer">{{ 'Provider {0}' | i18n:['Color'] }} </label>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-7 col-md-6 col-lg-6">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-9 col-md-8 col-lg-7">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div id="inpProviderColorSimple" kendo-color-palette ng-model="user.Color"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <a id="btnEditProviderColor" class="soar-link" ng-init="editingProviderColor = false;" ng-click="editingProviderColor = !editingProviderColor">{{ editingProviderColor ? 'Less': 'More' | i18n }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="row" ng-show="editingProviderColor">
+                                            <div class="col-xs-12">
+                                                <div id="inpProviderColorAdvanced" kendo-flat-color-picker ng-model="user.Color" k-buttons="false" k-preview="false" k-input="false"></div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix hidden-sm hidden-md hidden-lg">&nbsp;</div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3 col-md-4 col-lg-5">
+                                        <span id="lblProviderColorPreview" class="appointment-provider-preview" ng-style="{'background-color': user.Color }">
+                                            <span class="appointment-preview-text">
+                                                {{ 'Provider {0}' | i18n:['Time'] }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+    </div>
+
+    
+</div>

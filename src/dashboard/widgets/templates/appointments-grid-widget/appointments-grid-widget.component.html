@@ -1,0 +1,139 @@
+<form [formGroup]="appointmentsGridWidgetForm">
+    <div class="appointmentsGridWidget">
+        <div class="appointmentsGridWidget__header soarWidget__header panel-heading">
+            <div class="appointmentsGridWidget__title">
+                <div class="widget-handle">
+                    <label>{{ data?.Title | translate }}{{' on ' | translate}}{{dateFilter | date : 'fullDate'}}</label>
+                </div>
+                <app-date-selector id="appointmentWidgetCalendarInput" formControlName="appointmentWidgetCalendar"
+                    ngDefaultControl [value]="dateFilter" (dateChanged)="onDateChange($event)"
+                    (isValid)="onStartDateStateChange($event)">
+                </app-date-selector>
+                <div class="btn-group appointmentsMenu">
+                    <button class="btn-link dropdown-toggle padding-right-10" id="appointmentsMenu"
+                        data-toggle="dropdown">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="pull-right dropdown-menu">
+                        <li>
+                            <a (click)="navigate(scheduleUrl)" checkRoleAccess="soar-sch-swkstp-view">{{ 'Go to
+                                Schedule' | translate }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="appointmentsGridWidget__filters">
+                <div class="col-sm-6">
+                    <div class="col-sm-2">
+                        <label>{{ 'at' | translate }}</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <app-multiselect *ngIf="initializeCalled" checkRoleAccess="soar-sch-sch-view"
+                            [listItems]="options?.locationFilterOptions" id="appointmentsGridWidgetLocationFilter"
+                            [(model)]="filters.locationFilter" [showSelectAll]="true" [disabled]="disabled"
+                            groupData="true" (modelChange)="locationChange($event)"
+                            formControlName="appointmentsGridWidgetLocationFilter" ngDefaultControl>
+                        </app-multiselect>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-2">
+                        <label>{{ 'for' | translate }}</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <app-multiselect *ngIf="initializeCalled" checkRoleAccess="soar-sch-sch-view"
+                            [listItems]="options?.providerFilterOptions" id="appointmentsGridWidgetProviderFilter"
+                            [(model)]="filters.providerFilter" [showSelectAll]="true" [disabled]="disabled"
+                            (modelChange)="providerChange($event)" groupData="true"
+                            formControlName="appointmentsGridWidgetProviderFilter" ngDefaultControl>
+                        </app-multiselect>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="appointmentsGridWidgetbody">
+            <div class="fuseGrid">
+                <kendo-grid #grid [kendoGridBinding]="providerAppointments" [sortable]="true"
+                    (sortChange)="sortChange($event)">
+                    <kendo-grid-column title="Time" field="startTime" [width]="50">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <button
+                                id="id{{ dataItem?.appointment?.Person?.FirstName }}{{ dataItem?.appointment?.Person?.LastName }}{{ dataItem?.startTime | date:'HHmm' }}Time"
+                                class="btn btn-link p-0" (click)="showAppointmentModal(dataItem)" checkRoleAccess="soar-sch-sptapt-edit">
+                                {{ parseDate(dataItem?.startTime)| date : 'h:mma' }}
+                            </button>
+                            <i class="appointmentWidget__Status fa {{ getStatusIcon(dataItem?.appointment?.Appointment?.Status) }}"
+                                kendoTooltip position="bottom" tooltipClass="app-tooltip"
+                                title="{{ getStatusDescription(dataItem?.appointment?.Appointment?.Status) }}"></i>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Patient" field="Person" [width]="70">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <a href="{{getOverViewUrl(dataItem)}}" class="appointmentsGridWidget__patientLink">{{
+                                formatPatientName(dataItem?.appointment?.Person) }}</a>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Appt Type" field="ApptType" [width]="80">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{ dataItem?.appointment?.AppointmentType?.Name }}
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Location" field="Location" [width]="70">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{ dataItem?.appointment?.Location?.NameLine1 }}
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Room" field="Room" [width]="70">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{ dataItem?.appointment?.Room?.Name }}
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Provider" field="Provider" [width]="70">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{findProviderName(dataItem?.providerId,
+                            dataItem?.appointment?.ProviderUsers)}}
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="" [width]="50">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <div class="iconContainer">
+                                <div *ngIf="dataItem?.alerts?.medicalAlerts?.length" class="medicalAlert">
+                                    <i class="medicalAlertIcon__medicalHistoryIconColor fa fa-heart" kendoTooltip
+                                        tooltipClass="medicalAllergy-alert-tooltip" [tooltipTemplate]="tooltipTemplate" title
+                                        position="bottom">
+                                        <span class="medicalAlertIcon__notificationBadge">{{dataItem?.alerts?.medicalAlerts?.length}}</span>
+                                    </i>
+                                    <ng-template #tooltipTemplate>
+                                        <div [innerHTML]="getAlertDescription(dataItem?.alerts?.medicalAlerts | orderBy: {sortColumnName: 'MedicalHistoryAlertDescription', sortDirection: 1})"></div>
+                                    </ng-template>
+                                </div>
+                                <div *ngIf="dataItem?.alerts?.allergyAlerts?.length"
+                                    class="medicalAlertIcon__container allergyAlert">
+                                    <i class="fi-allergies" kendoTooltip title [tooltipTemplate]="tooltipTemplateAL"
+                                        tooltipClass="medicalAllergy-alert-tooltip" position="bottom">
+                                        <span class="medicalAlertIcon__svgNotificationBadge">{{dataItem?.alerts?.allergyAlerts?.length}}</span>
+                                    </i>
+                                    <ng-template #tooltipTemplateAL>
+                                        <div [innerHTML]="getAlertDescription(dataItem?.alerts?.allergyAlerts | orderBy: {sortColumnName: 'MedicalHistoryAlertDescription', sortDirection: 1})"></div>
+                                    </ng-template>
+                                </div>
+                                <div *ngIf="dataItem?.alerts?.premedAlerts?.length"
+                                    class="medicalAlertIcon__container premedAlert">
+                                    <i class="fi-premed" title="{{'Premedication required' | translate}}" kendoTooltip position="bottom"
+                                        tooltipClass="app-tooltip"><span
+                                            class="medicalAlertIcon__svgNotificationBadge">{{dataItem?.alerts?.premedAlerts?.length}}</span></i>
+                                </div>
+                                <div *ngIf="dataItem?.appointment?.Appointment?.Note"
+                                    class="medicalAlertIcon__container"
+                                    title="{{dataItem?.appointment?.Appointment?.Note}}" kendoTooltip position="bottom"
+                                    tooltipClass="note-tooltip">
+                                    <i class="appointmentWidgetNoteIcon fa fa-envelope"></i>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+</form>

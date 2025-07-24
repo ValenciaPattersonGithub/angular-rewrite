@@ -1,0 +1,55 @@
+﻿<div ng-form="frmMedicalHistory" class="medicalHistoryCrud">
+    <div class="container-fluid">
+        <div class="medicalHistoryCrud__header">
+            <h2 class="medicalHistoryCrud__title">
+                {{ formTitle | i18n}}
+            </h2>
+            <span class="medicalHistoryCrud__details" ng-show="viewOnly">
+                {{ "From " | i18n }}{{ medicalHistoryForm.DateModified | toShortDisplayDateLocal }}
+                <span ng-class="{ medicalHistoryCrud__detailsFlag: !isCurrentForm  }">({{ (isCurrentForm ? 'current' : 'out of date') | i18n }})</span>
+            </span>
+            <div>
+                <div>
+                    <button id="btnCancel" class="medicalHistoryCrud__btnCancel" title="{{'Cancel'|i18n}}" ng-click="close();" ng-disabled="disableCancel||loadingMedicalHistoryForm">{{ "Cancel" | i18n }}</button>
+                    <button id="btnUpdate" class="medicalHistoryCrud__btnUpdate" ng-if="viewOnly && isCurrentForm" title="{{ 'Update' | i18n }}"
+                            ng-click="renderUpdateView()" check-auth-z="soar-per-perhst-add">{{ 'Update' | i18n }}</button>
+                    <button id="btnSave" class="medicalHistoryCrud__btnSave" title="{{'Save'|i18n}}" ng-show="!viewOnly" check-auth-z="soar-per-perhst-add"
+                            ng-click="saveMedicalHistory();" ng-disabled="loadingMedicalHistoryForm || savingForm">
+                        {{ 'Save' | i18n }}
+                    </button>
+                    <button id="btnPrint" class="medicalHistoryCrud__btnPrint" ng-if="viewOnly" title="{{ 'Print' | i18n }}" ng-click="printMedicalHistory()">{{ 'Print' | i18n }}</button>
+                    <a class="medicalHistoryCrud__default" ng-click="noToAll()" ng-show="!viewOnly">
+                        <span id="btnNotToAll" title="{{'No to all'|i18n}}"
+                              ng-click="noToAll();" ng-disabled="disableNoToAll||loadingMedicalHistoryForm" tooltip-placement="right" tooltip-append-to-body="true">
+                            {{ "No to all" | i18n }}
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div ng-hide="medicalHistoryForm">
+            <no-results loading="loadingMedicalHistoryForm"></no-results>
+        </div>
+        <div ng-show="medicalHistoryForm">
+            <div class="medicalHistoryCrud__body">
+                <medical-history-form-directive
+                    medical-history-form-sections="medicalHistoryForm.FormSections"
+                    view-only="viewOnly"
+                    input-is-disabled="inputIsDisabled"
+                ></medical-history-form-directive>
+                <hr />
+                <div class="medicalHistoryCrud__footer">
+                    <div class="medicalHistoryCrud__signature">
+                        <signature-capture ng-if="!viewOnly" sig-title="signatureTitle" file-allocation-id="medicalHistoryForm.FileAllocationId" patient-info="patientInfo"></signature-capture>
+                        <signature-display ng-if="viewOnly" sig-title="signatureTitle" file-allocation-id="medicalHistoryForm.FileAllocationId"></signature-display>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div kendo-window="mhfUploader"
+     k-visible="false"
+     k-on-open="mhfUploaderOpen = true"
+     k-on-close="mhfUploaderOpen = false">
+</div>

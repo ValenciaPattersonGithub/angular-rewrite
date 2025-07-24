@@ -1,0 +1,87 @@
+﻿.perioLanding {
+    margin-top:-1px;
+    display:inline-block;
+    margin-left: 5px;
+    .buttonmenu, .buttonMenuAuto, .button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    &__add,
+    &__save,
+    &__end,
+    &__delete,
+    &__cancel {
+        .btn;
+        width: 100%;
+        margin-bottom: @brand-margin_md;
+    }
+
+    &__add {
+        .btn-primary;
+    }
+
+    &__save,
+    &__end,
+    &__delete,
+    &__cancel {
+        .btn-default;
+    }
+
+    &__legend {
+        margin-top: @brand-margin_md;
+
+        .legendRow {
+            margin: @brand-margin_sm;
+            width: 100%;
+        }
+
+        .legendItem {
+            display: inline-block;
+            margin-right: 2%;
+            width: 20%;
+        }
+
+        .mgLine {
+            background-color: @perio-chart-mg-junction-color;
+            height: 3px;
+        }
+
+        .gmLine {
+            background-color: @perio-chart-gingival-margin-color;
+            height: 3px;
+        }
+
+        .pdBarGood {
+            background-color: @perio-chart-pocket-depth-color;
+            height: 25px;
+            margin-left: @brand-margin_sm;
+            vertical-align: middle;
+            width: 7%;
+        }
+
+        .gmBar {
+            background-color: @perio-chart-gingival-margin-color;
+            height: 25px;
+            margin-left: @brand-margin_sm;
+            vertical-align: middle;
+            width: 7%;
+        }
+
+        .pdBarAlert {
+            background-color: @perio-chart-pocket-depth-alert-color;
+            height: 25px;
+            margin-left: @brand-margin_sm;
+            vertical-align: middle;
+            width: 7%;
+        }
+
+        .gmBarAlert {
+            background-color: @perio-chart-gingival-margin-alert-color;
+            height: 25px;
+            margin-left: @brand-margin_sm;
+            vertical-align: middle;
+            width: 7%;
+        }
+    }
+}

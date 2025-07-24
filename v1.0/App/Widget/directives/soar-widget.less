@@ -1,0 +1,98 @@
+﻿
+@screen-md: 1280px;
+
+.soarWidget {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+
+    .k-dropdown {
+        margin: 0px 0px;
+        font-size: 14px;
+
+        @media screen and (max-width:@screen-md) {
+            font-size: 12px;
+        }
+
+        .k-dropdown-wrap {
+            height: 28px;
+            width: 8em;
+
+            .k-input {
+                padding: 2px 0px 0px 0px;
+            }
+
+            .k-select {
+                line-height: 1.65em;
+            }
+
+            @media screen and (max-width:@screen-md) {
+                height: 24px;
+                width: 6em;
+
+                .k-select {
+                    line-height: 1.50em;
+                }
+            }
+        }
+    }
+
+    &__header {
+        float: left;
+        white-space: nowrap;
+        font-size: 18px;
+
+        .dateRangeFilter {
+            top: 75px;
+            font-size: 14px;
+        }
+
+        @media screen and (max-width:@screen-md) {
+            font-size: 14px;
+
+            .dateRangeFilter {
+                top: 70px;
+                font-size: 12px;
+            }
+        }
+
+        .w_row {
+            width: 100%;
+        }
+
+        .inlineFilter {
+            display: inline-block;
+            margin-left: -3em;
+
+            @media screen and (max-width:@screen-md) {
+                margin-left: -5em;
+            }
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+
+    &__body {
+        position: absolute;
+        top: 75px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+
+        @media screen and (max-width: @screen-md) {
+            top: 70px;
+        }
+
+        svg {
+            g {
+                g {
+                    path {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,99 @@
+﻿<ng-form name="questionAdlib">
+    <div class="col-md-6">
+        <!--Prompts-->
+        <div class="container-fluid">
+            <div ng-repeat="formBankItemPromptText in sectionItem.FormBankItemPromptTexts | orderBy:'ItemSequenceNumber' track by $index">
+                <div id="questionAdlibPrompt{{sectionIndex}}_{{sectionItemIndex}}{{$index}}" class="row">
+                    <div ng-if="formBankItemPromptText.ItemSequenceNumber===1">
+                        {{ 'Text Before Response'  |i18n }} :<span class="bold padding5 size-h4">*</span>
+                    </div>
+                    <div ng-if="formBankItemPromptText.ItemSequenceNumber===2">
+                        {{ 'Text After Response'  |i18n }} :<span class="bold padding5 size-h4">*</span>
+                    </div>
+                    
+                </div>
+                <div id="questionAdlib{{sectionIndex}}_{{sectionItemIndex}}{{$index}}" class="row">
+                    <input ng-class="{'red-border': formBankItemPromptText.$$Invalid && customForm.SectionValidationFlag}"
+                           name="questionAdlibText{{$index}}"
+                           id="questionAdlibText{{sectionIndex}}_{{sectionItemIndex}}{{$index}}"
+                           class="col-md-10" type="text"
+                           ng-model="formBankItemPromptText.ItemText"
+                           maxlength="500"
+                           required />
+                    <br />
+                </div>                
+                <div class="row error" ng-if="formBankItemPromptText.$$Invalid && customForm.SectionValidationFlag ">
+                    <span id="requiredMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required' | i18n }}</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-checkbox">
+                    <input type="checkbox" ng-value="true"
+                           ng-selected
+                           ng-model="sectionItem.IsRequired"
+                           id="questionAdlibRequired{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="questionAdlibRequiredLabel{{sectionIndex}}_{{sectionItemIndex}}"
+                           class="font-weight-normal ng-binding"
+                           for="questionAdlibRequired{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This question is required' | i18n }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+
+            <!--Responses-->
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-md-8" id="adlibResponsesHeader{{sectionIndex}}_{{sectionItemIndex}}">{{ 'Responses' |i18n }}</div>
+                </div>
+                <div id="questionAdlibRpesonses{{sectionIndex}}_{{sectionItemIndex}}">
+
+                    <div id="multipleChoiceOption{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"       
+                         ng-repeat="itemOption in sectionItem.ItemPromptTextsOptions[0] | orderBy:'BankItemOption.OptionIndex' track by $index"
+                         class="row margin-bottom15">
+
+
+                        <!--Are you sure message for list question option delete-->
+                       <div class="col-md-11" ng-show="confirmOptionRemoveIndex == $index">
+                        <div class="media-body master-list-warning-msg" id="multipleChoiceOptionDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}">
+                            <are-you-sure message="{{ 'Are you sure you want to delete this answer option?' | i18n }}"
+                                          if-yes="removeAdlibMultipleChoiceOption(sectionIndex,sectionItemIndex)"
+                                          if-no="cancelRemoveMultipleChoiceOption()"></are-you-sure>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <ng-form name="questionAdlibSelectValue">
+                            <input name="questionAdlibSelectValues"
+                                   type="text" id="questionAdlibOptionText{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                                   ng-model="itemOption.BankItemOption.OptionText"
+                                   class="col-md-7"
+                                   maxlength="100"
+                                   ng-blur="isValidCustomFormCheck(false)"
+                                   placeholder="Enter Answer Text"
+                                   required />
+                            &nbsp;
+                            <a check-auth-z="soar-biz-bcform-delete" id="lnkMultipleChoiceOptionDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                               class="cursor-pointer"                               
+                               ng-click="confirmRemoveMultipleChoiceOption(option,$index)"
+                               title="Remove"
+                               ng-show="sectionItem.ItemPromptTextsOptions[0].length > 1">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </ng-form>
+                    </div>
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 margin-bottom15">
+                        <button id="btnAddAnotherOption{{sectionIndex}}_{{sectionItemIndex}}" check-auth-z="soar-biz-bcform-add" type="button" class="button" ng-click="addNewAdlibResponse(sectionIndex,sectionItemIndex)">{{ 'Add another response' | i18n }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</ng-form>

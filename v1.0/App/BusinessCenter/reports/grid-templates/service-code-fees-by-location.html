@@ -1,0 +1,54 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.ServiceTypes.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.ServiceTypes.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="reportGrid__row stripOdd">
+                    <th class="col-sm-3 cell">{{'Service Type' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Service Code' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'CDT Code' | i18n}}</th>
+                    <th class="col-sm-3 cell">{{'Description' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Tax Type' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Location Fee' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'" ng-repeat="serviceType in data.ServiceTypes">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-3 cell">
+                        {{serviceType.ServiceType}}
+                    </td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-2 cell"></td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat="serviceCodeFee in serviceType.ServiceCodeFees">
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-1 cell">{{serviceCodeFee.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{serviceCodeFee.CdtCode}}</td>
+                    <td class="col-sm-3 cell">{{serviceCodeFee.Description}}</td>
+                    <td class="col-sm-2 cell">{{serviceCodeFee.TaxType}}</td>
+                    <td class="col-sm-2 cell">{{serviceCodeFee.LocationFee | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven">
+                <tr class="reportGrid__row reportGrid__footer">
+                    <td colspan="6" class="col-sm-12 reportGrid__countLabel">
+                        {{'Total' | i18n}} {{'Service Codes:' | i18n}} {{ data.TotalServiceCodes }}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven">
+                <tr class="reportGrid__row">
+                    <td colspan="6" class="col-sm-12 reportGrid__countLabel  text-align-center">
+                        {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association
+                        (ADA). All rights reserved.' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

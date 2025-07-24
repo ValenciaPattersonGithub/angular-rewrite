@@ -1,0 +1,131 @@
+﻿<!-- <business-nav></business-nav> -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div class="formsTemplates">
+    <!-- <div class="rowFull white">
+       
+        <div class="formsTemplates__header">
+          
+            <ul class="grpTypes__breadcrumb">
+                <li ng-repeat="breadcrumb in breadcrumbs">
+                    <ng-switch on="$last">
+                        <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+                        <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePageState(breadcrumb)"><a href="">{{breadcrumb.name | i18n }}</a></span>
+                    </ng-switch>
+                </li>
+            </ul>
+        </div>
+    </div> -->
+    <div class="rowFull">
+        <div class="formsTemplates__toolbar">
+            <!-- Tabs will only report to data model and will not use the tab-content
+            <uib-tabset class="formsTemplates__tabs" type="pills" active="3">
+                <uib-tab id="patientTab" index="0" heading="{{'Patients' | i18n}}" classes="btn-lg" select="getTab(0)"></uib-tab>
+                <uib-tab id="practiceTab" index="1" heading="{{'Practice' | i18n}}" classes="btn-lg" disable="true" select="getTab(1)"></uib-tab>
+                <uib-tab id="teamMembersTab" index="2" heading="{{'Team Members' | i18n}}" classes="btn-lg" disable="true" select="getTab(2)"></uib-tab>
+                <uib-tab id="formsTemplatesTab" index="3" heading="{{'Templates & Forms' | i18n}}" classes="btn-lg" disable="false" select="getTab(3)"></uib-tab>
+            </uib-tabset>
+            <div class="formsTemplates__actions">
+            </div>-->
+
+            <!-- <div class="pill-bar">
+                <a ng-repeat="item in viewOptions" ng-class="{'active': selectedItem == item.Name, 'disabled': item.Disabled}" ng-click="getTab(item.Index)">{{item.Name}}</a>
+            </div> -->
+
+        </div>
+        <div class="formsTemplates__body">
+            <div class="">
+                <div class="formsTemplates__secondary" ng-hide="showEditor">
+                    <div class="dirList">
+                        <div>
+                            <select name="mediaType-group" id="mediaTypeGroup" check-auth-z="soar-biz-comtmp-add" class="padding-10" ng-model="itemSelected" ng-change="onMediaTypeChange(itemSelected)"
+                                    ng-options="mediaType.Name for mediaType in mediaTypes"></select>
+                        </div>
+                        <uib-accordion close-others="true">
+                            <div uib-accordion-group class='{{pat.class}}' ng-repeat="group in groups" is-open="group.IsOpened">
+                                <uib-accordion-heading>
+                                    <span class="rootDir rootDir-font fa-folder" ng-class="{'active':group.IsOpened, 'formsTemplates__filteredOut': pat.hidden}" ng-bind-html="group.name"></span>
+                                </uib-accordion-heading>
+                                <!--<a class="subDir" ng-click="getGridData(group, 'Email')" ng-class="{'active':activeDir === 'Email', 'formsTemplates__filteredOut': pat.hidden}">{{ 'Email' | i18n }}</a>
+                               <a class="subDir" ng-click="getGridData(group, 'Text')" ng-class="{'active':activeDir === 'Text', 'formsTemplates__filteredOut': pat.hidden}">{{ 'Text' | i18n }}</a>-->
+                                <a class="subDir" ng-click="getGridData(group, 'Postcards')" ng-class="{'active':activeDir === 'Postcards', 'formsTemplates__filteredOut': pat.hidden}">{{ 'Postcards' | i18n }}</a>
+                                <a class="subDir" ng-click="getGridData(group, 'US Mail')" ng-class="{'active':activeDir === 'US Mail', 'formsTemplates__filteredOut': pat.hidden}">{{ 'US Mail' | i18n }}</a>
+                                <!--<a class="subDir disabled" href="" ng-click="" disable="true">{{ 'Email' | i18n }}</a>-->
+                            </div>
+                        </uib-accordion>
+                    </div>
+                </div>
+
+                <div class="formsTemplates__secondary" ng-show="showEditor" >
+                    <div class="dirList">
+                        <div class="panel-group formsTemplates__dataPoints" id="accordion">
+                            <div data-ng-repeat="(key, value) in dataMergePoints">
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#accordion" data-target="#{{getDisplayKey(key)}}" ng-mouseover="isEventReady()" class="soar-link font-weight-bold padding-2 text-left">
+                                        <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                                        {{key}}
+                                    </a>
+                                </div>
+                                <div class="panel-collapse collapse" id="{{getDisplayKey(key)}}">
+                                    <ul id="dataPoints">
+                                        <li ng-if="key==='Preferred Location'" class="small"><strong>Note: For appointment communications, use the location information fields listed under the Appointment category to merge details based on where the appointment is scheduled.</strong></li>
+                                        <li ng-repeat="name in value  | orderBy : 'DisplayName' "><a ng-mouseover="setupDrag()" dataPoint="{{name.TemplateTag}}" class="draggablenode" name="{{name.TemplateTag}}">{{name.DisplayName}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formsTemplates__primary" ng-show="showGrid">
+                    <div><h1 class="fdheader">{{groupTemplates}}</h1></div>
+                    <div class="container">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Reason</th>
+                                <th>Communication Type</th>
+                                <th>Date Modified</th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="i in activeCommTemplates | orderBy: 'TemplateName'">
+                                <td>{{ i.TemplateName }}</td>
+                                <td>{{ i.GroupName }}</td>
+                                <td>{{ i.MediaName }}</td>
+                                <td>
+                                    {{ i.DateModified | date: 'MM/dd/yyyy' }}
+                                    <a class="" ng-disabled="false" check-auth-z="soar-biz-comtmp-edit" ng-click="editNote(i)" ng-class=""
+                                    ><i class="far fa-edit"></i></a>
+                                    <a class="" check-auth-z="soar-biz-comtmp-delete" ng-disabled="false" ng-click="deleteNote(i)" ng-class=""
+                                    ><i class="far fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="formsTemplates__primary" ng-show="showEditor">
+                    <div ng-if="selectedMediaTypeId == '4'">
+                        <button style="float:right" id="btnSave" class="btn btn-primary cursor-pointer ng-binding" title="Preview" ng-click="previewPostcard()">{{'Preview'}}</button>
+                    </div>
+                    <div id="subjectWrapper"> </div>
+                    <div id="editorLocker"></div>
+                    <forms-editor focus="true" editor-id="inpNotes" content="selectedNote" group-folders="groups" media-folders="mediaTypes" 
+                                  selected-folder="selectedTemplate.activeGroup"
+                                  selected-media="selectedTemplate.activeMediaType"
+                                  on-cancel="cancel()" on-save="save()" tool-options="noteToolOptions"></forms-editor>
+                    <div ng-if="selectedMediaTypeId == '99'">
+                        <span style="float:right" class="fa-stack btn-hovertip cursor-pointer" title="Preview" tooltip-popup-delay="750" ng-click="previewPostcard()">
+                            <i class="fa fa-search fa-size-2px fa-lower-right"></i>
+                            <i class="far fa-address-card fa-size-2px fa-upper-left"></i>
+                            <span class="btn-hovertiptext">{{'Preview'}}</span>
+                        </span>
+                    </div>
+                    <div class="margin-top8">
+                        <button style="float:right" id="btnSave" class="btn btn-primary cursor-pointer" title="Save Note" ng-click="save()">{{ "Save" | i18n }}</button>
+                        <button style="float:right" id="btnCancel" class="btn btn-link cursor-pointer" title="Cancel" ng-click="cancel()">{{ "Cancel" | i18n }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

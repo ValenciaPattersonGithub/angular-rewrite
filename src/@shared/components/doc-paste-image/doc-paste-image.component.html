@@ -1,0 +1,9 @@
+<div class="docPasteImage form-row">
+    <div id="pasteTarget" class="target form-col-12" tabindex="0" [attr.contenteditable]="isIE" (paste)="onPaste($event)" (keydown)="onKeyDown($event)">
+        <p *ngIf="processingImage" i18n="@@docPasteImage_processing">Processing...</p>
+        <p *ngIf="!dataUrl" class="instructions" i18n="@@docPasteImage_instructions">
+            Click this area and press Ctrl+V to paste a copied image from the clipboard.
+        </p>
+        <img id="pasteImage" *ngIf="dataUrl" [src]="dataUrl" (load)="onLoad()" />
+    </div>
+</div>

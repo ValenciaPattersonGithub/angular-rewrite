@@ -1,0 +1,397 @@
+﻿<div>
+    <div class="medChangeAns">
+        <div class="rowFull white">
+            <div class="medChangeAns__header">
+                <!--Breadcrumb placeholder-->
+                <ul class="medChangeAns__breadcrumb">
+                    <li><span>{{ 'Insurance' | i18n }}</span></li>
+                    <li><span class="btn btn-link" ng-click="cancel()">{{ 'Claims & Predeterminations' | i18n }}</span></li>
+                    <li><span>{{ isReadOnly ? ('View Answers' | i18n) : ('Change Answers' | i18n) }}</span></li>
+                </ul>
+                <!--Title and subtitle-->
+                <div class="medChangeAns__title" ng-if="claim">
+                    <h1>
+                        {{ ::(isReadOnly ? ('View Answers on' | i18n) : ('Change Answers on' | i18n)) }}
+                        {{ ::(claim | claimPatientName) }}
+                        {{ ::(' CMS 1500 ')}}
+                        {{ ::(claim.PatientSignatureDate ? ('Claim from ' | i18n) : ('Claim ' | i18n)) }}
+                        {{ ::(claim.PatientSignatureDate | date:'MM/dd/yyyy') }}
+                        {{ ::(' for ' | i18n) }}
+                        {{ ::(claim | claimTotalFees) }}
+                    </h1>
+                </div>
+                <div ng-if="!claim && !loadingClaim">{{ ::('Failed to retrieve Claim' | i18n) }}</div>
+                <div ng-if="loadingClaim">{{ ::('Retrieving Claim...' | i18n) }}</div>
+            </div>
+        </div>
+        <div class="medChangeAns__body">
+            <fieldset ng-disabled="disabled">
+                <div class="medChangeAns__form">
+                    <div class="row form-row">
+                        <div class="col-xs-3">
+                            <label class="control-label">{{ ::('Coverage' | i18n) }}</label>
+                            <soar-select-list id="coverageType"
+                                              name="coverageType"
+                                              option-list="coverageTypes"
+                                              text-field="Text"
+                                              value-field="Value"
+                                              disable-input="disabled || false"
+                                              ng-model="claim.CoverageType">
+                            </soar-select-list>
+                        </div>
+                        <div class="col-xs-3">
+                            <label class="control-label">{{ ::('Is Patient\'s Condition Related To' | i18n) }}:</label>
+                            <div>
+                                <checkbox checkbox-id="IsOccupationalInjury"
+                                          checkbox-value="claim.IsOccupationalInjury"
+                                          checkbox-label="'Employment (Current or Previous)'"
+                                          checkbox-hidden="false">
+                                </checkbox>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <checkbox checkbox-id="IsAutoAccident"
+                                              checkbox-value="claim.IsAutoAccident"
+                                              checkbox-label="'Auto Accident'"
+                                              change-function="isAutoAccidentChange()">
+                                    </checkbox>
+                                </div>
+                                <div class="col-xs-3" ng-show="claim.IsAutoAccident" ng-class="{'error': showErrors && claim.IsAutoAccident && !claim.AutoAccidentState }">
+                                    <soar-select-list id="AutoAccidentState"
+                                                      name="AutoAccidentState"
+                                                      class-name="state-selector"
+                                                      option-list="states"
+                                                      sb-required="claim.IsAutoAccident"
+                                                      disable-input="disabled || false"
+                                                      placeholder="State"
+                                                      text-field="Abbreviation"
+                                                      value-field="Abbreviation"
+                                                      ng-model="claim.AutoAccidentState">
+                                    </soar-select-list>
+                                </div>
+                            </div>
+                            <div>
+                                <checkbox checkbox-id="IsOtherAccident"
+                                          checkbox-value="claim.IsOtherAccident"
+                                          checkbox-label="'Other Accident'"
+                                          checkbox-hidden="false">
+                                </checkbox>
+                            </div>
+                        </div>
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-5">
+                            <label class="control-label">{{ ::('Claim Codes (box 10d)' | i18n) }}</label>
+                            <soar-select-list id="ClaimCodes"
+                                              name="ClaimCodes"
+                                              class-name=""
+                                              option-list="claimCodes"
+                                              placeholder="Select Code"
+                                              text-field="Text"
+                                              value-field="Value"
+                                              disable-input="disabled || false"
+                                              ng-model="claim.ClaimCodes">
+                            </soar-select-list>
+                            <label class="control-label">{{ ::('Other Claim ID' | i18n) }}</label>
+                            <input class="form-control" type="text" maxlength="28" ng-model="claim.OtherAgencyClaimId" />
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-xs-6">
+                            <label class="control-label">{{ ::('Date of Current Illness, Injury (Accident), Pregnancy (LMP)' | i18n) }}</label>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <date-selector input-id="CurrentIllnessDate"
+                                                   ng-model="CurrentConditionDate"
+                                                   valid="CurrentIllnessDateValid"
+                                                   placeholder="MM/DD/YYYY"
+                                                   date-var="CurrentConditionDate"
+                                                   format="MM/dd/yyyy">
+                                    </date-selector>
+                                </div>
+                                <div class="col-xs-7" ng-class="{'error': showErrors && CurrentConditionDate && !claim.CurrentConditionQualifier }">
+                                    <soar-select-list id="CurrentConditionQualifier"
+                                                      name="CurrentConditionQualifier"
+                                                      class-name=""
+                                                      option-list="currentQualifiers"
+                                                      placeholder="Select Qualifier"
+                                                      text-field="Text"
+                                                      disable-input="!CurrentConditionDate || disabled"
+                                                      value-field="Value"
+                                                      ng-model="claim.CurrentConditionQualifier">
+                                    </soar-select-list>
+                                </div>
+                            </div>
+                            <label class="control-label error"
+                                   ng-show="showErrors && CurrentConditionDate > today">
+                                {{ ::('Cannot be a Future Date' | i18n) }}
+                            </label>
+                        </div>
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-5">
+                            <label class="control-label">{{ ::('Other Date' | i18n) }}</label>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <date-selector input-id="OtherIllnessDate"
+                                                   ng-model="OtherConditionDate"
+                                                   valid="OtherIllnessDateValid"
+                                                   placeholder="MM/DD/YYYY"
+                                                   date-var="OtherConditionDate"
+                                                   format="MM/dd/yyyy">
+                                    </date-selector>
+                                </div>
+                                <div class="col-xs-8" ng-class="{'error': showErrors && OtherConditionDate && !claim.OtherConditionQualifier }">
+                                    <soar-select-list id="OtherConditionQualifier"
+                                                      name="OtherConditionQualifier"
+                                                      class-name=""
+                                                      option-list="otherQualifiers"
+                                                      placeholder="Select Qualifier"
+                                                      text-field="Text"
+                                                      value-field="Value"
+                                                      disable-input="!OtherConditionDate || disabled"
+                                                      ng-model="claim.OtherConditionQualifier">
+                                    </soar-select-list>
+                                </div>
+                            </div>
+                            <label class="control-label error"
+                                   ng-show="showErrors && OtherConditionDate > today">
+                                {{ ::('Cannot be a Future Date' | i18n) }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row form-row">
+                        <div class="col-xs-6">
+                            <label class="control-label">{{ ::('Dates Unable to Work' | i18n) }}</label>
+                            <div class="row">
+                                <div class="col-xs-1 input-label">{{ ::('From' | i18n) }}</div>
+                                <div class="col-xs-4" ng-class="{'error': showErrors && UnableToWorkEndDate && !UnableToWorkStartDate }">
+                                    <date-selector input-id="UnableToWorkStartDate"
+                                                   ng-model="UnableToWorkStartDate"
+                                                   valid="unableToWorkStartDateValid"
+                                                   placeholder="MM/DD/YYYY"
+                                                   date-var="UnableToWorkStartDate"
+                                                   format="MM/dd/yyyy">
+                                    </date-selector>
+                                </div>
+                                <div class="col-xs-1 input-label"> {{ ::('To' | i18n) }}</div>
+                                <div class="col-xs-4" ng-class="{'error': showErrors && UnableToWorkStartDate && !UnableToWorkEndDate }">
+                                    <date-selector input-id="UnableToWorkEndDate"
+                                                   ng-model="UnableToWorkEndDate"
+                                                   placeholder="MM/DD/YYYY"
+                                                   valid="unableToWorkEndDateValid"
+                                                   date-var="UnableToWorkEndDate"
+                                                   format="MM/dd/yyyy">
+                                    </date-selector>
+                                </div>
+                            </div>
+                            <label class="control-label error"
+                                   ng-show="showErrors && UnableToWorkEndDate && UnableToWorkStartDate && UnableToWorkStartDate > UnableToWorkEndDate">
+                                {{ ::('From date must be before To date' | i18n) }}
+                            </label>
+                        </div>
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-5">
+                            <label class="control-label">{{ ::('Hospitalization Dates' | i18n) }}</label>
+                            <div class="row">
+                                <div class="col-xs-1 input-label">{{ ::('From' | i18n) }}</div>
+                                <div class="col-xs-5" ng-class="{'error': showErrors && HosipitalizationEndDate && !HosipitalizationStartDate }">
+                                    <date-selector input-id="hospitalizationStartDate"
+                                                   ng-model="HosipitalizationStartDate"
+                                                   valid="hospitalizationStartDateValid"
+                                                   placeholder="MM/DD/YYYY"
+                                                   date-var="HosipitalizationStartDate"
+                                                   format="MM/dd/yyyy">
+                                    </date-selector>
+                                </div>
+                                <div class="col-xs-1 input-label"> {{ ::('To' | i18n) }}</div>
+                                <div class="col-xs-5" ng-class="{'error': showErrors && HosipitalizationStartDate && !HosipitalizationEndDate }">
+                                    <date-selector input-id="hospitalizationEndDate"
+                                                   ng-model="HosipitalizationEndDate"
+                                                   placeholder="MM/DD/YYYY"
+                                                   valid="hospitalizationEndDateValid"
+                                                   date-var="HosipitalizationEndDate"
+                                                   format="MM/dd/yyyy">
+                                    </date-selector>
+                                </div>
+                            </div>
+                            <label class="control-label error"
+                                   ng-show="showErrors && HosipitalizationEndDate && HosipitalizationStartDate && HosipitalizationStartDate > HosipitalizationEndDate">
+                                {{ ::('From date must be before To date' | i18n) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-xs-6">
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <label class="control-label">{{ ::('Outside Lab?' | i18n) }}</label>
+                                </div>
+                                <div class="col-xs-5">
+                                    <label class="control-label">{{ ::('Authorize Payment to Office?' | i18n) }}</label>
+                                </div>
+                            </div>
+                            <div class="row verticalRadio">
+                                <div ng-class="{ 'col-xs-2': claim.OutsideLab, 'col-xs-7': !claim.OutsideLab }">
+                                    <radiogroup unique-id="OutsideLab" value="claim.OutsideLab" labels="['Yes', 'No']" options="[true, false]" change-function="outsideLabChanged(value)"></radiogroup>
+                                </div>
+                                <div class="col-xs-5" ng-show="claim.OutsideLab">
+                                    <div class="row">
+                                        <div class="col-xs-3 input-label">{{ ::('Charges' | i18n) }}</div>
+                                        <div class="col-xs-9"><input class="form-control" type="text" model-format="currency" ng-model="claim.OutsideLabCharge" /></div>
+                                    </div>
+                                    <label class="control-label error"
+                                           ng-show="showErrors && claim.OutsideLab && claim.OutsideLabCharge < .001">
+                                        {{ ::('Charge must be greater than $0' | i18n) }}
+                                    </label>
+                                    <label class="control-label error"
+                                           ng-show="showErrors && claim.OutsideLab && claim.OutsideLabCharge > 999999.99">
+                                        {{ ::('Charge must be less than $999,999.99' | i18n) }}
+                                    </label>
+                                </div>
+                                <div class="col-xs-5">
+                                    <radiogroup unique-id="IsPolicyHolderSignatureOnFile" value="claim.IsPolicyHolderSignatureOnFile" labels="['Yes', 'No']" options="[true, false]" change-function="isPolicyHolderSignatureOnFileChanged(value)"></radiogroup>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label class="control-label">{{ ::('Name of Referring Provider/Other Source' | i18n) }}</label>
+                                    <input class="form-control" type="text" maxlength="24" ng-model="claim.ReferringPhysicianName" ng-blur="referringProviderBlur()" />
+                                </div>
+                                <div class="col-xs-12" ng-class="{'error': showErrors && claim.ReferringPhysicianName && !claim.ReferringPhysicianQualifier }">
+                                    <soar-select-list id="referingProviderQualifiers"
+                                                      name="providerQualifiers"
+                                                      class-name="provider-dropdown"
+                                                      option-list="referingProviderQualifiers"
+                                                      placeholder="Select Qualifier"
+                                                      text-field="Text"
+                                                      disable-input="!claim.ReferringPhysicianName || disabled"
+                                                      value-field="Value"
+                                                      sb-required="claim.ReferringPhysicianName"
+                                                      ng-model="claim.ReferringPhysicianQualifier">
+                                    </soar-select-list>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-5">
+                            <div class="col-xs-12 no-padding">
+                                <label class="control-label">{{ ::('Resubmission Code:' | i18n) }}</label>
+                                <input class="form-control" type="text" maxlength="11" ng-model="claim.ResubmissionCode" />
+                            </div>
+                            <div class="col-xs-12 no-padding">
+                                <label class="control-label">{{ ::('Original Reference Number:' | i18n) }}</label>
+                                <input class="form-control" type="text" maxlength="18" ng-model="claim.OriginalReferenceNumber" />
+                            </div>
+                            <div class="col-xs-12 no-padding ">
+                                <label class="control-label">{{ ::('Prior Authorization Number:' | i18n) }}</label>
+                                <input class="form-control" type="text" maxlength="29" ng-model="claim.PriorAuthorizationNumber" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-xs-6">
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label class="control-label">{{ ::('Other ID # of Referring Provider/Other Source' | i18n) }}</label>
+                                    <input class="form-control" type="text" maxlength="17" ng-model="claim.ReferringPhysicianOtherId" ng-blur="otherReferringPhysicianBlur()" />
+                                </div>
+                                <div class="col-xs-12" ng-class="{'error': showErrors && claim.ReferringPhysicianOtherId && !claim.ReferringPhysicianOtherIdType }">
+                                    <soar-select-list id="referingProviderId"
+                                                      name="providerIdTypes"
+                                                      class-name="provider-dropdown"
+                                                      option-list="referingProviderIdTypes"
+                                                      placeholder="Select Qualifier"
+                                                      text-field="Text"
+                                                      disable-input="!claim.ReferringPhysicianOtherId || disabled"
+                                                      value-field="Value"
+                                                      sb-required="claim.ReferringPhysicianOtherId"
+                                                      ng-model="claim.ReferringPhysicianOtherIdType">
+                                    </soar-select-list>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label class="control-label">{{ ::('NPI of Referring Provider/Other Source' | i18n) }}</label>
+                                    <input class="form-control" type="text" numeric-only maxlength="10" ng-class="{ 'red-border': showErrors && claim.ReferringPhysicianName && (!claim.ReferringPhysicianNpi || claim.ReferringPhysicianNpi.length !== 10) }" ng-disabled="!claim.ReferringPhysicianName" ng-model="claim.ReferringPhysicianNpi" />
+                                    <label class="control-label error" ng-if="showErrors && claim.ReferringPhysicianName && (!claim.ReferringPhysicianNpi || claim.ReferringPhysicianNpi.length !== 10)">{{ ::('Must be 10 digits' | i18n) }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-5">
+                            <div class="col-xs-12 no-padding verticalRadio">
+                                <label class="control-label">{{ ::('Accept Assignment?' | i18n) }}</label>
+                                <radiogroup unique-id="ProviderAcceptAssignment" value="claim.ProviderAcceptAssignment" labels="['Yes', 'No']" options="[true, false]"></radiogroup>
+                            </div>
+                            <div class="col-xs-12 no-padding">
+                                <label class="control-label">{{ ::('Additional Claim Information (box 19)' | i18n) }}</label>
+                                <textarea class="form-control" name="addtlInformation" rows="4" maxlength="71" ng-model="claim.AdditionalClaimInfo"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row row-padding">
+                        <label class="control-label">{{ ::('Diagnosis or Nature of Illness or Injury' | i18n) }}</label>
+                        <div>
+                            <radiogroup unique-id="ICDIndicator" value="claim.ICDIndicator" labels="['ICD-9 (9)', 'ICD-10 (0)']" options="[1, 2]"></radiogroup>
+                            <label class="control-label error" ng-if="showErrors && !(claim | medicalClaimDiagnosisCodesAreValid)">{{ ::('Missing Diagnosis' | i18n) }}</label>
+                        </div>
+                        <div ng-class="{ 'red-border': showErrors && !(claim | medicalClaimDiagnosisCodesAreValid), 'error-height': showErrors && !(claim | medicalClaimDiagnosisCodesAreValid)}">
+                            <div class="col-xs-3 diagnosis" ng-repeat="code in claim.DiagnosisCodes track by $index">
+                                <span class="diagnosis-label">{{codeLabels[$index]}}.</span>
+                                <input id="{{ $index === 0 ? 'codeLabelsA' : '' }}" alpha-numeric-ext class="form-control diagnosis-input" type="text" maxlength="7" ng-model="claim.DiagnosisCodes[$index]" ng-blur="diagnosisCodeBlur($index)" />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row form-row row-padding">
+                        <div class="col-xs-12">
+                            <div class="row bold">
+                                <div class="col-xs-2"><br />{{ ::('Date' | i18n) }}</div>
+                                <div class="col-xs-1">{{ ::('Place of Service' | i18n) }}</div>
+                                <div class="col-xs-1"><br />{{ ::('EMG' | i18n) }}</div>
+                                <div class="col-xs-1"><br />{{ ::('Code' | i18n) }}</div>
+                                <div class="col-xs-4 text-center"><br />{{ ::('Modifier' | i18n) }}</div>
+                                <div class="col-xs-1">{{ ::('Diagnosis Pointer' | i18n) }}</div>
+                                <div class="col-xs-1"><br />{{ ::('Units' | i18n) }}</div>
+                                <div class="col-xs-1"><br />{{ ::('EPSDT' | i18n) }}</div>
+                            </div>
+                            <div ng-repeat="detail in claim.Details track by $index">
+                                <div class="row top-row">
+                                    <div class="col-xs-11 top-row-col"><input class="form-control top-row-input" type="text" maxlength="61" ng-model="detail.SupplementalInformation" /></div>
+                                    <div class="col-xs-1 top-row-col top-row-last-col"><input class="form-control top-row-input top-row-input-last" type="text" maxlength="2" ng-model="detail.EPSDT" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-2 bottom-row-col extra-padding">{{detail.ServiceStartDate | toShortDisplayDateUtc}}</div>
+                                    <div class="col-xs-1 bottom-row-col">
+                                        <div id="pos{{$index}}" class="row extra-padding pointer" ng-click="toggleSelect(detail, $index)">
+                                            <div class="col-xs-9">{{detail.PlaceOfService}}</div>
+                                            <div class="k-icon k-i-arrow-60-down"></div>
+                                        </div>
+                                        <select id="poshidden{{$index}}" ng-show="detail.showPlaceOfService" class="bottom-row-select" ng-click="detail.showPlaceOfService = false" ng-blur="detail.showPlaceOfService = false" ng-model="detail.PlaceOfService" ng-options="item.Value as item.Text for item in placeOfTreatmentOptions" size="10"></select>
+                                    </div>
+                                    <div class="col-xs-1 bottom-row-col"><input class="form-control bottom-row-input" type="text" maxlength="1" ng-model="detail.EmergencyService" ng-keypress="emgKeyPress($event, detail)" /></div>
+                                    <div class="col-xs-1 bottom-row-col extra-padding">{{detail.ProcedureCode}}</div>
+                                    <div class="col-xs-1 bottom-row-col" ng-repeat="modifier in detail.ProcedureCodeModifiers track by $index">
+                                        <input class="form-control bottom-row-input" type="text" maxlength="2" ng-model="detail.ProcedureCodeModifiers[$index]" />
+                                    </div>
+                                    <div class="col-xs-1 bottom-row-col"><input class="form-control bottom-row-input" type="text" maxlength="4" ng-model="detail.DiagnosisPointer" ng-keypress="modifierKeyPress($event, detail)" /></div>
+                                    <div class="col-xs-1 bottom-row-col extra-padding">1</div>
+                                    <div class="col-xs-1 bottom-row-col bottom-row-last-col"><input class="form-control bottom-row-input" type="text" maxlength="1" ng-model="detail.IsFamilyPlanningString" ng-keypress="planningKeyPress($event, detail)" /></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="medChangeAns__footer">
+            <div class="form-footer">
+                <button type="button" ng-if="claim.Status === 1 || claim.Status === 3" check-auth-z="soar-ins-iclaim-edit" class="btn btn-primary" ng-click="save()">{{ 'Save' | i18n }}</button>
+                <button type="button" ng-disabled="false" class="btn btn-default" ng-click="cancel()">{{ claim.Status === 1 || claim.Status === 3 ? ('Cancel' | i18n) : ('Close' | i18n) }}</button>
+            </div>
+        </div>
+    </div>
+</div>

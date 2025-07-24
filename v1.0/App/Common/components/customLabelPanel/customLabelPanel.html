@@ -1,0 +1,28 @@
+﻿<div class="panel panel-default panel-shadow" ng-class="{'panel-info': editIsActive}">
+    <div class="panel-heading">
+        <div class="panel-title pull-left">{{ 'Additional Identifiers' | i18n }}</div>
+        <div class="panel-options pull-right">
+            <div uib-tooltip="{{panelLiveTooltip}}" tooltip-placement="left">
+                <button id="btnEdit" ng-hide="editIsActive == true" ng-click="edit();" class="btn btn-xs btn-default" ng-disabled="panelLive == true || fetchingData == true"><i class="fas fa-pencil-alt"></i></button>
+            </div>
+            <button id="btnCancel" ng-show="editIsActive == true" ng-click="cancelChanges();" ng-disabled="panelSaving" class="btn btn-danger btn-icon btn-sm">{{ 'Cancel' | i18n }} <i class="fa fa-times"></i></button>
+            <button id="btnSave" ng-show="editIsActive == true" ng-click="saveChanges();" ng-disabled="valid == false || panelSaving == true" class="btn btn-success btn-icon btn-sm"> {{'Save' | i18n }}<i class="fa fa-save"></i></button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="panel-body">
+        <div class="row" ng-hide="fetchingData">
+            <div class="col-xs-12 col-sm-6 col-md-4" ng-class="{'custom-id-label-column-edit': editIsActive, 'custom-id-label-column-view': !editIsActive}" ng-repeat="customLabel in customLabels | orderBy: 'LabelName'">
+                <div class="form-group">
+                    <label id="lblCustomLabel{{ $index }}" class="control-label">{{ customLabel.LabelName }}</label>
+                    <input id="inpCustomLabel{{ $index }}" class="form-control" ng-model="customLabel.LabelValue" ng-show="editIsActive == true" maxlength="40" />
+                    <p id="customLabelValue{{ $index }}" class="form-control-static" ng-show="editIsActive == false">{{ customLabel.LabelValue }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="spinner" ng-show="fetchingData">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+<!-- contact information header -->
+<div class="panel">
+    <div class="panel-heading">
+        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+            <h4 class="panel-title">
+                {{ 'Contact Information' | translate }}
+            </h4>
+        </div>
+    </div>
+    <!-- contact information section -->
+    <form [formGroup]="contactForm" name="contactForm" role="form">
+        <div id="contactInfo" class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                    <!-- phones -->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                            <label class="form-label-newer">{{'Phone' | translate }} </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" [ngClass]="{error:!formIsValid && phones?.length>0 && phones[0]?.PhoneNumber?.length===0  && rxAccessRequirements}">
+                            <phone-info [showLabel]="false" [phones]="phones" [maxLimit]="5" [hasTexts]="false" [hasNotes]="false"
+                                        area="'user-crud'" (onDeletePhoneList)="deletePhonesList($event)">
+                            </phone-info>
+                            <label id="lblRxAccessRequiresPhone" class="help-text " *ngIf="!formIsValid && phones?.length>0 && phones[0]?.PhoneNumber?.length===0  && rxAccessRequirements">
+                                {{ 'This field is required for Rx Access.' | translate }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                            <label class="form-label-newer">{{'Address' | translate }} </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5"
+                            [ngClass]="{error:!formIsValid && contactForm?.get('addressLine1')?.status=='INVALID' && rxAccessRequirements}">
+                            <input class="form-input" id="inpAddressLine1" [tabindex]="10"
+                                placeholder="{{ 'Street address' | translate }}" name="inpAddressLine1" maxlength="128" formControlName="addressLine1" type="text" [required]="rxAccessRequirements" addressField />
+                            <label id="lblRxAccessRequiresAddress" class="help-text "
+                                *ngIf="!formIsValid && contactForm?.get('addressLine1')?.hasError('required') && rxAccessRequirements">
+                                {{ 'This field is required for Rx Access.' | translate }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+                            <input class="form-input" id="inpAddressLine2" [tabindex]="10" placeholder="{{ 'Address 2' | translate }}" formControlName="addressLine2" name="inpAddressLine2" maxlength="128" type="text" addressField />
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <!-- city -->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                            <label class="form-label-newer">{{'City' | translate }} </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5"
+                             [ngClass]="{error:!formIsValid && contactForm?.get('city')?.status=='INVALID' && rxAccessRequirements}">
+                            <input class="form-input" id="inpCity" [tabindex]="10"
+                                   placeholder="{{ 'Enter city' | translate }}" CapitalizeFirst name="inpCity" maxlength="64" formControlName="city" type="text" [required]="rxAccessRequirements" alphaOnly allowPunctuation="true" />
+                            <label id="lblRxAccessRequiresAddress" class="help-text "
+                                   *ngIf="!formIsValid && contactForm?.get('city')?.hasError('required') && rxAccessRequirements">
+                                {{ 'This field is required for Rx Access.' | translate }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <!-- state -->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                            <label class="form-label-newer">{{'State' | translate }} </label>
+                        </div>
+                        <div class="col-xs-9 col-sm-4 col-md-3 col-lg-3"
+                             [ngClass]="{error:!formIsValid && contactForm?.get('state')?.hasError('required') && rxAccessRequirements}">
+                            <div [ngClass]="{error:selectedState}">
+                                <state-list [stateListId]="'inpState'" ngDefaultControl formControlName="state"
+                                            [tabindex]="10" source="selectedState" [required]="rxAccessRequirements"
+                                            (sourceChange)="onstatechange($event)"></state-list>
+                                <label id="lblRxAccessRequiresState" class="help-text "
+                                       *ngIf="!formIsValid && contactForm?.get('state')?.errors?.required  && rxAccessRequirements">
+                                    {{ 'This field is required for Rx Access.' | translate }}
+                                </label>
+                            </div>
+                            <label id="lblStateInvalid" class="help-text"
+                                   *ngIf="contactForm?.get('state')?.status?.invalid && contactForm?.get('state')?.errors?.required ">
+                                {{ 'This entry is invalid.' | translate }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <!-- zip code -->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                            <label class="form-label-newer">{{'ZIP Code' | translate }} </label>
+                        </div>
+                        <div class="col-xs-9 col-sm-4 col-md-3 col-lg-3">
+                            <div [ngClass]="{error:!formIsValid && (contactForm?.get('zipCode')?.errors?.required || !contactForm?.get('zipCode')?.valid) }">
+                                <!--zip 9 numeric-->
+                                <input id="inpZip" type="text" class="form-input required valid" name="inpZip"
+                                       [tabindex]="10" placeholder="{{ 'Enter ZIP code' | translate }}"
+                                       formControlName="zipCode" maxlength="10" minlength="5" zipField="address?.ZipCode"
+                                       mask="00000-0000" [validation]="false" [required]="rxAccessRequirements" />
+                                <label id="errZipCode" class="help-text"
+                                       *ngIf="!formIsValid && !contactForm?.get('zipCode')?.errors?.required && !contactForm?.get('zipCode')?.valid">
+                                    {{ 'ZIP code must be 5 to 9 numeric characters.' | translate }}
+                                </label>
+                                <label id="lblRxAccessRequiresZipCode" class="help-text"
+                                       *ngIf="!formIsValid && contactForm?.get('zipCode')?.invalid && contactForm?.get('zipCode')?.errors?.required && rxAccessRequirements">
+                                    {{ 'This field is required for Rx Access.' | translate }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

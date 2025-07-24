@@ -1,0 +1,26 @@
+﻿<div class="cardServiceDisabledModal">
+    <div class="modal-header">
+        <h4><i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div>
+            <span>{{message1}}</span>
+            <span>{{message2}}</span>
+            <span>{{message3}}</span>
+        </div>
+        <br />
+        <div>
+            <span>{{message4}}</span>
+        </div>
+        <br />
+        <div>
+            <checkbox checkbox-id="chkCardServiceDisabled" checkbox-label="checkboxLabel" checkbox-value="doNotShowMessageAgain"></checkbox>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right">
+            <button id="btnCardServiceDisabledNo" ng-click="button2Click()" class="btn btn-default">{{button2Text}}</button>
+            <button id="btnCardServiceDisabledYes" ng-click="button1Click()" class="btn btn-primary">{{button1Text}}</button>
+        </div>
+    </div>
+</div>

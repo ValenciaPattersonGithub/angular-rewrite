@@ -1,0 +1,22 @@
+﻿<div ng-class="'fade-in'" ng-controller="DepositsController">
+    <div class="deposits">
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2">
+                <soar-select-list id="inpLocationDeposit"
+                                  name="inpLocation"
+                                  placeholder="{{ 'Select {0}' | i18n:['Location'] }}"
+                                  text-field="ModifiedNameLine1"
+                                  value-field="LocationId"
+                                  option-list="locationsDDL"
+                                  ng-model="selectedLocationId"></soar-select-list>
+            </div>
+        </div>
+        <div class="padding-top-20">
+            <button class="btn btn-primary"  check-auth-z="soar-biz-dep-add" ng-disabled="disableDeposit" ng-click="openDepositPaymentsModal()">Create Deposit</button>
+        </div>
+        <div class="padding-top-20" ng-if="hasAccess">
+            <grid class="depositGrid" options="depositGridOptions" />
+        </div>
+    </div>
+   
+</div>

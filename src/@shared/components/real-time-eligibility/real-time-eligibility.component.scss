@@ -1,0 +1,46 @@
+.realTimeEligibility {
+    display: flex;
+    margin: 0px 10px 0px 10px;
+
+    #RTEDropdown {
+        mix-blend-mode: normal;
+        color: rgb(85, 85, 85);
+        border-width: 1px;
+        border-color: rgb(221, 221, 221);
+        border-radius: 5px;
+        border-style: solid;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        text-align: left;
+        text-align-last: left;
+        width: 12.5em;
+        height: 25px;
+    }
+
+    ::ng-deep {
+        .k-dropdown {
+            >.k-dropdown-wrap {
+                height: auto;
+
+                >.k-input {
+                    padding: 1px;
+                }
+            }
+        }
+    }
+}
+
+//TODO: This issue is raising due to heighest z-index into AngularJS header.less file into .top-header class
+// we can remove following fix when the  header.less file will be removed from AngularJS in code clean-up
+::ng-deep {
+    .real-time-eligibility-app-tooltip {
+        z-index: 99999;
+    }
+
+    .k-popup > .k-list-optionlabel.k-state-selected:hover {
+        border: 0.8px solid transparent !important;
+    }
+}
+
+ 

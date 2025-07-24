@@ -1,0 +1,33 @@
+﻿<div>
+	<soar-select-list text-field="Value" no-data-text="{{'No Hidden Widgets'}}" value-field="Id"
+		placeholder="{{'Show Hidden' | i18n }}" option-list="hiddenWidgetFilterOptions" ng-model="hiddenFilter"
+		sb-select="changeFilter" style="margin-left:10px; font-weight:bold"></soar-select-list>
+
+	<a id="btnSaveLayout" class="btn btn-primary pull-right" ng-disabled="saveLayoutDisabled"
+		ng-click="saveLayout()">{{ 'Save Layout' |i18n }}</a>
+
+	<a id="btnDashboard" class="btn btn-default"
+	   ng-if="location != '/BusinessCenter/PracticeAtAGlance'"
+	   style="margin-right: 10px;float: right;" href="#/Dashboard2/">
+		{{ 'View New Dashboard' |i18n }}
+	</a>
+
+</div>
+<div on-size-changed="onResize">
+	<div gridster="gridsterOpts">
+		<ul>
+			<li style="border: 1px solid #A9A9A9; border-radius: 4px; background: #FFFFFF;  overflow: hidden"
+				gridster-item="customItemMap" ng-repeat="item in standardItems">
+				<div ng-switch="item.ItemType">
+					<div ng-switch-when="widget">
+						<soar-widget data="item" hide-widget="onClose"></soar-widget>
+					</div>
+					<div ng-switch-default>
+						<div class="widget-handle" style="width: 100%; background: #ddd; padding: 10px 0px">Handle</div>
+						{{ item }}
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

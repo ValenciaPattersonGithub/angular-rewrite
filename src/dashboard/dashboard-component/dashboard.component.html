@@ -1,0 +1,54 @@
+﻿<div id="dashBoardHeaderArea" class="dashboard-header-area">
+    <div id="mainTemp" class="main-temp">
+        <div id="mainLt" class="main-lt">
+            <h3 id="dashBoardHeading" class="dashboard-heading">Dashboard</h3>
+            <h5 id="dayDateDisplay">{{ dayDateDisplay }} <span class="light-border">|</span>
+                <span id="dashBoardWelcome" class="dashboard-welcome"> Welcome </span>
+                <span id="displayName" class="light-color">{{ displayName}}</span>
+            </h5>
+        </div>
+
+        <div id="mainRgt" class="main-rgt right">
+            <ul id="mainCrt" class="main-crt">
+                <li>
+                    <a id="btnDashBoard" class="otherDashboard" href="#/Dashboard/">{{ 'View Original Dashboard' | translate}}</a>
+                </li>
+                <li id="dashBoardKendo" class="dashboardKendo">
+                    <kendo-dropdownlist [data]="hiddenWidgetFilterOptions" [defaultItem]="setDefaultItem"
+                                        [textField]="'Value'" id="ddShowHidden" name="chartsList" valueField="Id" [popupSettings]="{animate:false}"
+                                        [(ngModel)]="widgetId" (valueChange)="changeFilter(widgetId);" >
+                        <ng-template kendoDropDownListNoDataTemplate>
+                            <div class="k-nodata noData">
+                                <div>No Hidden Widgets</div>
+                            </div>
+                        </ng-template>
+                    </kendo-dropdownlist>
+                </li>
+                <li>
+                    <button class="btn lay_pg" id="btnSaveLayout" (click)="saveLayout();" [disabled]="saveLayoutDisabled">{{'Save Layout' | translate}}</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="dashBoardCntrArea" class="dash-board-cntr-area">
+    <div id="dashBoardChartArea" class="row dashboard-chart-area">
+        <ng-container *ngFor="let item of standardItems">
+            <div id="widgetBlock" class="col-sm-3 widget-block">
+                <div attr.id="KendoWidgetId-{{item.ItemId}}" [ngClass]="{'column-chart-30':item.ItemId===30,'column-chart':item.ItemId!=30}">
+                    <div id="headingArea" class="heading-area">
+                        <h3 id="widgettitle" class="widget-title">{{item.Title}} <span id="btnCloseWidget" class="fa fa-times icon-close"
+                                                 (click)="onClose(item.ItemId)"></span></h3>
+                    </div>
+                    <div class="chart-block" *ngIf="item.ItemId !== 28">
+                        <widget-bar [widgetData]="item"></widget-bar>
+                    </div>
+                    <div class="chart-block" *ngIf="item.ItemId === 28">
+                        <open-eras-widget [widgetData]="item"></open-eras-widget>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

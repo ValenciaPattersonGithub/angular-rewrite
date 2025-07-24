@@ -1,0 +1,23 @@
+<div class="accountMembersHeader" id="account-members-header">
+    <div class="accountMembersHeader-title" id="account-members-header-title">
+        <span class="accountMembersHeader-main-title" id="account-members-header-main-title">{{ 'Account Members' |
+            translate }}</span>
+    </div>
+    <div class="accountMembersdetail" id="account-members-detail">
+        <div class="accountMembersdetail-members" id="account-members-detail-members">
+            <div id="account-members-detail-sub-members" class="accountMembersdetail-submembers"
+                *ngFor="let accountMember of accountMembers">
+                <a id="account-members-detail-name" class="accountMembersdetail-name"
+                    [ngClass]="{'accountMembersdetail-disabled-link': patientId == accountMember.PatientId || !accountMember.IsActive}"
+                    class="memberDetails" (click)="overview(accountMember.PatientId, accountMember.IsActive)">
+                    {{accountMember.Name}} <br></a>
+                <a *ngIf="accountMember.DOB" id="account-members-detail-DOB" class="accountMembersdetail-DOB"
+                    [ngClass]="{'accountMembersdetail-disabled-link': patientId == accountMember.PatientId || !accountMember.IsActive}"
+                    (click)="overview(accountMember.PatientId, accountMember.IsActive)"> 
+                    {{accountMember.DOB | date:'MM/dd/yyyy'}} 
+                    ({{'Age: ' | translate}}{{accountMember.DOB | age:accountMember.DOB }}) <br></a>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,186 @@
+﻿@import "variables";
+// todo: update multiselect, tooth select, and surface select components to use the library.
+// These styles are directly imported from the component library
+@import '../@shared/components/form-controls/select-list/select-list.component';
+@import '../@shared/components/form-controls/check-box/check-box.component';
+
+.rootSurfaceSelector {
+
+    .fui-select {
+        outline: none;
+        /*border-color: $light-action-blue;
+        border-width: 2px;*/
+        border-radius: 5px;
+        box-shadow: none;
+    }
+
+    .fui-select:focus {
+        outline: none;
+        border-color: $light-action-blue;
+        border-width: 2px;
+        border-radius: 5px;
+        box-shadow: none;
+    }
+
+    &__displayedTeeth {
+        float: left;
+        padding: 0px 25px 0px 8px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: absolute;
+        top: 0px;
+        left: 1px;
+        line-height: 25px;
+
+
+        button {
+            margin: 2px 0 2px 2px;
+        }
+    }
+
+    &__displayedTeeth:focus {
+        outline: none;
+        border-color: $light-action-blue;
+        border-width: 2px;
+        border-radius: 5px;
+        box-shadow: none;
+    }
+    /*    &__displayedTeeth:focus {
+        //outline: 2px solid $light-action-blue;
+        outline: none;
+        border-color: $light-action-blue;
+        border-width: 2px;
+        border-radius: 5px
+    }*/
+    &__toothInput {
+        float: left;
+        width: 100%;
+        line-height: 25px;
+
+        input {
+            border: none;
+            padding: 0px 25px 0px 8px;
+            width: 100%;
+        }
+
+        input::placeholder {
+            color: $placeholder-grey;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        i {
+            float: right;
+            position: absolute;
+            right: 8px;
+            line-height: 25px;
+            color: $border-grey;
+        }
+    }
+
+    &__toothDropdown {
+        background-color: $polar-white;
+        border: solid 1px #E3E5E5;
+        clear: left;
+        max-height: 250px;
+        margin-top: 25px;
+        overflow-y: auto;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        min-width: 100px;
+        width: 100%;
+        z-index: 99;
+    }
+
+    &__teethList {
+        float: left;
+        width: 100%;
+        line-height: 25px;
+
+
+
+        .teethListRow {
+            display: flex;
+            align-items: center;
+            
+            label {
+                width: 100%;
+                padding: 0px 8px;
+                height: 25px;
+                margin-bottom: 0px;
+
+                .label {
+                    line-height:25px;
+                    padding: 0px 8px;
+                }
+            }
+            
+
+            label:focus-within, label:hover {
+                outline: none;
+                background-color: $action-blue;
+                color: $polar-white;
+
+                .label{
+                    color: $polar-white;
+                }
+
+                & input ~ .checkmark:after {
+                    display: block;
+                    position: inherit;
+                    background: none;
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+                    background: url("data:image/svg+xml,%3Csvg version='1.2' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible' preserveAspectRatio='none' viewBox='0 0 24 24' width='18' height='18'%3E%3Cg%3E%3Cpath xmlns:default='http://www.w3.org/2000/svg' d='M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z' style='fill: rgb(255, 255, 255);' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+                }
+
+                & input:checked ~ .checkmark:after {
+                    display: block;
+                    position: inherit;
+                    background: none;
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+                    background: url("data:image/svg+xml,%3Csvg version='1.2' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible' preserveAspectRatio='none' viewBox='0 0 24 24' width='18' height='18'%3E%3Cg%3E%3Cpath xmlns:default='http://www.w3.org/2000/svg' d='M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M10,17l-5-5l1.4-1.4l3.6,3.6 l7.6-7.6L19,8L10,17z' style='fill: rgb(255, 255, 255);' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+                }
+
+                & input:disabled ~ .checkmark {
+                    display: block;
+                    position: inherit;
+                    background: none;
+                    width: 18px;
+                    height: 18px;
+                    background: url("data:image/svg+xml,%3Csvg version='1.2' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible' preserveAspectRatio='none' viewBox='0 0 24 24' width='18' height='18'%3E%3Cg%3E%3Cpath xmlns:default='http://www.w3.org/2000/svg' d='M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z' style='fill: %23cccccc;' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+                    cursor: not-allowed;
+                }
+
+                & input:checked:disabled ~ .checkmark:after {
+                    background: none;
+                    position: inherit;
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+                    background: url("data:image/svg+xml,%3Csvg version='1.2' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible' preserveAspectRatio='none' viewBox='0 0 24 24' width='18' height='18'%3E%3Cg%3E%3Cpath xmlns:default='http://www.w3.org/2000/svg' d='M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M10,17l-5-5l1.4-1.4l3.6,3.6 l7.6-7.6L19,8L10,17z' style='fill: %23cccccc;' vector-effect='non-scaling-stroke'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+                    cursor: not-allowed;
+                }                
+            }
+            
+        }
+    }
+    
+    &__highlight {
+        background-color: $action-blue;
+        color: $polar-white;
+    }
+
+    .redBorder {
+        border: 2px solid $alert-red !important;
+    }
+}

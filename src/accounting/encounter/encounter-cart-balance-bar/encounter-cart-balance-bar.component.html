@@ -1,0 +1,37 @@
+﻿<div class="encounter-cart-balance-bar">
+    <div class="totals">
+        <div class="locationFees">
+            <div>Location Fees</div>
+            <div class="value" id="lblBalBarFees">{{services | encounterFeeTotal:triggerValue | currency}}</div>
+        </div>
+        <div class="discounts">
+            <div>Discounts</div>
+            <div class="value" id="lblBalBarDiscounts">{{services | encounterDiscountTotal:triggerValue | currency}}</div>
+        </div>
+        <div class="tax">
+            <div>Tax</div>
+            <div class="value" id="lblBalBarTax">{{services | encounterTaxTotal:triggerValue | currency}}</div>
+        </div>
+        <div class="charges">
+            <div>Charges</div>
+            <div class="value" id="lblBalBarCharges">{{services | encounterTotalAmount:triggerValue | currency}}</div>
+        </div>
+        <div class="allowedAmount">
+            <div>Allowed Amount</div>
+            <div class="value" id="lblBalBarAllowedAmount">{{services | encounterTotalAllowedAmount:triggerValue | currency}}</div>
+        </div>
+        <div class="estInsAdj">
+            <div>Est Ins Adj</div>
+            <div class="value" id="lblBalBarEstInsAdj">{{services | encounterAdjEstTotal:triggerValue | currency}}</div>
+        </div>
+        <div class="estIns">
+            <div>Est Ins</div>
+            <div class="value" id="lblBalBarEstIns">{{services | encounterEstInsTotal:triggerValue | currency}}</div>
+        </div>
+    </div>
+    <div class="patientBalance">
+        <div class="text" id ="lblBalBarPatientBalanceText">Patient Balance ({{services.length}} {{services.length == 1 ? 'service' : 'services' }})</div>
+        <div class="amount" id="lblBalBarPatientBalanceAmount">{{services | encounterPatientPortionTotal:triggerValue | currency}}</div>
+    </div>
+</div>
+       

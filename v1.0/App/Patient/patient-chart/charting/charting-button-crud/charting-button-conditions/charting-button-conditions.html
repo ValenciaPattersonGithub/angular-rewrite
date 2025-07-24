@@ -1,0 +1,43 @@
+﻿<div class="chartBtnLayoutConds">
+    <div class="chartBtnLayoutConds__tabFilters col-md-7">
+        <input class="form-control" id="conditionFilter" type="search" ng-model="filterBy" placeholder="{{ ::'Search' | i18n }}"/>
+    </div>
+    <div class="chartBtnLayoutConds__loading" ng-if="loadingConditions === true">
+        <no-results loading="conditions.length === 0"></no-results>
+    </div>
+    <div class="col-md-5">
+        {{ ::'Drag and drop to add to favorites' | i18n}} <i class="fa fa-arrow-right"></i>
+    </div>
+    <div class="chartBtnLayoutConds__buttons col-md-12">
+        <div class="chartBtnLayoutConds__btnContainer" ng-repeat="condition in conditions | orderBy: 'Description' | filter: conditionsFilter">
+            <button class="chartBtnLayoutConds__btn sortable"
+                    id="{{::condition.ConditionId}}"
+                    ng-click="utilizeFavorite(layoutItem)"
+                    uib-tooltip-template="'chartingButtonConditionsTooltipTemplate.html'"
+                    tooltip-append-to-body="true"
+                    tooltip-placement="auto + top-right"
+                    ng-class="getButtonColorClass(condition.$$LayoutItemId)"
+                    ng-disabled="disableWhenPatientInactive===true"
+                    ng-attr-data-layoutItem="{{::condition.$$button | json}}"
+                    kendo-draggable
+                    k-dragend="onDragEnd"
+                    k-dragstart="onDragStart"
+                    k-hint="draggableHint">
+                <img ng-if="condition.IconUrl" class="chartBtnLayoutConds__btnIcon" ng-src="{{::condition.IconUrl}}" />
+                <span class="chartBtnLayoutConds__btnText">
+                    {{ ::condition.Description | limitTo:11}}<span ng-show="{{::condition.Description.length > 11}}">&#8230;</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!--tooltip template - Charting Favorite-->
+<script type="text/ng-template" id="chartingButtonConditionsTooltipTemplate.html">
+    <div class="chartingButtonTooltip">
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Description'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{::condition.Description}}</div>
+        </div>
+    </div>
+</script>

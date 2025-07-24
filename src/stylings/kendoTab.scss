@@ -1,0 +1,26 @@
+.k-tabstrip .k-tabstrip-items {
+    border-bottom: 1px solid lightgrey;
+  }
+  .k-tabstrip>.k-content {
+    padding: 0px !important;
+    border: none;
+    display: inherit;
+  }
+  
+  .k-tabstrip-items .k-item.k-state-active {
+    background: $page-content-background;
+    border: none;
+    border-bottom: 3px solid $tab-active-color !important;
+  }
+  
+  .k-tabstrip-items .k-item.k-state-active::after {
+    border-color: $tab-active-color !important;
+  }
+  
+  .k-tabstrip-items {
+    text-transform: capitalize;
+  }
+  .k-tabstrip-items>.k-item:not(.k-state-active) {
+    opacity: 1;
+  }
+  

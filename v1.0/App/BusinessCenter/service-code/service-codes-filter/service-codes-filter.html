@@ -1,0 +1,55 @@
+﻿<div id="divFilters" class="srvcCodeFltr">
+    <!--sorting-->
+    <div class="srvcCodeFltr__row">
+        <div class="srvcCodeFltr__title">
+            <h5>{{'Sorted by' | i18n }}</h5>
+        </div>
+        <div class="srvcCodeFltr__body">
+            <select kendo-drop-down-list
+                    name="inpSortedBy"
+                    id="inpSortedBy"
+                    k-option-label="'{{'Sorted By' | i18n}}'"
+                    class="fill-width"
+                    ng-model="data.SortField"
+                    k-data-source="data.SortByTypes"
+                    k-data-text-field="'SortByName'"
+                    k-data-value-field="'SortByField'"></select>
+        </div>
+    </div>
+    <div class="srvcCodeFltr__row">
+        <div class="srvcCodeFltr__title">
+            <h5>{{'Service Type' | i18n}}</h5>
+        </div>
+        <div class="srvcCodeFltr__body">
+            <checkbox ng-repeat="serviceType in filterObject.ServiceTypes" checkbox-disabled="showFiltering" checkbox-id="lblFilterServiceType" checkbox-value="serviceType.FilterBy" checkbox-label="serviceType.Description"></checkbox>
+        </div>
+    </div>
+
+    <!--active status-->
+    <div class="srvcCodeFltr__row">
+        <div class="srvcCodeFltr__title">
+            <h5>{{'Status' | i18n}}</h5>
+        </div>
+        <div class="srvcCodeFltr__body">
+            <checkbox checkbox-id="lblFilterActiveCodes" checkbox-value="filterObject.IsActive" checkbox-label="'Active'"></checkbox>
+            <checkbox checkbox-id="lblFilterInactiveCodes" checkbox-value="filterObject.IsInactive" checkbox-label="'Inactive'"></checkbox>
+        </div>
+    </div>
+    <!--types-->
+    <div class="srvcCodeFltr__row">
+        <div class="srvcCodeFltr__title">
+            <h5>{{'Type' | i18n}}</h5>
+        </div>
+        <div class="srvcCodeFltr__body">
+            <checkbox checkbox-id="lblFilterSwiftPickCodes" checkbox-value="filterObject.IsServiceCode" checkbox-label="'Service Code'"></checkbox>
+            <checkbox checkbox-id="lblFilterSwiftPickCodes" checkbox-value="filterObject.IsSwiftPickCode" checkbox-label="'Swift Code'"></checkbox>
+        </div>
+    </div>
+    <div class="srvcCodeFltr__row">
+        <div class="text-align-center text-muted" ng-show="showFiltering==true">
+            <i id="iDefaultMessage" class="fa fa-spinner fa-spin fa-2x loading"></i>
+        </div>
+    </div>
+</div>
+
+

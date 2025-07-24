@@ -1,0 +1,30 @@
+.benefit-plans-by-carrier {
+    grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
+}
+
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.patients-by-flags-report {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+        }
+      }
+}

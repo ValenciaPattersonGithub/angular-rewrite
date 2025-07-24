@@ -1,0 +1,14 @@
+﻿<div class="form-group">
+    <div class="row">
+        <div class="col-md-12">
+            <label id="lblFormItemTypeHeader{{sectionIndex}}_{{sectionItemPreviewIndex}}" for="{{'Signature' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}">
+                {{ 'Please Sign Below:' |i18n }}<span id="sectionItemIsRequired" ng-show="sectionItem.IsRequired" class="bold padding5 size-h4">*</span>
+            </label>           
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <textarea type="text" class="form-control border-solid-black" id="{{'Signature' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}" rows="3" ng-disabled="inputIsDisabled"></textarea>
+        </div>
+    </div>
+</div>

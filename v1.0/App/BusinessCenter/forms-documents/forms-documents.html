@@ -1,0 +1,180 @@
+﻿<!-- <business-nav></business-nav> -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div class="formsDocuments">
+    <!-- <div class="rowFull">
+        <div class="formsDocuments__header">
+            <div class="formsDocuments__title">
+                <h1>{{ 'Forms & Documents' | i18n }}</h1>
+            </div>
+        </div>
+    </div> -->
+    <div class="rowFull">
+        <div class="formsDocuments__toolbar">
+
+            <!-- <div class="pill-bar">
+                <a ng-repeat="item in viewOptions" ng-class="{'active': selectedItem == item.Name, 'disabled': item.Disabled}" ng-click="getTab(item.Index)">{{item.Name}}</a>
+            </div> -->
+
+
+            <div class="formsDocuments__actions">
+                <button class="btn btn-default" icon="fa-upload" ng-disabled="!canUpload" ng-click="uploadFile()" check-auth-z="soar-doc-docimp-add">{{'Upload Document' | i18n}}</button>&nbsp;&nbsp;
+                <button class="btn btn-default"
+                        icon="fa-download"
+                        ng-disabled="itemsQueuedForDownload.length === 0"
+                        ng-click="downloadSelectedDocs()"
+                        check-auth-z="soar-doc-docimp-view">
+                    {{'Download' | i18n}}
+                </button>&nbsp;&nbsp;
+
+                <button class="btn btn-default"
+                        ng-disabled="disableDocumentGroupsButton"
+                        ng-click="openDocumentGroupsModal()"
+                        check-auth-z="soar-doc-docorg-vgroup">
+                    {{'Document Groups' | i18n}}
+                </button>
+
+            </div>
+        </div>
+        <div class="formsDocuments__body">
+            <div class="formsDocuments__secondary">
+                <div class="dirList">
+                    <a class="" icon="fa-clock" ng-disabled="" ng-click="getRecentDocuments(true)">{{'Recently Viewed' | i18n}}</a>
+                    <hr />
+                    <div class="formsDocuments__search">
+                        <div class="form-inline">
+                            <div class="form-group has-feedback">
+                                <search-bar base-id="filterUser"
+                                            class="patientFilter"
+                                            header="false"
+                                            select-mode="true"
+                                            selected="patient"
+                                            b-focus="true"
+                                            show-search-button="true"
+                                            show-clear-button="true"
+                                            clear="clearPatientSearch"
+                                            hold-search-term="true"
+                                            tab-index="1"
+                                            current-patient-id="currentPatient.PatientId"
+                                            placeholder="{{ 'Patient Search' | i18n }}"
+                                            document-patients="true"                                            
+                                            set-focus>
+                                </search-bar>
+                            </div>
+                        </div>
+                    </div>
+                    <uib-accordion close-others="false" ng-if="documentGroups.length > 0 ">
+                        <no-results loading="patientsLoading" ng-if="patientsLoading === true"></no-results>
+                        <div ng-if="!patient" ng-hide="patientsLoading">
+                            {{ 'Please search for and select a patient.' | i18n }}
+                        </div>
+                        <div uib-accordion-group class='{{patient.class}}' ng-if="patient" is-open="patient.isOpen">
+                            <div uib-accordion-heading>
+                                <span class="rootDir far fa-folder"
+                                      ng-class="{'active':patient.isOpen }"
+                                      ng-bind-html="patient.$$FormattedName | boldTextIfContains:patientFilter">
+                                </span>
+                            </div>
+                            <uib-accordion close-others="false">
+                                <div uib-accordion-group is-disabled="!patient" ng-repeat="documentGroup in documentGroups | filter:parentGroupsFilter | orderBy: 'Description'" is-open="documentGroup.$$IsOpen">
+                                    <uib-accordion-heading>
+                                        <span class="rootDir far fa-folder padding-left-10" uib-tooltip="{{ documentGroup.Description }}" tooltip-append-to-body="true" tooltip-placement="top-left"
+                                              ng-click="setActiveParentGroup(documentGroup);setActiveDirectory(patient.PatientId, documentGroup.Description)"
+                                              ng-class="{'active':documentGroup.$$IsOpen}">
+                                            {{documentGroup.Description  | truncate: 30 :'...'}} ({{documentGroup.$$DocumentCount}})
+                                        </span>
+                                    </uib-accordion-heading>
+                                    <uib-accordion close-others="false">
+                                        <div uib-accordion-group is-disabled="!patient" ng-repeat="childDocumentGroup in documentGroup.$$childGroups  | orderBy: 'Description'" is-open="isOpen">
+                                            <uib-accordion-heading>
+                                                <a class="rootDir far fa-folder padding-left-25" uib-tooltip="{{ childDocumentGroup.Description }}" tooltip-append-to-body="true" tooltip-placement="top-left"
+                                                   ng-click="setActiveDirectory(patient.PatientId, childDocumentGroup.Description)"
+                                                   ng-class="{'active':activeDir.directory === childDocumentGroup.Description }">
+                                                    {{childDocumentGroup.Description | truncate: 30 :'...'}} ({{childDocumentGroup.$$DocumentCount}})
+                                                </a>
+                                            </uib-accordion-heading>
+                                        </div>
+                                    </uib-accordion>
+                                </div>
+                            </uib-accordion>
+                        </div>
+                    </uib-accordion>
+                </div>
+            </div>
+            <div class="formsDocuments__primary">
+                <div class="fuseGrid container pull-left" ng-if="activeDocumentList.length > 0">
+                    <div class="rowHeaderExt">
+                        <div class="col-sm-1 cell ">
+                            <span class="formsDocuments__rowHeaderfont">{{'Select All' | i18n}}</span><br />
+                            <checkbox checkbox-value="selectAllForDownload" change-function="selectAllCheckBoxChanged(selectAllForDownload)" checkbox-id="selectAllDocs" />
+                        </div>
+                        <div class="col-sm-4 cell formsDocuments__rowHeaderfont" ng-if="activeDir.directory === 'Recents'" ng-class="{'col-sm-4' : activeDir.directory === 'Recents'}">
+                            {{'Patient' | i18n}}<br />
+                            <input type="text" class="filter fa fa-filter" ng-model="listFilter.PatientName" ng-change="filterCol()" />
+                        </div>
+                        <div class="cell formsDocuments__rowHeaderfont" ng-class="{'col-sm-3' : activeDir.directory === 'Treatment Plans' || activeDir.directory === 'Recents', 'col-sm-4' : activeDir.directory !== 'Treatment Plans' && activeDir.directory !== 'Recents' }">
+                            {{'Name' | i18n}}
+                            <input type="text" class="filter fa fa-filter" ng-model="listFilter.Name" ng-change="filterCol()" />
+                        </div>
+                        <div class="col-sm-3 cell formsDocuments__rowHeaderfont" ng-if="activeDir.directory === 'Treatment Plans'">
+                            {{'Treatment Plan' | i18n}}
+                            <input type="text" class="filter fa fa-filter" ng-model="listFilter.OriginalFileName" ng-change="filterCol()" />
+                        </div>
+                        <div class="cell formsDocuments__rowHeaderfont" ng-class="{'col-sm-2' : activeDir.directory === 'Treatment Plans' || activeDir.directory === 'Recents', 'col-sm-3' : activeDir.directory !== 'Treatment Plans' && activeDir.directory !== 'Recents'}">
+                            {{'Type' | i18n}}
+                            <input type="text" class="filter fa fa-filter" ng-model="listFilter.MimeType" ng-change="filterCol()" />
+                        </div>
+                        <div class="cell formsDocuments__rowHeaderfont col-sm-1">
+                            {{'Date' | i18n}}
+                            <input type="text" class="filter fa fa-filter" ng-model="listFilter.Date" ng-change="filterCol()" />
+                        </div>
+                        <div class="col-sm-push-1 cell"></div>
+                    </div>
+                    <div class="row body" ng-repeat="doc in documentList = (filteredDocumentList | filter:documentsFilter)">
+                        <div class="col-sm-1 cell">
+                            <checkbox checkbox-value="doc.$$Checked" change-function="downloadCheckBoxChanged()" />
+                        </div>
+                        <div class="cell" ng-class="{'col-sm-4' : activeDir.directory === 'Recents'}" ng-if="activeDir.directory === 'Recents'">
+                            <span ng-bind-html="doc.$$FormattedName | boldTextIfContains:listFilter.PatientName"></span>
+                        </div>
+                        <div class="cell" ng-class="{'col-sm-3' : activeDir.directory === 'Treatment Plans' || activeDir.directory === 'Recents', 'col-sm-4' : activeDir.directory !== 'Treatment Plans' && activeDir.directory !== 'Recents'}">
+                            <a ng-click="viewDocument(doc)" check-auth-z="soar-doc-docimp-view">
+                                <span ng-bind-html="doc.Name | boldTextIfContains:listFilter.Name"></span>
+                            </a>
+                        </div>
+                        <div class="col-sm-3 cell" ng-if="activeDir.directory === 'Treatment Plans'">
+                            <span ng-if="doc.Description" ng-bind-html="doc.Description | boldTextIfContains:listFilter.OriginalFileName"></span>
+                            <span ng-if="!doc.Description"></span>
+                        </div>
+                        <div class="cell" ng-class="{'col-sm-2' : activeDir.directory === 'Treatment Plans' || activeDir.directory === 'Recents', 'col-sm-3' : activeDir.directory !== 'Treatment Plans' && activeDir.directory !== 'Recents'}">
+                            <span ng-if="doc.MimeType === 'Digital'" ng-bind-html="doc.MimeType | boldTextIfContains:listFilter.MimeType"></span>
+                        </div>
+                        <div class="cell col-sm-1">
+                            <span ng-bind-html="doc.DateUploaded | toShortDisplayDateLocal | boldTextIfContains:listFilter.Date"></span>
+                        </div>
+                        <div class="col-sm-1 cell text-align-right" ng-hide="(doc.$$DocumentGroup === 'HIPAA' && doc.MimeType === 'Digital')">
+                            <a id="lnkEditNoteTemplate" class="fas fa-pencil-alt" ng-click="openDocumentProperties(doc.DocumentId, doc.$$FormattedName)" ng-if="(doc.Description == null) && (doc.$$DocumentGroup !== 'Medical History') && !(doc.$$DocumentGroup === 'Consent' && doc.MimeType === 'Digital')" uib-tooltip="{{'Edit' | i18n}}" tooltip-append-to-body="true" check-auth-z="soar-doc-docimp-edit"></a>
+                            &nbsp;
+                            <a id="lnkDeleteNoteTemplate"
+                               class="fa fa-times"
+                               ng-hide="(doc.$$DocumentGroup === 'Medical History' && doc.MimeType === 'Digital')"
+                               ng-click="validateDelete(doc)"
+                               uib-tooltip="{{'Delete' | i18n}}"
+                               tooltip-append-to-body="true"
+                               check-auth-z="soar-doc-docimp-delete"></a>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+            <div ng-if="patient && filteredDocumentList.length === 0">{{'There are no documents to display.'| i18n}}</div>
+
+            <div ng-if="!patient && activeDocumentList.length === 0">{{'Please select a patient to get started.'| i18n}}</div>
+
+            <div id="docCtrlsWindow"
+                 kendo-window="docCtrls"
+                 k-visible="false"
+                 k-on-open="docCtrlsOpen = true"
+                 k-on-close="docCtrlsOpen = false">
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+.carrier-report {
+    grid-template-columns: 5fr 7fr 3fr 2fr 3fr;
+}
+.carrier-report-header {
+    grid-template-columns: 5fr 7fr 3fr 2fr 3fr;
+    background: transparent;
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display: grid;
+
+    &.header {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.carrier-report {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+
+        > div {
+            align-items: center;
+        }
+    }
+}
+.carrier-report-hr {
+    border-top: 2px solid #333333;
+    opacity: .5;
+    margin: 0;
+}

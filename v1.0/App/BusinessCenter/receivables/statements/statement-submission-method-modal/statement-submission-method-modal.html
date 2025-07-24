@@ -1,0 +1,23 @@
+﻿<div>
+    <div class="modal-header">
+        <h4>Send Now</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-offset-2">
+                <div class="radio-inline col-xs-3">
+                    <input type="radio" name="submissionMethodRadios" id="rdoSubmissionMethodElectronic" ng-model="submissionMethod" value="electronic">
+                    <label for="rdoSubmissionMethodElectronic">Electronic</label>
+                </div>
+                <div class="radio-inline col-xs-3">
+                    <input type="radio" name="submissionMethodRadios" id="rdoSubmissionMethodPrint" ng-model="submissionMethod" value="print">
+                    <label for="rdoSubmissionMethodPrint">Print</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-link" ng-click="cancel()">{{ 'Close' | i18n }}</button>
+        <button class="btn btn-primary" ng-click="submit(submissionMethod)">{{ 'Submit' | i18n }}</button>
+    </div>
+</div>

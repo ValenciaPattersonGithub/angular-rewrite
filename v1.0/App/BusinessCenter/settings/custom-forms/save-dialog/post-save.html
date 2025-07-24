@@ -1,0 +1,39 @@
+﻿<div class="modal-header">
+    <div class="container">
+        <div class="row">
+            <h1>
+                <span class="glyphicon glyphicon-ok large-size" aria-hidden="true"><span id="successHeader" class="modal-title">&nbsp;{{ 'Success!' | i18n }}</span></span>
+            </h1>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row" ng-show="isSaveOpearation">
+            <h2 id="formSavedMessage1">
+                {{ 'Your Template has been saved, This template will be available for use when published. Do you wish to publish?' | i18n }}
+            </h2><br />
+        </div>
+        <div class="row" ng-hide="isSaveOpearation">
+            <h2 id="formSavedMessage2">
+                {{ 'Your Template has been updated, This template will be available for use when published. Do you wish to publish?' | i18n }}
+            </h2><br />
+        </div>
+        <div class="row"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <button id="btnPublish" check-auth-z="soar-biz-bcform-pub" type="button" class="btn btn-default col-md-12" ng-click="doPublish()">
+                        <h4 id="publishMessage"> {{ 'Yes, please publish now.' | i18n }}</h4>
+                    </button>
+                </div>
+
+                <div class="col-md-6">
+                    <button id="btnDoNotPublish" type="button" class="btn btn-default col-md-12" ng-click="doNotPublish()">
+                        <h4 id="doNotPublishMessage"> {{ 'No, I will publish later.' | i18n }}</h4>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

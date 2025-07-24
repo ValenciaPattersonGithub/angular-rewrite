@@ -1,0 +1,20 @@
+﻿<form class="sectionPreview section-preview-show-border" id="{{ 'frmSectionPreview' + sectionIndex }}">
+    <div ng-class="{'container-fluid' : !section.$$isMHF}">
+        <div class="row" ng-if="canEditForm">
+            <div class="col-md-offset-11 col-md-1">
+                <button ng-disabled="!canEditForm" check-auth-z="soar-biz-bcform-edit" class="btn btn-default" id="{{ 'btnEdit_SEC_' + sectionIndex }}" type="button" ng-click="clearUndo();editSection(sectionIndex);$parent.openAccordion(allowSectionOpen);"><i class="glyphicon glyphicon-pencil"></i><br />{{ 'Edit' | i18n }}</button>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <h4 class="col-md-12 sectionPreview__title" ng-style="section.$$isMHF ? {'margin-top':'0'} : ''" id="title{{sectionIndex}}">{{ section.Title }}</h4>
+            </div>
+            <div class="section-items" ng-class="{ oneColumn: section.$$oneColumn, threeColumn: section.$$threeColumn}">
+                <div ng-repeat="(sectionItemPreviewIndex,sectionItem) in section.FormSectionItems">
+                    <section-item-preview-directive section-item="sectionItem"></section-item-preview-directive>
+                    <hr class="sectionPreview__headerRow" ng-if="!$last && section.$$isMHF" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

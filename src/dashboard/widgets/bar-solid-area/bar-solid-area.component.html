@@ -1,0 +1,8 @@
+<div id="barSolidArea" class="bar-solid-area" [ngClass]="{'bar-solid-area-padding': widgetData.ItemId !== 27, 'bar-solid-area-paddingPre': widgetData.ItemId === 27, 'bar-solid-area-paddingStatements': widgetData.ItemId === 29,'bar-solid-area-padding-referrals':widgetData.ItemId === 30}">
+    <ng-container *ngFor="let bar of barAreaList">
+        <div attr.id="barSolid{{bar.id}}" [class]="bar.solidClass" (mouseenter)="onLegendItemHover(bar.id)" (mouseleave)="onLegendItemHover(-1)">
+            <span [class]="bar.className"></span> {{bar.value}}
+        </div>
+    </ng-container>
+</div>
+

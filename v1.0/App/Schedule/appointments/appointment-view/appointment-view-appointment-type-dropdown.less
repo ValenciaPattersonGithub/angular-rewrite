@@ -1,0 +1,97 @@
+﻿
+.appointment-type-dropdown button, .appointment-type-dropdown .dropdownListBox {
+    font-family: @global-font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: #444;
+    width: 100%;
+}
+
+.appointment-type-dropdown button {
+    border: none;
+    height: 36px;
+    text-align: left;
+    padding-left: 10px;
+    background: #ffffff;
+    border-radius: 2px;
+    border: 1px solid #A9A9A9;
+    overflow-y: hidden;
+}
+
+.appointment-type-dropdown button:disabled {
+    background-color: #f5f5f5;
+    border-color: #cccccc;
+    color: #a1a1a1;
+}
+
+.appointment-type-dropdown {
+    width: 94%;
+}
+
+.appointment-type-dropdown .dropdownListBox {
+    border: 1px solid #A9A9A9;
+    background: #ffffff;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    opacity: 1;
+    z-index: 100;
+    width: 100%;
+}
+
+.appointment-type-dropdown .description {
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+.appointment-type-dropdown .dropdownListBox div:hover {
+    background-color: #0096FF;
+    color: #fff;
+    //background-color: #27BFE6;
+    //color: white;
+}
+
+.appointment-type-dropdown .dropdownListBox div:active {
+    background-color: #0096FF;
+    color: #fff;
+    //background-color: #27BFE6;
+    //color: white;
+}
+
+.appointment-type-dropdown button:focus {
+    outline: none;
+    border: 1px solid #27BFE6;
+    box-shadow: 0 0 5px #27BFE6; //$global-drop-shadow
+}
+
+.appointment-type-dropdown .active {
+    background-color: #0096FF;
+    color: #fff;
+    //background-color: #27BFE6;
+}
+
+.appointment-type-dropdown .option {
+    padding-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    cursor: pointer;
+}
+
+/* need to figure out how to get this to work */
+.appointment-type-dropdown button .arrow:after {
+    content: "\e006";
+    position: absolute;
+    width: 20px;
+    top: 0px;
+    right: 0px;
+    font-size: 19px;
+    color: #2DABCB;
+    font-family: 'WebComponentsIcons';
+    visibility: visible;
+    padding-top: 5px;
+    height: 100%;
+}
+/*
+.noClick {
+    color: $disabled-grey;
+}*/

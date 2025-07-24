@@ -1,0 +1,80 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage"
+        ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-12 cell" colspan="10">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{ 'Date' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Service Code' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Tooth' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Area' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Location Fee' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Fee Charged' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Discount Type' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Discount Rate (%)' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Amount of Discount' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="dateInfo in location.Dates" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'" ng-if="location.Dates.length > 0">
+                <tr>
+                    <td class="col-sm-1 cell">{{dateInfo.Date | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-2 cell">{{ dateInfo.Transactions[0].Patient }}</td>
+                    <td class="col-sm-2 cell">{{ dateInfo.Transactions[0].ServiceCode }}</td>
+                    <td class="col-sm-1 cell">{{ dateInfo.Transactions[0].Tooth }}</td>
+                    <td class="col-sm-1 cell">{{ dateInfo.Transactions[0].Area }}</td>
+                    <td class="col-sm-1 cell">{{ dateInfo.Transactions[0].LocationFee | currency }}</td>
+                    <td class="col-sm-1 cell">{{ dateInfo.Transactions[0].FeeCharged | currency }}</td>
+                    <td class="col-sm-1 cell">{{ dateInfo.Transactions[0].DiscountType }}</td>
+                    <td class="col-sm-1 cell text-right">{{ dateInfo.Transactions[0].DiscountRate| number }} {{'%' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right">{{ dateInfo.Transactions[0].AmountOfDiscount | currency }}</td>
+                </tr>
+                <tr ng-repeat="trans in dateInfo.Transactions | startFrom: 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell">{{ trans.Patient }}</td>
+                    <td class="col-sm-2 cell">{{ trans.ServiceCode }}</td>
+                    <td class="col-sm-1 cell">{{ trans.Tooth }}</td>
+                    <td class="col-sm-1 cell">{{ trans.Area }}</td>
+                    <td class="col-sm-1 cell">{{ trans.LocationFee | currency }}</td>
+                    <td class="col-sm-1 cell">{{ trans.FeeCharged | currency }}</td>
+                    <td class="col-sm-1 cell">{{ trans.DiscountType }}</td>
+                    <td class="col-sm-1 cell text-right">{{ trans.DiscountRate | number}} {{'%' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right">{{ trans.AmountOfDiscount | currency }}</td>
+                </tr>
+            </tbody>
+            <tbody ng-repeat="type in location.Types">
+                <tr class="reportGrid__row">
+                    <td colspan="7" class="col-sm-8 cell"></td>
+                    <td colspan="2" class="col-sm-3 cell text-right reportGrid__label">{{ type.DiscountType }} {{':' | i18n}}
+                    </td>
+                    <td class="col-sm-1 cell text-right ">{{ type.AmountOfDiscount | currency }}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr class="reportGrid__row">
+                    <td colspan="6" class="col-sm-7 cell"></td>
+                    <td colspan="3" class="col-sm-4 cell text-right reportGrid__label">{{ 'Total Discounts for Date Range Selected' | i18n }} {{':' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right ">{{ location.TotalDiscount | currency }}</td>
+                </tr>
+            </tbody>
+            <tbody ng-show="data.Locations.length === $index+1">
+                <tr class="stripEven">
+                    <td class="col-sm-12 text-align-center" colspan="10">
+                            {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental
+                            Association (ADA). All rights reserved.' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-show="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

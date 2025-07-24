@@ -1,0 +1,315 @@
+@import "variables";
+.family-registration-landing {
+  &-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "header header";
+    grid-gap: 20px;
+  }
+  &-header {
+    grid-area: header;
+    background-color: $white;
+  }
+  &-content {
+    display: grid;
+    grid-template: 68px 1fr / 190px 1fr;
+    grid-gap: 20px;
+    grid-template-areas: "sideNav patientDetails";
+    width: 96%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-top: 0 !important;
+    min-width: 1280px;
+    &-toc {
+      grid-area: sideNav;
+    }
+    &-person-detail {
+      grid-area: patientDetails;
+    }
+  }
+}
+
+.family-registration-landing-container .my-fab {
+  width: 30px;
+  height: 30px;
+  line-height: 18px;
+  //background-color: #27bfe6;
+  background-color: $action-blue;
+  &::ng-deep .mat-button-wrapper {
+    line-height: 14px;
+    padding: 0;
+    // .mat-icon {
+    //   font-size: 18px;
+    //   padding-top: 3px;
+    // }
+  }
+}
+.family-registration-landing-content-person-detail .mat-tab-group {
+  max-width: 1400px;
+}
+.family-registration-landing-container .my-active-tab-edit-icon {
+  font-size: 18px;
+  padding-left: 3px;
+  opacity: unset;
+  padding-top: 3px;
+}
+.family-registration-landing-container .my-active-tab-close-icon {
+  margin-left: 15px;
+}
+.person {
+  &-container {
+    display: grid;
+    grid-template: repeat(8, 1fr) / 100%;
+    grid-template-areas:
+      "personalDetails"
+      "contactDetails"
+      "insurance"
+      "preferances"
+      "dentalRecord"
+      "referrals"
+      "identifiers"
+      "documents"
+      "accountMembers";
+    max-height: calc(100vh + 22px - 62px - 40px - 68px - 22px - 57px);
+    overflow: auto;
+    padding-left: 1px;
+    margin-top: 1em;
+  }
+  &-section {
+    margin-right: 4px;
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: $background-color;
+    box-shadow: $global-drop-shadow;
+    margin-left: 1px;
+  }
+  &-personal-details {
+    grid-area: personalDetails;
+    margin-top: 0px;
+  }
+  &-contact-details {
+    grid-area: contactDetails;
+  }
+  &-insurance {
+    grid-area: insurance;
+  }
+  &-prefrences {
+    grid-area: preferances;
+  }
+  &-dental-record {
+    grid-area: dentalRecord;
+  }
+  &-referrals {
+    grid-area: referrals;
+  }
+  &-identifiers {
+    grid-area: identifiers;
+  }
+  &-documents {
+    grid-area: documents;
+  }
+  &-account-members {
+    grid-area: accountMembers;
+  }
+}
+.person-container::-webkit-scrollbar {
+  width: 16px;
+}
+
+.person-container::-webkit-scrollbar-track {
+  background-color: $appointment-dropdownlist-background-color;
+}
+.person-container::-webkit-scrollbar-track:hover {
+  background-color: $appointment-dropdownlist-background-color;
+}
+.person-container::-webkit-scrollbar-thumb {
+  background-color: $appointment-dropdownlist-box-background-color;
+  border-radius: 16px;
+  border: 5px solid $appointment-dropdownlist-background-color;
+}
+.person-container::-webkit-scrollbar-thumb:hover {
+  background-color: $appointment-dropdownlist-box-hover-background-color;
+  border: 4px solid $appointment-dropdownlist-box-hover-border-color;
+}
+
+.person-container::-webkit-scrollbar-button {
+  display: none;
+}
+::ng-deep {
+  .k-tabstrip .k-content.k-state-active {
+    padding: 0;
+  }
+  .k-tabstrip-items .k-state-active .k-link {
+    padding: 0;
+  }
+  .k-tabstrip-items .k-item.k-state-active {
+    background: none;
+    border: none;
+  }
+  .k-tabstrip {
+    .k-tabstrip-items {
+      border-bottom: 1px solid $patient-registration-border-color;
+      margin-right: 20px;
+    }
+  }
+  .k-tabstrip > .k-content {
+    display: block;
+    border: none;
+    background-color: transparent !important;
+  }
+  .k-widget.k-tabstrip.k-tabstrip-top {
+    display: grid;
+    grid-template: 22px 1fr / auto;
+    grid-template-areas:
+      "tabstrip"
+      "tabpanel";
+  }
+}
+* {
+  box-sizing: border-box;
+}
+::ng-deep .overlay-pane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0px !important;
+  left: 0px !important;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /*dim the background behind the modal*/
+}
+
+.reg-modal {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content 1fr min-content;
+  grid-template-areas: "header" "content" "footer";
+  margin: 0;
+  border: 1px solid $short-input-text-color;
+  border-radius: 4px;
+  outline: 0;
+  background-color: $brand-color_white;
+  border-radius: 5px;
+  box-shadow: $global-drop-shadow;
+  max-width: 80vw;
+  max-height: 80vh;
+  min-height: 1px;
+  min-width: 780px;
+}
+
+.reg-modal-body {
+  grid-area: content;
+  border-top: $app-modal-header-border;
+  border-bottom: $app-modal-header-border;
+  overflow: auto;
+}
+
+.reg-modal-header {
+  font-size: $app-modal-header-font-size;
+  font-weight: $app-modal-header-font-weight;
+  font-family: $global-font-family;
+  color: $text-black;
+  height: 18px;
+}
+
+.search-message {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 12px;
+  color: $label-color;
+}
+
+.reg-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  grid-area: footer;
+}
+
+.reg-modal-bold-text {
+  font-weight: bold;
+}
+
+.reg-modal-text {
+  font-weight: normal;
+}
+
+.btnFlexContainer {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.containerPadding {
+  padding: 15px;
+}
+
+.closeModal {
+  cursor: pointer;
+  color: $action-blue;
+
+  &:hover {
+    color: $light-action-blue;
+  }
+}
+
+.close-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 15px;
+}
+
+.reg-btn {
+  margin-left: 10px;
+}
+
+table,
+th,
+td {
+  border: 1px solid $patient-registration-border-color;
+  font-size: 12px;
+  color: $text-black;
+}
+
+tr:nth-child(even) {
+  background-color: $grid-odd-row-background-color;
+}
+
+tr:nth-child(odd) {
+  background-color: $background-color;
+}
+
+th {
+  color: $text-black;
+  font-weight: 700;
+}
+
+th,
+td {
+  text-align: left !important; //have to put !important because typography.less is forcing some column text to the right
+}
+
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+label {
+  position: relative;
+}
+
+label:before {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill-rule='evenodd'%3E%3Cpath d='M16.036 18.455l2.404-2.405 5.586 5.587-2.404 2.404zM8.5 2C12.1 2 15 4.9 15 8.5S12.1 15 8.5 15 2 12.1 2 8.5 4.9 2 8.5 2zm0-2C3.8 0 0 3.8 0 8.5S3.8 17 8.5 17 17 13.2 17 8.5 13.2 0 8.5 0zM15 16a1 1 0 1 1 2 0 1 1 0 1 1-2 0'%3E%3C/path%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.field {
+  min-width: 125px;
+}

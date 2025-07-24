@@ -1,0 +1,62 @@
+﻿<div class="perioRead {{::examType}}" ng-class="{active: activeExamType.Type === examType}">
+    <div class="perioRead__header">
+        <a id="{{examType+'_'+quadrant+'-Ctrl'}}" class="perioRead__title" ng-click="examToggle(examType)" tabindex="-1" ng-if="examTitle !== 'CAL'">{{::examTitle}}</a>
+        <span class="perioRead__title" tabindex="-1" ng-if="examTitle === 'CAL'">{{::examTitle}}</span>
+    </div>
+    <div class="perioRead__body">
+        <div class="perioInputs">
+            <div class="perioInputs__row">
+                <div class="perioInputs__tooth " ng-repeat="toothExam in exam | filter: getToothRange(perioExam, rangeStart, rangeEnd)| orderBy:dynamicToothOrder track by $index">
+                    <!-- Tooth Number -->
+                    <div class="perioInputs__toothNumber" ng-class="{ missing: toothExam.ToothState === 'MissingPrimary' }"
+                         ng-if="(examType === 'BleedingPocket' || examType === 'SuppurationPocket') && quadrant === 'UB'">
+                        {{::toothExam.ToothId}}
+                    </div>
+                    <!-- Default -->
+                    <div class="perioInputs__ctrl"
+                         ng-disabled="toothExam.ToothState === 'Missing' || toothExam.ToothState === 'MissingPrimary'"
+                         ng-class="{'notClickable' : examTitle === 'CAL', 'perioAlertLevel' : isGreaterThanAlertLevel(examType, toothExam[examType][x]), 'activeExam': activeExamType.Type === examType && !isActiveTooth(toothExam.ToothId), 'activeTooth': isActiveTooth(toothExam.ToothId), 'strikethrough' : toothExam[examType][x]< 0 }"
+                         ng-repeat="x in quadrant === 'UB' || quadrant === 'LB' ? toothExam.$$BuccalInputArray : toothExam.$$LingualInputArray"
+                         ng-click="inputClicked(examType, toothExam.ToothId, x, toothExam.ToothNumber)"
+                         ng-if="isVisible('default')">
+                        {{toothExam[examType][x]}}
+                    </div>
+                    <!-- BleedingPocket or SuppurationPocket -->
+                    <div class="perioInputs__bleedingSuppurationCircle"
+                         ng-disabled="toothExam.ToothState === 'Missing' || toothExam.ToothState === 'MissingPrimary'"
+                         ng-class="getBleedingSuppClasses(toothExam.ToothId, examType, x)"
+                         ng-repeat="x in quadrant === 'UB' || quadrant === 'LB' ? toothExam.$$BuccalInputArray : toothExam.$$LingualInputArray"
+                         ng-mousedown="inputClicked(examType, toothExam.ToothId, x, toothExam.ToothNumber)"
+                         ng-if="isVisible('bldg_supp')">
+                    </div>
+                    <!-- Mobility -->
+                    <div class="perioInputs__ctrl"
+                         ng-disabled="toothExam.ToothState === 'Missing' || toothExam.ToothState === 'MissingPrimary'"
+                         ng-class="{'activeExam': activeExamType.Type === examType && !isActiveTooth(toothExam.ToothId), 'activeTooth': isActiveTooth(toothExam.ToothId) }"
+                         ng-click="inputClicked(examType, toothExam.ToothId, 0, toothExam.ToothNumber)"
+                         ng-if="isVisible('mobility')">
+                        {{toothExam[examType]}}
+                    </div>
+                    <!-- FurcationGradeRoot -->
+                    <div class="perioInputs__ctrl"
+                         ng-disabled="toothExam.ToothState === 'Missing' || toothExam.ToothState === 'MissingPrimary' || toothExam.ToothState==='Implant' || !readingAllowed(toothExam.$$FurcationReadingsAllowed, x)"
+                         ng-class="{'activeExam': activeExamType.Type === examType && !isActiveTooth(toothExam.ToothId), 'activeTooth': isActiveTooth(toothExam.ToothId) && readingAllowed(toothExam.$$FurcationReadingsAllowed, x) }"
+                         ng-click="inputClicked(examType, toothExam.ToothId, x, toothExam.ToothNumber)"
+                         ng-repeat="x in inputArray"
+                         ng-if="isVisible('furcation')">
+                        {{toothExam[examType][x]}}
+                    </div>
+                    <!-- Tooth Number -->
+                    <div class="perioInputs__toothNumber" ng-class="{ missing: toothExam.ToothState === 'MissingPrimary' }"
+                         ng-if="(examType === 'BleedingPocket' || examType === 'SuppurationPocket') && quadrant === 'LB'">
+                        {{::toothExam.ToothId}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="perioRead__footer">
+        <a id="{{examType+'_2'+quadrant+'-Ctrl'}}" ng-click="examToggle(examType, quadrant)" tabindex="-1" ng-if="examTitle !== 'CAL'">{{::examTitle}}</a>
+        <span tabindex="-1" ng-if="examTitle === 'CAL'">{{::examTitle}}</span>
+    </div>
+</div>

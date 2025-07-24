@@ -1,0 +1,134 @@
+﻿<div ng-class="'fade-in'">
+    <form name="frmPatientServicesCrud" role="form" action="javascript:;" novalidate>
+        <div class="modal-header">
+            <div id="lblPlannedServiceHeader" class="modal-title-responsive">
+                {{ editMode ? 'Edit {0}' : (servicesCount==0)?'Add a {0}':'Add ' + iterationCount + ' Of ' + servicesCount + ' {0}' | i18n:[(servicesCount==0)?'Service':'Services'] }}
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="addServ__body">
+                <div class="addServ__form">
+                    <div class="addServ__formItem">
+                        <div class="addServ__formLbl">
+                            {{ 'Code' | i18n }} <span ng-hide="editMode">*</span>
+                        </div>{{serviceTransaction.TransactionId}}
+                        <div class="addServ__formCtrl" ng-if="!editMode">
+                            <service-codes-search on-select="selectResult" b-focus="bFocus" search-term="searchData.searchTerm" ng-show="!selectedService" select-auto-focus="selectAutoFocus"></service-codes-search>
+                            <div class="form-control addServ__selectedService" ng-click="clearSelectedService()" ng-show="selectedService">{{ selectedService | truncate:35 }}</div>
+                        </div>
+                        <div class="addServ__formCtrl" ng-if="editMode">
+                            <input ng-disabled="true" type="text" class="form-control" ng-model="serviceTransaction.Description"/>
+                        </div>
+                    </div>
+                    <div class="addServ__formItem" ng-if="!existingServiceTransactionStatus">
+                        <div class="addServ__formLbl">
+                            {{ 'Fee' | i18n }}
+                        </div>
+                        <div class="addServ__formCtrl">
+                            <input type="text" class="form-control" ng-model="serviceTransaction.Fee" min-value="0.00" max-value="999999.99" model-format="currency" id="inpFee" placeholder="{{'0'|currency}}"/>
+                        </div>
+                    </div>
+                    <div class="addServ__formItem">
+                        <div class="addServ__formLbl">
+                            {{ 'Status' | i18n }}
+                        </div>
+                        <div class="addServ__formCtrl">
+                            <soar-select-list id="inpServiceStatus"
+                                              name="inpServiceStatus"
+                                              placeholder="{{ 'Status' | i18n }}"
+                                              ng-model="serviceTransaction.ServiceTransactionStatusId"
+                                              text-field="Name"
+                                              value-field="Id"
+                                              option-list="filteredServiceTransactionStatuses"
+                                              disable-input="disableStatus()">
+                            </soar-select-list>
+                        </div>
+                    </div>
+                    <div class="addServ__formItem" ng-disable="existingServiceTransactionStatus">
+                        <div class="addServ__formLbl">
+                            {{ 'Provider' | i18n }} <span ng-hide="existingServiceTransactionStatus">*</span>
+                        </div>
+                        <div class="addServ__formCtrl">
+                            <provider-selector input-id="lstProvider" view-only="existingServiceTransactionStatus" provider-list="providers" patient-info="patientInfo" selected-provider="serviceTransaction.ProviderUserId" only-active="true"></provider-selector>
+                        </div>
+                    </div>
+                    <div class="addServ__formItem">
+                        <div class="addServ__formLbl">
+                            {{ 'Date' | i18n }}
+                        </div>
+                        <div class="addServ__formCtrl">
+                            <date-selector input-id="inpServiceDate" placeholder="MM/dd/yyyy" date-var="serviceTransaction.DateEntered" max-date="maxDate" valid="validDate" format="MM/dd/yyyy"></date-selector>
+                        </div>
+                    </div>
+                </div>
+                <div class="addServ__chart">
+                    <div class="addServ__teeth">
+                        <tooth-selector selected-teeth="selectedTeeth" active-tooth="activeTooth" multiselect-enabled="!editMode" disable-selection="toothSelectionDisabled" quadrant-selection-only="quadrantSelectionOnly"></tooth-selector>
+                    </div>
+                    <div class="addCond__surfaces" ng-show="!surfaceSelectionDisabled">
+                        <tooth-nav active-tooth="activeTooth" selected-teeth="selectedTeeth"></tooth-nav>
+                        <surface-selector active-tooth="activeTooth" selected-teeth="selectedTeeth" disable-selection="surfaceSelectionDisabled"></surface-selector>
+                    </div>
+                    <div class="addCond__surfaces" ng-show="!rootSelectionDisabled">
+                        <tooth-nav active-tooth="activeTooth" selected-teeth="selectedTeeth"></tooth-nav>
+                        <root-selector active-tooth="activeTooth" selected-teeth="selectedTeeth" disable-selection="rootSelectionDisabled"></root-selector>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            
+            
+            <div class="addServ__TXPlanSection" ng-hide="editMode">
+                <div class="addServ__TXPlanLabel" ng-hide="editMode">{{ 'Add {0}' | i18n:['to Treatment Plan'] }}:</div>
+                <div class="addServ__TXPlan">
+                    <soar-select-list id="inpTXPlan"
+                                      name="inpTXPlan"
+                                      class-name="fill-width"
+                                      placeholder="{{ 'Select {0}' | i18n:['Treatment Plan'] }}"
+                                      text-field="TreatmentPlanDescription"
+                                      value-field="TreatmentPlanHeader.TreatmentPlanId"
+                                      option-list="treatmentPlanHeaders"
+                                      ng-model="serviceTransaction.TreatmentPlanId"
+                                      disable-input="existingServiceTransactionStatus">
+                    </soar-select-list>
+                </div>
+                <div class="addServ__TXPlanLabel" ng-hide="editMode">{{ 'Stage' | i18n }}:</div>
+                <div class="addServ__TXPlanStage">
+                    <soar-select-list id="inpTxPlanPart"
+                                      name="inpTxPlanPart"
+                                      class-name="fill-width"
+                                      text-field="stageno"
+                                      value-field="stageno"
+                                      option-list="planStages"
+                                      ng-model="stageSelected"
+                                      disable-input="existingServiceTransactionStatus">
+                    </soar-select-list>
+                </div>
+            </div>
+            <div class="pull-right">
+                <button id="btnAddService"
+                        class="btn btn-primary pull-right margin-right-5"
+                        ng-click="saveServiceTransaction()"
+                        ng-disabled="savingForm || !formIsValid"
+                        check-auth-z="{{amfa}}">
+                    {{ iterationCount==servicesCount?'Save':'Next' | i18n }}
+                </button>
+                <button id="btnSkipService"
+                        class="btn btn-default pull-right margin-right-5"
+                        ng-click="skipService()"
+                        ng-hide="servicesCount==iterationCount">
+                    {{ 'Skip' | i18n }}
+                </button>
+                <button id="btnCancel"
+                        class="btn btn-default pull-right margin-right-5"
+                        ng-click="cancelChanges();"
+                        ng-disabled="serviceTransactionSaving">
+                    {{ 'Cancel' | i18n }}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+

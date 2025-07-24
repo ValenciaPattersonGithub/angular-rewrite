@@ -1,0 +1,69 @@
+﻿<div ng-form="frmAdlibSectionItem{{sectionIndex}}" class="form-group">
+    <!--special handling for invalid adlib question
+        TODO TODAY hide underscore if no more prompts
+    TODO refactor to handle n number of -->
+    <div ng-class="{'has-error':hasErrors && sectionItem.$$InvalidAnswer===true}">
+        <div class="row col-md-11 ">
+            <span ng-repeat="formBankItemPromptText in sectionItem.FormBankItemPromptTexts | orderBy:'ItemSequenceNumber' track by $index">
+                <label id="lblsectionItemText{{sectionIdex}}_{{sectionIdexPreviewIndex}}" class="control-label">
+                    {{ formBankItemPromptText.ItemText}}
+                </label>
+                <span ng-hide="$last"> _________________ </span>
+
+            </span>
+            <skip-prompt></skip-prompt>
+            <span id="sectionItemIsRequired{{sectionIdex}}_{{sectionIdexPreviewIndex}}"
+                  ng-show="sectionItem.IsRequired"
+                  class="bold padding5 size-h4">*</span>
+        </div>
+
+        <div ng-repeat="itemOption in sectionItem.ItemPromptTextsOptions[0] | orderBy:'BankItemOption.OptionIndex' track by $index"
+             ng-hide="itemOption.BankItemOption.OptionText == null || itemOption.BankItemOption.OptionText == undefined || itemOption.BankItemOption.OptionText == ''">
+            <div class="row col-md-11 radio">
+                <label>
+                    <input type="radio"
+                           id="{{ sectionItem.FormItemTypeName + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_1'  }}"
+                           name="{{ sectionItem.FormItemTypeName + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_1' }}"
+                           ng-model="sectionItem.FormBankItem.Answer"
+                           ng-required="sectionItem.IsRequired"
+                           value="{{ itemOption.BankItemOption.OptionText }}"
+                           ng-disabled="inputIsDisabled || sectionItem.$$Skip" />
+                    {{ itemOption.BankItemOption.OptionText }}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-11">
+                <div class="radio">
+                    <div class="margin-left-20">
+                        <input type="radio"
+                               id="{{ sectionItem.FormItemTypeName + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_1'  }}"
+                               name="{{ sectionItem.FormItemTypeName + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_1' }}"
+                               ng-model="sectionItem.FormBankItem.Answer"
+                               ng-required="sectionItem.IsRequired"
+                               value="{{ sectionItem.ItemPromptTextsOptions[0].BankItemOption.OptionText }}"
+                               ng-disabled="inputIsDisabled || sectionItem.$$Skip" />
+                        <label class="font-weight-normal control-label margin-left-minus16 customForms__customOption">
+
+                            <textarea text-auto-grow rows="0" id="txt{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT1_' + $index}}"
+                                   placeholder="{{'Enter Custom Choice' | i18n }}"
+                                   maxlength="500"
+                                   type="text"
+                                   ng-disabled="inputIsDisabled || sectionItem.$$Skip"
+                                   ng-change="sectionItem.FormBankItem.Answer=sectionItem.ItemPromptTextsOptions[0].BankItemOption.OptionText"
+                                   ng-model="sectionItem.ItemPromptTextsOptions[0].BankItemOption.OptionText" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--special handling for invalid adlib answer-->
+        <div class="row col-md-11">
+            <label id="lblSectionFormBankItemRequired_{{sectionItemPreviewIndex}}" class="help-block"
+                   ng-show="hasErrors && sectionItem.$$InvalidAnswer===true">
+                {{ 'This field is required.' | i18n }}
+            </label>
+
+        </div>
+    </div>
+</div>

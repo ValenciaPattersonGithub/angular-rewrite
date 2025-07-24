@@ -1,0 +1,152 @@
+﻿#notSortable {
+    list-style: none;
+}
+
+.patIns {
+    padding-left: @brand-padding_md;
+
+    &__title {
+        .clearfix;
+        font-size: 18px;
+        font-weight: @brand-font_heavy;
+    }
+
+    &__values {
+        text-align: right;
+        padding: @brand-padding_md;
+        margin: auto;
+    }
+
+    &__container {
+        &:last-child {
+            border-right: none;
+        }
+    }
+
+    &__sortableTileInfo {
+        background-color: @brand-color_white;
+        margin: @brand-margin_xs;        
+        border: 1px solid @brand-color_dark-gray;
+        padding: 0 @brand-padding_md @brand-padding_xs @brand-padding_md;
+    }
+
+    &__row {
+        .make-row();
+        margin: 0px;
+
+
+        .infoTile {
+            .make-xs-column(2.4);
+            .clearfix;
+            border: none;
+            border-right: 1px solid @brand-color_darker-gray;
+            min-height: 115px;
+            line-height: 2;
+
+            span {
+                font-weight: @brand-font_heavy;
+            }
+
+            &:last-child {
+                border-right: none;
+            }
+
+            &__used {
+                border-bottom: 1px solid @brand-color_darker-gray;
+            }
+        }
+    }
+
+
+    &__noValue {
+        font-size: 20px;
+    }
+
+    &__options {
+        overflow: visible !important;
+
+        &Btn {
+            .pull-right;
+            .btn;
+            .btn-link;
+
+            > span {
+                font-size: 22px;
+            }
+        }
+
+        &List {
+            top: 30px;
+            max-width: 150px;
+        }
+    }
+
+    &__max {
+    }
+
+    &__remain {
+        font-size: @brand-font_xl;
+    }
+
+    &__subTitle {
+        margin-top: @brand-margin_md;
+        margin-bottom: @brand-margin_md;
+
+        &ClaimInfo {
+            padding-bottom: 10px;
+        }
+    }
+
+    &__actions {
+        margin-bottom: @brand-margin_sm;
+        padding-left: 0;
+    }
+
+    &__detailTgl {
+        .btn;
+        .btn-link;
+        padding-left: 0;
+    }
+
+    &__sortablelist {
+        cursor: move;
+
+        .placeholder {
+            opacity: 0.4;
+            border: 1px dashed @border-color;
+            background-color: @btn-edit-bg-hover;
+            color: #333;
+        }
+    }
+}
+
+#sortable-basic {
+    padding: 0;
+    margin: 0;
+}
+
+li.sortable {
+    width: 50%;
+    list-style-type: none;
+    padding: @brand-padding_xs;
+    cursor: move;
+}
+
+li.sortable:hover {
+    background-color: @brand-color_dark-gray;
+    content: "\f047";
+}
+
+li.hint {
+    display: block;
+    width: 200px;
+    background-color: @brand-color_darker-gray;
+    color: @brand-color_white;
+}
+
+li.placeholder {
+    background-color: @brand-color_dark-gray;
+    color: @brand-color_darker-gray;
+    content: "\f047";
+    /*text-align: right;*/
+}

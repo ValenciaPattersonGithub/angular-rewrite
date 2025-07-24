@@ -1,0 +1,86 @@
+﻿<!-- <business-nav></business-nav> -->
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+  <div class="userRoles">
+    <div class="rowFull white">
+      <div class="userRoles__header">
+        <ul class="userRoles__breadcrumb">
+          <li>
+            <span><a href="#/BusinessCenter/PracticeSettings/">{{ 'Practice Settings' | i18n }}</a></span>
+          </li>
+          <li>
+            <span>{{ 'Assign Roles' | i18n }}</span>
+          </li>
+        </ul>
+
+        <div class="userRoles__title">
+          <h1>{{ 'Assign Roles' | i18n }}</h1>
+        </div>
+      </div>
+    </div>
+    <div class="rowFull">
+      <div class="userRoles__body">
+        <div class="userRoles__form">
+          <div class="userRoles__fieldset">
+            <div class="userRoles__location">
+              <div class="form-row">
+                <div class="form-group form-col-6 has-feedback">
+                  <label class="control-label">{{'Select and add users to group, or drag and drop them.' | i18n}}</label>
+                  <div class="has-feedback">
+                    <input class="form-control" id="inpFilterPracticeUser" placeholder="{{'Search for a user' | i18n}}" type="text" ng-model="searchUsersKeyword" />
+                    <span class="fa fa-search form-control-feedback"></span>
+                  </div>
+                  <span class="help-block" ng-if="hasError"></span>
+                </div>
+              </div>
+            </div>
+            <div class="userRoles__searchResult">
+              <div class="userRoles__tableSection">
+                <table class="userRoles__table">
+                  <tbody id="userDraggable">
+                    <tr ng-repeat="user in users | orderBy:orderBy.LastName:!orderBy.asc | searchOnParticularColumn:searchUsersKeyword:['FirstName','LastName']" kendo-draggable k-hint="draggableHint">
+                      <td>
+                        <input type="checkbox" name="user{{$index}}" value="" ng-model="user.selected" ng-disabled="assigningRole" />
+                        <span id="lblFirstName{{ $index}}" title="{{user.FirstName}}" ng-bind-html="user.FirstName  | highlightTextIfContains:searchUsersKeyword"></span>
+                        <span id="lblLastName{{ $index }}" title="{{user.LastName}}" ng-bind-html="user.LastName  | highlightTextIfContains:searchUsersKeyword"></span>
+                        <span ng-show="user.ProfessionalDesignation">,<span id="lblProfDesc{{ $index }}" title="{{user.ProfessionalDesignation}}" ng-bind-html="user.ProfessionalDesignation  | highlightTextIfContains:searchUsersKeyword"></span></span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <no-results loading="loadingUsersDone==false" loading-messag="' '" ng-hide="loadingUsersDone==true"></no-results>
+              </div>
+              <div class="userRoles__RoleSection">
+                <div ng-repeat="role in roles">
+                  <div class="userRoles__rolePermission" id="{{role.RoleId}}" kendo-droptarget k-drop="onDrop">
+                    <div class="userRoles__rolePermissionLeft">
+                      <span>{{role.RoleName}}</span>
+                    </div>
+                    <div class="userRoles__rolePermissionRight" ng-if="{{ hasHighRoleAccess }}">
+                      <span ng-click="assignRoleToSelectedUsers(role.RoleId)" check-auth-z="{{ !hasHighRoleAccess }}" ng-disabled="assigningRole" title="{{hasHighRoleAccess ? '+ Add Selected' : 'User is not authorized to access this area' | i18n}}"
+                        >{{ '+ Add Selected' | i18n }}</span
+                      >
+                    </div>
+                    <div
+                      class="userRoles__rolePermissionCount"
+                      ng-if="{{ hasRoleDetailsAccess }}"
+                      check-auth-z="{{ !hasRoleDetailsAccess }}"
+                      ng-click="openDetailsInNewTab(role.RoleId)"
+                      ng-disabled="assigningRole"
+                      title="{{hasRoleDetailsAccess ? 'Details' : 'User is not authorized to access this area' | i18n}}"
+                    >
+                      <span> {{ 'Details' | i18n }}</span>
+                    </div>
+                  </div>
+                  <div class="userRoles__rolePermissionLoading">
+                    <no-results loading="role.selected==true" loading-messag="' '" ng-hide="role.selected==false"></no-results>
+                  </div>
+                </div>
+                <no-results loading="loadingRolesDone==false" loading-messag="' '" ng-hide="loadingRolesDone==true"></no-results>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

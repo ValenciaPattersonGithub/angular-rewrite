@@ -1,0 +1,38 @@
+.referralsourcesproductivityreport {
+    grid-template-columns: 3fr 3fr 3fr 1fr 1fr 1fr
+}
+.referralsourcesproductivityreportgroupHeader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+.groupheader{
+    padding-right: 0.5%;
+    position: sticky;
+    top: 102px;
+    background: white;
+    z-index: 1;
+}
+.referralsourcesproductivityreportfooter {
+    grid-template-columns: 3fr 3fr 3fr 1fr 1fr 1fr
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.referralsourcesproductivityreport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 5px;
+            align-items: center;
+            margin-left: -5px;
+        }
+      }
+}

@@ -1,0 +1,114 @@
+﻿// Tooth Chart
+
+// #region Patient
+.toothQuadrant {     
+    padding:5px;
+     &__list {       
+        min-width: 500px; 
+        //padding:5px;
+        right:0;
+        left:0;
+       // bottom:0;
+         background-color:@brand-color_lighter-gray !important;
+         position:absolute;
+         z-index:10;
+         border:1px solid @brand-color_light-gray
+    }
+      &__list-quadrant {       
+        min-width: 150px; 
+        padding:5px;
+        background-color:@brand-color_lighter-gray !important;
+        position:absolute;
+        z-index:10;
+       // bottom: 0;
+        border:1px solid @brand-color_light-gray
+    }
+     &__list-item {
+        color:@gray-dark;
+    }
+    &__ctrl {       
+       font-size: 1em;
+       display: block;
+       color: @brand-color_link !important;
+       background-color:transparent !important;
+       padding-left:0 !important;
+    }
+    &__quadrant-title{
+         text-align: center;
+        h3 {
+            margin: 0;
+            font-size:12px;
+        }
+    }
+    &__quadrant-button
+        {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 10px !important;
+        margin: 0 1px 2px 0;
+        padding: 0;
+    }
+    .toothChart {
+    .clearfix;
+    &__title {
+        text-align: center;
+        h3 {
+            margin: 0;
+        }
+    }
+    &__toothCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        //display: inline-block;
+        width: 25px !important;
+        height: 25px !important;
+        font-size: 10px !important;
+        margin-right: 1px;
+        margin-bottom: 1px;
+        padding: 0;
+        border-radius: 100%;
+        box-shadow: none;
+        outline: none;
+       
+    }
+    &__regionCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        //display: inline-block;
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 10px !important;
+        margin: 0 1px 2px 0;
+        padding: 0;
+    }
+    &__perm {
+        .make-xs-column(12);
+        .clearfix;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+    &__title h3 {
+       font-size:12px;
+    }
+    &__prim {
+        .make-xs-column(8);
+        .clearfix;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+    &__regions {
+        .make-xs-column(2);
+        margin-top: 5px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+}
+
+}

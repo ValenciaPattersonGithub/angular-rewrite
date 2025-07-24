@@ -1,0 +1,227 @@
+﻿<div id="modalSelectServiceCode">
+  <div class="row">
+    <div class="form-inline col-md-3" ng-hide="editMode">
+      <div class="form-group has-feedback">
+        <input class="form-input border-solid-black" id="inpSearchServiceCodes" ng-disabled="fieldOptions.SearchBoxInput.Disabled" set-focus placeholder="{{'Search Services' | i18n }}" type="text" ng-change="clearAndCloseSelectedRow()" ng-model="searchServiceCodesKeyword" />
+        <span id="lblFeedback" ng-hide="fieldOptions.SearchBoxInput.Hidden" ng-disabled="fieldOptions.SearchBoxInput.Disabled" class="glyphicon glyphicon-search form-control-feedback"></span>
+      </div>
+    </div>
+    <div class="col-md-4" ng-hide="editMode">
+      <div class="form-group" ng-disabled="fieldOptions.ServiceTypeSelector.Disabled">
+        <select
+          kendo-combo-box="kendoComboBox"
+          name="lstServiceType"
+          id="lstServiceType"
+          class="form-control"
+          k-item-class="preserve-white-space"
+          k-placeholder="'{{'Service Types' | i18n}}'"
+          k-data-text-field="'Description'"
+          k-data-value-field="'ServiceTypeId'"
+          k-suggest="true"
+          k-filter="'startsWith'"
+          k-data-source="serviceTypes"
+          ng-model="filterItem"
+          ng-blur="serviceTypeOnBlur()"
+          ng-change="serviceTypeOnChange()"
+          required
+        ></select>
+      </div>
+    </div>
+    <div class="form-group col-md-5" ng-hide="editMode">
+      <div class="clearfix">&nbsp;</div>
+    </div>
+  </div>
+  <div class="" ng-class="{'service-codes-box' : editMode == false}">
+    <div class="col-xs-12">
+      <form name="serviceCodeSelectorForm" role="form" action="javascript:void(0);" novalidate>
+        <ul class="list-unstyled list-striped">
+          <li
+            class="service-list-item"
+            ng-repeat="serviceCode in filteredServiceCodes=(serviceCodes | filter:{IsActive: true}| filter:serviceTypeFilter | orderBy:orderBy.field:!orderBy.asc | searchOnParticularColumn:searchServiceCodesKeyword:['Code','CdtCodeName','Description','ServiceTypeDescription','Fee'])"
+          >
+            <div class="row" novalidate ng-class="{ 'padding-bottom-10': activeIndex == $index }">
+              <div id="tdCode{{$index}}" class="col-xs-12 col-sm-2 col-md-1 overflow-hidden clickable" ng-click="activateRow($index)" title="{{serviceCode.Code}}">
+                <strong><span id="lblCodeHeader" ng-class="{'soar-link' : editMode == false}" ng-bind-html="serviceCode.Code  | highlightTextIfContains:searchServiceCodesKeyword"></span></strong>
+              </div>
+              <div id="tdCdtCodeName{{$index}}" class="col-xs-12 col-sm-2 col-md-1 overflow-hidden" title="{{serviceCode.CdtCodeName}}">
+                <span id="lblCdtCodeNameHeader" ng-bind-html="serviceCode.CdtCodeName  | highlightTextIfContains:searchServiceCodesKeyword"></span>
+              </div>
+              <div id="tdDescription{{$index}}" class="col-xs-12 col-sm-3 col-md-3 overflow-hidden" title="{{serviceCode.Description}}">
+                <span id="lblDescriptionHeader" ng-bind-html="serviceCode.Description  | highlightTextIfContains:searchServiceCodesKeyword:65"></span>
+              </div>
+              <div id="tdServiceTypeDescription{{$index}}" class="col-xs-12 col-sm-2 col-md-2 overflow-hidden" title="{{serviceCode.ServiceTypeDescription}}">
+                <span id="lblServiceTypeDescriptionHeader{{$index}}" ng-bind-html="serviceCode.ServiceTypeDescription  | highlightTextIfContains:searchServiceCodesKeyword:35"></span>
+              </div>
+              <div id="tdFee{{$index}}" class="col-xs-12 col-sm-2 col-md-2 overflow-hidden text-align-right" title="{{serviceCode.Fee| currency}}">
+                <span id="lblFeeHeader{{$index}}" ng-bind-html="serviceCode.Fee | currency  | highlightTextIfContains:searchServiceCodesKeyword"></span>
+              </div>
+              <div class="col-xs-12 col-sm-2 col-md-2 pull-right" ng-if="activeIndex == $index">
+                <button id="btnAddLink{{$index}}" class="service-add-btn" ng-class="{'btn-yes':selectedCount()!=0,'text-muted':selectedCount()==0}" ng-disabled="selectedCount()==0" ng-click="onAddServices()">
+                  {{ serviceCode.IsSwiftPickCode?'Add Selected': addButtonText | i18n }}
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-if="activeIndex == $parent.$index" ng-repeat="plannedService in plannedServices" ng-class="{'padding-bottom-10': $index + 1 == serviceCode.SwiftPickServiceCodes.length, 'padding-bottom-8': $index + 1 != serviceCode.SwiftPickServiceCodes.length}">
+              <div class="col-xs-12">
+                <div class="row padding-bottom-4">
+                  <div class="col-xs-12 col-sm-1">
+                    <span id="lblCode{{$index}}" ng-show="serviceCode.IsSwiftPickCode" class="italic"> {{ plannedService.Code }} </span>
+                  </div>
+                  <div class="col-xs-12 col-sm-1">
+                    <span id="lblCdtCodeName{{$index}}" ng-show="serviceCode.IsSwiftPickCode" class="italic"> {{plannedService.CdtCodeName}} </span>
+                  </div>
+                  <div class="col-xs-12 col-sm-3">
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <span id="lblDescription{{$index}}" ng-show="serviceCode.IsSwiftPickCode" class="italic"> {{ plannedService.Description }} </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-3">
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <span id="lblServiceTypeDescription{{$index}}" ng-show="serviceCode.IsSwiftPickCode" class="italic"> {{ plannedService.ServiceTypeDescription }} </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-xs-12 form-inline">
+                    <ng-form name="dateForm">
+                      <div class="col-xs-12 col-sm-2 col-md-2 col-xs-offset-1">
+                        <date-selector
+                          id="inpServiceCodeDate{{$index}}"
+                          input-id="inpServiceCodeDate{{$index}}"
+                          name="inpServiceCodeDate"
+                          ng-class="{'error': (dateForm.inpServiceCodeDate.$error.required && validateFlag)}"
+                          date-var="plannedService.CreationDate"
+                          valid="plannedService.ValidDate"
+                          ng-model="plannedService.CreationDate"
+                          format="MM/dd/yyyy"
+                          min-date="plannedServiceMinDate"
+                          max-date="plannedServiceMaxDate"
+                          mode="day"
+                          disable-date-input="editableDate"
+                          placeholder="00/00/0000"
+                          ng-required="plannedService.Selected"
+                          class="service-datepicker service-picker-datepicker vertical-align-top"
+                        ></date-selector>
+                        <div class="error" ng-if="(dateForm.inpServiceCodeDate.$error.required && validateFlag)">
+                          <span class="help-text" id="lblRequiredServiceCodeDate{{$index}}">{{ 'This field is required.' | i18n }}</span>
+                        </div>
+                      </div>
+                    </ng-form>
+                    <div class="col-xs-12 col-sm-5 col-md-5" id="rowAnchor">
+                      <div class="row">
+                        <ng-form name="toothForm">
+                          <div class="col-md-4">
+                            <div class="form-group vertical-align-top" ng-if="plannedService.AffectedAreaId != 1">
+                              <div ng-class="{'error': (toothForm.inpTooth.$error.required && validateFlag)}">
+                                <input
+                                  type="text"
+                                  ng-change="validateTooth(plannedService)"
+                                  class="form-input required valid service-input service-picker-input"
+                                  id="inpTooth{{$index}}"
+                                  name="inpTooth"
+                                  ng-model="plannedService.Tooth"
+                                  char-pattern="{{'[^A-T0-9]'}}"
+                                  maxlength="20"
+                                  placeholder="{{'Tooth' | i18n}}"
+                                  set-focus-if="{{plannedService.AffectedAreaId!=1 && $index==0}}"
+                                  capitalize-first
+                                  ng-required="plannedService.Selected"
+                                />
+                              </div>
+                              <div class="error margin-top-minus6-percent" ng-if="(toothForm.inpTooth.$error.required && validateFlag && !plannedService.ToothFirst)">
+                                <span class="help-text" id="lblRequiredTooth{{$index}}">{{ 'This field is required.' | i18n }}</span>
+                              </div>
+                              <div class="error margin-top-minus6-percent" ng-if="plannedService.ToothFirst">
+                                <span class="help-text" id="lblRequiredToothFirst{{$index}}">{{ 'Tooth Required' | i18n }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-form>
+                        <ng-form name="surfaceForm">
+                          <div class="col-md-4">
+                            <div class="form-group vertical-align-top" ng-if="plannedService.AffectedAreaId == 4 ||plannedService.AffectedAreaId == 3">
+                              <div ng-class="{'error': (surfaceForm.inpSurface.$error.required && validateFlag)}">
+                                <input
+                                  type="text"
+                                  ng-change="validateTooth(plannedService,true)"
+                                  class="form-input required valid service-input service-picker-input"
+                                  id="inpSurface{{$index}}"
+                                  name="inpSurface"
+                                  ng-model="plannedService.Surface"
+                                  char-pattern="[^a-zA-Z0-9-, ]"
+                                  maxlength="20"
+                                  placeholder="{{plannedService.AffectedAreaId!=3?'Surface':'Root'| i18n}}"
+                                  ng-required="plannedService.Selected"
+                                />
+                              </div>
+                              <div class="error margin-top-minus6-percent" ng-if="(surfaceForm.inpSurface.$error.required && validateFlag)">
+                                <span class="help-text" id="lblRequiredSurface{{$index}}">{{ 'This field is required.' | i18n }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-form>
+                        <ng-form name="providerForm">
+                          <div class="col-md-4">
+                            <div class="form-group vertical-align-top" ng-if="!hideProvider">
+                              <div ng-class="{'error': (providerForm.lstProvider.$error.required && validateFlag)}">
+                                <select
+                                  set-focus-if="{{plannedService.AffectedAreaId==1 && $index==0}}"
+                                  ele="input"
+                                  kendo-combo-box
+                                  name="lstProvider"
+                                  id="lstProvider{{$index}}"
+                                  class="service-cmb"
+                                  k-item-class="preserve-white-space"
+                                  k-placeholder="'{{'Provider' | i18n}}'"
+                                  k-data-text-field="'Name'"
+                                  k-data-value-field="'ProviderId'"
+                                  k-suggest="true"
+                                  k-filter="'startsWith'"
+                                  k-data-source="providers"
+                                  ng-model="plannedService.ProviderId"
+                                  ng-blur="providerOnBlur({event:$event,plannedService:plannedService})"
+                                  ng-required="plannedService.Selected"
+                                ></select>
+                              </div>
+                              <div class="error margin-top-minus6-percent" ng-if="(providerForm.lstProvider.$error.required && validateFlag)">
+                                <span class="help-text" id="lblRequiredProvider{{$index}}">{{ 'Provider {0}' | i18n:['Required'] }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-form>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-2">
+                      <div class="form-group vertical-align-top" ng-class="{'error': ((plannedService.Fee < 0 || plannedService.Fee > 999999.99) && validateFlag)}">
+                        <input type="text" class="form-input text-align-right service-input margin-left-minus9" id="inpFee{{$index}}" ng-model="plannedService.Fee" maxlength="12" placeholder="{{'0'|currency}}" model-format="currency" />
+                      </div>
+                      <div class="error margin-left-minus20" ng-if="((plannedService.Fee < 0 || plannedService.Fee > 999999.99) && validateFlag)">
+                        <span class="help-text" id="lblFeeRange{{$index}}">{{ 'Fee range should be between 0.00 to 999999.99.'|i18n }}</span>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-1 col-md-1 pull-right" ng-if="serviceCode.IsSwiftPickCode">
+                      <checkbox class="pull-right" checkbox-id="lblSelectServiceCode{{$index}}" checkbox-value="plannedService.Selected"></checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li ng-show="serviceCodes.length==0 || filteredServiceCodes.length==0">
+            <div class="row">
+              <div class="col-xs-12">
+                <no-results loading-message="loadingMessageNoResults" loading="loadingServices==true" filtering="filteringServices" filtering-message="filteringMessageNoResults"></no-results>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>

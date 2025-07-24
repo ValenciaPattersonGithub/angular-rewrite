@@ -1,0 +1,46 @@
+﻿<div class="patientAdditionalIdentifier">
+    <div class="form-body-old" ng-form="frmPatientAdditionalIdentifier">
+
+        <div ng-if="editing == false">
+
+            <div class="row" ng-show="true">
+                <div ng-repeat="additionalIdentifier in additionalIdentifiers  | orderBy : 'Description'">
+                    <div class="col-xs-6" ng-if="!additionalIdentifier.IsSpecifiedList" >
+                        <label>{{ additionalIdentifier.Description }}: </label>
+                        <label title="{{additionalIdentifier.Value}}">&nbsp;{{additionalIdentifier.Value | truncate: 20 }}
+                            <i ng-show="additionalIdentifier.Value.length > 20">...</i>
+                        </label>
+                    </div>
+                    <div class="col-xs-6" ng-if="additionalIdentifier.IsSpecifiedList" >
+                        <label>{{ additionalIdentifier.Description }}: </label>
+                        <label title="{{additionalIdentifier.SpecifiedListValue}}">&nbsp;{{additionalIdentifier.SpecifiedListValue | truncate: 20 }}
+                            <i ng-show="additionalIdentifier.SpecifiedListValue.length > 20">...</i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+ 
+        <div ng-if="editing == true">
+            <div class="row">
+                <div ng-repeat="additionalIdentifier in additionalIdentifiers | orderBy : 'Description' ">
+                    <div class="col-xs-12">
+                        <label>{{ additionalIdentifier.Description }}</label>
+                        <input ng-if="!additionalIdentifier.IsSpecifiedList" id="inpAdditionalIdentifier" class="form-input" placeholder="{{ additionalIdentifier.Description | i18n }}"
+                            ng-model="additionalIdentifier.Value" capitalize-first-with-override name="inpAdditionalIdentifier"
+                            maxlength="100" sync-focus-with="editing" />
+                        <div ng-if="additionalIdentifier.IsSpecifiedList" class="clearfix"></div>
+                        <soar-select-list ng-if="additionalIdentifier.IsSpecifiedList" id="lstSpecifiedList" name="lstSpecifiedList" class-name="form-control"
+                            text-field="Text" 
+                            value-field="Value" 
+                            option-list="additionalIdentifier.SpecifiedListValuesDropdown"
+                            ng-model="additionalIdentifier.Value" 
+                            placeholder="{{ 'Select Identifier' | i18n }}"></soar-select-list>
+                        <div class="clearfix">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

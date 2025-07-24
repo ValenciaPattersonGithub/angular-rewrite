@@ -1,0 +1,19 @@
+<div class="taxonomySelector">
+    <kendo-dropdownlist [tabIndex]="sbTab"
+                        [data]="optionList"
+                        [textField]="'Category'"
+                        [valueField]="'TaxonomyCodeId'"                         
+                        [valuePrimitive]="true"
+                        [(ngModel)]="selectedItemValue" name="selectedItemValue"
+                        (valueChange)="onSelectionChanged($event)"
+                        [popupSettings]="{ animate:false }"
+                        [defaultItem]="defaultItem"
+                        [disabled]="disableInput"
+                        [ngClass]="{'disabledCursor':disableInput}"
+                        [required]="required"
+                        ngDefaultControl>
+        <ng-template kendoDropDownListItemTemplate let-dataItem>
+            <span class="k-state-default">{{dataItem.Category}} / {{dataItem.Code}}</span>
+        </ng-template>
+    </kendo-dropdownlist>
+</div>

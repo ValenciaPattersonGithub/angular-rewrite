@@ -1,0 +1,7 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid avoidPageBreak" ng-if="data.Locations.length > 0 && !showFilterMessage">
+        <encounters-by-carrier [data]="data" ></encounters-by-carrier>
+    </div>
+</div>

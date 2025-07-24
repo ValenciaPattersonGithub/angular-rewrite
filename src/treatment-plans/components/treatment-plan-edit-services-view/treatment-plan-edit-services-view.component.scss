@@ -1,0 +1,619 @@
+@import "variables";
+// todo: update select list components to use the library.
+// These styles are directly imported and require the classes fui-select-container and fui-select to work
+@import '../@shared/components/form-controls/select-list/select-list.component';
+
+.txPlanEditServices {
+    clear: both;
+    font-family: $global-font-family;
+    font-size: 12px;
+}
+
+.txPlan-pill {
+    border-top: 1px solid #dadcdc;
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+    margin: 10px 15px;
+    display: grid;
+    grid-template: 40px auto/ 40px 1fr 30px;
+    grid-template-areas: "dragSection descSection closeBtnSection" "dragSection tableSection tableSection ";
+}
+
+#txPlanName:invalid {
+    border: 2px solid #cc0000;
+}
+
+.dragSection {
+    grid-area: dragSection;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px;
+    border-color: #DADCDC;
+    border-right-style: solid;
+}
+
+.serviceDateContainer {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    font-size: 12px;
+}
+
+.descSection {
+    grid-area: descSection;
+    padding: 12px 15px 0px 15px;
+    white-space: nowrap;
+    display: flex;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.closeBtnSection {
+    grid-area: closeBtnSection;
+    padding-right: 15px;
+    padding-top: 10px;
+}
+
+
+.tableSection {
+    grid-area: tableSection;
+    padding: 15px 15px 15px 15px;
+    //overflow-x:auto;
+}
+
+
+.areaMultiSelect {
+    font-size: 12px;
+    width: 80px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding: 0px;
+}
+
+.delete-service {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/*tr.header.treatment-plan-service-row th {
+    font-weight: 600;
+}*/
+
+.grid-title {
+   font-weight: 600;
+}
+
+.redBorder {
+    border: 2px solid #cc0000 !important;
+}
+
+///* Annoying Shadow Dom Stuff */
+//:host ::ng-deep .k-multiselect-wrap {
+//    width: 100%;
+//    padding: 0px;
+//    height: 25px;
+//    border: none;
+//    overflow-x: hidden;
+//    box-shadow: none;
+//}
+
+:host ::ng-deep .k-multiselect-wrap.k-state-focused {
+    border: none;
+}
+
+:host ::ng-deep .k-multiselect .k-button {
+    color: $text-black;
+    border-color: none;
+    background-color: $polar-white;
+    padding: 2px 0px 0px 0px;
+}
+
+:host ::ng-deep .k-searchbar {
+    //overflow-x: hidden;
+}
+
+:host ::ng-deep .k-searchbar .k-input {
+    //width: 0px;
+    //overflow-x: hidden;
+    //overflow-y: hidden;
+    //padding: 0px;
+    float: none;
+}
+// stupid kendo version
+.txPlanEditServices .multiselect {
+    height: 25px;
+    background-color: $polar-white;
+    background-size: cover;
+    font-size: 12px;
+    color: $text-black;
+    text-decoration: none solid $text-black;
+    width: 100%;
+
+}
+
+/* End Annoying Shadow Dom Stuff */
+.txPlanEditServices .fuseServicesGrid {
+    padding: 0px;
+    width: 100%;
+}
+
+.txPlanEditServices .field {
+    height: 25px;
+    border: 1px solid $border-grey;
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    font-size: 12px;
+    color: $text-black;
+    text-decoration: none solid $text-black;
+}
+
+.service-description-col {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+//.service-desc-tooltip {
+//    display: block;
+//}
+//
+//.descSection .service-desc-tooltip {
+//    visibility: hidden;
+//    opacity: 0;
+//    -webkit-transition: opacity 600ms, visibility 600ms;
+//    transition: opacity 600ms, visibility 600ms;
+//    transition-delay: .5s;
+//}
+//
+//.descSection:hover .service-desc-tooltip {
+//    visibility: visible;
+//    opacity: 1;
+//}
+
+.iconContainer {
+    margin-right: 10px;
+    display: inline-flex;
+}
+
+.descContainer {
+    min-width: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 100px;
+}
+
+.pill-drag-handle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.txPlanEditServices .fuseGrid .header {
+    padding: 0 0 0 0 !important;
+}
+
+.txPlanEditServices td, .txPlanEditServices th {
+    padding: 5px 0px 0px 10px;
+    
+    &:first-of-type {
+        padding-left: 0px;
+    }
+}
+
+.txPlanEditServices .treatment-plan-service-row th {
+    /*height: 50px !important; // this was over written because of existing styles in fuse.*/
+    vertical-align: bottom;
+}
+
+.txPlanEditServices .treatment-plan-service-row .tx-row {
+    /*height: 70px;*/
+    vertical-align: middle;
+}
+
+.txPlanEditServices .treatment-plan-service-footer-row td {
+    height: 50px;
+    font-weight: 700;
+}
+
+.txPlanEditServices .stage-spacing {
+    padding: 0px 0px 10px 0;
+    margin-bottom: 20px;
+}
+
+.txPlanEditServices .stage-title-container {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.stageContainer {
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+}
+
+/*.drawerOpen {
+    min-height: 149px;
+
+}
+
+.drawerClosed {
+    min-width: 1171px;
+    min-height: 149px;
+}*/
+
+.stageHeaderContainer {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.txPlanEditServices .stage-title {
+    padding: 0px 0px 0px 0px;
+    font-size: 16px;
+    font-weight: 500;
+    /*margin-top: 15px;*/
+}
+
+.emptyStageContainer {
+    margin: 0px 15px 0px 15px;
+}
+
+
+/*.txPlanEditServices .service-area-spacing {
+    margin-top: 20px;
+}*/
+/*
+.txPlanEditServices .grid-column-drag-area {
+    width: 42px;
+}
+
+.txPlanEditServices .grid-title-column-desc {
+    min-width: 115px;
+}
+
+.txPlanEditServices .grid-title-column-teeth {
+    width: 75px;
+    padding: 5px 10px 5px 0px;
+}
+
+.txPlanEditServices .grid-title-column-surface {
+    width: 90px;
+    padding: 5px 10px 5px 0px;
+}
+
+.txPlanEditServices .grid-title-column-status {
+    width: 90px;
+    padding: 5px 10px 5px 0px;
+}
+
+.txPlanEditServices .grid-title-column-location {
+    width: 100px;
+    padding: 5px 10px 5px 0px;
+}
+
+.txPlanEditServices .grid-title-column-provider {
+    white-space: nowrap;
+    padding: 5px 10px 5px 0px;
+}*/
+
+.customGrid.fuseTable {
+    width: 100%;
+    display: grid;
+    grid-template: auto auto / 1fr 1fr 1fr 1fr 1.5fr 110px 75px 75px;
+    grid-gap: 5px 10px;
+    align-items: center;
+    justify-content: center;
+
+    &.gridDrawerClosed {
+        grid-template: auto auto / 1fr 1fr 1fr 1fr 1.5fr 110px 75px 75px 75px 80px 75px;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.txPlanEditServices .grid-title-column-money {
+    white-space: nowrap;
+}
+
+
+.toothPlaceholder {
+    /*width: 100%;*/
+   
+}
+
+.surfacePlaceholder {
+    
+   
+}
+
+.txPlanEditServices .grid-column-desc {
+    /*min-width: 115px;*/
+}
+
+.txPlanEditServices .grid-column-teeth {
+   
+    min-width: 40px;
+
+    &:first-of-type {
+        padding-left: 0px;
+    }
+
+    .toothSelect {
+        /*width: 100%;*/
+    }
+}
+
+.txPlanEditServices .grid-column-status {
+   
+
+    .statusSelect {
+        
+        /*width: 100%;*/
+    }
+}
+
+.txPlanEditServices .grid-column-location {
+   
+
+    .locationSelect {
+        /*width: 100%;*/
+    }
+}
+
+.txPlanEditServices .grid-column-provider {
+   
+
+    .providerSelect {
+        /*width: 100%*/
+    }
+}
+
+.txPlanEditServices .grid-column-edit-money {
+   
+
+    .moneyEdit {
+        text-align: right;
+    }
+}
+
+.txPlanEditServices .grid-column-money {
+
+   
+}
+
+/*.txPlanEditServices .grid-column-delete {
+    
+    padding: 5px 5px 5px 10px;
+    cursor: pointer;
+}*/
+
+.no-wrap-title {
+    white-space: nowrap;
+}
+
+
+    .moneyEdit {
+        width: 100%;      
+    }
+
+     .locationSelect {
+        width: 100%;
+    }
+
+    .providerSelect {
+        width: 100%;
+    }
+
+    .statusSelect {
+        width: 100%;
+    }
+
+    .surfaceSelect {
+        width: 100%;
+    }
+
+    .toothSelect {
+        width: 100%;
+    }
+
+.txPlanEditServices .delete-stage-container {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    font-family: $global-font-family;
+    font-size: 14px;
+    align-items: center;
+}
+
+.services-count {
+    margin-top: 7px;
+    margin-right: 5px;
+}
+
+.txPlanEditServices .delete-stage-btn {
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 8px;
+    color: $action-blue;
+    cursor: pointer;
+}
+
+.txPlanEditServices .text-table-column {
+    word-break: break-word;
+}
+
+.txPlanEditServices .service-code {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.add-stage-button-area {
+    text-align: right;
+}
+// delete service svg styles
+.delete-svg {
+    padding-top: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.delete-svg svg {
+    fill: $action-blue;
+}
+
+.delete-svg:hover svg {
+    fill: $light-action-blue;
+}
+/////////////////////////////////
+/* Drag and Drop Styles */
+/////////////////////////////////
+.pill-drag-area {
+    width: 40px;
+    /*border-right: 1px;
+    border-color: #DADCDC;
+    border-right-style: solid;*/
+}
+
+
+.drag-svg {
+    padding-top: 5px;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 10px;
+}
+
+
+.arrowMargins {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    margin: 0 0 0 15px !important;
+}
+
+.drag-svg svg {
+    fill: $action-blue;
+}
+
+.drag-svg:hover svg {
+    fill: $light-action-blue;
+}
+
+.preview {
+    transform: translate(-27px, -27px);
+    min-height: 70px;
+    vertical-align: middle;
+    width: 550px;
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+}
+
+.preview td {
+    padding-bottom: 0px;
+}
+
+.preview .drag-area {
+    width: 55px;
+    padding: 0px 8px 0px 8px;
+    vertical-align: middle;
+}
+
+.preview .drag-svg {
+    padding-top: 5px;
+}
+
+.preview .description {
+    width: 350px;
+    word-break: break-word;
+}
+
+.preview .preview-text {
+    width: 80px;
+    text-align: center;
+}
+
+.preview .preview-highlight {
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.cdk-drag-handle:hover {
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+/* Issue with dragging cursor https://github.com/angular/components/issues/20246 */
+.cdk-drop-list-dragging {
+    cursor: -webkit-grabbing !important;
+    cursor: grabbing !important;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.txPlanPart__grid.cdk-drop-list-dragging .treatment-plan-service-row:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.custom-placeholder-spacer {
+    height: 0px;
+    margin-top: 0px
+}
+
+.custom-placeholder {
+    border-radius: 5px;
+    border: dashed 2px $action-blue !important;
+    height: 70px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: $placeholder-grey;
+    text-decoration: none solid $placeholder-grey;
+    font-family: $global-font-family;
+    fill: $polar-white;
+    box-shadow: inset 0px 3px 14px rgba(0,0,0,0.15);
+    stroke-width: 1;
+}
+
+.empty-stage-container:hover .custom-placeholder {
+    display: none;
+}
+
+
+.custom-placeholder-original {
+    border-radius: 5px;
+    border: dashed 2px #999 !important;
+    height: 70px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    background: #ccc;
+    stroke-width: 1;
+    margin: 10px 15px 10px 15px;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}

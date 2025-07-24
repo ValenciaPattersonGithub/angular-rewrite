@@ -1,0 +1,8 @@
+<ng-container ng-if="migrationFeatureFlagsLoaded && useConverted">
+    <team-member-crud-ng [taxonomy-dropdown-template-data]="$parent.taxonomyDropdownTemplateData"
+        [current-user-data]="$parent.currentUserData"></team-member-crud-ng>
+</ng-container>
+<ng-container ng-if="migrationFeatureFlagsLoaded && (! useConverted)">
+    <user-crud-controller-original taxonomy-dropdown-template-data="$parent.taxonomyDropdownTemplateData"
+        current-user-data="$parent.currentUserData"></user-crud-controller-original>
+</ng-container>

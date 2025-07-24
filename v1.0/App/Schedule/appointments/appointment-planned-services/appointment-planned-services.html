@@ -1,0 +1,98 @@
+﻿<div class="apptPlnSvc" ng-if="hasServiceTransactionViewAccess">
+    <table class="fuseGrid container pull-left" >
+        <thead>
+            <tr class="row header">
+                <td class="cell" id="colCode">
+                    {{ ::('Service Code' | i18n) }}
+                </td>
+                <td class="cell" id="colCdtCode">
+                    {{ ::('CDT Code' | i18n) }}
+                </td>
+                <td class="cell" id="colSvc">
+                    {{ ::('Description' | i18n) }}
+                </td>
+                <td class="cell sortable" id="colTth"
+                    ng-click="changeSortingForGrid('Tooth')"
+                    ng-class="{'active': orderBy.field == 'Tooth', 'asc': orderBy.asc && orderBy.field == 'Tooth' }">
+                    {{ ::('Th' | i18n) }}
+                </td>
+                <td class="cell" id="colSfc">
+                    {{ ::('Area' | i18n) }}
+                </td>
+                <td class="cell" id="colPvdr">
+                    {{ ::('Provider' | i18n) }}
+                </td>
+                <td class="cell" id="colPvdrOnClaims">
+                    {{ ::('Provider on Claim' | i18n) }}
+                </td>
+                <td class="cell" id="colLocName">
+                    {{ ::('Location' | i18n) }}
+                </td>
+                <td class="cell" id="colCost">
+                    {{ ::('Amount' | i18n) }}
+                </td>
+                <td class="cell" id="colDltActBtn"></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="row body" id="svcRow{{$index}}" ng-repeat="service in plannedServices | orderBy:['!!InsuranceOrder','InsuranceOrder'] track by $index" >
+                <td class="cell" id="rowCode{{$index}}">
+                    {{ service.CodeName ? service.CodeName : service.Code }}
+                </td>
+                <td class="cell" id="rowCDTCode{{$index}}">
+                    {{ service.CdtCodeName }}
+                </td>
+                <td class="cell truncate" id="rowSvc{{$index}}">
+                    <span uib-tooltip="{{ service.$$Description }}">
+                        {{ service.$$Description | truncate: 50 }}
+                    </span>
+                </td>
+                <td class="cell" id="rowTooth{{$index}}" ng-click="changeSortingForGrid('service.Tooth');" ng-class="{'active': orderBy.field == 'service.Tooth', 'asc': orderBy.asc && orderBy.field == 'service.Tooth' }">
+                    {{ service.Tooth | convertToothRangeToQuadrantOrArchCode }}
+                </td>
+                <td class="cell" id="rowSfc{{$index}}">
+                    {{ service.Surface }}{{ service.Roots }}
+                </td>
+                <td class="cell" id="rowPvdr{{$index}}">
+                    {{ service.ProviderCode ? service.ProviderCode : service.$$Provider.UserCode ? service.$$Provider.UserCode : "" }}
+                </td>
+                <td class="cell" id="rowPvdr{{$index}}">
+                    {{ service.ProviderOnClaimsCode ? service.ProviderOnClaimsCode : "" }}
+                </td>                
+                <td class="cell">
+                    {{ service.LocationName }}
+                </td>
+                <td class="cell" id="rowFee{{$index}}">
+                    {{ service.Amount | currency }}
+                </td>
+                <td class="cell">
+                    <button id="rowDltActBtn{{$index}}" class="btn icon-button pull-right " check-auth-z="soar-sch-sptapt-edit" ng-click="removeAppointmentService(service)">
+                        <span class="far fa-lg fa-times-circle"></span>
+                    </button>
+                    <button class="btn icon-button ng-scope pull-right" id="btnEditService{{$index}}" check-auth-z="soar-sch-sptapt-edit" type="button"
+                            ng-click="$parent.$parent.$parent.$parent.$parent.$parent.editServiceModal($index, service)">
+                        <i class="far fa-edit fa-lg"></i>
+                    </button>
+                    <i class="far fa-lg fa-check-circle pull-right" ng-if="service.IsOnInformedConsent" uib-tooltip="{{::('Informed Consent' | i18n) }}" tooltip-append-to-body="true" tooltip-placement="top-left"></i>
+                </td>
+            </tr>
+            <tr id="totalRow">
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell strong align-right" id="rowTotallabel">
+                    {{ ::('Total:' | i18n) }}
+                </td>
+                <td class="cell" id="rowFeeTotal">
+                    {{ feeTotal | currency }}
+                </td>
+                <td class="cell"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

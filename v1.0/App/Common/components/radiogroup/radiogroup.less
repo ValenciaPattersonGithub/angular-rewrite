@@ -1,0 +1,49 @@
+﻿.utilRadio {
+    display: inline-block;
+    &__ctrl {
+        display: inline-block;
+        position: relative;
+        max-width: 100%;
+        line-height: 1;
+        padding: @brand-padding_sm 0;
+        margin: 0 20px 0 0;
+        border: none;
+        background-color: transparent;
+
+        /*&:focus {
+            outline: none;
+        }*/
+    }
+
+    &__label {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: left;
+        color: @brand-form_label--color;
+        
+        &:before {
+            display: inline-block;
+            font-family: 'Font Awesome 5 Pro';
+            content: '\f111';
+            margin-right: 10px;
+            font-size: 1.0em;
+
+            &:focus {
+            outline: none;
+            }
+        }
+
+        &.active {
+            &:before {
+                content: '\f192';
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+}

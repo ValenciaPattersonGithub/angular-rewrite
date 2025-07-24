@@ -1,0 +1,29 @@
+﻿<div class="patDuplicate" ng-if="checkingForDuplicates || showDuplicatePatients" >
+    <button id="btnCloseDuplicatePatient" class="patDuplicate__close" ng-click="closeDuplicatePatient()">
+        <span class="fa fa-times"></span>
+    </button>
+    <div ng-show="checkingForDuplicates" class="patDuplicate__load">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span> {{ 'Checking For Duplicates...' | i18n | uppercase }}</span>
+    </div>
+
+    <div ng-show="showDuplicatePatients" class="patDuplicate__header">
+	    <h5>{{ duplicatePatients.length }} {{ 'Possible Matches Found' | i18n }}</h5>
+    </div>
+
+    <!-- Duplicate Patient Search Results -->
+    <div ng-show="showDuplicatePatients" class="patDuplicate__body">
+        <a class="patDuplicate__link" check-auth-z="soar-per-perdem-view" ng-repeat="result in duplicatePatients | orderBy:['LastName','FirstName']" ng-click="duplicatePatientsLoaded ? openPatientTab(result) : return">
+            <div class="patDuplicate__linkName">
+                <span id="lblLastName{{ $index }}" class="fName" ng-bind-html="result.LastName | boldTextSearchCriteria:(patient.LastName?patient.LastName:'')"></span>,
+                <span id="lblFirstName{{ $index }}" class="lName" ng-bind-html="result.FirstName | boldTextSearchCriteria:(patient.FirstName?patient.FirstName:'')"></span>
+                <span id="lblPreferredName{{ $index }}" class="prefName" ng-bind-html="result.PreferredName?'('+result.PreferredName+')':'' | boldTextSearchCriteria:(patient.PreferredName?patient.PreferredName:'')"></span>
+            </div>
+            <div class="patDeuplicate__linkDetails">
+                <span id="lblDOB{{ $index }}" class="dob" ng-show="result.DateOfBirth" ng-bind-html="result.DateOfBirth |toShortDisplayDateUtc | boldTextSearchCriteria:(patient.DateOfBirth?(patient.DateOfBirth|toShortDisplayDate):'')"></span>
+                <span id="age" class="detAge" ng-show="result.DateOfBirth">&nbsp;({{ result.DateOfBirth | age }} {{'yo' | i18n }})</span>
+                <span id="lblLocation{{ $index }}" class="loc" ng-show="result.Location"> {{ result.Location }}</span>
+            </div>
+        </a>
+    </div>
+</div>

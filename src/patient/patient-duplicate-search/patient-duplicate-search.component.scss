@@ -1,0 +1,161 @@
+@import "variables";
+.patDuplicate {
+    position: relative;
+    padding: 8px;
+    background: #eee;
+    border: 1px solid #a9a9a9;
+    margin-top: 20px;
+}
+
+.patDuplicate__header {
+    h5 {
+        margin-top: 4px;
+    }
+}
+
+.patDuplicate__close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 9999;
+}
+.patDuplicate__link {
+    display: block;
+    margin-bottom: 8px;
+    padding: 8px;
+    border: 1px solid #a9a9a9;
+    background-color: $polar-white;
+    transition: all 0.3s ease;
+    .fName,
+    .lName,
+    .dob,
+    .age,
+    .loc {
+        color: $action-blue;
+    }
+}
+.patDuplicate__linkName {
+    font-weight: 700;
+}
+.patDuplicate__linkDetails {
+    span {
+        color: $action-blue;
+    }
+}
+#duplicate-results {
+    width: 300px;
+    background: #eee;
+    border: 1px solid #999;
+
+    @media only screen and (min-width: 320px) and (max-width: 992px) {
+        float: right;
+    }
+
+    @media only screen and (min-width: 992px) {
+        right: 20%;
+        position: absolute;
+    }
+}
+
+.duplicate-results-wrapper {
+    height: 260px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.duplicate-results-msg {
+    margin: 10px 0 0 0;
+    padding: 5px 10px 5px 10px;
+}
+
+.duplicate-results-icon {
+    position: relative;
+    top: 4px;
+}
+
+.duplicate-results-body {
+    margin-top: 2px;
+    font-size: 13px;
+}
+
+.duplicate-result-item {
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid $border-grey;
+    padding: 10px 0 10px 0;
+    margin: 0 10px 10px 10px;
+    height: 76px;
+}
+.patient-duplicate-header {
+    display: flex;
+}
+.patient-duplicate {
+    &-duplicate-search-title {
+        font-family: $global-font-family;
+        font-weight: 600;
+    }
+    &-link {
+        border: 1px solid $border-grey;
+        border-radius: 5px;
+        display: block;
+        margin-bottom: 8px;
+        padding: 8px;
+        background-color: $polar-white;
+        transition: all 0.3s ease;
+
+        .firstName,
+        .dateOfBirth,
+        .preferredName,
+        .pipe,
+        .location {
+            margin-right: 5px;
+            font-family: $global-font-family;
+            font-size: 14px;
+            color: $action-blue;
+        }
+        .lastName {
+            font-family: $global-font-family;
+            font-size: 14px;
+            color: $action-blue;
+        }
+    }
+}
+:host ::ng-deep {
+    .k-state-selected {
+        background-color: transparent;
+    }
+    .k-state-focused.k-state-selected {
+        background-color: transparent;
+    }
+    .k-panelbar-collapse.k-icon {
+        left: 0px;
+        color: $action-blue;
+        transform: rotate(180deg);
+    }
+    .k-panelbar-expand.k-icon {
+        left: 0px;
+        color: $action-blue;
+        transform: rotate(270deg);
+    }
+    span.ng-tns-c13-1.k-icon.k-i-arrow-n.k-panelbar-collapse.ng-star-inserted {
+        left: 3px;
+        color: $action-blue;
+    }
+    span.ng-tns-c13-2.k-icon.k-i-arrow-n.k-panelbar-collapse.ng-star-inserted {
+        left: 3px;
+        color: $action-blue;
+    }
+    kendo-panelbar.k-widget.k-panelbar {
+        border-style: none;
+        border: none;
+    }
+    .k-header {
+        background-color: $polar-white;
+    }
+    span.ng-tns-c218-1.k-link.k-header.k-state-selected,
+    span.ng-tns-c218-1.k-link.k-header,
+    .k-content.ng-tns-c218-1.ng-star-inserted {
+        border: none;
+    }
+}

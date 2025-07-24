@@ -1,0 +1,196 @@
+@import "variables";
+
+.insurance {
+    &-container {
+        padding: 15px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 5px;
+        hr {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        &-hr-border {
+            border-top: 1px solid #2b144e;
+        }
+    }
+    &-title {
+        font-family: $global-font-family;
+        font-size: 16px;
+        color: $patient-registration-title-color;
+        line-height: 16px;
+        font-weight: bold;
+    }
+    &-content {
+        display: grid;
+        position: relative;
+        grid-template: 1fr / 100%;
+        grid-template-areas:
+            "policyNumber"
+            "policyHolder"
+            "personSearch"
+            "planName"
+            "policyHolderId"
+            "memberId"
+            "effectiveDate"
+            "addPolicy"
+            "relationships"
+            "priorities";
+        padding-left: 1px;
+
+        & > div:not(.insurance-policy-number) {
+            margin-bottom: 20px;
+        }
+    }
+    &-policy-number {
+        grid-area: policyNumber;
+
+        &-wrapper {
+            display: grid;
+            grid-template: 1fr / 98% 2%;
+            grid-template-areas: "insurancePolicyNumber";
+        }
+        &-label {
+            grid-area: insurancePolicyNumber / 1;
+        }
+        &-icon {
+            grid-area: insurancePolicyNumber / 2;
+        }
+        &-close-icon {
+            color: $dropdown-hover-color;
+        }
+    }
+    &-policy-holder {
+        grid-area: policyHolder;
+    }
+    &-person-search {
+        grid-area: personSearch;
+    }
+    &-plan-name {
+        grid-area: planName;
+    }
+    &-policy-holder-id {
+        grid-area: policyHolderId;
+        margin-right: 15px;
+    }
+    &-member-id {
+        grid-area: memberId;
+        margin-right: 15px;
+    }
+    &-effective-date {
+        grid-area: effectiveDate;
+    }
+    &-add-policy {
+        grid-area: addPolicy;
+        grid-column-start: 1;
+        grid-column-end: 3 span;
+        margin: auto;
+        display: grid;
+        grid-template-columns: 15% 85%;
+        width: 170px;
+        &-icon {
+            color: $dropdown-hover-color;
+            grid-column: 1;
+            grid-row: 1;
+        }
+        &-icon-add {
+            color: $background-color;
+            grid-column: 1;
+            grid-row: 1;
+        }
+        &-icon-label {
+            color: $dropdown-hover-color;
+            grid-column: 2;
+            grid-row: 1;
+        }
+    }
+    &-icon-wrapper {
+        display: grid;
+        grid-template: 1fr / 98% 2%;
+        grid-template-areas: "addPolicyButton";
+
+        &-oval {
+            color: $dropdown-hover-color;
+            grid-area: addPolicyButton / 2;
+        }
+        &-add {
+            color: $background-color;
+            grid-area: addPolicyButton / 2;
+        }
+    }
+    &-relationship {
+        grid-area: relationships;
+    }
+    &-priority {
+        grid-area: priorities;
+    }
+    &-add-label {
+        font-size: 14px;
+        color: $dropdown-hover-color;
+        font-weight: 600;
+    }
+    &-mb-5 {
+        margin-bottom: 5px;
+    }
+    &-label {
+        font-size: 14px;
+        color: $label-color;
+        font-weight: 600;
+    }
+    &-mr-10 {
+        margin-right: 10px;
+    }
+    &-input {
+        height: 30px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 4px;
+        width: 100%;
+        padding: 0px 8px;
+        outline: none;
+    }
+    &-change-plan {
+        cursor: pointer;
+        color: $dropdown-hover-color;
+    }
+    &-main-add-policy {
+        display: inline-block;
+    }
+    &-add-policy-label {
+        float: right;
+        margin: 0px 0px 0px 25px;
+        color: $dropdown-hover-color;
+    }
+    &-selectlist {
+        height: 30px;
+        width: 100%;
+        border-radius: 5px;
+        font-size: 12px;
+        border: 1px solid $patient-registration-border-color;
+        outline: none;
+    }
+}
+::ng-deep {
+    .k-textbox > input,
+    .k-autocomplete .k-input {
+        border-radius: 5px;
+    }
+    .k-autocomplete {
+        border-radius: 5px;
+        height: 30px;
+    }
+}
+.disabled {
+    pointer-events: none;
+    color: $search-input-color !important;
+}
+.error-control {
+    width: 96%;
+    float: left;
+    border: 1px solid $error-color;
+    box-shadow: 0 0 0 1px $error-color;
+}
+.error-icon {
+    float: left;
+    margin-left: 10px;
+    margin-top: 8px;
+    color: $error-color;
+}

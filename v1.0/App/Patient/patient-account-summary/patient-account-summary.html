@@ -1,0 +1,26 @@
+﻿<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }" >
+    <form name="frmPatientAccountSummary" role="form" action="javascript:;" novalidate>
+        <div class="patAcctSmry" ng-if="person.Profile.PersonAccount">
+            <div class="patAcctSmry__section">
+                <patient-account-balance person="person.Profile" account-total-loading="loading" account-total="accountTotal" account-balances="accountBalances" graph-data="graphData"></patient-account-balance>
+            </div>
+            <div class="patAcctSmry__section">
+                <patient-account-insurance-estimate ins-estimate-loading="loading" disable-payments="disableInsurancePayments" insurance-estimate="estimatedInsurance" payment-function="makeInsurancePayment()"></patient-account-insurance-estimate>
+            </div>
+            <div class="patAcctSmry__section">
+                <patient-account-insurance-adjusted-estimate adj-estimate-loading="loading" adjusted-est-ins="adjustedEstIns" providers="providers" person="person"></patient-account-insurance-adjusted-estimate>
+            </div>
+            <div class="patAcctSmry__section">
+                <patient-account-portion patient-portion-loading="loading" disable-payments="disablePayments" patient-portion="patientPortion" payment-function="makePayment()"></patient-account-portion>
+            </div>
+            <div class="patAcctSmry__section">
+                <patient-account-insurance person-id="personId" person="person"></patient-account-insurance>
+            </div>
+            <div class="patAcctSmry__section">
+                <patient-account-latest-statement person-id="personId" person="person.Profile"></patient-account-latest-statement>
+            </div>
+        </div>
+    </form>
+</div>
+
+

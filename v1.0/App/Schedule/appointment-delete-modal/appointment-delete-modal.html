@@ -1,0 +1,10 @@
+﻿<div class="modal-header appointment-modal-header">
+    <strong id="lblAppointmentDeleteModalMessageCustom" ng-show="item.Message">{{ item.Message | i18n }}</strong>
+    <strong id="lblAppointmentDeleteModalMessageAllowed" ng-show="item.Allowed && !item.Message">{{ 'Are you sure you want to remove this {0} from the schedule?' | i18n:[item.Type] }}</strong>
+</div>
+<div class="modal-footer appointment-modal-footer">
+    <div class="pull-left">
+        <button id="btnCancelYes" ng-click="confirmDiscard();" class="btn btn-primary form-btn-save-new">{{ item.Allowed ? 'Yes' : 'Ok' | i18n }}</button>
+        <button id="btnCancelNo" ng-click="cancelDiscard();" class="btn form-btn-cancel-new" ng-show="item.Allowed">{{ 'No' | i18n }}</button>
+    </div>
+</div>

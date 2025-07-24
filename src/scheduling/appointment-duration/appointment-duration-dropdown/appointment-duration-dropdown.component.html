@@ -1,0 +1,13 @@
+﻿<div id="appointmentDuration{{inputId}}" class="dropdown" [ngClass]="{'disabled': isDisabled}">
+    <button id="btnDropDown{{inputId}}" (click)="btnClick()" (blur)="onBlur()" class="durationButton">
+        <span id="lblSelectedAppointmentDurationName{{inputId}}" [ngStyle]="{'cursor': 'pointer'}" class="selectedDescription">
+            {{ appointmentDuration.DurationText }}
+        </span>
+    </button>
+    <div id="dropdownListBox{{inputId}}" class="dropdownListBox" *ngIf="isOpen">
+        <div id="dropdownListItems{{inputId}}{{i}}" *ngFor="let dataItem of appointmentDurations; let i=index"
+             (mousedown)="selectItem(dataItem)" class="displayFlex dropdownPadding">
+                <span id="description{{inputId}}{{i}}" class="description"> {{ dataItem.DurationText }} </span>
+        </div>
+    </div>
+</div>

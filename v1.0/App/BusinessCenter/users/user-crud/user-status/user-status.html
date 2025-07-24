@@ -1,0 +1,149 @@
+﻿
+<div class="row">
+    <div class="col-xs-12 col-sm-9">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                <!--<label class="form-label-newer">{{'Current Status' | i18n }} </label>-->
+            </div>
+
+            <div class="col-xs-12 col-sm-9 col-md-10">
+                <div class="row" ng-if="showToggle">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label>{{'Current Status' | i18n }} </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="col-xs-2">
+                                    <span>{{'Active' | i18n }}</span>
+                                </div>
+                                <div class="col-xs-10">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="inpActive" ng-model="user.IsActive">
+                                        <label class="onoffswitch-label" for="inpActive" style="margin-bottom: 0px;"></label>
+                                    </div>
+                                </div>
+                                <!--<checkbox checkbox-id="inpActive" checkbox-value="user.IsActive" checkbox-label="'Active'"></checkbox>-->
+                            </div>
+                        </div>
+                        <div class="row" collapse="currentStatus==user.IsActive">
+                            <div class="col-xs-12">
+                                <div class="padding-top-16">
+                                    <!--<div class="row">
+                                        <div class="col-xs-12">
+                                            <span>
+                                                <label>
+                                                    {{ 'Are you sure you want to {0} this {1}?' | i18n:[((user.IsActive ? 'activate' : 'inactivate') | i18n), ('user' | i18n)] }}
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>-->
+                                    <div class="row" style="margin-left: -30px;" ng-show="currentStatus!=user.IsActive">
+                                        <div class="col-xs-12">
+                                            <div class="form-group col-xs-4">
+                                                <label class="control-label">{{'Date Effective' | i18n }}*</label>
+                                                <div style="pointer-events:none;">
+                                                    <date-selector input-id="inpDateEffective" date-var="currentDate" valid="true" format="MM/dd/yyyy" disable-date-input="true"></date-selector>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-8">
+                                                <label class="control-label">{{ 'Reason for status change' | i18n }} </label>
+                                                <input class="form-input" id="statusChangeNote" placeholder="{{ 'Text input' | i18n }}" ng-model="user.StatusChangeNote" type="text" />
+                                                <span id="errStatusNote" class="text-danger" ng-show="!user.StatusChangeNote">
+                                                    {{ 'Reason for status change required.' | i18n  }}
+                                                </span>
+                                            </div>
+                                            <!--<input id="statusChangeNote" type="text" ng-model="user.StatusChangeNote" class="form-input" maxlength="500" placeholder="{{ 'Reason for status change' | i18n }}"/>-->
+                                        </div>
+                                    </div>
+                                    <div class="row padding-top-16" ng-show="currentStatus!=user.IsActive">
+                                        <div class="col-xs-12">
+                                            <button id="btnConfirmStatusChange" ng-disabled="!user.StatusChangeNote" ng-click="openStatusChangeConfirmationModal()" class="btn btn-primary pull-right">
+                                                {{ 'Save' | i18n }}
+                                            </button>
+                                            <button id="cancelStatusChange" ng-click="cancelStatusChange()" class="btn btn-default pull-right margin-right-5">
+                                                {{ 'Cancel' | i18n }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row fuseGrid_scroll" id="activationHistoryGrid">
+                    <div class="col-xs-12">
+                        <div class="padding-top-20">
+                            <div class="fuseGrid pull-left col-md-12">
+                                <!--<grid-actions></grid-actions>-->
+                                <div class="gridActions">
+                                    <span class="gridActions__icons">
+                                        <!--<i tabindex="0" class="far fa-share-square" role="button" ng-click="share()"></i>
+                                        <i tabindex="0" class="fa fa-print" role="button" ng-click="print()"></i>-->
+                                    </span>
+                                    <span>
+                                        {{activationHistory.length}} of {{activationHistory.length}} records
+                                    </span>
+                                </div>
+                                <div class="row header">
+                                    <div class="{{getColumnSize(column)}} fuseGrid_cell_header" ng-repeat="column in header">
+                                        <div ng-if="column.sortable" ng-click="sort(column)">
+                                            <i class="fa fa-caret-down" ng-if="column.sorted && sortedColumn[0] == '-'"></i>
+                                            <i class="fa fa-caret-up" ng-if="column.sorted && sortedColumn[0] != '-'"></i>
+                                            {{ column.label }}
+                                        </div>
+                                        <div ng-if="!column.sortable">
+                                            {{ column.label }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row body" ng-repeat="activation in activationHistory | orderBy: sortedColumn">
+                                    <div class="col-sm-1 fuseGrid_cell fuseGrid_cell_body date-column">
+                                        {{ activation.DateModified | date : "MM/dd/yyyy"}}
+                                    </div>
+                                    <div class="col-sm-3 fuseGrid_cell fuseGrid_cell_body status-column">
+                                        {{ activation.StatusName }}
+                                    </div>
+                                    <div class="col-sm-5 fuseGrid_cell fuseGrid_cell_body reason-column" title="{{activation.Note.length > 40 ? activation.Note : ''}}">
+                                        {{ activation.Note.length > 40 ? activation.Note.substring(0, 40) + '...' : activation.Note }}
+                                    </div>
+                                    <div class="col-sm-3 fuseGrid_cell fuseGrid_cell_body">
+                                        {{ activation.UserModifiedName }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--activation history-->
+                            <!--<div class="display-list-results">
+                                <div class="display-list-item row">
+                                    <div class="col-xs-4 panel-heading-border">{{ 'Status'|i18n }}</div>
+                                    <div class="col-xs-4 panel-heading-border">{{ 'Last Modified By'|i18n }}</div>
+                                    <div class="col-xs-4 panel-heading-border">{{ 'Date'|i18n }}</div>
+                                </div>
+                                <div class="display-list-item row" ng-repeat="activation in activationHistory | orderBy:'-DateModified' | limitTo:showLimit()" ng-class-even="'item-zebra-dark'" ng-class-odd="'item-zebra-light'">
+                                    <div class="col-xs-4">
+                                        <span ng-class="{'text-muted': true}" id="lblStatus{{$index}}" ng-if="activation.IsActive ==true">{{ 'Active'|i18n }}</span>
+                                        <span ng-class="{'text-muted': true}" id="lblStatus{{$index}}" ng-if="activation.IsActive ==false">{{ 'Inactive'|i18n }}</span>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <span ng-class="{'text-muted': true}" id="lblStatusModifiedBy{{$index}}">{{ activation.UserModifiedName }}</span>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <span ng-class="{'text-muted': true}" id="lblStatusDateModified{{$index}}"> {{ activation.DateModified | toDisplayDate}}</span>
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <span ng-class="{'text-muted': true}" id="lblStatusNote{{$index}}"> {{ activation.Note }}</span>
+                                    </div>
+                                </div>
+                                <a id="btnShowAllStatus" class="soar-link" ng-click="showAllStatus = true" ng-show="!showAllStatus">{{'Show {0}' | i18n:['All'] }}</a>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

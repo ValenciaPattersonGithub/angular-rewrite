@@ -1,0 +1,18 @@
+﻿<div class="confirmModal">
+    <div class="modal-header">
+        <div class="header-close-button">
+            <button class="btn soar-link icon-button font-size-20" ng-click="close()"><b>x</b></button>
+        </div>
+        <h4 id="lblWarningModalHeader">{{ item.Title | i18n }}</h4>
+    </div>
+    <div class="modal-body">
+        <label id="lblWarningModalMessage" class="confirmModal__Message" ng-click="confirm();" ng-bind-html="item.Message"></label>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right">
+            <!--Cancel Button to be used in future-->
+            <!--<button id="btnCancelNo" ng-show="item.Button2Text?true:false" ng-click="close();" class="btn btn-default">{{ item.Button2Text | i18n }}</button>-->
+            <button id="btnOK" ng-click="close();" class="btn btn-primary">{{ item.Button1Text | i18n }}</button>
+        </div>
+    </div>
+</div>

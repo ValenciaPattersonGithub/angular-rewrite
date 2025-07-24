@@ -1,0 +1,80 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="benefit-plans-by-carrier grid header">
+        <div class="col-sm-3-migration">{{'Carrier' | translate }}</div>
+        <div class="col-sm-3-migration">{{'Address' | translate }}</div>
+        <div class="col-sm-2-migration">{{'Phone Number' | translate }}</div>
+        <div class="col-sm-2-migration">{{'Benefit Plan' | translate }}</div>
+        <div class="col-sm-2-migration">{{'Plan/Group Number' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+                                     id="benefit-plans-by-carrier">
+
+            <div *cdkVirtualFor="let carrier of reportData.carriers; index as i">
+
+                <div class="benefit-plans-by-carrier grid item">
+                    <div class="col-sm-1-migration">{{carrier.name}}</div>
+                    <div class="col-sm-1-migration">
+                        <div *ngIf="carrier.address">{{carrier.address}}</div>
+                        <div *ngIf="!carrier.address && carrier.address2">{{carrier.address2}}</div>
+                        <div *ngIf="!carrier.address && !carrier.address2 && (carrier.city || carrier.state || carrier.zipCode)">{{ carrier.city }}<span ng-if="carrier.city">,</span> {{ carrier.state }} {{ carrier.zipCode }}</div>
+                    </div>
+                    <div class="col-sm-1-migration">{{ carrier.phoneNumbers[0] | phoneNumber}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[0]?.name}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[0]?.planGroupNumber}}</div>
+                </div>
+
+                <div class="benefit-plans-by-carrier grid item">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">
+                        <div *ngIf="carrier.address && carrier.address2">{{carrier.address2}}</div>
+                        <div *ngIf="carrier.address && !carrier.address2 && (carrier.city || carrier.state || carrier.zipCode)">{{ carrier.city }}<span ng-if="carrier.city">,</span> {{ carrier.state }} {{ carrier.zipCode }}</div>
+                        <div *ngIf="!carrier.address && carrier.address2 && (carrier.city || carrier.state || carrier.zipCode)">{{ carrier.city }}<span ng-if="carrier.city">,</span> {{ carrier.state }} {{ carrier.zipCode }}</div>
+                    </div>
+                    <div class="col-sm-1-migration">{{ carrier.phoneNumbers[1] | phoneNumber}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[1]?.name}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[1]?.planGroupNumber}}</div>
+                </div>
+
+                <div class="benefit-plans-by-carrier grid item">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">
+                        <div *ngIf="carrier.address && carrier.address2 && (carrier.city || carrier.state || carrier.zipCode)">{{ carrier.city }}<span ng-if="carrier.city">,</span> {{ carrier.state }} {{ carrier.zipCode }}</div>
+                    </div>
+                    <div class="col-sm-1-migration">{{ carrier.phoneNumbers[2] | phoneNumber}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[2]?.name}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[2]?.planGroupNumber}}</div>
+                </div>
+
+                <div class="benefit-plans-by-carrier grid item" *ngIf="carrier.phoneNumbers.length > 3 || carrier.benefitPlans.length > 3">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">{{ carrier.phoneNumbers[3] | phoneNumber}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[3]?.name}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[3]?.planGroupNumber}}</div>
+                </div>
+
+                <div class="benefit-plans-by-carrier grid item" *ngIf="carrier.phoneNumbers.length > 4 || carrier.benefitPlans.length > 4">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">{{ carrier.phoneNumbers[4] | phoneNumber}}</div>
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[4]?.name}}</div> 
+                    <div class="col-sm-1-migration">{{ carrier.benefitPlans[4]?.planGroupNumber}}</div>
+                </div>
+
+
+                <div class="benefit-plans-by-carrier grid item" *ngFor="let benefitPlan of carrier.benefitPlans  | slice:5;">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">{{ benefitPlan.name}}</div>
+                    <div class="col-sm-1-migration">{{ benefitPlan.planGroupNumber}}</div>
+                </div>
+
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+
+
+</div>
+

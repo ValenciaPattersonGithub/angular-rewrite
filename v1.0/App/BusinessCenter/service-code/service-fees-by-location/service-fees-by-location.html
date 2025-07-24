@@ -1,0 +1,35 @@
+﻿<div class="feesByLocation panel panel-default">
+    <div class="panel-heading feesByLocation__heading-main">
+        <span class="panel-title">{{ 'Fees By Location' | i18n }}</span>
+        <div class="feesByLocation__locationSearch pull-right">
+            <input type="text" id="locationsSearch" class="form-input search" ng-model="searchTerm" ng-change="setLocationFilter(searchTerm)" placeholder="Search Locations" />
+            <span class="fa fa-times remove" ng-click="clearLocations()" ng-if="searchTerm.length > 0"></span>
+        </div>
+    </div>
+    <div class="feesByLocation__locationList" ng-class="{'setScroll': locations.length > 3}">        
+        <div clss="panel-body" ng-repeat="location in filteredLocations | orderBy: 'NameLine1'">
+            <div class="panel panel-default feesByLocation__feesEditPanel">
+                <div class="panel-heading feesByLocation__heading-loc">
+                    <div id="location{{ location.LocationId }}">
+                        <span class="panel-title">{{ location.NameLine1 }}</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-5">
+                        <label>{{ 'Location Fee: ' | i18n }}</label>
+                        <label id="lblLocationFee" name="lblLocationFee">{{location.$$LocationOverrides.$$FeeOverride | currency }}</label>
+                    </div>
+                    <div class="col-md-7">
+                        <label>{{ 'Tax Type: ' | i18n }}</label>
+                        <label id="lblLocationTaxableService" name="lblLocationTaxableService">{{location.$$LocationOverrides.$$TaxableServiceTypeIdType }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </div>
+    <div class="feesByLocation__footer">
+        <div class="feesByLocation__btn" ng-click="cancel()">
+            <a id="btnCancel" class="btn btn-link">{{ 'Close' |i18n }}</a>
+        </div>
+    </div>
+</div>

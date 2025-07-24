@@ -1,0 +1,27 @@
+﻿<div ng-form="frmPatientNoteTemplate" class="patientNoteTemplate" ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="patientNoteTemplate__body" ng-if="activeTemplate" ng-class="activeTemplate ? 'active' : 'inactive'">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-8">
+                <label id="lblTemplateName" class="patientNoteTemplate__header">{{selectedTemplate.TemplateName }}</label>
+            </div>
+            <div class="col-xs-6 col-md-4 ">
+                <div class="patientNoteTemplate__actions ">
+                    <button id="btnFinish" name="btnFinish" ng-click="finishTemplate();" class="btn btn-primary">{{'Finish'| i18n }}</button>
+                    <button id="btnCancel" name="btnCancel" ng-click="cancelTemplate()" class="btn btn-default">{{'Cancel'| i18n }}</button>
+                </div>
+            </div>
+        </div>
+        <div class="patientNoteTemplate__templateBody">
+            <div id="noteSection{{$index}}" ng-repeat="(sectionIndex,section) in selectedTemplate.TemplateBodyCustomForm.FormSections">
+                <div class="patientNoteTemplate__formSection" id="sectionPanel{{sectionIndex}}">
+                    <section-preview-directive></section-preview-directive>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

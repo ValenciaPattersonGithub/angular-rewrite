@@ -1,0 +1,74 @@
+<div class="contact-detail-container">
+    <div class="contactdetail-header">
+        <span class="contactdetail-header-title">{{'Contact Details' | translate}}</span>
+        <div class="contactdetail-header-actionButtons" >
+            <app-button id="btncontactedit" buttonLabel="{{'Edit' | translate }}" variation="secondary" class="ml-10"
+                (onClick)="updatePerson()" *ngIf="patientProfile" [isDisabled]='!hasEditAccess'></app-button>
+        </div>
+    </div>
+    <hr>
+    <div class="contactDetailContent">
+        <div class="contactDetailContent-phone">
+            <div class="contactDetailContent-phone-phone-wrapper">
+                <div class="contactDetailContent-phone-lable">
+                    <app-label class="contactDetailContent-contact-details-label" [label]="'Phone'">
+                    </app-label>
+                </div>
+                <div class="contactDetailContent-phone-opt-out">
+                    <app-label class="contactDetailContent-contact-details-label" [label]="'Reminders'">
+                    </app-label>
+                </div>
+            </div>
+            <div class="contactDetailContent-phone-wrapper" *ngFor="let phone of Phones">
+                <div class="contactDetailContent-phone-addresses">
+                    <span class="contactDetailContent-phone-addresses-title">{{phone.PhoneNumber | phoneNumber}} {{'(' +
+                        phone.Type[0] + ')'}}</span>
+                    <span>&nbsp;</span>
+                    <span class="contactDetailContent-phone-addresses-isPrimary" *ngIf="phone.IsPrimary">{{ '(Primary)'
+                        }}</span>
+                </div>
+                <div class="contactDetailContent-phone-reminder">
+                    <app-label class="contactDetailContent-contact-details-label" [label]="'Phone: '">
+                    </app-label>
+                    <span>&nbsp;</span>
+                    <span>{{ phone.ReminderOK ? 'Yes' : 'No' }}</span>
+                    <span>&nbsp;</span>
+                    <app-label class="contactDetailContent-contact-details-label" [label]="'Text: '">
+                    </app-label>
+                    <span>&nbsp;</span>
+                    <span>{{ phone.TextOk ? 'Yes' : 'No' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="contactDetailContent-email">
+            <div class="contactDetailContent-email-label">
+                <app-label class="contactDetailContent-contact-details-label" [label]="'Email'">
+                </app-label>
+            </div>
+            <div class="contactDetailContent-email-wrapper" *ngFor="let email of Emails">
+                <div class="contactDetailContent-email-addresses">
+                    <span class="contactDetailContent-email-addresses-title"><a
+                            href="mailto:{{email.Email}}">{{email.Email}}</a></span>
+                    <span>&nbsp;</span>
+                    <span class="contactDetailContent-email-addresses-isPrimary" *ngIf="email.IsPrimary">{{ '(Primary)'
+                        }}</span>
+                </div>
+                <div class="contactDetailContent-email-reminder">
+                    <app-label class="contactDetailContent-contact-details-label" [label]="'Email: '">
+                    </app-label>
+                    <span>&nbsp;</span>
+                    <span>{{ email.ReminderOK ? 'Yes' : 'No' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="contactDetailContent-address">
+            <div class="contactDetailContent-address-label ">
+                <app-label class="contactDetailContent-contact-details-label" [label]="'Address'">
+                </app-label>
+            </div>
+            <span class="providerlocationdetail-alternateLocations">
+                <span>{{address}}<br>{{displayCityStateZipCode}}</span>
+            </span>
+        </div>
+    </div>
+</div>

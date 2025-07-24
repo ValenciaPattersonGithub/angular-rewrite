@@ -1,0 +1,36 @@
+<div class="eras">
+    <label *ngIf="!locationEnrolledInEra && !initialLoading">{{ 'To access the feature, please visit the resources section and find instructions on ERA enrollment' }}</label>
+    <label *ngIf="initialLoading">{{ 'Loading...' }}</label>
+    <ng-container *ngIf="!initialLoading && locationEnrolledInEra">
+        <div class="loc-heading">
+            <span>{{ 'ERA | Payments will be applied to the current location' }}</span>
+            <span class="loc-name">{{ loggedInLocation.name }}</span>
+        </div>
+        <div class="form-row top-section">
+            <div class="form-group">
+                <select [(ngModel)]="filterOption">
+                    <option *ngFor="let option of processedSearchOptions" [ngValue]="option">{{option.Description}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="location-selector-override">
+                    <access-based-location-selector [id]="eraLocations" check-auth-z="'soar-acct-aipmt-view'"
+                                                    [expanded]="true"
+                                                    [selectedLocationIds]="selectedLocationIds"
+                                                    [showActiveOnly]="true"
+                                                    (selectedValueChanged)="onSelectedLocationChanged($event)"
+                                                    [amfaAccess]="'soar-ins-iclaim-view'">
+                    </access-based-location-selector>
+                </div>
+            </div>
+        </div>
+        <app-era-grid [allLocations]="allLocations"
+                      [allowedLocations]="allowedLocations"
+                      [loggedInLocation]="loggedInLocation"
+                      [insurancePaymentTypes]="insurancePaymentTypes"
+                      [filteredLocations]="filteredLocations"
+                      [filterOption]="filterOption">
+        </app-era-grid>
+    </ng-container>
+    <scroll-to-top></scroll-to-top>
+</div>

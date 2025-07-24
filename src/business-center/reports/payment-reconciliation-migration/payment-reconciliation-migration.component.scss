@@ -1,0 +1,44 @@
+.paymentreconreport {
+    grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr 2fr 1fr 1fr 1fr 0.05fr
+}
+.paymentreconreportgroupHeader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+.paymentreconreportfooter {
+    grid-template-columns: 8fr 3fr 1fr 0.05fr
+}
+.paymentreconreportsummaryfooter {
+    grid-template-columns: 7fr 4fr 1fr 0.05fr
+}
+
+.paymentreconreportsubfooter {
+    grid-template-columns: 9fr 1fr 1fr 1fr 0.05fr
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.paymentreconreport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+            margin-left: 3px;
+        }
+      }
+}

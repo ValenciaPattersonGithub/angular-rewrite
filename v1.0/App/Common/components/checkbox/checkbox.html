@@ -1,0 +1,15 @@
+﻿<div class="utilCheckbox" ng-class="{ 'isAccountFilter': isAccountFilter }">
+    <button id="{{checkboxId}}"
+            class="utilCheckbox__ctrl"
+            ng-focus="focused"
+            ng-blur="!focused"
+            ng-click="changeValue()"
+            ng-disabled="!authorized || checkboxDisabled"
+            ng-hide="checkboxHidden"
+            tabindex="{{(tabIndex=='0'||tabIndex)?tabIndex:0}}"
+            type="button">
+        <span class="utilCheckbox__label" ng-class="{ 'active': checkboxValue }" title="{{ !authorized ? message : checkboxLabel | i18n}}">
+            {{ checkboxLabel | i18n }}
+        </span>
+    </button>
+</div>

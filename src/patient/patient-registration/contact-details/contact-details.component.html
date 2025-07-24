@@ -1,0 +1,271 @@
+<div class="contact-detail-container">
+    <div class="contact-detail-header">
+        <span class="contact-detail-title">{{'Contact Details' | translate}}</span>
+        <span class="contact-detail-optout">
+            <app-toggle [id]="'optAll'" [isChecked]="optAll" (checkChanged)="optAllCommunications($event)"
+                [label]="'Opt out of all communications?'" [labelDirection]="'right'"></app-toggle>
+        </span>
+        <!--<span class="contact-detail-optout-label">{{'Opt out of all communications?' | translate}}</span>-->
+    </div>
+    <hr>
+    <form [formGroup]="contactDetails" class="form-horizontal" *ngIf="contactDetails" autocomplete="off">
+        <div class="detail-content">
+            <div class="opt-mail-communications">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'Opt out of mail communications?'"></app-label>
+                </div>
+                <app-check-box id="optmail" [label]="'Yes'" [checked]="optMails"
+                    (checkChanged)="optMailsCommunications($event)"></app-check-box>
+            </div>
+            <div class="member-address">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'Use Account Member\'s Address'">
+                    </app-label>
+                </div>
+                <select id="memberAddress" [attr.disabled]="disableAccountMemberAddress" autocomplete="off"
+                    (change)='onAccountMemberSelected($event)' formControlName="MemberAddress"
+                    class="memberAccount-selectlist">
+                    <option value="" selected>{{'No Selection' | translate}}</option>
+                    <option [value]='accountMember.value' *ngFor="let accountMember of filteredAccountMembers">
+                        {{accountMember.text}}
+                    </option>
+                </select>
+            </div>
+            <div class="street-address">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'Street Address'">
+                    </app-label>
+                </div>
+                <input id="address" [attr.disabled]="disableMemberAddress" formControlName="AddressLine1"
+                    autocomplete="new-AddressLine1" maxlength="128" placeholder="Address" type="text"
+                    class="input-address">
+            </div>
+            <div class="street-address2">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'Address 2'"></app-label>
+                </div>
+                <input id="address2" [attr.disabled]="disableMemberAddress" formControlName="AddressLine2"
+                    autocomplete="new-AddressLine2" maxlength="128" placeholder="Address Line 2" type="text"
+                    class="input-address">
+            </div>
+            <div class="city">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'City'"></app-label>
+                </div>
+                <input id="city" formControlName="City" [attr.disabled]="disableMemberAddress" placeholder="Enter City"
+                    autocomplete="new-City" maxlength="64" type="text" class="input-city">
+            </div>
+            <div class="state">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'State'"></app-label>
+                </div>
+                <select formControlName="State" [attr.disabled]="disableMemberAddress" class="state-selectlist">
+                    <option value="" selected>{{'Select State' | translate}}</option>
+                    <option [ngValue]="state.value" *ngFor="let state of states">
+                        {{state.text}}
+                    </option>
+                </select>
+                <!-- <app-select id="state" [isDisabled]="responsiblePersonType == '2' ? 'disabled' : null" [ngModel]="state"
+                    [placeholder]="'Select State'" [listItems]="states" [size]="'medium'"></app-select> -->
+            </div>
+            <div class="zip-code">
+                <div class="mb-5 ml-10">
+                    <app-label class="contact-detail-label" [label]="'Zip'"></app-label>
+                </div>
+                <input id="zipcode" formControlName="ZipCode" [attr.disabled]="disableMemberAddress" minlength="5"
+                    autocomplete="new-ZipCode" maxlength="9" placeholder="Zip Code" type="text" class="input-zip-code"
+                    (blur)=isZipCodeValid($event) [ngClass]="{'zipcode-error': !isValidZipCode}" OnlyNumber
+                    NumberType="zipCode">
+                <svg-icon [attr.id]="'ZipCodeErrorIcon'" class="zipcode-errorIcon" name="tooltipIcon" iconHeight="15px"
+                    tooltip="ZIP code must be 5 to 9 numeric characters." placement="top-error" delay="500"
+                    *ngIf="!isValidZipCode" iconWidth="15px"></svg-icon>
+            </div>
+            <div class="opt-phone-communications">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'Opt out of all phone communications?'">
+                    </app-label>
+                </div>
+                <app-check-box id="optphones" [label]="'Yes'" [checked]="optPhones"
+                    (checkChanged)="optPhoneCommunications($event)"></app-check-box>
+            </div>
+            <div class="phones-section">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'Phone'"></app-label>
+                </div>
+                <div class="phone-section-main" [formArrayName]="'Phones'">
+                    <div
+                        [ngClass]="{'phone-grid-owner': isHidePhoneEmailOwners, 'phone-grid': !isHidePhoneEmailOwners}">
+                        <ng-container *ngFor="let column of phoneDetailHeaders">
+                            <div *ngIf="!column.hide" class="phone-grid-header">
+                                <app-label class="contact-detail-label" [label]="column.label"></app-label>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div *ngFor="let phone of contactDetails.get('Phones')['controls']; let rowId= index"
+                        [formGroupName]="rowId">
+                        <div [ngClass]="{'phone-grid-owner': isHidePhoneEmailOwners, 'phone-grid': !isHidePhoneEmailOwners}"
+                            *ngIf="phone.controls.ObjectState.value !== 'Delete'">
+                            <div class="phone-grid-item" *ngIf="isHidePhoneEmailOwners">
+                                <select id="phoneowner" formControlName="PhoneOwner"
+                                    [attr.disabled]="phone.controls.ContactId && phone.controls.ContactId.value?'disabled':null"
+                                    (change)='selectedPhoneOwnerChanged($event.target.value, phone)'
+                                    class="phone-grid-owner-selectlist">
+                                    <option value="0" selected>{{'Self' | translate}}</option>
+                                    <option [value]="patientPhone.value" *ngFor="let patientPhone of patientPhones">
+                                        {{patientPhone.text}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="phone-grid-item">
+                                <input [attr.id]="'phoneNumber'+rowId" formControlName="PhoneNumber" maxlength="10"
+                                    autocomplete="new-PhoneNumber"
+                                    [attr.disabled]="phone.value.isDisabled?'disabled':null"
+                                    [ngClass]="{'error-contact-control': !phone.controls.ValidPhoneNumber.value}"
+                                    placeholder="Phone Number" type="text" class="phone-grid-phone-number"
+                                    spellcheck="false" (blur)=isPhoneNumberValid(phone) OnlyNumber NumberType="phone"
+                                    [value]="phone.controls.PhoneNumber.value | phoneNumber">
+                                <svg-icon [attr.id]="'tooltipPhoneNumberIcon'+rowId" class="phone-grid-PhoneNumberIcon"
+                                    name="tooltipIcon" *ngIf="!phone.controls.ValidPhoneNumber.value" iconHeight="15px"
+                                    tooltip="Phone number requires full 10 digit number" placement="top-error"
+                                    delay="500" iconWidth="15px"></svg-icon>
+                            </div>
+                            <div class="phone-grid-item">
+                                <select id="phonetypes" (change)='selectedPhoneTypeChanged($event.target.value,phone)'
+                                    [attr.disabled]="phone.value.isDisabled?'disabled':null"
+                                    (blur)=isPhoneNumberValid(phone)
+                                    [ngClass]="{'error-contact-control': !phone.controls.ValidPhoneType.value}"
+                                    formControlName="PhoneType" class="phone-grid-type-selectlist">
+                                    <option value=0 selected>{{'Select Phone Type' | translate}}</option>
+                                    <option [value]='phoneType.value' *ngFor="let phoneType of phoneTypes">
+                                        {{phoneType.text}}
+                                    </option>
+                                </select>
+                                <svg-icon [attr.id]="'tooltipPhoneTypeIcon'+rowId" class="phone-grid-PhoneTypeIcon"
+                                    name="tooltipIcon" *ngIf="!phone.controls.ValidPhoneType.value" iconHeight="15px"
+                                    tooltip="Phone Type is Required" placement="top-error" delay="500" iconWidth="15px">
+                                </svg-icon>
+                            </div>
+                            <div class="phone-grid-item">
+                                <app-radio-button [attr.id]="'rdbPrimaryPhone'+rowId" class="item-center"
+                                    [value]="rowId" [checked]="phone.controls.IsPrimary.value"
+                                    formControlName="IsPrimary" [name]="'primaryPhone'"
+                                    (change)="IsPrimaryPhoneChange(rowId)"></app-radio-button>
+                            </div>
+                            <div class="phone-grid-item">
+                                <app-toggle class="item-center" [id]="'optPhoneReminders'+rowId"
+                                    (checkChanged)="optPhoneReminder($event,phone)"
+                                    [isChecked]="phone.controls.PhoneReminder.value" formControlName="PhoneReminder">
+                                </app-toggle>
+                            </div>
+                            <div class="phone-grid-item">
+                                <app-toggle class="item-center" [id]="'optTextReminders'+rowId"
+                                    (checkChanged)="optTextReminder($event,phone)"
+                                    [isChecked]="phone.controls.TextReminder.value"
+                                    [isDisabled]="phone.controls.PhoneType.value !== 3" formControlName="TextReminder">
+                                </app-toggle>
+                            </div>
+                            <div class="phone-grid-close-item" (click)="deletePhoneNumber(rowId)"
+                                *ngIf="phone.controls.ObjectState.value != 'Delete'">
+                                <svg-icon class="phone-grid-clear-icon" name="closeIcon" iconHeight="20px"
+                                    iconWidth="20px" id="rp-clear-icon"></svg-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="add-phone-number">
+                <div class="add-phone-number-icon-label" id="addPhoneNumber" (click)="addPhoneNumber()">
+                    <label class="add-label"> {{ 'Add Phone Number' | translate }} </label>
+                </div>
+                <svg-icon class="add-phone-number-icon" name="ovalSolidIcon" iconHeight="20px"
+                    (click)="addPhoneNumber()" iconWidth="20px">
+                </svg-icon>
+                <svg-icon class="add-phone-number-icon-add" name="addIcon" iconHeight="20px" (click)="addPhoneNumber()"
+                    iconWidth="20px">
+                </svg-icon>
+            </div>
+            <div class="opt-email-communications">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'Opt out of all email communications?'">
+                    </app-label>
+                </div>
+
+                <app-check-box id="optemails" [label]="'Yes'" [checked]="optEmails"
+                    (checkChanged)="optEmailCommunications($event)"></app-check-box>
+            </div>
+            <div class="email-section">
+                <div class="mb-5">
+                    <app-label class="contact-detail-label" [label]="'Email'"></app-label>
+                </div>
+                <div class="email-section-main" [formArrayName]="'Emails'">
+                    <div
+                        [ngClass]="{'email-grid-owner': isHidePhoneEmailOwners, 'email-grid': !isHidePhoneEmailOwners}">
+                        <ng-container *ngFor="let column of emailDetailHeaders">
+                            <div *ngIf="!column.hide" class="email-grid-header">
+                                <app-label class="contact-detail-label" [label]="column.label">
+                                </app-label>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div *ngFor="let email of contactDetails.get('Emails')['controls']; let rowId= index"
+                        [formGroupName]="rowId">
+                        <div [ngClass]="{'email-grid-owner': isHidePhoneEmailOwners, 'email-grid': !isHidePhoneEmailOwners}"
+                            *ngIf="email.controls.ObjectState.value !== 'Delete'">
+                            <div class="email-grid-item" *ngIf="isHidePhoneEmailOwners">
+                                <select id="emailowner" formControlName="EmailOwner"
+                                    [attr.disabled]="email.controls.PatientEmailId && email.controls.PatientEmailId.value?'disabled':null"
+                                    (change)='selectedEmailOwnerChanged($event.target.value, email)'
+                                    class="email-grid-owner-selectlist">
+                                    <option value="0" selected>{{'Self' | translate}}</option>
+                                    <option [value]="patientEmail.value" *ngFor="let patientEmail of patientEmails">
+                                        {{patientEmail.text}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="email-grid-item">
+                                <input [attr.id]="'emailAddress'+rowId" placeholder="Email Address" type="email"
+                                    autocomplete="new-EmailAddress"
+                                    [ngClass]="{'error-contact-control': !email.controls.ValidEmail.value}"
+                                    class="email-grid-address" (blur)="isEmailValid(email)"
+                                    [attr.disabled]="email.value.isDisabled ? 'disabled':null"
+                                    formControlName="EmailAddress" maxlength="256">
+                                <svg-icon [attr.id]="'tooltipEmailIcon'+rowId" class="phone-grid-PhoneNumberIcon"
+                                    name="tooltipIcon" *ngIf="!email.controls.ValidEmail.value" iconHeight="15px"
+                                    tooltip="Email requires a valid email format" placement="top-error" delay="500"
+                                    iconWidth="15px"></svg-icon>
+                            </div>
+                            <div class="email-grid-item ml-45">
+                                <app-radio-button [attr.id]="'rdbPrimaryEmail'+rowId" class="item-center"
+                                    [value]="rowId" [checked]="email.controls.IsPrimary.value"
+                                    formControlName="IsPrimary" [name]="'primaryEmail'"
+                                    (change)="IsPrimaryEmailChange(rowId)"></app-radio-button>
+                            </div>
+                            <div class="email-grid-item">
+                                <app-toggle class="item-center" [id]="'optEmailReminders'+rowId"
+                                    (checkChanged)="optEmailReminder($event,email)"
+                                    [isChecked]="email.controls.EmailReminder.value" formControlName="EmailReminder">
+                                </app-toggle>
+                            </div>
+                            <div class="email-grid-close-item" (click)="deleteEmail(rowId)">
+                                <svg-icon class="email-grid-clear-icon" name="closeIcon" iconHeight="20px"
+                                    iconWidth="20px" id="rp-clear-icon"></svg-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="add-email">
+                <div class="add-email-icon-label" id="addEmail" (click)="addEmail()">
+                    <label class="add-label"> {{ 'Add Email' | translate }} </label>
+                </div>
+                <svg-icon class="add-email-icon" name="ovalSolidIcon" iconHeight="20px"
+                    (click)="addEmail()" iconWidth="20px">
+                </svg-icon>
+                <svg-icon class="add-email-icon-add" name="addIcon" iconHeight="20px" (click)="addEmail()"
+                    iconWidth="20px">
+                </svg-icon>
+            </div>
+        </div>
+    </form>
+</div>

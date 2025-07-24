@@ -1,0 +1,36 @@
+﻿<div>
+    <div class="modal-header">
+        <div class="modal-title-responsive">
+            {{'Edit {0}' | i18n:['Exams']}}
+        </div>
+    </div>
+    <div class="modal-body row">
+        <div class="col-md-12 margin-bottom10">
+            {{'Select up to 6 exams' | i18n}}
+        </div>
+        <div class="col-md-3">
+            <div ng-repeat="hdr in perioExamHeaders" ng-if="hdr.$$Column === 1">
+                <checkbox checkbox-label="hdr.$$Title" checkbox-value="hdr.$$Selected" change-function="checkBoxChanged()" checkbox-disabled="checkboxesDisabled && !hdr.$$Selected" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div ng-repeat="hdr in perioExamHeaders" ng-if="hdr.$$Column === 2">
+                <checkbox checkbox-label="hdr.$$Title" checkbox-value="hdr.$$Selected" change-function="checkBoxChanged()" checkbox-disabled="checkboxesDisabled && !hdr.$$Selected" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div ng-repeat="hdr in perioExamHeaders" ng-if="hdr.$$Column === 3">
+                <checkbox checkbox-label="hdr.$$Title" checkbox-value="hdr.$$Selected" change-function="checkBoxChanged()" checkbox-disabled="checkboxesDisabled && !hdr.$$Selected" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div ng-repeat="hdr in perioExamHeaders" ng-if="hdr.$$Column === 4">
+                <checkbox checkbox-label="hdr.$$Title" checkbox-value="hdr.$$Selected" change-function="checkBoxChanged()" checkbox-disabled="checkboxesDisabled && !hdr.$$Selected" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a id="btnCancel" class="btn btn-default" ng-click="cancel()">{{ 'Cancel' | i18n}}</a>
+        <a id="btnSave" class="btn btn-primary" ng-click="save()">{{ 'Save' | i18n}}</a>
+    </div>
+</div>

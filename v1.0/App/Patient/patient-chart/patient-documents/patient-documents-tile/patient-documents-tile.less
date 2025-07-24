@@ -1,0 +1,62 @@
+﻿.docsTile { 
+    .clearfix;       
+    background-color: @brand-color_white;
+    transition: all 0.5s ease 0s;
+    width: 100%;    
+    &.active {
+        background-color: @brand-color_gray;
+    }
+    &__detailsBox {
+        background-color: @brand-color_white;        
+
+        &.active {
+            background-color: @brand-color_gray;
+        }
+
+        &.groupedBottom {
+            border-left: 5px solid @brand-color_darker-gray;
+            border-right: 5px solid @brand-color_darker-gray;
+            border-bottom: 5px solid @brand-color_darker-gray;
+            margin-top: -2px;
+        }
+    }   
+
+    &__details {
+        .clearfix;
+        width: 80%;
+        padding-right: 4px;
+        float: left;
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        cursor: pointer;
+    }
+
+    &__description {
+        width: 100%;
+        float: left;
+        font-weight: 500;
+    }
+
+    &__tooth {
+        width: 48%;
+        float: left;
+        padding-right: 5px;
+        font-weight: 300;
+    }
+
+    &__area {
+        width: 48%;
+        float: left;
+        font-weight: 300;
+    }
+    &__icon {
+        left: 70%;
+        display: inline-block;
+        float: right;
+        height: 40px;
+        margin-top: 8px;
+        padding-top: 10px;
+        text-align: center;
+        width: 40px;
+    }
+}

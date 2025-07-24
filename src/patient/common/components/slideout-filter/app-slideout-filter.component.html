@@ -1,0 +1,129 @@
+<form [formGroup]="patientFilterForm">
+    <div class="panel-group appSlideout" id="accordion">
+        <div *ngFor="let filter of patientModelArray; let ind=index;">
+            <div class="panel-heading" *ngIf="filter?.filterText != ''">
+                <a data-toggle="collapse" data-parent="#accordion" [attr.data-target]="'#' + filter?.dataTarget"
+                    class="soar-link font-weight-bold padding-2" (click)="expandCollapse(ind)">
+                    <i [attr.id]="'filter_'+ind" class="indicator glyphicon"
+                    [ngClass]="filter?.isExpanded ? 'glyphicon-chevron-down':'glyphicon-chevron-up'"></i>
+                    {{filter?.filterText | translate}}
+                </a>
+            </div>
+
+            <div *ngIf="filter?.divUlId!='AppointmentDates' && filter?.divUlId!='InsuranceFilter' && filter?.divUlId!='createdDateList' && filter?.divUlId!='TreatmentPlanName' && filter?.divUlId!= 'AppointmentBlocks' && filter?.divUlId!='DueDateItems'"
+                class="filter-option  patient-management-slideout"
+                [ngClass]="{'panel-collapse collapse': filter?.filterText != '', 
+                'in': (isExpandGroupTypes && filter?.divUlId  == 'GroupTypes') || (isExpandPreferredDentists && filter?.divUlId  == 'PreferredDentists') || (isExpandPreferredHygienists && filter?.divUlId == 'PreferredHygienists')}" 
+                [attr.id]="filter?.divClassId">
+                <ul [attr.id]="filter?.divUlId" [ngClass]="filter?.divUlId=='SoonerIfPossible' ? 'alignLeft' : ''">
+                    <!-- common checkbox for ALL -->
+                    <li *ngIf="filter?.divUlId!='SoonerIfPossible'">
+                        <input type="checkbox" class="prvntvCareFilters" [attr.formControl]="i"
+                            [checked]="filter?.formArray?.controls[0]?.value?.isSelected"
+                            (click)="selectAll(ind, $event)">
+                        {{'All' | translate}}
+                    </li>
+                    <ng-container *ngFor="let item of filter?.filter; let i = index">
+                        <li 
+                            *ngIf="filter?.divUlId=='AppointmentStates' || shouldShowMore(filter?.divUlId) || i < showMoreLength">
+                            <input type="checkbox" class="prvntvCareFilters" [attr.formControl]="i"
+                                [checked]="filter?.filter[i]?.isSelected"
+                                (click)="toggleSelect(filter?.filter[i]?.value, filter?.filter[i]?.field, i, ind, $event)">
+                            {{filter.filter[i]?.value | translate}}
+                        </li>
+                    </ng-container>
+                </ul>
+                <div
+                    *ngIf="(filter?.formArray?.controls?.length - 1) > showMoreLength && filter?.divUlId!='AppointmentStates'">
+                    <span class="showMore" (click)="toggleShowMore(filter?.divUlId)">
+                        {{ shouldShowMore(filter?.divUlId) ? showLessText : showMoreText }}
+                    </span>
+                </div>
+            </div>
+
+            <div *ngIf="filter?.divUlId=='AppointmentDates' || filter?.divUlId=='AppointmentBlocks' || filter?.divUlId=='DueDateItems' || filter?.divUlId=='InsuranceFilter'"
+                class="filter-option panel-collapse collapse patient-management-slideout"
+                [attr.id]="filter?.divClassId">
+                <ul [attr.id]="filter?.divUlId">
+                    <!-- common radio button for ALL -->
+                    <li>
+                        <input type="radio" [attr.id]="'All' + '_' + filter?.divUlId" class="prvntvCareFilters"
+                            [name]="filter?.divUlId + '_' + activeFltrTab" [checked]="isChecked(ind)"
+                            [attr.formControl]="filter?.divUlId + '_' + activeFltrTab" [value]="'All'"
+                            (change)="selectAll(ind, $event)">
+                        {{'All' | translate}}
+                    </li>
+                    <ng-container *ngFor="let item of filter?.filter; let i = index">
+                        <li>
+                            <input type="radio" [attr.id]="filter?.filter[i]?.value + '_' + filter?.divUlId"
+                                [attr.formControl]="filter?.divUlId + '_' + activeFltrTab" class="prvntvCareFilters"
+                                [name]="filter?.divUlId + '_' + activeFltrTab"
+                                [checked]="filter?.formArray?.controls[i+1]?.value?.isSelected"
+                                [value]="filter?.formArray?.controls[i+1]?.value?.isSelected"
+                                (change)="toggleSelect(filter?.filter[i]?.value, filter?.filter[i]?.field, i, ind, $event)">
+                            {{filter?.filter[i]?.value | translate}}
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+
+            <div *ngIf="filter?.divUlId == 'createdDateList'" class="panel-collapse collapse"
+                [attr.id]="filter?.divClassId">
+                <ul [attr.id]="filter.divUlId">
+                    <li>
+                        <input type="radio" [attr.id]="'All' + '_' + filter?.divUlId" class="prvntvCareFilters"
+                            [name]="filter?.divUlId + '_' + activeFltrTab" [checked]="isChecked(ind)"
+                            [attr.formControl]="filter?.divUlId + '_' + activeFltrTab" [value]="'All'"
+                            (change)="selectAll(ind, $event, 'All')">
+                        {{'All' | translate}}
+                    </li>
+                    <li *ngFor="let item of filter?.filter; let i = index">
+                        <input type="radio" [attr.id]="filter?.filter[i]?.value + '_' + filter?.divUlId"
+                            [attr.formControl]="filter?.divUlId + '_' + activeFltrTab" class="prvntvCareFilters"
+                            [name]="filter?.divUlId + '_' + activeFltrTab"
+                            [checked]="filter?.formArray?.controls[i+1]?.value?.isSelected"
+                            [value]="filter?.formArray?.controls[i+1]?.value?.isSelected"
+                            (change)="toggleSelect(filter?.filter[i]?.value, filter?.filter[i]?.field, i, ind, $event)">
+                        {{'Date Range' | translate}}
+                    </li>
+                    <li *ngFor="let item of filter?.formArray?.controls; let i = index">
+                        {{(i==0) ? 'From' : 'To' | translate}}
+                        <app-date-selector #date [attr.formControl]="item?.value?.field" [disabled]="patientFilterService?.disableDateInput"
+                            ngDefaultControl [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"
+                            [maxDate]="maxCreatedDate" [value]="defaultDate" [defaultEmpty]="defaultEmpty"
+                            (dateChanged)="onDateChanged($event, i)">
+                        </app-date-selector>
+                    </li>
+                </ul>
+                <div class="errorMsg">
+                    <span id="errorRequiredDate" class="error"
+                        *ngIf="(!createdGte && createdLte || createdGte && !createdLte)">{{errorRequiredDate}}</span>
+                    <span class="error" *ngIf="invalidDateRange">{{errorDateRange}}</span>
+                </div>
+            </div>
+
+            <div *ngIf="filter?.divUlId == 'TreatmentPlanName'" class="panel-collapse collapse"
+                [attr.id]="filter?.divClassId">
+                <ul [attr.id]="filter.divUlId">
+                    <!-- common checkbox for ALL -->
+                    <li>
+                        <input type="checkbox" class="prvntvCareFilters" [attr.formControl]="i"
+                            [checked]="isChecked(ind)" (click)="selectAll(ind, $event)">
+                        {{'All' | translate}}
+                    </li>
+                    <ng-container *ngFor="let item of filter?.filter; let i = index">
+                        <li *ngIf="filter?.divUlId=='AppointmentStates' || i < showMoreLength">
+                            <input type="checkbox" class="prvntvCareFiltersEqual" attr.formControl="treatmentPlan_{{i}}"
+                                [checked]="filter?.filter[i]?.isSelected"
+                                (click)="toggleSelect(filter?.filter[i]?.key, filter?.filter[i]?.field, i, ind, $event)">
+                            {{filter.filter[i]?.key | translate}}
+                            <input #inpPlanName *ngIf="i==0 || i==1" type="text" id="TreatmentPlanName"
+                                class="prvntvCareFiltersEqual text-box"
+                                (blur)="inputValue($event,i, filter?.dataTarget)" />
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+        </div>
+    </div>
+</form>

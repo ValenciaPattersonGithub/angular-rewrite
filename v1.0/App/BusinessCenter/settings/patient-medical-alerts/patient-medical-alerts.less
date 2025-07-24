@@ -1,0 +1,43 @@
+﻿.medicalHistoryAlerts {
+    .standardHeader;
+
+    &__body {
+        .containerStandard;
+    }
+
+    &__text {
+        min-height: 200px;
+    }
+
+    &__actions {
+        text-align: right;
+        margin: @brand-margin_sm;
+    }
+
+    &__btnCancel {
+        .btn-link;
+        float: right;
+        margin-right: @brand-margin_sm;
+    }
+
+    &__btnSave {
+        .btn;
+        .btn-primary;
+        float: right;
+    }
+
+    &__grid {
+    }
+
+    &__slider {
+        cursor: pointer;
+
+        i.active {
+            color: @toggle-switch-color;
+        }
+
+        i.inactive {
+            color: lightgrey;
+        }
+    }
+}

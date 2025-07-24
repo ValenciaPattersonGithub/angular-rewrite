@@ -1,0 +1,64 @@
+﻿// #region Date Selector 
+
+.scheduledatepicker {
+    .date-selector-input-group {
+        width: 100%;
+
+        .date-selector-input {    
+            padding: 7px; // adjusted to match dropdown heights during kendo removal.
+            width: 100%;
+            border: @brand-form_border;
+            border-radius: @brand-form_border--radius;
+            box-sizing: border-box;
+        }
+        .dropdown-menu {
+            width: auto;
+            min-width: 254px;
+        }
+
+        .input-group-btn {
+            width: 0;
+
+            .date-selector-btn {
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: translate(0, -50%);
+                font-size: 20px;
+                border: none;
+                background: transparent;
+
+                @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+                    /* IE10+ CSS styles go here */
+
+                    transform: translate(0,0);
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+.table-input .date-selector-input {    
+    padding: @brand-padding_xs;
+}
+
+.uib-datepicker-popup.dropdown-menu {
+    z-index: 999999;
+}
+
+
+
+
+.table-input .date-selector-btn {
+    font-size: @font-size-normal;
+	padding-left: @brand-padding_sm;
+    padding-right: @brand-padding_sm;
+	padding-top: 0px;
+	padding-bottom: 0px;
+    height: auto;
+}

@@ -1,0 +1,66 @@
+﻿.patNotesList {
+    height: 100%;
+    &__actions {
+        position: relative;
+        padding: 8px 16px 8px 16px;
+        border-bottom: 1px solid @brand-color_dark-gray;
+
+        .k-dropdown {
+            width: auto;
+
+            .k-dropdown-wrap {
+                padding: 2px 4px;
+
+                .k-input {
+                    padding: 3px 0 2px;
+                    margin-right: 24px;
+                }
+            }
+        }
+    }
+
+    &__expand {
+        .btn;
+        .btn-link;
+        font-size: 1.4em;
+
+        &[disabled] {
+            color: @brand-color_link-disabled;
+        }
+    }
+
+    &__newNote,
+    &__search {
+        .btn;
+        .btn-default;
+    }
+
+    &__divider {
+        width: 1px;
+        height: 100%;
+        margin-right: 12px;
+        border-right: 1px solid @brand-color_dark-gray;
+    }
+
+    &__list {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 90%;;
+    }
+
+    &__listItem {
+
+        &:hover {
+            cursor: pointer;
+            background-color: @brand-color_gray;
+        }
+    }
+    &__toggleLnk {
+        float:left;
+        margin: @brand-margin_sm;        
+    }
+}
+
+.open .patNotesList {
+    height: 550px;
+}

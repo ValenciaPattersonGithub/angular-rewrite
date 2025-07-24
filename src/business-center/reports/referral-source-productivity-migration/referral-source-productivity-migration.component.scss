@@ -1,0 +1,120 @@
+.referralsourcesproductivityreport {
+    grid-template-columns: 2fr 1fr 2fr 2fr 1fr 2fr 2fr
+}
+.referralsourcesproductivityDetailedreport {
+    grid-template-columns: 2fr 2fr 2fr 2fr 1fr 1fr 1fr 1fr 1fr
+}
+// .referralsourcesproductivityreportgroupHeader {
+//     grid-template-columns: 12fr 0.05fr;
+//     background: transparent;
+// }
+// .groupheader{
+//     padding-right: 0.5%;
+//     position: sticky;
+//     top: 102px;
+//     background: white;
+//     z-index: 1;
+// }
+.referralsourcesproductivityreportfooter {
+    grid-template-columns: 3fr 3fr 3fr 1fr 1fr 1fr
+}
+.grid {
+    display:grid; 
+    border-bottom: 1px solid #e8e8e8; 
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+        width: calc(100% - 0.5em) !important;
+        &.referralsourcesproductivityreport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 5px;
+            align-items: center;
+            // margin-left: 1px;
+        }
+      }
+}
+
+.pgr-pager {
+    width: 100%; 
+    text-align: center !important;
+    padding: 20px;
+}
+
+.pgr-active-page-nm {
+    padding: 5px 10px;
+    border-radius: 50%;
+    background-color: lightblue;
+    color: black;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.pgr-page-nm {
+    color: gray;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.pgr-page-nxt-prev {
+    color: #2dabcb;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+.ref-grid-header {
+    color: #2dabcb;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.virtual-viewport-reports {
+    height: 40vh !important
+}
+
+.grid-item {
+    border-left-width: 1px;
+    border-color: #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.odd-row {
+    background-color: #ffffff;
+}
+
+.rpt-cell-custom {
+    padding-top: 5px !important;
+    padding-left: 10px !important;
+    padding-bottom: 5px !important;
+    border-left: 1px solid #e8e8e8 !important;
+    font-size: 12px !important;
+}
+
+.rpt-brd-last {
+    border-right: 1px solid #e8e8e8 !important;
+}
+
+.ref-grid-report-total {
+    color: #2dabcb;
+    border-bottom: 1px solid #e8e8e8;
+    font-weight: bold;
+}
+.pgr-page-nxt-prev.disabled {
+    pointer-events: none; /* Disable click */
+    opacity: 0.5;         /* Visual feedback */
+    cursor: default;
+}
+
+
+:host .fusePrintGrid .header {
+    width: calc(100% - 0.5em);
+}

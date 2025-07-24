@@ -1,0 +1,10 @@
+﻿<button [id]="id"
+        class="button"
+        [ngClass]="variation"
+        [class.disabled]="isDisabled"
+        (click)="onClickButton($event)"
+        [disabled]="isDisabled"
+        [type] ="type"
+>
+    {{buttonLabel}}
+</button>

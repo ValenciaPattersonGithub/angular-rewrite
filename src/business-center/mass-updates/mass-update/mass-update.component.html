@@ -1,0 +1,82 @@
+<top-navigation [menuType]="'Business'"></top-navigation>
+
+<div class="card-container mass-update-container" [formGroup]="massUpdateFormGroup">
+    <div class="mass-update-header-container row">
+        <h2 class="mass-update-header-info col-lg-8">Mass Patient Transfer (Preferred Provider)</h2>
+        <app-button (onClick)="RunMassUpdate();" id="btn_massupdatesRun" buttonLabel="Run" variation="primary"
+                    [tooltip]="headerMessage" class="massupdate-run-button" placement="left" [class.disabled]="isBatchRunning"
+                    [isDisabled]="selectedFromProvider == null || selectedToProvider == null || primaryLocDisable"> </app-button>
+    </div>
+    <hr class="massupdate-hr">
+    <h4 class="label-container">Location</h4>
+    <div class="row massupdate-ddl">
+        <app-select id="location" [listItems]="primaryLocations" [value]="locationId" [label]="" [size]="'auto'" (selectionChange)='onLocationChange($event)'></app-select>
+    </div>
+    <div class="label-container">Provider Type</div>
+    <div class="row radio-container">
+        <app-radio-button label="Dentist" name="Dentist" value="1" id="rc1" formControlName="radioOptions" (click)="providerTypes= [1,5]" [checked]="massUpdateFormGroup.get('radioOptions').value==='1'" [customClasslbl]="'radio-button-lbl label'"></app-radio-button>
+        <app-radio-button label="Hygienist" name="Hygienist" value="2" id="rc2" formControlName="radioOptions" (click)="providerTypes= [1, 2, 3, 5]" [checked]="massUpdateFormGroup.get('radioOptions').value==='2'" [customClasslbl]="'radio-button-lbl label'"></app-radio-button>
+    </div>
+    <div class="label-container">From</div>
+    <div class="row massupdate-ddl">
+        <provider-selector-with-grouping [providerTypeIds]="providerTypes" [addNoProvider]="true" [inputId]="'lstFromProvider'" [showInactiveProviders]="false" [setPreferred]="false" [mainDivClassName]="'providerSelectorSlim'" [filterByLocationId]="locationId"
+                                         (selectedProviderChange)="onFromProviderChange($event)" [defaultItemText]="'From Provider'" [selectedProvider]="selectedFromProvider"
+                                         [filterShowOnScheduleForMassUpdate]="false">
+        </provider-selector-with-grouping>
+    </div>
+    <div class="label-container">To</div>
+    <div class="row massupdate-ddl">
+        <provider-selector-with-grouping [providerTypeIds]="providerTypes" [inputId]="'lstToProvider'" [activeProvidersOnly]="true" [className]="'slim-dropdown'" [mainDivClassName]="'providerSelectorSlim'" [setPreferred]="false" [filterByLocationId]="locationId"
+                                         (selectedProviderChange)="onToProviderChange($event)" [defaultItemText]="'To Provider'" [selectedProvider]="selectedToProvider"
+                                         [filterShowOnScheduleForMassUpdate]="true">
+        </provider-selector-with-grouping>
+
+    </div>
+    <div class="label-container">Inactive Patients</div>
+    <div class="row radio-container">
+        <app-check-box [label]="'Do not include Inactive Patients'" [name]="'chkDonotIncudeInactivePatients'" [checked]="donotIncudeInactivePatients" (checkChanged)="changePatientType($event)" formControlName="chkInactivePatient"></app-check-box>
+    </div>
+
+</div>
+<div class="card-container mass-update-container massupdatecontainer-margin"  #resultsDiv 
+            [ngStyle]="{'display':(recentRecords && recentRecords.length>0)|| isProcessing?'block':'none'}">
+    <div class="massupdatecontainer-padding">
+        <div>
+            <div>
+                <h2 class="mass-updateresults-header-info">Recent Transfers</h2>
+            </div>
+            <hr class="massupdateresults-hr">
+            <div>
+                <div class="massupdatesresultheader grid header">
+                    <div class="massupdatecol1">{{ 'Location' | translate }}</div>
+                    <div class="massupdatecol2">{{ 'Provider Type' | translate }}</div>
+                    <div class="massupdatecol2">{{ 'From Provider' | translate }}</div>
+                    <div class="massupdatecol1">{{ 'To Provider' | translate }}</div>
+                    <div class="massupdatecol1">{{ 'Inactive Patients' | translate }}</div>
+                </div>
+                <div class="massupdatesresultProcessing grid" *ngIf="isProcessing">
+                    <loader-component></loader-component>
+                    <div>
+                        <span><b>Processing new results...</b></span>
+                    </div>
+                </div>
+                <div *ngFor="let itm of recentRecords">
+                    <div class="massupdatesresultsubHeader">
+                        <span><b>Run Date: </b>{{itm.RunDate | date: 'MM/dd/yy'}} |<b> By: </b>{{ itm.RunBy }} |<b> Failed: </b><a (click)="export(3,itm.MassUpdateId)"> 
+                            {{itm.FailedCount}} Export</a> |<b> Successful: </b><a (click)="export(2,itm.MassUpdateId)"> {{itm.SuccessCount}} Export</a></span>
+                    </div>
+                    <div class="massupdatesresultitem grid item itembackGround">
+                        <div class="massupdatecol1">{{ itm.LocationString | translate }}</div>
+                        <div class="massupdatecol2">{{ itm.ProviderType | translate }}</div>
+                        <div class="massupdatecol2">{{ itm.FromProvider | translate }}</div>
+                        <div class="massupdatecol1">{{ itm.ToProvider | translate }}</div>
+                        <div class="massupdatecol1">{{ itm.InActivePatient?'No':'Yes' | translate }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

@@ -1,0 +1,110 @@
+<div>
+    <input placeholder="Description" (input)="filter('description')" [(ngModel)]="searchDescText" class="input-kendo" />
+    <input placeholder="Category" (input)="filter('category')" [(ngModel)]="searchCatText"
+        class="input-kendo input-kendo-left-margin" />
+</div>
+<hr class="adjustmenttypeslist-hr">
+<kendo-grid class="kendoNewStyle"
+    [data]="adjustmentTypes | orderBy: { sortColumnName: sortColumnName, sortDirection: sortDirection }"
+    [sortable]="true">
+
+    <kendo-grid-column field="Description" title="Description" width="220">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.Description}}
+        </ng-template>
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+            <span translate>
+                Description
+                <div class="icon-right">
+                    <span
+                        *ngIf="(!isDescending && sortColumnName === 'Description') || sortColumnName !== 'Description'"
+                        class="fa fa-caret-up fa-sm sort-icon" (click)="sortAdjustmentTypes('Description')"></span>
+                    <span *ngIf="(isDescending && sortColumnName === 'Description') || sortColumnName !== 'Description'"
+                        class="fa fa-caret-down fa-sm sort-icon" (click)="sortAdjustmentTypes('Description')"></span>
+                </div>
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="AdjTypeStatus" title="Adj Type Status" width="150" [sortable]="true">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div>{{dataItem.AdjTypeStatus}}</div>
+        </ng-template>
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+            <span translate>
+                Adj Type Status
+                <div class="icon-right">
+                    <span
+                        *ngIf="(!isDescending && sortColumnName === 'AdjTypeStatus') || sortColumnName !== 'AdjTypeStatus'"
+                        class="fa fa-caret-up fa-sm sort-icon" (click)="sortAdjustmentTypes('AdjTypeStatus')"></span>
+                    <span
+                        *ngIf="(isDescending && sortColumnName === 'AdjTypeStatus') || sortColumnName !== 'AdjTypeStatus'"
+                        class="fa fa-caret-down fa-sm sort-icon" (click)="sortAdjustmentTypes('AdjTypeStatus')"></span>
+                </div>
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Category" title="Category" width="150">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div>{{dataItem.Category}}</div>
+        </ng-template>
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+            <span translate>
+                Category
+                <div class="icon-right">
+                    <span *ngIf="(!isDescending && sortColumnName === 'Category') || sortColumnName !== 'Category'"
+                        class="fa fa-caret-up fa-sm sort-icon" (click)="sortAdjustmentTypes('Category')"></span>
+                    <span *ngIf="(isDescending && sortColumnName === 'Category') || sortColumnName !== 'Category'"
+                        class="fa fa-caret-down fa-sm sort-icon" (click)="sortAdjustmentTypes('Category')"></span>
+                </div>
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Impacts" title="Impacts" width="150">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div>{{dataItem.Impacts}}</div>
+        </ng-template>
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+            <span translate>
+                Impacts
+                <div class="icon-right">
+                    <span *ngIf="(!isDescending && sortColumnName === 'Impacts') || sortColumnName !== 'Impacts'"
+                        class="fa fa-caret-up fa-sm sort-icon" (click)="sortAdjustmentTypes('Impacts')"></span>
+                    <span *ngIf="(isDescending && sortColumnName === 'Impacts') || sortColumnName !== 'Impacts'"
+                        class="fa fa-caret-down fa-sm sort-icon" (click)="sortAdjustmentTypes('Impacts')"></span>
+                </div>
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column title="" width="30">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="overflow-inherit menu-center">
+                <div class="btn-group tooltipDisable" (mouseover)="showToolTip(dataItem)">
+                    <button class="btn-link dropdown-toggle padding-right-10" data-toggle="dropdown" [disabled]="dataItem.IsSystemType||!hasEditAccess" [ngClass]="{'disableMenu':dataItem.IsSystemType||!hasEditAccess}">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <span *ngIf="toolTipEditMessage" class="toolTipText">
+                            {{ toolTipEditMessage }}
+                        </span>
+                    </button>
+                    <ul class="pull-right dropdown-menu col-md-12">
+                        <li>
+                            <a (click)="editAdjustmentType(dataItem)" class="minus_zindex"
+                                 translate>
+                                Edit
+                            </a>
+
+                            <a (click)="deleteAdjustmentType(dataItem, confirmationRef, dialogActions)"
+                                 class="minus_zindex" translate>
+                                Delete
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+<adjustment-type-form [adjustmentTypeEditData]="adjustmentTypeEditData" [drawer]="drawer"
+    [adjustmentTypeDataSet]="adjustmentTypes"
+    (refreshGrid)="refreshAdjustmentGrid()" [hasDeleteAccess]="hasDeleteAccess" [hasEditAccess]="hasEditAccess"
+    [hasCreateAccess]="hasCreateAccess">
+</adjustment-type-form>

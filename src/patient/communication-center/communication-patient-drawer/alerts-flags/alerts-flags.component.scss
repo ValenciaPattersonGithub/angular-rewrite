@@ -1,0 +1,52 @@
+@import "variables";
+@import '/src/patient/communication-center/communication-center-variables';
+
+.alerts-info {
+  display: grid;
+  grid-template-columns: 10% 90%;
+  margin: 0px 0px 5px 0px;
+
+  &-sub-title {
+    font-family: $communication-card-font-family;
+    font-size: 12px;
+    color: $communication-card-label-color;
+    text-decoration: none solid rgb(85, 85, 85);
+    line-height: 18px;
+    font-weight: 600;
+    word-break: break-word;
+  }
+}
+
+.medical-info {
+  display: grid;
+  grid-template-columns: 10% 90%;
+  margin: 0px 0px 5px 0px;
+
+  &-title {
+    font-family: $communication-card-font-family;
+    font-size: 12px;
+    color: $communication-center-error-color;
+    text-decoration: none solid rgb(85, 85, 85);
+    line-height: 18px;
+    font-weight: 600;
+  }
+}
+.fa-heart {
+  margin-top: 1px;
+  color: $communication-center-error-color;
+}
+.alertsFlagsInfo {
+  border-bottom: 1px solid $communication-center-preview-border-color;
+  margin: 15px 15px 0px 15px;
+
+  &-main {
+    display: grid;
+    grid-template-columns: 92% 8%;
+    margin: 0px 0px 10px 0px;
+  }
+  &-main-title {
+    font-family: $communication-card-font-family;
+    font-size: 16px;
+    color: $communication-center-heading-color;
+  }
+}

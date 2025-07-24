@@ -1,0 +1,27 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Carriers.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Carriers.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-3 cell">{{ 'Carrier' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Patient Name' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Patient Code' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Benefit Plan Priority' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="carrier in data.Carriers" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-12 cell" colspan="4">{{ carrier.CarrierName }}</td>
+                </tr>
+                <tr ng-repeat="patient in carrier.Patients">
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-3 cell">{{ patient.PatientName }}</td>
+                    <td class="col-sm-3 cell">{{ patient.PatientCode }}</td>
+                    <td class="col-sm-3 cell">{{ patient.BenefitPlanPriority }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

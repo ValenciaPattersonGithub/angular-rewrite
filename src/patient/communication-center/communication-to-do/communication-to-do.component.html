@@ -1,0 +1,31 @@
+<form class="form-horizontal" [formGroup]="toDoCommunicationCenter">
+    <div class="todo-sub-wrapper" id="comm-todo-duedate-wrapper">
+        <div id="comm-todo-duedate" class="todo-duedate-wrapper">
+            <label class="control-label"> {{'Due Date' | translate}} <span class="required">*</span> </label>
+            <app-date-picker [id]="'todo-duedate'" formControlName="DueDate" [value]="minDate">
+            </app-date-picker>
+        </div>
+    </div>
+    <div class="todo-wrapper">
+        <div class="todo-notes-wrapper" id="comm-todo-notes-wrapper">
+            <label class="control-label"> {{'Notes' | translate}} <span class="required">*</span> </label>
+            <textarea id="comm-todo-notes" formControlName="Notes" class="form-input form-textarea" rows="4"></textarea>
+        </div>
+        <div *ngIf="!hideBtn" class="todo-btn-wrapper" id="comm-todo-btn-wrapper">
+            <app-button id="btnToDoAdd" buttonLabel="{{'Add' | translate }}" variation="primary"
+                (onClick)="addToDoCommunication()" [isDisabled]="!(toDoCommunicationCenter.valid)">
+            </app-button>
+        </div>
+        <div *ngIf="hideBtn" class="edit-todo-btn-wrapper" id="comm-edit-todo-btn-wrapper">
+            <app-button id="btnToDoCancel" buttonLabel="{{'Cancel' | translate }}" variation="secondary" class="mr-8"
+                (onClick)="cancelInCompleteCommunication()">
+            </app-button>
+            <app-button id="btnToDoUpdate" buttonLabel="{{'Update' | translate }}" variation="primary"
+                (onClick)="updateInCompleteToDoCommunication()" [isDisabled]="!formValuesChanged">
+            </app-button>
+        </div>
+    </div>
+</form>
+<div class="collapsible-todo-wrapper">
+    <communication-todo-collapsible-section></communication-todo-collapsible-section>
+</div>

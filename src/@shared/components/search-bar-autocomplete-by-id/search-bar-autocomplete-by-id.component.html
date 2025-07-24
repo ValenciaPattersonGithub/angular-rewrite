@@ -1,0 +1,52 @@
+﻿<div class="search-bar-autocomplete-by-id">
+    <app-label [label]="inputFieldLabel" [fieldId]="kendoSearchId" *ngIf="inputFieldLabel !== ''"></app-label>
+    <kendo-autocomplete #autocomplete id="kendoSearchId" [data]="groupData" [valueField]="'BenefitId'" [value]="inputValueBind"
+                        (valueChange)="handleSelection($event)" [filterable]="true" (filterChange)="handleFilter($event)"
+                        [placeholder]="placeholder" [suggest]="true" [popupSettings]="{ animate:false, popupClass: 'search-bar-popup-wrapper' }" [virtual]="virtual" class="kendo-width" [disabled]="isDisabled">
+        <div *ngIf="template === 'kendoAutoCompleteBenefitPlanTemplate'">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-by-id-wrapper">
+                    <div class="search-bar-autocomplete-plan">
+                        <b>Benefit Plan: </b>
+                        <span class="text" [innerHTML]="dataItem.Name | highlightTextIfContains:searchString">
+                        </span>
+                        <div class="search-bar-autocomplete-carrier">
+                            <b>Carrier: </b>
+                            <span class="text" [innerHTML]="dataItem.CarrierName | highlightTextIfContains:searchString"
+                                  *ngIf="dataItem.CarrierName">
+                            </span>
+                        </div>
+                        <div class="search-bar-autocomplete-group">
+                            <b>Group #: </b>
+                            <span class="text" [innerHTML]="dataItem.PlanGroupNumber | highlightTextIfContains:searchString"
+                                  *ngIf="dataItem.PlanGroupNumber">
+                            </span>
+                        </div>
+                    </div>                  
+                    <div class="search-bar-autocomplete-address1" style="overflow: hidden">
+                        <b>Carrier Address: </b>
+                        <span class="text" [innerHTML]="dataItem.AddressLine1 | highlightTextIfContains:searchString"
+                              *ngIf="dataItem.AddressLine1">
+                        </span>
+                        <div class="search-bar-autocomplete-address2">
+                            <span class="text-indent" [innerHTML]="dataItem.AddressLine2 | highlightTextIfContains:searchString"
+                                  *ngIf="dataItem.AddressLine2">
+                            </span>
+                        </div>
+                        <div class="search-bar-autocomplete-address3">
+                            <span class="text-indent" [innerHTML]="dataItem.City | highlightTextIfContains: searchString"
+                                  *ngIf="dataItem.City">
+                            </span>
+                            <span class="text" [innerHTML]="', ' + dataItem.State | highlightTextIfContains: searchString"
+                                  *ngIf="dataItem.State">
+                            </span>
+                            <span class="text" [innerHTML]="' ' + dataItem.ZipCode | highlightTextIfContains: searchString"
+                                  *ngIf="dataItem.ZipCode">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </kendo-autocomplete>
+</div>

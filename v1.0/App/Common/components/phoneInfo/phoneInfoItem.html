@@ -1,0 +1,233 @@
+﻿<div ng-if="!isPatient" class="phoneInfoItem" ng-form="frmContactInfo">
+    <!-- Is Primary -->
+    <div class="phoneInfoItem__primary" ng-if="!hideIsPrimary && isPatient">
+        <checkbox checkbox-id="inpPhoneIsPrimary{{phoneId}}"
+                  checkbox-value="phone.IsPrimary"
+                  checkbox-label="'Primary'"
+                  checkbox-disabled="disableInput || !((phone.Type && phone.Type.length > 0) && (phone.PhoneNumber && phone.PhoneNumber.length == 10))"
+                  change-function="primaryChanged()">
+        </checkbox>
+    </div>
+    <!-- Phone Number -->
+    <div class="phoneInfoItem__num" ng-class="{'has-error':(phone.invalidPhoneNumber||phone.duplicateNumber)}">
+        <input id="inpPhoneNumber{{phoneId}}"
+               class="form-input"
+               tabindex="{{ phoneTabindex }}"
+               sync-focus-with="focus"
+               type="text"
+               placeholder="{{ 'Phone number' | i18n }}"
+               ui-mask-placeholder-char="_"
+               ui-mask="(999) 999-9999"
+               ng-disabled="disableInput"
+               ng-model="phone.PhoneNumber" />
+        <label id="lblPhoneNumberRequired{{phoneId}}" class="help-block" ng-show="phone.invalidPhoneNumber==true&&phone.duplicateNumber==false">
+            {{ 'Phone number must be 10 characters.' | i18n }}
+        </label>
+        <label id="lblDuplicatePhoneNumber{{phoneId}}" class="help-block" ng-show="phone.duplicateNumber==true">
+            {{ 'Phone number must be unique.' | i18n }}
+        </label>
+    </div>
+
+    <!-- Phone Type -->
+    <div class="phoneInfoItem__type" ng-class="{'has-error':!$scope.validForm && phone.invalidType }" ng-hide="hidePhoneTypes">
+        <soar-select-list id="inpPhoneType{{phoneId}}"
+                          name="inpPhoneType{{phoneId}}"
+                          placeholder="{{defaultPlaceholder}}"
+                          text-field="Value"
+                          value-field="Name"
+                          option-list="phoneTypes"
+                          ng-model="phone.Type"
+                          disable-input="disableInput"
+                          ng-hide="addingCustomPhoneType || editing"
+                          tabindex="{{ phoneTabindex }}"></soar-select-list>
+        <div class="phoneInfoItem__custom" ng-show="hidePhoneTypes">
+            <input id="inpCustomPhoneTypeNC{{phoneId}}"
+                   class="form-control"
+                   ng-disabled="disableInput"
+                   ng-model="phone.Type"
+                   placeholder="{{ 'Phone name or type' | i18n }}"
+                   maxlength="20"
+                   type="text"
+                   tabindex="{{ phoneTabindex }}" />
+        </div>
+        <div class="phoneInfoItem__custom" ng-show="addingCustomPhoneType || editing">
+            <input id="inpCustomPhoneTypeNCE{{phoneId}}"
+                   class="form-control"
+                   focus-on="addingCustomPhoneType || editing"
+                   ng-disabled="disableInput"
+                   ng-model="phone.Type"
+                   placeholder="{{ 'Phone name or type' | i18n }}"
+                   maxlength="20" type="text" />
+            <button id="btnAddCustomType{{phoneId}}" class="btn btn-link btn-xs" ng-click="cancelCustomPhoneType()" ng-show="!disableInput || (!phone.Type || phone.Type.length == 0)">{{ 'Cancel' | i18n }}</button>
+            <button id="btnCancelCustomType{{phoneId}}" class="btn btn-primary btn-xs" ng-click="addCustomPhoneType(phone)" ng-show="!disableInput || (phone.Type && phone.Type.length > 0)">{{ 'OK' | i18n }}</button>
+        </div>
+        <span id="lblTypeRequired{{phoneId}}" class="help-block" ng-show="!$scope.validForm && phone.invalidType">
+            {{ 'This field is required.' | i18n }}
+        </span>
+    </div>
+    <!-- Notes/Text -->
+    <div class="phoneInfoItem__notes" ng-if="hasNotes || hasText">
+        <!-- Primary Phone number notes -->
+        <div ng-if="hasNotes">
+            <div ng-show="!disableInput">
+                <a id="btnPhoneNotes{{phoneId}}" class="btn btn-link" icon="fa-plus" ng-click="noteCollapsed = false" ng-show="(!phone.Notes && noteCollapsed)">{{'Add {0}' | i18n:['a Note'] }}</a>
+            </div>
+            <div collapse="noteCollapsed && !phone.Notes">
+                <textarea id="inpPhoneNotes{{phoneId}}"
+                          class="form-control form-textarea"
+                          name="inpPhoneNotes"
+                          maxlength="500"
+                          rows="2"
+                          cols="50"
+                          ng-disabled="disableInput"
+                          ng-model="phone.Notes"
+                          placeholder="{{'Enter note...' | i18n }}"></textarea>
+            </div>
+        </div>
+        <!-- Text Option -->
+        <div ng-if="hasTexts">
+            <checkbox checkbox-id="inpPhoneText{{phoneId}}"
+                      checkbox-value="phone.TextOk"
+                      checkbox-label="'Texts OK'"
+                      checkbox-disabled="disableInput || !((phone.Type && phone.Type.length > 0) && (phone.PhoneNumber && phone.PhoneNumber.length == 10))"></checkbox>
+        </div>
+    </div>
+    <!-- Remove -->
+    <div class="phoneInfoItem__remove" ng-show="showRemoveOption && !showRemoveMsg">
+        <button class="form-btn-remove" icon="fa-times-circle" ng-click="removePrompt()"></button>
+
+    </div>
+    <div class="phoneInfoItem__prompt" ng-show="showRemoveOption && showRemoveMsg">
+        <span>{{ 'Are you sure?' | i18n }}</span>
+        <button class="btn btn-link btn-xs" id="btnCancelRemovePhone{{phoneId}}" ng-click="cancelRemove()">{{ 'Cancel' | i18n }}</button>
+        <button class="btn btn-primary btn-xs" id="btnConfirmRemovePhone{{phoneId}}" ng-click="confirmRemove()">{{ 'Confirm' | i18n }}</button>
+    </div>
+</div>
+<div ng-if="isPatient" class="phoneInfoItem row" ng-form="frmContactInfo">
+    <!-- Owner -->
+    <div class="col-xs-2">
+        <label class="phoneInfoLabel phoneInfoItem__wrap" ng-if="!phone.FromLinkedMember" title="{{phone.PatientInfo.FirstName}} {{phone.PatientInfo.LastName}}">
+            {{phone.PatientInfo.FirstName}} {{phone.PatientInfo.LastName}}
+        </label>
+        <label class="phoneInfoLabel" ng-if="phone.FromLinkedMember">
+            {{phone.FirstName}} {{phone.LastName}}
+        </label>
+    </div>
+
+    <!-- Phone Number -->
+    <div class="col-xs-2" ng-class="{'has-error':phone.invalidPhoneNumber || phone.duplicateNumber}">
+        <input id="inpPhoneNumber{{phoneId}}"
+               class="form-input"
+               tabindex="{{ phoneTabindex }}"
+               sync-focus-with="focus"
+               type="text"
+               placeholder="{{ 'Phone number' | i18n }}"
+               ui-mask-placeholder-char="_"
+               ui-mask="(999) 999-9999"
+               ng-disabled="disableInput || phone.FromLinkedMember"
+               ng-model="phone.PhoneNumber"
+               ng-show="editingMode"
+               ng-keypress="disableClickFn()"/>
+        <label id="lblPhoneNumberRequired{{phoneId}}" class="help-block" ng-show="phone.invalidPhoneNumber==true && !phone.duplicateNumber">
+            {{ 'Phone number must be 10 characters.' | i18n }}
+        </label>
+
+        <label class="phoneInfoLabel" id="lblPhoneNumber{{phoneId}}" ng-show="!editingMode">
+            {{ phone.PhoneNumber | tel }}
+        </label>
+
+        <label id="lblUniquePhoneNumberRequired{{phoneId}}" class="help-block" ng-show="phone.duplicateNumber">
+            {{ 'Phone number must be unique.' | i18n }}
+        </label>
+    </div>
+
+    <!-- Phone Type -->
+    <div class="col-xs-2" ng-class="{'has-error':!$scope.validForm && phone.invalidType }" ng-hide="hidePhoneTypes">
+        <soar-select-list id="inpPhoneType{{phoneId}}"
+                          name="inpPhoneType{{phoneId}}"
+                          placeholder="{{defaultPlaceholder}}"
+                          text-field="Value"
+                          value-field="Name"
+                          option-list="phoneTypes"
+                          ng-model="phone.Type"
+                          disable-input="phone.FromLinkedMember ? true : disableInput"
+                          tabindex="{{ phoneTabindex }}"
+                          ng-show="editingMode"
+                          sb-change="disableClickFn()"></soar-select-list>
+        <div class="phoneInfoItem__custom" ng-show="hidePhoneTypes">
+            <input id="inpCustomPhoneTypeC{{phoneId}}"
+                   class="form-control"
+                   ng-disabled="disableInput || phone.FromLinkedMember"
+                   ng-model="phone.Type"
+                   placeholder="{{ 'Phone name or type' | i18n }}"
+                   maxlength="20"
+                   type="text"
+                   tabindex="{{ phoneTabindex }}" />
+        </div>
+        <div class="phoneInfoItem__custom" ng-show="addingCustomPhoneType || editing">
+            <input id="inpCustomPhoneTypeCE{{phoneId}}"
+                   class="form-control"
+                   focus-on="addingCustomPhoneType || editing"
+                   ng-disabled="disableInput || phone.FromLinkedMember"
+                   ng-model="phone.Type"
+                   placeholder="{{ 'Phone name or type' | i18n }}"
+                   maxlength="20" type="text" />
+            <button id="btnAddCustomType{{phoneId}}" class="btn btn-link btn-xs" ng-click="cancelCustomPhoneType()" ng-show="!disableInput || (!phone.Type || phone.Type.length == 0)">{{ 'Cancel' | i18n }}</button>
+            <button id="btnCancelCustomType{{phoneId}}" class="btn btn-primary btn-xs" ng-click="addCustomPhoneType(phone)" ng-show="!disableInput || (phone.Type && phone.Type.length > 0)">{{ 'OK' | i18n }}</button>
+        </div>
+        <span id="lblTypeRequired{{phoneId}}" class="help-block" ng-show="!$scope.validForm && phone.invalidType">
+            {{ 'This field is required.' | i18n }}
+        </span>
+
+        <label class="phoneInfoLabel" id="lblPhoneType{{phoneId}}" ng-show="!editingMode">
+            {{ phone.Type }}
+        </label>
+    </div>
+    <!-- Is Primary -->
+    <div class="col-xs-1 switch_phoneitem">
+        <input type="radio" ng-click="isPrimaryClick($event)" ng-checked="phone.IsPrimary" style="margin-left: 20px; margin-top: 10px;">
+    </div>
+    <!-- ReminderOK -->
+    <div class="col-xs-2">
+        <div class="onoffswitch pull-left">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="reminderSwitch{{phoneId}}" ng-model="phone.ReminderOK">
+            <label class="onoffswitch-label" for="reminderSwitch{{phoneId}}" style="margin-bottom:0px;"></label>
+        </div>
+        <!--<label class="switch switch-mail-reminders pull-left">
+            <input name="mailReminders" type="checkbox" ng-model="phone.ReminderOK">
+            <span class="slider round"></span>
+        </label>-->
+    </div>
+    <!-- TextOK -->
+    <div class="col-xs-3">
+        <div class="onoffswitch pull-left" ng-if="phone.Type == 'Mobile'">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="textSwitch{{phoneId}}" ng-model="phone.TextOk">
+            <label class="onoffswitch-label" for="textSwitch{{phoneId}}" style="margin-bottom:0px;"></label>
+        </div>
+        <!--<label class="switch switch-mail-reminders pull-left" ng-if="phone.Type == 'Mobile'">
+        <input name="mailReminders" type="checkbox" ng-model="phone.TextOk">
+        <span class="slider round"></span>
+    </label>-->
+
+        <div ng-if="!editingMode">
+            <button id="btnDelete{{phoneId}}" class="form-btn-remove pull-right far fa-trash-alt" ng-click="removePrompt()"></button>
+            <button id="btnEdit{{phoneId}}" class="form-btn-remove pull-right" icon="fa-edit" ng-show="!phone.PhoneReferrerId" ng-click="enableEdit(phoneId)"></button>
+        </div>
+        
+        <div class="pull-right" ng-if="editingMode && !phone.FromLinkedMember">
+            <button id="btnCancel{{phoneId}}" class="btn btn-default" ng-click="cancelChanges(phoneId)">Cancel</button>
+            <button id="btnSave{{phoneId}}" class="btn btn-primary" ng-click="disableEdit(phoneId)" ng-disabled="disableClick">Save</button>
+        </div>
+    </div>
+    <!-- Remove -->
+    <!--<div class="col-xs-2" ng-show="showRemoveOption && !showRemoveMsg">
+
+
+    </div>-->
+    <div class="phoneInfoItem__prompt" ng-show="showRemoveOption && showRemoveMsg">
+        <span>{{ getDeleteMessage() | i18n }}</span>
+        <button class="btn btn-link btn-xs" id="btnCancelRemovePhone{{phoneId}}" ng-click="cancelRemove()">{{ 'Cancel' | i18n }}</button>
+        <button class="btn btn-primary btn-xs" id="btnConfirmRemovePhone{{phoneId}}" ng-click="confirmRemove()">{{ 'Confirm' | i18n }}</button>
+    </div>
+</div>
+

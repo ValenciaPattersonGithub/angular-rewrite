@@ -1,0 +1,57 @@
+﻿.depositPaymentsModal {
+    &__container {
+        .containerStandard;
+        padding: 0;
+    }
+    &__header{
+        .standardHeader;
+        word-break: break-all;
+        max-width: 60%;
+        > h1{
+            font-size: 22px !important;
+             white-space: nowrap;
+        }
+    }
+
+    &__breadcrumb{
+        .breadcrumb;
+        margin: @brand-margin_sm 0 0;
+    }
+
+    &__body{
+        padding-top: 20px;
+    }
+
+    .modalCloseBtn {
+        background: transparent;
+        color: @brand-color_font-dark;
+        border: none;
+    }
+
+    .blackFont {
+        color: @brand-color_black;
+        font-weight: bold;
+        font-size: @brand-font_md;
+    }
+    .grid{
+        margin: @brand-margin_lg;
+        word-wrap: break-word;
+    }
+
+    .scroll{
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 300px;
+    }
+
+    .scrollSummary{
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 400px;
+    }
+
+    .gridBody:nth-child(even) {
+        background: @zebra-dark;
+        border-top: 2px solid @brand-color_dark-gray;
+    }
+}

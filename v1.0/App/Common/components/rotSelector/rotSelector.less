@@ -1,0 +1,56 @@
+﻿.rotSelector {
+
+    .form-control {
+        height: 34px;
+        padding: 0;
+    }
+
+    &__selectedTeethTags {
+        float: left;
+
+        button {
+            margin: 2px 0 2px 2px;
+        }
+    }
+
+    &__toothInput {
+        float: left;
+
+        input {
+            border: none;
+            margin: 2px 0 2px 2px;
+            padding: @brand-padding_xs 0 0 @brand-padding_xs;
+            width: 125px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+    }
+
+    &__toothDropdown {
+        background-color: @brand-color_white;
+        border: solid 1px @brand-color_gray;
+        clear: left;
+        max-height: 150px;
+        margin-top: 30px;
+        overflow-y: scroll;
+        position: absolute;
+        width: 100%;
+        z-index: 99;
+
+        div {
+            cursor: pointer;
+        }
+
+        div:hover {
+            background-color: @panel-btn-color;
+            color: @brand-color_white;
+        }
+    }
+
+    &__highlight {
+        background-color: @panel-btn-color;
+        color: @brand-color_white;
+    }
+}

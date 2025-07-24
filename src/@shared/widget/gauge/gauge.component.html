@@ -1,0 +1,16 @@
+<div class="gauge-container" *ngIf="configSettings">
+  <kendo-arcgauge [value]="configSettings.value" [colors]="configSettings.colors" [transitions]="false"
+    class="kendo-arcgauge-container" (click)="onClick()">
+    <kendo-arcgauge-scale [reverse]="configSettings.reverse" [startAngle]="configSettings.startAngle"
+      [endAngle]="configSettings.endAngle" [rangePlaceholderColor]="configSettings.rangePlaceholderColor"
+      [rangeSize]="configSettings.rangeSize" [rangeLineCap]="configSettings.rangeLineCap">
+      <ng-template *ngIf="configSettings.showLabels" kendoArcGaugeCenterTemplate let-value="configSettings.value">
+        <span class="center-main-label">{{configSettings.value}}%</span><br>
+        <span class="center-sub-label"
+          *ngIf="gaugeChartType == GaugeChartType.GrossProduction || gaugeChartType == GaugeChartType.NetProduction">${{
+          gaugeValue | number:'1.2-2' }}</span>
+        <span class="center-sub-label" *ngIf="gaugeChartType == GaugeChartType.ScheduleUtilization">{{ booked }}</span>
+      </ng-template>
+    </kendo-arcgauge-scale>
+  </kendo-arcgauge>
+</div>

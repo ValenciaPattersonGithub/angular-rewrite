@@ -1,0 +1,30 @@
+﻿<div id="providerOnScheduleDropDown" class="multi-select">
+    <div class="dropdown">
+        <button class="btn multi-select__button" type="button" (click)="btnClick()">
+            <span #toggleButton *ngIf="masterSelected" class="multi-select__button__text">All Providers</span>
+            <span #toggleButton *ngIf="!masterSelected && uniqueCheckedList.length === 1" class="multi-select__button__text">{{uniqueCheckedList.length}} Provider</span>
+            <span #toggleButton *ngIf="!masterSelected && uniqueCheckedList.length === 0 || uniqueCheckedList.length > 1 && uniqueCheckedList.length !== uniqueList.length" class="multi-select__button__text">{{uniqueCheckedList.length}} Providers</span>
+            <i #caretButton class="fa fa-caret-down multi-select__button__i"></i>
+        </button>
+        <div #menu class="drop-show" [hidden]="!showDropDown" (mouseleave)="showDropDown = false;emitValues();">
+            <label class="container">
+                <input id="selectAllCheckBox" value={{masterSelected}} [(ngModel)]="masterSelected" type="checkbox" (change)="selectOrDeselectAllValues($event)" />
+                <span class="checkmark"><svg-icon class="svgIcon" name="checkmarkIcon" iconWidth="14px" iconHeight="14px"></svg-icon></span>
+                <span>Select All</span>
+            </label>
+            <div class="scrollbar">
+                <div *ngFor="let a of list; let i = index;">
+                    <!--This ngIf statement is hiding duplicate providers in provider dropdown list. We need duplicates in here so when checked == true, we can add to the checkedList. We need
+            so that we can save the providers for the locations selected in User Settings.-->
+                    <label class="container" *ngIf="((i === 0)) || ((i > 0) && (a.ProviderId !== list[i-1].ProviderId))">
+                        <input type="checkbox" value={{a.checked}} [(ngModel)]="a.checked" (change)="getSelectedValue(a)" />
+                        <span class="checkmark"><svg-icon class="svgIcon" name="checkmarkIcon" iconWidth="14px" iconHeight="14px"></svg-icon></span>
+                        <span *ngIf="!a.ProfessionalDesignation" class="displayText">{{a.FirstName}} {{a.LastName}}</span>
+                        <span *ngIf="a.ProfessionalDesignation" class="displayText">{{a.FirstName}} {{a.LastName}}, {{a.ProfessionalDesignation}}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+</div>
+
+

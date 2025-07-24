@@ -1,0 +1,84 @@
+﻿<div ng-class="'fade-in'">
+    <form name="frmPatientConditionCrud" role="form" action="javascript:;" novalidate>
+        <div class="modal-header">
+            <div id="lblPatientConditionHeader" class="modal-title-responsive">
+                {{ editMode ? 'Edit {0}' : 'Add a {0}' | i18n:['Condition'] }}
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="addCond__body">
+                <div class="addCond__conditions">
+                    <!-- Select a Condition (R) -->
+                    <div class="addCond__formItem">
+                        <div class="addCond__formLbl">
+                            {{'Condition' | i18n }} *
+                        </div>
+                        <div class="addCond__formCtrl">
+                            <div set-focus>
+                                <soar-select-list id="inpCondition"
+                                                  name="inpCondition"
+                                                  placeholder="{{ 'Condition' | i18n }}"
+                                                  text-field="Description"
+                                                  value-field="ConditionId"
+                                                  option-list="conditions"
+                                                  ng-model="patientCondition.ConditionId"
+                                                  disable-input="editMode">
+                                </soar-select-list>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Select Provider -->
+                    <div class="addCond__formItem">
+                        <div class="addCond__formLbl">
+                            {{'Provider' | i18n }} *
+                        </div>
+                        <div class="addCond__formCtrl">
+                            <provider-selector input-id="lstProvider" provider-list="providers" patient-info="patientInfo" selected-provider="patientCondition.ProviderId"></provider-selector>
+                        </div>
+                    </div>
+                    <!-- Select Condtion Date -->
+                    <div class="addCond__formItem">
+                        <div class="addCond__formLbl">
+                            {{'Date' | i18n }}
+                        </div>
+                        <div class="addCond__formCtrl">
+                            <date-selector input-id="inpConditionDate" placeholder="MM/dd/yyyy" date-var="patientCondition.ConditionDate" max-date="maxDate" valid="validDate" format="MM/dd/yyyy"></date-selector>
+                        </div>
+                    </div>
+                </div>
+                <div class="addCond__chart">
+                    <div class="addCond__teeth">
+                        <tooth-selector active-tooth="activeTooth" multiselect-enabled="!editMode" quadrant-selection-only="quadrantSelectionOnly" selected-teeth="selectedTeeth"></tooth-selector>
+                    </div>
+                    <div class="addCond__surfaces" ng-show="!surfaceSelectionDisabled">
+                        <tooth-nav active-tooth="activeTooth" selected-teeth="selectedTeeth" condition-id="patientCondition.ConditionId"></tooth-nav>
+                        <surface-selector active-tooth="activeTooth" selected-teeth="selectedTeeth" condition-id="patientCondition.ConditionId" disable-selection="surfaceSelectionDisabled"></surface-selector>
+                    </div>
+                    <div class="addCond__roots" ng-show="!rootSelectionDisabled">
+                        <tooth-nav active-tooth="activeTooth" selected-teeth="selectedTeeth" condition-id="patientCondition.ConditionId"></tooth-nav>
+                        <root-selector active-tooth="activeTooth" selected-teeth="selectedTeeth" condtion-id="patientCondition.ConditionId" disable-selection="rootSelectionDisabled"></root-selector>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer background-grey">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="pull-left">
+                        <button id="btnSave"
+                                ng-click="savePatientCondition()"
+                                ng-disabled="savingForm || !formIsValid"
+                                class="btn btn-primary form-btn-save-new"
+                                check-auth-z="{{amfa}}">
+                            {{ 'Save' | i18n }}
+                        </button>
+                    </div>
+                    <div class="pull-right">
+                        <button id="btnCancel" ng-click="cancelChanges();" ng-disabled="savingForm" class="btn form-btn-cancel-new">{{ 'Cancel' | i18n }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

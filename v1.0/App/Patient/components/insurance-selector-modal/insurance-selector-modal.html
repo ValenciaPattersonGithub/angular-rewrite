@@ -1,0 +1,19 @@
+﻿<div class="insuranceSelectorModal" ng-init="initialize()">
+    <div class="modal-header">
+        <h1>{{ 'Which of {0}\'s plans would you like to use?' | i18n:[{skip: patient.$name }] }}</h1>
+    </div>
+    <div class="modal-body insuranceSelectorModal__modalBody">
+        <div class="row">
+            <div class="col-xs-12">
+                <box-selector items="plans" bs-item-id="plan" selected-item="plan" patient="patient"
+                              bs-item-url="App/Patient/components/insurance-selector-modal/insurance-item.html" 
+                              can-add="fullLength < 6" bs-item-add-url="App/Patient/components/insurance-selector-modal/insurance-item-add.html"></box-selector>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="closeModal()" ng-disabled="!plan">{{ 'Select & Continue' | i18n }}</button>
+        <button class="btn btn-link" ng-click="cancelModal()">{{ 'Cancel' | i18n }}</button>
+    </div>
+
+</div>

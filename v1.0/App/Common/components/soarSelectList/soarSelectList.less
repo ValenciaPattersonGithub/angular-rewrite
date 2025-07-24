@@ -1,0 +1,58 @@
+﻿soar-select-list {
+    margin-right: -3px; //There's some invidible marging thing going on.  Can't figure it out.
+}
+
+.soarSelectList {
+    &.k-dropdown {
+        background-color: @brand-color_white;
+
+        .k-select {
+            border-color: transparent;
+        }
+    }
+}
+
+.k-list > .k-item.k-first {
+    padding-top: 2em !important;
+}
+
+.k-list > .k-state-hover.k-first {
+    padding-top: calc(2em - 1px);
+}
+
+.k-list > .k-item.k-first > .k-group {
+    height: 2em;
+    left: 0;
+}
+
+.k-list > .k-state-hover.k-first > .k-group {
+    top: -1px;
+    left: -1px;
+}
+
+.k-popup .k-list .k-item > .k-group {
+    background: white;
+    color: #999;
+    text-transform: capitalize;
+    font-size: 1em;
+}
+
+.k-group {
+    padding-top: 4px !important;
+    border-top-color: #aeaeae;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+
+.k-group-header + .k-list > .k-item.k-first {
+    border-top-color: white;
+}
+
+.k-popup > .k-group-header {
+    background: white;
+    color: #999;
+    text-align: left;
+    margin-top: 7px;
+    text-transform: capitalize;
+    font-size: 1em;
+}

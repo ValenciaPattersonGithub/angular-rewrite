@@ -1,0 +1,161 @@
+﻿<div class="patLedger" ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <form name="frmChartLedger" role="form" novalidate>                
+
+        <table id="tablePlannedServices" class="patLedger__table">
+            <div class="printCheckBox pull-right">
+                <checkbox 
+                    checkbox-label="'Show Deleted Services'"
+                          checkbox-value="showDeleted"
+                    change-function="showDeletedToggle">
+                </checkbox>
+            </div>
+
+            <div class="btn-group patLedger__actionBtns" ng-disabled="false" uib-dropdown>                
+                <div class="patLedger__duplicatePatients" ng-if="duplicatePatients.length > 1">
+                    <patient-filter-multi-select 
+                        disable-input="false" 
+                        options="duplicatePatients" 
+                        text-field="FullName" 
+                        value-field="Selected" 
+                        drop-down-label="Duplicate Patients" 
+                        change-event="selectedPatientsChanged()">
+                    </patient-filter-multi-select>
+                </div>                
+                <button id="btnActionButton" class="btn btn-default" uib-tooltip="{{ ::('Actions' | i18n) }}" ng-disabled="false"
+                    ng-click="setHasSelectedRows()" class="btn dropdown-toggle form-control" uib-dropdown-toggle>
+                    {{'Actions'|i18n}}
+                    <span id="dropDownArrow"><i class="fa fa-caret-down"></i></i></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a id="btnEditAll" class="dropdown-item btn btn-link" check-auth-z="soar-per-perdem-modify"
+                           ng-disabled="hasSelectedRows===false" uib-tooltip="{{'Edit Selected Services'|i18n }}"
+                           ng-click="editAll()">{{ 'Edit Selected Services'|i18n }}</a>
+                        <a id="btnDeleteAll" class="dropdown-item btn btn-link" check-auth-z="soar-per-perdem-delete"
+                           ng-disabled="hasSelectedRows===false" uib-tooltip="{{'Delete Selected'|i18n }}"
+                           ng-click="deleteAll()">{{ 'Delete Selected'|i18n }}</a>
+                    </li>
+                </ul>
+            </div>
+            <thead class="patLedger__header">
+                <tr>
+                    <td class="action"></td>                   
+                    <td id="tdDateRange" class="date"
+                        ng-click="changeSortingForGrid('CreationDate')"
+                        ng-class="{'active': orderBy.field == 'CreationDate', 'asc': orderBy.asc && orderBy.field == 'CreationDate' }">
+                        {{'Date' | i18n}}
+                    </td>
+                    <td id="tdProvider" class="defaultCol"
+                        ng-click="changeSortingForGrid('ProviderName')"
+                        ng-class="{'active': orderBy.field == 'ProviderName', 'asc': orderBy.asc && orderBy.field == 'ProviderName' }">
+                        {{'Provider' | i18n}}
+                    </td>
+                    <td id="tdLocation" class="defaultCol"
+                        ng-click="changeSortingForGrid('LocationName')"
+                        ng-class="{'active': orderBy.field == 'LocationName', 'asc': orderBy.asc && orderBy.field == 'LocationName' }">
+                        {{'Location' | i18n}}
+                    </td>
+                    <td id="tdDescription" class="desc"
+                        ng-click="changeSortingForGrid('Description')"
+                        ng-class="{'active': orderBy.field == 'Description', 'asc': orderBy.asc && orderBy.field == 'Description' }">
+                        {{'Description' | i18n}}
+                    </td>
+                    <td id="tdTooth" class="tooth"
+                        ng-click="changeSortingForGrid('Tooth')"
+                        ng-class="{'active': orderBy.field == 'Tooth', 'asc': orderBy.asc && orderBy.field == 'Tooth' }">
+                        {{'Tooth' | i18n}}
+                    </td>
+                    <td id="tdSurface" class="surface"
+                        ng-click="changeSortingForGrid('Area')"
+                        ng-class="{'active': orderBy.field == 'Area', 'asc': orderBy.asc && orderBy.field == 'Area' }">
+                        {{'Area' | i18n}}
+                    </td>
+                    <td id="tdStatus" class="status"
+                        ng-click="changeSortingForGrid('StatusName')"
+                        ng-class="{'active': orderBy.field == 'StatusName', 'asc': orderBy.asc && orderBy.field == 'StatusName'}">
+                        {{'Status' | i18n}}
+                    </td>
+                    <td id="tdFee" class="fee"
+                        ng-click="changeSortingForGrid('Fee')"
+                        ng-class="{'active': orderBy.field == 'Fee', 'asc': orderBy.asc && orderBy.field == 'Fee'}">
+                        {{'Fee' | i18n}}
+                    </td>
+                    <td id="tdscheduledAppt" class="defaultCol"  
+                        ng-click="changeSortingForGrid('AppointmentDate')"
+                        ng-class="{'active': orderBy.field == 'AppointmentDate', 'asc': orderBy.asc && orderBy.field == 'AppointmentDate'}">
+                        {{'Scheduled' | i18n}}
+                    </td>
+                    <td class="action"></td>
+
+                </tr>
+            </thead>
+            <tfoot class="patLedger__footer">
+                <tr ng-show="chartLedgerServices.length===0 || filteredServices.length === 0">
+                    <td id="tdDefaultMsg" colspan="1">
+                        <no-results filtering-message="'There are no services that match the search criteria.'" filtering="filterBy!=''"
+                                    loading-message="'There are no services.'" loading="initialized==false"></no-results>
+                    </td>
+                    <td ng-show="filteredServices.length === 0 && initialized == true" id="tdNoResultsMsg" colspan="8">{{noResultsMessage}}</td>
+                </tr>
+            </tfoot>
+            <tbody class="patLedger__body">                
+                <tr class="patLedger__row"
+                    ng-style="{color: patLedgerRowType(ps)}"
+                    ng-show="chartLedgerServices.length != undefined"
+                    ng-repeat="ps in filteredServices = (chartLedgerServices  | orderBy:orderBy.field:!orderBy.asc |filter:filterByDeleted | filter:servicesFilter)  track by $index"
+                    ng-if="ps.Fee>=0">
+                    <td class="padding-left-15">
+                        <input type="checkbox" ng-model="ps.$$SelectedRow" ng-disabled="ps.$AllowDelete===false" />
+                    </td>
+                    <td class="date" title="{{ps.CreationDate | toShortDisplayDateLocal }}" ng-bind-html="ps.CreationDate | toShortDisplayDateLocal | boldTextIfContains:filterBy"></td>
+                    <td class="defaultCol" title="{{ps.ProviderName}}">
+                        <span>{{ ps.ProviderName }}</span>
+                    </td>
+                    <td class="defaultCol" title="{{ps.LocationName}}">
+                        <span ng-bind-html="ps.LocationName | boldTextIfContains:filterBy"></span>
+                    </td>
+                    <td class="desc" title="{{ps.Description}}">
+                        <span ng-bind-html="ps.Description | boldTextIfContains:filterBy"></span>
+                    </td>
+                    <td class="tooth" title="{{ps.Tooth != 0 ? ps.Tooth : '' | convertToothRangeToQuadrantOrArchCode }}"><span ng-hide="ps.Tooth === 0">{{ps.Tooth | convertToothRangeToQuadrantOrArchCode }}</span></td>
+                    <td class="surface" title="{{ps.Area}}" ng-bind-html="ps.Area "></td>
+
+                    <td class="status" title="{{ps.StatusName}}" ng-bind-html="ps.StatusName | boldTextIfContains:filterBy"></td>
+                    <td class="fee" title="{{ps.Fee}}"><span ng-if="ps.StatusName != 'Existing'">{{ps.Fee | currency}}</span></td>
+                    <td class="scheduleselect" ng-if="ps.AppointmentDate" ng-click="editAppointmentFromModal(ps.AppointmentId, ps.AppointmentDate)" ng-bind-html="ps.AppointmentDate | toShortDisplayDateLocal"><span>{{ps.AppointmentDate| toShortDisplayDateLocal}}</span></td>
+                    <td class="scheduleselect" ng-if="!ps.AppointmentDate" ng-bind-html="ps.AppointmentDate | toShortDisplayDateLocal "><span>{{ps.AppointmentDate| toShortDisplayDateLocal}}</span></td>
+                    <td class="action">
+                        <button id="{{ps.RecordId}}_btnLedgerRowActionEllipses"
+                                class="patLedger__toggle"
+                                ng-if="ps.$ShowLedgerRowEditControl"
+                                ng-click="patLedgerMenuToggle($event, ps)"
+                                ng-blur="ps.ActionsVisible = false">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <div class="patLedger__actions" ng-class="{active : ps.ActionsVisible, orientTop : ps.orientV}">
+                            <button id="{{ps.RecordId}}_btnLedgerRowEdit" class="btn btn-link" ng-disabled="!ps.$AllowEdit" title="{{ps.EditButtonTooltip}}" ng-mousedown="editService(ps)" check-auth-z="{{ps.editAMFA}}">{{ 'Edit' | i18n }}</button><br />
+                            <button id="{{ps.RecordId}}_btnLedgerRowDelete" class="btn btn-link" ng-disabled="!ps.$AllowDelete || disableDeleteActions===true" title="{{ps.DeleteButtonTooltip}}" ng-mousedown="deleteService(ps)" check-auth-z="{{ps.deleteAMFA}}">{{ 'Delete' | i18n }}</button><br />
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>        
+    </form>
+    <!--Layout for kendo window charting controls-->
+    <div class="chartingControls__activeLayout">
+        <div kendo-window="toothCtrls"
+             k-title="'Tooth Controls'"
+             k-visible="false"
+             k-on-open="toothCtrlsOpen = true"
+             k-on-close="toothCtrlsOpen = false"
+             id="toothCtrlsWindowPatLedger">
+        </div>
+        <div kendo-window="patientConditionCreateUpdate"
+             k-title="'Patient Condition'"
+             k-visible="false"
+             k-on-open="toothCtrlsOpen = true"
+             k-on-close="toothCtrlsOpen = false"
+             id="patientConditionCreateUpdateWindow4">
+        </div>
+    </div>
+</div>

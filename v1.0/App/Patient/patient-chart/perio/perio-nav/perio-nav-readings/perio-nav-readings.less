@@ -1,0 +1,100 @@
+﻿.strikethrough {
+    text-decoration: line-through;
+}
+
+.perioNavInputs {
+    display: table;
+    min-height: 25px;
+    width: 100%;    
+
+    @media (max-width: 1366px) {
+        font-size: 12px;
+        line-height: @line-height-large;
+        margin: 0;
+        min-height: 0;
+        width: 100%;
+    }
+
+    &__leftSection {
+        width: 50%;
+    }
+
+    &__title {
+        display: inline-block;
+        text-align: right;
+        max-width: 108px;
+        padding-right: @brand-padding_xs;
+        vertical-align: 25%;
+        text-align: left;
+        font-size: 12px;
+    }
+
+    &__row {
+        display: block;
+        line-height: 20px;        
+    }
+
+    &__tooth {        
+        display: inline-block;        
+        text-align: center;
+        float: right;
+
+
+        .perioAlertLevel {
+            color: @perio-alert-level-color;
+        }
+
+        label {
+            margin-bottom: 0px;
+        }
+
+        app-check-box {
+            display: inline-block;
+            width: 18px;
+        }
+    }
+
+    &__ctrl {
+
+
+        input[type="checkbox"] {
+            width: 33.33%;
+            margin: 4px 4px 0;
+            margin-top: 1px \9; // IE8-9
+            line-height: normal;
+        }        
+        height: 17px;
+        width: 17px;
+        border: 1px solid #dddddd;
+        padding: 0px;
+
+        
+
+        max-width: 26px;
+        margin-left: 2px;
+        text-align: center;
+        font-size: 12px;
+        float: left;
+        background-color: @brand-color_white;
+
+        &.activeTooth {
+            background-color: @perio-chart-active-tooth-color;
+        }
+
+        &.activeExam {
+            background-color: @white;
+        }
+
+        &.activeExam[disabled] {
+            background-color: @brand-color_dark-gray;
+        }
+
+        &.mobility {
+            margin-right: 38px;
+        }
+    }
+
+    &.active {
+        background-color: @brand-color_dark-gray;
+    }
+}

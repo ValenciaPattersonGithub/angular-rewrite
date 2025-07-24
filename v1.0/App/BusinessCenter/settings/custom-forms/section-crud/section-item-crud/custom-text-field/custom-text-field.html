@@ -1,0 +1,24 @@
+﻿<ng-form name="frmQuestionTextField">
+    <div ng-class="{'col-md-11' : !sectionItem.$$isMHF, 'col-md-6' : sectionItem.$$isMHF}">
+        <div class="container-fluid">
+            <div class="row" id="questionTextFieldText{{sectionIndex}}_{{sectionItemIndex}}">
+                {{ 'Note Text' |i18n }}:
+                <span class="bold padding5 size-h4" id="QuestionTextRequiredStar{{sectionIndex}}_{{sectionItemIndex}}">*</span>
+            </div>
+            <div class="row" ng-class="{'red-border': (frmQuestionTextField.questionTextFieldText.$invalid && customForm.SectionValidationFlag) }">
+                <textarea id="questionTextFieldText{{sectionIndex}}_{{sectionItemIndex}}"
+                          name="questionTextFieldText"
+                          maxlength="1000" min-length="1"
+                          ng-model="sectionItem.FormItemTextField.NoteText"
+                          required ng-required="true"
+                          rows="4"
+                          class="form-control"></textarea>
+
+            </div>
+            <div class="row error" ng-if="(frmQuestionTextField.questionTextFieldText.$invalid && customForm.SectionValidationFlag) ">
+                <span id="requiredQuestionText{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required.' | i18n }}</span>
+            </div><br />
+
+        </div>
+    </div>
+</ng-form>

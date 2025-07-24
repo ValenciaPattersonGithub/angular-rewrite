@@ -1,0 +1,86 @@
+﻿<div class="row" ng-form="frmContactDetails"  >
+    <div class="col-xs-12" id="contactDetailsSection">        
+        <div class="row">
+            <!-- Email -->
+            <div class="col-xs-6" ng-class="{'has-error':hasErrors &&  !frmContactDetails.inpAddressEmail1.$valid}">                
+                <label class="col-xs-4 control-label">{{'Email' | i18n }}</label>
+                <input id="inpAddressEmail1" 
+                        name="inpAddressEmail1" 
+                        type="text" placeholder="{{ 'Email address' | i18n }}" 
+                        class="col-xs-8 form-control" 
+                        ng-disabled="useResponsiblePersonContact" 
+                        ng-model="person.Profile.EmailAddress" 
+                        valid-email maxlength="256">
+                <span class="help-block" ng-show="hasErrors && !frmContactDetails.inpAddressEmail1.$valid">
+                    {{ 'This field requires a valid email address.'| i18n }}
+                </span>
+            </div>
+            <!-- Email Notifications -->
+            <div class="col-xs-6">
+                <label class="col-xs-12 control-label">{{ 'Notifications' | i18n }} </label>
+                <checkbox class="col-xs-12" checkbox-id="inpEmailReminders" 
+                          checkbox-value="person.Profile.EmailAddressRemindersOk" 
+                          checkbox-label="'Enroll'">
+                </checkbox>
+            </div>
+        </div>
+        <div class="form-row" ng-show="showSecondEmail">
+            <div class="form-group form-col-6" ng-class="{error: hasErrors && !frmContactDetails.inpAddressEmail2.$valid}">
+                <!--email-->
+                <input id="inpAddressEmail2" 
+                       class="form-control"
+                       name="inpAddressEmail2" 
+                       type="text" 
+                       placeholder="{{ 'Email address' | i18n }}" 
+                       ng-disabled="useResponsiblePersonContact" 
+                       ng-model="person.Profile.EmailAddress2" 
+                       valid-email maxlength="256" />
+                <span id="errAddressEmail2" class="help-block" ng-show="hasErrors && !frmContactDetails.inpAddressEmail2.$valid">
+                    {{ 'This field requires a valid email address.'|i18n }}
+                </span>
+            </div>
+            <div class="form-group form-col-6">
+                <checkbox checkbox-id="inpEmail2Reminders" 
+                          checkbox-value="person.Profile.EmailAddress2RemindersOk" 
+                          checkbox-label="'Enroll'">
+                </checkbox>
+            </div>
+        </div>
+        <div class="form-row" ng-show="!showSecondEmail">
+            <div class="form-group form-col-12" >
+                <button id="btnAddEmail"  
+                        class="btn btn-link" 
+                        icon="fa-plus"
+                        ng-click="addEmail()">
+                {{ 'Add another email' | i18n }}
+                </button>
+            </div>
+        </div>
+
+        <!--<div class="form-row">
+            <div class="form-group form-col-12">
+                <label class="control-label">{{'Phone' | i18n }}</label>
+                <phone-info show-label="false" 
+                            phones="phones" max-limit="5" 
+                            show-is-primary="true"
+                            valid-phones="validPhones" 
+                            valid-form="!hasErrors" has-notes="true" has-texts="true"></phone-info>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group form-col-12">
+                <label class="control-label">{{'Email' | i18n }}</label>
+                <patient-email-info emails="emails"
+                            show-is-primary="true"
+                            valid-phones="validEmails"
+                            valid-form="!hasErrors"
+                            patient-info="person"></patient-email-info>
+            </div>
+        </div>
+        <!--Section Save buttons-->
+        <!--<div class="form-footer">
+            <button id="btnSaveContactDetails" class="btn btn-primary">{{ 'Save Contact Details' | i18n }}</button>
+            <button id="btnClear" class="btn btn-default">{{ 'Clear' | i18n }}</button>
+        </div>-->
+    </div>
+</div>

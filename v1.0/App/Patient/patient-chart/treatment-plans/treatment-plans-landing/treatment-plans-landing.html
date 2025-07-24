@@ -1,0 +1,25 @@
+﻿<div class="patTxList">
+    <div class="patTxList__actions">
+        <button id="patTxListCreate" class="btn btn-primary" ng-click="createTreatmentPlan()" 
+        check-auth-z="{{treatmentPlanCreateAmfa}}">{{::('New Treatment Plan'| i18n)}}</button>
+        <span class="sortContainer pull-right">
+            <span>{{ ::('Sort by' | i18n) }}</span>
+            <span class="sortLabel" ng-mousedown='changeSorting()'>{{ (sortOrder === '-TreatmentPlanHeader.CreatedDate' ? 'Descending' : 'Ascending') | i18n }}</span>
+            <span class="sortCaret fa fas fa-lg" ng-mousedown='changeSorting()' ng-class="sortOrder === '-TreatmentPlanHeader.CreatedDate' ? 'fa-sort-down' : 'fa-sort-up'"></span>
+        </span>
+    </div>   
+    <div class="patTxList__list">
+        <div ng-class="{'patTxList__listItem': plans.length > 1}" ng-repeat="(group, plans) in existingTreatmentPlans | 
+                orderBy:sortOrder  | 
+                groupBy: 'TreatmentPlanHeader.AlternateGroupId' ">
+            <i class="fa fa-link patTxList__iconLink fa-inverse" ng-hide="plans.length == 1"></i>
+            <div ng-class="{'patTxList__altGroup': plans.length > 1}" ng-repeat="plan in plans" 
+                ng-hide="plan.TreatmentPlanHeader.TreatmentPlanName.length == '' && !plan.Editing">
+                <treatment-plans-tile tx-plan="plan"
+                                      patient-info="patientInfo"
+                                      view-settings="viewSettings">
+                </treatment-plans-tile>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,130 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="adjustmentstypereport grid header">
+        <div class="col-sm-2-migration">{{ 'Adjustment Type' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Positive / Negative' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Impaction' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Date' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Responsible Party' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Provider' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Description' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Original Transaction Date (voids)' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Amount' | translate }}</div>
+    </div>
+    <div class="adjustmentstypereportgroupHeader groupheader" style="padding-right: 0.5%;">
+        <div class="col-sm-12-migration text-center" id="headerLocationDiv">
+            <h4>{{ ofcLocation }}</h4>
+        </div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="40" tabindex="0"
+            (scrolledIndexChange)="nextItem($event)">
+            <div *cdkVirtualFor="let adjustment of reportData; index as i" class="{{adjustment.Class}}">
+                <input type="hidden" value="{{adjustment.Location}}" id="adjustmentsTypeLocation{{i}}" />
+                <div class="adjustmentstypereportgroupHeader" *ngIf="i>0 && adjustment.IsLocationHeader == true"
+                    id="divLocation{{i}}">
+                    <div class="col-sm-12-migration text-center" id="subHeaderLocationDiv{{i}}">
+                        <h4>{{ adjustment.Location }}</h4>
+                    </div>
+                </div>
+                <div class="adjustmentstypereport grid" *ngIf="adjustment.IsAdjustmentTypeHeader == true" id="divMainInfo{{i}}">
+                    <div class="col-sm-2-migration">{{ adjustment.AdjustmentType }}</div>
+                    <div class="col-sm-1-migration">{{ adjustment.PositiveNegative }}</div>
+                    <div class="col-sm-1-migration">{{ adjustment.Impaction }}</div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="adjustmentstypereport grid item"
+                    *ngIf=" adjustment.IsAdjustmentTypeHeader != true && !data.isSummaryView && adjustment.IsDataRecord == true">
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">{{ adjustment.Date | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-2-migration">{{ adjustment.ResponsibleParty }}</div>
+                    <div class="col-sm-1-migration">{{ adjustment.Provider }}</div>
+                    <div class="col-sm-2-migration">{{ adjustment.Description | translate }}</div>
+
+                    <div class="col-sm-1-migration">{{ adjustment.OrigTransDate | date: 'MM/dd/yyyy' }}</div>
+                    
+                    <div *ngIf="adjustment.Amount >= 0 && adjustment.IsFeeScheduleWriteOff" class="col-sm-1-migration text-right flex-box orange">
+                        <mat-icon kendoTooltip tooltipClass="app-tooltip" title="Automatically Applied" svgIcon="assignment" class="assignment-icon">assignment</mat-icon>
+                        <span>
+                            {{adjustment.Amount |
+                        currency}}
+                        </span>
+                    </div>
+                    
+                    <div *ngIf="adjustment.Amount < 0 && adjustment.IsFeeScheduleWriteOff" class="col-sm-1-migration text-right flex-box orange">
+                        <mat-icon kendoTooltip tooltipClass="app-tooltip" title="Automatically Applied" svgIcon="assignment" class="assignment-icon">assignment</mat-icon>
+                        <span>
+                            ({{adjustment.Amount * -1 |
+                        currency}})
+                        </span>
+                    </div>
+
+                    <div class="col-sm-1-migration text-right" *ngIf="adjustment.Amount >= 0  && !adjustment.IsFeeScheduleWriteOff"> {{adjustment.Amount |
+                        currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="adjustment.Amount < 0 && !adjustment.IsFeeScheduleWriteOff">
+                        ({{adjustment.Amount * -1 |
+                        currency}})
+                    </div>
+                </div>
+                <div class="adjustmentstypereport grid item" *ngIf="data.isSummaryView && adjustment.IsDataRecord == true">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-2-migration"></div>
+
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration text-right"> </div>
+                    <div class="col-sm-1-migration text-right"></div>
+                </div>
+                <div class="adjustmentstypereportfooter grid" *ngIf="adjustment.IsFooter == true">
+                    <div class="col-sm-10-migration reportGrid__label"></div>
+                    <div class="col-sm-1-migration reportGrid__label">{{ adjustment.AdjustmentType }} Totals</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"
+                        *ngIf="adjustment.AdjustmentTypeTotal >= 0">
+                        {{adjustment.AdjustmentTypeTotal | currency}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label"
+                        *ngIf="adjustment.AdjustmentTypeTotal < 0">
+                        ({{adjustment.AdjustmentTypeTotal * -1 | currency}})</div>
+                </div>
+
+                <div class="adjustmentstypereportfooter grid" *ngIf="adjustment.IsFooter1 == true">
+                    <div class="col-sm-10-migration reportGrid__label"></div>
+                    <div class="col-sm-1-migration reportGrid__label"> {{'Total Adjustments' | translate}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label">
+                        {{adjustment.AdjustmentCount}}
+                    </div>
+                </div>
+                <div class="adjustmentstypereportfooter grid stripEven" id="locationTotalDiv{{i}}" *ngIf="adjustment.IsLocationFooter == true">
+                    <div class="col-sm-10-migration reportGrid__label"></div>
+                    <div class="col-sm-1-migration reportGrid__label">{{ adjustment.Location }} Totals</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="adjustment.LocationTotals >= 0">
+                        {{adjustment.LocationTotals | currency}}</div>
+                    <div class="col-sm-1-migration text-right reportGrid__label" *ngIf="adjustment.LocationTotals < 0">
+                        ({{adjustment.LocationTotals * -1 | currency}})</div>
+                </div>
+
+                <div class="adjustmentstypereportfooter grid item reportGrid__footer" *ngIf="i+1 == reportData.length">
+                    <div class="col-sm-10-migration"></div>
+                    <div class="col-sm-1-migration reportGrid__label">{{'Report Totals' | translate}}</div>
+                    <div *ngIf="data.Amount >= 0" class="reportGrid__label text-right col-sm-1-migration">{{
+                        data.Amount | currency
+                        }}
+                    </div>
+                    <div *ngIf="data.Amount < 0" class="reportGrid__label text-right col-sm-1-migration">
+                        ({{data.Amount * -1 |
+                        currency
+                        }})</div>
+                </div>
+
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

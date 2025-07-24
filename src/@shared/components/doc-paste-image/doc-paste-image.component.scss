@@ -1,0 +1,32 @@
+@import "variables";
+
+.docPasteImage {
+
+    .target {
+        border: solid 1px #A9A9A9;
+        width: 325px;
+        height: 300px;
+        margin-top: 1em;
+        cursor: pointer;
+
+        &:focus {
+            border: solid 1px $action-blue;
+            box-shadow: 0 0 7px 0 #5fc2db;
+        }
+
+        img {
+            border: none;
+            max-width: 323px;
+            max-height: 298px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    .instructions {
+        margin: 6px;
+    }
+
+}

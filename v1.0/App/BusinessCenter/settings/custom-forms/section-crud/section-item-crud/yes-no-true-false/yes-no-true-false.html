@@ -1,0 +1,44 @@
+﻿<ng-form name="questionYesNoTrueFalse">
+    <div class="col-md-6">
+        <div class="container-fluid">
+            <div class="row" id="questionTextYesNoTrueFalse{{sectionIndex}}_{{sectionItemIndex}}">
+                {{ 'Question Text' |i18n }}:<span class="bold padding5 size-h4" id="QuestionTextRequiredStar{{sectionIndex}}_{{sectionItemIndex}}">*</span>
+            </div>
+            <div class="row">
+                <input ng-class="{'red-border': (questionYesNoTrueFalse.questionYesNoTrueFalseText.$invalid && customForm.SectionValidationFlag) || (questionYesNoTrueFalse.questionYesNoTrueFalseText.$invalid  && $index == customForm.SectionCopyValidationFlag ) }" 
+                       id="questionYesNoTrueFalseText{{sectionIndex}}_{{sectionItemIndex}}" 
+                       name="questionYesNoTrueFalseText" 
+                       type="text" class="col-md-10" 
+                       ng-model="sectionItem.FormBankItem.ItemText" 
+                       maxlength="250" 
+                       required />
+                <br />
+            </div>
+            <div class="row error" ng-if="(questionYesNoTrueFalse.questionYesNoTrueFalseText.$invalid && customForm.SectionValidationFlag) || (questionYesNoTrueFalse.questionYesNoTrueFalseText.$invalid  && $index == customForm.SectionCopyValidationFlag )">
+                <span id="requiredYesNoTrueFalse{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required.' | i18n }}</span>
+            </div>
+            <div class="row">
+                <div class="form-checkbox">
+                    <input type="checkbox" ng-value="true" ng-selected ng-model="sectionItem.IsRequired" id="questionYesNoTrueFalseCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="lblQuestionYesNoTrueFalse{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionYesNoTrueFalseCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This question is required' | i18n }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="container-fluid">
+            <div class="row" for="sel1">
+                <div class="col-md-8" id="yesNoTrueFalseOption{{sectionIndex}}_{{sectionItemIndex}}">{{ 'Select Option' |i18n }}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <select ng-model="sectionItem.FormItemType"
+                            class="form-control" 
+                            id="selectYesNoTrueFalse{{sectionIndex}}_{{sectionItemIndex}}"
+                            ng-options="option.value as option.label for option in yesNoTrueFalseOptions">
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-form>

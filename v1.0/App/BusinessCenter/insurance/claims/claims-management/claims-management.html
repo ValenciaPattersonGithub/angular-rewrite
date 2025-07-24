@@ -1,0 +1,296 @@
+﻿<div class="claimsMgmt">
+  <div class="claimsMgmt__header">
+    <div class="claimsMgmt__filters form-row" ng-disabled="true">
+      <div class="claimsMgmt__action pull-left">
+        <checkbox change-function="toggleSelectAllClaims()" checkbox-id="cbxSelectedClaims" checkbox-label="selectAllLabel" checkbox-value="selectedAllClaims"> </checkbox>
+      </div>
+      <div class="claimsMgmt__filterCol" ng-show="activeTab == 'all' || activeTab == 'submitted'">
+        <date-selector tab-index="100" date-var="filterProperties.selectedDateFilter" valid="true" format="MM/dd/yyyy" max-date="maxDate" placeholder="{{'Date Submitted' | i18n}}"> </date-selector>
+      </div>
+      <div class="claimsMgmt__filterCol">
+        <soar-select-list id="claimPredoptionselectList" name="selectList" sb-tab="{{tabIndex}}" placeholder="{{}}" option-list="claimPredoptions" text-field="Text" value-field="Value" ng-model="filterProperties.selectedClaimPredoption" sb-required="required"> </soar-select-list>
+      </div>
+      <div>
+        <multi-selector id="carrierSelectList" open="false" list="carrierList" selected-list="selectedCarriers" display-field="CarrierName" id-field="CarrierId" placeholder="{{ 'Carrier' | i18n}}" on-blur-fn="updateCarrier()" class="claimsMgmt__filterCol"> </multi-selector>
+      </div>
+      <div>
+        <multi-selector
+          ng-show="activeTab == 'submitted'"
+          id="submissionMethodSelectList"
+          open="false"
+          list="submissionMethodList"
+          selected-list="selectedSubmissionMethods"
+          display-field="Text"
+          id-field="Value"
+          auth-z="'soar-biz-bizrcv-view'"
+          msDisabled="false"
+          on-blur-fn="updateSubmissionMethod()"
+          placeholder="{{'Submission Method' | i18n}}"
+          class="claimsMgmt__filterCol"
+        >
+        </multi-selector>
+      </div>
+      <div class="claimsMgmt__filterCol" ng-show="activeTab == 'submitted'">
+        <select class="k-multiselect" kendo-multi-select k-ng-model="filterProperties.selectedSubmittedStatuses" k-data-source="submittedStatusList" k-placeholder="'Submitted Status Filter'" k-data-text-field="'Text'" k-data-value-field="'Value'"></select>
+      </div>
+      <div class="claimsMgmt__filterCol" ng-show="activeTab == 'all'">
+        <select class="k-multiselect" kendo-multi-select k-ng-model="filterProperties.selectedGeneralStatuses" k-data-source="statusList" k-placeholder="'Status Filter'" k-data-text-field="'Text'" k-data-value-field="'Value'"></select>
+      </div>
+      <div class="claimsMgmt__filterCol">
+        <soar-select-list id="selectReport" name="selectReport" placeholder="{{'Reports' | i18n }}" text-field="ReportTitle" value-field="ReportValue" option-list="reports" ng-model="selectedReport.ReportId" ng-if="isReportDataLoaded"> </soar-select-list>
+      </div>
+      <div ng-class="activeTab == 'all' ? 'claimsMgmt__searchBoxAll' : 'claimsMgmt__searchBox'">
+        <div class="col-xs-10">
+          <input class="form-control border-solid-black" id="searchBoxClaims" placeholder="{{'Search Patient Name...'|i18n}}" type="text" ng-model="searchText" ng-model-options="{ debounce: 350 }" ng-change="searchTextChanged()" />
+        </div>
+        <div class="col-xs-1 claimsMgmt__searchIcon">
+          <span class="glyphicon glyphicon-search"></span>
+        </div>
+      </div>
+      <div class="pull-right">
+        <claims-management-mass-update ng-if="activeTab == 'unsubmitted'" [claims]="claimMgmtsLists"></claims-management-mass-update>
+        <a id="btnSubmit" class="btn btn-primary margin-left-5" ng-click="submitSelectedClaims()" ng-disabled="checkSelected() || submitButtonDisabled" check-auth-z="soar-ins-iclaim-edit">{{ 'Submit' | i18n }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="rowFull white">
+  <div id="tableClaimsMgmt" class="table claimsMgmt__table table-striped container" infinite-scroll="getAllClaims()" infinite-scroll-disabled="isUpdating || allDataDisplayed ">
+    <div class="claimsMgmt__header row gridRow">
+      <div id="tdSelection" class="checkboxColumn col-xs-1 gridItem">
+        <span>{{ '' | i18n }}</span>
+      </div>
+
+      <div id="tdSubmittedDate" class="submittedColumn col-xs-1 gridItem" ng-show="activeTab == 'all' || activeTab == 'submitted'">
+        <a id="colSubmittedDate" ng-click="changeSorting('colSubmittedDate', 'DateSubmitted')">{{ 'Date Submitted' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdPatientName" class="col-xs-1 gridItem" ng-class="{'nameColumn': activeTab == 'all' || activeTab == 'submitted', 'nameColumn2': activeTab != 'all' && activeTab != 'submitted'}">
+        <a id="colPatientName" ng-click="changeSorting('colPatientName', 'PatientName')">{{ 'Patient Name' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdClaimType" class="typeColumn col-xs-1 gridItem">
+        <a id="colClaimType" ng-click="changeSorting('colClaimType', 'Type')">{{ 'Type' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdProviderName" class="providerColumn col-xs-1 gridItem">
+        <a id="colProviderName" ng-click="changeSorting('colProviderName', 'ProviderName')">{{ 'Provider Name' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdPriority" class="priorityColumn col-xs-1 gridItem">
+        <a id="colPriority" ng-click="changeSorting('colPriority', 'Priority')">{{ 'Priority' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdCarrierName" class="carrierColumn col-xs-1 gridItem">
+        <a id="colCarrierName" ng-click="changeSorting('colCarrierName', 'CarrierName')">{{ 'Carrier Name' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdDateOfService" class="serviceDateColumn col-xs-1 gridItem">
+        <a id="coldateOfServices" ng-click="changeSorting('coldateOfServices', 'DateOfService')">{{ 'Date of Service' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdSubmissionMethod" class="subMethodColumn col-xs-1 gridItem">
+        <a id="colSubmissionMethod" ng-click="changeSorting('colSubmissionMethod', 'SubmittalMethod')">{{'Submission Method' | i18n}}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdTotalFee" class="feesColumn col-xs-1 gridItem">
+        <a id="colTotalFees" ng-click="changeSorting('colTotalFees', 'TotalFees')">{{ 'Total Fee' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+
+      <div id="tdPrintStatus" class="statusColumn col-xs-1 gridItem">
+        <a id="colPrintStatus" ng-click="changeSorting('colPrintStatus', 'Status')">{{ 'Status' | i18n }}<span class="fa fa-sort claimsMgmt__headerSort"></span></a>
+      </div>
+      <div class="extrasColumn col-xs-1 gridItem"></div>
+    </div>
+
+    <!-- filter is set by controller input -->
+
+    <div
+      ng-if="claimMgmtsLists.length"
+      ng-repeat="selectedStatusClaim in claimMgmtsLists"
+      ng-class="{'claim':selectedStatusClaim.Type === 1,'pred':selectedStatusClaim.Type == 2, highlighted: selectedStatusClaim.highlighted }"
+      ng-click="highlightRow(selectedStatusClaim)"
+      class="claimpredcolor row gridRow border"
+    >
+      <!--checkbox disabled if status is closed-->
+      <div class="checkboxColumn col-xs-1 gridItem">
+        <checkbox checkbox-id="cbxMember{{$index}}" checkbox-disabled="!(selectedStatusClaim | canBeSubmitted)" checkbox-value="selectedStatusClaim.Selected"> </checkbox>
+      </div>
+      <div class="submittedColumn col-xs-1 gridItem" ng-show="activeTab == 'all' || activeTab == 'submitted'">
+        <span>{{ selectedStatusClaim.DateSubmitted |date:'MM/dd/yyyy'}}</span>
+      </div>
+      <div class="col-xs-1 gridItem" ng-class="{'nameColumn': activeTab == 'all' || activeTab == 'submitted', 'nameColumn2': activeTab != 'all' && activeTab != 'submitted'}">
+        <button id="btnPatientName{{selectedStatusClaim.ClaimId}}" ng-bind-html="selectedStatusClaim.patientName  | highlightTextIfContains:searchText:100" ng-click="navToPatientProfile(selectedStatusClaim.PatientId)" class="btn-link" check-auth-z="soar-per-perdem-view"></button>
+      </div>
+      <div class="typeColumn col-xs-1 gridItem">
+        <span ng-bind="selectedStatusClaim.Type === 1 ? 'Claim':'PreD'"></span>
+      </div>
+      <div class="providerColumn col-xs-1 gridItem">
+        <span>{{selectedStatusClaim.TreatingDentistSignature}}</span>
+      </div>
+      <div class="priorityColumn col-xs-1 gridItem">
+        <span>{{selectedStatusClaim.PatientBenefitPlanPriority | priorityLabel }}</span>
+      </div>
+      <div class="carrierColumn col-xs-1 gridItem">
+        <span>{{ selectedStatusClaim.CarrierName}}</span>
+      </div>
+      <div class="serviceDateColumn col-xs-1 gridItem">
+        <span> {{selectedStatusClaim.startDatetoEndDate }} </span>
+      </div>
+      <div ng-if="selectedStatusClaim | canEditSubmissionMethod" class="subMethodColumn col-xs-1 gridItem">
+        <select
+          class="form-control"
+          ng-disabled="!(selectedStatusClaim | canEditSubmissionMethod) || !initialized"
+          id="iselectronic{{selectedStatusClaim.ClaimId}}"
+          ng-model="selectedStatusClaim.SubmittalMethod"
+          ng-options="x.value as x.name for x in (selectedStatusClaim.Type === 1 ? submissionMethodOptions : predSubmissionMethodOptions)"
+          ng-change="updateClaimSubmissionMethod(selectedStatusClaim)"
+        ></select>
+      </div>
+      <div ng-if="selectedStatusClaim.Status !== 1 && selectedStatusClaim.Status !== 3" class="subMethodColumn col-xs-1 gridItem" title="Only Unsubmitted Claims can have their submission method changed ">
+        <select
+          class="form-control"
+          ng-disabled="!(selectedStatusClaim | canEditSubmissionMethod) || !initialized"
+          id="iselectronic{{selectedStatusClaim.ClaimId}}"
+          ng-model="selectedStatusClaim.SubmittalMethod"
+          ng-options="x.value as x.name for x in submissionMethodOptions"
+          ng-change="updateClaimSubmissionMethod(selectedStatusClaim)"
+        ></select>
+      </div>
+      <div
+        ng-if="(selectedStatusClaim.Status === 1 || selectedStatusClaim.Status === 3) && selectedStatusClaim.PatientBenefitPlanPriority > 1 && selectedStatusClaim.SubmittalMethod === 2"
+        class="subMethodColumn col-xs-1 gridItem"
+        title="Only primary and secondary claims can be sent electronically"
+      >
+        <select
+          class="form-control"
+          ng-disabled="!(selectedStatusClaim | canEditSubmissionMethod) || !initialized"
+          id="iselectronic{{selectedStatusClaim.ClaimId}}"
+          ng-model="selectedStatusClaim.SubmittalMethod"
+          ng-options="x.value as x.name for x in submissionMethodOptions"
+          ng-change="updateClaimSubmissionMethod(selectedStatusClaim)"
+        ></select>
+      </div>
+      <div class="feesColumn col-xs-1 gridItem">
+        <span> {{selectedStatusClaim.TotalFees | currency }} </span>
+      </div>
+      <div class="statusColumn col-xs-1 gridItem">
+        <span>{{ selectedStatusClaim.Status | statusDefinition }}</span>
+      </div>
+      <div class="claimsMgmt__options extrasColumn col-xs-1 gridItem">
+        <span>
+
+          <span ng-show="selectedStatusClaim.IsReceived" tooltip-append-to-body="true" tooltip-placement="top">
+            <i class="fa fa-umbrella"  style="cursor: pointer;" uib-tooltip-html="'Carrier response is received. Click to view'"  ng-click="enterCarrierResponse(selectedStatusClaim)"></i>
+          </span>
+
+          <span ng-show="selectedStatusClaim.HasAttachemnt || selectedStatusClaim.HasAcceptedOrRejectedAttachment" tooltip-append-to-body="true" tooltip-placement="top">
+            <i class="fa fa-paperclip" 
+            ng-style="{'cursor': selectedStatusClaim.EAttachmentEnabled ? 'pointer' : 'default'}" 
+            uib-tooltip-html="selectedStatusClaim.EAttachmentEnabled ? ('Claim has existing Attachments. Click to view' | i18n) : ('Claim has existing Attachments' | i18n)" 
+            ng-click="selectedStatusClaim.EAttachmentEnabled && attachments(selectedStatusClaim)">
+         </i>
+          </span>
+        
+          <span ng-show="selectedStatusClaim.HasErrors || selectedStatusClaim.SubmittalStatus === 6" tooltip-append-to-body="true" tooltip-placement="top">
+            <i class="error fa fa-exclamation-triangle"  style="cursor: pointer;" uib-tooltip-html="'Claim has invalid/missing information. Click to view'" ng-click="viewAlerts(selectedStatusClaim)"></i>
+          </span>
+ 
+          <span ng-show="selectedStatusClaim.HasUserGeneratedNotes" tooltip-append-to-body="true" tooltip-placement="top">
+            <i class="far fa-file-alt"  style="cursor: pointer;" uib-tooltip-html="'Claim has notes. Click to view'" ng-click="openClaimNotesModal(selectedStatusClaim)" ></i>
+          </span>
+    
+          <span ng-show="selectedStatusClaim.Status === 6" tooltip-append-to-body="true" tooltip-placement="top">
+            <i class="fa fa-exclamation-circle" style="color: red; cursor: pointer;" uib-tooltip-html="'Claim is Rejected. Click to view'" ng-click="viewAlerts(selectedStatusClaim)"></i>
+          </span>
+
+          <button id="btnClaimMgmtOptions{{$index}}" type="button" data-toggle="dropdown" class="claimsMgmt__optionsBtn" aria-haspopup="true" aria-expanded="false">
+            <span class="fa fa-ellipsis-v"></span>
+          </button>
+          <ul class="dropdown-menu claimsMgmt__optionsList pull-right" role="menu" aria-labelledby="btnClaimMgmtOptions{{$index}}">
+              <li>
+              <a
+                ng-class="{disabled: (selectedStatusClaim.TreatmentPlanId == null && selectedStatusClaim.Type == 2)}"
+                     tooltip-enable="(selectedStatusClaim.TreatmentPlanId == null && selectedStatusClaim.Type == 2)"
+                     uib-tooltip="The proposed services have been removed"
+                     id="btnJumpToTreatmentPlan"
+                     check-auth-z="soar-clin-cpsvc-view"
+                     ng-show="selectedStatusClaim.Type === 2"
+                ng-click="NavigateToTreatmentPlan(selectedStatusClaim)"
+                >{{ 'Show Treatment Plan' | i18n }}</a
+              >
+              <a
+                id="btnClaimMgmtclose"
+                     ng-class="{ 'disabled': selectedStatusClaim.Status === 4 || selectedStatusClaim.Status === 9 }"
+                     tooltip-enable="selectedStatusClaim.Status === 4 || selectedStatusClaim.Status === 9"
+                     uib-tooltip="{{ 'Claim with a status of In Process cannot be closed' | i18n }}"
+                     ng-show="initialized && selectedStatusClaim.Type === 1 && !(selectedStatusClaim.Status === 7 || selectedStatusClaim.Status === 8)"
+                     check-auth-z="soar-ins-iclaim-close"
+                ng-click="closeClaimModal(selectedStatusClaim.ClaimId,selectedStatusClaim.Status,selectedStatusClaim.PatientId, selectedStatusClaim.patientName, selectedStatusClaim.DataTag)"
+                >{{ 'Close Claim' | i18n }}</a
+              >
+                  <a id="btnClaimPdf" check-auth-z="soar-ins-iclaim-view" ng-click="previewPdf(selectedStatusClaim)">
+                      <span ng-show="selectedStatusClaim.Status === 1 || selectedStatusClaim.Status === 3">{{ selectedStatusClaim.Type === 1 ? 'Preview Claim' : 'Preview Predetermination' | i18n }}</span>
+                      <span ng-hide="selectedStatusClaim.Status === 1 || selectedStatusClaim.Status === 3">{{ selectedStatusClaim.Type === 1 ? 'View Claim' : 'View Predetermination' | i18n }}</span>
+                  </a>
+              <a
+                id="btnInsurancePayment"
+                     check-auth-z="soar-acct-aipmt-view"
+                     ng-show="selectedStatusClaim.Type === 1 && !(selectedStatusClaim.Status === 7 || selectedStatusClaim.Status === 8)"
+                     ng-class="{ 'disabled': selectedStatusClaim.Status === 4 || selectedStatusClaim.Status === 9 }"
+                     ng-click="applyInsurance(selectedStatusClaim)"
+                ng-if="hasPatientInsurancePaymentViewAccess"
+              >
+                {{ 'Apply Insurance Payment' | i18n }}</a
+              >
+                  <a id="btnClaimNotes" ng-click="openClaimNotesModal(selectedStatusClaim)"> {{ "Claim Notes" | i18n }}</a>
+              <a id="btnChangeAnswers" check-auth-z="{{ (selectedStatusClaim.Type == 1) ? 'soar-ins-iclaim-edit' : 'soar-ins-ipred-edit' }}" ng-click="changeAnswers(selectedStatusClaim)"
+                >{{ (selectedStatusClaim.Status == 1 || selectedStatusClaim.Status == 3) ? 'Change Answers' : "View Claim Answers" | i18n }}</a
+              >
+              <a
+                id="btnEnterCarrierResponse"
+                     ng-show="selectedStatusClaim.Type === 2 "
+                     ng-click="enterCarrierResponse(selectedStatusClaim)"
+                     ng-class="{'disabled': selectedStatusClaim.PatientBenefitPlanPriority !== 0 && selectedStatusClaim.PatientBenefitPlanPriority !== 1 }"
+                     uib-tooltip="{{'A carrier response can only be entered on primary and secondary predeterminations' | i18n}}"
+                     tooltip-enable="selectedStatusClaim.PatientBenefitPlanPriority !== 0 && selectedStatusClaim.PatientBenefitPlanPriority !== 1"
+                tooltip-placement="auto left"
+              >
+                      {{ selectedStatusClaim.IsReceived || selectedStatusClaim.Status == 7 || selectedStatusClaim.Status == 8 ? 'View Carrier Response' : 'Enter Carrier Response' | i18n }}
+                  </a>
+                  <a id="btnClosePredetermination" check-auth-z="soar-ins-iclaim-close"
+                     ng-class="{ 'disabled': selectedStatusClaim.Status === 4 || selectedStatusClaim.Status === 9 }"
+                     tooltip-enable="selectedStatusClaim.Status === 4 || selectedStatusClaim.Status === 9"
+                     uib-tooltip="{{ 'Predetermination with a status of In Process cannot be closed' | i18n }}"
+                     ng-show="selectedStatusClaim.Type === 2 && !(selectedStatusClaim.Status === 7 || selectedStatusClaim.Status === 8)"
+                     ng-click="closePredetermination(selectedStatusClaim.ClaimId)"
+                    >{{ 'Close Predetermination' | i18n }}</a
+                  >
+                  <!-- NOTE if feature is enabled and claim status 4,5,6,7,8,9 show Submission History (which shows list of claim submission history) NOTE hasErrors is true also but not relevant to history-->
+                  <a id="btnViewClaimAlertHistory" 
+                     ng-show="submissionHistoryClaimStatusList.includes(selectedStatusClaim.Status) && enableClaimStatusHistory" 
+                     ng-click="viewSubmissionHistory(selectedStatusClaim)">{{ 'Submission History' | i18n }}</a>
+                  <!-- NOTE if feature not enabled OR hasErrors show View Alert (which shows validation error list)-->
+                  <a id="btnViewClaimAlerts" ng-show="selectedStatusClaim.HasErrors || selectedStatusClaim.SubmittalStatus === 6 && enableClaimStatusHistory===false" ng-click="viewAlerts(selectedStatusClaim)">{{ 'View Alert' | i18n }}</a>
+              <a
+                id="btnAttachment"
+                     ng-show="selectedStatusClaim.Status === 3 || selectedStatusClaim.Status === 5 || selectedStatusClaim.Status === 6 || selectedStatusClaim.HasAttachemnt || selectedStatusClaim.HasRejectedAttachment"
+                     ng-class="{'disabled': !selectedStatusClaim.EAttachmentEnabled }"
+                     uib-tooltip="To activate Attachments, you need to complete all steps in the resource titled 'eAttachment Setup Instructions' separately for each location."
+                     tooltip-enable="!selectedStatusClaim.EAttachmentEnabled"
+                     tooltip-placement="auto left"
+                ng-click="attachments(selectedStatusClaim)"
+                >{{'Attachments' | i18n }}</a
+              >
+              </li>
+          </ul>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div ng-show="!claimMgmtsLists">
+    <no-results filtering-message="'There are no Claims that match the search criteria.'" loading-message="'No claims were found.'" loading="true"></no-results>
+  </div>
+  <button ng-show="hasScrolled" class="btn btn-primary text-center back-to-top" ng-click="backToTop()"><i class="fa fa-arrow-circle-up"></i><br />Top</button>
+</div>

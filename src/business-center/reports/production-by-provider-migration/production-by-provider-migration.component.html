@@ -1,0 +1,164 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="claim grid header">
+        <div class="col-sm-1-migration">{{ 'Provider' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Date' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Patient' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Description' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Applied To' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Applied To Date' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Original Transaction Date (voids)' | translate }}</div>
+        <div class="text-center col-sm-1-migration">{{ 'Tooth-Area' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Location' | translate }}</div>
+        <div class="text-right col-sm-1-migration">{{ 'Production' | translate }}</div>
+        <div class="text-right col-sm-1-migration">{{ 'Adjustments' | translate }}</div>
+        <div class="text-right col-sm-1-migration">{{ 'Net Production' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+            id="performanceByProviderDetaild">
+            <div *cdkVirtualFor="let transaction of reportData; index as i" class="{{transaction.Class}}">
+                <div class="claim grid item" *ngIf="!transaction.isSummaryView && transaction.IsHeader">
+                    <div>{{ transaction.Provider }}</div>
+                    <div></div> <div></div> <div></div> <div></div> 
+                    <div></div> <div></div> <div></div> <div></div> 
+                    <div></div> <div></div> <div></div>
+                </div>
+
+                <div class="claim grid item" *ngIf="!transaction.isSummaryView">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration">{{ transaction.Date | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-1-migration">{{ transaction.Patient }}</div>
+                    <div class="col-sm-1-migration">{{ transaction.Description }} </div>
+                    <div class="col-sm-1-migration">{{ transaction.AppliedTo | translate }}</div>
+                    <div class="col-sm-1-migration">{{ transaction.AppliedToDate| date: 'MM/dd/yyyy'  }}</div>
+                    <div class="col-sm-1-migration">{{ transaction.OriginalDate | date: 'MM/dd/yyyy' }}</div>
+                    <div class="text-center col-sm-1-migration">{{ transaction.ToothArea }}</div>
+                    <div class="col-sm-1-migration pl-5"> {{ transaction.Location }} </div>
+                    <div *ngIf="!transaction.IsAdjustment && transaction.Production >=0" class="text-right col-sm-1-migration">
+                        {{ transaction.Production | currency}}
+                    </div>
+                    <div *ngIf="!transaction.IsAdjustment && transaction.Production < 0" class="text-right col-sm-1-migration">
+                        ({{
+ transaction.Production * -1 |
+                        currency
+                        }})
+                    </div>
+                    <div class="col-sm-1-migration text-right" *ngIf="transaction.IsAdjustment"></div>
+                    <div *ngIf="transaction.IsAdjustment && transaction.Adjustment >=0" class="text-right col-sm-1-migration orange">
+                        <mat-icon *ngIf="transaction.IsFeeScheduleWriteOff" kendoTooltip tooltipClass="app-tooltip" title="Automatically Applied" svgIcon="assignment" class="assignment-icon">assignment</mat-icon>
+                        <span> {{ transaction.Adjustment | currency }}</span>
+                    </div>
+                    <div *ngIf="transaction.IsAdjustment && transaction.Adjustment <0" class="text-right col-sm-1-migration flex-box orange">
+                        <mat-icon *ngIf="transaction.IsFeeScheduleWriteOff" kendoTooltip tooltipClass="app-tooltip" title="Automatically Applied" svgIcon="assignment" class="assignment-icon">assignment</mat-icon>
+                        <span>
+                            ({{
+                            transaction.Adjustment * -1 | currency
+                            }})
+                        </span>
+                    </div>
+                    <div class="col-sm-1-migration text-right" *ngIf="!transaction.IsAdjustment"></div>
+                    <div class="col-sm-1-migration text-right"></div>
+                </div>
+
+                <div class="claim grid item" *ngIf="transaction.IsFooter && data.isSummaryView">
+                    <div class="col-sm-1-migration">{{ transaction.Provider }}</div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div *ngIf="transaction.TotalProduction >= 0" class="text-right reportGrid__label col-sm-1-migration">{{
+                        transaction.TotalProduction | currency}}
+                    </div>
+                    <div *ngIf="transaction.TotalProduction < 0" class="text-right reportGrid__label col-sm-1-migration">({{
+                        transaction.TotalProduction * -1 | currency
+                        }})</div>
+                    <div *ngIf="transaction.TotalAdjustment >= 0" class="text-right reportGrid__label col-sm-1-migration">{{
+                        transaction.TotalAdjustment | currency }}
+                    </div>
+                    <div *ngIf="transaction.TotalAdjustment < 0" class="text-right reportGrid__label col-sm-1-migration">
+                        ({{transaction.TotalAdjustment * -1 | currency
+                        }})</div>
+                    <div *ngIf="transaction.TotalNetProduction >= 0" class="text-right reportGrid__label col-sm-1-migration">{{
+                        transaction.TotalNetProduction | currency
+                        }}</div>
+                    <div *ngIf="transaction.TotalNetProduction < 0" class="text-right reportGrid__label col-sm-1-migration">
+                        ({{transaction.TotalNetProduction * -1 |
+                        currency }})</div>
+
+                </div>
+
+                
+                <div class="claim grid item" *ngIf="transaction.IsFooter && !data.isSummaryView">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div  class="reportGrid__label" *ngIf="transaction.Provider && transaction.Provider.trim().length == 0">{{'Unassigned Totals' |
+                        translate}}</div>
+                    <div  class="reportGrid__label" *ngIf="transaction.Provider && transaction.Provider.trim().length > 0">{{'Totals for' |
+                        translate}} {{transaction.Provider}}</div>
+                    <div *ngIf="transaction.TotalProduction >= 0" class="text-right reportGrid__label col-sm-1-migration">{{
+                        transaction.TotalProduction | currency}}
+                    </div>
+                    <div *ngIf="transaction.TotalProduction < 0" class="text-right reportGrid__label col-sm-1-migration">({{
+                        transaction.TotalProduction * -1 | currency
+                        }})</div>
+                    <div *ngIf="transaction.TotalAdjustment >= 0" class="text-right reportGrid__label col-sm-1-migration">{{
+                        transaction.TotalAdjustment | currency }}
+                    </div>
+                    <div *ngIf="transaction.TotalAdjustment < 0" class="text-right reportGrid__label col-sm-1-migration">
+                        ({{transaction.TotalAdjustment * -1 | currency
+                        }})</div>
+                    <div *ngIf="transaction.TotalNetProduction >= 0" class="text-right reportGrid__label col-sm-1-migration">{{
+                        transaction.TotalNetProduction | currency
+                        }}</div>
+                    <div *ngIf="transaction.TotalNetProduction < 0" class="text-right reportGrid__label col-sm-1-migration">
+                        ({{transaction.TotalNetProduction * -1 |
+                        currency }})</div>
+
+                </div>
+
+                <div class="claim grid item reportGrid__footer" *ngIf="i+1 == reportData.length">
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="reportGrid__label">{{'Report Totals' | translate}}</div>
+                    <div *ngIf="data.TotalProduction >= 0" class="text-right reportGrid__label col-sm-1-migration">{{ data.TotalProduction |
+                        currency}}
+                    </div>
+                    <div *ngIf="data.TotalProduction < 0" class="text-right reportGrid__label col-sm-1-migration">({{ data.TotalProduction * -1 |
+                        currency
+                        }})</div>
+                    <div *ngIf="data.TotalAdjustments >= 0" class="text-right reportGrid__label col-sm-1-migration">{{ data.TotalAdjustments | currency
+                        }}
+                    </div>
+                    <div *ngIf="data.TotalAdjustments < 0" class="text-right reportGrid__label col-sm-1-migration">({{data.TotalAdjustments * -1 |
+                        currency
+                        }})</div>
+                    <div *ngIf="data.TotalNetProduction >= 0" class="text-right reportGrid__label col-sm-1-migration">{{ data.TotalNetProduction |
+                        currency
+                        }}</div>
+                    <div *ngIf="data.TotalNetProduction < 0" class="text-right reportGrid__label col-sm-1-migration">({{data.TotalNetProduction * -1 |
+                        currency }})</div>
+
+                </div>
+                <div class='col-sm-12 text-center margin-top-footer' *ngIf="i+1 == reportData.length">
+                    {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | translate}}
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

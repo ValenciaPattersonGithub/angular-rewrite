@@ -1,0 +1,160 @@
+@import "variables";
+
+.patientcard-title {
+    font-family: $global-font-family;
+    font-size: 16px;
+    color: $patient-registration-title-color;
+    line-height: 16px;
+    font-weight: bold;
+}
+
+.ptientcard-container {
+    padding: 15px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 5px;
+    hr {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+}
+
+.patientcard {
+    display: grid;
+    position: relative;
+    grid-template: 1fr / 100%;
+    grid-template-areas:
+        "InitialsAndName"
+        "ContentRow";
+    // 100% = Column
+    // InitialsAndName = First Row
+    // ContentRow = Second Row
+    // Appointments = Third Row
+    & * {
+        box-sizing: border-box;
+    }
+    &-initialsname {
+        grid-area: InitialsAndName / 1;
+        text-align: center;
+
+        &-wrapper {
+            display: grid;
+            grid-template: 1fr / 100%;
+            grid-gap: 5px;
+            grid-template-areas:
+                "initialrow"
+                "namerow"
+                "dobrow";
+            // 100% = Column
+            // initialrow = First Row
+            // namerow = Second Row
+            // dobrow = Third Row
+            &-badgeinitial {
+                grid-area: initialrow / 1;
+                justify-self: center;
+                overflow: hidden;
+            }
+            &-name {
+                grid-area: namerow / 1;
+                font-size: 16px;
+            }
+            &-dob {
+                grid-area: dobrow / 1;
+            }
+            &-age {
+                font-weight: 600;
+            }
+        }
+    }
+    &-content {
+        grid-area: ContentRow / 1;
+
+        &-wrapper {
+            display: grid;
+            grid-template: 1fr / 50% 50%;
+            grid-gap: 10px;
+            grid-template-areas:
+                "GenderSignatureOnFile"
+                "PatientStatus"
+                "ResponsibleParty"
+                "Edit"
+                "Seperator"
+                "Appointments";
+            // 50% = First Column
+            // 50% = Second Column
+            // GenderSignatureOnFile = First Row
+            // PatientStatus = Second Row
+            // ResponsibleParty = Third Row
+            &-gender {
+                grid-area: GenderSignatureOnFile / 1;
+            }
+            &-signature {
+                grid-area: GenderSignatureOnFile / 2;
+            }
+
+            &-responsible-party {
+                grid-area: ResponsibleParty / 1;
+            }
+
+            &-weight {
+                grid-area: ResponsibleParty / 2;
+            }
+
+            &-patient {
+                grid-area: PatientStatus / 1;
+            }
+            &-status {
+                grid-area: PatientStatus / 2;
+            }
+            &-edit {
+                grid-area: Edit;
+                justify-self: center;
+                grid-column: 1/3;
+            }
+            &-seperator {
+                grid-area: Seperator;
+                grid-column: 1/3;
+                padding-right: 15px;
+            }
+            &-appointments {
+                grid-area: Appointments / span 2;
+                padding-right: 10px;
+            }
+        }
+
+
+    }
+    &-header {
+        margin-bottom: 15px;
+    }
+
+}
+.initialBadge {
+    width: 80px;
+    height: 80px;
+    border: 1px solid $badge-color;
+    background-color: $background-color;
+    background-size: cover;
+    font-family: $global-font-family;
+    font-size: 22px;
+    color: $badge-color;
+    text-align: center;
+    border-radius: $brand-initial-badge_border-radius;
+    overflow: hidden;
+    align-items: center;
+}
+
+.patientPhotoCover {
+    width: 80px;
+    height: 80px;
+    align-items: center;
+    display: flex;
+}
+
+.patientPhoto {
+    border-radius: 50%;
+    width: 80px;
+    height: auto;
+    align-items: center;
+    
+
+}

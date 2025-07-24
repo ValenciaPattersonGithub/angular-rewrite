@@ -1,0 +1,111 @@
+@import "variables";
+
+.autocomplete {
+    position: relative;
+
+    .autocomplete-icons {
+        position: absolute;
+        right: 6px;
+        top: 6px;
+        cursor: pointer;
+
+        .icon-remove {
+            color: $alert-red;
+        }
+        &.error {
+            right: 21px;
+        }
+    }
+
+    input {
+        height: 30px;
+        padding: 0px 25px 0px 8px;
+        border: 1px solid $border-grey;
+        border-radius: 4px;
+        background-color: $polar-white;
+        background-size: cover;
+        font-family: $font-family;
+        font-size: 14px;
+        color: $text-black;
+        text-decoration: none solid $text-black;
+        box-sizing: border-box;
+        width: 100%;
+
+        &:focus {
+            box-shadow: 0px 0px 0px 3px $text-selection;
+        }
+
+        &:focus-visible {
+            outline: none;
+        }
+
+        &:disabled {
+            border-color: $disabled-grey;
+            color: $disabled-grey;
+            text-decoration-color: $disabled-grey;
+            cursor: not-allowed;
+
+            & + .autocomplete-icons {
+                color: $disabled-grey;
+                cursor: not-allowed;
+            }
+
+            &::placeholder {
+                color: $disabled-grey;
+            }
+        }
+
+        &.error {
+            border-color: $alert-red;
+        }
+    }
+
+    .autocomplete-drawer {
+        max-height: 500px;
+        overflow: auto;
+        display: none;
+        position: relative;
+        z-index: 999;
+        border: 1px solid $border-grey;
+        border-top-width: 0px;
+        width: 100%;
+        box-sizing: border-box;
+        cursor: pointer;
+        background-color: $polar-white;
+
+        &:hover {
+            display: block;
+        }
+    }
+
+    &:focus-within .autocomplete-drawer {
+        display: block;
+    }
+
+    .autocomplete-error-wrapper {
+        font-size:$global-body-font-size;
+        display: grid;
+        grid-template: auto auto / 1fr min-content;
+        grid-template-areas:
+            'control error';
+        grid-gap: 3px 5px;
+        max-width: 100%;;
+    }
+    
+    .autocomplete-error-control {
+        grid-area: control;    
+    }
+    .autocomplete-control-error {
+        grid-area: error;
+        display: flex;
+        align-items: center;
+    
+        .error-icon-20 {
+            margin-top:20px;
+            color: $error-color;
+        }
+        .error-icon {
+            color: $error-color;
+        }
+    }
+}

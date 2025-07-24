@@ -1,0 +1,18 @@
+﻿    <div id="statusDropdown" class="dropdown">
+        <button id="btnDropDown" (click)="btnClick()" (blur)="onBlur()" [disabled]="disableStatusDropdown" class="statusButton" [ngClass]="{'noClick': disableStatusDropdown === true}">
+            <span id="selectedIcon" class="selectedIcon"><i class="fas {{selectedIcon}}"></i></span>
+            <span id="selectedDescription" class="selectedDescription">{{selectedValue}}</span>
+            <svg-icon name="downArrowIcon" iconHeight="36px" iconWidth="24px"></svg-icon>
+        </button>
+        <div id="dropdownListBox" class="dropdownListBox" *ngIf="isOpen">
+            <div [ngClass]="{'active': selectedValue === statusListValue.description,'noClick': statusListValue.disabled == true}" (mousedown)="!statusListValue.disabled && clickSelectItem(statusListValue.description,statusListValue.icon)" *ngFor="let statusListValue of statusListModel let i=index" id="dropdownListItems" [(ngModel)]="statusListModel" ngDefaultControl>
+                <span id="listItemData" class="listItemData">
+                    <span id="icon" *ngIf=" statusListValue.description !== 'Unschedule' && statusListValue.description !== 'Add to Clipboard'" class="icon iconCircle"><i class="fa {{statusListValue.icon}}  ml3"></i></span>
+                    <span id="description" class="description">{{statusListValue.description}}</span>
+                </span>
+                <div *ngIf="statusListValue.description == 'Confirmed' || statusListValue.description == 'Start Appointment'" class="groupSeperator"></div>
+            </div>
+        </div>
+    </div>
+
+ 

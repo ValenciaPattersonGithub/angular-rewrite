@@ -1,0 +1,65 @@
+﻿<div class="patNotesList">
+    <div class="patNotesList__actions">
+        <button id="btnNoteCreate" check-auth-z="soar-clin-cnotes-add" class="btn btn-primary" ng-click="createNote()">{{'New Note'|i18n}}</button>
+                
+        <div class="btn-group pull-right">
+           <!--show deleted notes-->
+           <span class="btn btn-xs btn-link patNotesList__toggleLnk" ng-disabled="loadingClinicalNotes" ng-click="toggleDeleted()">{{ toggleLabel | i18n}}</span>
+
+           <button id="btnShowDateFilters"
+                    check-auth-z="soar-clin-cnotes-view"
+                    class="btn btn-default"
+                    ng-disabled="loadingClinicalNotes"
+                    title="{{'Filter by'|i18n}} {{'Date Range'|i18n}}"
+                    ng-click="filteringByDate=!filteringByDate">
+                <i class="far fa-calendar-alt"></i>
+            </button>
+            <button id="btnPrintNotes"
+                    check-auth-z="soar-clin-cnotes-view"
+                    class="btn btn-default"
+                    ng-disabled="loadingClinicalNotes"
+                    title="{{'Print'|i18n}}"
+                    ng-click="printNotes(filteredNotes)">
+                <i class="fa fa-print"></i>
+            </button>            
+        </div>
+    </div>
+
+    <div id="ctrlDateFilter" ng-if="filteringByDate===true" class="btn-group">
+        <div class="panel-body" ng-class="{error: dateRangeError}">
+            <div class="col-sm-5" ng-class="{error: dateRangeError}">
+                <date-selector id="dteStart"
+                               placeholder="{{'From' | i18n}}"
+                               date-var="filterObject.StartDate"
+                               format="MM/dd/yyyy"
+                               max-date="maxDate"
+                               valid="true"
+                               disable-date-input="editableDate"></date-selector>
+            </div>
+            <div class="col-sm-5" ng-class="{error: dateRangeError}">
+                <date-selector id="dteEnd"
+                               placeholder="{{'To' | i18n}}"
+                               date-var="filterObject.EndDate"
+                               format="MM/dd/yyyy"
+                               max-date="maxDate"
+                               valid="true"
+                               disable-date-input="editableDate"></date-selector>
+            </div>
+            <a class="btn btn-link" ng-click="clearFilters();" href="">{{'clear'|i18n}}</a>
+            <div class="col-sm-12" ng-class="{error: dateError}">
+                <label id="lblError" class="help-text" ng-show="dateRangeError===true">
+                    {{ 'From date must be the same or less than to date.' | i18n }}
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="patNotesList__list">
+        <div id="divNotes" class="patNotesList__listItem" ng-repeat="note in filteredNotes = (notesVm | filter: noteFilter | orderBy:'-$$OriginalCreatedDate')  track by $index">
+            <patient-notes-tile person-id="personId" note="note" view-settings="viewSettings" note-disabled="false"></patient-notes-tile>
+            <div ng-show="haveNotes === true">
+                <no-results loading-message='loadingMessageNoResults' loading="loadingClinicalNotes"></no-results>
+            </div>
+        </div>
+    </div>
+</div>
+

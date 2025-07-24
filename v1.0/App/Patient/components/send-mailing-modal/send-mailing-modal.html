@@ -1,0 +1,79 @@
+﻿<div class="">
+    <div class="modal-header">
+        <button class="prevCare__secClose" icon="fa-times" ng-click="close()"></button>
+        <h4 class="modal-title">{{'Send ' + item.Title + ' Mailing'   | i18n }}</h4>
+    </div>
+
+    <div class="text-side">
+       <div class="form-row">
+           <div class="form-group">
+               <input type="radio" id="inpPrintBulk" checked="checked">
+               <span>{{'All ' + item.activeGridDataCount + ' People in list'}}</span>
+           </div>
+
+       </div>
+        <div class="form-row">
+            <div class="form-group form-col-6">
+                <label class="control-label"> {{ 'Communication Type' | i18n }}</label>
+                <soar-select-list id="inpCommunicationtype"
+                                  name="inpCommunicationtype"
+                                  placeholder="{{ 'Select Type'}}"
+                                  value-field="Id"
+                                  text-field="Name"
+                                  option-list="communicationType"
+                                  sb-change="communicationTypeIdChanged"
+                                  ng-model="communicationType.Id">
+                </soar-select-list>
+            </div>
+        </div>
+    
+        <div class="form-row" ng-show="commTypeId  === '1' || commTypeId  === '4'">
+            <div class="form-group form-col-6">
+                <label class="control-label"> {{ 'Template' | i18n }}</label>
+
+                <!--<div>
+                    <select ng-model="CommunicationTemplateId" id="cbTemplateSource" ng-change="templateIdChanged()" kendo-combo-box>
+                        <option ng-repeat="option in templateSource" value="{{option.CommunicationTemplateId}}">{{option.TemplateName}}</option>
+                    </select>
+                </div>-->
+
+                <soar-select-list id="inpTemplateSrc"
+                                  name="inpTemplateSrc"
+                                  placeholder="{{ 'Select Template'}}"
+                                  value-field="CommunicationTemplateId"
+                                  text-field="TemplateName"
+                                  option-list="templateSource"
+                                  sb-change="templateIdChanged"
+                                  sb-tab="1"
+                                  ng-model="communicationTemplateId">
+                </soar-select-list>
+            </div>
+        </div>
+
+        <br />
+        <input id="lblPrevBal" type="checkbox" ng-model="checked" />
+        <span class="modal-title">{{ 'Print Mailing Labels' | i18n }}</span>
+        <div ng-show="checked ">
+            <br />
+            <div>{{ 'For best results when printing mailing labels, ensure your printer setting are:' | i18n }}</div>
+            <br />
+            <div>{{ '- Portrait Mode' | i18n }}</div>
+            <div>{{ '- Paper size = Letter' | i18n }}</div>
+            <div>{{ '- Margins = None ' | i18n }}</div>
+            <div>{{ ' - Zoom = 100% ' | i18n }}</div>
+        </div>
+    </div>
+    <div class="preview-side">
+        <div class="preview-container">
+            <div class="preview-content">
+                Preview
+            </div>
+        </div>
+    </div>
+    <div class="clear-fix"></div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="close()">{{ 'Cancel' | i18n }}</button>
+        <button type="button" class="btn btn-primary" ng-disabled="(disabled && !checked)" ng-click="confirm()">{{ 'Confirm and Print' | i18n }}</button>
+    </div>
+
+</div>

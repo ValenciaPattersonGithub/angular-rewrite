@@ -1,0 +1,46 @@
+﻿<!-- <business-nav></business-nav> -->
+<div ng-class="'fade-in'" ng-controller="PracticeSetupController" class="practiceSetup">
+    <form name="frmBusinessCenter" role="form" action="javascript:;" novalidate>
+        <div class="rowFull white">
+            <div class="practiceSetup__container">
+                <h1>{{ 'Practice Settings' | i18n }}</h1>
+                <div class="section-divider"></div>
+                <div class="col-xs-12 col-md-3">
+                    <practice-info list="practiceInfoList"></practice-info>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <services-settings list="servicesSettingsList"></services-settings>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <clinical-setup list="clinicalSetupList"></clinical-setup>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <chart-settings list="chartSettingsList"></chart-settings>
+                </div>
+            </div>
+        </div>
+        <div class="rowFull white">
+            <div class="practiceSetup__container">
+                <div class="col-xs-12 col-md-3">
+                    <team-members-settings list="teamMembersSettingsList"></team-members-settings>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <patient-profile-setup list="patientProfileSetupList"></patient-profile-setup>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <patient-accounting-setup list="patientAccountingSetupList"></patient-accounting-setup>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <schedule-setup list="scheduleSetupList" has-a-provider-setup="hasAtLeastOneProvider"></schedule-setup>
+                </div>
+            </div>
+        </div>
+        <div class="rowFull white" ng-if="showPrmLink">
+            <div class="practiceSetup__container">
+                <div class="col-xs-12 col-md-3">
+                    <prm-settings list="prmSettingsList"></prm-settings>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

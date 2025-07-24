@@ -1,0 +1,1520 @@
+﻿.soar-link-active {
+    .btn-primary;
+}
+
+.row-vertical-align {
+    display: flex;
+    flex-direction: row;
+}
+
+.row-vertical-align > [class^="col-"],
+.row-vertical-align > [class*=" col-"] {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.color-error {
+    color: @brand-warning;
+}
+
+.color-success {
+    color: @brand-success;
+}
+
+.warning {
+    color: #f0ad4e;
+}
+
+.history-alert {
+    color: red;
+}
+
+.flags {
+    color: #6A7575;
+}
+
+// Banner
+.banner {
+    margin: 10px;
+    width: 99%;
+    background-color: #fff5d3;
+    color: #856404;
+    padding: 10px;
+    padding-right: 20px;
+    border: 1px solid #856404;
+    border-radius: 5px;
+    box-shadow: 0px 5px 15px rgba(133,100,4,0.2);
+}
+
+.banner-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: start;
+}
+
+.banner-content {
+    margin-left: 8px;
+}
+
+.banner-toggle {
+    font-weight: bold;
+    margin-left: auto;
+    align-self: end;
+    font-size: 12px;
+}
+
+.banner a, .banner .banner-toggle {
+    text-decoration: underline !important;
+    color: #856404;
+
+    &:hover {
+        color: #2D2833;
+    }
+}
+
+// endBanner
+
+// #region Scheduler
+
+.scheduler-settings-link {
+    font-size: @font-size-normal;
+}
+
+.scheduler-req-error {
+    position: fixed;
+    top: 250px;
+    bottom: 40px;
+    right: 0;
+    left: 0;
+    background-color: white;
+    z-index: 101;
+
+    > h3 {
+        text-align: center;
+    }
+}
+
+.scheduler-loading {
+    position: fixed;
+    top: 108px;
+    bottom: 40px;
+    right: 0;
+    left: 0;
+    z-index: 1011;
+    /*background-color: rgba(255, 255, 255, 0.9);*/
+    > div {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        text-align: center;
+
+        #lblSchedulerLoading {
+            font-size: 16px !important;
+        }
+    }
+}
+
+.schedule-nav {
+    height: 40px;
+
+    &.row {
+        padding-top: 13px;
+        margin-right: 0px;
+    }
+}
+
+.schedule-nav-elements {
+    margin-right: 10px;
+}
+
+.schedule-nav-margin {
+    margin-top: @brand-padding_sm;
+    margin-right: 10px;
+    //margin-right: 10px;
+    .dropdown-menu {
+        width: 300px;
+
+        a {
+            white-space: nowrap;
+        }
+    }
+}
+
+.schedule-nav-margin-top {
+    margin-top: @brand-padding_sm;
+}
+
+#btnOpenUnscheduled {
+    height: 30px;
+    padding: 1px 6px;
+
+    > i {
+        font-size: 28px;
+    }
+}
+
+#newAppointmentBottom {
+    position: fixed;
+    bottom: 20px;
+    right: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    > *:not(:first-child) {
+        margin-left: 10px;
+    }
+}
+
+#btnOpenUnscheduledBottom {
+    height: 55px;
+    width: 55px;
+    position: relative;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    color: rgba(47,171,203,1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2DABCB;
+    border-width: 0px;
+
+    && svg {
+        height: 30px;
+        width: 30px;
+        color: #FFFFFF;
+    }
+}
+
+#btnOpenFamilyBottom {
+    height: 55px;
+    width: 55px;
+    position: relative;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    color: rgba(47,171,203,1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2DABCB;
+    border-width: 0px;
+
+    && svg {
+        height: 30px;
+        width: 30px;
+        color: #FFFFFF;
+    }
+}
+
+#btnOpenFamSchedule {
+    height: 145px;
+    width: 145px;
+    padding: 1px 6px;
+    position: fixed;
+    bottom: 41px;
+    right: 275px;
+    border: red 1px 1px;
+    background: rgba(255,255,255,0.4);
+    /*border-radius: 35px;
+    color: rgba(47,171,203,1);*/
+
+    > i {
+        font-size: 28px;
+    }
+}
+
+#btnOpenBlockBottom {
+    height: 39px;
+    width: 39px;
+    position: relative;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    color: rgba(47,171,203,1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+    border-color: #2DABCB;
+    border-width: 1px;
+
+    > i {
+        font-size: 28px;
+    }
+}
+
+#btnOpenFamilyBottom:hover, #btnOpenUnscheduledBottom:hover {
+    background-color: #27BFE6;
+}
+
+#btnOpenBlockBottom:hover {
+    color: #27BFE6;
+    border-color: #27BFE6;
+}
+
+#btnOpenBlockBottom:focus, #btnOpenFamilyBottom:focus, #btnOpenUnscheduledBottom:focus {
+    outline-width: 0px; // this kills visible focus until we figure out how to do a circular outline
+    outline-offset: 1px;
+    outline-color: #2DABCB;
+}
+
+.schedule-nav-btn-group {
+
+    .small {
+        min-width: 160px;
+    }
+}
+
+.schedule-nav-btn {
+    height: 30px; // to be same height has kendo dropdown...
+    width: 77px;
+}
+
+.schedule-nav-icon-btn {
+    height: 30px;
+    font-size: @font-size-normal;
+    width: 40px;
+    background-color: white;
+    border: @brand-form_border;
+    border-radius: 2px;
+
+    > i {
+        font-size: 25px;
+        position: relative;
+        top: -5px;
+    }
+}
+
+.schedule-nav-jump-week {
+    position: absolute;
+    top: 2px;
+    left: 7px;
+
+    > i {
+        font-size: 25px;
+        position: relative;
+        width: 7px;
+    }
+}
+
+.btn-schedule-multi-select {
+    > div > div > button {
+        height: 30px;
+        padding: 3px 6px 0 6px;
+    }
+}
+
+.btn-schedule-more {
+    width: 90px;
+    text-align: left;
+}
+
+.dropdown-schedule-more {
+    min-width: 150px;
+}
+
+.schedule-nav-location {
+    width: 170px;
+
+    > span {
+        text-align: left;
+        width: 120px;
+    }
+}
+
+.drag-hint {
+    height: 30px;
+    width: 100%;
+    padding: 5px;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+}
+
+.event {
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.event-container {
+    position: absolute;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 100;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+
+    > span, > div {
+        width: 100%;
+        text-align: center;
+        white-space: nowrap;
+    }
+}
+
+.event-center {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    top: 0;
+
+    > div {
+        flex-grow: 1;
+        text-align: center;
+    }
+}
+
+
+.event-btn {
+    position: absolute;
+    right: 0;
+    background: transparent;
+    border: none;
+    z-index: 1000;
+}
+
+.event-appointment-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+}
+
+.event-appointment-status {
+    border: transparent;
+    height: 20px;
+    width: 20px;
+    padding: 0;
+    border-radius: 20px;
+}
+
+.time-header {
+    text-align: left;
+    width: 100px;
+}
+
+.current-time-marker-line {
+    background: #444;
+    z-index: 100;
+    height: 1px;
+    right: 1px;
+    left: 0;
+}
+
+.current-time-marker-label {
+    left: 100px;
+
+    > label {
+        position: absolute;
+        color: #444;
+        left: -36px;
+        top: -8px;
+    }
+}
+
+.k-scheduler-table td, .k-scheduler-table th {
+    padding: 0;
+}
+
+.k-scheduler-table th {
+    text-align: center;
+}
+
+.scheduler {
+    height: 880px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &__customHeaderContainer {
+        @media (max-width: @screen-lg) {
+            font-size: small;
+        }
+    }
+
+    .schedulerCustomHeaderColumn {
+        border-color: #c5c5c5;
+        border-bottom-style: solid !important;
+        border-bottom-width: 0px !important;
+        border-left-style: solid !important;
+        border-left-width: 1.188px !important;
+        border-right: none !important;
+        border-top-style: solid !important;
+        border-top-width: 1.188px !important;
+        padding-bottom: 0px;
+        padding-top: 0px;
+    }
+
+    &__customHeaderTable {
+        table-layout: fixed;
+        box-sizing: content-box;
+        border-spacing: 0;
+        width: 100%;
+        margin: 0;
+        margin-top: 15px;
+        border-collapse: separate;
+        max-width: 100%;
+        background-clip: border-box;
+        border-color: #c5c5c5;
+        border-right-style: solid !important;
+        border-right-width: 1.188px !important;
+    }
+
+    &__customHeaderRow {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        font-size: 18px;
+        padding-bottom: 0;
+        padding-top: 0;
+
+        th, td {
+            .schedulerCustomHeaderColumn;
+        }
+    }
+
+    &__customHeaderColumn {
+        .schedulerCustomHeaderColumn;
+    }
+
+    &__customHeaderContainer {
+        align-items: stretch;
+        display: flex;
+        flex-direction: column;
+        padding-top: 5px;
+        height: 65px;
+    }
+
+    &__customHeaderPrimaryRow {
+        align-items: center;
+        display: flex;
+        flex-grow: 1;
+    }
+
+    &__customHeaderSecondaryRow {
+        flex-shrink: 1;
+        font-size: 14px;
+        min-height: 25px;
+    }
+
+    &__customHeaderLeftArrowContainer {
+        flex-shrink: 1;
+        float: left;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    &__customHeaderRightArrowContainer {
+        flex-shrink: 1;
+        float: right;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    &__customHeaderResourceName {
+        .truncate;
+        flex-grow: 1;
+        text-align: center;
+        padding: 0px;
+    }
+
+    &__customHeaderResourceLocationName {
+        .truncate;
+        flex-grow: 1;
+        font-size: 14px;
+        text-align: center;
+        padding: 0px;
+    }
+
+    &__secondaryRowWeekContainer {
+        align-items: center;
+        display: flex;
+        /*display none and display flex simultaneously not playing well together. using inline css for display:none*/
+    }
+
+    &__secondaryRowWeekday {
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    &__secondaryRowViewButtonContainer {
+        font-size: 12px;
+        font-weight: normal;
+        padding-top: 0px;
+    }
+
+    &__secondaryRowViewButton {
+        .btn;
+        .soar-link;
+        .icon-button;
+
+        @media (max-width: @screen-lg) {
+            font-size: small;
+        }
+    }
+
+    &__fixedHeader {
+        position: fixed;
+        z-index: 1;
+        top: 125px;
+    }
+
+    &__dateTimeHeader {
+        text-align: center;
+        font-size: 18px;
+        padding-top: 10px;
+        vertical-align: text-top;
+        table-layout: fixed;
+    }
+
+    &__groupHeaderTemplate {
+        font-size: 14px;
+        width: 70%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.scheduler-slider-table {
+    width: 118px; // 115px;
+}
+
+.scheduler-slider-container {
+    display: block;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 7px;
+
+    > .scheduler-slider {
+        min-height: 90px;
+        padding-top: 8px;
+
+        > .scheduler-slider-icon {
+            float: left;
+            padding-left: 4px;
+            padding-right: 4px;
+
+            > .rot90 {
+                transform: rotate(90deg);
+                -ms-transform: rotate(90deg);
+                -moz-transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);
+                -o-transform: rotate(90deg);
+            }
+        }
+
+        > .scheduler-slider-icon-right {
+            float: right;
+
+            > .rot90 {
+                transform: rotate(90deg);
+                -ms-transform: rotate(90deg);
+                -moz-transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);
+                -o-transform: rotate(90deg);
+            }
+        }
+
+        > .scheduler-slider-input {
+            display: inline-block;
+            width: 70%;
+            padding-left: 4px;
+            padding-right: 4px;
+            position: relative;
+
+            input[type='range'] {
+                padding: 0;
+                margin: 0;
+            }
+        }
+    }
+}
+
+.scheduler-container {
+    height: 880px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.scheduler-custom-header {
+    overflow-y: scroll;
+}
+
+.k-nonwork-hour, .k-scheduler-dayview .k-today.k-nonwork-hour, .k-scheduler-timelineview .k-today.k-nonwork-hour {
+    background-color: @gray-lighter !important;
+}
+// kendos styles change the border size and border style and that creates instances where the display breaks.
+// these are overrides so the number of breaks are reduced.
+.schedule2 .k-scheduler .k-scheduler-content tr td {
+    border-bottom-style: solid !important;
+    border-bottom-width: 1px !important;
+    border-left-style: solid !important;
+    border-left-width: 1.2px !important;
+}
+
+
+.schedule2 .k-scheduler-dayview .k-scheduler-header .k-scheduler-table {
+    display: none !important;
+}
+
+.schedule2 .k-scheduler-dayview .k-event {
+    background-color: white !important;
+    border-radius: 0;
+    //border: none !important;
+    overflow: visible;
+    margin-top: 2px;
+    border-left: 7px solid transparent;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    -moz-background-clip: border !important; /* Firefox 3.6 */
+    -webkit-background-clip: border !important; /* Safari 4? Chrome 6? */
+    background-clip: border-box !important; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+    -moz-background-clip: padding !important; /* Firefox 3.6 */
+    -webkit-background-clip: padding !important; /* Safari 4? Chrome 6? */
+    background-clip: padding-box !important; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+    -moz-background-clip: content !important; /* Firefox 3.6 */
+    -webkit-background-clip: content !important; /* Safari 4? Chrome 6? */
+    background-clip: content-box !important; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
+
+.schedule2 .k-scheduler-weekview .k-event {
+    background-color: white !important;
+    border-radius: 0;
+    border: none !important;
+    overflow: visible;
+    margin-top: 2px;
+}
+
+
+.scheduler-grid-container {
+    position: absolute;
+    bottom: 0;
+    top: 85px;
+    //border: thin solid #c5c5c5;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .k-scheduler-table {
+        /*.k-state-selected {
+        background-color:lightcoral;
+        border-color:black;
+        color:white;
+    }*/
+        .open-time {
+            background-color: white !important;
+
+            &:hover {
+                background-color: lightblue !important;
+            }
+        }
+
+        .closed-time {
+            background-color: @gray-lighter !important;
+        }
+
+        .selected {
+            &-valid {
+                border: none;
+                background-color: fade(@brand-success, 25%) !important;
+            }
+
+            &-invalid {
+                border: none;
+                background-color: fade(@brand-danger, 25%) !important;
+            }
+        }
+    }
+}
+
+.scheduler-event-data-container {
+    position: relative;
+    z-index: 11;
+    width: 100%;
+}
+
+.scheduler-event-data {
+    display: block;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scheduler-event-planned-services {
+    display: inline;
+    font-style: italic;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    //font-size: 12px; // This will give a little more room for displaying the name on the card
+}
+
+.scheduler-event-alert {
+    padding: 2px;
+    margin: 2px;
+    background-color: white;
+    background-repeat: no-repeat;
+    height: 14px !important;
+    width: 14px !important;
+    font-size: 10pt !important;
+    vertical-align: middle;
+}
+
+.scheduler-event-alert-icon {
+    text-align: center;
+    padding-top: 4px !important;
+    padding-bottom: 0 !important;
+}
+
+.scheduler-event-note {
+    z-index: 10;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+}
+/* This adds the (o) resize elements on the view on hover */
+.schedule2 .k-event .k-resize-n {
+    border: thin solid #000;
+    border-radius: 90px;
+    height: 10px;
+    left: 50%;
+    margin-left: -5px;
+    position: absolute;
+    top: -5px;
+    width: 10px;
+    z-index: 103;
+}
+
+.lunch .k-resize-n {
+    display: none;
+}
+/* This adds the (o) resize elements on the view on hover */
+.schedule2 .k-event .k-resize-s {
+    border: thin solid #000;
+    border-radius: 90px;
+    bottom: -5px;
+    height: 10px;
+    left: 50%;
+    margin-left: -5px;
+    position: absolute;
+    width: 10px;
+    z-index: 103;
+}
+
+.lunch .k-resize-s {
+    display: none;
+}
+
+.appointment-data-container {
+    padding-top: 3px;
+    padding-bottom: 6px;
+}
+
+.appointment-icon-container {
+    width: 24px;
+    float: right;
+}
+
+.appointment-card-user {
+    line-height: 1.6px;
+}
+
+.appointment-icon-warning-container {
+    position: absolute;
+    bottom: -45px;
+    right: 1px;
+    z-index: 100;
+}
+
+.truncate-event-data {
+    max-width: 75%;
+}
+
+.appointment-icon-note-container {
+    position: absolute;
+    bottom: -20px;
+    right: 1px;
+    z-index: 100;
+}
+
+.appointment-icon-warning-container > i {
+    border: transparent;
+    font-size: 1.5em;
+    padding: 0;
+    opacity: 1;
+    color: #2DABCB;
+}
+
+.appointment-icon-note-container > i {
+    border: transparent;
+    font-size: 1.5em;
+    padding: 0;
+    opacity: 1;
+    color: #2DABCB;
+}
+
+
+#hint-warning-lbl {
+    top: 0;
+    left: 9px;
+    position: absolute;
+    color: white;
+    width: 90%;
+}
+
+.schedule-appointment-status {
+    .k-dropdown {
+        z-index: 101;
+        background: transparent;
+
+        .k-dropdown-wrap {
+            margin-right: 12px;
+            border: none;
+            padding: 0;
+            background: transparent;
+
+            .k-input {
+                .appointment-status-icon,
+                .appointment-status-description {
+                    font-weight: 500;
+                    color: @brand-color_link;
+                }
+
+                &:hover {
+                    .appointment-status-icon,
+                    .appointment-status-description {
+                        color: @brand-color_link;
+                    }
+                }
+            }
+
+            .k-select {
+                display: none;
+            }
+        }
+    }
+}
+
+#scheduler-wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+#scheduler-wrapper.toggled {
+    padding-left: 0px;
+    position: fixed;
+}
+
+#scheduler-slideout-wrapper {
+    z-index: 90;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -206px;
+    overflow-y: hidden;
+    background: @brand-color_lighter-gray;
+    margin-top: 73px;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+
+    .btn-unscheduled-appts {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        padding: 10px;
+        color: @fuse-text-black;
+        font-size: 14px;
+        font-weight: 700;
+        & svg {
+            color: @fuse-action-blue;
+            margin-right: 8px;
+        }
+    }
+
+    .btn-unscheduled-appts:hover {
+        & svg {
+            color: @fuse-light-action-blue;
+        }
+    }
+
+    .calendar-picker-body {
+        margin-top: @brand-padding_md;
+        position: static;
+    }
+}
+
+#scheduler-wrapper.toggled #scheduler-slideout-wrapper {
+    width: 0px;
+    left: 0px;
+    margin-left: 0px;
+    margin-top: 0px;
+    height: 0px;
+}
+
+#scheduler-content-wrapper {
+    width: 100%;
+    position: absolute;
+    //padding: 15px;
+
+    .k-scheduler-times {
+        width: 110px;
+    }
+}
+
+#toggleHide {
+    margin-left: -250px;
+    margin-top: -10px;
+}
+
+@media(min-width:768px) {
+    #scheduler-wrapper {
+        padding-left: 255px;
+    }
+
+    #scheduler-wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #scheduler-slideout-wrapper {
+        width: 272px;
+    }
+
+    #scheduler-wrapper.toggled #scheduler-slideout-wrapper {
+        width: 0;
+    }
+
+    #scheduler-content-wrapper {
+        //padding: 20px 0px 20px 21px;
+        position: relative;
+
+        .container-fluid {
+            padding-right: 0px;
+        }
+
+        .row {
+            margin-right: 0px;
+        }
+    }
+
+    #scheduler-wrapper.toggled #scheduler-content-wrapper {
+        position: relative;
+        margin-right: 0;
+        //padding: 20px 0px 20px 0px;
+    }
+}
+
+.btn-cal {
+    border-color: white;
+}
+
+.slider-unscheduled-appts {
+    clear: both;
+}
+
+.display-slider-label {
+    font-weight: bold;
+    padding-bottom: @brand-padding_lg;
+    padding-top: @brand-padding_sm;
+    margin-left: @brand-padding_xs;
+}
+
+.display-privacymode-label {
+    font-weight: bold;
+    padding: 16px 5px 8px 10px;
+}
+
+.slider-counter {
+    margin-left: 230px;
+    margin-top: 0px;
+}
+
+.slider-top-nav-show {
+    margin-top: 45px;
+    margin-left: -275px;
+    // do not put over 999 will cause problems with the overlay appointment screen.
+    z-index: 900;
+    position: fixed;
+}
+
+.slider-top-nav-hide {
+    margin-top: 45px;
+    margin-left: -10px;
+    z-index: 1000;
+    position: fixed;
+}
+
+.slider-top-nav-icons-show {
+    margin-left: 165px;
+    margin-top: -23px;
+}
+
+.slider-top-nav-icons-hide {
+    margin-top: -43px;
+}
+
+.slider-order-columns-btn {
+    width: 90%;
+    margin: @brand-margin_md 0 0 @brand-margin_md;
+}
+
+.privacymode-btn {
+    margin-left: 10px
+}
+
+.clipboard-appointments {
+    background: @brand-color_white;
+}
+
+.clipboard-appointments-header {
+    border-bottom: solid;
+    border-width: thin;
+    text-align: center;
+}
+
+.clipboard-appointments-content {
+    overflow-y: auto;
+    height: calc(100vh - 500px);
+    overflow-x: hidden;
+}
+// parent styles are messing up the display of items on the page.
+// I am not a fan of having to do this ... it tells you that your setting styles wrong or overriding bootstrap styles wrong.
+.schedule2 .clipboard-appointments-content .row {
+    margin-left: 0px !important;
+}
+
+.schedule2 .clipboard-appointments-content .row .col-xs-12 {
+    padding-left: 0px !important;
+}
+
+.schedule2 .clipboard-appointments-content .row .col-xs-12.row {
+    margin-left: -16px !important;
+}
+////////////////////////////////////
+
+.clipboard-appointments-count {
+    text-align: center;
+}
+
+.reorder {
+    z-index: 1010;
+    background: @brand-color_white;
+    position: absolute;
+    border: solid;
+    border-width: thin;
+    margin-top: -71px;
+    width: 272px;
+}
+
+.reorder-header {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.reorder-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 749px;
+}
+
+.reorder-content-list {
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.reorder-content-list-item {
+    cursor: move;
+
+    &.hovering-up {
+        border-top: thin solid black;
+    }
+
+    &.hovering-down {
+        border-bottom: thin solid black;
+    }
+}
+
+.reorder-content-list-item-content {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 8px 12px 8px 12px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.reorder-content-list-item-content-button {
+    margin-top: 8px;
+    cursor: move;
+}
+
+.addBorder {
+    border-color: #000000;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.iconAlignMiddle {
+    text-align: center;
+    margin-top: -2px;
+}
+
+#ex1Slider .slider-selection {
+    background: #BABABA;
+}
+
+.weeklySetupItems {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.clipboardItemBorder {
+    border-bottom: 5px solid #2DABCB;
+    border-right: 20px solid #2DABCB;
+    border-top: 5px solid #2DABCB;
+}
+
+.schedule-print-btn {
+    margin-top: 10px;
+}
+
+.schedule-slot-content {
+    width: 100%;
+    height: 100%;
+}
+
+.warning-format {
+    color: #2DABCB;
+    font-size: 10pt;
+}
+
+.alert-flex-container {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-align-content: flex-start;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+
+.alert-flex-item {
+    -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+}
+
+.k-scheduler-table {
+    border-collapse: collapse;
+}
+
+.weekView-header {
+    position: fixed;
+    top: 128px;
+    z-index: 1;
+    padding-right: 16px;
+}
+
+.k-scheduler-weekview .weekView-header .k-scheduler-table th {
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-color: #e8e8e8;
+    border-style: solid;
+}
+
+.schedule-nav {
+    width: 100% !important;
+}
+
+.schedule-print-title {
+    display: none;
+}
+/*.schedule-nav-btn-group-small {
+    width: 140px !important;
+}*/
+
+.schedle2 .container-fluid {
+    padding: 0px !important;
+}
+
+.schedule2 .hours-label {
+    left: 15% !important;
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+    .body {
+        font-size: 11px;
+    }
+
+    .event-appointment-status {
+        width: 5px;
+        height: 10px;
+    }
+
+    #scheduler-slideout-wrapper {
+        max-height: 650px;
+        overflow-y: scroll;
+        width: 275px;
+        overflow-x: hidden;
+    }
+
+    .scheduler {
+        &__groupHeaderTemplate {
+            font-size: 11px;
+        }
+    }
+
+    .btn-unscheduled-appts {
+        margin-top: 10px !important;
+    }
+
+    .clipboard-appointments {
+        margin-top: -30px;
+    }
+
+    .th {
+        font-size: 14px !important;
+    }
+
+    .k-scheduler-header-wrap {
+        padding-right: 0px;
+    }
+
+    .container-fluid {
+        .col-lg-12 {
+            padding-right: 0px;
+        }
+    }
+}
+
+@media(max-height:850px) {
+    #scheduler-slideout-wrapper {
+        max-height: 600px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .view-container {
+        margin-top: 0px !important;
+    }
+}
+
+@media print {
+    // I want to remember some of this for if we attempt to do this again.
+    @page {
+        // for if we ever look at landscape
+        //size: 297mm 210mm; // landscape
+        ///you can also specify margins here:
+        //margin: 25mm;
+        //margin-right: 45mm; //thinking about other formats ... A4 and Letter
+    }
+
+    .body {
+        height: 100%;
+        overflow: hidden !important;
+    }
+
+    .schedule2 {
+        padding: 0px !important;
+    }
+
+    .row .col-lg-12 .scheduler-grid-container {
+        height: 100%;
+        overflow: hidden !important;
+        overflow-x: hidden !important;
+        overflow-y: hidden !important;
+        padding-right: 0px !important;
+    }
+
+    .hide-for-print {
+        display: none !important;
+    }
+
+    .k-ff .k-scheduler-content {
+        margin-right: 17px !important;
+    }
+
+    .weekView-header {
+        // the week view has problems with the current code running with print and is adding a double scroll last second before going to the print view.
+        // I need to fix the column header padding up because of this.
+        padding-right: 0px !important;
+        top: 60px;
+    }
+
+    .appointment {
+        border-color: #000000;
+        border-width: 1px;
+        border-style: solid;
+    }
+
+    .schedule2 .k-scheduler .k-scheduler-content tr td {
+        border-color: #c5c5c5 !important;
+    }
+
+    .schedule-print-title {
+        display: block;
+    }
+
+    .no-space-on-print {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    .font-18 {
+        font-size: 16px !important;
+    }
+
+    #toast-container {
+        display: none !important;
+    }
+}
+
+.schedule-tooltip {
+    position: absolute;
+    transform: translateX(0%) translateY(-108%);
+    background-color: @fuse-purple;
+    opacity: 1;
+    z-index: 1;
+    box-shadow: @global-drop-shadow;
+    font-size: 14px;
+    font-family: @global-font-family;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    color: white;
+    border: 1px solid @fuse-purple;
+
+    &:before {
+        content: " ";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        border-width: 10px;
+        border-style: solid;
+        border-color: @fuse-purple transparent transparent transparent;
+        transform: translateX(-50%);
+    }
+}
+
+.create-block-tooltip {
+    transform: translate(-55%, -118%);
+}
+
+.create-unscheduled-tooltip {
+    transform: translate(33%, -110%);
+}
+
+// Handles resizing the sheduler tool bar on smaller resolutions
+.toolbar-controls-wrapper {
+    display: flex;
+    flex-wrap: nowrap; 
+    align-items: center;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    justify-content: flex-start;
+    overflow: visible;
+}
+
+.responsive-toolbar-div {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    box-sizing: border-box;
+    max-width: 100%;
+    justify-content: flex-start;
+    overflow: visible;
+    z-index: 110;
+}
+
+
+.responsive-schedule-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+
+@media (max-width: 1719px) {
+    .responsive-toolbar-div {
+        z-index: 110;
+    }
+
+    .schedule-date-scaled {
+        width: 150px;
+        margin-left: 0;
+        margin-top: 26px;
+
+        .holiday-scaled {
+            margin-left: 0;
+        }
+
+        span {
+            font-size: 12px !important;
+        }
+    }
+
+    .btn-scaled {
+        padding: 1px 6px;
+        padding-block: 0;
+        height: 20px;
+
+        .iconAlignMiddle-scaled {
+            margin-top: 0;
+        }
+    }
+
+    downgraded-room-dropdown-component button, 
+    downgraded-provider-on-schedule-dropdown-component button, 
+    downgraded-location-dropdown-component button {
+        height: 20px !important;
+        padding-block: 0;
+        padding: 1px 6px !important;
+    }
+}
+
+@media print {
+    .schedule-date-scaled {
+        width: auto;
+        margin-left: 0;
+        margin-top: 0;
+    }
+}

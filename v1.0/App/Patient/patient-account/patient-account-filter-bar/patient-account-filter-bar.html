@@ -1,0 +1,133 @@
+﻿<div id="accountFilterBar" class="account-filter-bar">
+    <div class="flex-container" 
+         uib-tooltip="{{ 'The {0} filters are currently applied and are overriding user filters.' | i18n:[currentDisplay] }}"
+         tooltip-enable="{{filterBarDisabled}}"
+         tooltip-placement="top"
+         tooltip-class="filterBarTooltip">
+        <div id="patientFilter" class="patientFilter" ng-class="{'disabled': filterBarDisabled}">
+            <div ng-class="{'hidden': hideFilters.accountMember}">
+                <label class="no-flex">{{ 'Account Members:' | i18n }}</label>
+                <div><patient-filter-multi-select disable-input="filterBarDisabled" options="filters.Patients" text-field="Text" value-field="Selected" drop-down-label="Account Members" change-event="listFilterIsValid('Patient')"></patient-filter-multi-select></div>
+                <div class="patientError" ng-class="{error: errors.patientError.hasError}">
+                    <label id="patError" class="help-text" ng-show="errors.patientError.hasError">
+                        {{ 'At least one account member must be selected.' | i18n }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="locationFilter" class="locationFilter" ng-class="{'disabled': filterBarDisabled}">
+            <div ng-class="{'hidden': hideFilters.location}">
+                <label class="no-flex">{{ 'Locations:' | i18n }}</label>
+                <div><patient-filter-multi-select disable-input="filterBarDisabled" options="filters.Locations" text-field="Text" value-field="Selected" drop-down-label="Locations" change-event="listFilterIsValid('Location')"></patient-filter-multi-select></div>
+                <div class="locationError" ng-class="{error: errors.locationError.hasError}">
+                    <label id="locError" class="help-text" ng-show="errors.locationError.hasError">
+                        {{ 'At least one location must be selected.' | i18n }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="dateFilterSection" ng-class="{'disabled': filterBarDisabled}">
+            <div ng-class="{'hidden': hideFilters.date}">
+                <label class="no-flex">{{ 'Date:' | i18n }}</label>
+                <div class="datePicker">
+                    <div id="dateFrom" class="dateFrom" ng-class="{error: errors.dateError.hasError}">
+                        <date-selector id="dteStart"
+                                       class="filter-datepicker"
+                                       placeholder="{{'From' | i18n}}"
+                                       date-var="filterObject.dateRange.start"
+                                       format="MM/dd/yyyy"
+                                       valid="true"
+                                       disable-date-input="!filterBarDisabled"
+                                       max-date="filterMaxDate"></date-selector>
+                    </div>
+                    <div id="dateTo" class="dateTo" ng-class="{error: errors.dateError.hasError}">
+                        <date-selector id="dteEnd"
+                                       class="filter-datepicker"
+                                       placeholder="{{'To' | i18n}}"
+                                       date-var="filterObject.dateRange.end"
+                                       format="MM/dd/yyyy"
+                                       valid="true"
+                                       disable-date-input="!filterBarDisabled"
+                                       max-date="filterMaxDate"></date-selector>
+                    </div>
+                </div>
+                <div class="dateError" ng-class="{error: errors.dateError.hasError}">
+                    <label id="dteError" class="help-text" ng-show="errors.dateError.hasError">
+                        {{ 'From date must be the same or less than to date.' | i18n }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn btn-link showMoreLinkSection" ng-click="showMoreFilters = filterBarDisabled ? false : !showMoreFilters" ng-class="{'disabled': filterBarDisabled, 'hidden': hideFilters.showMoreFilters}">
+            <div class="inner">
+                <div class="buttonLabel">
+                    <div><b>{{ (showMoreFilters && !filterBarDisabled ? 'Hide Filters' : 'More Filters') | i18n }}&nbsp;<i class="fa" ng-class="{'fa-caret-right': !showMoreFilters, 'fa-caret-down': showMoreFilters}"></i></b></div>
+                    <div>{{ '(' + filterCount + ') Other Filters Applied' }}</div>
+                </div>
+            </div>
+        </div>
+        <div id="buttonSection" class="buttonSection">
+            <div>
+                <a class="btn btn-default padding-right-10" ng-class="{'disabled': disableReset}" ng-click="resetFilters()">Reset</a>
+                <a class="btn btn-primary" ng-class="{'disabled': disableApply}" ng-click="applyFilters()">Apply</a>
+            </div>
+        </div>
+    </div>
+    <div class="moreFilters" ng-show="showMoreFilters">
+        <div class="header">{{ ::('Additional Filters' | i18n) }}</div>
+        <div class="outer">
+			<div>
+				<div ng-class="{'hidden': hideFilters.transactionType}">
+					<div class="outer-item inner dropdowns">
+						<label>{{ ::('Transaction Types' | i18n) }}</label>
+						<patient-filter-multi-select options="filters.TransactionTypes" text-field="Text" value-field="Selected" drop-down-label="Transaction Types" change-event="listFilterIsValid('TransactionTypes')"></patient-filter-multi-select>
+						<div class="error" ng-class="{error: errors.transactionTypeError.hasError}">
+							<label id="txTypesError" class="help-text" ng-show="errors.transactionTypeError.hasError">
+								{{ 'At least one type must be selected.' | i18n }}
+							</label>
+						</div>
+					</div>
+				</div>
+				<div ng-class="{'hidden': hideFilters.transactionStatus}">
+					<div class="outer-item inner dropdowns">
+						<label>{{ ::('Distribution Status' | i18n) }}</label>
+						<patient-filter-multi-select options="filters.TransactionStatus" text-field="Text" value-field="Selected" drop-down-label="Distribution Statuses" change-event="filterChanged()"></patient-filter-multi-select>
+					</div>
+				</div>
+			</div>
+			<div>
+				<div ng-class="{'hidden': hideFilters.provider}">
+					<div class="outer-item inner dropdowns">
+						<label>{{ ::('Providers' | i18n) }}</label>
+						<patient-filter-multi-select options="filters.Providers" text-field="Text" value-field="Selected" drop-down-label="Providers" change-event="listFilterIsValid('Provider')"></patient-filter-multi-select>
+						<div class="error" ng-class="{error: errors.providerError.hasError}">
+							<label id="provError" class="help-text" ng-show="errors.providerError.hasError">
+								{{ 'At least one provider must be selected.' | i18n }}
+							</label>
+						</div>
+					</div>
+				</div>
+				<div ng-class="{'hidden': hideFilters.status}">
+					<div class="outer-item inner dropdowns">
+						<label>{{ ::('Transaction Status' | i18n) }}</label>
+						<patient-filter-multi-select options="filters.Statuses" text-field="Text" value-field="Selected" drop-down-label="Transaction Statuses" change-event="listFilterIsValid('TransactionStatus')"></patient-filter-multi-select>
+						<div class="error" ng-class="{error: errors.statusError.hasError}">
+							<label id="provError" class="help-text" ng-show="errors.statusError.hasError">
+								{{ 'At least one status must be selected.' | i18n }}
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div>
+				<div ng-class="{'hidden': hideFilters.tooth}">
+					<div class="outer-item inner dropdowns">
+						<label>{{ ::('Tooth' | i18n) }}</label>
+						<patient-account-tooth-filter [selected-teeth]="filters.Teeth" [disabled]="filterBarDisabled" [toggled]="showMoreFilters" (selected-teeth-change)="selectedTeethWatcher($event)"></patient-account-tooth-filter>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿<!-- <business-nav></business-nav> -->
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="typeOrMaterials">
+        <form name="frmTypeOrMaterials" role="form" novalidate>
+            <div class="rowFull white">
+                <div class="content__row">
+                    <ul class="drawTypes__breadcrumb">
+                        <li>
+                            <span><a href="#/BusinessCenter/">{{ 'Practice Settings' | i18n }}</a></span>
+                        </li>
+                        <li>
+                            <span>{{ 'Type / Materials' | i18n }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="rowFull white">
+                <div class="typeOrMaterials__header">
+
+                    <div class="typeOrMaterials__title">
+                        <h1>{{ 'Type / Materials' | i18n }}</h1>
+                    </div>
+                    <div class="typeOrMaterials__add">
+                        <button tabindex="2" id="btnAddTypeOrMaterial" class="addButton" icon="fa-plus" ng-click="addOrEditTypeOrMaterial()" check-auth-z="{{addTypeOrMaterialAuthAbbrev}}">{{ 'Add {0}' | i18n:['Type / Material'] }}</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="rowFull gray">
+                <div class="typeOrMaterials__search">
+                    <div class="form-inline typeOrMaterialSearch">
+                        <div class="form-group typeOrMaterialSearch__control">
+                            <input tabindex="2" id="filterTypeOrMaterials" class="form-control typeOrMaterialSearch__input" placeholder="{{'Find {0}...' | i18n:['Type / Material']}}" type="text" ng-model="filterBy" set-focus />
+                            <span class="glyphicon glyphicon-search typeOrMaterialSearch__icon"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="typeOrMaterials__body">
+                    <table id="tableTypeOrMaterials" class="typeOrMaterials__table">
+                        <thead>
+                            <tr class="blue">
+                                <td id="tdDescription" colspan="2">
+                                    <div id="columnDescription" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Description')">
+                                        <div class="col-md-4">
+                                            {{'Description' | i18n}}
+                                        </div>
+                                        <span class="fa fas" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'Description'"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr tabindex="2" ng-show="typeOrMaterials.length" ng-repeat="typeOrMaterial in filteredTypeOrMaterials = (typeOrMaterials | orderBy:orderBy.field:!orderBy.asc | filter:typeOrMaterialsFilter) track by $index ">
+                                <td id="tdDescription{{$index}}"
+                                    class="typeOrMaterials__descriptionEntry"
+                                    ng-bind-html="typeOrMaterial.Description | boldTextIfContains:filterBy"></td>
+
+                                <td class="typeOrMaterials__actions">
+                                    <a id="btnEditTypeOrMaterial{{$index}}"
+                                       class="editIcon"
+                                       ng-click="addOrEditTypeOrMaterial(typeOrMaterial)"
+                                       check-auth-z="{{editTypeOrMaterialAuthAbbrev}}">
+                                    </a>
+                                    <a id="btnDeleteTypeOrMaterial{{$index}}"
+                                       class="deleteIcon"
+                                       ng-click="deleteTypeOrMaterial(typeOrMaterial)"
+                                       check-auth-z="{{deleteTypeOrMaterialAuthAbbrev}}"></a>
+                                </td>
+                            </tr>
+                            <tr ng-show="typeOrMaterials.length === 0 || filteredTypeOrMaterials.length === 0">
+                                <td id="tdDefaultMsg" colspan="2" class="typeOrMaterials__noRecordsMessage">
+                                    <no-results loading-message='loadingMessageNoResults'
+                                                loading="loadingList"
+                                                filtering="filteringList"
+                                                filtering-message='filteringMessageNoResults'>
+                                    </no-results>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+

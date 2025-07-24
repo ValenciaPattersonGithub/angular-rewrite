@@ -1,0 +1,32 @@
+@import 'variables';
+@import '/src/patient/communication-center/communication-center-variables';
+
+.patientHeader-drawer-nav {
+    border-right: 1px solid $communication-center-preview-border-color;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:first-of-type {
+        border-left: 1px solid $communication-center-preview-border-color;
+    }
+
+    & svg {
+        fill: $communication-card-primary-color;
+    }
+
+    &.active {
+        background-color: $communication-card-primary-color;
+
+        & svg {
+            fill: $communication-card-background-color;
+        }
+    }
+}
+.drawer-nav-container {
+    margin-left: auto;
+    display: flex;
+    flex-flow: row nowrap;
+}

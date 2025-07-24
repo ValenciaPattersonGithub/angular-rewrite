@@ -1,0 +1,172 @@
+﻿<div class="patProfile" ng-class="'fade-in'">
+    <form name="frmPatientCrud" role="form" novalidate>
+        <div class="rowFull white">
+            <div class="patProfile__header">
+                <div class="patProfile__title">
+                    <h1>{{ 'Add a {0}' | i18n:['Person'] }}</h1>
+                </div>
+                <span class="required">* {{ 'required' | i18n }}</span>
+            </div>
+        </div>
+        
+
+        <div class="secondaryNavigationFixed">
+            <div class="container">
+                <div class="secondaryNavigationFixed__nav-box">
+                    <div class="row-fluid">
+                        <div class="secondaryNavigationFixed__nav-tabs">
+                            <a id="btnPersonalInfo" class="secondaryNavigationFixed__nav-item" href="#personalInfoSection" scroll-to-offset="personalInfoSection" negative-offset=130>
+                                <i class="col-xs-12 fa fa-user fa-2x"></i>
+                                <div class="col-xs-12">{{ 'Personal' | i18n }}</div>
+                            </a>
+                            
+                            <a id="btnContactDetails" class="secondaryNavigationFixed__nav-item" href="#contactDetailsSection" scroll-to-offset="contactDetailsSection" negative-offset=130>
+                                <i class="col-xs-12 fa fa-phone fa-2x"></i>
+                                <div class="col-xs-12">{{ 'Contact' | i18n }}</div>
+                            </a>
+                            
+                            <a id="btnPatientInsurance" class="secondaryNavigationFixed__nav-item" href="#personInsuranceSection" scroll-to-offset="personInsuranceSection" negative-offset=130>
+                                <i class="col-xs-12 fa fa-umbrella fa-2x"></i>
+                                <div class="col-xs-12">{{ 'Insurance' | i18n }} </div>
+                            </a>
+
+                            <a id="btnPatientPreferences" class="secondaryNavigationFixed__nav-item" href="#personPreferencesSection" scroll-to-offset="personPreferencesSection" negative-offset=130>
+                                <i class="col-xs-12 fas fa-cog fa-2x"></i>
+                                <div class="col-xs-12">{{ 'Preferences' | i18n }}</div>
+                            </a>
+                            
+                            <a id="btnPatientDentalRecords" class="secondaryNavigationFixed__nav-item" href="#previousDentalSection" scroll-to-offset="previousDentalSection" negative-offset=130>
+                                <i class="col-xs-12 far fa-file fa-2x"></i>
+                                <div class="col-xs-12">{{ 'Dental Records' | i18n }}</div>
+                            </a>
+                            <a id="btnPatientReferrals" class="secondaryNavigationFixed__nav-item" href="#patientReferralsSection" scroll-to-offset="patientReferralsSection" negative-offset=130>
+                                <i class="col-xs-12 fa fa-users fa-2x"></i>
+                                <div class="col-xs-12">{{ 'Referrals' | i18n }}</div>
+                            </a>
+                            <a id="btnPatientAdditionalIdentifier" class="secondaryNavigationFixed__nav-item" href="#patientAdditionalIdentifierSection" scroll-to-offset="patientAdditionalIdentifierSection" negative-offset=130>
+                                <i class="col-xs-12 far fa-plus-square fa-2x"></i>
+                                <div class="col-xs-12">{{ 'Additional Identifiers' | i18n }}</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="secondaryNavigationFixed__nav-actions">
+                            <a id="btnCancel" class="btn btn-default" href="" ng-click="cancelChanges();" ng-disabled="savingPatient" check-auth-z="soar-per-perdem-add">
+                                {{ 'Discard' | i18n }}
+                            </a>
+                            <a id="btnSave" class="btn btn-primary" href="" ng-click="savePerson();" ng-disabled="savingPatient" check-auth-z="soar-per-perdem-add">
+                                {{ 'Save' | i18n }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="patProfile__body">
+            <div class="patProfile__formBox">
+                <!-- Personal Info -->
+                <div class="patProfile__form" id="personalInfoSection" highlight-relevant-items negative-offset=130>
+                    <personal-details-panel patient-data="person" panel-title="Personal Details" phones="phones" set-focus-on-input="setFocusOnProfile"></personal-details-panel>
+                    <!--<profile-section base-id="patientPersonalInfo" title="Personal Details">
+                        <personal-info person="person" phones="phones" set-focus-on-input="setFocusOnProfile"></personal-info>
+                    </profile-section>-->
+                </div>
+                <!-- Contact Details-->
+                <div class="patProfile__form" id="contactDetailsSection" highlight-relevant-items negative-offset=130>
+                    <contact-details-panel patient-data="person" panel-title="Contact Details" phones="phones" emails="emails" set-focus-on-input="setFocusOnContactDetails"></contact-details-panel>                    
+                </div>
+                <!-- Insurance -->
+                <div class="patProfile__form" id="personInsuranceSection" highlight-relevant-items negative-offset=130>
+                    <profile-section [base-id]="'patientInsurance'" [section-title]="'Insurance'">
+                        <ng-container layout1>
+                            <div class="form-row" ng-show="!person.PatientBenefitPlanDtos.length">
+                                <div class="form-col-12">
+                                    <button id="btnAddInsurance" class="btn btn-link" ng-click="addInsurance()"><i class="fa fa-plus"></i> {{ 'Add {0}' | i18n:['Insurance'] }}</button>
+                                </div>
+                            </div>
+                            <patient-insurance id="patient-insurance-div{{$index}}" insurance="insurance" person="person.Profile" responsible-person="person.Profile.ResponsiblePersonId" available-priorities="availablePriorities" validate-policy-holder="true" remove="removeInsurance($index)" priority="priorityChanged($index)" ng-repeat="insurance in person.PatientBenefitPlanDtos"></patient-insurance>
+                            <!--Section Save buttons-->
+                            <!--<div class="form-footer" ng-show="person.PatientBenefitPlanDtos.length">
+                                <button id="btnSaveInsDetails" class="btn btn-primary">{{ 'Save Insurance Details' | i18n }}</button>
+                                <button id="btnClear" class="btn btn-default">{{ 'Clear' | i18n }}</button>
+
+                            </div>-->
+                            <div ng-show="person.PatientBenefitPlanDtos.length && person.PatientBenefitPlanDtos.length <= 5">
+                                <button class="btn btn-link" ng-click="addInsurance()"><i class="fa fa-plus"></i>{{ 'Add More {0} ' | i18n:['Insurance Coverage'] }}</button>
+                            </div>
+                        </ng-container>
+                    </profile-section>
+                </div>
+
+                <!-- Preferences -->
+                <div class="patProfile__form" id="personPreferencesSection" highlight-relevant-items negative-offset=130>
+                    <profile-section [base-id]="'patientPreferences'" [section-title]="'Preferences'">
+                        <ng-container layout1>
+                            <preferences person="person" set-focus-on-input="setFocusOnPreferredLocation"></preferences>
+                            <patient-flags person="person"></patient-flags>
+                            <!-- Receives Statements and Finance Charges -->
+                            <div class="form-body">
+                                <div class="form-row">
+                                    <div class="form-group form-col-6">
+                                        <div uib-tooltip="This option can be modified by editing the patient's responsible person."
+                                            tooltip-enable="person.Profile.ResponsiblePersonType == 2"
+                                            tooltip-placement="top-right"
+                                            tooltip-append-to-body="true">
+                                            <checkbox checkbox-id="receivesStatements"
+                                                    checkbox-value="person.Profile.PersonAccount.ReceivesStatements"
+                                                    checkbox-Disabled="person.Profile.ResponsiblePersonType == 2"></checkbox>
+                                            <span class="font-weight-bold">Account receives statements?</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-col-6">
+                                        <div uib-tooltip="This option can be modified by editing the patient's responsible person."
+                                            tooltip-enable="person.Profile.ResponsiblePersonType == 2"
+                                            tooltip-placement="top-right"
+                                            tooltip-append-to-body="true">
+                                            <checkbox checkbox-id="receivesFinanceCharges"
+                                                    checkbox-value="person.Profile.PersonAccount.ReceivesFinanceCharges"
+                                                    checkbox-Disabled="person.Profile.ResponsiblePersonType == 2"></checkbox>
+                                            <span class="font-weight-bold">Account receives finance charges?</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </profile-section>
+                </div>
+
+                <!-- Dental Records -->
+                <div class="patProfile__form" id="previousDentalSection" highlight-relevant-items negative-offset=130>
+                    <profile-section [base-id]="'patientPreviousDental'" [section-title]="'Dental Records'">
+                        <ng-container layout1>
+                            <previous-dental-office person="person" previous-dental-office="previousDentalOffice" set-focus-on-input="setFocusOnPreviousDental"></previous-dental-office>
+                        </ng-container>
+                    </profile-section>
+                </div>
+
+                <!-- Referrals -->
+                <div class="patProfile__form" id="patientReferralsSection" highlight-relevant-items negative-offset=130>
+                    <profile-section [base-id]="'patientPatientReferrals'" [section-title]="'Referrals'">
+                        <ng-container layout1>
+                            <patient-referred-by referral="patientReferral" person="person" set-focus-on-input="setFocusOnReferrals" valid="flags.validReferral" form-is-valid="true"></patient-referred-by>
+                        </ng-container> 
+                    </profile-section>
+                </div>
+                <!-- Additional Identifier -->
+                <div class="patProfile__form additionalIdentifierSection" style="display:none"  id="patientAdditionalIdentifierSection" highlight-relevant-items negative-offset=130>
+                    <profile-section [base-id]="'patientAdditionalIdentifier'" [section-title]="'Additional Identifiers'">
+                        <ng-container layout1>
+                            <patient-identifier person="person" identifier="patientIdentifier" set-focus-on-input="setFocusOnAdditionalIdentifier" form-is-valid="true"></patient-identifier>
+                        </ng-container>
+                    </profile-section>
+                </div>
+            </div>
+
+
+        </div>
+    </form>
+
+</div>

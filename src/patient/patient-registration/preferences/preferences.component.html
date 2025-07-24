@@ -1,0 +1,252 @@
+<div class="preferences-container">
+  <div class="preferences-header">
+    <span class="preferences-title">{{ "Preferences" | translate }}</span>
+  </div>
+  <hr />
+  <form [formGroup]="patientPreference" class="form-horizontal" *ngIf="patientPreference" autocomplete="off">
+    <div class="pereferences-content">
+      <div class="pereferences-content-primary-location">
+        <div class="mb-5">
+          <app-label class="pereferences-label" [label]="'Primary Location'"> </app-label>
+          <span class="pereferences-content-required">*</span>
+        </div>
+        <select
+          (change)="onPrimaryLocationSelected($event)"
+          id="primaryLocation"
+          class="preferences-selectlist"
+          [ngClass]="{ 'error-control': !isValidPrimaryLocation }"
+          formControlName="PrimaryLocation"
+        >
+          <option value="" selected>{{ "Select Location" | translate }}</option>
+          <option [value]="primaryLocation.value" *ngFor="let primaryLocation of primaryLocations">
+            {{ primaryLocation.text }}
+          </option>
+        </select>
+        <svg-icon
+          [attr.id]="'primaryLocationErrorIcon'"
+          class="error-icon"
+          name="tooltipIcon"
+          iconHeight="15px"
+          tooltip="Primary Location is required"
+          placement="top-error"
+          delay="500"
+          *ngIf="!isValidPrimaryLocation"
+          iconWidth="15px"
+        ></svg-icon>
+      </div>
+      <div class="pereferences-content-alternate-location">
+        <div class="mb-5">
+          <app-label class="pereferences-label" [label]="'Alternate Location(s)'"> </app-label>
+        </div>
+
+        <app-multiselect
+          [placeholder]="'Select Location'"
+          [listItems]="alternateLocations"
+          [showSelectAll]="alternateLocations.length"
+          [id]="'alternateLocation'"
+          [id]="'multiselect-default'"
+          [model]="selectedAlternateLocations"
+          (modelChange)="getSelectedAlternateLocations($event)"
+        >
+        </app-multiselect>
+        <div class="chips-wrapper" *ngIf="selectedAlternateLocations.length">
+          <app-chips
+            variation="primary"
+            [chipsText]="location.text"
+            class="chips-right"
+            showIcon="true"
+            (removeChips)="removeSelectedAlternateLocations($event, rowId)"
+            [tooltip]="location.IsDisabled ? 'Cannot remove location Due to patient Activity' : ''"
+            placement="top-black"
+            delay="500"
+            [showIcon]="!location.IsDisabled"
+            [attr.id]="'locationChip' + rowId"
+            *ngFor="let location of selectedAlternateLocations; let rowId = index"
+          ></app-chips>
+        </div>
+      </div>
+      <div class="pereferences-content-preferred-dentist">
+        <div class="mb-5">
+          <app-label class="pereferences-label" [label]="'Preferred Dentist'"> </app-label>
+        </div>
+        <select id="preferredDntist" class="preferences-selectlist" formControlName="PreferredDentists" (change)="onDentistSelected($event)">
+          <option value="" selected>{{ "Select Preferred Dentist" | translate }}</option>
+          <option [value]="preferredDentist.value" *ngFor="let preferredDentist of preferredDentists">
+            {{ preferredDentist.text }}
+          </option>
+        </select>
+      </div>
+      <div class="pereferences-content-preferred-hygienist">
+        <div class="mb-5">
+          <app-label class="pereferences-label" [label]="'Preferred Hygienist'"> </app-label>
+        </div>
+        <select id="preferredHygienist" class="preferences-selectlist" formControlName="PreferredHygienists" (change)="onHygienistsSelected($event)">
+          <option value="" selected>{{ "Select Preferred Hygienist" | translate }}</option>
+          <option [value]="preferredHygienist.value" *ngFor="let preferredHygienist of preferredHygienists">
+            {{ preferredHygienist.text }}
+          </option>
+        </select>
+      </div>
+      <div class="flags">
+        <div class="flags-wrapper">
+          <div class="flags-master-flag">
+            <div class="mb-5">
+              <app-label class="pereferences-label" [label]="'Master Flag'"> </app-label>
+            </div>
+            <app-multiselect
+              class="masterflagtlist"
+              [placeholder]="'Select Flag'"
+              [model]="selectedMasterFlags"
+              (modelChange)="getSelectedFlags($event)"
+              [listItems]="masterAlerts"
+              [id]="'masterFlag'"
+            ></app-multiselect>
+          </div>
+          <div class="flags-custom-flag">
+            <div class="mb-5 flags-custom-flag-label">
+              <app-label class="pereferences-label" [label]="'Custom Flag'"> </app-label>
+            </div>
+            <div style="margin-top: 0.2em; width: max-content; float: left">
+              <svg-icon
+                class="preferences-tooltipIcon"
+                (mouseover)="toolTipText()"
+                (mouseout)="showTooltip = false"
+                name="tooltipIcon"
+                iconHeight="15px"
+                iconWidth="15px"
+                tooltip="{{ toolTipMessage }}"
+                placement="top"
+                delay="500"
+              ></svg-icon>
+            </div>
+            <input
+              class="preferences-custom-flag-input"
+              id="customFlag"
+              formControlName="CustomFlag"
+              autocomplete="off"
+              placeholder="Enter Custom Flag Here"
+              type="text"
+              maxlength="264"
+              [ngClass]="{ 'customFlag-error': !isValidFlag }"
+            />
+
+            <svg-icon
+              [attr.id]="'CustomFlagErrorIcon'"
+              class="customFlag-errorIcon"
+              name="tooltipIcon"
+              iconHeight="15px"
+              tooltip="This Field is required"
+              placement="top-error"
+              delay="500"
+              *ngIf="!isValidFlag"
+              iconWidth="15px"
+            ></svg-icon>
+          </div>
+          <div class="flags-end-date">
+            <div class="mb-5">
+              <app-label class="pereferences-label" [label]="'End Date'"> </app-label>
+            </div>
+            <app-date-picker
+              [id]="'endDate'"
+              [minDate]="minDate"
+              formControlName="EndDate"
+              [ngClass]="{ disabled: !hasCreateAccess }"
+              title="{{ !hasCreateAccess ? 'You do not have permission to add custom flags.' : '' }}"
+            >
+            </app-date-picker>
+          </div>
+          <div class="flags-add-custom-flag" id="addCustomFlag">
+            <div class="flags-add-icon">
+              <svg-icon
+                class="flags-add"
+                name="addIcon"
+                iconHeight="20px"
+                iconWidth="20px"
+                (click)="addCustomFlag()"
+                [ngClass]="{ disabled: !hasCreateAccess }"
+                title="{{ !hasCreateAccess ? 'You do not have permission to add custom flags.' : '' }}"
+              >
+              </svg-icon>
+            </div>
+          </div>
+          <div class="chips-wrapper" *ngIf="selectedFlags.length">
+            <app-chips
+              variation="primary"
+              [chipsText]="location.text"
+              class="chips-right"
+              showIcon="true"
+              (removeChips)="removeSelectedFlags($event, rowId)"
+              *ngFor="let location of selectedFlags; let rowId = index"
+            ></app-chips>
+          </div>
+        </div>
+      </div>
+      <div class="pereferences-content-discount">
+        <div class="mb-5">
+          <app-label class="pereferences-label" [label]="'Discount'"> </app-label>
+        </div>
+        <select
+          id="discount"
+          class="preferences-selectlist"
+          formControlName="DiscountType"
+          [attr.disabled]="!hasEditDiscountAccess ? true : null"
+          (change)="onDiscountSelected($event)"
+        >
+          <option value="" selected>{{ "Select a Discount" | translate }}</option>
+          <option [value]="discountType.value" *ngFor="let discountType of discountTypes">
+            {{ discountType.text }}
+          </option>
+        </select>
+      </div>
+      <div class="pereferences-content-groups">
+        <div class="mb-5">
+          <app-label class="pereferences-label" [label]="'Groups'"> </app-label>
+        </div>
+        <app-multiselect [placeholder]="'Select Group'" [model]="selectedGroups" (modelChange)="getSelectedGroups($event)" [listItems]="groups" [id]="'patientGroups'">
+        </app-multiselect>
+        <div class="chips-wrapper" *ngIf="selectedGroups.length">
+          <app-chips
+            variation="primary"
+            [chipsText]="group.text"
+            class="chips-right"
+            [showIcon]="hasEditGroupAccess ? true : false"
+            (removeChips)="removeSelectedGroups($event, rowId)"
+            *ngFor="let group of selectedGroups; let rowId = index"
+          ></app-chips>
+        </div>
+      </div>
+      <div class="pereferences-content-statements">
+        <div class="mb-5">
+          <app-label class="pereferences-label" [label]="'Account receives statements?'"> </app-label>
+        </div>
+        <app-check-box
+          id="receiveStatements"
+          [label]="'Yes'"
+          [checked]="statements"
+          (checkChanged)="receiveStatements($event)"
+          [isDisabled]="disableStatementsFinaceCharges"
+          tooltip="{{ disableStatementsFinaceCharges ? 'This option can be modified by editing the patient/s responsible person.' : '' }}"
+          placement="top"
+          delay="500"
+        >
+        </app-check-box>
+      </div>
+      <div class="pereferences-content-finance-charges">
+        <div class="mb-5">
+          <app-label class="pereferences-label" [label]="'Account receives finance charges?'"> </app-label>
+        </div>
+        <app-check-box
+          id="financeCharges"
+          [label]="'Yes'"
+          [checked]="financecharges"
+          (checkChanged)="receiveFinanceCharges($event)"
+          [isDisabled]="disableFinanceCharges"
+          placement="top"
+          delay="500"
+          tooltip="{{ disableStatementsFinaceCharges ? 'This option can be modified by editing the patient/s responsible person.' : '' }}"
+        >
+        </app-check-box>
+      </div>
+    </div>
+  </form>
+</div>

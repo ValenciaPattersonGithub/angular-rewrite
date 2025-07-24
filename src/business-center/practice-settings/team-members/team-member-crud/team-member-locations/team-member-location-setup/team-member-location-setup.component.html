@@ -1,0 +1,223 @@
+<ng-template #templateRef>
+    <div class="tmlocationsetcrud">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 *ngIf="!editMode">{{'Add Location' | translate }}</h4>
+                    <h4 *ngIf="editMode">{{'Edit Location' | translate }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <form [formGroup]="teamMemberLocationSetup" name="teamMemberLocationSetup"
+                  (ngSubmit)="saveUserLocationSetup()" id="teamMemberLocationSetup" role="form">
+                <!-- location select list-->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label>{{'Location' | translate}} *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-11 col-sm-4 col-md-4 col-lg-4" *ngIf="!editMode">
+                        <soar-select-list id="inpLocation" [placeHolder]="'Select a Location'" name="inpLocation"
+                                          formControlName="inpLocation" class="fill-width" [textField]="'NameLine1'"
+                                          [valueField]="'LocationId'" [optionList]="filteredLocations"
+                                          [selectedItemValue]="userLocationSetup?.LocationId">
+                        </soar-select-list>
+
+                        <span id="lblLocationRequired" class="has-error"
+                              *ngIf="teamMemberLocationSetup?.get('inpLocation')?.touched && teamMemberLocationSetup?.get('inpLocation')?.hasError('required')">
+                            {{ 'This field is required.' | translate }}
+                        </span>
+                    </div>
+                    <div class="col-xs-12" *ngIf="editMode">
+                        <span class="padding-10">{{userLocationSetup?.$$Location?.NameLine1}}</span>
+                    </div>
+                </div>
+
+                <!-- Security Roles select list-->
+                <div class="row margin-top" *ngIf="user?.IsActive">
+                    <div class="col-xs-11 col-sm-8 col-md-8 col-lg-8">
+                        <label>{{'Security Roles' | translate}} *</label>
+                    </div>
+                </div>
+                <div class="row" *ngIf="!user?.$$isPracticeAdmin && user?.IsActive">
+                    <div class="col-xs-11 col-sm-8 col-md-8 col-lg-8">
+                        <app-multiselect [listItems]="allRoles" [placeholder]="selectRolesPlaceholder"
+                                         [id]="'selectLocationRoles'" [model]="selectedRoles"
+                                         (modelChange)="onRoleSelectedChange($event)" [showSpecificList]="true"></app-multiselect>
+                    </div>
+                </div>
+                <!-- add/remove chips-->
+                <div class="row" *ngIf="!user?.$$isPracticeAdmin && user?.IsActive">
+                    <div class="col-xs-12 col-sm-11 col-md-11 col-lg-11">
+                        <app-chips class="pull-left custom-margin" variation="primary" [chipsText]="item?.text"
+                                   placement="top-error" delay="500" (removeChips)="removeRoles(item)" [showIcon]="true"
+                                   *ngFor="let item of deletedRolesFilter(selectedRoles)">
+                        </app-chips>
+                    </div>
+                </div>
+                <div class="row" *ngIf="user?.$$isPracticeAdmin && user?.IsActive">
+                    <div class="col-xs-12 col-sm-11 col-md-11 col-lg-11">
+                        <app-chips class="pull-left custom-margin" variation="primary" [chipsText]="item?.RoleName"
+                                   placement="top-error" delay="500" [showIcon]="false"
+                                   *ngFor="let item of rxRoleFilter()">
+                        </app-chips>
+                    </div>
+                </div>
+                <label id="lblRolesRequired" class="has-error" *ngIf="hasRoleErrors">
+                    {{ 'Your team member must have at least one role assigned per location.' | translate }}
+                </label>
+
+                <!-- Provider Type select list -->
+                <div class="row margin-top">
+                    <div class="col-xs-11 col-sm-4 col-md-4 col-lg-4 custom-top-margin">
+                        <label>{{'Provider Type' | translate}} *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-11 col-sm-4 col-md-4 col-lg-4">
+                        <soar-select-list id="inpProviderType" [placeHolder]="'Select Provider Type'"
+                                          name="inpProviderType" class="fill-width" formControlName="inpProviderType"
+                                          [textField]="'Name'" [valueField]="'Id'" [optionList]="providerTypes"
+                                          (selectedItemValueChange)="providerTypeChange($event)">
+                        </soar-select-list>
+
+                        <label id="lblLocationRequired" class="has-error"
+                               *ngIf="teamMemberLocationSetup?.get('inpProviderType')?.touched && teamMemberLocationSetup?.get('inpProviderType')?.hasError('required')">
+                            {{ 'This field is required.' | translate }}
+                        </label>
+                    </div>
+                </div>
+
+                <div *ngIf="isProviderActive">
+                    <div class="row">
+                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                            <app-check-box formControlName="isActive"
+                                           [checked]="userLocationSetup?.IsActive"
+                                           [label]="'Active'" id="inpUserLocationSetupIsActive"
+                                           (checkChanged)="activeInactive()">
+                            </app-check-box>
+                        </div>
+                        <div *ngIf="shouldShowLocumTenensDentistField" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <div class="locum-checkbox-row">
+                                <app-check-box formControlName="isLocumDentist"
+                                               [checked]="locumDentistCheckedState"
+                                               [label]="'Locum Tenens Treating Dentist'"
+                                               id="inpUserLocationSetupIsLocumTenensDentist">
+                                </app-check-box>
+                                <span kendoTooltip
+                                      position="top"
+                                      tooltipClass="app-tooltip"
+                                      [tooltipWidth]="250"
+                                      [title]="'This checkbox should only be selected if the dentist is filling in on a temporary basis.' | translate"
+                                      class="locum-tooltip">
+                                    <i class="fa fa-question-circle locum-tooltip-icon"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kendo color palette -->
+                    <div class="row margin-top">
+                        <div class="col-xs-11 col-sm-4 col-md-4 col-lg-4 custom-top-margin">
+                            <label>{{'Provider Color' | translate}} *</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="example-wrapper col-xs-5 col-sm-5 col-md-5 col-lg-5">
+
+                                <app-color-picker  [setColor]="selectedColor"
+                                                  (colorChanged)="colorChanged($event)"></app-color-picker>
+                            </div>
+                            <div class="ml-2 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="provider-color" [ngStyle]="{ 'background-color': selectedColor }">
+                                    {{'Provider Time' | translate}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Employment Status select list -->
+                    <div class="row margin-top">
+                        <div class="col-xs-11 col-sm-4 col-md-4 col-lg-4 custom-top-margin">
+                            <label>{{'Employment Status' | translate}} *</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-11 col-sm-4 col-md-4 col-lg-4">
+                            <soar-select-list id="selEmployeeStatus" name="selEmployeeStatus" class="fill-width"
+                                              formControlName="selEmployeeStatus" [optionList]="employeeStatusOptions"
+                                              [placeHolder]="'Select Status'" [textField]="'Name'" [valueField]="'Value'">
+                            </soar-select-list>
+                            <label id="lblEmployeeStatusRequired"
+                                   *ngIf="teamMemberLocationSetup?.get('selEmployeeStatus')?.touched && teamMemberLocationSetup?.get('selEmployeeStatus')?.hasError('required')"
+                                   class="has-error">
+                                {{ 'This field is required.' | translate }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Provider on Claims radio-->
+                    <div class="row margin-top">
+                        <div class="col-xs-11 col-sm-4 col-md-4 col-lg-4">
+                            <label>{{'Provider on Claims' | translate}} *</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-11 col-md-1 col-sm-1 col-lg-1">
+                            <span>
+                                <input id="rbtProviderOnClaimsSelf" type="radio" formControlName="providerOnClaims"
+                                       name="providerOnClaims" (change)="providerChange(true)" [value]="1"
+                                       [checked]="teamMemberLocationSetup?.get('providerOnClaims')?.value==1">
+                                {{ 'Self' | translate }}
+                            </span>
+                        </div>
+                        <div class="col-xs-11 col-md-2 col-sm-2 col-lg-2">
+                            <span>
+                                <input id="rbtProviderOnClaimsOther" type="radio" formControlName="providerOnClaims"
+                                       name="providerOnClaims" (change)="providerChange(false)" [value]="2"
+                                       [checked]="teamMemberLocationSetup?.get('providerOnClaims')?.value==2">
+                                {{ 'Other' | translate }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row search-dd-margin"
+                         *ngIf="teamMemberLocationSetup?.get('providerOnClaims')?.value==2">
+                        <!-- Provider on Claims -->
+                        <div class="col-xs-12">
+                            <div [ngClass]="{error:providerOnClaimsError}">
+                                <search-bar-autocomplete [list]="filteredActiveProviders"
+                                                         [inputValueBind]="providerOnClaimsName" [placeholder]="providerOnClaimsPlaceholder"
+                                                         [valueF]="'UserId'" [template]="template"
+                                                         (selectedValueChange)="selectProviderResult($event)"
+                                                         (filterValueChange)="filterValueChange()">
+                                </search-bar-autocomplete>
+                                <label id="lblProviderOnClaimsRequired" *ngIf="providerOnClaimsError" class="has-error">
+                                    {{ 'This field is required.' | translate }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-11">
+                        <button type="submit" id="btnSaveUserLocationSetup" class="btn btn-primary pull-right"
+                                [disabled]="teamMemberLocationSetup?.invalid">
+                            {{ 'Done' | translate }}
+                        </button>
+                        <button type="button" id="btnCancelUserLocationSetup" (click)="confirmClose()"
+                                class="btn btn-default mr-1 pull-right">
+                            {{ 'Cancel' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+<ng-container #container></ng-container>

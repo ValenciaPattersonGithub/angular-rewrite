@@ -1,0 +1,480 @@
+@import "variables";
+
+.contact-detail {
+    font-family: $global-font-family;
+    &-container {
+        padding: 15px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 5px;
+        hr {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-top: 1px solid #2b144e;
+        }
+    }
+    &-header {
+        display: grid;
+        grid-template-columns: 1fr min-content;
+    }
+    &-title {
+        width: 156px;
+        height: 16px;
+
+        font-size: 16px;
+        color: $text-black;
+        text-decoration: none solid $text-black;
+        line-height: 16px;
+        font-weight: bold;
+        grid-column: 1;
+    }
+    &-optout {
+        grid-column: 2;
+        padding-left: 10px;
+    }
+    &-optout-label {
+        grid-column: 3;
+        font-size: 12px;
+        color: $label-color;
+        text-decoration: none solid $label-black;
+    }
+    &-content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 10px;
+    }
+    &-label {
+        font-size: 14px;
+        color: $label-color;
+        font-weight: 600;
+    }
+}
+.detail-content {
+    display: grid;
+    grid-template-columns: 50% 35% 15%;
+    row-gap: 20px;
+    &-required {
+        font-family: $global-font-family;
+        font-size: 14px;
+        color: $alert-red;
+        text-decoration: none solid $alert-red;
+    }
+}
+.opt-mail-communications {
+    grid-row: 1;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+}
+.member-address {
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+}
+.street-address {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+}
+.street-address2 {
+    grid-row: 4;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+}
+.city {
+    grid-row: 5;
+    grid-column: 1;
+    align-self: end;
+}
+.state {
+    grid-row: 5;
+    grid-column: 2;
+}
+.memberAccount-selectlist {
+    height: 30px;
+    width: 100%;
+    padding: 0px 8px;
+    text-align: left;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    border: 1px solid $patient-registration-border-color;
+    background-color: $page-search-input-background;
+    color: $text-black;
+    outline: none;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+}
+.state-selectlist {
+    height: 30px;
+    width: 97%;
+    padding: 0px 5px;
+    text-align: left;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    border: 1px solid $patient-registration-border-color;
+    background-color: $page-search-input-background;
+    color: $text-black;
+    outline: none;
+}
+.zip-code {
+    grid-row: 5;
+    grid-column: 3;
+    align-self: end;
+}
+.opt-phone-communications {
+    grid-row: 6;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+}
+.phones-section {
+    grid-row: 7;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+}
+.phone-section-main {
+    font-family: $global-font-family;
+    font-size: 12px;
+    color: $text-black;
+    text-decoration: none solid $text-black;
+}
+.email-section-main {
+    font-family: $global-font-family;
+    font-size: 12px;
+    color: $text-black;
+    text-decoration: none solid $text-black;
+}
+.opt-email-communications {
+    grid-row: 9;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+}
+.email-section {
+    grid-row: 10;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+}
+.add-phone-number {
+    grid-row: 8;
+    grid-column-start: 1;
+    grid-column-end: 3 span;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 15% 85%;
+    width: 170px;
+    &-icon {
+        color: $dropdown-hover-color;
+        grid-column: 1;
+        grid-row:1;
+    }
+    &-icon-add {
+        color: $background-color;
+        grid-column: 1;
+        grid-row:1;
+    }
+    &-icon-label {
+        color: $dropdown-hover-color;
+        grid-column: 2;
+        grid-row:1;
+    }
+}
+.add-email {
+    grid-row: 11;
+    grid-column-start: 1;
+    grid-column-end: 3 span;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 15% 85%;
+    width: 170px;
+    &-icon {
+        color: $dropdown-hover-color;
+        grid-column: 1;
+        grid-row:1;
+    }
+    &-icon-add {
+        color: $background-color;
+        grid-column: 1;
+        grid-row:1;
+    }
+    &-icon-label {
+        color: $dropdown-hover-color;
+        grid-column: 2;
+        grid-row:1;
+    }
+}
+.add-label {
+    font-size: 14px;
+    color: $dropdown-hover-color;
+    font-weight: 600;
+}
+
+.input-address {
+    height: 30px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 4px;
+    width: 100%;
+    padding: 0px 8px;
+    outline: none;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+}
+.input-city {
+    height: 30px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 4px;
+    width: 98%;
+    padding: 0px 5px;
+    outline: none;
+}
+.input-zip-code {
+    height: 30px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 4px;
+    width: 95%;
+    padding: 0px 8px;
+    outline: none;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+    margin-left: 10px;
+}
+.zipcode-error {
+    width: 75%;
+    float: left;
+    border: 1px solid $error-color;
+    box-shadow: 0 0 0 1px $error-color;
+}
+.zipcode-errorIcon {
+    float: left;
+    margin-left: 10px;
+    margin-top: 8px;
+    color: $error-color;
+}
+.mb-5 {
+    margin-bottom: 5px;
+}
+.ml-10 {
+    margin-left: 10px;
+}
+.phone-grid {
+    display: grid;
+    grid-template-columns: 21% 19% 19% 19% 19% 3%;
+    height: 40px;
+    &-header:first-child {
+        border-left: 1px solid $patient-registration-border-color;
+        padding: 10px;
+    }
+    &-header:last-child {
+        border-top: 1px solid $patient-registration-border-color;
+        border-right: 1px solid $patient-registration-border-color;
+        border-bottom: 1px solid $patient-registration-border-color;
+        padding: 10px;
+    }
+    &-header:not(:last-child) {
+        border-top: 1px solid $patient-registration-border-color;
+        border-right: 1px solid $patient-registration-border-color;
+        border-bottom: 1px solid $patient-registration-border-color;
+        padding: 10px;
+    }
+    &-item {
+        padding: 5px 10px;
+        display: flex;
+    }
+    &-item:not(:last-child) {
+        border-right: 1px solid $patient-registration-border-color;
+        border-bottom: 1px solid $patient-registration-border-color;
+    }
+    &-item:first-child {
+        border-left: 1px solid $patient-registration-border-color;
+    }
+    &:nth-child(odd) {
+        background-color: $grid-odd-row-background-color;
+    }
+    &:first-child {
+        background-color: $background-color;
+    }
+    &-close-item {
+        border-right: 1px solid $patient-registration-border-color;
+        border-bottom: 1px solid $patient-registration-border-color;
+        display: flex;
+    }
+    &-clear-icon {
+        color: $search-dropdown-hover-background-color;
+        margin: auto;
+    }
+    &-clear-icon:hover {
+        cursor: pointer;
+    }
+    &-phone-number {
+        height: 30px;
+        padding: 0px 5px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 4px;
+        width: 100%;
+        outline: none;
+    }
+    &-PhoneNumberIcon {
+        color: $error-color;
+        margin: auto;
+    }
+    &-PhoneTypeIcon {
+        color: $error-color;
+        margin: auto;
+    }
+    &-tooltip {
+        position: relative;
+    }
+    &-type-selectlist:focus {
+        box-shadow: 0 0 0 1px $dropdown-hover-color;
+    }
+    &-type-selectlist {
+        height: 30px;
+        width: 100%;
+        padding: 0px 5px;
+        text-align: left;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        border: 1px solid $patient-registration-border-color;
+        background-color: $page-search-input-background;
+        color: $text-black;
+    }
+}
+.phone-grid-owner {
+    display: grid;
+    grid-template-columns: 19% 21% 19% 13% 13% 12% 3%;
+    height: 40px;
+    &-selectlist {
+        height: 30px;
+        width: 100%;
+        padding: 0px 5px;
+        text-align: left;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        border: 1px solid $patient-registration-border-color;
+        background-color: $page-search-input-background;
+        color: $text-black;
+        outline: none;
+    }
+    &-selectlist:focus {
+        box-shadow: 0 0 0 1px $dropdown-hover-color;
+    }
+}
+.email-grid {
+    display: grid;
+    grid-template-columns: 33% 32% 32% 3%;
+    height: 40px;
+    &-header:first-child {
+        border-left: 1px solid $patient-registration-border-color;
+        padding: 10px;
+    }
+    &-header:last-child {
+        border-top: 1px solid $patient-registration-border-color;
+        border-right: 1px solid $patient-registration-border-color;
+        border-bottom: 1px solid $patient-registration-border-color;
+        padding: 10px;
+    }
+    &-header:not(:last-child) {
+        border-top: 1px solid $patient-registration-border-color;
+        border-right: 1px solid $patient-registration-border-color;
+        border-bottom: 1px solid $patient-registration-border-color;
+        padding: 10px;
+    }
+    &-item {
+        padding: 5px 10px;
+        display: flex;
+    }
+    &-item:not(:last-child) {
+        border-right: 1px solid $patient-registration-border-color;
+        border-bottom: 1px solid $patient-registration-border-color;
+    }
+    &-item:first-child {
+        border-left: 1px solid $patient-registration-border-color;
+    }
+    &:nth-child(odd) {
+        background-color: $grid-odd-row-background-color;
+    }
+    &:first-child {
+        background-color: $background-color;
+    }
+    &-close-item {
+        border-right: 1px solid $patient-registration-border-color;
+        border-bottom: 1px solid $patient-registration-border-color;
+        display: flex;
+    }
+    &-clear-icon {
+        color: $search-dropdown-hover-background-color;
+        margin: auto;
+    }
+    &-clear-icon:hover {
+        cursor: pointer;
+    }
+    &-address {
+        height: 30px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 4px;
+        width: 100%;
+        padding: 0px 8px;
+        outline: none;
+    }
+}
+.email-grid-owner {
+    display: grid;
+    grid-template-columns: 30% 33% 17% 17% 3%;
+    height: 40px;
+    &-selectlist:focus {
+        box-shadow: 0 0 0 1px $dropdown-hover-color;
+    }
+    &-selectlist {
+        height: 30px;
+        width: 100%;
+        padding: 0px 5px;
+        text-align: left;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        border: 1px solid $patient-registration-border-color;
+        background-color: $page-search-input-background;
+        color: $text-black;
+        outline: none;
+    }
+}
+.item-center {
+    margin: auto;
+}
+.contact-detail-optout-label {
+    margin: -2px 0px 0px 10px;
+}
+.state-selectlist:focus {
+    box-shadow: 0 0 0 1px $dropdown-hover-color;
+}
+.memberAccount-selectlist:focus {
+    box-shadow: 0 0 0 1px $dropdown-hover-color;
+}
+.error-contact-control {
+    border: 1px solid $error-color;
+    box-shadow: 0 0 0 1px $error-color;
+    width: 85%;
+}
+::ng-deep {
+    .fui-select-container {
+        width: 98% !important;
+    }
+    .fui-select {
+        height: 30px !important;
+        outline: none;
+    }
+    .select-list-wrapper {
+        grid-gap: 0px !important;
+    }
+    .fui-toggle-wrapper {
+        margin-top: 6px;
+    }
+}

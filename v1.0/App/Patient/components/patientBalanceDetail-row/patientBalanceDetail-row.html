@@ -1,0 +1,128 @@
+﻿<div class="container-fluid">
+    <div class="table-row">
+        <div class="infoBox">
+            <div class="col-md-12 infoBoxGroup">
+                <div class="col-md-2 infoBoxSectionBorder">                    
+                    <h2>
+                        <span ng-hide="calculatingBalance" id="valueSelectedMemberBalance">{{showTotalBalance ? totalBalance : selectedMemberBalance | formatCurrencyWithParensIfNeg}}</span> <span ng-show="!showTotalBalance && !calculatingBalance && !singleAccountMember">*</span>
+                        <i id="idBalanceSpinner" ng-show="calculatingBalance" class="fa fa-spinner fa-spin loading"></i>
+                    </h2>
+                    <h5><span id="lblTotalBalance">{{'Balance' | i18n}}</span></h5>
+                    <div class="box-info font-12 padding-top-10" ng-show="!showTotalBalance && !calculatingBalance && !singleAccountMember">
+                        <span id="valueTotalBalance">* {{totalBalance | formatCurrencyWithParensIfNeg}}</span><span id="lblFor"> {{'for' | i18n}}</span> 
+                        <a ng-if="linkToAllAccountMembers" id="linkToAllAccountMembers" ng-click="resetDataToAll()">{{'All Account Members' | i18n }}</a>
+                        <span ng-if="!linkToAllAccountMembers" id="linkToAllAccountMembers">{{'All Account Members' | i18n }}</span>
+                    </div>
+                    <div class="padding-top-4">
+                        <div class="padding-top-4">
+                            <a id="lnkReceivableMenuInCollections" check-auth-z="soar-acct-coll-edit" ng-click="updateAccountInCollections(receivable)" class="ng-binding">
+                                {{ receivable?  ('Remove from Collections' | i18n ) : ( 'Place into Collections' | i18n)}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 infoBoxSectionBorder">
+                    <h2>
+                        <span ng-hide="calculatingBalance || !showInsuranceEstimate" id="valueTotalInsuranceEst">{{showTotalBalance ? totalInsurance : selectedMemberInsurance | formatCurrencyWithParensIfNeg}}</span>
+                        <span ng-show="showTotalBalance && !calculatingBalance && !singleAccountMember" class="font-weight-bold font-20"></span>
+                        <span ng-show="!showInsuranceEstimate">{{'N/A' | i18n}}</span>
+                        <i id="idInsuranceSpinner" ng-show="calculatingBalance" class="fa fa-spinner fa-spin loading"></i>
+                    </h2>
+                    <h5>
+                        <span id="lblTotalInsuranceEst">{{'Estimated Ins.' | i18n}}</span>
+                    </h5>
+                    <div class="padding-top-4">
+                        <a id="applyPatientInsurancePayment" check-auth-z="{{ soarAuthInsPaymentAddKey }}" ng-click="applyPatientInsurancePayment()" class="ng-binding">{{ 'Apply an insurance payment' | i18n }}</a>
+                    </div>
+                </div>
+                <div class="col-md-2 infoBoxSectionBorder">
+                    <h2>
+                        <span ng-hide="calculatingBalance || !showAdjustedEstimate" id="valueTotalAdjustedEst">{{showTotalBalance ? totalAdjustedEstimate : selectedMemberAdjustedEstimate | formatCurrencyWithParensIfNeg}}</span>
+                        <span ng-show="showTotalBalance && !calculatingBalance && !singleAccountMember"></span>
+                        <span ng-show="!showAdjustedEstimate">{{'N/A' | i18n}}</span>
+                        <i id="idInsuranceSpinner" ng-show="calculatingBalance" class="fa fa-spinner fa-spin loading"></i>
+                    </h2>
+                    <h5>
+                        <span id="lblTotalAdjEst">{{'Estimated Ins. Adj.' | i18n}}</span>
+                    </h5> 
+                </div>
+                <div class="col-md-2 infoBoxSectionBorder">
+                    <h2>
+                        <span ng-hide="calculatingBalance" id="valueSelectedMemberPatientPortion">{{showTotalBalance ? totalPatientPortion : selectedMemberPatientPortion | formatCurrencyWithParensIfNeg}}</span>
+                        <i id="idPatientPortionSpinner" ng-show="calculatingBalance" class="fa fa-spinner fa-spin loading"></i>
+                    </h2>
+                    <h5>
+                        <span>{{ 'Due Now' | i18n }}</span>
+                    </h5>
+
+                    <div class="padding-top-4">
+                        <a id="applyPatientPayment" check-auth-z="{{soarAuthAddAccountPaymentKey}}" ng-click="openPatientPaymentModal()">{{ 'Apply a payment' | i18n }}</a>
+                    </div>
+                </div>
+                <div class="col-md-2 infoBoxSectionBorder">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <patient-account-aging data="totalBalance" graph-data="graphData"></patient-account-aging>
+                        </div>
+
+                        <div class="col-md-9 padding-top-5 font-12">
+                            <table class="ditribution-detials">
+                                <tr>
+                                    <td colspan="2">
+                                        <a id="linkAllAccountMembersBalances" ng-class="{ 'disabled': !selectedGraphModifier }" class="header-link" ng-click="loadBalanceSummary()">{{'All' | i18n }}</a>&nbsp;|&nbsp;
+                                        <a id="linkPatientOnlyAccountMembersBalance" ng-class="{ 'disabled': selectedGraphModifier === 'patient' }" class="header-link" ng-click="loadBalanceSummary('patient')">{{'Patient Only' | i18n }}</a> &nbsp;|&nbsp;
+                                        <a id="linkInsuranceOnlyAccountMembersBalance" ng-class="{ 'disabled': selectedGraphModifier === 'insurance' }" class="header-link" ng-click="loadBalanceSummary('insurance')">{{'Insurance Only' | i18n }}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="balance-type"><span id="lblAgeBand0to30Type">{{'{0} Days' | i18n:['0-30']}}: </span></td>
+                                    <td class="balance-name balance-current"><span id="lblAgeBand0to30Name" ng-if="graphData.currentBalance> 0 || graphData.currentBalance< 0">{{graphData.currentBalance| formatCurrencyWithParensIfNeg}}</span><span id="lblAgeBand0to30Dash" ng-if="graphData.currentBalance== 0">&#8212;</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="balance-type"><span id="lblAgeBand31to60Type">{{'{0} Days' | i18n:['31-60']}}: </span></td>
+                                    <td class="balance-name balance-overdue"><span id="lblAgeBand31to60" ng-if="graphData.moreThanThirtyBalance> 0">{{graphData.moreThanThirtyBalance| formatCurrencyWithParensIfNeg}}</span><span id="lblAgeBand31to60Dash" ng-if="graphData.moreThanThirtyBalance<= 0">&#8212;</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="balance-type"><span id="lblAgeBand61to90Type">{{'{0} Days' | i18n:['61-90']}}: </span></td>
+                                    <td class="balance-name balance-overdue"><span id="lblAgeBand61to90" ng-if="graphData.moreThanSixtyBalance>0">{{graphData.moreThanSixtyBalance| formatCurrencyWithParensIfNeg}}</span><span id="lblAgeBand61to90Dash" ng-if="graphData.moreThanSixtyBalance<= 0">&#8212;</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="balance-type"><span id="lblAgeBandAbove90Type">{{'{0} Days' | i18n:['> 90']}}: </span></td>
+                                    <td class="balance-name balance-delinquent"><span id="lblAgeBandAbove90Name" ng-if="graphData.moreThanNintyBalance>0">{{graphData.moreThanNintyBalance| formatCurrencyWithParensIfNeg}}</span><span id="lblAgeBandAbove90Dash" ng-if="graphData.moreThanNintyBalance<= 0">&#8212;</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 infoBoxSectionBorder">
+                    <div>
+                        <a id="applyAdjustment" class="btn btn-link" check-auth-z="{{soarAuthAddCreditAdjustmentKey}}" ng-click="openAdjustmentModal()">{{ 'Apply adjustment' | i18n }}</a>
+                    </div>
+                    <div>
+                        <a id="createStatement" class="btn btn-link" check-auth-z="{{soarAuthAcctStmtAddKey}}" ng-click="openTab()">{{ 'Create a Statement' | i18n }}</a>
+                    </div>
+                    <div>
+                        <a id="addDocument" class="btn btn-link" check-auth-z="soar-doc-docimp-add" ng-click="uploadFile()">{{ 'Add a Document' | i18n }}</a>
+                    </div>
+                    <div>
+                        <div kendo-window="docCtrls"
+                             k-title="'Document Uploader'"
+                             k-visible="false"
+                             k-on-open="docCtrlsOpen = true"
+                             k-on-close="docCtrlsOpen = false">
+                        </div>
+                    </div>
+                    <div>
+                        <fieldset  >
+                            <button  id="addNote" ng-click="createNoteModal()" class="btn btn-link">{{ 'Add a note' | i18n }}</button>
+                        </fieldset>
+                    </div>
+                    <div>
+                        <button ng-click="transferAccount()" class="btn btn-link">{{ 'Transfer' | i18n }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

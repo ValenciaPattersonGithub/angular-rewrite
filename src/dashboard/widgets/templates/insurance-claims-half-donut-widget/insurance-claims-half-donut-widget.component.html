@@ -1,0 +1,25 @@
+<div class="soarWidget InsuranceClaimsHalfDonut">
+    <div class="panel-heading soarWidget__header">
+        <div class="widget-handle w_row">
+            <label>{{ data?.Title | translate }}</label>
+        </div>
+        <div class="soarSelectList">
+            <kendo-dropdownlist *ngIf="displayTypeOptions.length"
+                id="insuranceClaimsFilter" 
+                [data]="displayTypeOptions"
+                [textField]="'Value'"
+                [valueField]="'Value'" 
+                [tabIndex]="'10'"
+                [(ngModel)]="dateFilter"
+                [valuePrimitive]="true"
+                (valueChange)="dateFilterChanged($event)"
+                ngDefaultControl #datedropdown clickOutside (clickOutside)="clickedOutside(datedropdown)">
+            </kendo-dropdownlist> 
+        </div>
+    </div>
+    <ng-container *ngIf="simpleHalfDonutChartData">
+        <div class="soarWidget__body">
+            <simple-half-donut [simpleHalfDonutFiltersTypes]="simpleHalfDonutFiltersTypes" [simpleHalfDonutChartData]="simpleHalfDonutChartData"></simple-half-donut>
+        </div>
+    </ng-container>
+</div>

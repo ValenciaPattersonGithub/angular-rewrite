@@ -1,0 +1,37 @@
+﻿.perioChart {
+    font-family: @brand-font_header;
+    width: 80%;
+    margin-left: 10%;
+
+    &__chart {
+        width: 100%;
+        /* turns off the circles in the line graph */
+        circle {
+            display: none;
+        }
+    }
+
+    &__upper {
+        margin-bottom: @brand-margin_xl;
+    }
+
+    &__top {
+        height: 125px;
+    }
+
+    &__bottom {
+        height: 100px;
+    }
+
+    &__legend {
+        display: flex;
+
+        > div {
+            color: @brand-color_white;
+            flex: 1;
+            margin: @brand-margin_sm;
+            padding: @brand-padding_xs;
+            text-align: center;
+        }
+    }
+}

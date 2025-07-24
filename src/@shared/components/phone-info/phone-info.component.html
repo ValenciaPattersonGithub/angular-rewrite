@@ -1,0 +1,20 @@
+<div *ngIf="phoneTypes">
+    <div class="phone-item" *ngFor="let phone of phones">
+        <div class="phone-container">
+            <phone-info-item [showLabel]="showLabel" [phoneId]="$index" [phone]="phone" [validForm]="validForm"
+                [phoneTypes]="phoneTypes" [disableInput]="disableInput" [editMode]="flags?.editing"
+                [showRemoveOption]="phones?.length>1" [showIsPrimary]="showIsPrimaryCheckBox"
+                (removeFunction)="removePhone(phone)" (onUpdatePhone)="onUpdatePhone()" [hasNotes]="hasNotes"
+                [hasTexts]="hasTexts" [phoneTabindex]="tabIndex" [hidePhoneTypes]="customTypeOnly == true">
+            </phone-info-item>
+        </div>
+    </div>
+    <div class="phoneInfo__add" *ngIf="!disableInput">
+        <button id="btnAddPhone" #btnAddPhone class="btn btn-link" icon="fa-plus" [tabindex]="tabIndex" (click)="addPhone()"
+            *ngIf="ifAddAccess && ((phones?.length - deletedPhones?.length) < maxLimit)">
+            {{ 'Add another phone' | translate }}
+        </button>
+        <span id="lblMaxPhones" class="help-block" *ngIf="(phones?.length - deletedPhones?.length) == maxLimit">{{
+            'Maximum number of phones has been reached.' | translate }}</span>
+    </div>
+</div>

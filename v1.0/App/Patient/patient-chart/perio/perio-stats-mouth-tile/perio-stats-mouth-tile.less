@@ -1,0 +1,49 @@
+﻿.proStatsMthTile {    
+    .clearfix;    
+    background-color: @brand-color_white;
+    transition: all 0.5s ease 0s;
+    width: 100%;    
+    &.active {
+        background-color: @brand-color_gray;
+    } 
+    &__dtlBox {
+        width: 83%;
+        float: left;
+        padding: 12px;
+        margin-left: 5px;
+        background-color: @brand-color_white;
+        border: 1px solid @brand-color_dark-gray;
+        min-height: 70px;
+        cursor: pointer !important;
+    }
+    &__dtlLeft {
+        .clearfix;
+        width: 80%;
+        float: left;
+        padding-right: 4px;
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        color: @brand-color_font-regular;
+    }
+
+    &__dtlRight {
+        float: right;
+        margin-top: 10px;
+        margin:10px 12px 0px 0px;
+    }
+
+    &__desc {
+        width: 100%;
+        font-weight: 300;
+        float: left;
+    }
+
+    &__pckts {
+        font-weight: 500;
+        width: 100%;
+        float: left;
+    }
+}
+
+
+

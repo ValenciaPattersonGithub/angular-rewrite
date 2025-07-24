@@ -1,0 +1,35 @@
+//Used all kendo class for kendo dialog design and visibility
+// ::ng-deep will apply the change to kendo popup and :host will apply these changes to current pages only
+
+:host ::ng-deep {
+    .k-window {
+        left: 25%;
+        width: 50%;
+        top: 10%;
+        right: 25%;
+        max-height: 520px;
+    }
+
+    .k-window-content, .k-prompt-container {
+        padding: 0px !important;
+    }
+
+    .k-dialog .k-content {
+        padding: 0px !important;
+    }   
+}
+
+//Used to handle scrolling area for setScroll
+.feesByLocation__locationList.setScroll {
+    max-height: 400px !important;
+}
+
+//Used for dialog content handling
+.panel .panel-heading {
+    width: -webkit-fill-available;
+}
+
+//Used for each location box design
+.panel .panel-body {
+    display:flex;
+}

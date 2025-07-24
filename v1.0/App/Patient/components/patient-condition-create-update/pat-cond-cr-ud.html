@@ -1,0 +1,52 @@
+﻿<div class="patCondCreateUpdate">
+    <!-- Teeth Selector -->
+    <div class="form-row" ng-show="area">
+        <div class="form-col-12">
+            <label class="control-label" >{{'Tooth *' | i18n}}</label>
+            <select kendo-multi-select k-options="teethSelectOptions" k-ng-model="activeTeeth" k-change="activeTeethUpdated" ng-if="loadKendoWidgets === true"></select>
+        </div>
+    </div>
+    <!-- Area Selectors -->
+    <!-- Surface -->
+    <div class="form-row" ng-if="surfaces.length != 0 && area==4">
+        <div class="form-col-12">
+            <label class="control-label">{{'Surface' | i18n}}</label>
+            <surfaces data="surfaces"></surfaces>
+        </div>
+    </div>
+    <!-- Root -->
+    <div class="form-row" ng-hide="activeTeeth.length > 1" ng-if="roots.length != 0 && area==3">
+        <div class="form-col-12" >
+            <label class="control-label">{{'Root' | i18n}}</label>
+            <roots data="roots" active-teeth="detailedActiveTeeth"></roots>
+        </div>
+    </div>    
+    <!-- Date -->
+    <div class="form-row">
+        <!-- Status -->
+        <div class="form-col-6">
+            <label class="control-label">{{'Status' | i18n}}</label>
+             <soar-select-list id="inpStatus"
+                              name="inpStatus"                                                           
+                              text-field="Name"
+                              value-field="Id"
+                               ng-model="patientCondition.Status"
+                              option-list="ConditionStatus">
+             </soar-select-list>
+        </div>
+        <!-- Date -->
+        <div class="form-col-6">
+            <label class="control-label">{{'Date' | i18n}}</label>
+            <date-selector input-id="inpConditionDate" placeholder="MM/dd/yyyy" date-var="patientCondition.ConditionDate" max-date="maxDate" valid="validDate" format="MM/dd/yyyy"></date-selector>
+        </div>
+    </div>
+    <!-- Footer -->
+    <div class="form-footer">
+        <button id="btnSave" class="btn btn-primary" ng-click="savePatientCondition()" ng-disabled="!formIsValid || saving || loading">
+            {{ 'Save' | i18n }}
+        </button>
+        <button id="btnCancel" class="btn btn-default" ng-click="close()">
+            {{ 'Cancel' | i18n }}
+        </button>
+    </div>
+</div>

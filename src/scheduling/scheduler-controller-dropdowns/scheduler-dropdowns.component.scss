@@ -1,0 +1,158 @@
+﻿@import "variables";
+
+/***
+    css for multi select drop down
+**/
+.multi-select {
+    left: 0;
+    position: relative;
+    top: 0;
+    margin-right: 10px;
+
+    &__button {
+        height: 39px;
+        border: 1px solid #A9A9A9;
+        border-radius: 2px;
+        color: $action-blue;
+        background: $polar-white;
+        padding: 8px;
+
+        &__text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &__i{
+
+            margin-left: 3px;
+        }
+    }
+}
+
+    .dropdown {
+        position: relative;
+    }
+
+.drop-show {
+    padding-top: 4px 0px 4px 0px;
+    width: 350px;
+    background-color: $polar-white;
+    position: absolute;
+    z-index: 1000;
+    box-shadow: $global-drop-shadow;
+    margin-left: 1px;
+}
+   
+    .drop-show div {
+        display: block;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .drop-show div input {
+        vertical-align: top;
+    }
+
+    .drop-show div span {
+        display: inline-block;
+    }
+
+.scrollbar {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 500px;
+}
+
+/* Customize the label (the container) */
+.container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 350px;
+    /*height: 33px;*/
+    padding: 10px;
+    margin-bottom: 0px !important;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-bottom-width: 0px;
+    border-style: solid;
+    border-color: $border-grey;
+    background-color: $polar-white;
+    background-size: cover;
+    font-family: $global-font-family;
+    font-size: 12px;
+    font-weight: 400 !important;
+    color: $label-black;
+    text-decoration: none solid rgb(85, 85, 85);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container:hover{
+    background-color: $action-blue;
+    color: $polar-white;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+    position: relative;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    height: 16px;
+    width: 16px;
+    min-width: 16px;
+    margin-right: 10px;
+    border: solid 1px $action-blue;
+    border-radius: 3px;
+    background-color: $polar-white;
+}
+
+.displayText {
+    width: 300px;
+    overflow-wrap: break-word;
+}
+
+.container:hover input:checked ~ .checkmark {
+    background-color: $polar-white;
+    border: solid 1px $action-blue;
+    color: $action-blue;
+}
+
+/* On hover, add an action blue background color and a white border to checkbox */
+.container:hover input ~ .checkmark {
+    background-color: $action-blue;
+    border: solid 1px $polar-white;
+}
+
+/* When the checkbox is checked, add an action blue background */
+.container input:checked ~ .checkmark {
+    background-color: $action-blue;
+}
+
+
+//Hide the checkmark
+.container .checkmark .svgIcon {
+    display: none;
+}
+
+//Show the checkmark and make the checkmark polar white when not hovering
+.container input:checked ~ .checkmark .svgIcon {
+    display: block;
+    color: $polar-white;
+}
+
+//Make the checkmark action blue when the checkbox is checked and hovering
+.container:hover input:checked ~ .checkmark .svgIcon {
+   color: $action-blue;
+}
+

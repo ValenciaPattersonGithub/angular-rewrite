@@ -1,0 +1,146 @@
+﻿<div class="row claimPaymentGrid">
+
+    <div class="fuseGrid pull-left col-md-12"  >
+        <div class="row header">
+            <div ng-repeat="column in header">
+                <div class="{{column.size}} {{column.class}}">
+                    {{ column.label }}
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div ng-if="!claims || claims.length === 0" class="col-md-12 row text-center padding-10">{{ 'No search results' | i18n}}</div>
+     
+        <div class="row body" infinite-scroll="getClaims()" infinite-scroll-disabled="isUpdating" >
+
+        <div  ng-repeat="payment in claims">
+            <div class="col-sm-12">
+                <div class="row payment">
+                    <div class="col-sm-1">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa"
+                                   ng-click="payment.selected = !payment.selected || payment.$$servicesHaveErrors"
+                                   ng-class="{'fa-chevron-down': payment.selected, 'fa-chevron-right': !payment.selected }"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ (payment.MinServiceDate | toShortDisplayDateUtc) == (payment.MaxServiceDate | toShortDisplayDateUtc) ? (payment.MinServiceDate | toShortDisplayDateUtc) : (payment.MinServiceDate | toShortDisplayDateUtc) + ' - ' + (payment.MaxServiceDate | toShortDisplayDateUtc) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        {{ payment.PatientName }}
+                    </div>
+                    <div class="col-sm-1">
+                        {{ payment.ProviderName }}
+                    </div>
+                    <div class="col-sm-2">
+                        {{ !payment.CarrierName || payment.CarrierName === '' ? 'No carrier assigned' : payment.CarrierName + ' - ' + payment.PrimaryClaim }}
+                        <div ng-show="payment.FeeScheduleId">
+                            <div class="patIns__subTitle"><a ng-click="openFeeScheduleEvent({feeScheduleId:payment.FeeScheduleId})" check-auth-z="soar-ins-ifsch-view"> {{ 'Fee Schedule' | i18n }}</a></div>
+                        </div>
+                    </div>
+                    <div class="half-col">
+                        {{ payment.Tooth }}
+                    </div>
+                    <div class="half-col">
+                        {{ payment.Surface | surfaceStringFromCSVs }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ payment.TotalCharges | currency }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ payment.AllowedAmount | currency }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ payment.TotalEstimatedInsurance | currency }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ payment.TotalEstInsuranceAdj | currency }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ payment.TotalPatientBalance | currency }}
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="text"
+                               placeholder="{{ 0 | currency }}"
+                               class="form-control bulk-payment-type text-right"
+                               id="inpAmountClaim{{ payment.ClaimId }}"
+                               model-format="currency"
+                               ng-disabled="disableInput || disableAll === true"
+                               ng-model-options="{updateOn: 'blur'}"
+                               ng-change="paymentAmountBlurEvent({amount:payment.PaymentAmount ? payment.PaymentAmount : 0, claim: payment})"
+                               ng-model="payment.PaymentAmount" />
+                    </div>
+                    <div class="col-sm-1 text-center">
+                        <input type="checkbox"
+                               id="inpFinalPaymentClaim{{payment.ClaimId}}"
+                               ng-disabled="payment.Status === 7 || payment.Status === 8 || payment.Status === 4 || payment.Status === 9 || disableAll === true"
+                               ng-change="finalPaymentChangeEvent()"
+                               ng-model="payment.FinalPayment" />
+                    </div>
+                </div>
+                <div class="row service" ng-show="payment.selected" ng-repeat="service in payment.ServiceTransactionToClaimPaymentDtos">
+                    <div class="col-sm-1">
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                {{ service.displayDateEntered }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        {{ service.PatientName }}
+                    </div>
+                    <div class="col-sm-1">
+                        {{ service.ProviderName }}
+                    </div>
+                    <div class="col-sm-2">
+                        {{ service.Description }}
+                    </div>
+                    <div class="half-col">
+                        {{ service.Tooth }}
+                    </div>
+                    <div class="half-col">
+                        {{ service.Surface | surfaceStringFromCSVs  }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ service.Charges | currency }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ service.AllowedAmount | currency }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ service.InsuranceEstimate | currency }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ service.AdjustedEstimate | currency }}
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        {{ service.Balance | currency }}
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="text"
+                               placeholder="{{ 0 | currency }}"
+                               ng-class="{'patientAcctInsPmt__amount-error': parseFloat((service.Charges - service.TotalInsurancePayments).toFixed(2)) < parseFloat(service.PaymentAmount.toFixed(2)) && !disableInput}"
+                               class="form-control bulk-payment-type text-right"
+                               id="inpAmount{{ service.ServiceTransactionId }}"
+                               model-format="currency"
+                               ng-disabled="disableInput || disableAll === true"
+                               ng-blur="serviceAmountBlurEvent({claim: payment, service: service})"
+                               ng-model="service.PaymentAmount" />
+                        <span class='error help-text' ng-show="parseFloat((service.Charges - service.TotalInsurancePayments).toFixed(2)) < parseFloat(service.PaymentAmount.toFixed(2)) && !disableInput">{{ ('Amount cannot be greater than the remaining amount of ' | i18n) + ((service.Charges - service.TotalInsurancePayments) | currency)}}</span>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+         
+        </div>
+        <div class="text-align-center text-muted" ng-if= "resultCount && claims && claims.length > 0 && resultCount !== claims.length">
+            <i id="iDefaultMessage" class="fa fa-spinner fa-spin fa-2x loading"></i>
+        </div>
+    </div>
+</div>

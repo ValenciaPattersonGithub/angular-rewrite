@@ -1,0 +1,5 @@
+<a id="skipPrompt_{{sectionItem?.Index}}" *ngIf="!sectionItem?.IsRequired && !sectionItem?.isMHF && !inputIsDisabled" (click)="changeSkipMode(sectionItem?.Skip)">
+    &nbsp;
+    <span *ngIf="!sectionItem?.Skip">{{'Skip' | translate}}</span>
+    <span *ngIf="sectionItem?.Skip">{{'Skipped' | translate}}</span>
+</a>

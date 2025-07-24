@@ -1,0 +1,310 @@
+﻿<div ng-class="containerClass" ng-if="flyout">
+  <!--Title-->
+  <div>
+    <div class="col-xs-12 row">
+      <div class="row">
+        <div class="col-md-11">
+          <label class="control-label font-24">{{ 'Add Services from Proposed to {0}' | i18n:[ displayMessage ] }}</label>
+        </div>
+      </div>
+      <div class="propClose row">
+        <button id="sp-close" class="btn btn-link" ng-click="hideFilters()"><i class="fa fa-times"></i></button>
+      </div>
+    </div>
+  </div>
+  <!--Input Box-->
+  <div class="row">
+    <div class="col-md-12 row">
+      <div class="form-group">
+        <div class="inner-addon right-addon">
+          <div class="col-xs-4">
+            <input class="form-control border-solid-black" id="searchBoxServiceCodes" placeholder="{{'Search service code, CDT code, description, fee...'|i18n}}" type="text" ng-model="serviceCodesFilters.searchServiceCodesKeyword" ng-model-options="{ debounce: 100 }" />
+          </div>
+
+          <div class="col-xs-1 searchIcon">
+            <span class="glyphicon glyphicon-search"></span>
+          </div>
+          <div class="col-xs-3" ng-if="!loadingServiceTypes">
+            <soar-select-list id="filterList" name="filterList" placeholder="{{'All Service Types' |i18n}}" text-field="Description" value-field="Description" sb-change="changeFilter" option-list="serviceTypes" ng-model="filterServiceList"></soar-select-list>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Table Header-->
+  <div class="row">
+    <div class="col-md-12 proposedHeader">
+      <table ng-hide="hasProposedServices === false" id="tableServiceCodes" class="table table-striped border-solid-black table-hover proposedTable">
+        <thead>
+          <tr class="blue">
+            <td id="tdSelect" class="selectBtn">
+              <div class="pull-left">
+                <button id="lblAddServiceCodes" class="btn btn-primary" ng-disabled="!disableQuickAdd" ng-click="onSelectedCodes()">{{ '+ Add {0}' | i18n:['Services'] }}</button>
+              </div>
+            </td>
+            <td id="tdServiceCode" class="servCode">
+              <div id="columnServiceCode" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('ServiceCodeString')">
+                <div class="col-md-11 sortCdt">{{::('Service Code' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="ServiceCodeString" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdCdtCode" class="cdtCode">
+              <div id="columnCdtCode" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('CdtCode')">
+                <div class="col-md-11 sortArea">{{::('CDT Code' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="CdtCode" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdDescription" class="description">
+              <div id="columnDescription" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Desc')">
+                <div class="col-md-11 sortDesc">{{::('Description' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Desc" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdTooth" class="tooth">
+              <div id="columnTooth" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Tooth')">
+                <div class="col-md-11 sortTooth">{{::('Tooth' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Tooth" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdArea" class="area">
+              <div id="columnArea" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Area')">
+                <div class="col-md-11 sortArea">{{::('Area' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Area" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdProvider" class="provider">
+              <div id="columnProvider" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Name')">
+                <div class="col-md-11 sortProvider">{{::('Provider' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Name" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdMasterFee" class="fee">
+              <div id="columnMasterFee" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Fee')">
+                <div class="col-md-11 col-md-offset-1 sortFee">{{::('Fee' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Fee" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <!--Table Body-->
+  <div class="row">
+    <div class="scrollHeight col-md-12">
+      <table ng-hide="hasProposedServices === false" id="tableServiceCodes" class="table table-striped border-solid-black table-hover">
+        <tbody>
+          <tr ng-repeat="serviceCode in filteredProposedServices | orderBy:orderBy.field:orderBy.asc" uib-tooltip-template="'locationErrorTooltip.html'" tooltip-class="tooltipWidth" tooltip-append-to-body="true" tooltip-placement="top" tooltip-enable="!patientLocationMatch">
+            <!--,'Tooth','Area','Name', -->
+            <td id="tdActionButtons{{::$index}}" class="selectBtn">
+              <div class="quick-add-container">
+                <button id="quickAdd{{::$index}}" ng-disabled="disableQuickAdd || serviceCode.$$disableAddService || !serviceCode.$$invalidLocation" ng-click="quickAddService(serviceCode)" class="btn btn-link ng-binding width-70-percent" title="{{::serviceCode.serviceTitle}}">+ quick add</button>
+                <input class="width-15-percent addCheckBox" ng-disabled="serviceCode.$$disableAddService || !serviceCode.$$invalidLocation" id="chkServiceCode{{::$index}}" type="checkbox" ng-model="serviceCode.$$isSelected" ng-change="selectedService(serviceCode,{{::$index}})" />
+                <i
+                  ng-if="serviceCode.serviceIsActive==false"
+                  class="fa fa-exclamation-triangle inactive-service-warning"
+                  popover-trigger="'mouseenter'"
+                  popover-placement="auto bottom"
+                  popover-append-to-body="false"
+                  uib-popover="Inactive as of {{::serviceCode.serviceInactivationDate|date:'MM/dd/yyyy'}}"
+                ></i>
+
+                <i ng-if="serviceCode.AppointmentId" class="far fa-calendar-check scheduledicon width-10-percent" title="{{'This service is on an appointment.'|i18n}}"></i>
+                <i ng-if="serviceCode.$$hasBeenAddedToATxPlan" class="fas fa-clipboard added-to-tx-icon width-10-percent" title="{{'This service has been added to a treatment plan.'|i18n}}"></i>
+              </div>
+            </td>
+            <td
+              id="tdCode{{::$index}}"
+              ng-class="{'text-muted': serviceCode.$$disableAddService}"
+              class="servCode"
+              title="{{::serviceCode.ServiceCodeString}}"
+              ng-bind-html="serviceCode.ServiceCodeString  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"
+            ></td>
+            <td id="tdCode{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="cdtCode" title="{{::serviceCode.CdtCode}}" ng-bind-html="serviceCode.CdtCode  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+            <td id="tdDescription{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="description" title="{{::serviceCode.Desc}}" ng-bind-html="serviceCode.Desc  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword:65 "></td>
+            <td
+              id="tdTooth{{::$index}}"
+              ng-class="{'text-muted': serviceCode.$$disableAddService}"
+              class="tooth"
+              title="{{::serviceCode.Tooth | convertToothRangeToQuadrantOrArchCode}}"
+              ng-bind-html="serviceCode.Tooth  === 0 ? '' : serviceCode.Tooth | convertToothRangeToQuadrantOrArchCode"
+            ></td>
+            <!-- |highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"-->
+            <td id="tdArea{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="area" title="{{::serviceCode.Area}}" ng-bind-html="serviceCode.Area"></td>
+            <!--|highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"-->
+            <td id="tdProvider{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="provider" title="{{::serviceCode.Name}}" ng-bind-html="serviceCode.Name"></td>
+            <!--|highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"-->
+            <td id="tdFee{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="fee" title="{{::serviceCode.Fee | currency}}" ng-bind-html="serviceCode.Fee | currency  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--Error Message-->
+  <div class="row">
+    <div class="col-xs-12">
+      <div ng-show="hasProposedServices === false || filteredServiceCodes.length==0">
+        <no-results loading-message="loadingMessageNoResults" loading="loadingServices==true" filtering="filteringServices" filtering-message="filteringMessageNoResults"></no-results>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="proposedSelectorRunning" ng-if="!flyout">
+  <!--Title-->
+  <div>
+    <div class="col-xs-12 row">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="control-label font-24">{{ 'Add Services from Proposed to {0}' | i18n:[ displayMessage] }}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Input Box-->
+  <div class="row">
+    <div class="col-md-12 row">
+      <div class="form-group compactView">
+        <div class="inner-addon right-addon compactView">
+          <div class="col-xs-4">
+            <input class="form-control border-solid-black" id="searchBoxServiceCodes" placeholder="{{::('Search service code, CDT code, description, fee...'|i18n)}}" type="text" ng-model="searchServiceCodesKeyword" />
+          </div>
+
+          <div class="col-xs-1 searchIcon">
+            <span class="glyphicon glyphicon-search"></span>
+          </div>
+          <div class="col-xs-3" ng-if="!loadingServiceTypes">
+            <soar-select-list id="filterList" name="filterList" placeholder="{{'All Service Types'|i18n}}" text-field="Description" value-field="Description" sb-change="changeFilter" option-list="serviceTypes" ng-model="filterServiceList"></soar-select-list>
+          </div>
+          <div class="col-xs-4 divShowInactive"><input id="showProposedServiceSelector" type="checkbox" ng-model="allowInactive" ng-change="setStatus()" />{{::('Show Inactive'|i18n)}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Table Header-->
+  <div class="row">
+    <div class="col-md-12 proposedHeader">
+      <table ng-hide="hasProposedServices === false" id="tableServiceCodes" class="table table-striped border-solid-black table-hover proposedTable compactView">
+        <thead>
+          <tr class="blue">
+            <td id="tdSelect" class="selectBtn">
+              <div class="pull-left">
+                <button id="lblAddServiceCodes" class="btn btn-primary" ng-click="onSelectedCodes()">{{ '+ Add {0}' | i18n:['Services'] }}</button>
+              </div>
+            </td>
+            <td id="tdServiceCode" class="servCode">
+              <div id="columnServiceCode" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('ServiceCodeString')">
+                <div class="col-md-11">{{::('Service Code' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="ServiceCodeString" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdDescription" class="description">
+              <div id="columnDescription" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Desc')">
+                <div class="col-md-11">{{::('Description' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Description" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdTooth" class="tooth">
+              <div id="columnTooth" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Tooth')">
+                <div class="col-md-11">{{::('Tooth' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Tooth" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdArea" class="area">
+              <div id="columnArea" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Area')">
+                <div class="col-md-11">{{::('Area' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Area" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdProvider" class="provider">
+              <div id="columnProvider" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Name')">
+                <div class="col-md-11">{{::('Provider' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Name" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+            <td id="tdMasterFee" class="fee">
+              <div id="columnMasterFee" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Fee')">
+                <div class="col-md-11 col-md-offset-1">{{::('Fee' | i18n)}}</div>
+                <column-sort sort-field="orderBy.field" col="Fee" asc="orderBy.asc"></column-sort>
+              </div>
+            </td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <!--Table Body-->
+  <div class="row compactView">
+    <div class="col-md-12 compactTable">
+      <table ng-hide="hasProposedServices === false" id="tableServiceCodes" class="table table-striped border-solid-black table-hover">
+        <tbody>
+          <tr
+            ng-repeat="serviceCode in filteredProposedServices"
+            ng-class="{'disabled': !patientLocationMatch || serviceCode.$$disableAddService}"
+            uib-tooltip-template="'locationErrorTooltip.html'"
+            tooltip-class="tooltipWidth"
+            tooltip-append-to-body="true"
+            tooltip-placement="top"
+            tooltip-enable="!patientLocationMatch"
+          >
+            <!--,'Tooth','Area','Name', -->
+            <td id="tdActionButtons{{::$index}}" class="selectBtn">
+              <div>
+                <button id="quickAdd{{::$index}}" ng-disabled="serviceCode.$$disableAddService" ng-click="quickAddService(serviceCode)" class="btn btn-link ng-binding width-70-percent">+ quick add</button>
+                <input class="width-20-percent addCheckBox" ng-disabled="serviceCode.$$disableAddService" id="chkServiceCode{{::$index}}" type="checkbox" ng-model="serviceCode.$$isSelected" ng-change="selectedService(serviceCode,{{::$index}})" />
+                <i
+                  ng-if="serviceCode.serviceIsActive==false"
+                  class="fa fa-exclamation-triangle inactive-service-warning"
+                  popover-trigger="'mouseenter'"
+                  popover-placement="auto bottom"
+                  popover-append-to-body="false"
+                  uib-popover="Inactive as of {{::serviceCode.serviceInactivationDate|date:'MM/dd/yyyy'}}"
+                ></i>
+                <i class="far fa-calendar-check scheduledicon width-10-percent" uib-tooltip-template="'proposedScheduleTooltip.html'" ng-if="serviceCode.AppointmentId && !$first"></i>
+                <i class="far fa-calendar-check scheduledicon width-10-percent" uib-tooltip-template="'proposedScheduleTooltip.html'" ng-if="serviceCode.AppointmentId && $first" tooltip-placement="bottom-middle"></i>
+              </div>
+            </td>
+            <td
+              id="tdCode{{::$index}}"
+              ng-class="{'text-muted': serviceCode.$$disableAddService}"
+              class="servCode"
+              title="{{::serviceCode.ServiceCodeString}}"
+              ng-bind-html="serviceCode.ServiceCodeString   | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"
+            ></td>
+            <td id="tdDescription{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="description" title="{{::serviceCode.Desc}}" ng-bind-html="serviceCode.Desc   | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword:65 "></td>
+            <td id="tdTooth{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="tooth" title="{{::serviceCode.Tooth | convertToothRangeToQuadrantOrArchCode}}" ng-bind-html="serviceCode.Tooth | convertToothRangeToQuadrantOrArchCode"></td>
+            <!-- |highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"-->
+            <td id="tdArea{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="area" title="{{::serviceCode.Area}}" ng-bind-html="serviceCode.Area"></td>
+            <!--|highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"-->
+            <td id="tdProvider{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="provider" title="{{::serviceCode.Name}}" ng-bind-html="serviceCode.Name"></td>
+            <!--|highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"-->
+            <td id="tdFee{{::$index}}" ng-class="{'text-muted': serviceCode.$$disableAddService}" class="fee" title="{{::serviceCode.Fee | currency}}" ng-bind-html="serviceCode.Fee | currency  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--Error Message-->
+  <div class="row">
+    <div class="col-xs-12">
+      <div ng-show="noProposedServices === true || filteredServiceCodes.length==0">
+        <no-results loading-message="loadingMessageNoResults" loading="loadingServices==true" filtering="filteringServices" filtering-message="filteringMessageNoResults"></no-results>
+      </div>
+    </div>
+  </div>
+</div>
+<!--tooltip template - Location Error -->
+<script type="text/ng-template" id="locationErrorTooltip.html">
+  <div class="locationErrorMessage">
+      <p>
+          {{::'Your current location does not match this patient\'s primary or alternate locations.' | i18n }}
+          <br />{{::'Please update your current location to the patient\'s primary or any alternate locations to complete this action.' | i18n }}
+      </p>
+  </div>
+</script>
+<!--schedule icon tooltip-->
+<script type="text/ng-template" id="proposedScheduleTooltip.html">
+  <div class="scheduleIconMessage">
+      {{serviceCode.AppointmentInfo.time | date : 'MM/dd/yyyy @ h:mm a'}} {{serviceCode.AppointmentInfo.timezone}}
+      <br />{{serviceCode.AppointmentInfo.locationname}}
+  </div>
+</script>

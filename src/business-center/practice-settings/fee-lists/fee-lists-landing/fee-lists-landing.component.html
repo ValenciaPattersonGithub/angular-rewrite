@@ -1,0 +1,102 @@
+<div [ngClass]="'fade-in'">
+    <div class ="rowFull white">
+         <form name="frmfeeLists">
+             <div class="feeLists__header">
+                 <!--Breadcrumbs-->
+                 <app-page-navigation [navigationData]="breadCrumbs" (currentPath)="navigateToLanding($event)"></app-page-navigation>
+
+                    <!--landing page title-->
+                    <div *ngIf="editOrViewMode===false">
+                        <div class="feeLists__title">
+                            <h1>{{ 'Location Fee Lists' | translate }}</h1>
+                        </div>
+                        <!--TODO amfa-->
+                        <div class="feeLists__actions">
+                            <button id="btnCreateFeeList" 
+                                    checkRoleAccess="soar-biz-feelst-view" 
+                                    (click)="initNewFeeList();" 
+                                    [disabled]="loadingFeeList" 
+                                    class="btn btn-primary"
+                                    icon="fa-plus">
+                                {{ 'Create a Location Fee List' | translate }}
+                            </button>
+                            <soar-select-list *ngIf="reports?.length > 0" id="selectReport" name="selectReport"
+                                [placeHolder]="'Reports' | translate" [textField]="'ReportTitle'"
+                                [valueField]="'ReportValue'" [optionList]="reports"
+                                [(ngModel)]="selectedReport.ReportId" 
+                                [disableInput]="!hasReportAccess"
+                                (blurEvent)="reportListBlur()" 
+                                (selectedItemValueChange)="selectedReportChange($event)">
+                            </soar-select-list>
+                        </div>
+                    </div>
+                </div>
+                <div class="feeLists__body">
+                    <div class="feeLists__list" *ngIf="editOrViewMode===false">
+                        <!--List of fee lists grid-->
+                        <div class="fuseGrid container pull-left">
+                            <div class="row header">
+                                <div id="gridHeaderName" class="col-xs-4 cell sortCursor"
+                                    (click)="changeSortingForGrid('Name')">
+                                    {{'Location Fee List'|translate}}
+                                    <span class="fa fas fa-lg pull-right"
+                                        [ngClass]="orderBy?.asc ? 'fa-sort-up' : 'fa-sort-down'"
+                                        *ngIf="orderBy?.field == 'Name'"></span>
+                                </div>
+                                <div id="gridHeaderLocations" class="col-xs-7 cell">
+                                    {{'Location'|translate}}
+                                </div>
+                            </div>
+                            <div class="feeLists__grid">
+                                <div class="row body"
+                                    *ngFor="let feeList of feeListsArray  |  orderBy:{sortColumnName:orderBy?.field, sortDirection: (orderBy?.asc==true ? 1:-1)} ">
+                                    <div id="gridFeeListRowName_{{$index}}" class="col-xs-4 cell ">
+                                        <a id="lnkFeeListName_{{$index}}" (click)="viewFeeList(feeList)"
+                                            class="soar-link">
+                                            {{feeList?.Name}}</a>
+                                    </div>
+                                    <div id="gridFeeListRowLocations_{{$index}}" class="col-xs-6 cell"
+                                        [innerHTML]="feeList?.LocationNames">
+                                    </div>
+                                    <!--delete button-->
+                                    <div class="col-xs-1 cell">
+                                        <button class="btn btn-default btn-link pull-right cursor-pointer"
+                                            title="{{'Delete fee list' | translate}}" [disabled]="loadingFeeList"
+                                            checkRoleAccess="soar-biz-feelst-delete"
+                                            (click)="deleteFeeList(feeList?.FeeListId)">
+                                            <i class="fa fa-times-circle fa-lg"></i>
+                                        </button>
+                                        &nbsp;
+                                        <!--edit button-->
+                                        <button class="btn btn-default btn-link pull-left cursor-pointer"
+                                            title="{{'Edit fee list' | translate}}" [disabled]="loadingFeeList"
+                                            *ngIf="!feeList?.DraftDate" checkRoleAccess="soar-biz-feelst-edit"
+                                            (click)="editFeeList(feeList?.FeeListId)">
+                                            <i class="far fa-edit fa-lg"></i>
+                                        </button>
+                                        <!--draft button-->
+                                        <button
+                                            class="btn btn-default btn-link  pull-left visible-md visible-lg cursor-pointer"
+                                            title="{{'Edit draft fee list' | translate}}" 
+                                            [disabled]="loadingFeeList"
+                                            *ngIf="feeList?.DraftDate" 
+                                             checkRoleAccess="soar-biz-feelst-edit"
+                                            (click)="editFeeList(feeList?.FeeListId)">
+                                            {{'Draft'|translate}}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <no-results loading="loadingFeeList" *ngIf="loadingFeeList"></no-results>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div> 
+
+    <div *ngIf="editOrViewMode===true">
+        <fee-list-crud [editOrViewMode]="editOrViewMode" (saveFeeList)="save()" (deleteDraft)="deleteFeeListDraft()" [feeLists]="feeListsArray" (cancel)="cancel()" [feeListData]="dataForCrudOperation"></fee-list-crud>
+    </div>
+</div>

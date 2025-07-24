@@ -1,0 +1,332 @@
+@import 'variables';
+
+.patient-account-summary-grid-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: middle;
+    text-align: left;
+    background-color: $polar-white;
+    font-size: 12px;
+    font-family: $global-font-family;
+    font-weight: bold;
+    border: 1px solid #bfbcbc;
+    margin-top: 10px;
+    margin-bottom: 5px;
+
+    .amount {
+        padding-left: 5px;
+        padding-right: 5px;
+        text-align: right;
+    }
+}
+
+.header-data {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: middle;
+    text-align: left;
+    font-weight: 600;
+    background-color: white;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.no-right-padding {
+    padding-right: 0;
+}
+
+.overview .row .row-header-field,
+.overview .row .row-body-field {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.overview .row .row-header-field:first-child,
+.overview .row .row-body-field:first-child {
+    padding-left: 8px;
+}
+
+
+.account-summary-pending-label {
+    color: $alert-red;
+    text-align: right;
+    font-size: 14px;
+}
+
+.patient-account-summary-grid-row {
+    border: solid;
+    border-width: 1px;
+    border-color: #bfbcbc;
+    padding: 1px;
+    padding-left: 0;
+    margin-bottom: 5px;
+    font-size: 12px;
+
+    .amount {
+        padding-left: 5px;
+        padding-right: 5px;
+        text-align: right;
+    }
+}
+
+.patient-account-summary-detail-grid {
+    border-top: solid;
+    border-width: 1px;
+    border-color: #bfbcbc;
+    background-color: #fcfcfc;
+}
+
+.patient-account-summary-detail-grid-row {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    color: #434649;
+}
+
+.patient-account-summary-detail-grid-row:nth-child(odd) {
+    background-color: #E3E5E5;
+}
+
+.patient-account-summary-detail-grid-row:nth-child(even) {
+    background-color: white;
+}
+
+.color-blue {
+    color: blue;
+}
+
+.action-bar {
+    background-color: #FCFCFC;
+}
+
+.no-side-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.pending-encounters {
+    border-color: $alert-red;
+}
+
+.pending-encounters.overview {
+    border-color: #8c8c8c;
+}
+
+.action-link {
+    padding: 0;
+    border: 0;
+}
+
+.eob-link {
+    padding: 0;
+    padding-right: 5px;
+    border: 0;
+}
+
+.patient-account-summary-balance {
+    font-size: 14px;
+}
+
+.margin-bottom-15 {
+    margin-bottom: 15px;
+}
+
+.payment {
+    color: $alert-red;
+}
+
+.negative-adjustment {
+    color: #FF9516;
+}
+
+.service {
+    color: blue;
+}
+
+.positive-adjustment {
+    color: #168016;
+}
+
+.fa,
+.far,
+.fas {
+    padding: 3px;
+}
+
+.large-text {
+    font-size: 18px;
+}
+
+unapplied-menu {
+    i.fa-question-circle {
+        color: #c7254e;
+    }
+
+    div.unappliedMenu {
+        a {
+            padding: 0;
+        }
+    }
+}
+
+.encounterActions__add {
+    .btn-new-encounter {
+        float: right;
+        margin-left: 3px;
+    }
+
+    unapplied-menu {
+        float: right;
+    }
+
+    div {
+        a {
+            float: right;
+        }
+    }
+}
+
+.patient-summary-daterowhdr {
+    padding-right: 0px;
+}
+
+.popover {
+    max-width: inherit;
+    height: inherit;
+}
+
+.balanceDetail {
+    .amount {
+        padding-right: 5px;
+    }
+}
+
+.patient-account-summarytooltip {
+    max-width: 1000px;
+}
+
+.wordbreak {
+    word-break: break-word;
+}
+
+.btn.btn-link {
+    white-space: normal;
+    text-align: left;
+}
+
+.width-4-percent {
+    width: 4%;
+}
+
+.width-6-percent {
+    width: 6%;
+}
+
+.width-7-percent {
+    width: 7%;
+}
+
+.width-8-percent {
+    width: 8%;
+}
+
+.width-9-percent {
+    width: 9%;
+}
+
+.width-10-percent {
+    width: 10%
+}
+
+.width-12-percent {
+    width: 12%;
+}
+
+.width-20-percent {
+    width: 20%;
+}
+
+.disabled {
+    pointer-events: none;
+    color: grey;
+    cursor: not-allowed !important;
+
+}
+
+.disabled:hover {
+    cursor: not-allowed !important;
+}
+
+.disableIcon {
+    cursor: inherit;
+    opacity: 0.65;
+}
+
+.disableIcon:hover {
+    cursor: inherit;
+    opacity: 0.65;
+}
+
+.patient-account-summary-h5 {
+    font-weight: bold;
+}
+
+.txhInsAdjAmountIcon {
+    margin-left: 2px;
+    color: rgb(240, 171, 0);
+}
+
+.app-tooltip {
+    z-index: 3 !important;
+    font-size: $tooltip-font-size !important;
+    font-weight: bold !important;
+    color: $tooltip-default-font-color !important;
+}
+
+.divunaplied {
+    top: -3px;
+}
+
+
+.popover-width {
+    width: 500px;
+}
+
+.setposition {
+    width: 20px !important;
+}
+
+.disableSpan {
+    opacity: 0.65;
+    color: rgb(85, 85, 85);
+}
+
+.disableSpan:hover {
+    cursor: not-allowed;
+    opacity: 0.65;
+    color: grey;
+}
+
+.disableSpan:focus,
+.disableAnchor:active {
+    border: none !important;
+    outline: none !important;
+}
+
+.display-inline-block {
+    display: inline-block;
+}
+
+.font-red {
+    color: $alert-red;
+}
+
+.assignment-icon{
+    height: 16px;
+    width: 16px;
+    position: relative;
+    top: 2px;
+}
+

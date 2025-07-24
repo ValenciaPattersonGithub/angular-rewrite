@@ -1,0 +1,180 @@
+﻿<profile-section ng-attr-id="{{id}}" [base-id]="'Appointments'" [section-title]="'{{title}}'" i18n-section-title="@@appointments_sectionTitle" [count]="formatApptCount()" [actions]="patientAppointmentActions" ng-init="initialize();" ng-if="layout == 1">
+    <ng-container layout1>
+        <div class="patientAppt">
+            <div class="patientAppt__alert" ng-show="appointments.length == 0">
+                <no-results loading="loading" loading-message='loadingMessageNoResults'></no-results>
+            </div>
+            <div class="patientAppt__content" ng-if="appointments.length != 0">
+                <table class="patientAppt__table">
+                    <thead></thead>
+                    <tbody>
+                        <tr ng-disabled="appointment.Saving == true;" ng-repeat="appointment in appointments | filter: appointmentsFilter | orderBy: ['$$SortingId', 'StartTime'] track by $index" ng-class="{ 'late-appointment': appointment.StartTime < today }" ng-if="appointment.StartTime != null">
+                            <td class="accountView">
+                                <div id="lblPatient{{$index}}">{{ appointment.Patient.FirstName }}</div>
+                            </td>
+                            <td class="date">
+                                <button class="btn btn-link" ng-if="appointment.StartTime" id="btnGoToAppointment{{$index}}" ng-click="showAppointmentModal(appointment)" check-auth-z="soar-sch-sptapt-edit">{{ appointment.StartTime | date: appointment.StartTimeFormat }} - {{ appointment.EndTime | date: 'h:mm a' }} ({{ appointment.tzAbbr }})</button>
+                                <button class="btn btn-link" ng-click="showAppointmentModal(appointment)" ng-if="!appointment.StartTime">{{ ::('Unscheduled' | i18n) }}</button>
+                            </td>
+                            <td class="type">
+
+                                <button id="btnEditAppointment{{$index}}" class="btn btn-link" ng-click="showAppointmentModal(appointment)" ng-hide="appointment.Loading == true" check-auth-z="soar-sch-sptapt-edit">
+                                    <span id="lblAppointmentType{$index}Preview" class="border-solid-black appointment-type-table-preview-box pull-left" ng-style="{'background-color': appointment.AppointmentType.AppointmentTypeColor, color: appointment.AppointmentType.FontColor}">
+                                        <span>{{ appointment.AppointmentType.Name }}</span>
+                                    </span>
+                                </button>
+
+                                <no-results loading="appointment.Loading" ng-show="appointment.Loading == true"></no-results>
+                            </td>
+                            <td class="provider">
+                                <span id="lblProviderName{{$index}}" ng-hide="appointment.Loading == true">
+                                    {{ appointment.Provider.Name }}
+                                    <i class="fas fa-exclamation-triangle patientAppt__orange-warning" ng-show="appointment.isInactivePreferredDentist" title="Provider is inactive. Please select a new Preferred Provider."></i>
+                                </span>
+                            </td>
+                            <td class="room" ng-if="!appointment.StartTime">
+                                {{ appointment.ProposedDuration }} {{ ::('minutes' | i18n) }}
+                            </td>
+                            <td class="room" ng-if="appointment.StartTime">
+                                <div ng-hide="appointment.Loading == true">
+                                    <span id="lblRoom{{$index}}">{{ appointment.Room.Name }}</span>
+                                    <span ng-if="appointment.Room.Name > '' && appointment.Location > ''">, </span>
+                                    <span id="lblLocation{{$index}}">{{ appointment.Location.NameAbbreviation }}</span>
+                                </div>
+                            </td>
+                            <td class="status">
+                                <div ng-if="!appointment.$$authorized"><button class="btn btn-link" ng-click="showAppointmentModal(appointment)">{{appointment.StatusName}}</button></div>
+                                <appointment-status-hover ng-if="appointment.$$authorized" [(appointment)]="appointment" [is-Clickable]="true"
+                                                          (update-appointment-status)="appointmentStatusChangedNew($event)" id="inpAppointment{{::appointment.$$index}}{{::appointment.Classification}}Status">
+
+                                </appointment-status-hover>
+                                <button class="btn btn-link" ng-if="!appointment.$$authorized && !appointment.StartTime" ng-click="showAppointmentModal(appointment)">{{ ::('Schedule' | i18n) }}</button>
+                            </td>
+                            <td class="status">
+                                <button check-auth-z="soar-sch-sptapt-delete" ng-if="!appointment.$$authorized" id="btnDeleteAppointment{{$index}}" class="btn btn-link far fa-trash-alt" ng-click="showAppointmentModal(appointment)" ng-show="appointment.Classification==2" title="{{ ::('Delete' | i18n) }}"></button>
+                                <button check-auth-z="soar-sch-sptapt-delete" ng-if="appointment.$$authorized" id="btnDeleteAppointment{{$index}}" class="btn btn-link far fa-trash-alt" ng-click="showDeleteAppointmentModal(appointment)" ng-show="appointment.Classification==2" title="{{ ::('Delete' | i18n) }}"></button>
+                            </td>
+                        </tr>
+                        <tr ng-disabled="appointment.Saving == true;" ng-repeat="appointment in appointments | filter: appointmentsFilter | orderBy: ['$$SortingId', 'DateModified'] track by $index" ng-class="{ 'late-appointment': appointment.StartTime < today }" ng-if="appointment.StartTime == null">
+                            <td class="accountView">
+                                <div id="lblPatient{{$index}}">{{ appointment.Patient.FirstName }}</div>
+                            </td>
+                            <td class="date">
+                                <button class="btn btn-link" ng-if="appointment.StartTime" id="btnGoToAppointment{{$index}}" ng-click="showAppointmentModal(appointment)" check-auth-z="soar-sch-sptapt-edit">{{ appointment.StartTime | date: appointment.StartTimeFormat }} - {{ appointment.EndTime | date: 'h:mm a' }} ({{ appointment.tzAbbr }})</button>
+                                <button class="btn btn-link" ng-click="showAppointmentModal(appointment)" ng-if="!appointment.StartTime">{{ ::('Unscheduled' | i18n) }}</button>
+                            </td>
+                            <td class="type">
+
+                                <button id="btnEditAppointment{{$index}}" class="btn btn-link" ng-click="showAppointmentModal(appointment)" ng-hide="appointment.Loading == true" check-auth-z="soar-sch-sptapt-edit">
+                                    <span id="lblAppointmentType{$index}Preview" class="border-solid-black appointment-type-table-preview-box pull-left" ng-style="{'background-color': appointment.AppointmentType.AppointmentTypeColor, color: appointment.AppointmentType.FontColor}">
+                                        <span>{{ appointment.AppointmentType.Name }}</span>
+                                    </span>
+                                </button>
+
+                                <no-results loading="appointment.Loading" ng-show="appointment.Loading == true"></no-results>
+                            </td>
+                            <td class="provider">
+                                <span id="lblProviderName{{$index}}" ng-hide="appointment.Loading == true">
+                                    {{ appointment.Provider.Name }} 
+                                    <i class="fas fa-exclamation-triangle patientAppt__orange-warning" ng-show="appointment.isInactivePreferredDentist" title="Provider is inactive. Please select a new Preferred Provider."></i>
+                                </span>
+                            </td>
+                            <td class="room" ng-if="!appointment.StartTime">
+                                {{ appointment.ProposedDuration }} {{ ::('minutes' | i18n) }}
+                            </td>
+                            <td class="room" ng-if="appointment.StartTime">
+                                <div ng-hide="appointment.Loading == true">
+                                    <span id="lblRoom{{$index}}">{{ appointment.Room.Name }}</span>
+                                    <span ng-if="appointment.Room.Name > '' && appointment.Location > ''">, </span>
+                                    <span id="lblLocation{{$index}}">{{ appointment.Location.NameAbbreviation }}</span>
+                                </div>
+                            </td>
+                            <td class="status">
+                                <div ng-if="!appointment.$$authorized"><button class="btn btn-link" ng-click="showAppointmentModal(appointment)">{{appointment.StatusName}}</button></div>
+                                <appointment-status-hover ng-if="appointment.$$authorized" [(appointment)]="appointment" [is-Clickable]="true"
+                                                          (update-appointment-status)="appointmentStatusChangedNew($event)" id="inpAppointment{{::appointment.$$index}}{{::appointment.Classification}}Status">
+
+                                </appointment-status-hover>
+                                <button class="btn btn-link" ng-if="!appointment.$$authorized && !appointment.StartTime" ng-click="showAppointmentModal(appointment)">{{ ::('Schedule' | i18n) }}</button>
+                            </td>
+                            <td class="status">
+                                <button check-auth-z="soar-sch-sptapt-delete" ng-if="!appointment.$$authorized" id="btnDeleteAppointment{{$index}}" class="btn btn-link far fa-trash-alt" ng-click="showAppointmentModal(appointment)" ng-show="appointment.Classification==2" title="{{ ::('Delete' | i18n) }}"></button>
+                                <button check-auth-z="soar-sch-sptapt-delete" ng-if="appointment.$$authorized" id="btnDeleteAppointment{{$index}}" class="btn btn-link far fa-trash-alt" ng-click="showDeleteAppointmentModal(appointment)" ng-show="appointment.Classification==2" title="{{ ::('Delete' | i18n) }}"></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ng-container />
+</profile-section>
+<profile-section ng-attr-id="{{id}}" [base-id]="'Appointments'" [section-title]="'{{ title | i18n }}'" [count]="listCount" [actions]="patientAppointmentActions" ng-init="initialize();" [layout]="2" ng-if="layout == 2" >
+    <ng-container layout2>
+        <div class="patientAppt">
+            <div class="patientAppt__alert" ng-if="appointments.length == 0">
+                <no-results loading="loading" loading-message='loadingMessageNoResults'></no-results>
+            </div>
+            <div class="patientAppt__content" ng-if="appointments.length != 0">
+                <table class="patientAppt__table">
+                    <thead></thead>
+                    <tbody>
+
+                        <tr class="hoverAppt" ng-click="selectAppointment(appointment)" ng-disabled="appointment.Saving == true;"
+                            ng-repeat="appointment in appointments | filter: appointmentsFilter | orderBy: ['$$SortingId', 'DateModified']"
+                            ng-class="{ 'late-appointment': appointment.StartTime < today,
+                                                trInitiallyClicked: (rowClicked == appointment && isInitialLoad)
+                                                            || (tabIdentifier != 3 && appointments.length == 1)
+                                                            || (tabIdentifier != 3 && appointment.MostRecentUnscheduledAppt
+                                                                    && !appointment.MostRecentTxPlanAppt && !appointment.MostRecentPcAppt)
+                                                            || (tabIdentifier == 1 && appointment.MostRecentTxPlanAppt)
+                                                            || (tabIdentifier == 2 && appointment.MostRecentPcAppt),
+                                                trClicked: (rowClicked == appointment && !isInitialLoad) }">
+                            <td ng-show="accountView" class="accountView">
+                                <div id="lblPatient{{$index}}">{{ appointment.Patient.FirstName }}</div>
+                            </td>
+
+                            <td class="date">
+                                <a class="btn btn-link startTime" ng-if="appointment.StartTime" id="btnGoToAppointment{{$index}}" ng-click="showAppointmentModal(appointment)" check-auth-z="soar-sch-sptapt-edit">{{ appointment.StartTime | date: "MM-dd-yyyy" }} <br /> {{ appointment.StartTime | date: 'h:mm a' }} ({{ appointment.tzAbbr }})</a>
+                                <a class="btn btn-link" ng-click="showAppointmentModal(appointment)" ng-if="!appointment.StartTime">{{ ::('Unscheduled' | i18n) }}</a>
+                            </td>
+                            <td class="type">
+
+                                <button id="btnEditAppointment{{$index}}" class="btn btn-link" ng-click="showAppointmentModal(appointment)" ng-hide="appointment.Loading == true" check-auth-z="soar-sch-sptapt-edit">
+                                    <span id="lblAppointmentType{$index}Preview" class="border-solid-black appointment-type-table-preview-box pull-left" ng-style="{'background-color': appointment.AppointmentType.AppointmentTypeColor, color: appointment.AppointmentType.FontColor}">
+                                        <span>{{ appointment.AppointmentType.Name }}</span>
+                                    </span>
+                                </button>
+
+                                <no-results loading="appointment.Loading" ng-show="appointment.Loading == true"></no-results>
+                            </td>
+                            <td class="provider">
+                                <span id="lblProviderName{{$index}}" ng-hide="appointment.Loading == true">
+                                    {{ appointment.Provider.Name }}
+                                    <span ng-if="appointment.ProviderUsers && appointment.ProviderUsers.length > 1" title="{{appointment.DisplayProviders}}">({{appointment.ProviderUsers.length}})</span>
+                                </span>
+                                <i class="fas fa-exclamation-triangle" style="color:orange; margin-left:5px;" ng-show="appointment.isInactivePreferredDentist" title="Provider is inactive. Please select a new Preferred Provider."></i>
+                            </td>
+                            <td class="room" ng-if="!appointment.StartTime">
+                                {{ appointment.ProposedDuration }} {{ ::('minutes' | i18n) }}
+                            </td>
+                            <td class="room" ng-if="appointment.StartTime">
+                                <div ng-hide="appointment.Loading == true">
+                                    <span id="lblLocation{{$index}}">{{ appointment.Location.NameAbbreviation }}</span>
+                                    <span ng-if="appointment.Room.Name > '' && appointment.Location > ''">, </span>
+                                    <span id="lblRoom{{$index}}">{{ appointment.Room.Name }}</span>
+                                </div>
+                            </td>
+                            <td class="status">
+                                <div ng-if="!appointment.$$authorized"><button class="btn btn-link" ng-click="showAppointmentModal(appointment)">{{appointment.StatusName}}</button></div>
+                                <appointment-status-hover ng-if="appointment.$$authorized" [(appointment)]="appointment" [is-Clickable]="true"
+                                                          (update-appointment-status)="appointmentStatusChangedNew($event)" id="inpAppointment{{::appointment.$$index}}{{::appointment.Classification}}Status">
+                                </appointment-status-hover>
+                                <button class="btn btn-link" ng-if="!appointment.$$authorized && !appointment.StartTime" ng-click="showAppointmentModal(appointment)">{{ ::('Schedule' | i18n) }}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ng-container />
+</profile-section>

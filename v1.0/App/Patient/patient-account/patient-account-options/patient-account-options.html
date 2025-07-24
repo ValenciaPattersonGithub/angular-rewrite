@@ -1,0 +1,62 @@
+﻿<div ng-class="'fade-in'" ng-controller="PatientAccountOptionController">
+    <div class="rowFull">
+        <div class="patientAccount">
+            <form name="frmPatientAccountOptions" role="form" action="javascript:void(0);" novalidate>
+                <div ng-class="{'patientAccount__nav': !enableNewClinicalNavigation}">
+                    <div
+                        ng-class="enableNewClinicalNavigation? 'patientAccount__newNavContainer patientAccount__newNav' : 'pill-bar'">
+                        <a ng-if="!loadingAccountOptions && patient.Data.ResponsiblePersonType != 0"
+                            ng-repeat="option in accountSummaryOptions"
+                            ng-class="{'active': selectedSummaryOption == option.name}"
+                            ng-click="accountSummaryOptionClicked(option)"
+                            id="patActNavPillBar{{option.name.split(' ').join('')}}">
+                            {{option.name}}
+                        </a>
+                    </div>
+                    <div class="text-align-center text-muted" ng-show="loadingAccountOptions==true">
+                        <i id="iDefaultMessage" class="fa fa-spinner fa-spin fa-2x loading"></i>
+                    </div>
+
+                    
+                    <div>
+                        <div ng-if="selectedSummaryOption != defaultSummaryOptionName">
+                            <div
+                            ng-show="(accountMembersOptionsTemp.length > 1 || activeTab == 'Transaction History') && activeTab != 'Contract'">
+                                <patient-account-filter-bar ng-class="{'newNav':enableNewClinicalNavigation}"
+                                    route="activeTab" apply-changes-function="applyFilters()"
+                                    filter-object="filterObject"
+                                    hide-running-balance="filterBarProperties.hideRunningBalance"
+                                    hide-filters="hideFilters"></patient-account-filter-bar>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+
+                <div id="insuranceDiv" check-auth-z="soar-acct-insinf-view" class="patientAccount__panels"
+                    ng-if="activeTab == 'Insurance Information'">
+                    <ng-include src="accountSummaryOptions[1].templateUrl"></ng-include>
+                </div>
+                <div id="profileDiv" check-auth-z="soar-per-perdem-modify" class="patientAccount__profilepanel"
+                    ng-if="activeTab == 'Profile'">
+                    <ng-include src="accountSummaryOptions[2].templateUrl"></ng-include>
+                </div>
+
+                <div id="summaryDiv" check-auth-z="soar-acct-actsrv-view" class="patientAccount__panels"
+                    ng-if="activeTab == 'Account Summary' && accountMembersOptionsTemp.length > 0">
+                    <ng-include src="accountSummaryOptions[0].templateUrl"></ng-include>
+                </div>
+
+                <div id="trxHistoryDiv" check-auth-z="soar-acct-trxhis-view" class="patientAccount__panels"
+                    ng-if="activeTab == 'Transaction History' && accountMembersOptionsTemp.length > 0">
+                    <ng-include src="accountSummaryOptions[3].templateUrl"></ng-include>
+                </div>
+
+                <div id="contractDiv" class="patientAccount__panels"
+                    ng-if="activeTab == 'Contract'">
+                    <ng-include src="accountSummaryOptions[4].templateUrl"></ng-include>
+                </div> 
+                                
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,336 @@
+@import 'variables';
+
+.encounter-cart-card {
+    margin: 0px 0px 0px 0px;
+    font-family: $global-font-family;
+    font-size: 12px;
+
+    .col-sm-1, .col-sm-2, .col-sm-12 {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    input {
+        border: 1px solid $border-grey;
+    }
+
+    .page_sub_title {
+        height: 20px;
+        font-size: 16px;
+        color: $page-content-select-color;
+        text-decoration: none solid rgb(51, 51, 51);
+        line-height: 18px;
+        font-weight: bold;
+    }
+
+    .page_sub_title_description {
+        height: 20px;
+        font-size: 16px;
+        color: $page-content-select-color;
+        text-decoration: none solid rgb(51, 51, 51);
+        line-height: 18px;
+        font-weight: normal;
+        padding-left: 10px;
+    }
+
+    .control-label {
+        font-weight: 600;
+    }
+
+    .service-desc {
+        height: 35px;
+        padding: 0px;
+    }
+
+    .input-row {
+        padding: 0px;
+
+        .date {
+            min-width: 125px;
+            padding-left: 0px;
+            padding-right: 10px;
+            padding-bottom: 20px;
+        }
+
+        .tooth,
+        .area {
+            min-width: 100px;
+            padding-left: 0px;
+            padding-right: 10px;
+            padding-bottom: 20px;
+        }
+
+        .provider,
+        .providerOnClaims {
+            min-width: 150px;
+            padding-left: 0px;
+            padding-right: 10px;
+            padding-bottom: 20px;
+        }
+    }
+
+    .form-row {
+        margin-bottom: 20px;
+    }
+
+    .kendodatestyle {
+        width: 100%;
+    }
+
+    .icon-button {
+        stroke-width: 1;
+        background-color: $polar-white;
+        color: $page-primary-button-background;
+        font-size: 18px;
+        height: 18px;
+        width: 18px;
+        padding: 0px;
+        display: block;
+    }
+
+    ul {
+        padding: 0;
+        margin: 0px;
+        list-style-type: none;
+    }
+
+    .fa fa-times {
+        display: block;
+    }
+
+    i {
+        font-size: 14px;
+    }
+
+    .amountsRow {
+        width: 100%;
+        float: left;
+        border: 1px solid #eeeeee;
+        display: flex;
+        justify-content: space-evenly;
+
+        i {
+            color: $action-blue;
+            height: 25px;
+            width: 25px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .plans,
+        .locationFee,
+        .discounts,
+        .tax,
+        .charges,
+        .allowedAmount,
+        .estInsAdj,
+        .estIns,
+        .patBal {
+            display: inline-grid;
+            border-right: 1px solid #eeeeee;
+            width: 100%;
+
+            .header {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                font-weight: bold;
+                height: 35px;
+                border-bottom: 1px solid #eeeeee;
+                padding: 10px;
+                white-space: nowrap;
+            }
+
+            .headerCollapsed {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                color: $warning-orange;
+                font-weight: bold;
+                height: 35px;
+                border-bottom: 1px solid #eeeeee;
+                padding: 10px;
+                white-space: nowrap;
+            }
+
+            .value {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                text-align: right;
+                height: 35px;
+                padding-right: 10px;
+                padding-left: 10px;
+
+                .valueText {
+                    width: 100%;
+                }
+            }
+        }
+
+        .patBal {
+            border-right: 0px;
+        }
+
+        .plans {
+            min-width: 80px;
+            max-width: 80px;
+
+            .header {
+                justify-content: center;
+            }
+
+            .headerCollapsed {
+                justify-content: center;
+            }
+
+            .value {
+                justify-content: center;
+            }
+        }
+    }
+
+    .table {
+        border: 1px solid #eeeeee;
+        background-color: white;
+        margin: 0px;
+        // Cells
+        > thead,
+        > tbody,
+        > tfoot {
+            > tr {
+                > th,
+                > td {
+                    padding: 0px 10px;
+                    vertical-align: middle;
+                    color: $text-black;
+                    text-decoration: none solid rgb(85, 85, 85);
+                    border: 1px solid #eeeeee;
+                    height: 35px;
+                }
+            }
+        }
+        // Bottom align for column headings
+        > thead > tr > th {
+            padding: 0px 10px;
+            line-height: 18px;
+            vertical-align: middle;
+            text-decoration: none solid rgb(45, 171, 203);
+            color: $page-content-grid-header !important;
+            white-space: nowrap;
+        }
+    }
+
+    .table-striped {
+        > tbody > tr:nth-of-type(even) {
+            background-color: $bg-grey;
+        }
+
+        > tbody > tr:nth-of-type(odd) {
+            background-color: white;
+        }
+    }
+
+    .insuranceCollapsableMenu {
+        width: 100%;
+        float: left;
+        fill: #f4f3f5;
+        box-shadow: inset 0px 5px 7px rgba(0,0,0,0.2);
+        background-color: #f4f3f5;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .static-info {
+        width: 100%;
+        display: inline;
+        overflow: hidden;
+        border-radius: 5px;
+        font-family: $global-font-family;
+        font-size: 12px;
+        height: 25px;
+        background-color: $page-search-input-background;
+    }
+
+    ::ng-deep .k-datepicker {
+        width: 100%;
+        height: 25px;
+
+        > .k-picker-wrap {
+            font-family: $global-font-family;
+            font-size: 12px;
+            border-radius: 5px;
+            padding: 0px 8px;
+            border: 1px solid $border-grey;
+            height: 23px;
+        }
+
+        input {
+            height: 23px;
+            padding: 0px;
+        }
+    }
+
+    ::ng-deep .k-dropdown {
+        width: 100%;
+
+        > .k-dropdown-wrap {
+            width: inherit;
+            height: 25px;
+            font-family: $global-font-family;
+            font-size: 12px;
+            border-radius: 5px;
+            border-color: $border-grey;
+
+            > .k-input {
+                line-height: 24px;
+                padding: 0px 8px;
+            }
+        }
+    }
+
+    ::ng-deep .k-multiselect {
+        width: 100%;
+        height: 25px;
+
+        > .k-multiselect-wrap {
+            width: inherit;
+            //height: 25px;
+            font-family: $global-font-family;
+            font-size: 12px;
+            border-radius: 5px;
+            border-color: $border-grey;
+            padding: 0px 8px;
+        }
+
+        > .k-multiselect-wrap::after {
+            font-size: 16px;
+            line-height:27px;
+        }
+    }
+
+
+    .est-ins-wrapper {
+        position: relative;
+    }
+
+    .errorMessage {
+        position: absolute;
+        right: 100%;
+        background-color: $alert-red;
+        z-index: 1;
+        top: -65%;
+        width: 200px;
+    }
+
+    .providerUserIdError {
+        ::ng-deep .k-dropdown-wrap {
+            border: 2px solid $alert-red !important;
+        }
+    }
+}
+
+
+

@@ -1,0 +1,63 @@
+<div *ngIf="featureName === 'PatientRegistration'" class="accountMembers-container" id="am-container">
+    <div class="accountMembers-header" id="am-header">
+        <span id="am-title" class="accountMembers-title">{{'Account Members'| translate}}</span>
+    </div>
+    <hr>
+    <div class="accountMembers-section">
+        <div class="accountMembers-grid">
+            <div *ngFor="let column of gridHeaders" class="accountMembers-grid-header">
+                <app-label class="patient-accountMembers-label"  [labelClass]="'patient-accountMembers-label'" [label]="column.label"></app-label>
+            </div>
+        </div>
+        <div class="accountMembers-grid" *ngFor="let member of accountMembers; let rowId= index">
+            <div class="accountMembers-grid-item" (click)="openNewTab(member)">
+                <span *ngIf="member.FirstName">{{member.FirstName}}</span>
+                <span *ngIf="member.MiddleName">{{member.MiddleName}}</span>
+                <span *ngIf="member.LastName">{{member.LastName}}</span>
+                <span *ngIf="member.SuffixName">{{member.SuffixName}}</span>
+                <span *ngIf="member.IsResponsiblePerson">{{'(RP)'}}</span>
+                <span *ngIf="member.DateOfBirth">{{member.DateOfBirth | date:'MM/dd/yyyy'}}
+                    ({{'Age: ' | translate}}{{member.DateOfBirth | age:member.DateOfBirth }})</span>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="featureName === 'PatientProfile'" class="patient-accountMembers-container" id="pam-container">
+    <div class="patient-accountMembers-header" id="pam-header">
+        <span id="pam-title" class="patient-accountMembers-title">{{'Account Members'| translate}}</span>
+    </div>
+    <hr>
+    <div class="patient-accountMembers-section">
+        <div class="patient-accountMembers-grid">
+            <div *ngFor="let column of gridHeaders" class="patient-accountMembers-grid-header"
+                (click)="sortColumn(column.click ? column.click : '')">
+                <app-label class="patient-accountMembers-label" [labelClass]="'patient-accountMembers-label'" [label]="column.label"></app-label>
+                <span *ngIf="column.label !== 'Transfer' && column.label !== 'Age'" class="fa fas"
+                    [ngClass]="sortcss(column.click ? column.click : '')"></span>
+            </div>
+        </div>
+        <div class="patient-accountMembers-grid" *ngFor="let member of patientAccountMembers; let rowId= index">
+            <div class="patient-accountMembers-grid-item" (click)="openNewTab(member)">
+                <span *ngIf="member.LastName">{{member.LastName}}</span>
+                <span *ngIf="member.SuffixName">{{member.SuffixName}}</span>,
+                <span *ngIf="member.FirstName">{{member.FirstName}}</span>
+                <span *ngIf="member.MiddleName">{{member.MiddleName}}</span>
+                <span *ngIf="member.PreferredName">({{member.PreferredName}})</span>
+                <span *ngIf="member.IsResponsiblePerson">{{'(RP)'}}</span>
+            </div>
+            <div class="patient-accountMembers-grid-DOB-item">
+                <span *ngIf="member.DateOfBirth">{{member.DateOfBirth | date:'MM/dd/yyyy'}}
+                </span>
+            </div>
+            <div class="patient-accountMembers-grid-age-item">
+                <span *ngIf="member.DateOfBirth">{{member.DateOfBirth | age:member.DateOfBirth }}
+                </span>
+            </div>
+            <div class="patient-accountMembers-grid-item" (click)="transfer(member.PatientId)" *ngIf="hasViewAccess">
+                <span>{{'Transfer'}}</span>
+            </div>
+        </div>
+    </div>
+</div>

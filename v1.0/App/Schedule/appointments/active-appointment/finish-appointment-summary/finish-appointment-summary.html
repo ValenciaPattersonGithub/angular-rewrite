@@ -1,0 +1,67 @@
+﻿<div id="fnshApptModal" class="fnshApptModal">
+    <div class="fnshApptModal__hdr">
+        <h2 class="fnshApptModal__name">
+            <span class="far fa-check-circle color-success fnshApptModal__icon"></span>
+            <div id="fnshApptModal__title" class="fnshApptModal__title">{{ 'Encounter created for {0}' | i18n:[{skip:patientDisplayName}] }}</div>
+        </h2>
+    </div>
+    <div class="fnshApptModal__body">
+        <div class="fnshApptModal__dtlLft">
+            <div class="fnshApptModal__appt">
+                {{'Appointment Summary' | i18n}}
+            </div>
+            <div id="lblAppointmentDate">
+                {{ appointmentActualStartTime | date:"MMM" }} {{ appointmentActualStartTime | date:"d" }} {{ appointmentActualStartTime | date:"yyyy" }}, {{ appointmentActualStartTime  | date:"h:mma" }} - {{ appointmentActualEndTime | date:"h:mma" }}
+            </div>
+            <div id="lblAppointmentTypeName" ng-if="isAppointmentTypeSelected">
+                {{ appointment.AppointmentTypeName }}
+            </div>
+            <div id="lblTreatmentRoomName">
+                {{ appointment.TreatmentRoomName }}
+            </div>
+            <no-results id="lstAppointmentDataLoading"
+                        loading="loading.AppointmentType==true || loading.TreatmentRoom==true"
+                        loading-messag="' '"
+                        ng-hide="loading.AppointmentType==false && loading.TreatmentRoom==false">
+            </no-results>
+            <div id="lblProviderName">
+                {{ appointment.ProviderName }}
+            </div>
+            <div class="fnshApptModal__select" ng-hide="true">
+                <div class="fnshApptModal__cbx">
+                    <checkbox checkbox-id="cbx" checkbox-value=""></checkbox>
+                </div>
+                <div id="lblOpenLabCase" class="fnshApptModal__lab">{{ 'Open a Lab Case' | i18n }}</div>
+            </div>
+        </div>
+        <div class="fnshApptModal__dtlRght">
+            <div class="fnshApptModal__svcLst">
+                <span>{{appointment.PlannedServices.length}}{{service}}</span>
+                <span id="lblServiceCodes" title="{{appointment.ServiceCodesDisplayAs}}">{{ appointment.ServiceCodesDisplayAs | truncate:25 }}</span>
+                <span id="lblTotalFees">{{' '}}{{ amount | currency }}</span>
+                <a id="lblAppointmentDetails" ng-hide="true" class="fnApptModal__btn">{{ 'View Details' | i18n }}</a>
+            </div>
+            <div id="lblPatientPortion" class="fnshApptModal__algnTxt">
+                {{'Patient Portion: ' | i18n}}{{patientPortion | currency}}
+            </div>
+            <div id="lblEstInsurance" class="fnshApptModal__algnTxt">
+                {{'Est. Insurance: ' | i18n}}{{estInsurance | currency}}
+            </div>
+            <div id="lblTotal" class="fnshApptModal__ttl">
+                {{'Total: ' | i18n}}{{amount | currency}}
+            </div>
+        </div>   
+    </div>
+   
+    <div class="fnshApptModal__footr">
+        <button id="closeModalLink" class="fnshApptModal__closeBtn" ng-disabled="disableBtn" ng-click="closeModal()">{{ 'Ok, Thanks' | i18n }}</button>
+
+        <button id="nextAppointmentLink" ng-disabled="disableBtn" ng-click="scheduleNextAppt()" class="fnshApptModal__otherBtn">
+            {{ 'Schedule Next Appt' | i18n  }}
+        </button>
+
+        <!--<button id="checkoutLink" ng-disabled="disableBtn" ng-click="checkout()" check-auth-z="{{ soarAuthEnctrChkOutKey }}" class="fnshApptModal__otherBtn">{{ 'Check out' | i18n }}</button>-->
+        <button id="checkoutLink_v2" ng-disabled="disableBtn" ng-click="checkout_v2()" check-auth-z="{{ soarAuthEnctrChkOutKey }}" class="fnshApptModal__otherBtn">{{ 'Check out' | i18n }}</button>
+        <button id="viewInsuranceClaimLink" ng-hide="true" ng-disabled="disableBtn" class="fnshApptModal__otherBtn">{{ 'View Insurance Claim' | i18n }}</button>
+    </div>
+</div>

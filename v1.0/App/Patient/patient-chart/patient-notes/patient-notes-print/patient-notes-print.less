@@ -1,0 +1,120 @@
+﻿@media screen {
+    
+    .patientNotesPrint {
+        font-size: @brand-font_md;
+        margin: @brand-margin_lg auto;
+        width: 80%;
+        .page-break { display: block; page-break-before: auto; }     
+        .view-container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 0 @brand-margin_sm;
+            background-color: @white;
+        }
+
+        /*body.patientNotesPrint {
+            padding: 0;
+            background-color: yellow;
+            margin-top: 0;
+        }*/
+
+        &__header {
+            width: 100%;
+            min-height: 90px;
+            margin-top: 0;
+            font-weight: bold;
+            margin-bottom: @brand-margin_sm;
+        }
+
+        &__title {
+
+        }
+
+        &__body {
+            .clearfix;
+            margin-bottom: 50px;
+            margin-top:25px;
+            position: relative;
+        }
+        
+        &__container {
+                 
+            background-color: @table-bg-accent;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+        }
+
+        &__row {
+            width: 100%; 
+            margin-bottom:10px;           
+        }
+    }
+}
+
+
+@media screen, print {
+    /*body.patientNotesPrint {
+        padding: 0;        
+        margin-top: 0;
+    }*/
+    
+    .patientNotesPrint {
+        .top-header,
+        .feedback-container,
+        .walkme-player {
+            display: none !important;
+        }        
+        .view-container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 0 @brand-margin_sm;
+            background-color: @white;
+        }
+    }
+}
+
+/*@media print {*/
+@media print {
+    
+    .patientNotesPrint {
+        
+        font-size: 8pt;
+        margin: 0;
+        padding: 0;        
+        &__header {
+            width: 100%;
+            min-height: 70pt;
+            margin-top: 0;
+            font-weight: bold;
+            margin-bottom: 3pt;
+        }
+        &__body {
+            .clearfix;
+            margin-bottom: 5pt;
+            position: relative;
+        }
+        &__container { 
+            background-color: @table-bg-accent !important;
+            -webkit-print-color-adjust: exact;
+            padding: 10pt;
+            width: 100%;            
+            margin-bottom: 12pt;
+        }
+        &__row {
+            width: 100%; 
+            margin-bottom:10pt;           
+        }
+        &__print {
+            display: none;
+        }
+        &__practice {
+            margin-top: -25pt;
+        }
+        
+    }
+
+    a:link:after, a:visited:after {
+        content: "";
+    }
+}

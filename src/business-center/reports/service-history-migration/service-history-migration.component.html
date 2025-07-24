@@ -1,0 +1,46 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="serviceHistory grid header">
+        <div class="col-sm-1-migration">{{'Date' | translate }}</div>
+        <div class="col-sm-2-migration">{{'Provider' | translate }}</div>
+        <div class="col-sm-2-migration">{{'Patient' | translate }}</div>
+        <div class="col-sm-2-migration text-center">{{'Tooth' | translate }}</div>
+        <div class="col-sm-1-migration text-center">{{'Area' | translate }}</div>
+        <div class="col-sm-2-migration text-right">{{'Fee' | translate }}</div>
+        <div class="col-sm-2-migration">{{'Location' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+                                     id="serviceHistory">
+
+            <div *cdkVirtualFor="let tran of reportData.Transactions; index as i">
+
+                <div class="serviceHistory grid item">
+                    <div class="col-sm-1-migration">{{tran.Date | date: 'MM/dd/yyyy'}}</div>
+                    <div class="col-sm-2-migration">{{tran.Provider}}</div>
+                    <div class="col-sm-2-migration">{{tran.Patient}}</div>
+                    <div class="col-sm-2-migration text-center">{{tran.Tooth | convertToothRangeToQuadrantOrArchCode}}</div>
+                    <div class="col-sm-1-migration text-center">{{tran.Area}}</div>
+                    <div class="col-sm-2-migration text-right">{{tran.Fee | currency}}</div>
+                    <div class="col-sm-2-migration">{{tran.Location}}</div>
+                </div>
+              
+                <div class="serviceHistory grid item reportGrid__footer" *ngIf="i+1 == reportData.Transactions.length">
+                    <div class="col-sm-1-migration">{{'Report Totals' | translate }}</div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-1-migration"></div>
+                    <div class="col-sm-2-migration text-right">{{reportData.TotalFee | currency}}</div>
+                    <div class="col-sm-1-migration"></div>
+                </div>
+            </div>
+
+            <div class="col-sm-12-migration text-align-center">
+                {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright &#169; American Dental Association (ADA). All rights reserved.' | translate}}
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+    
+    
+</div>
+

@@ -1,0 +1,459 @@
+﻿<div>
+    <div class="dentChangeAns">
+        <div class="rowFull white">
+            <div class="dentChangeAns__header">
+                <!--Breadcrumb placeholder-->
+                <ul class="dentChangeAns__breadcrumb">
+                    <li><span>{{ 'Insurance' | i18n }}</span></li>
+                    <li><span ng-click="cancel()"><a>{{ 'Claims & Predeterminations' | i18n }}</a></span></li>
+                    <li><span>{{ isReadOnly ? 'View' : 'Change'}}{{ ' Answers' | i18n }}</span></li>
+                </ul>
+
+                <!--Title and subtitle-->
+                <div class="dentChangeAns__title">
+                    <h1>{{ isReadOnly ? 'View' : 'Change'}}{{ ' Answers on ' | i18n }}{{ claim.ClaimCommon.PatientFirstName + ' '}}{{ claim.ClaimCommon.PatientLastName}}{{ claim.ClaimCommon.PatientSuffix ? ' ' + claim.ClaimCommon.PatientSuffix + '\'s' : '\'s'}}</h1>
+                    <h2>{{ 'Claim from ' | i18n }}{{ claim.ClaimCommon.PatientSignatureDate | date:'MM/dd/yyyy'}}{{ ' for ' | i18n }}{{ calculatedFees | currency }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="dentChangeAns__body">
+            <div class="dentChangeAns__form">
+                <div class="dentChangeAns__fieldset">
+                    <div class="row margin-bottom10">
+                        <div class="col-xs-3">
+                            <checkbox checkbox-id="authPmtChkBox"
+                                      checkbox-value="authorizePayment"
+                                      checkbox-label="'Authorize Payment to Office'"
+                                      checkbox-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      checkbox-hidden="false">
+                            </checkbox>
+                        </div>
+                        <div class="col-xs-2">
+                            <checkbox checkbox-id="trackClaimChkBox"
+                                      checkbox-value="trackClaim"
+                                      checkbox-label="'Track Claim'"
+                                      checkbox-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      checkbox-hidden="false">
+                            </checkbox>
+                        </div>
+                        <div class="col-xs-3">
+                            <checkbox checkbox-id="enclosureChkBox"
+                                      checkbox-value="claim.J430DMain.IsEnclosures"
+                                      checkbox-label="'Enclosures'"
+                                      checkbox-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      checkbox-hidden="false">
+                            </checkbox>
+                        </div>
+                    </div>
+                    <div ng-if="claim.ClaimEntity.HasAttachment" class="form-row">
+                        <label class="control-label reference"> {{'eAttachment Reference #: ' | i18n }} {{claim.ClaimEntity.ExternalAttachmentId }}</label>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group form-col-8">
+                            <label class="control-label">{{ 'Preauthorization / Predetermination Number (Box 2)' | i18n }}</label>
+                            <input id="predetNum"
+                                   class="form-control"
+                                   type="text"
+                                   ng-disabled="isReadOnly || !canEdit"
+                                   check-auth-z="soar-ins-iclaim-edit"
+                                   ng-model="claim.ClaimCommon.PredeterminationNumber"
+                                   placeholder=""
+                                   maxlength="40" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group form-col-8">
+                            <label class="control-label">{{ 'Place of Treatment (Box 38)' | i18n }}</label>
+                            <soar-select-list id="treatmentPlace"
+                                              name="treatmentPlace"
+                                              sb-tab="{{tabIndex}}"                                              
+                                              option-list="placeOfTreatmentList"
+                                              text-field="description"
+                                              value-field="code"
+                                              ng-model="placeOfTreatment"
+                                              disable-input="isReadOnly || !canEdit"
+                                              check-auth-z="soar-ins-iclaim-edit"
+                                              sb-required=""></soar-select-list>
+                        </div>
+                        <div class="form-group form-col-4"></div>
+                    </div>
+                    <!-- Other Place of Treatment Elements-->
+                    <div ng-if="placeOfTreatment == placeOfTreatmentEnums.Other">
+                        <div class="form-row">
+                            <div class="form-group form-col-3">
+                                <label class="control-label">{{'Place of Treatment Code' | i18n }}</label>
+                                <input id="otherLocationCode"
+                                       class="form-control"
+                                       maxlength="2"
+                                       type="text"
+                                       ng-model="claim.J430DMain.PlaceOfTreatment"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       check-auth-z="soar-ins-iclaim-edit"
+                                       char-pattern="[^0-9]"
+                                       ng-blur="fixPlaceOfTreatmentLength()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="placeOfTreatment != placeOfTreatmentEnums.Office">
+                        <!--Address-->
+                        <div class="form-row">
+                            <div class="form-group form-col-8">
+                                <label class="control-label">{{'Address *' | i18n }}</label>
+                                <input id="inpAddressLine1"
+                                       class="form-control"
+                                       type="text"
+                                       placeholder="{{ 'Street address' | i18n }}"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       check-auth-z="soar-ins-iclaim-edit"
+                                       ng-class="{'invalidTextBox': invalidAddress}"
+                                       ng-mousedown="clearErrorMessages()"
+                                       ng-change="clearErrorMessages()"
+                                       ng-model="claim.J430DMain.TreatingDentistAddress1"
+                                       maxlength="128" char-pattern="[^a-zA-Z0-9-'. ]" />
+                                <label id="errAddress" class="error help-text" ng-show="invalidAddress">
+                                    {{'Address is required' | i18n}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group form-col-8">
+                                <label class="control-label">{{'Address 2' | i18n }}</label>
+                                <input id="inpAddressLine2"
+                                       class="form-control"
+                                       type="text"
+                                       placeholder="{{ 'Address 2' | i18n }}"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       check-auth-z="soar-ins-iclaim-edit"
+                                       ng-model="claim.J430DMain.TreatingDentistAddress2"
+                                       maxlength="128" char-pattern="[^a-zA-Z0-9-'. ]" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <!-- City -->
+                            <div class="form-group form-col-4">
+                                <label class="control-label">{{'City *' | i18n }}</label>
+                                <input id="inpCity"
+                                       type="text" placeholder="{{ 'Enter city' | i18n }}"
+                                       class="form-control"
+                                       ng-class="{'invalidTextBox': invalidCity}"
+                                       ng-mousedown="clearErrorMessages()"
+                                       ng-change="clearErrorMessages()"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       check-auth-z="soar-ins-iclaim-edit"
+                                       ng-model="claim.J430DMain.TreatingDentistCity"
+                                       maxlength="64" char-pattern="[^a-zA-Z-'. ]"
+                                       capitalize-first-with-override />
+                                <label id="errCity" class="error help-text" ng-show="invalidCity">
+                                    {{'City is required' | i18n}}
+                                </label>
+                            </div>
+                            <!-- State -->
+                            <div class="form-group form-col-2">
+                                <label class="control-label">{{'State *' | i18n }}</label>
+                                <div>
+                                    <state-list state-list-id="inpState"
+                                                source="claim.J430DMain.TreatingDentistStateProvince"
+                                                ng-class="{'invalidTextBox': invalidState}"
+                                                ng-mousedown="clearErrorMessages()"
+                                                disable-input="isReadOnly || !canEdit">
+                                    </state-list>
+                                </div>
+                                <label id="errState" class="error help-text" ng-show="invalidState">
+                                    {{'State is required' | i18n}}
+                                </label>
+                            </div>
+                            <!-- Zip -->
+                            <div class="form-group form-col-2">
+                                <label class="control-label">{{'Zip *' | i18n }}</label>
+                                <input id="inpZipCode"
+                                       name="inpZipCode"
+                                       class="form-control"
+                                       zip-field="claim.J430DMain.TreatingDentistPostalCode"
+                                       type="text"
+                                       placeholder="{{'ZIP Code' | i18n }}"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       ng-class="{'invalidTextBox': invalidZip}"
+                                       ng-mousedown="clearErrorMessages()"
+                                       ng-change="clearErrorMessages()"
+                                       ng-model="claim.J430DMain.TreatingDentistPostalCode"
+                                       maxlength="10"
+                                       minlength="5" />
+                                <label id="errZipCode" class="error help-text" ng-show="invalidZip">
+                                    {{'ZIP code must be 5 to 9 numeric characters' | i18n}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <!-- Phone -->
+                            <div class="form-group form-col-3">
+                                <label class="control-label">{{'Phone *' | i18n }}</label>
+                                <input id="inpPhoneNumber"
+                                       class="form-input"
+                                       type="text"
+                                       placeholder="{{ 'Phone number' | i18n }}"
+                                       ui-mask-placeholder-char="_"
+                                       ui-mask="(999) 999-9999"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       ng-class="{'invalidTextBox': invalidPhone}"
+                                       ng-mousedown="clearErrorMessages()"
+                                       ng-change="clearErrorMessages()"
+                                       ng-model="claim.J430DMain.TreatingDentistLocationPrimaryPhone" />
+                                <label id="errPhone" class="error help-text" ng-show="invalidPhone">
+                                    {{'Phone is required' | i18n}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group form-col-8">
+                            <label class="control-label">{{ 'Remarks (Box 35)' | i18n }}</label>
+                            <textarea id="remarks"
+                                      class="form-control"
+                                      rows="2"
+                                      ng-class="{'invalidTextBox': claim.J430DMain.Remarks.length > 80}"
+                                      type="text"
+                                      placeholder=""
+                                      maxlength="80"
+                                      ng-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      ng-model="claim.J430DMain.Remarks"></textarea>
+                        </div>
+                        <div class="form-group form-col-4"></div>
+                    </div>
+                    <div class="form-row">
+
+                        <label class="control-label">{{ 'Diagnosis Code(s) (Box 34a)' | i18n }}</label>
+
+                    </div>
+                    <div class="control-label invalidDiagnosisCodes" ng-if="showErrors && invalidDiagnosisCode">{{ 'Missing Diagnosis' | i18n }}</div>
+                    <div ng-class="{'invalidDiagnosisBox': showErrors && invalidDiagnosisCode}">
+                        <div class="form-row">
+                            <div class="form-group form-col-4 dentChangeAns__sideLbl">
+                                <span class="control-span">{{ 'A' | i18n }}</span>
+                                <input id="diagCodeA"
+                                       class="form-control"
+                                       type="text"
+                                       ng-model="claim.J430DMain.DiagnosisCodeA"
+                                       ng-class="{'invalidTextBox': claim.J430DMain.DiagnosisCodeA.length > 7}"
+                                       maxlength="7"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       check-auth-z="soar-ins-iclaim-edit"
+                                       placeholder="" />
+                            </div>
+
+                            <div class="form-group form-col-4 dentChangeAns__sideLbl">
+                                <span class="control-span"> {{ 'B' | i18n }}</span>
+                                <input id="diagCodeB"
+                                       class="form-control"
+                                       type="text"
+                                       ng-model="claim.J430DMain.DiagnosisCodeB"
+                                       ng-class="{'invalidTextBox': claim.J430DMain.DiagnosisCodeB.length > 7}"
+                                       maxlength="7"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       check-auth-z="soar-ins-iclaim-edit"
+                                       placeholder="" />
+                            </div>
+                            <div class="form-group form-col-4"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group form-col-4 dentChangeAns__sideLbl">
+                                <span class="control-span">{{ 'C' | i18n }}</span>
+                                <input id="diagCodeC"
+                                       class="form-control"
+                                       type="text"
+                                       ng-model="claim.J430DMain.DiagnosisCodeC"
+                                       ng-class="{'invalidTextBox': claim.J430DMain.DiagnosisCodeC.length > 7}"
+                                       maxlength="7"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       check-auth-z="soar-ins-iclaim-edit"
+                                       placeholder="" />
+                            </div>
+
+                            <div class="form-group form-col-4 dentChangeAns__sideLbl">
+                                <span class="control-span">{{ 'D' | i18n }}</span>
+                                <input id="diagCodeD"
+                                       class="form-control"
+                                       type="text"
+                                       ng-model="claim.J430DMain.DiagnosisCodeD"
+                                       ng-class="{'invalidTextBox': claim.J430DMain.DiagnosisCodeD.length > 7}"
+                                       maxlength="7"
+                                       ng-disabled="isReadOnly || !canEdit"
+                                       check-auth-z="soar-ins-iclaim-edit"
+                                       placeholder="" />
+                            </div>
+                            <div class="form-group form-col-4"></div>
+                        </div>
+                    </div>
+                    <!--Grid-->
+                    <div class="form-row">
+                        <div class="form-group form-col-12">
+                            <kendo-grid options="changeAnswersDetailGrid" k-data-source="gridData"></kendo-grid>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <checkbox checkbox-id="orthodonticsChkBox"
+                                      checkbox-value="isTreatmentForOrthodontics"
+                                      checkbox-label="'Is Treatment for Orthodontics'"
+                                      checkbox-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      checkbox-hidden="false"
+                                      change-function="removeOrthoData()">
+                            </checkbox>
+                        </div>
+                    </div>
+
+
+                    <div class="row margin-bottom10">
+                        <div class="col-xs-3">
+                            <label class="control-label">{{ 'Date Appliance Placed' | i18n }}{{isTreatmentForOrthodontics ? '*' : ''}}</label>
+                            <date-selector input-id="inpAppliancePlacedDateId"
+                                           ng-model="DateAppliancePlaced"
+                                           is-Required="isTreatmentForOrthodontics"
+                                           disable-date-input="isReadOnly || !canEdit || isTreatmentForOrthodontics"
+                                           placeholder="MM/DD/YYYY"
+                                           max-date="maxDate"
+                                           date-var="DateAppliancePlaced"
+                                           valid="appliancePlacedDateIsValid"
+                                           format="MM/dd/yyyy">
+                            </date-selector>
+
+                        </div>
+                        <div class="col-xs-3">
+
+                            <label class="control-label">{{ 'Months of Treatment Remaining' | i18n }}{{isTreatmentForOrthodontics ? '*' : ''}}</label>
+                            <input id="monthsRemain"
+                                   class="form-control"
+                                   type="number"
+                                   ng-disabled="isReadOnly || !canEdit || !isTreatmentForOrthodontics"
+                                   ng-required="isTreatmentForOrthodontics"
+                                   check-auth-z="soar-ins-iclaim-edit"
+                                   ng-model="claim.J430DMain.TotalMonthsOfTreatmentRemaining"
+                                   ng-change="validateTotalMonthsRemaining()"
+                                   placeholder="1-99" />
+                            <span class="error"><span class="help-text" ng-if="showErrors && isTreatmentForOrthodontics && !claim.J430DMain.TotalMonthsOfTreatmentRemaining">{{ 'Required' | i18n }}</span></span>
+                        </div>
+                        <div class="col-xs-3">
+
+                            <label class="control-label">{{ 'Total Months of Treatment' | i18n }}{{isTreatmentForOrthodontics ? '*' : ''}}</label>
+                            <input id="totalMonthsTreatment"
+                                   class="form-control"
+                                   type="number"
+                                   ng-disabled="isReadOnly || !canEdit || !isTreatmentForOrthodontics"
+                                   ng-required="isTreatmentForOrthodontics"
+                                   check-auth-z="soar-ins-iclaim-edit"
+                                   ng-model="claim.J430DMain.TotalMonthsOfTreatment"
+                                   ng-change="validateTotalMonthsTreatment()"
+                                   placeholder="1-99" />
+                            <span class="error"><span class="help-text" ng-if="showErrors && isTreatmentForOrthodontics && !claim.J430DMain.TotalMonthsOfTreatment">{{ 'Required' | i18n }}</span></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <checkbox checkbox-id="ProsthesisChkBox"
+                                      checkbox-value="isReplacementOfProsthesis"
+                                      checkbox-label="'Replacement of Prosthesis'"
+                                      checkbox-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      checkbox-hidden="false"
+                                      change-function="removeProsthesisData()">
+                            </checkbox>
+                        </div>
+                    </div>
+
+                    <div class="row margin-bottom10">
+                        <div class="col-xs-3">
+                            <label class="control-label">{{ 'Date of Prior Prosthesis' | i18n }}{{isReplacementOfProsthesis ? '*' : ''}}</label>
+                            <date-selector input-id="inpPriorDateId"
+                                           ng-model="DateOfPriorPlacement"
+                                           is-Required="isReplacementOfProsthesis"
+                                           disable-date-input="isReadOnly || !canEdit || isReplacementOfProsthesis"
+                                           placeholder="MM/DD/YYYY"
+                                           max-date="maxDate"
+                                           date-var="DateOfPriorPlacement"
+                                           valid="priorDateIsValid"
+                                           format="MM/dd/yyyy">
+                            </date-selector>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label class="control-label">{{ 'Treatment Resulting From:' | i18n }}</label>
+                        </div>
+                        <div class="col-xs-2">
+                            <checkbox checkbox-id="occIllnessOrInjuryChkBox"
+                                      checkbox-value="isOccupationalInjury"
+                                      checkbox-label="'Occupational Illness/injury'"
+                                      checkbox-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      checkbox-hidden="false"
+                                      change-function="removeAccidentData()">
+                            </checkbox>
+
+                            <checkbox checkbox-id="autoAccidentChkBox"
+                                      checkbox-value="isAutoAccident"
+                                      checkbox-label="'Auto Accident'"
+                                      checkbox-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      checkbox-hidden="false"
+                                      change-function="removeAccidentData()">
+                            </checkbox>
+
+                            <checkbox checkbox-id="otherAccidentChkBox"
+                                      checkbox-value="isOtherAccident"
+                                      checkbox-label="'Other Accident'"
+                                      checkbox-disabled="isReadOnly || !canEdit"
+                                      check-auth-z="soar-ins-iclaim-edit"
+                                      checkbox-hidden="false"
+                                      change-function="removeAccidentData()">
+                            </checkbox>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3" ng-show="isOccupationalInjury || isAutoAccident || isOtherAccident">
+                            <label class="control-label">{{ 'Date of Accident' | i18n }}{{isOccupationalInjury || isAutoAccident || isOtherAccident ? '*' : ''}}</label>
+                            <date-selector input-id="dateOfAccident"
+                                           ng-model="DateOfAccident"
+                                           is-Required="isOccupationalInjury || isAutoAccident || isOtherAccident"
+                                           disable-Date-Input=""
+                                           placeholder="MM/DD/YYYY"
+                                           max-date="maxDate"
+                                           date-var="DateOfAccident"
+                                           valid="accidentDateIsValid"
+                                           format="MM/dd/yyyy">
+                            </date-selector>
+                        </div>
+                        <div class="col-xs-3" ng-show="isAutoAccident">
+                            <label class="control-label">{{ 'Auto Accident State' | i18n }}{{isAutoAccident ? '*' : ''}}</label>
+                            <soar-select-list id="inpAutoAccidentState"
+                                              name="inpAutoAccidentState"
+                                              class-name="state-selector"
+                                              option-list="states"
+                                              sb-required="isAutoAccident"
+                                              disable-input="disabled || false"
+                                              placeholder="State"
+                                              text-field="Abbreviation"
+                                              value-field="Abbreviation"
+                                              ng-model="claim.J430DMain.AutoAccidentState">
+                            </soar-select-list>
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <button type="button" ng-show="!isReadOnly" check-auth-z="soar-ins-iclaim-edit" class="btn btn-primary" ng-click="saveChanges()">{{ 'Save' | i18n }}</button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">{{ isReadOnly ? 'Close' : 'Cancel' }}</button>
+                    </div>
+                    <div class="form-footer margin-top4">
+                        <span id="invalidDataMsg" ng-if="invalidDiagPointer" class="error help-text block">{{'Diagnosis Pointer is invalid' | i18n}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

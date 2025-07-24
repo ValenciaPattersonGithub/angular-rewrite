@@ -1,0 +1,211 @@
+﻿@import 'variables';
+
+.multiselect-wrapper {
+    display: grid;
+    grid-template: auto auto / auto;
+    grid-gap: 3px 5px;
+
+    &.label-left {
+        grid-template: auto / min-content auto;
+    }
+}
+.multiselect-label {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.multiselect-popup {
+    font-family: $global-font-family;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 9px;
+}
+
+.multiselect-wrap {
+    display: flex;
+    align-items: center;
+    word-wrap: break-word;
+    overflow-wrap: anywhere; //to allow space seperated text-wrapping inside multiselect-list
+}
+.mass-update-dropdown {
+    width: 35% !important;
+    margin-left: 1.2%;
+}
+::ng-deep .multiselect-wrapper .k-multiselect-wrap.k-floatwrap {
+    //override kendo jquery styles
+    font-family: $global-font-family;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid $border-grey;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: none;
+
+    li.k-button {
+        color: $label-color;
+        font-family: $global-font-family;
+        font-size: 12px;
+        background: transparent;
+        border: none;
+        width: 100%;
+        min-height: auto;
+        padding: 0 0 0 4px;
+        float: none;
+
+        &:active {
+            box-shadow: none;
+        }
+
+        .k-select {
+            display: none;
+        }
+
+        .k-i-arrow-s {
+            float: right;
+        }
+
+        .item-number {
+            font-weight: 700;
+        }
+    }
+}
+.k-list .k-item.k-state-selected,
+.k-list-optionlabel.k-state-selected {
+    background-color: $polar-white;
+}
+
+::ng-deep .multiselect-popup-wrapper .k-list .k-item.k-state-selected .k-checkbox-label:before {
+    content: "\e118";
+    color: white;
+    background-color: $action-blue;
+    border-color: $action-blue;
+}
+
+::ng-deep .multiselect-popup-wrapper .k-list .k-item.k-state-selected:hover .k-checkbox-label:before {
+    color: $action-blue;
+    background-color: white;
+    border-color: white;
+}
+
+.k-multiselect .k-multiselect-wrap .k-searchbar {
+    float: none;
+}
+
+::ng-deep .multiselect-wrapper .k-multiselect input:disabled {
+    background-color: transparent;
+}
+
+
+::ng-deep .multiselect-wrapper .k-multiselect .k-multiselect-wrap .k-button {
+    white-space: nowrap;
+}
+
+::ng-deep .multiselect-wrapper .k-multiselect .k-multiselect-wrap:after {
+    content: "\e006";
+    position: absolute;
+    right: 5px;
+    font-size: 19px;
+    font-family: "WebComponentsIcons", monospace;
+    visibility: visible;
+    height: 100%;
+}
+
+.k-multiselect {
+    width: 12.4em;
+    line-height: 1.42857143;
+    display: flex;
+}
+
+::ng-deep .multiselect-popup-wrapper li.k-item > label.k-checkbox-label {
+    display: none;
+}
+
+.ml-5 {
+    margin-left: 5px;
+}
+
+input.k-checkbox {
+    border: none;
+}
+
+
+/// copied from base.less
+.k-checkbox-label:before {
+    font: 14px "WebComponentsIcons", monospace;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-width: 1px;
+    border-style: solid;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    line-height: 14px;
+    text-align: center;
+}
+
+.k-checkbox-label, .k-radio-label {
+    display: inline-block;
+    position: relative;
+    padding-left: 25.2px;
+    vertical-align: top;
+    line-height: 16px;
+    cursor: pointer;
+    border-style: solid;
+    border-width: 0;
+}
+
+// keep wrapper class so that styling doesn't leak outside of the encapsulation into other
+// components due to ng-deep
+::ng-deep .multiselect-popup-wrapper .k-list .k-item {
+    background-color: $white;
+    border-bottom: 1px solid $multiselect-item-border;
+    display: flex;
+    align-items: center;
+
+    .k-checkbox:checked {
+        border-color: $multiselect-action;
+        color: $polar-white;
+        background-color: $multiselect-action;
+    }
+
+    &:hover {
+        border-radius: 0;
+        border: transparent;
+        background: $multiselect-action;
+        color: $white;
+
+        .k-checkbox:checked {
+            border-color: $white;
+            color: $multiselect-action;
+            background-color: $white;
+        }
+    }
+
+    &focus, &.k-state-focused {
+        box-shadow: none;
+        color: $text-black;
+    }
+}
+
+::ng-deep .multiselect-popup-wrapper .k-list .k-item.k-state-selected,
+::ng-deep .multiselect-popup-wrapper .k-list-optionlabel.k-state-selected {
+    background: $white;
+    color: $text-black;
+
+    &:hover {
+        border: transparent;
+        background: $multiselect-action;
+        color: $white;
+    }
+}
+
+/// copied from checkbox.less ///
+.k-checkbox-label:before {
+    border-color: #cccccc;
+    background: #fff;
+    border-radius: 3px;
+}

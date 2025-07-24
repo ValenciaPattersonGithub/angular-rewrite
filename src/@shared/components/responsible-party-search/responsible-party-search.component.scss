@@ -1,0 +1,181 @@
+@import "variables";
+
+.responsiblePersonWrapper {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: minmax(min-content, max-content);
+
+    &-main-search {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    &-input-group {
+        display: inline-flex;
+        width: 100%;
+    }
+    &-search-input {
+        width: 100%;
+        height: 30px;
+        padding: 0px 10px;
+        border: 1px solid $search-input-border-color;
+        border-right: 0px !important;
+        border-radius: 5px 0px 0px 5px;
+        background-color: $search-input-background-color;
+        background-size: cover;
+        font-family: $global-font-family;
+        font-size: 14px;
+        color: $search-input-color;
+        margin-left: 0px;
+        outline: none;
+    }
+    &-main-search-icon {
+        margin-right: 5px;
+        padding: 5px 5px 0px 0px;
+        border-width: 1px;
+        border-style: solid;
+        border-left: 0px;
+        color: $search-icon-color;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+    &-search-icon {
+        color: $search-svg-color;
+    }
+    &-clear-icon {
+        color: $search-dropdown-hover-background-color;
+    }
+    &-main-clear-icon {
+        margin-right: 5px;
+        padding: 5px 5px 0px 0px;
+        border-width: 1px;
+        border-style: solid;
+        border-left: 0px;
+        color: $search-icon-color;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+    &-dropdown {
+        list-style-type: none;
+        max-height: 350px;
+        display: block;
+        overflow: auto;
+        max-width: 100%;
+        min-width: 100%;
+        padding-inline-start: 0px;
+        background: $search-input-background-color;
+        position: absolute;
+        z-index: 1;
+    }
+    &-search-data-wrapper {
+        padding: 8px;
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 40px 150px 5px 100px 5px 100px;
+        grid-auto-rows: minmax(min-content, max-content);
+        font-size: 12px;
+    }
+    &-main-person-icon {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    &-inner-person-icon {
+        margin: -2px 10px 0px 7px;
+        float: left;
+    }
+    &-person-icon {
+        color: $search-dropdown-hover-background-color;
+    }
+    &-name {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    &-mr-2 {
+        margin-right: 2px;
+    }
+    &-code-pipe {
+        grid-column: 3;
+        grid-row: 1;
+    }
+    &-code {
+        grid-column: 4;
+        grid-row: 1;
+    }
+    &-dob-pipe {
+        grid-column: 5;
+        grid-row: 1;
+    }
+    &-dob {
+        grid-column: 6;
+        grid-row: 1;
+    }
+    &-no-record {
+        padding: 8px;
+        color: $search-input-color;
+    }
+    &-label {
+        font-weight: lighter;
+    }
+    &-add-person {
+        padding: 5px 0px 5px 5px;
+    }
+    &-add-person-li:hover {
+        background-color: transparent !important;
+    }
+    //scroll css starts
+    &-dropdown::-webkit-scrollbar {
+        background-color: $appointment-dropdownlist-background-color;
+        width: 16px;
+    }
+    &-dropdown::-webkit-scrollbar-track {
+        background-color: $appointment-dropdownlist-background-color;
+    }
+    &-dropdown::-webkit-scrollbar-track:hover {
+        background-color: $appointment-dropdownlist-background-color;
+    }
+    &-dropdown::-webkit-scrollbar-thumb {
+        background-color: $appointment-dropdownlist-box-background-color;
+        border-radius: 16px;
+        border: 5px solid $appointment-dropdownlist-background-color;
+    }
+    &-dropdown::-webkit-scrollbar-thumb:hover {
+        background-color: $appointment-dropdownlist-box-hover-background-color;
+        border: 4px solid $appointment-dropdownlist-box-hover-border-color;
+    }
+    &-dropdown::-webkit-scrollbar-button {
+        display: none;
+    }
+    //scroll css ends
+}
+.responsiblePersonWrapper-dropdown li:hover {
+    min-height: 30px;
+    border: 1px solid $search-dropdown-hover-border-color;
+    background-color: $search-dropdown-hover-background-color;
+    background-size: cover;
+    font-family: $global-font-family;
+    font-size: 12px;
+    color: $search-dropdown-hover-color;
+}
+.responsiblePersonWrapper-dropdown li:hover .responsiblePersonWrapper-person-icon {
+    color: $search-dropdown-hover-color;
+}
+li {
+    list-style-position: inside;
+    min-height: 30px;
+    border: 1px solid $search-dropdown-border-color;
+    background-size: cover;
+    font-family: $global-font-family;
+    font-size: 12px;
+}
+svg {
+    margin-top: 10px;
+}
+.rp-error-control {
+    border: 1px solid $error-color;
+    box-shadow: 0 0 0 1px $error-color;
+}
+.rp-error-icon {
+    float: left;
+    margin-left: 10px;
+    margin-top: 8px;
+    color: $error-color;
+}

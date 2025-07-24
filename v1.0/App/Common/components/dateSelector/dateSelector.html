@@ -1,0 +1,31 @@
+﻿<div class="datepicker">
+    <p class="input-group no-margin-bottom date-selector-input-group" ng-form="dateForm">
+        <input id="{{inputId}}"
+               placeholder="{{placeholder}}"
+               type="text"
+               name="datePicker"
+               date-only
+               ng-class="{error: !valid && onBlurCalled}"
+               maxlength="10" class="date-selector-input"
+               uib-datepicker-popup="{{ format }}"
+               show-button-bar="false"
+               ng-model="tempDate"
+               is-open="opened"
+               datepicker-options="dateOptions"
+               datepicker-append-to-body="true"
+               ng-blur="onBlurCalled = true"
+               ng-disabled="disableDateInput == false"
+               ng-hide="hideDateInput"
+               tabindex="{{tabIndex}}"
+               ng-required="isRequired" />
+        <span class="input-group-btn">
+            
+            <button type="button" id="{{inputId}}_dateSelectorBtn" class="date-selector-btn" ng-click="open($event)" tabindex="-1" ng-disabled="disableDateInput == false">
+                <i class="far fa-calendar-alt"></i>
+            </button>
+        </span>
+    </p>
+    <div ng-class="{error: !dateForm.datePicker.$valid}">
+        <span id="{{inputId}}ValidationMessage" class="help-text" ng-if="!dateForm.datePicker.$valid">{{'Invalid Date' | i18n }}</span>
+    </div>
+</div>

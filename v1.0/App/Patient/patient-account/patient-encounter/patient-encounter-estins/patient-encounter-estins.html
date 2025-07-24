@@ -1,0 +1,113 @@
+﻿
+<div class="patEstIns">
+    <div tooltip-enable="!isValidForInsurance"
+         tooltip-class="summarytooltip wordbreak"
+         tooltip-placement="left"
+         tooltip-append-to-body="true"
+         uib-tooltip="{{ ('The service must have a CDT Code assigned and be marked to submit to insurance.' | i18n) }}">
+        <span class="fa fa-edit"
+              uib-popover-template="'estinspopup.html'"
+              popover-placement="{{popOverPlacement}}"
+              popover-append-to-body="true"
+              popover-is-open="isOpen"
+              popover-trigger="'none'"
+              ng-class="{'disable': !isValidForInsurance}"
+              ng-click="toggle()">
+        </span>
+    </div>
+    <script type="text/ng-template" id="estinspopup.html">
+        <div class="patEncChg">
+            <div class="header">
+                <button id="btn-close" class="btn btn-link fa fa-times pull-right" ng-click="toggle()"></button>
+            </div>
+            <div class="body extraPadding">
+                <div class="row" ng-repeat="estimate in inputData.InsuranceEstimates">
+                    <form ng-class="{'has-error': !estimate.validInsAmount}">
+                        <div class="col-xs-6">
+                            Est. Ins. {{ $index === 0 ? '(Primary)' : '(Secondary)' }}
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-icon">
+                                <input id="estInsuranceInput" ng-disabled="!hasPatientBenefitPlan" type="text" class="form-input text-align-right input-sm form-control" model-format="currency" maxlength="12"
+                                       placeholder="{{ '0' | currency }}" ng-model="estimate.InputEstInsurance" ng-blur="verifyMaxAmount('ins', estimate)">
+                            </div>
+                        </div>
+                        <div class="col-xs-12" ng-hide="estimate.validInsAmount">
+                            <label class="control-label" for="inputError2">{{"Cannot exceed charge/fee schedule fee" | i18n}}</label>
+                        </div>
+                    </form>
+                </div>
+                <hr class="no-line" />
+                <div class="row" ng-repeat="estimate in inputData.InsuranceEstimates">
+                    <div class="col-xs-6">
+                        Est. Adj. {{ $index === 0 ? '(Primary)' : '(Secondary)' }}
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="text-align-right pull-right">+ {{estimate.InputAdjEst | currency }}</label>
+                    </div>
+                </div>
+                <hr class="dotted" />
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h4>Net Est. Ins.</h4>
+                    </div>
+                    <div class="col-xs-6 text-align-right">
+                        <h4>{{inputData.InputTotalEstInsurance + inputData.InputTotalAdjEstimate | currency}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="pull-right">
+                    <button id="btn-update" class="btn btn-sm btn-primary" ng-disabled="disableSave()" ng-click="update()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </script>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

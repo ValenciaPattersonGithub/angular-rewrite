@@ -1,0 +1,107 @@
+﻿.insurance {
+    background-color: #FAFAFA;
+    &__container {
+        .containerStandard;
+        padding: 0;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    &__header {
+        .clearfix;
+        position: relative;
+        padding-bottom: @brand-padding_md;
+        margin-bottom: @brand-margin_md;
+        border-bottom: @brand-border;
+
+        .form-group {
+            margin-bottom: 0;
+        }
+    }
+     &__claimsOption{
+           .button{
+                background-color: transparent;
+                font-size: 22px;
+                border: none;
+                padding: 0;
+                font-weight: bold;
+           }
+           .span{
+                position: relative;
+                bottom: 5px;
+                font-size: 22px;
+                border: none;
+                padding: 0;
+                font-weight: bold;
+           }
+                padding-left: 10px;
+                padding-right: 10px;
+                font-size: 22px;
+                font-weight: bold;
+     }
+        &__action{
+        padding-top:@brand-padding_xs;
+    }
+
+    &__nav {
+
+        padding-left: 0;
+        .dropdown {
+            display: inline-block;
+            margin-right: @brand-padding_xs;
+
+            > .fa-sort-down {
+                padding-left: 10px;
+                padding-right: 10px;
+                font-size: 22px;
+                font-weight: bold;
+            }
+        }
+
+        .accountmembersdrp {
+            display: inline-block;
+            padding-right:10px;
+        }
+    }
+    &__search {
+        padding-right: 0;
+        padding-top:@brand-padding_xs;
+        float:right;
+        text-align: right;
+
+        .btn {
+            float: right;
+            margin-left: @brand-margin_sm;
+        }
+        .form-group {
+
+            display: inline-block;
+            float: right;
+            max-width: 200px;
+
+            .form-control {
+                height: auto;
+            }
+        }
+    }
+    &__inputGroup {
+        display: inline;
+    }
+
+    &__searchFilter {
+        margin-right: 10px;
+
+        
+    }
+
+    &__contentwidth{
+        width:99%;
+       } 
+    &__contentwidthera{
+        width:97%;
+       }
+}
+.for-display {
+    font-size: 1.5em;
+  margin-right: @brand-margin_sm; 
+}

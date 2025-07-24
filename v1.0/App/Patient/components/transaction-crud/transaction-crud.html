@@ -1,0 +1,498 @@
+﻿<div ng-show="!loadingServices" class="transCrud">
+    <div class="modal-header padding-bottom-none">
+        <div class="draggable-modal-header transCrud__headercursor-pointer" id="modalScroll">
+            <div class="pull-right">
+                <button id="btnClose" ng-click="closeModal()" class="btn btn-link fa fa-times icon-click"></button>
+            </div>
+        </div>
+        <div class="page-title-responsive form-header-newer padding-top-none">
+            <div class="row ">
+                <div class="col-xs-12">
+                    <span id="lblTitleDate">
+                        {{transaction.TitleDate}}
+                    </span>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-xs-12">
+                    <span id="lblServiceType">
+                        {{transaction.ServiceType}}
+                    </span>
+                    <span id="lblTransactionType" ng-if="(transaction.TransactionTypeId==5 || transaction.TransactionTypeId==6) && !editMode">
+                        {{transaction.TransactionType}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="!loadingDisplayProperties" class="modal-body">
+        <div class="row">
+            <div class="col-xs-10">
+                <form name="viewTransactionForm" role="form" action="javascript:void(0);" novalidate>
+                    <div class="transCrud__formItem">
+                        <div class="transCrud__formLbl" id="dvDate">
+                            {{'Date' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <label class="lbl-text" id="lblDate">{{transaction.DateEntered | toShortDisplayTodayLocal:'Central Standard Time'}}</label>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="dateForm">
+                                <date-selector id="inpTransactionDate" 
+                                    input-id="inpTransactionDate" 
+                                    name="inpTransactionDate"                                     
+                                    ng-class="{'error': (dateForm.inpTransactionDate.$error.required && validateFlag && !( (transaction.DateEntered !=undefined || transaction.DateEntered !=null) && transaction.DateEntered!='')
+                                                                                           && transaction.ValidDate)}" 
+                                    date-var="displayDateEntered"
+                                    valid="transaction.ValidDate" 
+                                    ng-model="displayDateEntered" 
+                                    format="MM/dd/yyyy" 
+                                    min-date="transactionMinDate"
+                                    max-date="transactionMaxDate" 
+                                    mode="day"
+                                    on-select="resetDateEntered(displayDateEntered)"
+                                    set-focus placeholder="00/00/0000" required
+                                    class="service-datepicker service-picker-datepicker vertical-align-top"></date-selector>
+                                <div class="error" ng-if="(dateForm.inpTransactionDate.$error.required && validateFlag && transaction.DateEntered!='')">
+                                    <span class="help-text" id="lblRequiredTransactionDate">{{ 'Date {0}' | i18n:['Required'] }}</span>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <div class="transCrud__formItem">
+                        <div class="transCrud__formLbl" id="dvPatient">
+                            {{'Patient' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl">
+                            <label class="lbl-text" id="lblPatient">{{transaction.PatientDetailedName}}</label>
+                        </div>
+                    </div>
+                    <div class="transCrud__formItem">
+                        <div class="transCrud__formLbl" id="dvProvider">
+                            {{'Provider (Services)' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <label class="lbl-text" id="lblProvider">{{transaction.Provider}}</label>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="providerForm">                               
+                                <div ng-if="transaction.TransactionTypeId==1" class="transcrud_provider-dropdown-width">
+                                    <div ng-class="{'error': ((angular.isUndefined(transaction.ProviderUserId) || transaction.ProviderUserId =='') && validateFlag)}">
+                                        <provider-selector-with-grouping [input-id]="'lstProvider'" 
+                                            [class-name]="{'error': ((angular.isUndefined(transaction.ProviderUserId) || transaction.ProviderUserId == null || transaction.ProviderUserId == '') && validateFlag)}"
+                                            [patient-info]="patientInfo"                                            
+                                            [provider-type-ids]="[1,2,3,5]"       
+                                            (selected-provider-change)="updateProviderId($event)"                                                                
+                                            [selected-provider]="transaction.ProviderUserId"
+                                            [is-required]="true">
+                                        </provider-selector-with-grouping> 
+                                    </div>
+                                    <div class="error" ng-if="((angular.isUndefined(transaction.ProviderUserId) || transaction.ProviderUserId == null || transaction.ProviderUserId == '') && validateFlag)">
+                                        <span class="help-text" id="lblRequiredProvider">{{ 'Provider {0}' | i18n:['Required'] }}</span>
+                                    </div>
+                                </div>
+                                <div ng-if="transaction.TransactionTypeId==5" class="transcrud_provider-dropdown-width">                                    
+                                    <provider-selector-with-grouping [input-id]="'lstProvider'"
+                                        [class-name]="{'error': ((angular.isUndefined(transaction.ProviderUserId) || transaction.ProviderUserId == null || transaction.ProviderUserId == '') && validateFlag)}"
+                                        [patient-info]="patientInfo"
+                                        [provider-type-ids]="[1,2,3,5]"   
+                                        (selected-provider-change)="updateProviderId($event)"                                                                             
+                                        [selected-provider]="transaction.ProviderUserId"
+                                        [set-preferred]="false"
+                                        [is-required]="true">
+                                    </provider-selector-with-grouping> 
+
+                                </div>
+                            </ng-form>
+
+                        </div>
+                    </div>
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId != 5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvProviderOnClaims">
+                            {{'Provider (Claims)' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <label class="lbl-text" id="lblProviderOnClaims">{{transaction.ProviderOnClaims}}</label>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="providerOnClaimsForm">
+                                <div ng-if="transaction.TransactionTypeId==1">
+                                    <div ng-class="{'error': ((angular.isUndefined(transaction.ProviderOnClaimsId) || transaction.ProviderOnClaimsId =='') && validateFlag)}">
+                                        <practice-provider-selector input-id="ClaimsProvider"
+                                            class-name="{'error': ((angular.isUndefined(transaction.ProviderOnClaimsId) || transaction.ProviderOnClaimsId == '') && validateFlag)}"
+                                            provider-on-claims-only="true" 
+                                            selected-provider="transaction.ProviderOnClaimsId"
+                                            sb-change="providerOnClaimsOnChange" 
+                                            obj-trans="transaction">
+                                        </practice-provider-selector>                                        
+                                    </div>
+                                    <div class="error" ng-if="((angular.isUndefined(transaction.ProviderOnClaimsId) || transaction.ProviderOnClaimsId == '') && validateFlag)">
+                                        <span class="help-text" id="lblRequiredProvider">{{ 'Provider On Claims {0}' | i18n:['Required'] }}</span>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <!--New field Amount added for positive adjustment-->
+
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId==5 || transaction.TransactionTypeId == 6">
+                        <div class="transCrud__formLbl">
+                            <label id="lblAmountMessage">{{'Amount' | i18n}}</label>
+                        </div>
+
+                        <div class="transCrud__formCtrl" ng-if="editMode && transaction.TransactionTypeId == 5">
+                            <ng-form>
+                                <div>
+                                    <div ng-class="{'transCrud__amount-error': ((transaction.Amount <= 0.00 || transaction.Amount > 999999.99) && errorFlags.hasError)}">
+                                        <input type="text" class="form-input text-align-right debit-input" name="inpAmount" id="inpAmount" ng-model="transaction.Amount" maxlength="12" placeholder="{{'0'|currency}}" model-format="currency" ng-change="setPreviousAmount()" />
+                                    </div>
+                                    <div class="error" ng-if="((transaction.Amount <= 0.00 || transaction.Amount > 999999.99) && validateFlag)">
+                                        <span class="help-text" id="lblRequiredAmount">{{ 'Amount must be greater than $0.00 or less than $1,000,000.00' | i18n }}</span>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <label class="lbl-text" id="lblFee">{{transaction.Amount | currency}}</label>
+                        </div>
+
+                    </div>
+
+                    <div class="transCrud__formItem">
+                        <div class="transCrud__formLbl" id="dvLocation">
+                            {{'Location' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl">
+                            <label class="lbl-text" id="lblLocation">{{transaction.LocationNameLine1}}</label>
+                        </div>
+                    </div>
+
+                    <div class="transCrud__formItem" id="dvSelectedType" ng-if="transaction.TransactionTypeId==5">
+                        <div class="transCrud__formLbl">
+                            {{'Type' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <label class="lbl-text" id="lblSelectedType">{{transaction.TransactionType}}</label>
+                        </div>
+                        <div class="transCrud__formLbl" ng-if="transaction.TransactionTypeId==5  && editMode">
+                            {{'Positive Adjustment Type' | i18n}}
+                        </div>
+                        <ng-form name="adjustmentTypeForm" ng-if="transaction.TransactionTypeId==5 && editMode">
+                            <div class="transCrud__formCtrl">
+                                <div ng-class="{'error': (adjustmentTypeForm.lstAdjustmentType.$error.required && validateFlag)}">
+                                    <soar-select-list id="lstAdjustmentType"
+                                                      name="lstAdjustmentType"
+                                                      placeholder="{{ 'Adjustment Type' | i18n }}"
+                                                      text-field="Description"
+                                                      value-field="AdjustmentTypeId"
+                                                      option-list="adjustmentTypes"
+                                                      ng-model="transaction.AdjustmentTypeId"
+                                                      sb-required="required"></soar-select-list>
+                                </div>
+                                <div class="error" ng-if="(adjustmentTypeForm.lstAdjustmentType.$error.required && validateFlag)">
+                                    <span class="help-text" id="lblRequiredPaymentType">{{ 'Type {0}' | i18n:['Required'] }}</span>
+                                </div>
+                            </div>
+                        </ng-form>
+                        <div class="transCrud__formCtrl" ng-if="transaction.TransactionTypeId == 5 && !editMode">
+                            <label class="lbl-text" id="lblAdjType">{{transaction.AdjustmentTypeName}}</label>
+                        </div>
+                    </div>
+                    <div class="transCrud__formItem">
+                        <div class="transCrud__formLbl" id="dvType" ng-if="transaction.TransactionTypeId!=5">
+                            {{'Type' | i18n}}
+                        </div>
+
+                        <div class="transCrud__formCtrl" ng-if="transaction.TransactionTypeId!=5">
+                            <label class="lbl-text" id="lblType">{{transaction.TransactionType}}</label>
+                        </div>
+
+                    </div>
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId!=5">
+                        <div class="transCrud__formLbl" id="dvDescription">
+                            {{'Description' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl">
+                            <label class="lbl-text" id="lblDescription">{{transaction.Description}}</label>
+                        </div>
+                    </div>
+                    <div class="transCrud__formItem" ng-if="transaction.AffectedAreaId != 1 && transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvTooth">
+                            {{'Tooth' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <label class="lbl-text" id="lblTooth">{{transaction.Tooth | convertToothRangeToQuadrantOrArchCode}}</label>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="toothForm">
+                                <div class="padding-2">
+                                    <div ng-if="!transaction.UseCodeForRangeOfTeeth">
+                                        <div ng-class="{'error': (toothForm.inpTooth.$error.required && validateFlag)}">
+                                            <input type="text" class="form-input service-input input-capitalize" id="inpTooth" name="inpTooth" ng-model="transaction.Tooth"
+                                                   char-pattern="{{'[^A-T0-9]'}}" maxlength="2"
+                                                   ng-change="validateTooth(transaction)" focus-enter
+                                                   placeholder="{{'Tooth' | i18n}}" required />
+                                            <tooth-quadrant selected-teeth="transaction.Tooth" quadrant-selection-only="transaction.AffectedAreaId ==2" multiselect-enabled="true" show-teeth-detail="displayVariables.showTeethDetail"></tooth-quadrant>
+                                        </div>
+                                        <div>
+                                        </div>
+                                        <div class="error" ng-if="(toothForm.inpTooth.$error.required && validateFlag)">
+                                            <span class="help-text" id="lblRequiredTooth">{{'Tooth {0}' | i18n:['Required']}}</span>
+                                        </div>
+                                        <div class="error" ng-if="(!toothForm.inpTooth.$error.required && validateFlag && transaction.invalidTooth)">
+                                            <span class="help-text" id="lblInvalidTooth_{{encounter.Status}}_{{ encounterIndex }}_{{$index}}">{{'Invalid tooth' | i18n }}</span>
+                                        </div>
+                                    </div>
+                                    <div ng-if="transaction.UseCodeForRangeOfTeeth">
+                                        <rot-selector selected="activeTeeth"></rot-selector>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <div class="transCrud__formItem" ng-if="(transaction.AffectedAreaId == 4 && transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6)">
+                        <div class="transCrud__formLbl" id="dvArea">
+                            {{'Area' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <label class="lbl-text" id="lblSurface">{{transaction.SurfaceSummaryInfo}}</label>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="surfaceForm">
+                                <div class="padding-2">
+                                    <div>
+                                        <div ng-class="{'error': (surfaceForm.inpSurface.$error.required && validateFlag)}">
+                                            <input type="text" class="form-input service-input input-capitalize" id="inpSurface" name="inpSurface" ng-disabled="true"
+                                                   ng-model="transaction.SurfaceSummaryInfo" char-pattern="[^MODBIFL5modbifl]"
+                                                   maxlength="20" placeholder="{{transaction.AffectedAreaId!=3?'Surface':'Root'| i18n}}" required />
+                                            <surface selected-surface='transaction.Surface' selected-tooth="transaction.Tooth" is-surface-editing="transaction.isSurfaceEditing" selected-Surface-Summary-Info="transaction.SurfaceSummaryInfo"></surface>
+                                        </div>
+                                        <div>
+
+                                        </div>
+                                        <div class="error" ng-if="(surfaceForm.inpSurface.$error.required && validateFlag)">
+                                            <span class="help-text" id="lblRequiredSurface">{{'Surface {0}'| i18n:['Required']}}</span>
+                                        </div>
+                                        <div class="error" ng-if="!(surfaceForm.inpSurface.$error.required && validateFlag) && transaction.invalidSurface">
+                                            <span class="help-text" id="lblInvalidSurface_{{$index}}">{{ 'Invalid surface.' | i18n }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <div class="transCrud__formItem" ng-if="(transaction.AffectedAreaId == 3 && transaction.TransactionTypeId!=5  && transaction.TransactionTypeId != 6)">
+                        <div class="transCrud__formLbl" id="dvArea">
+                            {{'Area' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <label class="lbl-text" id="lblRoots">{{transaction.Roots}}</label>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="rootsForm">
+                                <div class="padding-2">
+                                    <div>
+                                        <div ng-class="{'error': (rootsForm.inpRoots.$error.required && validateFlag)}">
+                                            <input type="text" class="form-input service-input" ng-change="validateTooth(transaction,true)" id="inpRoots" name="inpRoots" ng-model="transaction.Roots" char-pattern="[^DBMPS,]" maxlength="20" placeholder="{{'Root'| i18n}}" required />
+                                        </div>
+                                        <div class="error" ng-if="(rootsForm.inpRoots.$error.required && validateFlag)">
+                                            <span class="help-text" id="lblRequiredRoots">{{'Root {0}'| i18n:['Required']}}</span>
+                                        </div>
+                                        <div class="error" ng-if="!(rootForm.inpRoot.$error.required && validateFlag) && transaction.invalidRoot">
+                                            <span class="help-text" id="lblInvalidRoot_{{$index}}">{{ 'Invalid root.' | i18n }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvFee">
+                            {{'Fee' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <div class="transaction-currency-field">
+                                <label class="lbl-text" id="lblFee">{{transaction.Fee | currency}}</label>
+                            </div>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="feeForm">
+                                <div>
+                                    <div ng-class="{'error': ((transaction.Fee < 0 || transaction.Fee > 999999.99) && validateFlag)}">
+                                        <input type="text" class="form-input text-align-right service-input" id="inpFee" name="inpFee" ng-model="transaction.Fee" maxlength="12" placeholder="{{'0'|currency}}" model-format="currency" required ng-blur="calculateTaxandInsurance()" ng-change="setPreviousAmount()" />
+                                    </div>
+                                    <div class="error" ng-if="((transaction.Fee < 0 || transaction.Fee > 999999.99) && validateFlag)">
+                                        <span class="help-text" id="lblRequiredFee">{{'Fee range should be between 0.00 to 999999.99.'| i18n}}</span>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvAllowedAmount">
+                            {{'Allowed Amount' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl">
+                            <div class="transaction-currency-field">
+                                <label class="lbl-text" id="lblAllowedAmount">{{allowedAmountDisplay !== null && allowedAmountDisplay !== undefined ? (allowedAmountDisplay | currency) : '-'}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvDiscount">
+                            {{'Discount' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl">
+                            <div class="transaction-currency-field">
+                                <label class="lbl-text" id="lblDiscount">({{transaction.Discount | currency}})</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvTax">
+                            {{'Tax' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <div class="transaction-currency-field">
+                                <label class="lbl-text" id="lblTax">{{transaction.Tax | currency}}</label>
+                            </div>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <ng-form name="feeForm">
+                                <div>
+                                    <div ng-show="!taxLoading">
+                                        <input type="text" class="form-input text-align-right service-input" id="inpTax" name="inpTax" ng-model="transaction.Tax" maxlength="12" placeholder="{{'0'|currency}}" model-format="currency" ng-disabled="true" required />
+                                    </div>
+                                    <i id="iLoading{{$index}}" ng-show="taxLoading && previousAmountChanged" class="fa fa-spinner fa-spin loading"></i>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+
+                    <!--New field Charge added and formula is Charge=Fee-Discount+Tax-->
+
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvCharge">
+                            {{'Charge' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl">
+                            <div class="transaction-currency-field">
+                                <label class="lbl-text" id="lblCharge">{{transaction.Fee-transaction.Discount+transaction.Tax | currency}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvInsuranceEst">
+                            {{'Estimated Ins.' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode || !transaction.OpenClaim">
+                            <div class="transaction-currency-field">
+                                <label class="lbl-text" id="lblInsurance">{{(transaction.InsuranceEstimates != null ? transaction.TotalEstInsurance : 0) | currency}}</label>
+                            </div>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode && transaction.OpenClaim">
+                            <ng-form name="insEstForm">
+                                <div class="form-group vertical-align-top" ng-class="{'error': ((insEstForm.inpInsEst.$error.maxValue) && validateFlag)}">
+                                    <div>
+                                        <input type="text" class="form-input service-input text-align-right" id="inpInsEst" name="inpInsEst" maxlength="10"
+                                               ng-disabled="transaction.$$claimPriority > 1"
+                                               ng-model="transaction.TotalEstInsurance" model-format="currency" placeholder="{{'0'|currency}}"
+                                               ng-blur="overrideEstimatedInsurance(transaction)" min-value="0.00" max-value="{{transaction.Amount}}" />
+                                    </div>
+                                    <span class="help-text" ng-if="(insEstForm.inpInsEst.$error.maxValue) && validateFlag" id="estInsuranceRange">
+                                        {{ 'The Insurance estimation cannot be greater than the service code charge.' | i18n }}
+                                    </span>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId !=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvAdjEst">
+                            {{'Estimated Ins. Adj.' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl">
+                            <div class="transaction-currency-field">
+                                <label class="lbl-text" id="lblAdjustment">{{(transaction.InsuranceEstimates != null ? transaction.TotalAdjEstimate : 0) | currency}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--New field Patient Portion added and formula is PatientPortion=Charge-Insurance est-->
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId!=5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvPatientPortion">
+                            {{'Patient Portion' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl">
+                            <div class="transaction-currency-field">
+                                <label class="lbl-text" id="lblPatientPortion">{{ (transaction.Fee-transaction.Discount+transaction.Tax) - transaction.TotalEstInsurance - transaction.TotalAdjEstimate | currency}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--New Note is added only for positive transaction-->
+                    <div class="transCrud__formItem" ng-if="transaction.TransactionTypeId==5 && transaction.TransactionTypeId != 6">
+                        <div class="transCrud__formLbl" id="dvNote">
+                            {{'Note' | i18n}}
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="editMode">
+                            <textarea id="inpAdjustmentNotes" class="form-input form-textarea" name="inpAdjustmentNotes" maxlength="500" rows="2" cols="50" ng-disabled="disableInput" ng-model="transaction.Note" placeholder="{{'Enter note...' | i18n }}"></textarea>
+                        </div>
+                        <div class="transCrud__formCtrl" ng-if="!editMode">
+                            <label class="overflow-hidden lbl-text note-desc" title="{{transaction.Note}}" id="lblNote">{{transaction.Note}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-xs-2">
+                <button id="btnEdit" check-auth-z="{{soarAuthEditKey}}" class="btn btn-link" 
+                        ng-show="!editMode && (transaction.TransactionTypeId == 1 || transaction.TransactionTypeId == 5)" 
+                        ng-click="!transaction.disableMessage && editTransaction()"
+                        ng-class="{'transCrud__fakeDisabled': transaction.disableMessage}"
+                        uib-tooltip="{{ transaction.disableMessage | i18n }}"
+                        tooltip-placement="right"
+                        tooltip-enable="transaction.disableMessage"
+                        tooltip-append-to-body="true">
+                    {{'Edit'|i18n}}
+                </button>
+            </div>
+        </div>
+        <div class="row transCrud__relatedEncountersTopBorder">
+            <div class="col-xs-10">
+                <div class="transCrud__formItem">
+                    <div class="transCrud__formLbl" id="dvEnteredBy">
+                        {{'Entered By' | i18n}}
+                    </div>
+                    <div class="transCrud__formCtrl">
+                        <label class="lbl-text" id="lblEnteredBy">{{transaction.EnteredByName}}</label>
+                    </div>
+
+                </div>
+                <div class="transCrud__formItem">
+                    <div class="transCrud__formLbl" id="dvRelatedEncounters">
+                        {{'Related Encounter(s)' | i18n}}
+                    </div>
+                    <div class="transCrud__formCtrl transCrud__relatedEncountersLink" ng-if="transaction.TransactionTypeId != 5 && transaction.TransactionTypeId != 6">
+                        <a id="btnNavigateToRelatedEncounter" check-auth-z="soar-acct-actsrv-view" ng-click="navigateToAccountSummary(transaction.EncounterId)">{{ transaction.RelatedEncounterDate | toShortDisplayDateUtc}}</a>
+                    </div>
+                    <div class="transCrud__formCtrl transCrud__relatedEncountersLink" ng-if="transaction.TransactionTypeId == 5 || transaction.TransactionTypeId == 6">
+                        <a id="btnNavigateToRelatedEncounter" check-auth-z="soar-acct-actsrv-view" ng-click="navigateToAccountSummary(transaction.DebitTransactionId)">{{ transaction.DateEntered | toShortDisplayDateUtc}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer background-grey" ng-if="editMode">
+        <div class="row">
+            <div class="col-xs-12">
+                <button id="btnApply" title="{{saveTooltip}}" check-auth-z="{{soarAuthEditKey}}" class="btn btn-primary pull-left" ng-click="saveTransaction()" ng-disabled="alreadySaving || previousAmountChanged || (!hasValueChanged && activeTeeth | teethEqual: originalActiveTeeth) ||  !serviceLocationMatch || transaction.invalidTooth || transaction.invalidSurface">{{ 'Save' | i18n }}</button>
+                <button id="btnCancel" class="btn btn-link" ng-click="closeModal()" ng-disabled="alreadySaving">{{ 'Cancel' | i18n }}</button>
+            </div>
+        </div>
+    </div>
+</div>

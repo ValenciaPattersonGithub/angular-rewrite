@@ -1,0 +1,33 @@
+<div class="panel-heading collapseExpand">
+    <a data-toggle="collapse" attr.data-target="#{{reportNumericFilterModel?.FilterId}}" class="soar-link font-weight-bold padding-2 text-left">
+        <i class="indicator fa fa-chevron-up"></i>
+        {{reportNumericFilterModel?.Name}}
+    </a>
+</div>
+
+<div class="filter-option panel-collapse collapse reports-slideout" attr.id="{{reportNumericFilterModel?.FilterId}}">
+    <ul attr.id="{{reportNumericFilterModel?.data[0]?.Field}}">
+        <li *ngFor="let item of reportNumericFilterModel?.data" [hidden]="!item.isVisible">
+            <input type="radio" attr.id="{{item?.Value}}" class="rprtsFilters" attr.name="{{item?.Field}}" attr.data-field="{{item?.Field}}" attr.data-key="{{item?.Key}}" [checked]="item?.Checked" 
+            (click)="toggleRadio(item.Value)" />{{item?.Value}}
+            <div *ngIf="item?.OptionType == 2">
+                <div *ngIf="item?.Checked">
+                    {{'<' | translate}}&nbsp;<input type="text" attr.id="{{item?.Value}}1" [(ngModel)]="lessThanValue" (keyup)="change(item, 1, lessThanValue)"   class="numberInput" min="0" max="999" maxlength="3" pattern="[0-9]+">&nbsp;{{item.Units}}
+                </div>
+            </div>
+            <div *ngIf="item?.OptionType == 3">
+                <div *ngIf="item?.Checked">
+                    {{'>' | translate}}&nbsp;<input type="text" attr.id="{{item?.Value}}2" [(ngModel)]="greaterThanValue" (keyup)="change(item, 2, greaterThanValue)" class="numberInput" min="0" max="999" maxlength="3" pattern="[0-9]+">&nbsp;{{item.Units}}
+                </div>
+            </div>
+            <div *ngIf="item?.OptionType == 4">
+                <div *ngIf="item?.Checked">
+                    <input type="text" attr.id="{{item?.Value}}3" [(ngModel)]="betweenLessValue" (keyup)="change(item, 3, betweenLessValue)" class="numberInput" min="0" max="999" maxlength="3" pattern="[0-9]+">&nbsp;{{'-' | translate}}&nbsp;<input type="text" attr.id="{{item?.Value}}4" [(ngModel)]="betweengreaterValue" (keyup) ="change(item, 4, betweengreaterValue)" class="numberInput" min="0" max="999"  maxlength="3" pattern="[0-9]+">&nbsp;{{item.Units}}
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="errorMsg">
+        <span class="error" *ngIf="invalidValues">{{errorMessage}}</span>
+    </div>
+</div>

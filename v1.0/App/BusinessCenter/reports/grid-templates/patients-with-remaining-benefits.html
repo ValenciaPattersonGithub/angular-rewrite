@@ -1,0 +1,44 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr class="stripEven">
+                    <th class="cell" colspan="12">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{ 'Renewal Month' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Carrier' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Plan' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Priority' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Individual Deductible Remaining' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Family Deductible Remaining' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Individual Annual Max Remaining' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripOdd'" ng-class-Even="'stripEven'" ng-repeat="month in location.Months">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-1 cell">{{month.Month}}</td>
+                    <td class="col-sm-11 cell" colspan="7"></td>
+                </tr>
+                <tr ng-repeat="patient in month.Patients" class="reportGrid__row">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-3 cell">{{patient.Patient}}</td>
+                    <td class="col-sm-2 cell">{{patient.Carrier}}</td>
+                    <td class="col-sm-2 cell">{{patient.Plan}}</td>
+                    <td class="col-sm-1 cell">{{patient.Priority}}</td>
+                    <td class="col-sm-1 cell text-right">{{patient.IndividualDeductibleRemaining | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{patient.FamilyDeductibleRemaining | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{patient.MaxBenefitsRemaining | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,349 @@
+﻿<!--user identification section header-->
+<div>
+        <div class="panel">
+            <div class="col-xs-12 panel-heading">
+                <h4 class="panel-title">
+                    {{ 'Licenses & IDs' | i18n }}
+
+                    <button ng-click="userIdentificationSectionOpen = !userIdentificationSectionOpen" class="pull-right icon-button fa fa-lg" ng-class="{'fa-minus': userIdentificationSectionOpen, 'fa-plus': !userIdentificationSectionOpen}" id="btnToggleUserIdentification" data-toggle="collapse" data-target="#userIdentification"></button>
+                </h4>
+            </div>
+        </div>
+        <div id="userIdentification" class="collapse in">
+            <div class="row">
+                <div ng-form="userIdentificationFrm">
+
+                    <div class="col-xs-12 margin-bottom20 padding-bottom-4">
+
+                        <!-- Federal Identification header -->
+                        <div class="panel">
+                            <div class="col-xs-12 panel-heading">
+                                <h4 class="panel-title">
+                                    {{ 'Federal Identification' | i18n }}
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+
+                        <!--FederalTaxId-->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2 panel-heading">
+                                <label class="form-label-newer">{{'Tax ID' | i18n }} </label>
+                            </div>
+                            <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5"
+                                ng-class="{error: (hasErrors && userIdentificationFrm.inpFederalTaxId.$error.required) ||
+                                (!userIdentificationFrm.inpFederalTaxId.$valid && !userIdentificationFrm.inpFederalTaxId.$error.required)}">                            
+                                <input class="form-input" ng-disabled="!canEditProviderInfo" id="inpFederalTaxId" placeholder="{{ 'Tax ID' | i18n }}"
+                                       ng-model="user.TaxId" name="inpFederalTaxId" type="text"
+                                       ui-mask="?99-9999999" ng-blur="validateTaxId()"
+                                       ng-required="isPrescribingUser" />
+                                <label id="errinpFederalTaxIdInvalid" class="help-text"
+                                       ng-show="!userIdentificationFrm.inpFederalTaxId.$valid && !userIdentificationFrm.inpFederalTaxId.$error.required">
+                                    {{'Tax ID must be 9 numeric characters'|i18n  }}
+                                </label>
+                                <label id="errNoTaxId"
+                                       class="help-text"
+                                       ng-show="hasErrors && userIdentificationFrm.inpFederalTaxId.$error.required">
+                                    {{"Prescribing Users Require Tax ID"|i18n  }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+
+                        <!--FederalLicense-->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                <label class="form-label-newer">{{'Federal License' | i18n }} </label>
+                            </div>
+                            <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5">
+                                <input class="form-input" ng-disabled="!canEditProviderInfo" id="inpFederalLicense" placeholder="{{ 'Federal License' | i18n }}" ng-model=" user.FederalLicense" name="inpFederalLicense" ng-minlength="1" ng-maxlength="32" minlength="1" maxlength="32" type="text" alpha-numeric />
+                            </div>
+                        </div>
+
+                        <div class="clearfix">&nbsp;</div>
+                        <!--DeaNumber NOTE required for prescribing user-->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                <label class="form-label-newer">{{'DEA Number' | i18n }} </label>
+                            </div>
+                            <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5"
+                                 ng-class="{error:hasErrors && (userIdentificationFrm.inpUserDeaNumber.$error.required ||userIdentificationFrm.inpUserDeaNumber.$error.deaNumberNotAllowed )}">
+                                <input class="form-input"
+                                       ng-disabled="!canEditProviderInfo || disableDeaNumber"
+                                       id="inpUserDeaNumber"
+                                       placeholder="{{ 'DEA Number' | i18n }}"
+                                       ng-model="user.DeaNumber"
+                                       name="inpUserDeaNumber"
+                                       type="text"
+                                       ui-mask="AA-9999999"
+                                       ng-required="isPrescribingUser" />
+                                <!-- show error help -->
+                                <label id="errNoDeaNumber"
+                                       class="help-text"
+                                       ng-show="hasErrors && userIdentificationFrm.inpUserDeaNumber.$error.required">
+                                    {{"Prescribing Users Require DEA Number"|i18n  }}
+                                </label>
+                                <label id="errDeaNumberNotAllowed"
+                                       class="help-text"
+                                       ng-show="hasErrors && userIdentificationFrm.inpUserDeaNumber.$error.deaNumberNotAllowed">
+                                    {{"Rx Admin may not be a Provider who has a DEA number"|i18n  }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <!--NPIType1 NOTE required for prescribing user-->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                <label class="form-label-newer">{{'NPI Type 1' | i18n }} </label>
+                            </div>
+                            <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5"
+                                 ng-class="{error:hasErrors && (userIdentificationFrm.inpNpiType1.$invalid ||userIdentificationFrm.inpNpiType1.$error.required )}">
+                                <input class="form-input"
+                                       ng-disabled="!canEditProviderInfo"
+                                       id="inpNpiType1"
+                                       placeholder="{{ 'NPI Type 1' | i18n }}"
+                                       ng-model=" user.NpiTypeOne"
+                                       name="inpNpiType1"
+                                       ng-minlength="10"
+                                       ng-maxlength="10"
+                                       minlength="10"
+                                       maxlength="10"
+                                       type="text"
+                                       ng-required="isPrescribingUser"
+                                       numeric-only />
+                                <!-- show error help -->
+                                <label id="errNpiInvalid"
+                                       class="help-text"
+                                       ng-show="hasErrors && userIdentificationFrm.inpNpiType1.$invalid && !userIdentificationFrm.inpNpiType1.$error.required">
+                                    {{'Invalid NPI Type 1 Number'|i18n  }}
+                                </label>
+                                <label id="errNoNpiNumber"
+                                       class="help-text"
+                                       ng-show="hasErrors && userIdentificationFrm.inpNpiType1.$error.required">
+                                    {{"Prescribing Users Require NPI Type 1"|i18n  }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+
+                        <!--PrimaryTaxonomyId-->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                <label class="form-label-newer">{{'Primary {0}' | i18n:['Taxonomy Code / Specialty'] }} </label>
+                            </div>
+                            <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5" ng-class="{error: !userIdentificationFrm.inpPrimaryTaxonomyCode.$valid}">
+                                <soar-select-list id="inpPrimaryTaxonomyCode"
+                                                  name="inpPrimaryTaxonomyCode"
+                                                  placeholder="{{ 'Select {0}' | i18n:['Primary Taxonomy Code / Specialty'] }}"
+                                                  text-field="$$DisplayText"
+                                                  value-field="TaxonomyCodeId"
+                                                  option-list="primaryTaxonomyCodes"
+                                                  ng-model="user.PrimaryTaxonomyId"
+                                                  disable-input="!canEditProviderInfo"></soar-select-list>
+                                <label id="lblPrimaryTaxonomyInvalid" class="help-text" ng-show="userIdentificationFrm.inpPrimaryTaxonomyCode.$error.comboBox">
+                                    {{ 'This entry is invalid.'|i18n }}
+                                </label>
+                                <label id="lblPrimaryTaxonomyDuplicateError" class="help-text" ng-show="!TaxonomyCodesAreUnique">
+                                    {{ 'Duplicate Taxonomy Code / Speciality.' | i18n  }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">&nbsp;</div>
+
+                        <!--SecondaryTaxonomyId-->
+                        <div class="row" ng-show="user.PrimaryTaxonomyId">
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                <label class="form-label-newer">{{ 'Secondary {0}' | i18n:['Taxonomy Code / Specialty'] }} </label>
+                            </div>
+                            <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5" ng-class="{error: !userIdentificationFrm.inpSecondaryTaxonomyCode.$valid}">
+                                <soar-select-list id="inpSecondaryTaxonomyCode"
+                                                  name="inpSecondaryTaxonomyCode"
+                                                  placeholder="{{ 'Select {0}' | i18n:['Secondary Taxonomy Code / Specialty'] }}"
+                                                  text-field="$$DisplayText"
+                                                  value-field="TaxonomyCodeId"
+                                                  option-list="secondaryTaxonomyCodes"
+                                                  disable-input="!canEditProviderInfo"
+                                                  ng-model="user.SecondaryTaxonomyId"></soar-select-list>
+                                <label id="lblSecondaryTaxonomyInvalid" class="help-text" ng-show="userIdentificationFrm.inpSecondaryTaxonomyCode.$error.comboBox">
+                                    {{ 'This entry is invalid.'|i18n }}
+                                </label>
+                                <label id="lblSecondaryTaxonomyDuplicateError" class="help-text" ng-show="!TaxonomyCodesAreUnique">
+                                    {{ 'Duplicate Taxonomy Code / Speciality.' | i18n  }}
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="clearfix" ng-show="user.PrimaryTaxonomyId">&nbsp;</div>
+
+                        <div class="row" ng-if="isProviderOfService">
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                <label class="form-label-newer">{{ 'Denti-Cal PIN' | i18n}}</label>
+                            </div>
+                            <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5">
+                                <input class="form-input"
+                                       id="denticalPin"
+                                       ng-model=" user.DentiCalPin"
+                                       name="denticalPin"
+                                       ng-maxlength="50"
+                                       maxlength="50"
+                                       type="text"
+                                       alpha-numeric />
+                            </div>
+                        </div>
+
+                        <div class="clearfix">&nbsp;</div>
+
+                        <!-- State Identification header -->
+                        <div class="panel">
+                            <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 panel-heading">
+                                <h4 class="panel-title">{{ 'State Identification' | i18n }} </h4>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div>
+                            <button ng-click="allowLicenseAdd()" class="btn btn-primary">Add License</button> <span class="warning-font-style margin-left-30">{{needLicenseStates}}</span>
+                        </div>
+
+                        <div class="clearfix">&nbsp;</div>
+                        <!-- State License -->
+                        <!--<div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+            <label class="form-label-newer">{{'State License' | i18n }} </label>
+        </div>
+        <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5">
+            <input class="form-input" ng-disabled="!canEditProviderInfo" id="inpStateLicense" placeholder="{{ 'State License' | i18n }}" ng-model=" user.StateLicense" name="inpStateLicense" ng-minlength="1" ng-maxlength="32" minlength="1" maxlength="32" type="text" alpha-numeric />
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>-->
+                        <!--Anesthesia Id-->
+                        <!--<div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+            <label class="form-label-newer">{{'Anesthesia ID' | i18n }} </label>
+        </div>
+        <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5">
+            <input class="form-input" ng-disabled="!canEditProviderInfo" id="inpAnesthesiaId" placeholder="{{ 'Anesthesia ID' | i18n }}" ng-model=" user.AnesthesiaId" name="inpAnesthesiaId" ng-minlength="1" ng-maxlength="32" minlength="1" maxlength="32" type="text" alpha-numeric />
+        </div>
+    </div>-->
+                        <!--Prototype-->
+                        <div class="row col-sm-8">
+                            <div class="col-sm-12 grid-height border-bottom-gray padding-top-10">
+                                <div class="col-sm-3">
+                                    <label class="grid-header">State * </label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="grid-header">State License * </label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="grid-header">Anesthesia ID </label>
+                                </div>
+                                <div class="col-sm-2 ">&nbsp;</div>
+                            </div>
+                            <div class="col-sm-12 grid-body border-bottom-gray padding-top-4" ng-repeat="UserStateLicense in UserStateLicenses" ng-show="UserStateLicense.ObjectState !== 'Delete'">
+                                <div class="col-sm-3 row" ng-class="{error: UserStateLicense.StateIdUndefined}">
+                                    <select class="state-license-dropdown" id="statesId{{$index}}" ng-click="updateState(UserStateLicense,$index)" ng-show="UserStateLicense.IsEdit">
+                                        <option value="0">Select State</option>
+                                        <option ng-repeat="state in states" ng-selected="state.StateId == UserStateLicense.StateId" value="{{state.StateId}}" ng-disabled="state.Disabled">{{state.Abbreviation}}</option>
+                                    </select>
+                                    <span ng-show="!UserStateLicense.IsEdit" class="grid-text">{{UserStateLicense.StateAbbreviation}} </span>
+                                    <label id="dlStatesRequired" class="help-text small" ng-show="UserStateLicense.StateIdUndefined">
+                                        {{ 'This field is required.' | i18n }}
+                                    </label>
+                                </div>
+                                <div class="col-sm-4" ng-class="{error: UserStateLicense.StateLicenseUndefined}">
+                                    <input class="form-input"
+                                           ng-disabled="false" x
+                                           maxlength="20"
+                                           id="inpDeaNumber{{$index}}"
+                                           placeholder="{{ 'Enter License Number' | i18n }}"
+                                           ng-model="UserStateLicense.StateLicense"
+                                           name=""
+                                           type="text"
+                                           ui-mask=""
+                                           ng-required=""
+                                           ng-change="clearStateLicenseValidation()" ng-show="UserStateLicense.IsEdit" />
+
+                                    <span ng-show="!UserStateLicense.IsEdit" title="{{UserStateLicense.StateLicense}}" class="grid-text">{{UserStateLicense.StateLicense | truncate: 25 }}<i ng-show="UserStateLicense.StateLicense.length > 25">...</i></span>
+                                    <label id="inpDeaNumberRequired" class="help-text small" ng-show="UserStateLicense.StateLicenseUndefined">
+                                        {{ 'This field is required.' | i18n }}
+                                    </label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-input"
+                                           ng-disabled="false"
+                                           id="inpDeaNumber{{$index}}"
+                                           placeholder="{{ 'Enter ID Number' | i18n }}"
+                                           ng-model="UserStateLicense.AnesthesiaId"
+                                           name=""
+                                           type="text"
+                                           ui-mask=""
+                                           maxlength="20"
+                                           ng-required="" ng-show="UserStateLicense.IsEdit" />
+                                    <span ng-show="!UserStateLicense.IsEdit" title="{{UserStateLicense.AnesthesiaId}}" class="grid-text">{{UserStateLicense.AnesthesiaId | truncate: 25}}<i ng-show="UserStateLicense.AnesthesiaId.length > 25">...</i> </span>
+
+                                </div>
+
+                                <div class="col-sm-2 text-align-right">
+                                    <button class="form-btn-remove" ng-show="UserStateLicense.IsEdit" icon="fa-plus-circle" ng-click="persistUpdateStateLicense(UserStateLicense)"></button>
+                                    <button class="form-btn-remove" ng-show="!UserStateLicense.IsEdit" icon="fa-pen-square" ng-click="editUserStateLicense(UserStateLicense,$index)"></button>
+                                    <button class="form-btn-remove" ng-show="UserStateLicense.IsEdit" icon="fa-times-circle" ng-click="discardChangesStateLicense(UserStateLicense)"></button>
+                                    <button class="form-btn-remove" ng-show="!UserStateLicense.IsEdit" icon="fa-times-circle" ng-click="removeUserStateLicense(UserStateLicense)"></button>
+                                </div>
+
+                            </div>
+
+                            <div ng-hide="!isAdding" class="col-sm-12 grid-body padding-top-2" ng-class="{hasHeight: noStateLicense || noDLSate}">
+                                <div class="col-sm-3" ng-class="{error: noDLSate}">
+                                    <select class="state-license-dropdown" id="dlStates" ng-change="clearStateDropdownValidation()" ng-model="ModelStateLicense">
+                                        <option value="0">Select State</option>
+                                        <option ng-repeat="state in states" value="{{state.StateId}}" ng-disabled="state.Disabled">{{state.Abbreviation}}</option>
+                                    </select>
+                                    <label id="dlStatesRequired" class="help-text" ng-show="noDLSate">
+                                        {{ 'This field is required.' | i18n }}
+                                    </label>
+                                </div>
+                                <div class="col-sm-4" ng-class="{error: noStateLicense}">
+                                    <input class="form-input"
+                                           ng-disabled="false"
+                                           maxlength="20"
+                                           id="inpDeaNumber"
+                                           placeholder="{{ 'Enter License Number' | i18n }}"
+                                           ng-model="NewUserStateLicense.StateLicense"
+                                           name=""
+                                           type="text"
+                                           ui-mask=""
+                                           ng-required=""
+                                           ng-change="clearStateLicenseValidation()" />
+                                    <label id="inpDeaNumberRequired" class="help-text" ng-show="noStateLicense">
+                                        {{ 'This field is required.' | i18n }}
+                                    </label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-input"
+                                           ng-disabled="false"
+                                           id="inpDeaNumber"
+                                           placeholder="{{ 'Enter ID Number' | i18n }}"
+                                           ng-model="NewUserStateLicense.AnesthesiaId"
+                                           name=""
+                                           type="text"
+                                           ui-mask=""
+                                           maxlength="20"
+                                           ng-required="" />
+                                </div>
+                                <div class="col-sm-2 phoneInfoItem__remove">
+                                    <button class="form-btn-remove" icon="fa-plus-circle" ng-click="addUserStateLicense(NewUserStateLicense)"></button>
+                                    <button class="form-btn-remove" icon="fa-times-circle" ng-click="clearUserStateLicense()"></button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="clearfix">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

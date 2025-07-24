@@ -1,0 +1,16 @@
+﻿<div class="patAcctSmry__content">
+    <div>
+        <span id="lblLatestStatementTotalTitle" class="font-weight-bold">{{'Latest Statement:' | i18n }} {{statementDate | toShortDisplayDate }}</span>
+    </div>
+    <div ng-hide="accountStatementDto.TotalCharges">
+        <span class="font-weight-bold">{{ 'N/A' | i18n }}</span>
+    </div>
+    <div ng-show="accountStatementDto.TotalCharges">
+        <div>
+            <span class="font-weight-bold">{{accountStatementDto.TotalCharges | formatCurrencyWithParensIfNeg }}</span>
+        </div>
+        <div>
+            <button id="viewStatementLink" class="btn btn-link patAcctSmry__btn-link" ng-click="viewLatestStatement()">{{ 'view' | i18n }}</button>
+        </div>
+    </div>
+</div>

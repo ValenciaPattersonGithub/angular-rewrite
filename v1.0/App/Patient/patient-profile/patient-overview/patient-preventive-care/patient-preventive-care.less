@@ -1,0 +1,48 @@
+﻿
+/* placeholder */
+.patientOdontogram {
+    .make-md-column(8);
+    min-height: 300px;
+}
+
+.patientPrevCare {
+    .make-md-column(4);
+
+    &__item {
+        margin: @brand-margin_md;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    &__itemLarge {
+        font-size: 16px;
+    }
+
+    &__sectionDivider {
+        .section-divider;
+    }
+
+    &__name {
+        .clearfix;
+        display: inline-block;
+        float: left;
+        font-weight: @brand-font_heavy;
+        margin-right: @brand-margin_xs;
+    }
+
+    &__text {
+        margin-right: @brand-margin_xs;
+    }
+
+    &__success {
+        color: @brand-color_success;
+    }
+
+    &__warning {
+        color: @brand-color_warning;
+    }
+
+    &__error {
+        color: @brand-color_error;
+    }
+}

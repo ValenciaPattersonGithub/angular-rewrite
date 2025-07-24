@@ -1,0 +1,73 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Locations.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{ 'Location' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Carrier' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Payer ID' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ '# of Patients Seen' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ '% of Patients' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ '# of Claims Submitted' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total' | i18n }} {{ 'Amount Submitted' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ '# of Ins Payments' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total' | i18n }} {{ 'Amount Paid' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total' | i18n }} {{ 'Amount of Fee Schedule Adjustments' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total' | i18n }} {{ 'Net Production' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="location in data.Locations" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-1 cell">{{ location.Location }}</td>
+                    <td class="col-sm-11 cell" colspan="10"></td>
+                </tr>
+                <tr ng-repeat="carrier in location.Carriers">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell">
+                        <div>{{ carrier.Carrier }}</div>
+                        <div ng-if="carrier.Address">{{ carrier.Address }}</div>
+                        <div ng-if="carrier.Address2">{{ carrier.Address2 }}</div>
+                        <div>{{ carrier.City }}<span ng-if="carrier.City">,</span> {{ carrier.State }} {{ carrier.ZipCode }}</div>
+                        <div>{{ carrier.PhoneNumber | tel}}</div>
+                    </td>
+                    <td class="col-sm-1 cell">{{carrier.PayerId}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.PatientsSeen}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.PatientPercentage}}{{'%' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.ClaimsSubmitted}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.AmountSubmitted | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.InsurancePayments}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.AmountPaid | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.NetProduction | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="3">{{'Totals for' | i18n}} {{location.Location}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.PatientsSeen}}</td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell text-right">{{location.ClaimsSubmitted}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.AmountSubmitted | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.InsurancePayments}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.AmountPaid | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.NetProduction | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="reportGrid__footer stripEven" ng-if="data.Locations.length > 0 && !showFilterMessage">
+                <tr>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="3">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.PatientsSeen}}</td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell text-right">{{data.ClaimsSubmitted}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.AmountSubmitted | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.InsurancePayments}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.AmountPaid | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.NetProduction | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

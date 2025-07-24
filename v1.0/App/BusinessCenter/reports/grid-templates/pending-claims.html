@@ -1,0 +1,117 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Carriers.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Carriers.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell"> {{ 'Carrier' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Birth Date' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Benefit Plan / Policy Holder' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Service Date' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total Fee' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Est Ins' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Amount Paid' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Status' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Date Submitted' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Days Outstanding' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="carrier in data.Carriers">
+            <tr class="stripEven">
+                <td class="col-sm-1 cell">
+                    <div>{{ carrier.Carrier }}</div>
+                    <div ng-if="carrier.Address">{{ carrier.Address }}</div>
+                    <div ng-if="carrier.Address2">{{ carrier.Address2 }}</div>
+                    <div>{{ carrier.City }}<span ng-if="carrier.City">,</span> {{ carrier.State }} {{ carrier.ZipCode }}</div>
+                    <div>{{ carrier.PhoneNumber | tel}}</div>
+                </td>
+                <td class="col-sm-11 cell" colspan="10"></td>
+            </tr>
+            <tr ng-repeat-start="patient in carrier.Patients" class="stripOdd">
+                <td class="col-sm-1 cell"></td>
+                <td class="col-sm-1 cell">{{patient.Patient}}</td>
+                <td class="col-sm-1 cell">{{patient.DateOfBirth | date: 'MM/dd/yyyy'}}</td>
+                <td class="col-sm-1 cell">
+                    <div>{{'Plan Name' | i18n}}{{':' | i18n}} {{ patient.Claims[0].BenefitPlan }}</div>
+                    <div>{{'Plan/Group Number' | i18n}}{{':' | i18n}} {{ patient.Claims[0].PlanGroupNumber }}</div>
+                    <div>{{'Plan/Group Name' | i18n}}{{':' | i18n}} {{ patient.Claims[0].PlanGroupName }}</div>
+                    <div>{{'Priority' | i18n}}{{':' | i18n}} {{ patient.Claims[0].Priority }}</div>
+                    <div>{{'Policy Holder' | i18n}}{{':' | i18n}} {{ patient.Claims[0].PolicyHolder}}</div>
+                    <div>{{'Policy Holder DOB' | i18n}}{{':' | i18n}} {{ patient.Claims[0].DateOfBirth | date: 'MM/dd/yyyy'}}</div>
+                    <div>{{'Policy Holder ID' | i18n}}{{':' | i18n}} {{ patient.Claims[0].PolicyHolderId}}</div>
+                    <div>{{'Relationship' | i18n}}{{':' | i18n}} {{ patient.Claims[0].Relationship}}</div>
+                </td>
+                <td class="col-sm-1 cell" ng-if="patient.Claims[0].ClaimType === 1">
+                    <div ng-if="patient.Claims[0].DateDiff === 0">
+                        {{patient.Claims[0]['ServiceDate(Start)'] | date: 'MM/dd/yyyy'}}
+                    </div>
+                    <div ng-if="patient.Claims[0].DateDiff === 1">{{patient.Claims[0]['ServiceDate(Start)'] | date: 'MM/dd/yyyy'}} - {{patient.Claims[0]['ServiceDate(End)'] | date: 'MM/dd/yyyy'}}</div>
+                </td>
+                <td class="col-sm-1 cell" ng-if="patient.Claims[0].ClaimType === 2">
+                    {{'N/A' | i18n}}
+                </td>
+                <td class="col-sm-1 cell">{{patient.Claims[0].Provider}}</td>
+                <td class="col-sm-1 cell text-right">{{patient.Claims[0].TotalFee | currency}}</td>
+                <td class="col-sm-1 cell text-right">{{patient.Claims[0].EstIns | currency}}</td>
+                <td class="col-sm-1 cell text-right">{{patient.Claims[0].AmountPaid | currency}}</td>
+                <td class="col-sm-1 cell">{{patient.Claims[0].Status}}</td>
+                <td class="col-sm-1 cell">{{patient.Claims[0].DateSubmitted | date: 'MM/dd/yyyy'}}</td>
+                <td class="col-sm-1 cell text-right">{{patient.Claims[0].DaysOutstanding}}</td>
+            </tr>
+            <tr ng-repeat-end ng-repeat="claim in patient.Claims | startFrom: 1" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <td class="col-sm-3 cell" colspan="3"></td>
+                <td class="col-sm-1 cell">
+                    <div>{{'Plan Name' | i18n}}{{':' | i18n}} {{ claim.BenefitPlan }}</div>
+                    <div>{{'Plan/Group Number' | i18n}}{{':' | i18n}} {{ claim.PlanGroupNumber }}</div>
+                    <div>{{'Plan/Group Name' | i18n}}{{':' | i18n}} {{ claim.PlanGroupName }}</div>
+                    <div>{{'Priority' | i18n}}{{':' | i18n}} {{ claim.Priority }}</div>
+                    <div>{{'Policy Holder' | i18n}}{{':' | i18n}} {{ claim.PolicyHolder}}</div>
+                    <div>{{'Policy Holder DOB' | i18n}}{{':' | i18n}} {{ claim.DateOfBirth | date: 'MM/dd/yyyy'}}</div>
+                    <div>{{'Policy Holder ID' | i18n}}{{':' | i18n}} {{ claim.PolicyHolderId}}</div>
+                    <div>{{'Relationship' | i18n}}{{':' | i18n}} {{ claim.Relationship}}</div>
+                </td>
+                <td class="col-sm-1 cell" ng-if="claim.ClaimType === 1">
+                    <div ng-if="claim.DateDiff === 0">{{claim['ServiceDate(Start)'] | date: 'MM/dd/yyyy'}}</div>
+                    <div ng-if="claim.DateDiff === 1">{{claim['ServiceDate(Start)'] | date: 'MM/dd/yyyy'}} - {{claim['ServiceDate(End)'] | date: 'MM/dd/yyyy'}}</div>
+                </td>
+                <td class="col-sm-1 cell" ng-if="claim.ClaimType === 2">
+                    {{'N/A' | i18n}}
+                </td>
+                <td class="col-sm-1 cell">{{claim.Provider }}</td>
+                <td class="col-sm-1 cell text-right">{{claim.TotalFee | currency}}</td>
+                <td class="col-sm-1 cell text-right">{{claim.EstIns | currency}}</td>
+                <td class="col-sm-1 cell text-right">{{claim.AmountPaid | currency}}</td>
+                <td class="col-sm-1 cell">{{claim.Status}}</td>
+                <td class="col-sm-1 cell">{{claim.DateSubmitted | date: 'MM/dd/yyyy'}}</td>
+                <td class="col-sm-1 cell text-right">{{claim.DaysOutstanding}}</td>
+            </tr>
+            <tr>
+                <td class="col-sm-6 cell reportGrid__label" colspan="5">{{'Totals for' | i18n}} {{carrier.Carrier}}</td>
+                <td class="col-sm-1 cell reportGrid__label text-right">{{carrier.TotalFee | currency}}</td>
+                <td class="col-sm-1 cell reportGrid__label text-right">{{carrier.EstIns | currency}}</td>
+                <td class="col-sm-1 cell reportGrid__label text-right">{{carrier.AmountPaid | currency}}</td>
+                <td class="col-sm-3 cell" colspan="3"></td>
+            </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.Carriers.length > 0 && !showFilterMessage">
+            <tr class="reportGrid__row reportGrid__footer">
+                <td class="col-sm-3 cell reportGrid__label" colspan="3">{{'Report Totals' | i18n}}</td>
+                <td class="col-sm-3 cell reportGrid__label text-right" colspan="2">{{'Claims:' | i18n}} {{data.Claims}}</td>
+                <td class="col-sm-1 cell reportGrid__label text-right">{{data.TotalFee | currency}}</td>
+                <td class="col-sm-1 cell reportGrid__label text-right">{{data.EstIns | currency}}</td>
+                <td class="col-sm-1 cell reportGrid__label text-right">{{data.AmountPaid | currency}}</td>
+                <td class="col-sm-3 cell" colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="col-sm-12 cell text-align-center" colspan="11">
+                    {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}
+                </td>
+            </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

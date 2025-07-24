@@ -1,0 +1,27 @@
+<ng-container *ngIf="reportData$ | async as reportData">
+    <div *ngIf="isDataLoaded" class="no-outline">
+        <div class="patients-by-benefit-report grid header">
+            <div class="col-sm-3-migration">{{ 'Benefit Plan' | translate }}</div>
+            <div class="col-sm-3-migration">{{ 'Patient Name' | translate }}</div>
+            <div class="col-sm-2-migration">{{ 'Patient Code' | translate }}</div>
+            <div class="col-sm-2-migration">{{ 'Preferred Location' | translate }}</div>
+            <div class="col-sm-2-migration">{{ 'Benefit Plan Priority' | translate }}</div>
+        </div>
+        <ng-container>
+            <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="30" tabindex="0">
+                <div *cdkVirtualFor="let rowdata of reportData; index as i" class="{{rowdata.Class}}">
+                    <div class="patients-by-benefit-reportgroupHeader" id="divBenefitPlan{{i}}" *ngIf="rowdata.IsHeader">
+                        <div class="col-sm-12-migration"  id="subHeaderBenefitPlanDiv{{i}}">{{ rowdata.benefitPlanName }}</div>
+                    </div>
+                    <div class="patients-by-benefit-report grid item" id="divMainInfo{{i}}" *ngIf="!rowdata.IsHeader">
+                        <div class="col-sm-2-migration"></div>
+                        <div class="col-sm-2-migration">{{ rowdata.patient.lastName | translate }}, {{ rowdata.patient.firstName | translate }} {{ rowdata.patient.middleName | translate }}. {{ rowdata.patient.suffixName | translate }}</div> 
+                        <div class="col-sm-2-migration">{{ rowdata.patient.patientCode | translate }}</div> 
+                        <div class="col-sm-2-migration">{{ rowdata.patient.location.nameLine1 | translate }}</div> 
+                        <div class="col-sm-2-migration">{{ rowdata.priority | translate}}</div> 
+                    </div>
+                </div>
+            </cdk-virtual-scroll-viewport>
+        </ng-container>
+    </div>
+</ng-container>

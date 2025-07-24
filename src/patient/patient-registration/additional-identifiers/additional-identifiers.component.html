@@ -1,0 +1,27 @@
+<div class="addtionalIdentifiers-container" id="ai-container">
+    <div class="addtionalIdentifiers-header" id="ai-header">
+        <span id="ai-title" class="addtionalIdentifiers-title">{{'Additional Identifiers'| translate}}</span>
+    </div>
+    <hr>
+    <form [formGroup]="additionalIdentifiers" class="form-horizontal" id="ai-form-horizontal" *ngIf="additionalIdentifiers" autocomplete="off" >
+        <div class="addtionalIdentifiers-content" id="ai-addtionalIdentifiers" [formArrayName]="'PatientIdentifiers'">
+            <div class="addtionalIdentifiers-content-row" id="ai-addtionalIdentifiers"
+                *ngFor="let identifier of patientIdentifiers; let rowId= index" [formGroupName]="rowId">
+                <div class="addtionalIdentifiers-label mb-10">
+                    <app-label class="dentalRecords-label" [label]="identifier.Description"
+                        [attr.id]="'ai-label'+rowId" ></app-label>
+                </div>
+                <input class="addtionalIdentifiers-input" [attr.id]="'ai-control'+rowId" maxlength="100" formControlName="Value" autocomplete="off"
+                    placeholder="{{identifier.Description}}" type="text" *ngIf="!identifier.IsSpecifiedList"  (blur)="UpdateObjectState(rowId,$event)">
+                <select class="addtionalIdentifiers-selectlist" *ngIf="identifier.IsSpecifiedList" formControlName="Value" (change)="UpdateObjectState(rowId,$event)"
+                    [attr.id]="'ai-control'+rowId">
+                    <option value="" selected>{{'Select Identifier' }}</option>
+                    <option [ngValue]="list.Value" *ngFor="let list of identifier.ListValues" >
+                        {{list.Value}}
+                    </option>
+                </select>
+            </div>
+
+        </div>
+    </form>
+</div>

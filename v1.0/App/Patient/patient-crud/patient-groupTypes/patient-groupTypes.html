@@ -1,0 +1,55 @@
+﻿<div class="form-body">
+    <div class="row">
+	    <div class="col-xs-12 col-md-3">
+		    <select ng-model="patientGroupType" class="form-input" id="inpGroupType"
+		            ng-change="AddPatientGroupType(patientGroupType)"
+		            ng-options="groupType.GroupTypeName for groupType in groupTypeList | excludeFromList : patientGroupTypes : GroupTypesAreEqual"
+		            ng-disabled="patientGroupTypes.length >= 10 || deleteMode">
+			    <option value="">{{ 'Select {0}' | i18n:['Group'] | uppercase}}</option>
+		    </select>
+		    <div id="lblMaxPatientGroupTypesMessage" collapse="patientGroupTypes.length < 10">
+			    <b>
+				    {{ 'A patient may only belong to 10 groups at any given time.' | i18n }}
+			    </b>
+		    </div>
+	    </div>
+	    <div class="col-xs-12">
+		    <div class="row" collapse="!deleteMode">
+			    <div class="col-xs-12 col-md-4 alert-remove-message">
+				    <div class="row">
+					    <span id="lblDeleteGroupTypeMessage">
+						    {{ ('Are you sure you want to {0}' | i18n:['remove this group type from patient']) }} <b> {{ patient.FirstName + ' ' + patient.LastName }} </b> {{ '?' }}
+					    </span>
+				    </div>
+
+				    <br />
+
+				    <div class="row">
+					    <div class="col-xs-5 col-md-3 pull-right">
+						    <button id="btnKeepPatientGroupType" class="alerts-btn alerts-btn-cancel" ng-click="ExitDeleteMode()">Cancel</button>
+					    </div>
+
+					    <div class="col-xs-2 col-md-1 pull-right"></div>
+
+					    <div class="col-xs-5 col-md-3 pull-right">
+						    <button id="btnRemovePatientGroupType" check-auth-z="soar-per-pergrp-delete" class="alerts-btn alerts-btn-save" ng-click="ConfirmRemove()">Ok</button>
+					    </div>
+				    </div>
+
+			    </div>
+		    </div>
+		    <ul id="lstGroupTypes" class="list-inline wrap-contents">
+			    <li ng-repeat="groupType in patientGroupTypes" class="group-type-list-item">
+				    <div class="group-type-tag">
+					    <div id="lblGroupTypeDescription{$index}" class="group-type-text">
+						    {{ groupType.Description }}
+					    </div>  
+					    <div class="group-type-remove">
+						    <a id="btnRemoveGroupType{$index}" class="btn fa fa-times font-18" ng-click="RemovePatientGroupType($index, groupType)" ng-disabled="deleteMode"></a>
+					    </div>
+				    </div>
+			    </li>
+		    </ul>
+	    </div>
+    </div>   
+</div>

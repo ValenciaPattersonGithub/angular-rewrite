@@ -1,0 +1,110 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Details.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Details.length> 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="reportGrid__row stripOdd">
+                    <th class="col-sm-2 cell">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Patients Seen' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Avg. Encounter' | i18n }}</th>
+                    <th class="col-sm-1 cell"></th>
+                    <th class="col-sm-2 cell text-right">{{ 'Production' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Collection' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Adjustments' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'" ng-repeat="detail in data.Details">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-2 cell">{{detail.Provider}}</td>
+                    <td class="col-sm-1 cell text-right">{{detail.PatientsSeen}}</td>
+                    <td class="col-sm-2 cell text-right">{{detail.AvgEncounter | currency}}</td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.Production >= 0">{{detail.Production | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.Production < 0">({{detail.Production * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="detail.Collection >= 0">{{detail.Collection | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.Collection < 0">({{detail.Collection * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="detail.Adjustments >= 0">{{detail.Adjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.Adjustments < 0">({{detail.Adjustments * -1 | currency}})</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-5 cell" colspan="3"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{'MTD' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.MtdProduction >= 0">{{detail.MtdProduction | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.MtdProduction < 0">({{detail.MtdProduction * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="detail.MtdCollection >= 0">{{detail.MtdCollection | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.MtdCollection < 0">({{detail.MtdCollection * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="detail.MtdAdjustments >= 0">{{detail.MtdAdjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.MtdAdjustments < 0">({{detail.MtdAdjustments * -1 | currency}})</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-5 cell" colspan="3"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{'YTD' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.YtdProduction >= 0">{{detail.YtdProduction | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.YtdProduction < 0">({{detail.YtdProduction * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="detail.YtdCollection >= 0">{{detail.YtdCollection | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.YtdCollection < 0">({{detail.YtdCollection * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="detail.YtdAdjustments >= 0">{{detail.YtdAdjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="detail.YtdAdjustments < 0">({{detail.YtdAdjustments * -1 | currency}})</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven">
+                <tr class="reportGrid__row reportGrid__footer">
+                    <td class="col-sm-2 cell text-right reportGrid__label">
+                        {{'Current Totals' | i18n}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">{{data.PatientsSeen}}</td>
+                    <td class="col-sm-2 cell text-right">{{data.AvgEncounter | currency}}</td>
+                    <td class="col-sm-1 cell text-right"></td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.Production >= 0">{{data.Production | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.Production < 0">({{data.Production * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="data.Collection >= 0">{{data.Collection | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.Collection < 0">({{data.Collection * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="data.Adjustments >= 0">{{data.Adjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.Adjustments < 0">({{data.Adjustments * -1 | currency}})</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-2 cell text-right reportGrid__label">
+                        {{'MTD Totals:' | i18n}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">&nbsp;</td>
+                    <td class="col-sm-2 cell text-right">&nbsp;</td>
+                    <td class="col-sm-1 cell text-right">&nbsp;</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.MtdProduction >= 0">{{data.MtdProduction | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.MtdProduction < 0">({{data.MtdProduction * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="data.MtdCollection >= 0">{{data.MtdCollection | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.MtdCollection < 0">({{data.MtdCollection * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="data.MtdAdjustments >= 0">{{data.MtdAdjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.MtdAdjustments < 0">({{data.MtdAdjustments * -1 | currency}})</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-2 cell text-right reportGrid__label">
+                        {{'YTD Totals:' | i18n}}
+                    </td>
+                    <td class="col-sm-1 cell text-right">&nbsp;</td>
+                    <td class="col-sm-2 cell text-right">&nbsp;</td> 
+                    <td class="col-sm-1 cell text-right">&nbsp;</td> 
+                    <td class="col-sm-2 cell text-right" ng-if="data.YtdProduction >= 0">{{data.YtdProduction | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.YtdProduction < 0">({{data.YtdProduction * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="data.YtdCollection >= 0">{{data.YtdCollection | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.YtdCollection < 0">({{data.YtdCollection * -1 | currency}})</td>
+
+                    <td class="col-sm-2 cell text-right" ng-if="data.YtdAdjustments >= 0">{{data.YtdAdjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="data.YtdAdjustments < 0">({{data.YtdAdjustments * -1 | currency}})</td>
+                </tr>
+            </tbody>
+            <tbody  class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

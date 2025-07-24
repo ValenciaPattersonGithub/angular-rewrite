@@ -1,0 +1,61 @@
+﻿<div class="" ng-form="formsEditorForm" >
+
+    <div class="col-sm-12 row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label">{{ 'Template Name' | i18n }}</label> *
+
+                <div ng-class="{error: formsEditorForm.inpTemplateName.$error.required || noTemplateName || duplicateTemplateName }">
+                    <input id="inpTemplateName"
+                           class="form-control"
+                           placeholder="{{ 'Template Name' | i18n }}"
+                           capitalize-first-with-override
+                           maxlength="50"
+                           ng-model="content.TemplateName"
+                           ng-change="setHasChange()"
+                           set-focus />
+                    <label id="inpTemplateNameRequired" class="help-text " ng-show="noTemplateName">
+                        {{ 'This field is required.' | i18n }}
+                    </label>
+
+                </div>
+                <div ng-class="{error: duplicateTemplateName }">
+                    <label id="lblNoteDuplicate" class="help-text " ng-show="duplicateTemplateName">
+                        {{ 'A template with this name already exists.' | i18n }}
+                    </label>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-4">
+
+            <div class="form-group" >
+                <label class="control-label">{{ 'Reason' | i18n }}</label> *
+                
+                <div ng-class="{error: noGroup }">
+                    <select class="form-control" name="folder-group" id="folderGroup" ng-model="selectedFolder" ng-change="setHasChange()"
+                            ng-options="group.name group by group.group for group in groupFolders"></select>
+                    <label id="folderGroupRequired" class="help-text " ng-show="noGroup">
+                        {{ 'This field is required.' | i18n }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group" >
+                <label class="control-label">{{ 'Communication Type' | i18n }}</label> *
+                <select class="form-control" name="mediaType-group" id="mediaTypeGroup" ng-model="selectedMedia" ng-change="setHasChange()"
+                        ng-options="mediaType.Name for mediaType in mediaFolders | filter: { Id: '!0'}"></select>
+            </div>
+        </div>
+    </div>
+
+    <textarea style="height:500px;" ng-bind-html="content.Note" id="{{editorId}}" kendo-editor="kendoeditor"
+              rows='5'
+              cols='20'
+              ng-model='content.Note'
+              resizeable="true"
+              k-encoded="false"
+              k-tools="{{toolOptions}} "
+              k-on-change="change()"></textarea>
+</div>

@@ -1,0 +1,455 @@
+﻿<div class="txPlanPart" ng-init="ds=getDs(stage.stageno)">    
+    <div class="txPlanPart__header">
+        <!-- TODO: DO I need this?-->
+        <div class="txPlanPart__details stage-text-tile-display" ng-if="expandedView">
+            <!-- parts are renamed to stages  -->
+            <span class="txPlanPart__title" ng-if="planStages.length > 0" ng-class="{'lg': lgBtn}">
+                {{ 'Stage '+stageIndex  | i18n }}
+            </span>
+            <button class="btn btn-link txPlanPart__addServicesBtn" ng-if="!timelineView" ng-click="addServices(stageIndex)" ng-disabled="disableAddServices">+ {{ ::('Services' | i18n) }}</button>
+        </div>
+        <div class="txPlanPart__details" ng-if="!expandedView" style=" width: 100%;">
+            <!-- parts are renamed to stages  -->
+            <div style="display:flex;">
+                <div style="display: flex; width: 100%; justify-content:flex-start;">
+                    <span class="txPlanPart__title" style=" padding:0px;" ng-if="planStages.length > 0" ng-class="{'lg': lgBtn}">
+                        {{ 'Stage '+stageIndex  | i18n }}
+                    </span>
+                    <span style="padding: 0px 6px 0px 6px;">|</span>
+                    <a ng-class="{disabled:disableEditFunctions}" ng-if="!timelineView" ng-click="addServicesWhenEnabled(stageIndex)" ng-disabled="disableAddServices">+ {{ ::(' Add Services' | i18n) }}</a>
+                </div>
+                <div style="display: flex; width: 100%; justify-content:flex-end;">
+                    <a ng-class="{disabled:disableEditFunctions}" class="no-print delete-stage-btn" icon="fa-trash-alt" check-auth-z="soar-clin-cplan-edit" ng-click="deleteStage(stageIndex, stage, $event)">
+                        {{ 'Delete Stage '+stageIndex  | i18n }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="txPlanPart__body" ng-class="{hideGridHeader:!expandedView}">
+            <!-- TODO: Do I need to keep this-->
+            <!-- timeline view -->
+            <div class="fuseGrid container pull-left txPlanPart__grid" ng-if="expandedView">
+                <div class="row header">
+                    <div class="description-column-tile-display cell">
+                        {{ ::('Description' | i18n) }}
+                    </div>
+                    <div class="normal-column-tile-display cell">
+                        {{ ::('Tooth' | i18n) }}
+                    </div>
+                    <div class="normal-column-tile-display cell">
+                        {{ ::('Surface' | i18n) }}
+                    </div>
+                    <div style=" width: 55px;" class="normal-column-tile-display cell">
+                        {{ ::('Provider' | i18n) }}
+                    </div>
+                    <div class="button-column-tile-display cell"></div>
+                </div>
+                <div class="row body" ng-repeat="ps in proposedServicesForStage | orderBy: ['TreatmentPlanServiceHeader.TreatmentPlanGroupNumber','TreatmentPlanServiceHeader.Priority'] track by $index">
+                    <div class="description-column-tile-display cell" uib-tooltip="{{ ps.ServiceTransaction.Description }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        {{ ps.ServiceTransaction.Description | truncate: 50 }}
+                    </div>
+                    <div class="normal-column-tile-display cell">
+                        {{ps.ServiceTransaction.Tooth != 0 ? ps.ServiceTransaction.Tooth : '' | convertToothRangeToQuadrantOrArchCode }}
+                    </div>
+                    <div class="normal-column-tile-display cell ">
+                        {{ ps.ServiceTransaction.$$Area }}
+                    </div>
+                    <div class="normal-column-tile-display cell" uib-tooltip="{{ps.ServiceTransaction.UserCode }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        {{ps.ServiceTransaction.UserCode}}
+                    </div>
+                    <div class="button-column-tile-display cell">
+                        <button id="txSrvTileRemove-drawer-{{::ps.ServiceTransaction.ServiceTransactionId}}"
+                                class="txPlanPart__remove"
+                                ng-click="remove(ps, $event, true)"
+                                ng-if="treatmentPlan.TreatmentPlanHeader.Status !== 'Completed'"
+                                check-auth-z="soar-clin-cplan-dsvccd"
+                                uib-tooltip="{{::('Delete' | i18n) }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                            <i class="fa fa-fw fa-times-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- crud view -->
+            <table class="fuseGrid fuseTable container txPlanPart__grid" ng-if="!expandedView">
+                <tr class="header treatment-plan-service-row">
+                    <th class="no-wrap-column grid-column-checkbox">
+                        <checkbox class="check-box-spacing txPlanPart__stageSelectAllCheckbox"
+                                  checkbox-hidden="!stageSelectAllCheckboxVisible"
+                                  checkbox-id="checkbox-{{::stageSelectAllCheckboxId}}"
+                                  checkbox-disabled="false"
+                                  checkbox-value="stageSelectAllCheckboxValue"
+                                  ng-click="toggleSelectAllStageCheckbox(proposedServicesForStage, stageSelectAllCheckboxValue)">
+
+                        </checkbox>
+                    </th>
+                    <th class="grid-column-desc">
+                        <div>{{ ::('Description' | i18n) }}</div>
+                    </th>
+                    <th class="grid-column-teeth">
+                        {{ ::('Tooth' | i18n) }}
+                    </th>
+                    <th class="grid-column-surface">
+                        {{ ::('Area' | i18n ) }}
+                    </th>
+                    <th class="no-wrap-column grid-column-status">
+                        {{ ::('Status' | i18n) }}
+                    </th>
+                    <th class="grid-column-location">
+                        {{ ::('Location' | i18n) }}
+                    </th>
+                    <th class="grid-column-provider">
+                        {{ ::('Provider' | i18n) }}<br />{{ ::('(Services)' | i18n) }}
+                    </th>
+                    <!--<th class="grid-column-provider" ng-if="!drawerState">
+                        {{ ::('Provider' | i18n) }}<br />{{ ::('(Claims)' | i18n) }}
+                    </th>-->
+                    <th class="text-align-right no-wrap-column grid-column-money" ng-if="!drawerState">
+
+
+
+                        {{ ::('Location' | i18n) }}<br />{{ ::('Fee' | i18n) }}
+
+
+
+                    </th>
+                    <!--<th class="no-wrap-column grid-column-tooltip">-->
+                    <!--placeholder for tool tip-->
+                    <!--</th>-->
+
+
+                    <th class="text-align-right no-wrap-column grid-column-money">
+                        {{ ::('Charges' | i18n) }}
+                    </th>
+                    <th class="no-wrap-column grid-column-tooltip">
+                        <!--placeholder for tool tip-->
+                    </th>
+                    <th class="text-align-right optional-no-wrap grid-column-money" ng-if="!drawerState">
+                        {{ ::('Allowed' | i18n) }}<br />{{ ::('Amount' | i18n) }}
+                    </th>
+
+
+                    <!--<th class="text-align-right optional-no-wrap grid-column-money" ng-if="!drawerState">
+                        {{ ::('Est' | i18n) }}<br />{{ ::('Insurance' | i18n) }}
+                    </th>-->
+                    <th class="text-align-right optional-no-wrap grid-column-money">
+                        {{ ::('Est' | i18n) }}<br />{{ ::('Insurance' | i18n) }}
+                    </th>
+
+                    <th class="grid-column-tooltip">
+                        <!--placeholder for tool tip-->
+                    </th>
+                    <th class="text-align-right optional-no-wrap grid-column-money" ng-if="!drawerState">
+                        {{ ::('Est' | i18n) }}<br />{{ ::('Ins Adj' | i18n) }}
+                    </th>
+                    <th class="text-align-right optional-no-wrap grid-column-money">
+                        {{ ::('Est Pat' | i18n) }}<br />{{ ::('Balance' | i18n) }}
+                    </th>
+                    <th class="grid-column-tooltip">
+                        <!--placeholder for tool tip-->
+                    </th>
+                    <th class="no-wrap-column grid-column-icons"></th>
+                    <th class="no-wrap-column grid-column-icons"></th>
+                    <th class="no-wrap-column grid-column-options"></th>
+                <tr class="body treatment-plan-service-row" ng-repeat="ps in proposedServicesForStage | orderBy: ['TreatmentPlanServiceHeader.TreatmentPlanGroupNumber','TreatmentPlanServiceHeader.Priority'] track by $index"
+                    ng-style="{ color: ps.ServiceTransaction.IsDeleted ? '#999999' : (ps.ServiceTransaction.$$statusName =='Completed'? 'green' : 'black') }">
+                    <td class="text-left no-wrap-column tx-row">
+                        <checkbox class="check-box-spacing"
+                                  checkbox-id="checkbox-{{::ps.ServiceTransaction.ServiceTransactionId}}"
+                                  checkbox-disabled="ps.ServiceTransaction.checkboxDisabled"
+                                  change-function="addToApptChbxChecked(ps.ServiceTransaction)"
+                                  checkbox-value="ps.ServiceTransaction.$$IncludeInAppointment"></checkbox>
+                    </td>
+                    <td class="tx-row text-table-column" uib-tooltip="{{ ps.ServiceTransaction.Description }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        {{ ps.ServiceTransaction.Description | truncate: 100 }}
+                    </td>
+                    <td class="tx-row text-table-column">
+                        {{ps.ServiceTransaction.Tooth != 0 ? ps.ServiceTransaction.Tooth : '' | convertToothRangeToQuadrantOrArchCode }}
+                    </td>
+                    <td class="tx-row text-table-column">
+                        {{ ps.ServiceTransaction.$$Area }}
+                    </td>
+                    <td class="no-wrap-column tx-row" uib-tooltip="{{ ps.ServiceTransaction.$$statusName }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        {{ ps.ServiceTransaction.$$statusName  === 'Referred Completed' ? 'Ref Completed' : ps.ServiceTransaction.$$statusName | truncate:8:'...'}}
+                    </td>
+                    <td class="tx-row text-table-column">
+                        {{ ps.ServiceTransaction.DisplayName }}
+                    </td>
+                    <td class="tx-row text-table-column" uib-tooltip="{{ps.ServiceTransaction.UserCode }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        {{ ps.ServiceTransaction.ProviderFullName | truncate: 50 }}
+                    </td>
+                    <!--<td class="tx-row text-table-column" ng-if="!drawerState">
+                        {{ ps.ServiceTransaction.ProviderOnClaimsFullName | truncate: 50 }}
+                    </td>-->
+
+
+
+
+
+
+                    <td class="text-align-right no-wrap-column tx-row" ng-if="!drawerState">
+                        {{ ps.ServiceTransaction.Fee | currency }}
+                    </td>
+                    <!--<td class="no-wrap-column tx-row grid-column-tooltip">
+                        <treatment-plan-fee-change ng-if="!readOnly"
+                                                   service-transaction="ps.ServiceTransaction" close-all="popOverTracker" recalculate="recalculateReturnUpdatedInputFees" save="recalculateServiceTransactions"></treatment-plan-fee-change>
+                    </td>-->
+
+
+                    <td class="text-align-right no-wrap-column tx-row">
+                        {{ ps.ServiceTransaction.Amount | currency}}
+                    </td>
+                    <td class="no-wrap-column tx-row grid-column-tooltip" uib-tooltip-template="'txPlanTooltipByServiceTemplate.html'" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        <i class="fa fa-info-circle"></i>
+                    </td>
+                    <td class="text-align-right no-wrap-column tx-row" ng-if="!drawerState">
+                        {{ ps.ServiceTransaction.AllowedAmount | currency }}
+                    </td>
+
+                    <!--<td class="text-align-right no-wrap-column tx-row" ng-if="!drawerState">
+                        {{ ps.ServiceTransaction.$$EstInsurance | currency}}
+                    </td>
+                    <td class="no-wrap-column tx-row grid-column-tooltip" ng-if="!drawerState">-->
+                    <!-- && !angular.isUndefined(ps.ServiceTransaction.InsuranceEstimates[0].EstInsurance) && ps.ServiceTransaction.InsuranceEstimates[0].EstInsurance!=null-->
+                    <!--<treatment-plan-estins ng-if="!readOnly"
+                                               service-transaction="ps" close-all="popOverTracker" recalculate="recalculateServiceTransactions" has-patient-benefit-plan="hasBenefitPlan"></treatment-plan-estins>
+
+                    </td>-->
+
+                    <td class="text-align-right no-wrap-column tx-row">
+                        {{ ps.ServiceTransaction.$$EstInsurance | currency}}
+                    </td>
+                    <td class="no-wrap-column tx-row grid-column-tooltip">
+                        <!-- && !angular.isUndefined(ps.ServiceTransaction.InsuranceEstimates[0].EstInsurance) && ps.ServiceTransaction.InsuranceEstimates[0].EstInsurance!=null-->
+                        <treatment-plan-estins ng-if="!loadingPatientBenefitPlans" service-transaction="ps"
+                                               close-all="popOverTracker" recalculate="recalculateServiceTransactions"
+                                               has-patient-benefit-plan="hasBenefitPlan"
+                                               patient-benefit-plans="patientBenefitPlans">
+                        </treatment-plan-estins>
+
+                    </td>
+
+                    <td class="text-align-right no-wrap-column tx-row" ng-if="!drawerState">
+                        {{ ps.ServiceTransaction.$$AdjEst | currency}}
+                    </td>
+
+                    <td class="text-align-right no-wrap-column tx-row">
+                        {{ ps.ServiceTransaction.$$PatientPortion | currency}}
+                    </td>
+                    <td class="no-wrap-column tx-row grid-column-tooltip" uib-tooltip-template="'txPlanTooltipByEstimatedPatientTemplate.html'" tooltip-class="tooltipWidth" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        <i class="fa fa-info-circle"></i>
+                    </td>
+                    <td id="serviceSignatureEdit{{index}}" class="tx-row">
+                        <i class="tp_CaldColor far fa-file-signature" ng-if="ps.ServiceTransaction.IsOnInformedConsent" uib-tooltip="{{::('Informed Consent' | i18n) }}" tooltip-append-to-body="true" tooltip-placement="top-left"></i>
+                    </td>
+                    <td id="serviceAppointmentEdit{{index}}" class="tx-row">
+                        <i class="tp_CaldColor far fa-calendar-alt" ng-class="iconClass" ng-if="ps.ServiceTransaction.ScheduledStatus && ps.ServiceTransaction.ScheduledStatus != 'Unscheduled'" ng-click="editAppointmentFromModal(ps.ServiceTransaction.AppointmentId)" uib-tooltip="{{ ps.ServiceTransaction.ScheduledStatus ==  'Completed' ? 'Completed:' + ps.ServiceTransaction.$$DateCompleted : 'Scheduled:' + ps.ServiceTransaction.ScheduledStatus }}" tooltip-append-to-body="true" tooltip-placement="top-left"></i>
+                        <i class="tp_CaldColor far fa-calendar-alt" ng-class="iconClass" ng-if="ps.ServiceTransaction.ScheduledStatus && ps.ServiceTransaction.ScheduledStatus == 'Unscheduled'" ng-click="editAppointmentFromModal(ps.ServiceTransaction.AppointmentId)" uib-tooltip="{{ 'Unscheduled' }}" tooltip-append-to-body="true" tooltip-placement="top-left"></i>
+                    </td>
+                    <td id="serviceOptionsEdit{{index}}" class="tx-row">
+                        <button id="txSrvTileToggle-{{::ps.ServiceTransaction.ServiceTransactionId}}"
+                                ng-disabled="disableEditFunctions" 
+                                class="txPlanPart__toggle"
+                                ng-click="ps.ActionsVisible = !ps.ActionsVisible;getUpdatedPlanStages()"
+                                ng-if="treatmentPlan.TreatmentPlanHeader.Status !== 'Completed'"
+                                ng-blur="ps.ActionsVisible = false">
+                            <i class="fa fa-fw fa-ellipsis-v"></i>
+                        </button>
+                        <div class="txPlanPart__menuactions" ng-class="{active : ps.ActionsVisible}">
+                            <div>
+                                <!-- parts are renamed to stages  -->
+                                <button id="txSrvTileRemove-{{::ps.ServiceTransaction.ServiceTransactionId}}" ng-disabled="disableEditFunctions"  class="btn btn-link no-print" ng-mousedown="remove(ps)" check-auth-z="soar-clin-cplan-dsvccd">{{ ::('Remove Service' | i18n) }}</button>
+                                <button id="txSrvTileEdit-{{::ps.ServiceTransaction.ServiceTransactionId}}" ng-disabled="disableEditFunctions"  ng-if="ps.ServiceTransaction.IsDeleted === false" class="btn btn-link no-print" ng-mousedown="editServiceTransaction(ps)" check-auth-z="soar-clin-cplan-dsvccd">{{ ::('Edit' | i18n) }}</button>
+                                <button id="txSrvTileMoveToNewPart-stage{{::$index+1}}-{{::ps.ServiceTransaction.ServiceTransactionId}}" ng-disabled="disableEditFunctions"  ng-repeat="planStage in planStages|orderBy:'stageno'"
+                                        ng-if="$index != stageIndex - 1 && planStages.length > 1 && ps.ServiceTransaction.IsDeleted === false" class="btn btn-link no-print" check-auth-z="soar-clin-cplan-edit" ng-mousedown="checkServicesAppointments(ps,planStage.stageno)">
+                                    {{ 'Move to Stage {0}' | i18n:[$index+1] }}
+                                </button>
+
+                                <button id="txSrvTileAddToNewPart-{{::ps.ServiceTransaction.ServiceTransactionId}}" ng-disabled="disableEditFunctions"  ng-if="ps.ServiceTransaction.IsDeleted === false" check-auth-z="soar-clin-cplan-add" class="btn btn-link no-print" ng-disabled="actions[1].Disabled"
+                                        ng-mousedown="addToNewStage(ps);">
+                                    {{::('Add to New Stage'|i18n)}}
+                                </button>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Sum totals go below. -->
+                <tr class="treatment-plan-service-footer-row">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <!--<td ng-if="!drawerState"> -->
+                    <!-- provider on claims -- will never have a value but we are spacing this out to align vertically-->
+                    <!--</td>-->
+                    <td class="no-wrap-column">
+                        {{ (proposedServicesForStage||[]).length}} {{ ::('Service(s)' | i18n) }}
+
+
+
+                    </td>
+                    <td class="text-align-right" ng-if="!drawerState">
+                        <!-- Fee Sum Total -->{{ stageTotals.feeTotal | currency}}
+
+
+
+
+                    </td>
+
+
+                    <td class="text-align-right">
+                        <!-- Charges Sum Total -->{{ stageTotals.chargesTotal | currency}}
+                    </td>
+                    <td class="grid-column-tooltip" uib-tooltip-template="'txPlanTooltipByStageTemplate.html'" tooltip-class="tooltipWidth" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        <i class="fa fa-info-circle"></i>
+                    </td>
+                    <td class="text-align-right" ng-if="!drawerState">
+                        <!-- Allowed Amount Sum Total -->
+                        {{ stageTotals.allowedAmountTotal | currency}}
+                    </td>
+                    <td class="text-align-right">
+                        <!-- Est Insurance Sum Total -->{{ stageTotals.estimatedInsuranceTotal | currency}}
+                    </td>
+                    <td></td>
+                    <td class="text-align-right" ng-if="!drawerState">
+                        <!-- Est Ins Adjustment Total -->{{ stageTotals.estimatedInsuranceAdjustmentTotal | currency}}
+                    </td>
+                    <td class="text-align-right">
+                        <!-- Est Pat Balance Sum Total -->{{ stageTotals.estimatedPatientBalanceTotal | currency}}
+                    </td>
+                    <td class="grid-column-tooltip" uib-tooltip-template="'txPlanTooltipByEstimatedPatientTotalsTemplate.html'" tooltip-class="tooltipWidth" tooltip-append-to-body="true" tooltip-placement="top-left">
+                        <i class="fa fa-info-circle"></i>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div id="txPlanFooter" class="txPlanPart__footer" ng-if="expandedView">
+            <a class="no-print" icon="fa-trash-alt" check-auth-z="soar-clin-cplan-edit" ng-click="deleteStage(stageIndex, stage, $event)">
+                {{ 'Delete Stage '+stageIndex  | i18n }}
+            </a>
+            <div class="pull-right">
+                <div class="pull-right">
+                    <span class="" uib-tooltip-template="'txPlanTooltipByStageTemplate.html'" tooltip-append-to-body="true" tooltip-placement="top-right">
+                        <strong>{{(proposedServicesForStage||[]).length}} {{::('Service(s)' | i18n)}} {{ totalAmountPerStage | currency}}</strong>
+                        <i class="fa fa-info-circle"></i>
+                    </span>
+                    <span> |</span>
+                    <span class="" uib-tooltip-template="'txPlanTooltipByEstimatedPatientTotalsTemplate.html'" tooltip-class="tooltipWidth" tooltip-append-to-body="true" tooltip-placement="top">
+                        <strong>{{::('Estimated Patient:' | i18n)}} {{ patientPortionPartTotal | currency}}</strong>
+                        <i class="fa fa-info-circle"></i>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--tooltip template - Estimated Patient  Schedule-->
+    <script type="text/ng-template" id="txScheduleTooltipByEstimatedPatientTemplate.html">
+        <div class="txPlanTooltip">
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Scheduled'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ps.ServiceTransaction.ScheduledStatus}}</div>
+            </div>
+        </div>
+    </script>
+    <!--tooltip template - Estimated Patient-->
+    <script type="text/ng-template" id="txPlanTooltipByEstimatedPatientTemplate.html">
+        <div class="txPlanTooltip">
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Charges'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ ps.ServiceTransaction.Amount | currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Est Ins'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ ps.ServiceTransaction.$$EstInsurance | currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Est Ins Adj'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ ps.ServiceTransaction.$$AdjEst | currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Est Patient'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ ps.ServiceTransaction.$$PatientPortion | currency }}</div>
+            </div>
+        </div>
+    </script>
+    <!--tooltip template - Estimated Patient Totals-->
+    <script type="text/ng-template" id="txPlanTooltipByEstimatedPatientTotalsTemplate.html">
+        <div class="txPlanTooltip">
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Charges'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ stageTotals.chargesTotal | currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Est Ins'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ stageTotals.estimatedInsuranceTotal | currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Est Ins Adj'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ stageTotals.estimatedInsuranceAdjustmentTotal | currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Est Patient'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ stageTotals.estimatedPatientBalanceTotal | currency }}</div>
+            </div>
+        </div>
+    </script>
+    <!--tooltip template - service-->
+    <script type="text/ng-template" id="txPlanTooltipByServiceTemplate.html">
+        <div class="txPlanTooltip">
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Fee'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ ps.ServiceTransaction.Fee| currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Discount'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ ps.ServiceTransaction.Discount| currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Tax'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ ps.ServiceTransaction.Tax | currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Charges'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ ps.ServiceTransaction.Amount| currency }}</div>
+            </div>
+        </div>
+    </script>
+    <!--tooltip template - stage-->
+    <script type="text/ng-template" id="txPlanTooltipByStageTemplate.html">
+        <div class="txPlanTooltip">
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Fee'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ stageTotals.feeTotal| currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Discount'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ stageTotals.DiscountTotal| currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Tax'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ stageTotals.TaxTotal | currency }}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Charges'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{ stageTotals.chargesTotal| currency }}</div>
+            </div>
+        </div>
+    </script>
+
+    <!--Layout for kendo window charting controls-->
+    <div class="chartingControls__activeLayout">
+        <div kendo-window="toothCtrls"
+             k-title="'Tooth Controls'"
+             k-visible="false"
+             k-on-open="toothCtrlsOpen = true"
+             k-on-close="toothCtrlsOpen = false"
+             id="toothCtrlsWindowTxPlan1">
+        </div>
+    </div>
+</div>

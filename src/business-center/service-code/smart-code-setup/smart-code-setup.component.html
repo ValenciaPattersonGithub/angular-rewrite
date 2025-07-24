@@ -1,0 +1,71 @@
+<ng-template #templateRef>
+    <div class="modal-content">
+        <div class="smartCodeSetup">
+            <div class="panel smartCodeSetup__content">
+                <div class="panel-heading">
+                    <span class="panel-title">{{'Smart Code Setup' | translate}} </span>
+                    <span class="close fas fa-times pull-right" (click)="cancel()"></span>
+                </div>
+                <div class="panel-body">
+                    <div class="smartCodeSetup__setupOptions">
+                        <div class="radio">
+                            <label> <input type="radio" name="optradio" [(ngModel)]="radioButtonModel"  [checked]="radioButtonModel == false"   [value]="false" (change)="toggle()" >
+                                {{ label }} </label>
+                        </div>
+                        <div class="radio">
+                            <label> <input type="radio" name="optradio" [(ngModel)]="radioButtonModel"  [checked]="radioButtonModel == true"    [value]="true" (change)="toggle()">
+                                {{ label2 }} </label>
+                        </div>
+                    </div>
+                    <hr /> <!-- This is to break up the sections -->
+                    <div class="smartCodeSetup__setupOptions">
+                        <div class=""
+                            *ngIf="serviceCode?.AffectedAreaId == 5 && (radioButtonModel == 'true' || radioButtonModel == true)">
+                            <!-- Range of Teeth -->
+                            <label *ngIf="serviceCode"><input type="checkbox" [(ngModel)]="serviceCode.UseSmartCodes" name="rangeOfTeeth"
+                                    value="true">&nbsp;{{'Use Smart Code for Upper and Lower Teeth' | translate}}</label>
+                        </div>
+                    </div>
+                    <div *ngIf="validateOptions()">
+                        <div *ngFor="let item of [].constructor(codesByArea?.count); let i = index">
+                            <div class="smartCodeSetup__surfaceSetup col-md-5">
+                                <div class="form-group">
+                                    <div class="inner-addon right-addon">
+                                        <div class="serviceCodeSearchBoxContainer">
+                                            <div class="serviceCodeSearchBoxContainer"
+                                                [ngClass]="{'error':hasErrors === true && searchData?.searchTerms[i]?.invalidCode}">
+                                                <span class="smartCodeSetup__label"
+                                                    *ngIf="!codesByArea?.RoT?.length">{{i+1}}<span *ngIf="i == 4">+</span> {{codesByArea?.label}}</span>
+                                                <span class="smartCodeSetup__label"
+                                                    *ngIf="codesByArea?.RoT?.length">{{codesByArea?.RoT[i]}}</span>
+                                                <search-bar-autocomplete [list]="filteredServices" [placeholder]="placeholder" [template]="template" 
+                                                                         [inputValueBind]="searchData?.searchTerms[i]?.term" [valueF]="'Name'"
+                                                    (selectedValueChange)="selectResult($event,i)" (filterValueChange)="filterServiceCodes($event)">
+                                                </search-bar-autocomplete>
+                                                <span id="lblInvalidCode[i]" class="help-text"
+                                                    *ngIf="hasErrors === true && searchData?.searchTerms[i]?.invalidCode">
+                                                    {{ searchData.searchTerms[i]?.validationMessage }}
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="smartCodeSetup__footer col-md-12">
+                        <div class="smartCodeSetup__btns pull-right">
+                            <app-button id="btn_secondary" buttonLabel="Cancel" (onClick)="cancel()"
+                                variation="secondary" style="margin-right:10px"></app-button>
+                            <app-button id="btn_primary" buttonLabel="Ok" (onClick)="close()" variation="primary">
+                            </app-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<div kendoDialogContainer></div>

@@ -1,0 +1,10 @@
+﻿<div id="patientAllergies" class="form-body" ng-form="patientAllergies">
+    <div class="form-row">
+        <div class="form-col-12">
+            <label class="control-label">{{ 'Check any of the following if you are allergic' | i18n }}</label>
+        </div>
+    </div>
+    <div class="form-row">
+        <checkbox class="checkbox-control" ng-repeat="alrg in allergies" checkbox-label="alrg.name" ng-model="alrg.value" checkbox-value="alrg.value"></checkbox>
+    </div>
+</div>

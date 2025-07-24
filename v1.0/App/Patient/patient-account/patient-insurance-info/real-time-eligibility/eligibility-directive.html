@@ -1,0 +1,24 @@
+﻿
+<div id="eligibility{{inputId}}" class="eligibility-dropdown dropdown"
+     tooltip-enable="!patientBenefitPlans || patientBenefitPlans.length === 0 || locationEnrolledInRTE === false"
+     tooltip-placement="auto top" uib-tooltip="{{ tooltipMessage }}">
+    <button id="btnDropDown{{inputId}}" ng-click="btnClick()" ng-blur="onBlur()"
+            ng-disabled="!patientBenefitPlans || patientBenefitPlans.length === 0 || locationEnrolledInRTE === false" 
+            class="">
+        <span ng-if="!selectedItem" id="defaultSelectedDescription{{inputId}}" class="selected-description">{{ ::(placeHolder) }}</span>
+        <span ng-if="selectedItem" id="lblSelectedAppointmentTypeName{{inputId}}" ng-style="{'cursor': 'pointer'}">
+            {{ selectedItem.label }}
+        </span>
+        <span class="arrow"></span>
+    </button>
+    <div id="dropdownListBox{{inputId}}" class="dropdownListBox" ng-if="isOpen">
+        <div id="default{{inputId}}" class="option" ng-mousedown="selectItem(null)"> {{ ::(placeHolder) }} </div>
+        <div id="dropdownListItems{{inputId}}{{$index}}" ng-repeat="dataItem in patientBenefitPlans track by $index">
+            <div id="lblOptionName{{inputId}}{{$index}}"  class="option" ng-mousedown="selectItem(dataItem)">
+                <span> {{ dataItem.label }} </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+

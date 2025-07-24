@@ -1,0 +1,151 @@
+@import "variables";
+
+/// Toggle Component Variables
+$toggle-circle-shadow: 0px 1px 1px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12), 0px 1px 3px rgba(0,0,0,0.2);
+// 'On' state
+$circle-color-on: $action-blue;
+$bar-color-on: rgba(39, 191, 230, .4); //$light-action-blue opacity 40%
+$halo-color-on: rgba(45, 171, 203, .2); //$action-blue opacity 20%
+// 'On & Disabled' state
+$circle-color-on-disabled: $disabled-grey;
+$bar-color-on-disabled: $placeholder-grey;
+// 'Off' state
+$circle-color-off: $polar-white;
+$bar-color-off: rgba(116, 116, 116, .4); //#747474 opacity 40%
+$halo-color-off: rgba(116, 116, 116, .2); //#747474 opacity 20%
+$halo-color-off-pressed: rgba(116, 116, 116, .3); //#747474 opacity 30% ///todo: is this actually used?
+// 'Off & Disabled' state
+$circle-color-off-disabled: $polar-white;
+$bar-color-off-disabled: rgba(116, 116, 116, .3); //#747474 opacity 30%
+
+// label alignment
+.fui-toggle-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: left;
+
+  &.label-left {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+    .fui-toggle-label {
+      margin-right: 10px;
+    }
+  }
+
+  &.label-right {
+    flex-direction: row-reverse;
+    justify-content:flex-end;
+    align-items: center;
+
+    .fui-toggle-label {
+      margin-left: 10px;
+    }
+  }
+}
+.fui-toggle-label {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+// end label alignment
+
+// toggle styles //
+//// .switch == the 'bar' of the toggle ////
+//// :before == the 'halo' of the toggle ////
+//// :after == the 'circle' of the toggle ////\
+
+.checkbox { // toggle 'off' position
+  & + .switch {
+    position : relative ;
+    display : inline-block;
+    width : 32px;
+    height : 14px;
+    background-color: $bar-color-off;
+    border-radius: 14px;
+    margin-bottom: 0;
+  }
+  & + .switch::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: $halo-color-off;
+    top: -2px; // circle goes outside of the bar, this sets the position
+    left: -4px;
+    transition: all 0.3s;
+  }
+  & + .switch:hover::before {
+    width: 40px;
+    height: 40px;
+    top: -13px; // circle goes outside of the bar, this sets the position
+    left: -15px;
+  }
+  & + .switch::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: $circle-color-off;
+    box-shadow: $toggle-circle-shadow;
+    top: -2px; // circle goes outside of the bar, this sets the position
+    left: -4px;
+    transition: all 0.3s;
+  }
+}
+
+.checkbox:checked { // toggle 'on' position
+  & + .switch::after {
+    left: 16px;
+    background-color: $circle-color-on;
+  }
+
+  & + .switch::before {
+    top: -2px;
+    left: 16px;
+    background-color: $halo-color-on;
+  }
+
+  & + .switch:hover::before {
+    top: -13px;
+    left: 5px;
+  }
+
+  & + .switch {
+    background-color: $bar-color-on;
+  }
+}
+
+// disabled 'off'
+.checkbox[disabled] + .switch {
+  background-color: $bar-color-off-disabled;
+  cursor: not-allowed;
+  &:after {
+    background-color: $circle-color-off-disabled;
+  }
+  &:before {
+    display: none;
+  }
+}
+// disabled 'on'
+.checkbox[disabled]:checked + .switch {
+  background-color: $bar-color-on-disabled;
+  cursor: not-allowed;
+  &:after {
+    background-color: $circle-color-on-disabled;
+  }
+  &:before {
+    display: none;
+  }
+}
+.checkbox {
+  display : none;
+}
+
+.fui-toggle-container {
+  display : flex;
+}

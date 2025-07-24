@@ -1,0 +1,152 @@
+﻿<style>
+    input[type="text"] {
+        height: 30px;
+    }
+</style>
+<div id="medicalHistoryTemplate" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 id="customFormHeader">
+                {{ 'Medical History Templates' | i18n }}
+            </h3>
+        </div>
+    </div>
+</div>
+
+<form novalidate role="form" name="customTemplateForm" spell-check="true">
+    <!-- container class has not been added to keep side bar aligned to left side with spacing -->
+    <div class="row">
+        <div class="col-md-2">
+            <div class="content">
+                <div ng-class="zIndexClass" id="accordion">
+                    <div id="customSidebar" ng-class="showCustomSidebar" ng-click="toggleSidebarHeader(false);" class="border-solid-black panel-group-horizontal">
+                        <h4 class="panel-title-horizontal" style="text-align: center;">
+                            <a class="cursor-pointer" id="lnkSidebarHeader">
+                                <i class="glyphicon pull-left glyphicon-arrow-down"></i>
+                                <span id="yourSavedTemplateHeader">{{ 'Your Saved Templates' | i18n }}</span>
+                                <i class="glyphicon pull-right glyphicon-arrow-down"></i>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOneHorizontal" ng-class="customSidebarCollapse ? 'panel-collapse collapse in' : 'panel-collapse collapse'" class="panel-group-horizontal-custom panel panel-default border-solid-black">
+                        <div id="accordionArrowsTop" class="row">
+                            <div class="cursor-pointer col-xs-offset-11" ng-click="toggleSidebarHeader(true);">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body sidebar-height400 sidebar-panel-paddingzero">
+
+                            <div class="row">
+                                <div class="col-md-offset-4">
+                                    <span id="yourSavedTemplate">{{ 'Your Saved Templates' | i18n }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="row sidebar-padding-left53">
+                                    <button set-focus id="btnEditTemplate" type="button" ng-click="getFormsByStatus(false);" check-auth-z="soar-biz-bcform-edit" class="col-md-3 sidebar-btn"><i class="glyphicon glyphicon-file"></i><div>{{ 'Edit {0}' | i18n:['Template'] }}</div></button>
+                                    <button id="btnCreateFromExistingTemplate" type="button" ng-click="getFormsByStatus(true);" check-auth-z="soar-biz-bcform-add" class="col-md-3 sidebar-btn"><i class="glyphicon glyphicon-file"></i><div>{{ 'Create {0}' | i18n:['from Existing Template'] }}</div></button>
+                                    <button id="btnCreateBlankTemplates" type="button" class="col-md-3 sidebar-btn" check-auth-z="soar-biz-bcform-add" ng-click="addBlankTemplate();"><i class="glyphicon glyphicon-file"></i><div>{{ 'Create {0}' | i18n:['Blank Templates'] }}</div></button>
+                                </div>
+                            </div>
+                            <h6>&nbsp;</h6>
+                            <div style="height:250px;overflow-x: hidden;overflow-y:auto">
+                                <div class="row" ng-repeat="template in savedTemplates | orderBy: 'FormName'">
+                                    <div class="btn-group col-xs-12">
+                                        <button id="btnEditCustomForm" class="btn btn-default col-xs-9" style="text-align: left" check-auth-z="soar-biz-bcform-pub" ng-click="editCustomForm(template.FormId,template.IsPublished)" title="{{('{0}'+ template.IsPublished?'':'(unpublished)') | i18n:[{skip:template.FormName}]}}"><b ng-class="{'text-muted': !template.Status}">{{'{0}' + (template.IsPublished?'':'(unpublished)') | i18n:[{skip: template.FormName}] | truncate: 45 }}</b></button>
+                                        <button id="btnDeleteCustomForm" ng-show="!template.IsPublished" class="btn btn-default  col-xs-3" check-auth-z="soar-biz-bcform-edit" ng-click="deleteCustomForm(template.FormId,template.FormName)">{{ 'Delete'| i18n }}</button>
+                                        <button id="btnActivateCustomForm" ng-show="template.IsPublished" class="btn btn-default col-xs-3" check-auth-z="soar-biz-bcform-act" ng-click="activeOrInactiveCustomForm(template.FormId,!template.Status)">{{template.Status ? 'Deactivate':'Activate' | i18n}}</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="accordionArrowsBottom" class="row">
+                            <div class="cursor-pointer col-xs-offset-11" ng-click="toggleSidebarHeader(true);">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="customFormTemplateArea" class="container template-margin-left30" ng-show="showTemplate">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="deleteConfirmPanel" ng-show="showPublishConfirmation">
+                            <div id="publishConfirmContainer" class="media-body master-list-warning-msg">
+                                <are-you-sure message="{{'Are you sure you want to publish the form {0}' | i18n:[{skip:customForm.FormName}] }}" if-yes="publishFormById(customForm.FormId)" if-no="showPublishConfirmation=false"></are-you-sure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class="col-md-6">
+                        <button id="btnSave" type="button" class=" btn btn-default" ng-disabled="dataHasChanged || alreadyClicked" check-auth-z="soar-biz-bcform-edit" ng-click="saveCustomForm()"><i class="glyphicon glyphicon-save col-md-1"></i><br />{{ 'Save' | i18n }}</button>
+                        <button id="btnDiscard" type="button" class=" btn btn-default" ng-disabled="dataHasChanged || alreadyClicked" ng-click="discardCustomForm()"><i class="glyphicon glyphicon-remove-sign col-md-1"></i> <br />{{ 'Discard' | i18n }}</button>
+                        <button id="btnPublish" type="button" class=" btn btn-default" check-auth-z="soar-biz-bcform-pub" ng-disabled="((customForm.TemplateMode == 1 || customForm.TemplateMode == 2)? dataHasChanged: (!(customForm.TemplateMode == 3))) || alreadyClicked" ng-click="publishCustomForm(customForm.FormId)"><i class="glyphicon glyphicon-file col-md-1"></i> <br />{{ 'Publish' | i18n }}</button>
+                    </div>
+                    <div class="col-md-offset-6"></div>
+                </div>
+
+                <div class="row spacer">
+                    <div class="col-md-6">
+                        <button id="btnAddSection" type="button" class="btn btn-default" check-auth-z="soar-biz-bcform-edit" ng-click="addSection();"><i class="glyphicon glyphicon-plus-sign col-md-1"></i><br />{{ 'Add {0}' | i18n:['Section'] }}</button>
+                        <button id="btnPrint" type="button" class="btn btn-default"> <i class="glyphicon glyphicon-print span1"></i><br />{{ 'Print' | i18n }}</button>
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="container">
+                        <br />
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div id="medicalHistoryFormTitle" class="form-group">
+                                    <b id="customFormTitle">
+                                        {{ 'Medical History Form Title' | i18n }}:<span class="bold padding5 size-h4" id="requiredCustomFormTitleStar">*</span><br />
+                                    </b>
+                                    <input ng-class="{'red-border': invalidName && customTemplateForm.formTitle.$invalid}" id="customFormName" ng-model="customForm.FormName" type="text" name="formTitle" ng-required="true" maxlength="128"
+                                           ng-blur="checkUniqueFormName()" class="col-md-12" ng-change="doesFormTitleExists=false" /><br />
+                                    <div class="error" ng-if="invalidName && customTemplateForm.formTitle.$invalid">
+                                        <span id="formTitleRequired">{{ 'This field is required' | i18n }}</span>
+                                    </div>
+                                    <div id="uniqueTitleServerMessage" ng-if="doesFormTitleExists && customForm.FormName" class="error">
+                                        {{uniqueTitleServerMessage}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div id="medicalHistoryFormDescription" class="form-group">
+                                    <b id="customFormDescription">
+                                        {{ 'Medical History Form Description' | i18n }}:<br />
+                                    </b>
+                                    <textarea id="txtMedicalHistoryFormDescription" ng-model="customForm.Description" name="formDescription" rows="4" cols="80" maxlength="128" class="col-md-12"></textarea>
+                                </div>
+                            </div>
+                            <h5>&nbsp;</h5>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="sectionAccordion" close-others="oneAtATime">
+                    <angular-accordion custom-form="customForm" inputIsDisabled="true" show-footer-page="false" form-type="mhf" can-edit-form="true"></angular-accordion>
+                </div>
+            </div>
+        </div>
+        <h1>&nbsp;</h1>
+        <h1>&nbsp;</h1>
+    </div>
+</form>

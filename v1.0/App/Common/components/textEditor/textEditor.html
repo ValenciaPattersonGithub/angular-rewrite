@@ -1,0 +1,12 @@
+﻿<div class="soarTextEditor" ng-form="textEditorForm" >
+    <textarea ng-bind-html="content" id="{{editorId}}" kendo-editor="kendoeditor"
+              rows='5'
+              cols='20'
+              ng-model='content'
+              resizeable="true"
+              k-encoded="false"
+              k-tools="{{toolOptions}}"
+              k-on-change="change()"
+              k-on-paste="paste(kendoEvent)">
+</textarea>
+</div>

@@ -1,0 +1,100 @@
+﻿<div ng-form="frmHipaaAuthorization" class="hipaaAuthorizationCrud">
+    <div class="container-fluid">
+        <div class="hipaaAuthorizationCrud__header">
+            <h2 class="hipaaAuthorizationCrud__title">
+                {{ formTitle | i18n}}
+            </h2>
+            <!--<span class="medicalHistoryCrud__details" ng-show="false">
+                 {{ "From " | i18n }}{{ medicalHistoryForm.DateModified | toDisplayDate }}
+                 <span ng-class="{ medicalHistoryCrud__detailsFlag: !isCurrentForm  }">({{ (isCurrentForm ? 'current' : 'out of date') | i18n }})</span>
+            </span>-->
+            <div>
+                <div>
+                    <button id="btnCancel" class="medicalHistoryCrud__btnCancel" title="{{lblCancel|i18n}}" ng-click="close();">{{ lblCancel | i18n }}</button>
+                    <!--<button id="btnUpdate" class="medicalHistoryCrud__btnUpdate" ng-if="viewOnly && isCurrentForm" title="{{ 'Update' | i18n }}"
+                            ng-click="renderUpdateView()" check-auth-z="soar-per-perhst-add">{{ 'Update' | i18n }}</button>-->
+                    <button ng-if="!forViewing" id="btnSave" class="hipaaAuthorizationCrud__btnSave" title="{{'Save'|i18n}}" check-auth-z="soar-per-perhst-add"
+                            ng-click="saveHipaaAuthorization();" ng-disabled="loadingMedicalHistoryForm">
+                        {{ 'Save' | i18n }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div ng-hide="hipaaAuthorizationForm">
+            <no-results loading="loadingMedicalHistoryForm"></no-results>
+        </div>
+        <div>
+            <div class="hipaaAuthorizationCrud__body">
+                <div style="background-color:white" class="col-md-12">
+                    <div style="" ng-repeat="providerDetail in ProviderDetails.FormSectionItems">
+                        <!--<div class="col-md-8" ng-if="$index===1"><div class="col-md-2"><br /><label>{{'Location Address'}}:</label></div></div>-->
+                        <div class="col-md-12" ng-if="$index > 0 && $index < 6">
+                            <div class="col-md-3 text-right"><label style="margin-top:7px">{{LocationAddressLabels[$index - 1]}}:</label></div>
+                            <div class="col-md-6"><input ng-readonly="forViewing" style="width:75%;margin-top:5px;margin-bottom:5px; background-color:white" class="form-control" type="text" ng-model="providerDetail.FormBankItem.Answer" ></div>
+                        </div>
+                        <!--<div class="col-md-12" ng-if="$index===5"><div class="col-md-2"><br /></div></div>-->
+                        <div class="col-md-12" ng-if="$index === 0 || $index > 5">
+                            <div class="col-md-3 text-right"><label style="margin-top:7px">{{providerDetail.FormBankItem.ItemText}}:</label></div>
+                            <div class="col-md-6"><input ng-readonly="forViewing" style="width:75%;margin-top:5px;margin-bottom:5px; background-color:white" class="form-control" type="text" ng-model="providerDetail.FormBankItem.Answer"></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label style="margin-top:15px;margin-bottom:15px">
+                        {{FormDetailHeaders1[0]}}
+                    </label>
+                </div>
+                <div style="background-color:white" class="col-md-12">
+                    <div ng-repeat="patientDetail in PatientDetails.FormSectionItems">
+                        <div class="col-md-12">
+                            <div class="col-md-3 text-right"><label style="margin-top:7px">{{patientDetail.FormBankItem.ItemText}}:</label></div>
+                            <div class="col-md-6"><input ng-readonly="forViewing" style="width:75%;margin-top:5px;margin-bottom:5px; background-color:white" class="form-control" type="text" ng-model="patientDetail.FormBankItem.Answer"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="text-left">
+                        <label style="margin-top:15px;margin-bottom:15px">
+                            {{FormDetailHeaders1[1]}}
+                        </label>
+                    </div>
+                    <div id="hipaaAuthorizationSection{{$index}}" ng-repeat="formDetail in FormDetails.FormSectionItems">
+                        <div class="text-left">
+                            <label>{{formDetail.FormBankItem.ItemText}}</label><textarea ng-readonly="forViewing" rows="4" cols="50" maxlength="500" ng-model="formDetail.FormBankItem.Answer"></textarea>
+                        </div>
+                        <br />
+                    </div>
+                    <br />
+
+                    <div id="hipaaAuthorizationSection{{$index}}" ng-repeat="formDetailHeader in FormDetailHeaders2">
+                        <div class="text-left">
+                            <label class="margin-top-bottom-15">{{formDetailHeader}}</label>
+                        </div>
+                        <br />
+                    </div>
+
+                </div>
+                <hr />
+                <div class="hipaaAuthorizationCrud__footer col-md-12">
+                    <div style="width:650px; text-align:center" class="col-md-8">
+                        <div ng-if="forViewing" class="dateLocker"></div>
+                        <div class="hipaaAuthorizationCrud__signature">
+                            <signature-capture ng-if="!forViewing" sig-title="signatureTitle" file-allocation-id="hipaaAuthorizationForm.FileAllocationId" patient-info="patientInfo"></signature-capture>
+                            <signature-display ng-if="forViewing" sig-title="signatureTitle" file-allocation-id="hipaaAuthorizationForm.FileAllocationId"></signature-display>
+                        </div>
+                        
+                    </div>
+                    
+                    <div style="margin-top:18px" class="col-md-4"><div ng-if="forViewing" class="dateLocker"></div>
+                    {{'Date'}}: <div style="width:85%; margin-top:10px"><date-selector disableDateInput="false" input-id="inpFollowUp" placeholder="MM/DD/YYYY" format="MM/dd/yyyy" min-date="minDate" date-var="defaultDate" valid="valid "></date-selector></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div kendo-window="sigUploader"
+     k-visible="false"
+     k-on-open="sigUploaderOpen = true"
+     k-on-close="sigUploaderOpen = false">
+</div>

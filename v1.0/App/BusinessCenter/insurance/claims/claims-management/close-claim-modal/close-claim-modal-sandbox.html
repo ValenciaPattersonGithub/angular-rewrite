@@ -1,0 +1,62 @@
+﻿<div class="closeClaim">
+    <div class="rowFull white">
+        <div class="closeClaim__header">
+            <div class="closeClaim__title">
+                <h1>{{ 'Close Claim' | i18n }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="rowFull">
+        <div class="closeClaim__body">
+            <div class="closeClaim__form">
+                <div class="closeClaim__formAgg">
+                    <div class="form-row">
+                        <div class="form-group form-col-2" ng-class="{'has-error': hasErrorStatement}">
+                            <label class="control-label">{{ 'Estimated Total' | i18n }}:</label>
+                        </div>
+                        <div class="form-group form-col-2">
+                            <input class="form-control" type="text" />
+                            <span class="control-span" ng-if="hasError"></span> <!-- Whatever the error message is -->
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group form-col-2" ng-class="{'has-error': hasErrorStatement}">
+                            <label class="control-label">{{ 'Total Paid' | i18n }}:</label>
+                        </div>
+                        <div class="form-group form-col-2">
+                            <input class="form-control" type="text" />
+                            <span class="help-block" ng-if="hasError"></span> <!-- Whatever the error message is -->
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group form-col-2" ng-class="{'has-error': hasErrorStatement}">
+                            <label class="control-label">{{ 'Unpaid Amount' | i18n }}:</label>
+                        </div>
+                        <div class="form-group form-col-2">
+                            <input class="form-control" type="text" />
+                            <span class="help-block" ng-if="hasError"></span> <!-- Whatever the error message is -->
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group form-col-12">
+                        <radiogroup options="closeClaimOptions"></radiogroup>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group form-col-3" ng-class="{'has-error': hasErrorStatement}">
+                        <label class="control-label">{{' '}}</label>
+                        <checkbox checkbox-label="No insurance Payment"></checkbox>
+                        <span class="help-block" ng-if="hasErrorStatement"></span> <!-- Whatever the error message is -->
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button class="btn btn-primary">{{ 'Close Claim' | i18n }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+

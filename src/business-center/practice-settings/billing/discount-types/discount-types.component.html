@@ -1,0 +1,102 @@
+<div class="discountTypes">
+    <form name="frmDiscountTypes" role="form" novalidate>
+        <div class="rowFull white">
+            <div class="discountTypes__header">
+                <!--Breadcrumbs-->
+                <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                <!--header-->
+                <div class="discountTypes__title">
+                    <h1>{{ 'Discount Types' | translate }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="discountTypes__body">
+            <!--show the master list if not in edit mode-->
+            <div [ngClass]="{'slide-animation': 'forward', 'slide-backward-animation': '!forward'}">
+                <!--the list-->
+                <div class="discountTypes__list">
+                    <kendo-grid  [data]="gridData" (edit)="editDiscountType($event)" (cancel)="onCancel($event)"
+                        (save)="saveDiscountType($event)" (add)="createDiscountType($event)" [height]="455" [sortable]="true"
+                        [sort]="state.sort" (sortChange)="sortChange($event)" [filterable]="true"
+                        [filter]="state.filter"  [loading]="loading" (dataStateChange)="dataStateChange($event)" [navigable]="true">
+                        <div class="discountTypes__actions">
+                            <ng-template kendoGridToolbarTemplate>
+                                <button kendoGridAddCommand checkRoleAccess="{{ !hasCreateAccess }}" id="createButton"
+                                    class="btn btn-primary" [iconClass]="'k-icon k-i-plus'">
+                                    {{'Add Discount Type' | translate }}
+                                </button>
+                            </ng-template>
+                        </div>
+                        <kendo-grid-column field="DiscountName" title="Discount Type" width="400">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem?.DiscountName}}
+                            </ng-template>
+                            <ng-template kendoGridEditTemplate let-column="column" let-formGroup="formGroup"
+                                let-isNew="isNew">
+                                <input #input class="k-textbox" [formControl]="formGroup.get(column.field)"
+                                    maxlength="64">
+                                <div class="k-tooltip-validation"
+                                    *ngIf="formGroup.get(column.field).invalid && !(isNew && formGroup.get(column.field).untouched)">
+                                    <span class="k-icon k-i-warning"></span>
+                                    {{ 'Name is required.' | translate }}
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="DiscountRate" title="Discount Rate" format="#.##%" width=200>
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column"
+                                let-formGroup="formGroup" width=400>
+                                <drop-down-list-filter field="DiscountRate" [filter]="state.filter"
+                                    [data]="discountRatedataSource" textField="DiscountRateDisplay"
+                                    valueField="DiscountRate" defaultTextField="(All)">
+                                </drop-down-list-filter>
+                            </ng-template>
+                            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-column="column"
+                                let-formGroup="formGroup" let-isNew="isNew">
+                                <kendo-numerictextbox [formControl]="formGroup.get(column.field)" [decimals]="2" [step]="1.00" [min]="1" [max]="100">
+                                </kendo-numerictextbox>
+                                <div *ngIf="formGroup.get(column.field).invalid && !(isNew && formGroup.get(column.field).untouched)"
+                                    class="k-tooltip-validation">
+                                    <span class="k-icon k-i-warning"></span>
+                                    {{ 'Discount Rate 1 to 100.' | translate }}
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="IsActive" title="Status" width="200">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{ getStatus(dataItem?.IsActive)?.Text}}
+                            </ng-template>
+                            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-column="column"
+                                let-formGroup="formGroup">
+                                <kendo-dropdownlist [data]="masterListStatus" textField="Text" valueField="Value"
+                                    [valuePrimitive]="true" [formControl]="formGroup.get('IsActive')">
+                                </kendo-dropdownlist>
+                            </ng-template>
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column"
+                                let-formGroup="formGroup">
+                                <kendo-grid-messages filterIsFalse="Inactive" filterIsTrue="Active">
+                                </kendo-grid-messages>
+                                <kendo-grid-boolean-filter-cell [column]="column" [filter]="filter" class="isActive">
+                                </kendo-grid-boolean-filter-cell>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-command-column title="" width="100">
+                            <ng-template kendoGridCellTemplate let-isNew="isNew">
+                                <button kendoGridEditCommand [iconClass]="'fas fa-pencil-alt'" *ngIf="hasEditAccess">
+                                </button>
+                                <a kendoGridCancelCommand [iconClass]="'k-icon k-i-cancel'"></a>
+                                <a kendoGridSaveCommand [disabled]="formGroup?.invalid"
+                                    [iconClass]="'k-icon k-i-check'"></a>
+                            </ng-template>
+                        </kendo-grid-command-column>
+                        <kendo-grid-messages [noRecords]="loading==true?'':noRecordsMessage"></kendo-grid-messages>
+                    </kendo-grid>
+
+                    <!--loading spinner-->
+                    <no-results *ngIf="loading" [loading]="loading"></no-results>                
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>

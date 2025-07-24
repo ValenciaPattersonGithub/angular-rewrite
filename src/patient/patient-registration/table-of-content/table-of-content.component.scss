@@ -1,0 +1,32 @@
+@import "variables";
+.toc-container{
+    padding-left: 20px;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    font-family: $global-font-family;
+    cursor: pointer;
+    
+}
+.toc-item{
+    grid-column: 1;
+    text-align: left;
+    background-color: $white;
+    border-radius: 0px;
+    border-width: 0px 0px 1px;
+    border-color: $patient-registration-border-color;
+    border-style: solid;
+    color: $dropdown-hover-color;
+    font-size: 14px;
+    height: 42px;
+    width: 175px;
+    box-shadow: rgba(0, 0, 0,0.24) 0px 1px 2px 0px; // does not use global shadow
+}
+.toc-text{
+    margin:12px;
+}
+.toc-item:first-child{
+    border-radius: 5px 5px 0px 0px;
+}
+.toc-item:last-child{
+    border-radius: 0px 0px 5px 5px;
+}

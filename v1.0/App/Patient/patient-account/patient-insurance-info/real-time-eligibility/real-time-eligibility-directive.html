@@ -1,0 +1,13 @@
+﻿<span class="realTimeEligibility">
+    <soar-select-list id="RTEDropdown"
+                      name="RTEDropdown"
+                      text-field="label"
+                      value-field="PatientBenefitPlanId"
+                      option-list="patientBenefitPlans"
+                      class-name="benefitPlans"
+                      ng-model="selectedPlanId"
+                      placeholder="{{'Check Eligibility'}}"
+                      disable-input="!patientBenefitPlans || patientBenefitPlans.length === 0 || locationEnrolledInRTE === false"
+                      tooltip-enable="!patientBenefitPlans || patientBenefitPlans.length === 0 || locationEnrolledInRTE === false" tooltip-placement="auto top" uib-tooltip="{{ tooltipMessage }}">
+    </soar-select-list>
+</span>

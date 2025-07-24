@@ -1,0 +1,74 @@
+﻿.patientAcctSelectClaims {
+
+    &__body {
+       
+    }
+
+    &__applyInsPayment {
+       margin-top:1%;
+    }
+
+    &__backBtn {
+        float:right;
+        padding-right:2%;
+    }
+
+    &__bckBtn {
+        .btn;
+        .btn-default;
+    }
+
+    &__grid {
+        .containerStandard;
+        padding-top: @brand-padding_horizontal;
+        padding-bottom: @brand-padding_horizontal;
+
+        .truncateText{
+            display: inline-block;
+            float: left;
+            width: 90%;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            -ms-text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+        }
+
+        .k-grid {
+            .k-grouping-row {       
+                > td {
+                    
+                        > p,
+                        > .k-reset {
+                        display: none;
+                    }
+                }
+                .k-group-custom-header {
+                    display:inline-block;
+                    position: relative;
+                    > table {
+                        .k-reset {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+            tr:nth-child(even) {
+               color: #333;
+            }
+            .k-grid-header th.k-header > .k-link {
+                :hover {
+                     color: #333;
+                }
+            }
+        }
+    }
+ }
+.k-checkbox-wrapper input {
+    position:absolute;
+    width: 14px;
+    height: 14px;
+    z-index: 20;
+    cursor: pointer;
+}

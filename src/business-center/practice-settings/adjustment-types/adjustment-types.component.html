@@ -1,0 +1,34 @@
+<ng-container #container></ng-container>
+<div class="view-container">
+    <div id="mainLt" class="main-lt">
+        <div id="businessTopBoardHeading" class="topnavbar-heading">Adjustment Types</div>
+    </div>
+    <div id="mainLt" class="main-lt-market-place">
+        <div id="businessTopBoardPattersnMarket" class="topnavbar-heading-pattersonmarket">
+            <a href="https://www.pattersondental.com/" target="_blank" class="topnavbar-marketplace">
+                <svg-icon name="basketIcon" class="marketPlace" iconHeight="20px" iconWidth="20px"></svg-icon> Patterson Market Place
+            </a>
+        </div>
+
+    </div>
+    <div class="topnavbar-header-quick-info">
+        <span class="subheader-container">{{dayDateDisplay}} | Welcome</span> {{displayName}}
+    </div>
+    <app-page-navigation [navigationData]="breadCrumbs" class="topnavbar-mainmenu-container"></app-page-navigation>
+    <div class="card-container adjustment-types-container">
+            <div class="grid-header">
+                <p class="text-left page_sub_title">Adjustment Types</p>
+            </div>
+            <div class="float-right add_button">
+                    <app-button buttonLabel="+ Adjustment Type" variation="primary" id="btnAddAdjustment"
+                                [isDisabled]="!hasCreateAccess"
+                                title="{{!hasCreateAccess? 'You do not have permission to view this information.' : ''}}"
+                                placement="left" (onClick)="showAdjustmentForm()"> </app-button>
+            </div>
+        <hr class="adjustmenttypes-hr">      
+            <app-adjustment-types-list [hasDeleteAccess]="hasDeleteAccess" [hasEditAccess]="hasEditAccess"
+                                       [hasCreateAccess]="hasCreateAccess" [adjustmentTypes]="adjustmentTypes$ | async" [drawer]="drawer"
+                                       (refreshAdjustmentTypeGrid)="initializeGrid()">
+            </app-adjustment-types-list>       
+    </div>
+</div>

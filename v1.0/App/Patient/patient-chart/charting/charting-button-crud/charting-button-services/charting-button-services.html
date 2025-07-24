@@ -1,0 +1,86 @@
+﻿<div class="chartBtnLayoutServices col-md-12">
+    <div class="chartBtnLayoutServices__tabFilters col-md-12">
+        <soar-select-list id="srvcTypeDropdown"
+                          class="col-md-3"
+                          name="srvcType"
+                          placeholder="{{ ::'Service Type' | i18n }}"
+                          option-list="serviceTypes"
+                          text-field="Description"
+                          value-field="ServiceTypeId"
+                          ng-model="filterBy.serviceTypeId"
+                          ng-if="type === 'services'">
+        </soar-select-list>
+        <div class="chartBtnLayoutServices__search col-md-3">
+            <input class="form-control" id="srvcFilter" type="search" ng-model="filterBy.text" placeholder="{{ ::'Search' | i18n }}" />
+        </div>
+        <div class="col-md-2 show-inactive" ng-if="type === 'services'">
+            <input type="checkbox" ng-model="filterBy.showInactive" />
+            <label>{{'Show Inactive' | i18n}}</label>
+        </div>
+        <div class="col-md-4 drag-label">
+            {{ ::'Drag and drop to add to favorites' | i18n}} <i class="fa fa-arrow-right"></i>
+        </div>
+    </div>
+    <div class="chartBtnLayoutServices__loading" ng-if="services.length === 0">
+        <no-results loading="services.length === 0"></no-results>
+    </div>
+    <div class="chartBtnLayoutServices__buttons col-md-12">        
+        <div class="chartBtnLayoutServices__btnContainer" ng-repeat="layoutItem in services | orderBy: 'DisplayAs' | filter: servicesFilter">
+            <button class="chartingControls__btn sortable"
+                    id="{{::layoutItem.ServiceCodeId}}"
+                    ng-click="utilizeFavorite(layoutItem)"
+                    uib-tooltip-template="getTemplateType(layoutItem)"
+                    tooltip-append-to-body="true"
+                    tooltip-placement="auto + top-right"
+                    ng-class="getButtonColorClass(layoutItem.$$LayoutItemId)"
+                    ng-disabled="disableWhenPatientInactive===true"
+                    ng-attr-data-layoutItem="{{::layoutItem.$$button | json}}"
+                    kendo-draggable
+                    k-dragend="onDragEnd"
+                    k-dragstart="onDragStart"
+                    k-hint="draggableHint">
+                <img ng-if="layoutItem.IconUrl" class="chartBtnLayoutServices__btnIcon" ng-src="{{::layoutItem.IconUrl}}" />                
+            </button>            
+            <span class="chartBtnLayoutServices__btnText">
+                {{::layoutItem.IsActive ? (layoutItem.DisplayAs | limitTo:11) : (layoutItem.DisplayAs | limitTo:8) }}<span ng-show="{{::layoutItem.DisplayAs.length > 11}}">&#8230;</span>
+                <i class="fas fa-exclamation-triangle patientHeader__orange-warning" ng-show="!layoutItem.IsActive" title="Service Code is inactive"></i>
+            </span>
+        </div>
+    </div>
+</div>
+<!--tooltip template - Charting Favorite-->
+<script type="text/ng-template" id="chartingButtonServicesTooltipTemplate.html">
+    <div class="chartingButtonTooltip">
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Service Code'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{::layoutItem.Code}}</div>
+        </div>
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'CDT Code'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{::layoutItem.CdtCodeName}}</div>
+        </div>
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Description'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{::layoutItem.Description}}</div>
+        </div>
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Service Type'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{::layoutItem.ServiceTypeDescription}}</div>
+        </div>
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Fee'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{::layoutItem.LocationSpecificInfo[0].Fee | currency}}</div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="chartingButtonSwiftCodeTooltipTemplate.html">
+    <div class="chartingButtonTooltip">
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Service Codes'|i18n}}:</div>
+            <div ng-repeat="service in layoutItem.SwiftPickServiceCodes">
+                {{::service.Code}}
+            </div>
+        </div>
+    </div>
+</script>

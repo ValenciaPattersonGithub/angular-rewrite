@@ -1,0 +1,922 @@
+﻿.patChart {
+    //margin: 15px 20px 0 20px;
+    &__chartingControls {
+        height: 100%;
+    }
+
+    .selected {
+        background-color: @brand-navigation_primary_color_gray;
+        color: @white;
+    }
+
+    &__wrapper {
+        display: grid;
+        grid-template: auto / 1fr 2fr;
+        font-family: @global-font-family;
+        font-size: 12px;
+        grid-gap: 5px;
+    }
+
+    .commaSeparated:not(:last-of-type):after {
+        content: ', ';
+    }
+
+    .patChart__scrollableDrawer {
+        padding: 12px 20px 20px 20px;
+    }
+
+    ul.patChart__flagWrapper {
+        list-style: none;
+        padding-bottom: 0px;
+        margin-bottom: auto;
+        padding-left: 0px;
+
+        li {
+            display: flex;
+            margin-bottom: 5px;
+
+            i {
+                margin-right: 10px;
+            }
+        }
+    }
+
+    div.patChart__displayName {
+        cursor: pointer;
+    }
+
+    div.patChart__transferLink {
+        font-size: 12px;
+        font-family: @global-font-family;
+    }
+
+    div.patChart__birthDate {
+        color: black;
+    }
+
+
+    ul.patChart__memberWrapper {
+        list-style: none;
+        padding-bottom: 0px;
+        margin-bottom: auto;
+        padding-left: 0px;
+
+        li {
+            display: block;
+            margin-bottom: 5px;
+            color: #22a9cb;
+            font-family: @global-font-family;
+            font-size: 12px;
+        }
+    }
+
+    h4 {
+        font-family: @global-font-family;
+    }
+
+    h3 {
+        padding-left: 40px;
+        font-family: @global-font-family;
+    }
+
+    .accountMember {
+        color: #22a9cb;
+        font-family: @global-font-family;
+        font-size: 12px;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template: auto / 1fr auto;
+
+        &.old-style {
+            grid-template: auto / 1fr minmax(500px, 33.3333%);
+        }
+
+        &.perio, &.perio.old-style {
+            grid-template: auto / 1fr 16.66666%;
+        }
+    }
+
+    &__primary {
+        .clearfix;
+        grid-column: 1;
+        display: grid;
+        grid-template: min-content auto / auto;
+        padding: 20px 20px 0 20px;
+
+        &.perio {
+            padding: 10px 0 0 20px;
+        }
+    }
+
+    &__row1 {
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    &__odontogramPlaceholder {
+        min-height: 344px;
+        background-color: @brand-color_white;
+        padding: 15px 0;
+        margin: 0 15px;
+    }
+
+    &__nav {
+        .clearfix;
+
+        @media only screen and (max-width: 1366px) {
+            .pill-bar a {
+                padding: 10px 15px;
+            }
+        }
+    }
+
+    &__navPrimaryNew {
+        border-bottom: 1px solid #DDDDDD;
+        margin-bottom: 20px;
+        padding-bottom: 5px;
+
+        .navbar-newNav {
+            display: flex;
+
+
+            ul {
+                font-family: @global-font-family;
+                font-size: 14px;
+                color: #333333;
+                text-decoration: none;
+                padding: 0;
+                margin: 0px 20px 0px 0px;
+                list-style: none;
+            }
+
+            li {
+                a {
+                    color: #333333;
+                    margin-bottom: 5px;
+
+                    &.active {
+                        background-color: transparent;
+                        color: @brand-color_font-dark;
+                        padding-bottom: 5px;
+                        border-bottom: 1px solid #2DABCB;
+                    }
+                }
+            }
+        }
+
+        .perio {
+            float: right;
+            padding-bottom: 0px;
+
+            .fui-check-box {
+                display: inline-block;
+                width: auto;
+
+                .label {
+                    padding-left: 0px;
+                }
+            }
+        }
+
+        .perioNavButtons {
+            height: 30px;
+
+            .examTypes {
+                height: 100%;
+                display: inline-block;
+
+                .examType {
+                    padding: 5px 20px 3.5px 0px;
+                    display: inline-block;
+
+                    a {
+                        margin-top: 7px;
+                        color: #434649;
+                        display: inline-block;
+
+                        &.perioSelected {
+                            color: #2DABCB;
+                            border-bottom: 3.5px solid #2DABCB;
+                        }
+                    }
+                }
+            }
+
+            app-button {
+                margin-left: 10px;
+            }
+
+            app-check-box {
+                .fui-check-box, .perio-checkbox {
+                    display: inline-block;
+                    width: auto;
+                }
+            }
+            .select-list-wrapper, .fui-select-container {
+                display: inline-block;
+            }
+        }
+    }
+
+
+    &__navPrimary {
+        float: left;
+        padding-left: 0;
+
+        .navbar-nav {
+            padding-bottom: 10px;
+            margin-top: 2px;
+
+            &:first-child li > a {
+                border-bottom-left-radius: 6px;
+                border-top-left-radius: 6px;
+            }
+
+            &:last-child li > a {
+                border-bottom-right-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+
+            li > a {
+                border-radius: 0px;
+                padding: 10px 25px;
+                font-size: 18px;
+                background-color: @brand-navigation_tertiary_bg;
+                font-family: @brand-font;
+                color: @brand-navigation_tertiary_color;
+                border: @brand-navigation_tertiary_border;
+                box-shadow: @brand-navigation_tertiary_box_shadow @brand-naviagtion_tertiary_box_shadow_color;
+
+                &.active {
+                    color: @brand-navigation_tertiary_active_color;
+                    background-color: @brand-navigation_tertiary_active_bg;
+                    font-weight: 600;
+                    padding: 10px 30px;
+                }
+            }
+        }
+    }
+
+    &__navSecondary {
+        float: right;
+        padding-right: 0;
+        position: relative;
+
+        &.perioLandingNav {
+            width: 100%;
+
+            &.perioExamList {
+                margin-top: -1px;
+            }
+
+            .select-list-wrapper {
+                display: inline-block;
+            }
+        }
+
+        perio-landing {
+            float: right;
+        }
+    }
+
+    &__primaryViewPort {
+        grid-row: 2;
+        grid-column: 1;
+    }
+
+    &__secondary {
+        height: 74vh;
+        min-width: 500px;
+        border-width: 1px;
+        border-color: #DADCDC;
+        padding: 20px 20px 0 0;
+        grid-column: 2;
+
+        &.perio {
+            min-width: initial;
+        }
+    }
+
+    &__drawer {
+        grid-column: 2;
+        box-sizing: border-box;
+        width: 0;
+        overflow: auto;
+        transition: width 1s;
+        background-color: #ffffff;
+        border: 1px solid #eeeeee;
+
+        &.open {
+            width: 480px;
+        }
+
+        &.favorites {
+            height: calc(100vh - 180px);
+            overflow: hidden;
+        }
+
+        &.timeline {
+            height: calc(100vh - 180px);
+            overflow:hidden;
+        }
+
+        &.closed * {
+            display: none;
+        }
+    }
+
+    .drawer-title {
+        height: 45px;
+        border-bottom: 1px solid #dddddd;
+        font-size: 16px;
+        font-weight: bold;
+        font-family: @global-font-family;
+        color: #333333;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+    }
+
+    .timeline-drawer {
+        display:flex;
+        flex-grow: 1;
+    }
+
+    .drawer-close {
+        color: #2DABCB;
+        margin-left: auto;
+        font-size: 20px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &__chart {
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+
+        .chartingButtons {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            border-bottom: 1px solid @patient-profile_header_border_color;
+            padding: 10px 0;
+            margin: 0 15px;
+
+            .toggleModeClass {
+                margin-left: auto;
+                margin-right: 15px;
+            }
+
+
+            .btn {
+                margin-right: 5px;
+            }
+        }
+
+        .chartingTitle {
+            font-family: @global-font-family;
+            font-size: 16px;
+            color: #333333;
+            font-weight: bold;
+            margin-right: auto;
+        }
+
+        .k-grid-content {
+            tbody tr {
+                &:hover {
+                    background: @brand-color_light-gray;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .gridServices, .gridConditions {
+            z-index: 1;
+            opacity: 0;
+            overflow: hidden;
+            background-color: @brand-color_light-gray;
+
+            &.active {
+                max-width: 100%;
+                min-height: 750px;
+                opacity: 1;
+            }
+        }
+
+        .gridScroll {
+            overflow-y: auto;
+            height: 625px
+        }
+
+        .gridHeader {
+            background-color: @brand-color_light-gray;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .gridContentRow {
+            &:hover {
+                background: @brand-color_light-gray;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__secTabs {
+        height: 100%;
+
+        .spanHeight {
+            height: 100%;
+        }
+
+        .tab-content {
+            height: 100%;
+            background-color: @brand-color_white;
+            border: 1px solid @nav-tabs-active-link-hover-border-color;
+            border-top: none;
+
+            .tab-pane {
+                height: 100%;
+            }
+        }
+    }
+
+    &__expndView {
+        .clearfix;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        max-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        background-color: @brand-application_bg;
+
+        &.active {
+            max-width: 100%;
+            min-height: 0px;
+            opacity: 1;
+            grid-column: 1;
+            grid-row: 1 / span 2;
+            position: static;
+        }
+    }
+
+    &__medicalHistoryCrud,
+    &__notesCrud,
+    &__txPlanCrud,
+    &__propSrvc {
+        width: 100%;
+        height: 100%;
+        min-width: 600px;
+    }
+
+    &__txPlanCrud {
+        background-color: @brand-color_white;
+        border: 1px solid #DADCDC;
+        border-radius: @borderRadius3;
+    }
+
+    &__healthPrimary {
+        .make-md-column(6);
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    &__healthSecondary {
+        .make-md-column(6);
+    }
+
+    &__perioPathList {
+        .soarSelectList.k-dropdown {
+            margin-right: @brand-margin_sm;
+            min-width: 250px;
+        }
+    }
+
+    i.inactive-service-warning {
+        color: #f7b82d;
+        vertical-align: text-bottom;
+    }
+
+    i.inactive-service-warning + div.popover {
+        background: #106c90;
+        color: #fff;
+        font-size: 12px;
+    }
+}
+
+.drawer-container {
+    height: 100%;    
+
+    &.timeline{
+        display:flex;
+        flex-direction:column;
+    }
+}
+
+.navPill {
+    .nav;
+    .nav-pills;
+}
+
+.odoNav {
+    text-align: right;
+
+    &__views {
+        display: inline-block;
+    }
+
+    &__actions {
+        display: inline-block;
+        position: relative;        
+        margin-top: 5px;
+    
+
+    .fa-chevron-down {
+        transform: translateX(6px);
+    }
+}
+
+
+    &__actionsPanel {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        border: 1px solid gray;
+        z-index: 99999;
+
+        &.active {
+            display: none;
+        }
+
+        .btn-default {
+            min-width: 125px;
+        }
+    }
+
+    &__toggle {
+        transform: translateX(-5px);
+
+        &:first-child {
+            /*transform: translateX(0px);*/
+        }
+
+        &[disabled] {
+            color: @brand-color_white;
+            background-color: @brand-color_primary;
+            cursor: pointer;
+        }
+    }
+}
+
+
+
+
+.perioOptions {
+    text-align: right;
+
+    &__views {
+        display: inline-block;
+    }
+
+    &__actions {
+        display: inline-block;
+        position: relative;
+        font-size: 16px;
+        padding: 0px 0px 0px 10px;
+
+
+        .fa-chevron-down {
+            transform: translateX(6px);
+        }
+    }
+
+
+    &__actionsPanel {
+        position: absolute;
+        top: 100%;
+        right: -10px;
+        z-index: 99999;
+        background-color: #ffffff;
+        width: 125px;
+        font-size: 12px;
+
+        &.active {
+            display: none;
+        }
+
+        a {
+            padding: 5px 8px;
+            color: #434649;
+            border: 1px solid #eeeeee;
+            display: block;
+            width: 100%;
+        }
+
+        a:hover {
+            background-color: #2dabcb;
+            color: #ffffff;
+        }
+
+        ::before {
+            content: " ";
+            position: absolute;
+            bottom: 100%;
+            left: 90%;
+            border-width: 10px;
+            border-style: solid;
+            border-color: transparent transparent #DADCDC transparent;
+            transform: translateX(-50%);
+        }
+    }
+
+    &__toggle {
+        transform: translateX(-5px);
+
+        &[disabled] {
+            color: @brand-color_white;
+            background-color: @brand-color_primary;
+            cursor: pointer;
+        }
+    }
+}
+
+
+
+
+
+/* this ends up being our largest problem ... with new nav 6/1/2020 I am not this things friend*/
+.patChart__primary {
+    height: 500px !important;
+}
+
+.odoNav2 {
+
+    &__views {
+        display: inline-block;
+    }
+
+    &__actions {
+        display: inline-block;
+        position: relative;
+
+        .fa-chevron-down {
+            transform: translateX(6px);
+        }
+    }
+
+    &__actionsPanel {
+        position: absolute;
+        top: 100%;
+        left: -145px;
+        z-index: 99999;
+
+        &.active {
+            display: none;
+        }
+
+        .btn-default {
+            min-width: 125px;
+        }
+    }
+
+    &__toggle {
+        /*transform: translateX(-5px);*/
+        font-size: 24px;
+        padding-left: 10px;
+
+
+        &:first-child {
+            /*transform: translateX(0px);*/
+        }
+
+        &[disabled] {
+            color: @brand-color_white;
+            background-color: @brand-color_primary;
+            cursor: pointer;
+        }
+    }
+}
+
+
+.perioNav {    
+    #perioCompareList {
+        padding-right: @brand-padding_sm;
+        //display:inline-block;
+    }
+
+    .perioEdit {
+        padding-right: @brand-padding_sm;
+        padding-top: @brand-padding_sm;
+    }
+
+    &__compare {
+        .btn-nav-toggle;
+        color: @brand-color_white;
+        background-color: @brand-color_primary;
+        transform: translateX(-5px);
+        margin-right: @brand-margin_sm;
+
+        &:first-child {
+            transform: translateX(0px);
+        }
+
+        &:hover {
+            background-color: lighten(@brand-color_primary, 5);
+        }
+
+        &:focus,
+        &:active:focus,
+        &:hover:focus {
+            border: 1px solid transparent;
+            background-color: lighten(@brand-color_primary, 5);
+        }
+
+        &[disabled] {
+            color: @brand-color_white;
+            background-color: @brand-color_primary;
+            cursor: pointer;
+        }
+    }
+
+    .k-dropdown-wrap.k-state- {
+
+        &default {
+            border-color: transparent;
+            border-radius: 0;
+        }
+
+        &focused {
+            outline-color: transparent;
+        }
+    }
+
+    .k-dropdown {
+        border-radius: 0;
+        text-align: left;
+
+        &:focus {
+            outline: none;
+        }
+
+        .k-dropdown-wrap {
+            .k-input {
+                height: auto;
+                line-height: 1;
+                padding: 12px 0;
+                color: @brand-color_primary;
+                font-style: normal;
+            }
+        }
+    }
+}
+
+.perioTopNav {
+    display: flex;
+    justify-content: flex-end;
+
+    .examTypes {
+        height: 100%;
+        display: inline-block;
+        position:absolute;
+        left:0px;
+
+        .examType {
+            padding: 5px 20px 3.5px 0px;
+            display: inline-block;
+
+            a {
+                margin-top: 7px;
+                color: #434649;
+                display: inline-block;
+
+                &.perioSelected {
+                    color: #2DABCB;
+                    border-bottom: 3.5px solid #2DABCB;
+                }
+            }
+        }
+    }
+
+    #perioCompareList {
+        padding-right: @brand-padding_sm;        
+    }
+
+    .perioEdit {
+        padding-right: @brand-padding_sm;
+        padding-top: @brand-padding_sm;
+    }
+
+    &__compare {
+        .btn-nav-toggle;
+        color: @brand-color_white;
+        background-color: @brand-color_primary;
+        transform: translateX(-5px);
+        margin-right: @brand-margin_sm;
+
+        &:first-child {
+            transform: translateX(0px);
+        }
+
+        &:hover {
+            background-color: lighten(@brand-color_primary, 5);
+        }
+
+        &:focus,
+        &:active:focus,
+        &:hover:focus {
+            border: 1px solid transparent;
+            background-color: lighten(@brand-color_primary, 5);
+        }
+
+        &[disabled] {
+            color: @brand-color_white;
+            background-color: @brand-color_primary;
+            cursor: pointer;
+        }        
+
+        .fui-select-container {
+            margin-right: 10px;
+        }
+
+        .perioLanding {
+            margin-right: 5px;
+        }
+    }
+
+    .k-dropdown-wrap.k-state- {
+
+        &default {
+            border-color: transparent;
+            border-radius: 0;
+        }
+
+        &focused {
+            outline-color: transparent;
+        }
+    }
+
+    .k-dropdown {
+        border-radius: 0;
+        text-align: left;
+
+        &:focus {
+            outline: none;
+        }
+
+        .k-dropdown-wrap {
+            .k-input {
+                height: auto;
+                line-height: 1;
+                padding: 12px 0;
+                color: @brand-color_primary;
+                font-style: normal;
+            }
+        }
+    }
+}
+
+.perioSelect {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+// this class is being dynamically applied to an element on the page
+// when you scroll to a certain position we want the drawer to not go away
+// but to stay at the top of the view port under the head of the site.
+.scroll-drawer-position {
+    position: fixed;
+    // this should number not be needed but we have a negative padding on the pages where this is applied
+    // if that negative padding issue were addressed we would have to change this.
+    top: 62px;
+    right: 0px;
+}
+
+// to get the effect right with the above item we have to keep a hidden element under the fixed positioned drawer.
+// when we add the above style to the compelete_drawer_area we are going to remove this class from the hidden-drawer
+.hidden-drawer {
+    display: none;
+}
+
+.chartModeHeader {
+    width: 100%;
+    height: 40px;
+    background-color: #2dabcb;
+    background-size: cover;
+    font-family: @global-font-family;
+    font-size: 16px;
+    color: #ffffff;
+    text-decoration: none solid rgb(255, 255, 255);
+    text-align: center;
+    padding: 10px;
+}

@@ -1,0 +1,53 @@
+
+//Used all kendo class for kendo dialog design and visibility
+// ::ng-deep will apply the change to kendo popup and :host will apply these changes to current pages only
+
+:host ::ng-deep {
+    .k-window {
+        left: 30%;
+        top: 30%;
+        z-index: 1000 !important;
+    }
+
+    .k-overlay {
+        z-index: 1000 !important;
+    }
+
+    .k-window-content,
+    .k-prompt-container {
+        padding: 0px !important;
+        overflow: hidden;
+    }
+
+    .k-dialog .k-content {
+        padding: 0px !important;
+    }
+}
+.accountStatementBillingMessageCrud {
+    margin: 0;
+
+    .row {
+        margin: 16px;
+    }
+
+    h4 {
+        margin: 16px;
+    }
+
+    .error-border {
+        border-width: 2px;
+    }
+}
+
+.form-control {
+    width: 90%
+}
+
+.margin-right-10 {
+   margin-right:10px
+}
+
+.error-border {
+    border-color: #E43122;
+    border-width: 2px;
+}

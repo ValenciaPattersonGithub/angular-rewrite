@@ -1,0 +1,32 @@
+@import "variables";
+.toast {
+  width: 305px;
+  min-height: 70px;
+  padding: 15px;
+  border-radius: 15px;
+  background-size: cover;
+  font-family: $global-font-family;
+  font-size: 14px;
+  color: $polar-white;
+  text-decoration: none solid $polar-white;
+  line-height: 20px;
+  display: grid;
+  grid-template-columns: 90% 10%;
+  &-error {
+    background-color: $alert-red;
+  }
+  &-warning {
+    background-color: $warning-orange;
+  }
+  &-success {
+    background-color: $success-green;
+  }
+  &-title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  &-icon {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}

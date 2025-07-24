@@ -1,0 +1,86 @@
+<form [formGroup]="sectionHeaderForm" name="sectionHeaderForm" role="form">
+    <div class="container" [ngClass]="{'noteTemplate' :  formType === 'note'}">
+        <div class="row col-md-12">
+            <div class="col-md-4 form-inline margin-top4">
+                <span id="sectionToggle{{sectionIndex}}" class="cursor-pointer" (click)="toggleAccordion()">
+                    <label id="sectionTitle{{sectionIndex}}" for="{{'inpSectionTitle_'+ sectionIndex}}">{{ 'Section Title' | translate }}:*</label>
+                </span>
+                <input class="form-control" formControlName="inpSectionTitle" name="{{'inpSectionTitle_'+ sectionIndex}}" (change)="titleChanged()"
+                       id="{{'inpSectionTitle_'+ sectionIndex}}" maxlength="256" required/>
+            </div>
+
+            <div id="additemMenu{{sectionIndex}}" class="btn-group col-md-1 margin-top4">
+                <div id="sectionItemMenu{{sectionIndex}}" class="noteTemplate__sectionItemMenu"
+                     [ngClass]="{'dropdown-menu-custom-settings' : formType === 'mhf'}">
+                    <div class="container">
+                        <div class="row col-md-2" [ngSwitch]="formType">
+                            <span *ngSwitchCase="'mhf'">
+                                <button id="btnAddItem{{sectionIndex}}" type="button"
+                                        class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    {{ 'Add Item' | translate }} <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu noteTemplate__sectionItemMenu">
+                                    <li>
+                                        <button id="btnMultipleChoice{{sectionIndex}}"
+                                                class="col-md-1 dropdownmenu-btn btn btn-default"
+                                                (click)="addSectionItem(sectionIndex,3);">
+                                            <i class="glyphicon glyphicon-th-large"></i><br />{{ formsName[3] | translate }}
+                                        </button>
+                                        <button id="btnYesNoTrueFalse{{sectionIndex}}"
+                                                class="col-md-1 dropdownmenu-btn btn btn-default"
+                                                (click)="addSectionItem(sectionIndex,2);">
+                                            <i class="glyphicon glyphicon-th-large"></i><br />{{ formsName[2] | translate }}
+                                        </button>
+                                        <button id="btnCommentsEssaybox{{sectionIndex}}"
+                                                class="col-md-1 dropdownmenu-btn btn btn-default"
+                                                (click)="addSectionItem(sectionIndex,7);">
+                                            <i class="glyphicon glyphicon-th-large"></i><br />{{  formsName[7] | translate }}
+                                        </button>
+                                        <button id="btnDemographicQuestion{{sectionIndex}}"
+                                                class="col-md-1 dropdownmenu-btn btn btn-default"
+                                                (click)="addSectionItem(sectionIndex,1);">
+                                            <i class="glyphicon glyphicon-th-large"></i><br />{{  formsName[1]| translate }}
+                                        </button>
+                                        <button id="btnEmergencyContact{{sectionIndex}}"
+                                                class="col-md-1 dropdownmenu-btn btn btn-default"
+                                                (click)="addSectionItem(sectionIndex,6);">
+                                            <i class="glyphicon glyphicon-th-large"></i><br />{{  formsName[6] | translate  }}
+                                        </button>
+                                        <button id="btnDateStampQuestion{{sectionIndex}}"
+                                                class="col-md-1 dropdownmenu-btn btn btn-default"
+                                                (click)="addSectionItem(sectionIndex,5);">
+                                            <i class="glyphicon glyphicon-th-large"></i><br />{{ formsName[5] |translate}}
+                                        </button>
+                                        <button id="btnSignatureBox{{sectionIndex}}"
+                                                class="col-md-1 dropdownmenu-btn btn btn-default"
+                                                (click)="addSectionItem(sectionIndex,4);">
+                                            <i class="glyphicon glyphicon-th-large"></i><br />{{ formsName[4]|  translate  }}
+                                        </button>
+                                    </li>
+                                </ul>
+                            </span>
+                            <span *ngSwitchCase="'note'" id="addPromtSpan">
+                                <soar-select-list id="addPrompt" name="addPrompt" #addPrompt
+                                                  [placeHolder]="'Add Prompt' | translate" [textField]="'Text'"
+                                                  [valueField]="'Value'" [optionList]="sections"
+                                                  [selectedItemValue]="sectionSelected"
+                                                  (selectedItemValueChange)="onSectionSelectedChange($event)"
+                                                  (blurEvent)="addPromptBlur()">
+                                </soar-select-list>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 pull-right vertical-center">
+                <i id="btnPreview{{sectionIndex}}" class="fa fa-eye fa-2x noteTemplate__icon" title="Preview" kendoTooltip position="top" tooltipClass="app-tooltip" (click)="previewSection()"></i>
+                <i id="btnUndo{{sectionIndex}}" (click)="undo()" [ngClass]="{'disabled': !canUndo}" class="fa fa-undo fa-2x noteTemplate__icon" title="Undo" kendoTooltip position="top" tooltipClass="app-tooltip"></i>
+                <i id="btnRedo{{sectionIndex}}" (click)="redo()" [ngClass]="{'disabled': !canRedo}" *ngIf="!(formType === 'note')" class="btn btn-default" title="Redo" kendoTooltip position="top" tooltipClass="app-tooltip"></i>
+                <i id="btnMoveUp{{sectionIndex}}" class="fa fa-arrow-up fa-2x noteTemplate__icon" title="Move Up" kendoTooltip position="top" tooltipClass="app-tooltip" [ngClass]="{'disabled': first}" (click)="moveSectionUp(sectionIndex)"></i>
+                <i id="btnMoveDown{{sectionIndex}}" class="fa fa-arrow-down fa-2x noteTemplate__icon" title="Move Down" kendoTooltip position="top" tooltipClass="app-tooltip" [ngClass]="{'disabled': last}" (click)="moveSectionDown(sectionIndex)"></i>
+                <i id="btnCopy{{sectionIndex}}" class="far fa-files fa-2x noteTemplate__icon" title="Copy" kendoTooltip position="top" tooltipClass="app-tooltip" *ngIf="!(formType === 'note')" (click)="copySection(sectionIndex)"></i>
+                <i id="btnDelete{{sectionIndex}}" class="fa fas fa-trash-alt fa-2x noteTemplate__icon" title="Delete" kendoTooltip position="top" tooltipClass="app-tooltip" (click)="confirmDeleteSection(sectionIndex)"></i>
+            </div>
+        </div>
+    </div>
+</form>

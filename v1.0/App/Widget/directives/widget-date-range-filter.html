@@ -1,0 +1,31 @@
+﻿<soar-select-list id="{{dropdownId}}"
+                  text-field="display"
+                  value-field="value"
+                  option-list="options"
+                  ng-model="dateFilter"
+                  sb-change="onDateFilterChange"
+                  sb-select="onDateFilterSelect"></soar-select-list>
+<div class="dateRangeFilter" ng-show="showModal">
+    <div class="row">
+        <div class="col-sm-6">
+            <label>{{ ::'From' | i18n }}:</label>
+            <date-selector date-var="fromDate"
+                           placeholder="MM/DD/YYYY"
+                           format="MM/dd/yyyy"
+                           valid="fromDateIsValid"></date-selector>
+        </div>
+        <div class="col-sm-6">
+            <label>{{ ::'To' | i18n }}:</label>
+            <date-selector date-var="toDate"
+                           placeholder="MM/DD/YYYY"
+                           format="MM/dd/yyyy"
+                           valid="toDateIsValid"></date-selector>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-primary" ng-click="onSearch()">{{ ::'Search' | i18n }}</button>
+            <button class="btn btn-default" ng-click="onClear()">{{ ::'Clear' | i18n }}</button>
+        </div>
+    </div>
+</div>

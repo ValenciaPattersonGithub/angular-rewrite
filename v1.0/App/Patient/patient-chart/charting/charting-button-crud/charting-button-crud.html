@@ -1,0 +1,24 @@
+﻿<div class="chartBtnLayoutCrud">
+    <div class="chartBtnLayoutCrud__title">
+        <h1>{{ ::'Manage Favorites' | i18n }}</h1>
+    </div>
+    <div class="chartBtnLayoutCrud__tabs">
+        <uib-tabset active="0">
+            <uib-tab id="servicesTab" heading="{{ ::'Services' | i18n }}">
+                <div class="chartBtnLayoutCrud__tabsContent">
+                    <charting-button-services selected-layout-items="selectedLayoutItems" services-backup="allServices" type="services"></charting-button-services>
+                </div>
+            </uib-tab>
+            <uib-tab id="swiftCodesTab" heading="{{ ::'Swift Codes' | i18n }}">
+                <div class="chartBtnLayoutCrud__tabsContent">
+                    <charting-button-services selected-layout-items="selectedLayoutItems" services-backup="allSwiftCodes" type="swiftCodes"></charting-button-services>
+                </div>
+            </uib-tab>
+            <uib-tab id="conditionsTab" heading="{{ ::'Conditions' | i18n }}">
+                <div class="chartBtnLayoutCrud__tabsContent">
+                    <charting-button-conditions selected-layout-items="selectedLayoutItems" conditions-backup="allConditions"></charting-button-conditions>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+</div>

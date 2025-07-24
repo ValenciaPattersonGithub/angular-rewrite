@@ -1,0 +1,103 @@
+﻿<div class="perio" >
+
+    <div class="perio__key">
+        <div class="perio__lvl">
+            <div class="perio__lvlTitle"></div>
+            <div class="perio__lvlInd"></div>
+        </div>
+    </div>
+
+    <div ng-if="perioGraphActive.flag">
+        <div class="col-sm-12 margin-bottom15">
+            <perio-chart arch="Upper" raw-exam="activePerioExam.ExamDetails" active-data-points="activeDataPoints"></perio-chart>
+            <perio-chart arch="Lower" raw-exam="activePerioExam.ExamDetails" active-data-points="activeDataPoints"></perio-chart>
+        </div>
+        <div class="col-sm-12 text-center">
+            <a class="btn btn-default" ng-class="{'btn-primary' : activeDataPoints.indexOf('PD') !== -1}" ng-click="toggleGraphDataPoint('PD')">{{ 'Pocket Depth' | i18n }}</a>
+            <a class="btn btn-default" ng-class="{'btn-primary' : activeDataPoints.indexOf('GM') !== -1}" ng-click="toggleGraphDataPoint('GM')">{{ 'Gingival Margin' | i18n }}</a>
+            <a class="btn btn-default" ng-class="{'btn-primary' : activeDataPoints.indexOf('MGJ') !== -1}" ng-click="toggleGraphDataPoint('MGJ')">{{ 'M-G Junction' | i18n }}</a>
+        </div>
+    </div>
+
+    <div class="perio__chart" ng-class="{view: viewOnly, 'started': showPerioNav}" ng-if="activePerioExam.ExamDetails && !perioGraphActive.flag">
+
+        <div>
+            <perio-readings ng-show="bleedingPocketVisible" ng-if="loadingQueue[0].load" queue="loadingQueue" quadrant="'UB'" exam="activePerioExam.ExamDetails" exam-type="BleedingPocket" exam-title="' '"></perio-readings>
+            <perio-readings ng-show="suppurationPocketVisible" ng-if="loadingQueue[1].load" queue="loadingQueue" quadrant="'UB'" exam="activePerioExam.ExamDetails" exam-type="SuppurationPocket" exam-title="' '"></perio-readings>
+            <perio-readings ng-if="loadingQueue[2].load" queue="loadingQueue" quadrant="'UB'" exam="activePerioExam.ExamDetails" exam-type="DepthPocket" exam-title="'PD'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[3].load" queue="loadingQueue" quadrant="'UB'" exam="activePerioExam.ExamDetails" exam-type="GingivalMarginPocket" exam-title="'GM'"></perio-readings>
+            <div class="col-md-2 perio__verticalLabel" ng-if="loadingQueue[7].load">
+                <span class="">{{ 'BUCCAL' | i18n }}</span>
+            </div>
+            <div class="col-md-2 perio__verticalLabelRight" ng-if="loadingQueue[7].load">
+                <span class="">{{ 'BUCCAL' | i18n }}</span>
+            </div>
+            <perio-readings ng-if="loadingQueue[4].load" queue="loadingQueue" quadrant="'UB'" exam="activePerioExam.ExamDetails" disabled-inputs="true" exam-type="AttachmentLvl" exam-title="'CAL'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[5].load" queue="loadingQueue" quadrant="'UB'" exam="activePerioExam.ExamDetails" exam-type="MgjPocket" exam-title="'MGJ'"></perio-readings>
+            <!--NOTE Mobility this may get moved...-->
+            <perio-readings ng-if="loadingQueue[6].load" queue="loadingQueue" quadrant="'UB'" exam="activePerioExam.ExamDetails" exam-type="Mobility" exam-title="'MOB'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[7].load" queue="loadingQueue" quadrant="'UB'" exam="activePerioExam.ExamDetails" exam-type="FurcationGradeRoot" exam-title="'FG'"></perio-readings>
+        </div>
+
+        <div class="perio__buccalLingualDivider"></div>
+
+        <div>
+            <perio-readings ng-if="loadingQueue[8].load" queue="loadingQueue" quadrant="'UL'" exam="activePerioExam.ExamDetails" exam-type="DepthPocket" exam-title="'PD'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[9].load" queue="loadingQueue" quadrant="'UL'" exam="activePerioExam.ExamDetails" exam-type="GingivalMarginPocket" exam-title="'GM'"></perio-readings>
+            <div class="col-md-2 perio__verticalLabel" ng-if="loadingQueue[13].load">
+                <span class="">{{ 'LINGUAL' | i18n }}</span>
+            </div>
+            <div class="col-md-2 perio__verticalLabelRight" ng-if="loadingQueue[13].load">
+                <span class="">{{ 'LINGUAL' | i18n }}</span>
+            </div>
+            <perio-readings ng-if="loadingQueue[10].load" queue="loadingQueue" quadrant="'UL'" exam="activePerioExam.ExamDetails" disabled-inputs="true" exam-type="AttachmentLvl" exam-title="'CAL'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[11].load" queue="loadingQueue" quadrant="'UL'" exam="activePerioExam.ExamDetails" exam-type="MgjPocket" exam-title="'MGJ'"></perio-readings>
+            <perio-readings class="perio__lastInArch" ng-show="bleedingPocketVisible" ng-if="loadingQueue[12].load" queue="loadingQueue" quadrant="'UL'" exam="activePerioExam.ExamDetails" exam-type="BleedingPocket" exam-title="' '"></perio-readings>
+            <perio-readings class="perio__lastInArch" ng-show="suppurationPocketVisible" ng-if="loadingQueue[13].load" queue="loadingQueue" quadrant="'UL'" exam="activePerioExam.ExamDetails" exam-type="SuppurationPocket" exam-title="' '"></perio-readings>
+        </div>
+
+        <div class="perio__archDivider"></div>
+
+        <div>
+            <perio-readings ng-show="bleedingPocketVisible" ng-if="loadingQueue[14].load" queue="loadingQueue" quadrant="'LL'" exam="activePerioExam.ExamDetails" exam-type="BleedingPocket" exam-title="' '"></perio-readings>
+            <perio-readings ng-show="suppurationPocketVisible" ng-if="loadingQueue[15].load" queue="loadingQueue" quadrant="'LL'" exam="activePerioExam.ExamDetails" exam-type="SuppurationPocket" exam-title="' '"></perio-readings>
+            <perio-readings ng-if="loadingQueue[16].load" queue="loadingQueue" quadrant="'LL'" exam="activePerioExam.ExamDetails" exam-type="DepthPocket" exam-title="'PD'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[17].load" queue="loadingQueue" quadrant="'LL'" exam="activePerioExam.ExamDetails" exam-type="GingivalMarginPocket" exam-title="'GM'"></perio-readings>
+            <div class="col-md-2 perio__verticalLabel" ng-if="loadingQueue[21].load">
+                <span class="">{{ 'LINGUAL' | i18n }}</span>
+            </div>
+            <div class="col-md-2 perio__verticalLabelRight" ng-if="loadingQueue[21].load">
+                <span class="">{{ 'LINGUAL' | i18n }}</span>
+            </div>
+            <perio-readings ng-if="loadingQueue[18].load" queue="loadingQueue" quadrant="'LL'" exam="activePerioExam.ExamDetails" disabled-inputs="true" exam-type="AttachmentLvl" exam-title="'CAL'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[19].load" queue="loadingQueue" quadrant="'LL'" exam="activePerioExam.ExamDetails" exam-type="MgjPocket" exam-title="'MGJ'"></perio-readings>
+            <!--NOTE Mobility this may get moved...-->
+            <perio-readings ng-if="loadingQueue[20].load" queue="loadingQueue" quadrant="'LB'" exam="activePerioExam.ExamDetails" exam-type="Mobility" exam-title="'MOB'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[21].load" queue="loadingQueue" quadrant="'LB'" exam="activePerioExam.ExamDetails" exam-type="FurcationGradeRoot" exam-title="'FG'"></perio-readings>
+        </div>
+
+        <div class="perio__buccalLingualDivider"></div>
+
+        <div>
+            <perio-readings ng-if="loadingQueue[22].load" queue="loadingQueue" quadrant="'LB'" exam="activePerioExam.ExamDetails" exam-type="DepthPocket" exam-title="'PD'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[23].load" queue="loadingQueue" quadrant="'LB'" exam="activePerioExam.ExamDetails" exam-type="GingivalMarginPocket" exam-title="'GM'"></perio-readings>
+            <div class="col-md-2 perio__verticalLabel" ng-if="loadingQueue[27].load">
+                <span class="">{{ 'BUCCAL' | i18n }}</span>
+            </div>
+            <div class="col-md-2 perio__verticalLabelRight" ng-if="loadingQueue[27].load">
+                <span class="">{{ 'BUCCAL' | i18n }}</span>
+            </div>
+            <perio-readings ng-if="loadingQueue[24].load" queue="loadingQueue" quadrant="'LB'" exam="activePerioExam.ExamDetails" disabled-inputs="true" exam-type="AttachmentLvl" exam-title="'CAL'"></perio-readings>
+            <perio-readings ng-if="loadingQueue[25].load" queue="loadingQueue" quadrant="'LB'" exam="activePerioExam.ExamDetails" exam-type="MgjPocket" exam-title="'MGJ'"></perio-readings>
+            <perio-readings class="perio__lastInArch" ng-show="bleedingPocketVisible" ng-if="loadingQueue[26].load" queue="loadingQueue" quadrant="'LB'" exam="activePerioExam.ExamDetails" exam-type="BleedingPocket" exam-title="' '"></perio-readings>
+            <perio-readings class="perio__lastInArch" ng-show="suppurationPocketVisible" ng-if="loadingQueue[27].load" queue="loadingQueue" quadrant="'LB'" exam="activePerioExam.ExamDetails" exam-type="SuppurationPocket" exam-title="' '"></perio-readings>
+        </div>
+
+    </div>    
+    <div ng-show="showPerioNav"><perio-nav show-perio-nav="showPerioNav" person-id="personId"></perio-nav></div>
+
+    <div class="perio__footer" ng-show="loadingExam" title="{{loadingMessage}}">
+        <span class="fa fa-spinner fa-spin fa-4x"></span>
+    </div>
+
+</div>

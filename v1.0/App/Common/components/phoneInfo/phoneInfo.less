@@ -1,0 +1,208 @@
+﻿// #region PhoneInfo Directive
+.phone-container {
+    @media only screen and (min-width:320px) and (max-width:768px) {
+        margin-left: -10px;
+        margin-right: -10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+.phone-delete {
+    position: relative;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+}
+
+.phone-item {
+    margin-bottom: 3px;
+}
+
+.phoneInfoItem {
+    .clearfix;
+    position: relative;
+
+    &.ng-enter {
+        -webkit-animation: 1s fade-in;
+        -moz-animation: 1s fade-in;
+        -o-animation: 1s fade-in;
+        animation: 1s fade-in;
+    }
+
+    &.ng-leave {
+        -webkit-animation: 0.5s fade-out;
+        -moz-animation: 0.5s fade-out;
+        -o-animation: 0.5s fade-out;
+        animation: 0.5s fade-out;
+    }
+
+    &__primary {
+        .make-form-col(2);
+        padding-left: 0;
+    }
+
+    .switch_phoneitem {
+        padding-right: 4px;
+        float: left;
+    }
+
+    &__num,
+    &__type {
+        .make-form-col(4);
+    }
+
+    &__remove {
+        .make-form-col(2);
+
+        .btn {
+            font-size: 20px;
+            padding: @brand-padding_xs;
+        }
+    }
+
+    &__prompt {
+        clear: both;
+        padding-bottom: @brand-padding_sm;
+        text-align: center;
+    }
+
+    &__wrap {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .form-btn-remove {
+        padding-top: 0px;
+    }
+}
+
+.phoneInfoLabel {
+    margin-top: 7px;
+}
+
+.phone-edit-icon {
+    color: #000;
+    background: transparent;
+    border: transparent;
+    height: 34px;
+    width: 34px;
+    right: -4px;
+    position: relative;
+
+    &:hover {
+        background: @btn-edit-bg-hover;
+        color: #fff;
+    }
+}
+
+@media only screen and (min-width: @screen-sm) {
+
+    .phone-container-narrow {
+
+        .phone-container {
+            padding: 0 5px 5px 5px;
+        }
+
+        .phone-delete {
+            padding-top: 10px;
+        }
+
+        .form-label-newer {
+            float: none;
+        }
+
+        .phone-label {
+            float: none;
+            margin-bottom: 20px;
+            width: 75%;
+        }
+
+        .phone-divider {
+            float: none;
+            width: 75%;
+        }
+
+        .phone-left {
+            padding-right: 2%;
+            width: 48%;
+        }
+
+        .phone-right {
+            padding-left: 2%;
+            width: 48%;
+        }
+    }
+}
+
+// #endregion
+
+.onoffswitch {
+    position: relative;
+    width: 45px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.onoffswitch-checkbox {
+    display: none;
+}
+
+.onoffswitch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    height: 20px;
+    padding: 0;
+    line-height: 20px;
+    border: 1px solid #999999;
+    border-radius: 20px;
+    background-color: #CCC;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.onoffswitch-label:before {
+    content: "";
+    display: block;
+    width: 20px;
+    margin: 0px;
+    background: #FFFFFF;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 23px;
+    border: 1px solid #999999;
+    border-radius: 20px;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+    background-color: #2DABCB;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+    border-color: #2DABCB;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+    right: 0px;
+}
+
+.mainToggle {
+    margin-top: 12px;
+    margin-right: 10px;
+}
+
+.mailReminderToggle {
+    margin-top: 5px;
+    margin-left: 35px;
+}
+
+.emailPhoneReminderToggle {
+    margin-top: 5px;
+    margin-left: 20px;
+}

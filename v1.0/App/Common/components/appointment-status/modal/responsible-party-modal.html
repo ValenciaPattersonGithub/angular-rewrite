@@ -1,0 +1,30 @@
+﻿<div class="modal-header">
+    <label>{{ display.title | i18n }}</label>
+
+    <div class="clearfix">&nbsp;</div>
+
+    <div class="form-row">
+        <div class="col-xs-10 col-height">
+            <label class="control-label ng-binding"> Responsible Person</label>
+
+            <patient-responsible-party patient="patient"
+                                       show-header="false"
+                                       responsible-person="responsiblePerson"
+                                       age-check="ageCheck"
+                                       show-error="hasErrors && !validResponsiblePerson"
+                                       default-focus="focusOnResponsiblePerson"
+                                       is-valid="validResponsiblePerson">
+            </patient-responsible-party>
+        </div>
+    </div>
+       
+    <label class="lblError" ng-if="!isValid">{{'Please select an option' | i18n}}</label>
+        <div class="modal-footer responsibleParty-modal-footer">
+                <button class="btn btn-primary" ng-click="AddRp(patient)">
+                    {{ 'Continue' | i18n }}
+                </button>
+                <button class="btn btn-link" ng-click="cancelDiscard()">
+                    {{ 'Cancel' | i18n }}
+                </button>
+        </div>
+</div>

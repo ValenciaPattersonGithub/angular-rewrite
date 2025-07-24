@@ -1,0 +1,116 @@
+@import 'variables';
+
+:host {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+}
+
+
+::ng-deep .app-confirmation-modal-overlay-backdrop {
+    position: relative !important;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5 !important; 
+    background: #000000;
+}
+
+:host .app-confirmation-modal-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.app-modal {
+    display: grid;
+    grid-template: 40px 1fr auto / auto;
+    grid-template-areas:
+        'header''content''footer';
+    width: 500px;
+    height: 315px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    background-size: cover;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.app-modal-header {
+    grid-area: header;
+    font-size: $app-modal-header-font-size;
+    font-weight: $app-modal-header-font-weight;
+    font-family: $global-font-family;
+    border-bottom: $app-modal-header-border;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.app-modal-body {
+    grid-area: content;
+    padding: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+
+    .bodyItem {
+        margin-bottom: 10px;
+        width: 240px;
+        position: relative;
+    }
+
+    .fui-select-container {
+        width: 240px;
+    }
+
+    .bodyItem:last-child {
+        margin-bottom: 0px;
+    }
+
+
+    ::ng-deep .k-dropdown {
+        width: 100%;
+
+        >.k-dropdown-wrap {
+            width: inherit;
+            height: 25px;
+            font-family: $global-font-family;
+            font-size: 12px;
+            border-radius: 5px;
+            border-color: $border-grey;
+
+            >.k-input {
+                line-height: 24px;
+                padding: 0px 8px;
+            }
+        }
+    }
+
+
+    ::ng-deep .cdk-overlay-container {
+        z-index: 2000 !important; 
+    }
+
+}
+
+.app-modal-footer {
+    grid-area: footer;
+    padding: 15px;
+    border-top: $app-modal-header-border;
+    display: flex;
+    justify-content: flex-end;
+
+    app-button {
+        margin-left: 10px;
+    }
+}
+
+.app-modal-bold-text {
+    font-weight: bold;
+}
+
+.app-modal-text {
+    font-weight: normal;
+}

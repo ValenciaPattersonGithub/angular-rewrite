@@ -1,0 +1,19 @@
+﻿<div class="signatureCapture">
+    <div class="form-row">
+        <div class="signatureCapture__title">
+            {{formTitle | i18n}}
+        </div>       
+    </div>    
+        
+   
+    <div class="form-footer">
+        <signature sig-width="450"
+                   sig-height="100"                   
+                   enable-save="enableSave"
+                   enable-load="enableLoad"
+                   save-sig-data="saveSignature(data)"
+                   load-sig-data="loadSignature(data)"
+                   clear-sig-data="onClearSignature()">
+        </signature>
+    </div>
+</div>

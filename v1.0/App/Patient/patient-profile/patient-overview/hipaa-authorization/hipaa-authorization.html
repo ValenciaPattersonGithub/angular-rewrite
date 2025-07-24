@@ -1,0 +1,16 @@
+﻿<div style="text-align:center">
+    <div class="panel panel-hipaa-form">
+        <div class="panel-heading text-left">
+            <span class="panel-title">
+                <h4>{{ title | i18n }}</h4>
+            </span>
+        </div>
+
+        <!--animation-->
+        <div class="panel-body">
+            <div ng-if="canUpdateForm">
+                <hipaa-authorization-crud patientId="patientId"></hipaa-authorization-crud>
+            </div>
+        </div>
+    </div>
+</div>

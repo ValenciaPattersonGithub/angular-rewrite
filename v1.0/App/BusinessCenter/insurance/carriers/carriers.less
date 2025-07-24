@@ -1,0 +1,121 @@
+﻿.carrier {
+    &__container {
+        .containerStandard;
+        padding: 0;
+        max-width: 100%;
+        width: 99.5%;
+        padding: 0 20px 0 20px;
+    }
+
+    &__table {
+        table-layout: fixed;
+    }
+
+    &__header {
+        &Sort {
+            margin-left: 10px;
+        }
+
+        > tr > td {
+            vertical-align: middle;
+
+            > a {
+                .btn;
+            }
+
+            > a, > span {
+                .btn-link;
+                text-align: left;
+                width: 100%;
+                padding: 6px 12px 6px 0;
+            }
+
+            > span {
+                display: inline-block;
+                text-align: left;
+                width: 100%;
+                padding: 6px 12px 6px 0;
+            }
+
+            .active, a:focus, a:active {
+                color: black;
+            }
+        }
+
+        th {
+            font-weight: bold;
+            text-align: left;
+            width: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+
+    &__body {
+        .list-group;
+
+        > tr {
+            .list-group-item;
+            padding: 0;
+            display: table-row;
+
+            > td {
+                .truncate;
+                display: table-cell;
+                padding: 13px 20px 12px 20px;
+            }
+        }
+    }
+
+    &__options {
+        overflow: visible !important;
+
+        &Btn {
+            .pull-right;
+            .btn;
+            .btn-link;
+
+            > span {
+                font-size: 22px;
+            }
+        }
+
+        &List {
+            top: 30px;
+        }
+    }
+
+    &__searchIcon {
+        padding-top: 9px;
+        padding-left: 0px;
+        float: left;
+    }
+
+    .inactive {
+        color: @brand-deleted-transactions-color;
+    }
+
+    #selectCarrierReport {
+        .k-dropdown {
+            width: 100% !important;
+        }
+    }
+
+    .filter_checkbox {
+        padding-top: 33px;
+    }
+
+    .filter_row {
+        width: 85%;
+
+        .col-xs-1, .col-xs-4, .col-xs-5 {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+
+        .btn_add_carrier
+        {
+            width:fit-content;
+        }
+    }
+}

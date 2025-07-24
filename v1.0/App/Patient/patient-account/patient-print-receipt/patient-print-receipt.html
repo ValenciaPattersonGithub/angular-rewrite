@@ -1,0 +1,296 @@
+﻿<div class="receiptPrint">
+  <div class="receiptPrint__practice">
+    <div>
+      <span class="receiptPrint__headingBlack">{{
+        'make checks payable to:' | i18n
+      }}</span
+      ><br />
+      {{ receiptDto.Location.NameLine1 }}<br />
+      <span ng-if="receiptDto.Location.NameLine2"
+        >{{ receiptDto.Location.NameLine2 }}<br
+      /></span>
+      {{ receiptDto.Location.AddressLine1 }}
+      {{ receiptDto.Location.AddressLine2 }}<br />
+      <span ng-if="receiptDto.ResponsiblePerson.City">{{
+        receiptDto.Location.City + ','
+      }}</span>
+      {{ receiptDto.Location.State }} {{ receiptDto.Location.ZipCode }}
+    </div>
+    <div class="receiptPrint__print">
+      <button id="btnPrint" class="btn btn-default" onclick="window.print();">
+        <i class="fa fa-print"></i>{{ 'Print this receipt' | i18n }}
+      </button>
+    </div>
+  </div>
+  <div class="receiptPrint__title">
+    {{ 'Receipt' | i18n }}
+  </div>
+  <hr />
+  <div class="receiptPrint__patient">
+    <div>
+      <span class="receiptPrint__headingBlack">{{ 'addressee:' | i18n }}</span
+      ><br />
+      {{ receiptDto.ResponsiblePerson.FirstName }}
+      {{ receiptDto.ResponsiblePerson.LastName }}<br />
+      {{ receiptDto.ResponsiblePerson.AddressLine1 }}<br />
+      <span ng-if="receiptDto.ResponsiblePerson.AddressLine2"
+        >{{ receiptDto.ResponsiblePerson.AddressLine2 }}<br
+      /></span>
+      <span ng-if="receiptDto.ResponsiblePerson.City">{{
+        receiptDto.ResponsiblePerson.City + ','
+      }}</span>
+      {{ receiptDto.ResponsiblePerson.State }}
+      {{ receiptDto.ResponsiblePerson.ZipCode }}
+    </div>
+    <div class="receiptPrint__paymentOverview">
+      <div class="receiptPrint__paymentOverview--container">
+        <div class="receiptPrint__headingBlue">{{ 'receipt date' | i18n }}</div>
+        <div id="recDate">{{ receiptDto.DateModified | toDisplayDate }}</div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="receiptPrint__encounter"
+    ng-if="receiptDto.CreditTransactionDetails != undefined"
+  >
+    <div>
+      <span>{{ 'date' | i18n }}</span>
+      <span>{{ 'patient' | i18n }}</span>
+      <span>{{ 'description' | i18n }}</span>
+      <span>{{ 'amount' | i18n }}</span>
+    </div>
+    <hr />
+    <!-- This is the old code that showed each detail. Added the function to only show a single payment when applied to several services
+        <div class="receiptPrint__encounterDetail" ng-repeat="item in receiptDto.CreditTransactionDetails">
+            <span>{{item.DateEntered | toDisplayDate}}</span>
+            <span>{{item.PatientName}}</span>
+            <span>{{receiptDto.AdjustmentType}} - {{receiptDto.Description}}</span>
+            <span>{{makePositive(item.Amount) | currency}}</span>
+        </div>-->
+    <div class="receiptPrint__encounterDetail">
+      <span id="rpDate">{{ receiptDto.DateEntered | toDisplayDate }}</span>
+      <!--<span>{{receiptDto.ResponsiblePerson.FirstName}} {{receiptDto.ResponsiblePerson.LastName}}</span>-->
+      <span id="rpName">{{ receiptDto.PatientName }}</span>
+      <span class="invoice_desc" id="rpDescription"
+        >{{ receiptDto.AdjustmentType }} - {{ receiptDto.Description }}</span
+      >
+      <span id="rpAmount">{{
+        makePositive(receiptDto.Amount) | currency
+      }}</span>
+    </div>
+    <div
+      ng-if="receiptDto.IsCreditCardPayment && receiptDto.IsLocationPaymentGatewayEnabled"
+    >
+      <div class="receiptPrint__receiptDetails col-xs-12">
+        <div class="col-xs-4"></div>
+        <div class="receiptPrint__receiptContainer col-xs-8">
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'Entry Legend' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptEntryLegend
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'Entry Method' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptEntryMethod
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'Approval Code' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptApprovalCode
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'AC' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptApplicationCryptogram
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'ATC' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptApplicationTransactionCounter
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'AID' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptApplicationIdentifier
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'AID NAME' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptApplicationPreferredName
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'TVR' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptTerminalVerificationResults
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'TSI' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptTransactionStatusInformation
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'Resp CD' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptAuthorizationResponseCode
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'TRN REF' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptTransactionReferenceNumber
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">{{
+              'VAL CODE' | i18n
+            }}</span>
+            <span class="receiptPrint__receiptItemValue col-xs-6">{{
+              receiptDto.ReceiptValidationCode
+            }}</span>
+          </div>
+          <br />
+          <div class="row col-xs-12">
+            <span class="receiptPrint__receiptItemLabel">&nbsp;</span>
+          </div>
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="receiptPrint__encounter"
+    ng-if="receiptDto.CreditTransactionDetails == undefined"
+  >
+    <div>
+      <span>{{ 'date' | i18n }}</span>
+      <span>{{ 'patient' | i18n }}</span>
+      <span>{{ 'description' | i18n }}</span>
+      <span>{{ 'amount' | i18n }}</span>
+    </div>
+    <hr />
+    <div class="receiptPrint__encounterDetail">
+      <span>{{ receiptDto.DateEntered | toDisplayDate }}</span>
+      <span
+        >{{ receiptDto.PatientInfo.FirstName }}
+        {{ receiptDto.PatientInfo.LastName }}</span
+      >
+      <span
+        >{{ receiptDto.AdjustmentType }} - {{ receiptDto.Description }}</span
+      >
+      <span>{{ receiptDto.Amount | currency }}</span>
+    </div>
+  </div>
+  <hr />
+  <br />
+  <div class="printReceipt">
+      <div class="printReceipt__section printReceipt__firstChildWidth printReceipt__removeBorder"></div>
+    <div class="printReceipt__section">
+      <div class="box-info">
+        <span id="lblTotalBalance" class="font-weight-bold printReceipt__totalValue">{{
+          receiptDto.TotalBalance | currency
+        }}</span>
+      </div>
+      <div class="box-info">
+        <span id="totalBalance" class="printReceipt__totalLabel">{{
+          'Balance' | i18n
+        }}</span>
+      </div>
+    </div>
+    <div class="printReceipt__section printReceipt__boxWidth">
+      <div class="box-info">
+        <span id="lblTotalEstIns" class="font-weight-bold printReceipt__totalValue">{{
+          receiptDto.TotalInsurance | currency
+        }}</span>
+      </div>
+      <div class="box-info">
+        <span id="totalEstIns" class="printReceipt__totalLabel">{{
+          'Estimated Ins.' | i18n
+        }}</span>
+      </div>
+    </div>
+    <div class="printReceipt__section printReceipt__boxWidth">
+      <div class="box-info">
+        <span id="lblTotalAdjEst" class="font-weight-bold printReceipt__totalValue">{{
+          receiptDto.TotalAdjustedEstimate | currency
+        }}</span>
+      </div>
+      <div class="box-info">
+        <span id="totalAdjEst" class="printReceipt__totalLabel">{{
+          'Estimated Ins. Adj.' | i18n
+        }}</span>
+      </div>
+    </div>
+    <div class="printReceipt__section printReceipt__boxWidth printReceipt__removeBorder">
+      <div class="box-info">
+        <span id="lblTotalPatPortion" class="font-weight-bold printReceipt__totalValue">{{
+          receiptDto.TotalPatientPortion | currency
+        }}</span>
+      </div>
+      <div class="box-info">
+        <span id="totalPatPortion" class="printReceipt__totalLabel">{{
+          'Due Now' | i18n
+        }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="receiptPrint__footer">
+    <div class="receiptPrint__ada">
+      <img src="Images/logo-ada.png" />
+      <div>
+        {{
+          'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT).'
+            | i18n
+        }}
+        <br />
+        {{
+          'Copyright &copy; American Dental Association (ADA). All rights reserved.'
+            | i18n
+        }}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+﻿<div class="container" ng-class="{'noteTemplate' : formType === 'note'}">
+    <div class="row col-md-12">
+        <div class="col-md-4 form-inline margin-top4">
+            <span id="sectionToggle{{sectionIndex}}" class="cursor-pointer" ng-click="toggleAccordion()">
+                <label id="sectionTitle{{sectionIndex}}" for="{{'inpSectionTitle_'+ sectionIndex}}">{{ 'Section Title' | i18n }}:*</label>
+            </span>
+
+            <input id="{{'inpSectionTitle_'+ sectionIndex}}" ng-model="section.Title" class="form-control" type="text" name="sectionTitle" maxlength="256">
+        </div>
+        <div id="additemMenu{{sectionIndex}}" class="btn-group col-md-1 margin-top4">
+            <div id="sectionItemMenu{{sectionIndex}}" class="noteTemplate__sectionItemMenu" ng-class="{'dropdown-menu-custom-settings' : formType === 'mhf'}">
+                    <div class="container">
+                        <div class="row">
+                            <ng-switch on="formType">
+                                <span ng-switch-when="mhf">
+                                    <button id="btnAddItem{{sectionIndex}}" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        {{ 'Add {0}' | i18n:['Item'] }} <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu noteTemplate__sectionItemMenu">
+                                        <li>
+                                            <button id="btnMultipleChoice{{sectionIndex}}" class="col-md-1 dropdownmenu-btn btn btn-default" ng-click="addSectionItem(sectionIndex,3);openAccordion();"><i class="glyphicon glyphicon-th-large"></i><br />{{ 'Multiple Choice' | i18n }}</button>
+                                            <button id="btnYesNoTrueFalse{{sectionIndex}}" class="col-md-1 dropdownmenu-btn btn btn-default" ng-click="addSectionItem(sectionIndex,2);openAccordion();"><i class="glyphicon glyphicon-th-large"></i><br />{{ 'Yes/No True/False' | i18n }}</button>
+                                            <button id="btnCommentsEssaybox{{sectionIndex}}" class="col-md-1 dropdownmenu-btn btn btn-default" ng-click="addSectionItem(sectionIndex,7);openAccordion();"><i class="glyphicon glyphicon-th-large"></i><br />{{ 'Comments /Essay box' | i18n }} </button>
+                                            <button id="btnDemographicQuestion{{sectionIndex}}" class="col-md-1 dropdownmenu-btn btn btn-default" ng-click="addSectionItem(sectionIndex,1);openAccordion();"><i class="glyphicon glyphicon-th-large"></i><br />{{ 'Demographic Question' | i18n }}</button>
+                                            <button id="btnEmergencyContact{{sectionIndex}}" class="col-md-1 dropdownmenu-btn btn btn-default" ng-click="addSectionItem(sectionIndex,6);openAccordion();"><i class="glyphicon glyphicon-th-large"></i><br />{{ 'Emergency Contact' | i18n }}</button>
+                                            <button id="btnDateStampQuestion{{sectionIndex}}" class="col-md-1 dropdownmenu-btn btn btn-default" ng-click="addSectionItem(sectionIndex,5);openAccordion();"><i class="glyphicon glyphicon-th-large"></i><br />{{ 'Date of Completion' | i18n }}</button>
+                                            <button id="btnSignatureBox{{sectionIndex}}" class="col-md-1 dropdownmenu-btn btn btn-default" ng-click="addSectionItem(sectionIndex,4);openAccordion();"> <i class="glyphicon glyphicon-th-large"></i><br />{{ 'Signature Box' | i18n }}</button>
+                                       </li>
+                                    </ul> 
+                                </span>
+                                <span ng-switch-when="note">
+                                   <soar-select-list id="addPrompt"
+                                                      name="addPrompt"
+                                                      class=""
+                                                      text-field="Text"
+                                                      value-field="Value"
+                                                      placeholder="{{ 'Add Prompt' | i18n }}"
+                                                      option-list="sections"
+                                                      ng-model="sectionSelected"
+                                                      sb-change="addPromptChanged">
+                                    </soar-select-list>
+                                </span>
+                            </ng-switch>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="col-md-5 pull-right vertical-center">
+            <i id="btnPreview{{sectionIndex}}" class="fa fa-eye fa-2x noteTemplate__icon" uib-tooltip="Preview" ng-click="previewSection()"></i>
+            <i id="btnUndo{{sectionIndex}}" ng-click="undo()" ng-class="{'disabled': !canUndo}" class="fa fa-undo fa-2x noteTemplate__icon" uib-tooltip="Undo"></i>
+            <i id="btnRedo{{sectionIndex}}" ng-click="redo()" ng-class="{'disabled': !canRedo}" ng-hide="formType === 'note'" class="btn btn-default"></i>
+            <i id="btnMoveUp{{sectionIndex}}" class="fa fa-arrow-up fa-2x noteTemplate__icon" uib-tooltip="Move Up" ng-class="{'disabled': $first}" ng-click="moveSectionUp(sectionIndex)"></i>
+            <i id="btnMoveDown{{sectionIndex}}" class="fa fa-arrow-down fa-2x noteTemplate__icon" uib-tooltip="Move Down" ng-class="{'disabled': $last}" ng-click="moveSectionDown(sectionIndex)"></i>
+            <i id="btnCopy{{sectionIndex}}" class="far fa-files fa-2x noteTemplate__icon" uib-tooltip="Copy" ng-hide="formType === 'note'" ng-click="copySection(sectionIndex)"></i>
+            <i id="btnDelete{{sectionIndex}}" class="fa fas fa-trash-alt fa-2x noteTemplate__icon" uib-tooltip="Delete" ng-click="confirmDeleteSection(sectionIndex)"></i>
+        </div>
+    </div>
+</div>

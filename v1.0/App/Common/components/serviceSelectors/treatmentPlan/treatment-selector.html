@@ -1,0 +1,347 @@
+﻿<div class="slidePanelLeft" ng-if="flyout && serviceFilter === 'encounter'">
+<div class="slidePanelLeft__filteringMask" ng-if="filtering === true"></div>
+    <div>
+        <div class="slidePanelLeft__header">
+            <div class="slidePanelLeft__title">
+                <label class="control-label font-24">{{::('Add Services from Treatment Plans to '|i18n)}}{{::displayMessage}}</label>
+                <div class="slidePanelLeft__header__btns">
+                    <button id="btnAddServices" class="btn btn-primary" ng-click="onSelectedCodes()" ng-disabled="checkedRows.length<1">+ {{ ::('Add Services' | i18n) }}</button>
+                    <input id="showTreatmentPlanSelector" style="margin-left: 58%;" type="checkbox" ng-model="allowInactive" ng-change="setStatus()">   Show Inactive
+                </div>
+            </div>
+            <div class="slidePanelLeft__close">
+                <button id="sp-close" class="btn btn-link" ng-click="hideFilters()"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="slidePanelLeft__body">
+            <kendo-grid id='treatmentKendoGrid' options="TxPlanServiceColumns" k-height="270" data-source="TxPlanDataSource" ng-class="{'disabled': !patientLocationMatch}"
+                        uib-tooltip-template="'locationErrorTooltip.html'" tooltip-class="tooltipWidth" tooltip-append-to-body="true" tooltip-placement="top" tooltip-enable="!patientLocationMatch"></kendo-grid>
+        </div>
+    </div>
+</div>
+
+<!-- This section added for new encounter cart functionality.  
+    After current encounter refactor is remove, we can 
+    remove the section above for 'encounter' -->
+<div class="slidePanelLeft" ng-if="flyout && serviceFilter === 'encounter-refactored'">
+    <div class="slidePanelLeft__filteringMask" ng-if="filtering === true"></div>
+        <div>
+            <div class="slidePanelLeft__header">
+                <div class="slidePanelLeft__title">
+                    <label class="control-label font-24">{{::('Add Services from Treatment Plans to '|i18n)}}{{::displayMessage}}</label>
+                    <div class="slidePanelLeft__header__btns">
+                        <button id="btnAddServices" class="btn btn-primary" ng-click="onSelectedCodes()" ng-disabled="checkedRows.length<1">+ {{ ::('Add Services' | i18n) }}</button>
+                        <input id="showTreatmentPlanSelector" style="margin-left: 58%;" type="checkbox" ng-model="allowInactive" ng-change="setStatus()">   Show Inactive
+                    </div>
+                </div>
+                <div class="slidePanelLeft__close">
+                    <button id="sp-close" class="btn btn-link" ng-click="hideFilters()"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="slidePanelLeft__body">
+                <div class="row treatmentSelectorEncounter__body padding-10">
+                    <div class="treatmentSelectorEncounter__row" ng-repeat="treatmentPlan in treatmentPlans | orderBy:'-TreatmentPlanHeader.CreatedDate'">
+                        <div class="col-xs-12 treatmentSelectorEncounter__bodyHeader">
+                            <button class="btn btn-link" id="btnToggleTreatmentPlan_{{$index}}" ng-click="togglePlan(treatmentPlan);">
+                                <i ng-class="treatmentPlan.$$Collapsed === true ? 'fa fa-caret-right' : 'fa fa-caret-down'" ></i>
+                            </button>
+                            <button id="btnQuickAddTreatmentPlan_{{$index}}" class='btn btn-link ng-binding ' 
+                                ng-disabled='treatmentPlan.$$disableQuickAdd'
+                                ng-click='selectServicesOnPlan(treatmentPlan, true)'>
+                                +{{::('quick add'|i18n)}}
+                            </button>
+        
+                            <input id="btnSelectTreatmentPlan_{{$index}}" type="checkbox" ng-model="treatmentPlan.$$Selected"
+                                   ng-disabled="treatmentPlan.$$disableQuickAdd" ng-change="selectServicesOnPlan(treatmentPlan, false)">
+        
+                            <span class="margin-left-15"><b>{{treatmentPlan.TreatmentPlanHeader.TreatmentPlanName}}</b></span>
+                        </div>
+        
+                        <div ng-if="treatmentPlan.$$Collapsed === false" >
+                            <div ng-repeat="(key, value) in treatmentPlan.TreatmentPlanServices | orderBy: ['TreatmentPlanServiceHeader.TreatmentPlanGroupNumber','TreatmentPlanServiceHeader.Priority'] | groupBy: '[TreatmentPlanServiceHeader.TreatmentPlanId, TreatmentPlanServiceHeader.TreatmentPlanGroupNumber]'">
+                                <div class="col-xs-12 treatmentSelectorEncounter__bodyHeader padding-left-35">
+                                    <button class="btn btn-link" id="btnToggleTreatmentPlan_{{$index}}" ng-click="hideGroup[key] = !hideGroup[key]">
+                                        <i ng-class="hideGroup[key] === true ? 'fa fa-caret-right' : 'fa fa-caret-down'" ></i>
+                                    </button>                            
+                                    <button id="btnQuickAddTreatmentPlanStage_{{$index}}" class='btn btn-link ng-binding treatmentSelectorEncounter__stageHeader' 
+                                        ng-disabled='stageIsDisabled(value)|| value[0].$$stageIsDisabled' ng-click='selectServicesOnStage(key, value, true)'>
+                                        +{{::('quick add'|i18n)}}
+                                    </button>
+                                    <input id="btnSelectTreatmentPlanStage_{{$index}}" type="checkbox" ng-model="group[key]"
+                                           ng-disabled="stageIsDisabled(value)|| value[0].$$stageIsDisabled" ng-change="selectServicesOnStage(key, value, false)">
+        
+                                    <span class="margin-left-15"><b>{{::('Stage'|i18n)}}#:{{value[0].TreatmentPlanServiceHeader.TreatmentPlanGroupNumber}}</b></span>
+                                </div>
+                                <div class="treatmentSelectorEncounter__grid" ng-hide="hideGroup[key]"  ng-class="{'disabled': !patientLocationMatch}">
+                                    <div class="fuseGrid container">
+                                        <!--column headers-->
+                                        <div class="row header">
+                                            <div id="gridHeaderFillerOne" class="col-sm-1 cell"></div>
+                                                    
+                                            <div id="gridHeaderQuickAdd" class="col-sm-1 cell"></div>
+        
+                                            <div id="gridHeaderCheckBox" class="col-sm-1 cell">
+                                            </div>
+                                            <div id="gridHeaderServiceCode" class="col-sm-1 cell">
+                                                {{::('Service Code'|i18n)}}
+                                            </div>
+                                            <div id="gridHeaderCdtCode" class="col-sm-1 cell">
+                                                {{::('CDT Code'|i18n)}}
+                                            </div>
+                                            <div id="gridHeaderDescription" class="col-sm-3 cell">
+                                                {{::('Description'|i18n)}}
+                                            </div>
+                                            <div id="gridHeaderTooth" class="col-sm-1 cell">
+                                                {{::('Tooth'|i18n)}}
+                                            </div>
+                                            <div id="gridHeaderTooth" class="col-sm-1 cell">
+                                                {{::('Area'|i18n)}}
+                                            </div>
+                                            <div id="gridHeaderScheduled" class="col-sm-1 cell">
+                                                {{::('Provider'|i18n)}}
+                                            </div>
+                                            <div id="gridHeaderFee" class="col-sm-1 cell">
+                                                {{::('Fee'|i18n)}}
+                                            </div>
+                                            
+        
+                                        </div>
+        
+                                        <div class="row body" ng-repeat="tps in value | filter:!allowInactive">
+                                            <div id="gridRowFillerOne" class="col-sm-1 cell"></div>
+                                                   
+                                            <div id="gridRowCheckbox_{{$index}}" class="col-sm-1 cell">
+                                                <button id="btnQuickAddService_{{$index}}" class='btn btn-link ng-binding' 
+                                                    ng-disabled='tps.$$disableAddService'
+                                                    ng-click="quickAdd(tps)">+ {{::('quick add'|i18n)}}      
+                                                </button>
+                                            </div>                                    
+                                            <div id="gridRowCheckbox_{{$index}}" class="col-sm-1 cell">
+        
+                                                <input type="checkbox" ng-model="tps.ServiceTransaction.$$Selected"
+                                                       id="serviceCheckBox" ng-disabled="tps.$$disableAddService" ng-change="checkSelected()">                                        
+        
+                                                <i ng-if="!tps.ServiceTransaction.serviceIsActive"
+                                                   uib-tooltip="{{::tps.ServiceTransaction.serviceInactivationMessage }}"
+                                                   tooltip-append-to-body="true" tooltip-placement="top"
+                                                   class="fa fa-exclamation-triangle inactive-service-warning"></i>
+        
+                                                <i class='far fa-calendar-check scheduledicon'
+                                                   uib-tooltip="{{tps.AppointmentInfo.tooltipMessage }}"
+                                                   tooltip-append-to-body="true" tooltip-placement="top"
+                                                   ng-if='tps.ServiceTransaction.AppointmentId'></i>
+        
+                                            </div>                                    
+                                            <div id="gridRowServiceCode_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{::tps.ServiceTransaction.showCode }}"
+                                                 tooltip-append-to-body="true" tooltip-placement="top-left">
+                                                {{::tps.ServiceTransaction.showCode }}
+                                            </div>
+                                            <div id="gridRowCdtCode_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{::tps.ServiceTransaction.CdtCode }}"
+                                                 tooltip-append-to-body="true" tooltip-placement="top-left">
+                                                {{::tps.ServiceTransaction.CdtCode }}
+                                            </div>
+                                            <div id="gridRowDescription_{{$index}}" class="col-sm-3 cell" uib-tooltip="{{::tps.ServiceTransaction.showDisc }}"
+                                                 tooltip-append-to-body="true" tooltip-placement="top-left">
+                                                {{::tps.ServiceTransaction.showDisc }}
+                                            </div>
+                                            <div id="gridRowTooth_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.ServiceTransaction.Tooth }}"
+                                                 tooltip-append-to-body="true" tooltip-placement="top-left">
+                                                {{ ::tps.ServiceTransaction.Tooth }}
+                                            </div>
+                                            <div id="gridRowSurface_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.ServiceTransaction.$$RootOrSurface }}"
+                                                 tooltip-append-to-body="true" tooltip-placement="top-left">
+                                                {{ ::tps.ServiceTransaction.$$RootOrSurface }}
+                                            </div>
+                                            <div id="gridRowProviderName_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.ServiceTransaction.providerName }}"
+                                                 tooltip-append-to-body="true" tooltip-placement="top-left">
+                                                {{ ::tps.ServiceTransaction.providerName }}
+                                            </div>
+                                            <div id="gridRowFee_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{::tps.ServiceTransaction.Amount }}"
+                                                 tooltip-append-to-body="true" tooltip-placement="top-left">
+                                                {{::tps.ServiceTransaction.Amount | currency}}
+                                            </div>                                    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- selector for appointments -->
+<div class="treatmentSelectorAppointment" ng-if="flyout && serviceFilter == 'appointment'">
+    <div class="treatmentSelectorAppointment__filteringMask" ng-if="filtering === true"></div>
+    <div>
+        <div class="treatmentSelectorAppointment__header">
+            <div class="treatmentSelectorAppointment__title">
+                <label class="control-label font-24">{{::('Add Services from Treatment Plans to '|i18n)}}{{::displayMessage}}</label>
+                <button id="sp-close" class="btn btn-link closebtn" ng-click="hideFilters()"><i class="fa fa-times"></i></button>
+                <div class="treatmentSelectorAppointment__header__btns">
+                    <button id="btnAddServicesToAppointments" class="btn btn-primary" ng-click="onSelectedCodes()" ng-disabled="checkedRows.length < 1">+
+                        Add Services</button>
+                    <input id="showInactiveServicesForAppointments" style="margin-left: 58%;" type="checkbox" ng-model="allowInactive"
+                        ng-change="setStatus()"> Show Inactive
+                </div>
+            </div>
+        </div>
+
+        <div class="row treatmentSelectorAppointment__body padding-10">
+            <div class="" ng-repeat="treatmentPlan in treatmentPlans | orderBy:'-TreatmentPlanHeader.CreatedDate'">
+                <div class="col-xs-12 treatmentSelectorAppointment__bodyHeader">
+                    <button class="btn btn-link" id="btnToggleTreatmentPlan_{{$index}}" ng-click="togglePlan(treatmentPlan);">
+                        <i ng-class="treatmentPlan.$$Collapsed === true ? 'fa fa-caret-right' : 'fa fa-caret-down'" ></i>
+                    </button>
+                    <button id="btnQuickAddTreatmentPlan_{{$index}}" class='btn btn-link ng-binding ' 
+                        ng-disabled='quickAddDisabled  || treatmentPlan.$$disableQuickAdd || treatmentPlan.ServiceTransaction.ServiceTransctionStatusId ==3'
+                        ng-click='selectServicesOnPlan(treatmentPlan, true)'>
+                        +{{::('quick add'|i18n)}}
+                    </button>
+
+                    <input id="btnSelectTreatmentPlan_{{$index}}" type="checkbox" ng-model="treatmentPlan.$$Selected"
+                           ng-disabled="treatmentPlan.$$disableQuickAdd" ng-change="selectServicesOnPlan(treatmentPlan, false)">
+
+                    <span class="margin-left-15"><b>{{treatmentPlan.TreatmentPlanHeader.TreatmentPlanName}}</b></span>
+                </div>
+
+                <div ng-if="treatmentPlan.$$Collapsed === false" >
+                    <div ng-repeat="(key, value) in treatmentPlan.TreatmentPlanServices | orderBy: ['TreatmentPlanServiceHeader.TreatmentPlanGroupNumber','TreatmentPlanServiceHeader.Priority'] | groupBy: '[TreatmentPlanServiceHeader.TreatmentPlanId, TreatmentPlanServiceHeader.TreatmentPlanGroupNumber]'">
+                        <div class="col-xs-12 treatmentSelectorAppointment__bodyHeader padding-left-35">
+                            <button class="btn btn-link" id="btnToggleTreatmentPlan_{{$index}}" ng-click="hideGroup[key] = !hideGroup[key]">
+                                <i ng-class="hideGroup[key] === true ? 'fa fa-caret-right' : 'fa fa-caret-down'" ></i>
+                            </button>                            
+                            <button id="btnQuickAddTreatmentPlanStage_{{$index}}" class='btn btn-link ng-binding treatmentSelectorAppointment__stageHeader' 
+                                ng-disabled=' value[0].$$stageIsDisabled || quickAddDisabled ' ng-click='selectServicesOnStage(key, value, true)'>
+                                +{{::('quick add'|i18n)}}
+                            </button>
+                            <input id="btnSelectTreatmentPlanStage_{{$index}}" type="checkbox" ng-model="group[key]"
+                                   ng-disabled="::stageIsDisabled(value)" ng-change="selectServicesOnStage(key, value, false)">
+
+                            <span class="margin-left-15"><b>{{::('Stage'|i18n)}}#:{{value[0].TreatmentPlanServiceHeader.TreatmentPlanGroupNumber}}</b></span>
+                        </div>
+                        <div class="treatmentSelectorAppointment__grid" ng-hide="hideGroup[key]" >
+                            <div class="fuseGrid container">
+                                <!--column headers-->
+                                <div class="row header">
+                                    <div id="gridHeaderFillerOne" class="col-sm-1 cell"></div>
+                                            
+                                    <div id="gridHeaderQuickAdd" class="col-sm-1 cell"></div>
+
+                                    <div id="gridHeaderCheckBox" class="col-sm-1 cell">
+                                    </div>
+                                    <div id="gridHeaderServiceCode" class="col-sm-1 cell">
+                                        {{::('Service Code'|i18n)}}
+                                    </div>
+                                    <div id="gridHeaderCdtCode" class="col-sm-1 cell">
+                                        {{::('CDT Code'|i18n)}}
+                                    </div>
+                                    <div id="gridHeaderDescription" class="col-sm-3 cell">
+                                        {{::('Description'|i18n)}}
+                                    </div>
+                                    <div id="gridHeaderTooth" class="col-sm-1 cell">
+                                        {{::('Tooth'|i18n)}}
+                                    </div>
+                                    <div id="gridHeaderTooth" class="col-sm-1 cell">
+                                        {{::('Area'|i18n)}}
+                                    </div>
+                                    <div id="gridHeaderScheduled" class="col-sm-1 cell">
+                                        {{::('Provider'|i18n)}}
+                                    </div>
+                                    <div id="gridHeaderFee" class="col-sm-1 cell">
+                                        {{::('Fee'|i18n)}}
+                                    </div>
+                                    
+
+                                </div>
+
+                                <div class="row body" ng-repeat="tps in value | filter:!allowInactive">
+                                    <div id="gridRowFillerOne" class="col-sm-1 cell"></div>
+                                           
+                                    <div id="gridRowCheckbox_{{$index}}" class="col-sm-1 cell">
+                                        <button id="btnQuickAddService_{{$index}}" class='btn btn-link ng-binding' 
+                                            ng-disabled='quickAddDisabled || tps.$$disableAddService || tps.ServiceTransaction.ServiceTransactionStatusId == 3'
+                                            ng-click="quickAdd(tps)">+ {{::('quick add'|i18n)}}      
+                                        </button>
+                                    </div>                                    
+                                    <div id="gridRowCheckbox_{{$index}}" class="col-sm-1 cell">
+
+                                        <input type="checkbox" ng-model="tps.ServiceTransaction.$$Selected"
+                                               id="serviceCheckBox" ng-disabled="tps.$$disableAddService || tps.ServiceTransaction.ServiceTransactionStatusId == 3 " ng-change="checkSelected()">                                        
+
+                                        <i ng-if="!tps.ServiceTransaction.serviceIsActive"
+                                           uib-tooltip="{{::tps.ServiceTransaction.serviceInactivationMessage }}"
+                                           tooltip-append-to-body="true" tooltip-placement="top"
+                                           class="fa fa-exclamation-triangle inactive-service-warning"></i>
+
+                                        <i class='far fa-calendar-check scheduledicon'
+                                           uib-tooltip="{{tps.AppointmentInfo.tooltipMessage }}"
+                                           tooltip-append-to-body="true" tooltip-placement="top"
+                                           ng-if='tps.ServiceTransaction.AppointmentId'></i>
+
+                                    </div>                                    
+                                    <div id="gridRowServiceCode_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{::tps.ServiceTransaction.showCode }}"
+                                         tooltip-append-to-body="true" tooltip-placement="top-left">
+                                        {{::tps.ServiceTransaction.showCode }}
+                                    </div>
+                                    <div id="gridRowCdtCode_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{::tps.ServiceTransaction.CdtCode }}"
+                                         tooltip-append-to-body="true" tooltip-placement="top-left">
+                                        {{::tps.ServiceTransaction.CdtCode }}
+                                    </div>
+                                    <div id="gridRowDescription_{{$index}}" class="col-sm-3 cell" uib-tooltip="{{::tps.ServiceTransaction.showDisc }}"
+                                         tooltip-append-to-body="true" tooltip-placement="top-left">
+                                        {{::tps.ServiceTransaction.showDisc }}
+                                    </div>
+                                    <div id="gridRowTooth_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.ServiceTransaction.Tooth }}"
+                                         tooltip-append-to-body="true" tooltip-placement="top-left">
+                                        {{ ::tps.ServiceTransaction.Tooth }}
+                                    </div>
+                                    <div id="gridRowSurface_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.ServiceTransaction.$$RootOrSurface }}"
+                                         tooltip-append-to-body="true" tooltip-placement="top-left">
+                                        {{ ::tps.ServiceTransaction.$$RootOrSurface }}
+                                    </div>
+                                    <div id="gridRowProviderName_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.ServiceTransaction.providerName }}"
+                                         tooltip-append-to-body="true" tooltip-placement="top-left">
+                                        {{ ::tps.ServiceTransaction.providerName }}
+                                    </div>
+                                    <div id="gridRowFee_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{::tps.ServiceTransaction.Amount }}"
+                                         tooltip-append-to-body="true" tooltip-placement="top-left">
+                                        {{::tps.ServiceTransaction.Amount | currency}}
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="treatmentSelectorRunning" ng-if="!flyout">
+    <label class="control-label font-24">Add Services from Treatment Plans to {{::displayMessage}}</label>
+    <div>
+        <button id="btnAddServices" class="btn btn-primary" ng-click="onSelectedCodes()" ng-disabled="checkedRows.length<1">+ Add Services</button>
+        <input id="showTreatmentPlanSelector" style="margin-left: 58%;" type="checkbox" ng-model="allowInactive" ng-change="setStatus()">   Show Inactive
+    </div>
+    <kendo-grid id='treatmentKendoGrid' options="TxPlanServiceColumnsSmall" k-height="300" data-source="TxPlanDataSource" ng-class="{'disabled': !patientLocationMatch}"
+                uib-tooltip-template="'locationErrorTooltip.html'" tooltip-class="tooltipWidth" tooltip-append-to-body="true" tooltip-placement="top" tooltip-enable="!patientLocationMatch"></kendo-grid>
+</div>
+
+<!--tooltip template - Location Error -->
+<script type="text/ng-template" id="locationErrorTooltip.html">
+    <div class="locationErrorMessage">
+        <p>
+            {{::('Your current location does not match this patient\'s primary or alternate locations.' | i18n) }}
+            <br />{{::('Please update your current location to the patient\'s primary or any alternate locations to complete this action.' | i18n) }}
+        </p>
+    </div>
+</script>
+<!--schedule icon tooltip-->
+<script type="text/ng-template" id="txScheduleTooltip.html">
+    <div class="scheduleIconMessage">
+        {{dataItem.AppointmentInfo.time | date : 'MM/dd/yyyy @ h:mm a'}} {{dataItem.AppointmentInfo.timezone}}
+        <br />{{dataItem.AppointmentInfo.locationname}}
+    </div>
+</script>

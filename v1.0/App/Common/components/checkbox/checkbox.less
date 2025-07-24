@@ -1,0 +1,99 @@
+﻿// #region checkbox
+.utilCheckbox {
+    display: inline-block;
+
+    &__ctrl {
+        display: inline-block;
+        position: relative;
+        max-width: 100%;
+        line-height: 1;
+        padding: @brand-padding_sm 0;
+        margin: 0;
+        border: none;
+        background-color: transparent;
+        line-height: 1;
+
+        &:focus {
+            outline: thin dotted;
+        }
+
+		&:disabled,
+		&.disabled,
+		&[disabled],
+		fieldset[disabled] & {
+			.opacity(.65);
+		}
+    }
+
+    &__label {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: left;
+        color: @brand-form_label--color;
+        
+
+
+        &:before {
+            display: inline-block;
+            font-family: 'Font Awesome 5 Pro';
+            content: '\f0c8';
+            font-size: 1.3em;
+            /*margin-right: 2.5px;*/ /* there is no matching margin once active. should be removed? */
+        }
+
+        &.active {
+            &:before {
+                content: '\f14a';
+                margin-right: 0;
+                &:focus {
+                    //outline: none;
+                 }
+            }
+
+        }
+    }
+}
+
+.isAccountFilter {
+    display: block;
+}
+
+/*
+ * TP: TO BE REMOVED LATER
+ */
+.checkbox-directive-label {
+    color: @brand-form_label--color;
+    width:100%;
+    text-align:left;
+}
+
+.checkbox-directive-icon {
+    width: 28px;
+    margin-right: 5px;
+    text-align: left;
+    font-size: 26px;
+    color: @brand-form_toggle--color;
+    float: left;
+    margin-top: -1px;
+}
+
+.checkbox-directive {
+    font-weight: normal;
+    display: flex;
+    flex-direction: row;
+    
+    > button {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; 
+        padding: 0;
+        margin: 0;
+        border: none;
+        background-color: transparent;
+       
+    }
+}
+// #endregion          

@@ -1,0 +1,54 @@
+﻿<ng-form name="questionEmergencyContact">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="container-fluid">
+                <div class="row" id="questionEmergencyContactName{{sectionIndex}}_{{sectionItemIndex}}">
+                    {{ 'Emergency Contact Name' |i18n }}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemEmergencyContact.IsRequiredContact" id="questionEmergencyContactNameCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                        <label id="lblQuestionEmergencyContactName{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionEmergencyContactNameCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="container-fluid">
+                <div class="row" id="questionEmergencyContactPhone{{sectionIndex}}_{{sectionItemIndex}}">
+                    {{ 'Emergency Contact Phone' |i18n }}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemEmergencyContact.IsRequiredPhone" id="questionEmergencyContactPhoneCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                        <label id="lblQuestionEmergencyContactPhone{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionEmergencyContactPhoneCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="container-fluid">
+                <div class="row" id="questionEmergencyContactRelationship{{sectionIndex}}_{{sectionItemIndex}}">
+                    {{ 'Emergency Contact Relationship' |i18n }}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemEmergencyContact.IsRequiredContactRelationship" id="requiredquestionEmergencyContactRelationshipCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                        <label id="lblQuestionEmergencyContactRelationship{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="requiredquestionEmergencyContactRelationshipCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</ng-form>

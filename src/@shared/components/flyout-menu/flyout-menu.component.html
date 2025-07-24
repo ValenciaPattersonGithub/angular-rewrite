@@ -1,0 +1,37 @@
+<div class="fly-out-menu"
+    [ngClass]="{'fly-out-menu':menuType==0, 'subfly-out-menu':menuType==1}"
+    style="top:40px;">
+    <div class="fly-out-menu-menu-container">
+        <div class="fly-out-menu-content-container">
+            <p class="headerText">{{menuHeader}}</p>
+            <div class="vertical-menu">
+                <ng-container *ngFor="let menuItem of flyOutMenuItems; index as i">
+                    <div *ngIf="!menuItem.FeatureFlag || (menuItem.FeatureFlag | featureFlagEnabled | async) === true">
+                        <p class="menuItem favorite-link"
+                            [ngClass]="{'disabled': menuItem.Disabled, 'favorite-link': menuItem.AddSeparator != undefined && menuItem.AddSeparator == 'Y' }"
+                            *ngIf="!menuItem.Disabled"
+                            (mouseover)="showSubMenu(menuItem)"
+                            (click)="menuClicked(menuItem)"
+                            id="{{menuHeader}}menuItem{{i}}">
+                            {{ menuType==0 ? menuItem.Text : menuItem.Plural}}
+                        </p>
+                        <svg-icon name="downArrowIcon"
+                            iconHeight="20px"
+                            iconWidth="20px"
+                            class="flyOutRightIcon"
+                            *ngIf="menuItem && !menuItem.Disabled && menuItem.SubMenuItems"></svg-icon>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+<flyout-menu *ngIf="showSubFlyOutMenu"
+    id="subFlyOutMenu"
+    class="flyoutmenu"
+    [menuHeader]="subMenuHeader"
+    [menuType]="'1'"
+    [flyOutMenuItems]="subMenuItems"
+    (mouseleave)="showSubFlyOutMenu=false"
+    (menuClick)="subMenuClicked($event)">
+</flyout-menu>

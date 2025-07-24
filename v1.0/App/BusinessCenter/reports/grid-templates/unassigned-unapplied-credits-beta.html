@@ -1,0 +1,45 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.ResponsiblePersonDetails.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid pull-left avoidPageBreak" ng-if="data.ResponsiblePersonDetails.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-12 cell" colspan="9">{{ 'Responsible Person' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="person in data.ResponsiblePersonDetails" ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'">
+                <tr>
+                    <td class="col-sm-8 cell" colspan="6">{{ person.ResponsiblePerson }}</td>
+                    <td class="col-sm-4 cell text-right" colspan="3">{{'Account Balance:' | i18n}} {{person.AccountBalance | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell" colspan="9"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label"></td>
+                    <td class="col-sm-1 cell reportGrid__label">{{ 'Date' | i18n }}</td>
+                    <td class="col-sm-2 cell reportGrid__label"> {{ 'Patient' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label"> {{ 'Provider' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label"> {{ 'Location' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label"> {{ 'Type' | i18n }}</td>
+                    <td class="col-sm-2 cell reportGrid__label"> {{ 'Description' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label text-right"> {{ 'Transaction Amount' | i18n }}</td>
+                    <td class="col-sm-1 cell reportGrid__label text-right"> {{ 'Unapplied Amount' | i18n }}</td>
+                </tr>
+                <tr ng-repeat="transaction in person.TransactionDetails">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-1 cell">{{ transaction.Date | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-2 cell">{{ transaction.Patient }}</td>
+                    <td class="col-sm-1 cell">{{ transaction.Provider }}</td>
+                    <td class="col-sm-1 cell">{{ transaction.Location }}</td>
+                    <td class="col-sm-1 cell">{{ transaction.TransactionType }}</td>
+                    <td class="col-sm-2 cell">{{ transaction.Description }}</td>
+                    <td class="col-sm-1 cell text-right">{{ transaction.TransactionAmount | currency }}</td>
+                    <td class="col-sm-1 cell text-right">{{ transaction.UnappliedAmount | currency }}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

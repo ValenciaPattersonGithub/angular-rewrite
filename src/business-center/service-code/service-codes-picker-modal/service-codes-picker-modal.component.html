@@ -1,0 +1,14 @@
+﻿<ng-template #templateRef>
+  <div class="modal-body">
+    <div class="row">
+      <div class="pull-right">
+        <app-button [id]="'lblCloseModal'"
+                    [variation]="'btn btn-link fa fa-times icon-click'"
+                    (onClick)="close()">
+        </app-button>
+      </div>
+    </div>
+    <service-codes-picker (onSelect)="onSelect($event)"></service-codes-picker>
+  </div>
+</ng-template>
+<ng-container #container></ng-container>

@@ -1,0 +1,103 @@
+﻿.chartBtnLayoutConds {
+
+    &__tabFilters {
+        .clearfix;
+        display: inline-block;
+    }
+
+    &__loading {
+        text-align: center;
+    }
+
+        // CSS from working timeline favorites
+        &__btnContainer {
+        display: inline-block;
+        text-align: center;
+        width: 16.666667%;
+        padding-bottom: 15px;
+    }
+
+    &__btn {
+        .btn;
+        .btn-default;
+        border: 2px solid;
+        border-radius: 5px;
+        height: 64px;
+        margin: @brand-margin_sm 0 0 0;
+        padding: 0px;
+        width: 64px;
+        cursor: move;
+
+        
+        &.condBtnColor {
+            border-color: #6FAEEE;
+        }
+        
+        &.svcBtnColor {
+            border-color: #FD9290;
+        }
+
+        &.swiftCodeBtnColor {
+            border-color: #67C1BD;
+        }
+        .bold-search-text {            
+            font-weight:bold;
+        }   
+    }
+
+    &__btnIcon {
+        width: 48px;
+        height: 48px;
+        vertical-align: middle;
+        margin-top: @brand-padding_sm;
+
+        .img {
+            border: none;
+        }
+    }
+
+    &__btnText {
+        display: block;
+        font-family: @brand-font;
+        font-weight: 100;
+        font-size: @brand-font_sm;
+        text-align: center;
+        margin-top: @brand-padding_sm;
+        padding-bottom: 15px;
+        color: #6A7575;
+    }
+
+    &__layoutContainer {
+        height: 90%;
+        background-color: @brand-color_white;
+        /*margin-bottom: @brand-margin_md;
+        margin-top: @brand-margin_md;*/
+        padding: @brand-padding_md;
+    }
+
+    &__buttons {
+        margin-top: @brand-margin_md;
+        height: 430px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        display: block;
+    }
+
+    &__selected {
+        border-top: 5px solid @brand-color_gray;
+        min-height: 120px;
+        padding-top: @brand-padding_md;
+    }
+
+    &__dropTarget {
+        border: 3px dashed @brand-color_darker-gray;
+        margin: 10px auto 0 auto;
+        padding: 20px;
+        text-align: center;
+        width: 25%;
+    }
+
+    .k-listview {
+        border: none;
+    }
+}

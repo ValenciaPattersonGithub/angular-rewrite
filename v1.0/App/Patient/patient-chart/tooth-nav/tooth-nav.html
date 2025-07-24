@@ -1,0 +1,11 @@
+﻿<div class="addCond__surfHeader">
+    <button class="btn btn-link" ng-disabled="selectedTeeth.length<2"
+            ng-click="toothNav(activeTooth, true)">
+        <span class="fa fa-arrow-circle-left fa-2x"></span>
+    </button>
+    <span class="addCond__toothTitle">{{ 'Tooth' | i18n }} {{ activeTooth.USNumber }}</span>
+    <button class="btn btn-link" ng-disabled="selectedTeeth.length<2"
+            ng-click="toothNav(activeTooth, false)">
+        <span class="fa fa-arrow-circle-right fa-2x"></span>
+    </button>
+</div>

@@ -1,0 +1,151 @@
+﻿.patSrvTile {
+    background-color: @brand-color_white;
+
+    &__dtlLeft {
+        .clearfix;
+        margin-right: @brand-margin_sm;
+    }
+
+    &__dtlRight {
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        float: left;
+    }
+
+    &__desc {
+        width: 100%;
+        float: left;
+    }
+
+    &__displayAs {
+        font-weight: bold;
+        color: #2dabcb;
+        width: 100%;
+        float: left;
+    }
+
+    .timelineTile:hover {
+        cursor: default;
+    }
+
+    .timelineTile.deleted:hover {
+        cursor: not-allowed;
+    }
+
+    &__toggle {
+        .btn;
+        .btn-link;
+        padding: 0px;
+        height: 24px;
+        width: 24px;
+        margin-right: 10px;
+    }
+
+    &__toggle:focus {
+        border: none !important;
+        outline: none !important;
+    }
+
+    .action {
+        float: right;
+        position: relative;
+        padding-top: 5px;
+
+        i {
+            font-size: 21px;
+            font-weight: 400;
+        }
+    }
+
+    &__actions {
+        display: none;
+        position: absolute;
+        top: 30px;
+        right: 11px;
+        z-index: 999;
+        min-width: 100px;
+        background-color: @brand-color_white;
+
+
+        button {
+            font-size: 14px;
+            border: 1px solid #eeeeee;
+            width: 100%;
+            text-align: left;
+            color: #333333;
+        }
+
+        button:hover {
+            background-color: #2dabcb;
+            color: #ffffff;
+            font-size: 14px;
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+        &.active {
+            display: inline-block;
+        }
+
+
+
+        .btn {
+            font-size: 14px;
+            padding: 5px 8px;
+
+            &[disabled] {
+                color: @brand-color_link-disabled;
+            }
+        }
+
+        &.orientTop {
+            top: auto;
+            bottom: 30px;
+
+            &__actions::before {
+                content: none;
+            }
+
+            &__actions::after {
+                content: " ";
+                position: absolute;
+                top: 100%;
+                left: 90%;
+                border-width: 10px;
+                border-style: solid;
+                border-color: #DADCDC transparent transparent transparent;
+                transform: translateX(-50%);
+            }
+        }
+
+        &.orientTop::before {
+            content: none;
+        }
+
+        &.orientTop::after {
+            content: " ";
+            position: absolute;
+            top: 100%;
+            left: 90%;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #DADCDC transparent transparent transparent;
+            transform: translateX(-50%);
+        }
+    }
+
+    &__actions::before {
+        content: " ";
+        position: absolute;
+        bottom: 100%;
+        left: 90%;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent transparent #DADCDC transparent;
+        transform: translateX(-50%);
+    }
+
+    &__actions::after {
+        content: none;
+    }
+}

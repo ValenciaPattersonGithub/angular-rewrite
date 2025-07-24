@@ -1,0 +1,96 @@
+﻿/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    body {
+        .no-display {
+            display: none;
+        }
+        font-size: @brand-font-tablet_sm;
+
+        // Buttons
+        button, a {
+            font-size: @brand-font-tablet_sm;
+            padding: 4px 8px !important;
+        }
+
+        .btn {
+            font-size: @brand-font-tablet_sm !important;
+            padding: 4px 8px !important;
+        }
+
+        // Patient Header
+        .patientHeader__secondaryNavigation {
+            margin-right: -20px;
+        }
+
+        .medicalAlertIcon {
+            display: none;
+        }
+        
+        // Secondary Navigation
+        .secondaryNavigation {
+            margin-top: -26px;
+            padding-right: @brand-padding-tablet_md;
+        }
+
+        // Tertiary Navigation
+        .pill-bar{
+            font-size: @brand-font-tablet_lg;
+            padding: @brand-padding-tablet_xs @brand-padding-tablet_sm;
+            a{
+                font-size: @brand-font-tablet_sm;
+                &.active{
+                    color: @brand-navigation_tertiary_active_color;
+                    background-color: @brand-navigation_tertiary_active_bg;
+                    font-weight: 600;
+                    padding: @brand-padding-tablet_xs @brand-padding-tablet_sm;
+                }
+            }
+            *:last-child{
+                border-bottom-right-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+            *:first-child{
+                border-bottom-left-radius: 6px;
+                border-top-left-radius: 6px;
+            }
+        }
+    }
+
+    // Header Fonts
+    h1 {
+        font-size: @brand-font-tablet_h1 !important;
+    }
+
+    h2 {
+        font-size: @brand-font-tablet_h2 !important;
+    }
+
+    h3 {
+        font-size: @brand-font-tablet_h3 !important;
+    }
+    
+    h4 {
+        font-size: @brand-font-tablet_h4 !important;
+    }
+
+    h5 {
+        font-size: @brand-font-tablet_h5 !important;
+    }
+
+    h6 {
+        font-size: @brand-font-tablet_h6 !important;
+    }
+}
+
+@media only screen (max-device-width: 960px) {
+    section {
+        display: none;
+    }
+
+    .no-display {
+        display: block
+    }
+}

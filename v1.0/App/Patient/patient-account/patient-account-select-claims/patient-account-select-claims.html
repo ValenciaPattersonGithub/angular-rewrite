@@ -1,0 +1,55 @@
+﻿<div>
+    <patient-header patient-data="patient.Data" active-url="activeTemplate" hide-tabs="true"></patient-header>
+    <div class="patientAcctSelectClaims">
+        <div class="rowFull white">
+            <div class="patientAcctInsPmt__header">
+                <ul class="patientAcctInsPmt__breadcrumb">
+
+                    <li>
+                        <span><a href="{{'#/'+ PreviousLocationRoute}}">{{ PreviousLocationName | i18n }}</a></span>
+                    </li>
+                    <li>{{ 'Select Claims' | i18n }} </li>
+                </ul>
+                <div class="patientAcctInsPmt__title">
+                    <h1>{{ 'Select Claims' | i18n }}</h1>
+                </div>
+
+                <div class="patientAcctSelectClaims__applyInsPayment row">
+                    <div class="col-sm-1">
+                        <button id="cancelPmtToClaims" class="btn btn-default col-sm-12" ng-click="backToPreviousLocation()">{{'Cancel' | i18n }}</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button id="applyPmtToClaims" class="btn btn-primary" ng-disabled="noClaimsFoundMsg" ng-click="applyPaymentToClaims()">{{'Apply Payment to Selected Claims' | i18n }}</button>
+                    </div>
+                    <div class="col-sm-3">
+                        <typeahead class="soar-typeahead" placeholder="{{ 'Carrier' | i18n }}" items="carriers" loading="" term="selectedCarrier.Label" search="filterCarriers(term)" focused="focus" cancel="" clear-content="clearContent()" select="selectCarrier(item)">
+                            <ul ng-show="carriers.length > 0">
+                                <li typeahead-item="carrier" ng-repeat="carrier in filteredCarrierList" class="results">
+                                    <div class="row">
+                                        <div class="col-xs-9">
+                                            <span id="">{{carrier.LongLabel}}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </typeahead>
+                    </div>
+                </div>
+
+                <div class="row margin-top4">
+                    <span ng-if="noClaimsSelectedMsg" class="error help-text margin-left-15">{{ 'A minimum of one claim must be selected to apply payment' | i18n }}</span>
+                </div>
+            </div>
+
+            <!--Grid-->
+            <div class="patientAcctSelectClaims__grid" ng-show="hasPatientInsurancePaymentViewAccess && filteredClaims.length > 0">
+                <kendo-grid id="selectClaimGrid" k-options="selectClaimsGridOptions">
+
+                </kendo-grid>
+            </div>
+            <div id="noClaimsMsg" class="alert text-align-center" ng-show="hasPatientInsurancePaymentViewAccess" ng-if="noClaimsFoundMsg">{{ 'No records found' | i18n }}</div>
+            <div id="noClaimsMsg" class="alert text-align-center" ng-show="hasPatientInsurancePaymentViewAccess" ng-if="!selectedCarrier">{{ 'Please select a carrier' | i18n }}</div>
+        </div>
+
+    </div>
+</div>

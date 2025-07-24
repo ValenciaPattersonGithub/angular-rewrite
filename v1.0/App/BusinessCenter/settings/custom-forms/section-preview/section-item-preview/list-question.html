@@ -1,0 +1,79 @@
+﻿<div ng-form="frmListQuestionSectionItem{{sectionIndex}}" class="form-group customForms">
+    <!--special handling for invalid list question answer-->
+    <div ng-class="{'has-error':hasErrors && sectionItem.$$InvalidAnswer===true}">
+        <div class="row">
+            <div class="col-md-11">
+                <label id="lblsectionItemText{{sectionIdex}}_{{sectionIdexPreviewIndex}}" class="control-label">
+                    {{ sectionItem.FormBankItem.ItemText }} <span id="sectionItemIsRequired{{sectionIdex}}_{{sectionIdexPreviewIndex}}" ng-show="sectionItem.IsRequired" class="bold padding5 size-h4">*</span>
+                </label>
+                <skip-prompt></skip-prompt>
+            </div>
+        </div>
+        <div ng-repeat="itemOption in sectionItem.ItemOptions">
+            <!--checkbox for multi select-->
+            <div class="row" ng-if="sectionItem.MultiSelectAllow">
+                <div class="col-md-11">
+                    <div id="isAllowMultipleAnswers{{sectionIdex}}_{{sectionIdexPreviewIndex}}" class="checkbox">
+                        <div class="margin-left-20">
+                            <input type="checkbox"
+                                   id="{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_' + $index}}"
+                                   name="{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}"
+                                   value="{{ itemOption.BankItemOption.OptionText }}"
+                                   ng-model="itemOption.Answer"
+                                   checked="{{sectionIdexPreviewIndex}}checked"
+                                   ng-disabled="inputIsDisabled || itemOption.BankItemOption.OptionText.length < 1 || sectionItem.$$Skip" />
+                            <!--NOTE this styling should be refactored and added to less file but all of the custom forms need restyled so just doing inline for now-->
+                            <label class="font-weight-normal control-label margin-left-minus16 customForms__customOption"
+                                   id="lbl{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_' + $index}}"
+                                   for="{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_' + $index}}">
+                                <span ng-hide="itemOption.BankItemOption.CustomLabel">{{ itemOption.BankItemOption.OptionText }}</span>
+                                <textarea text-auto-grow id="txt{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT1_' + $index}}"
+                                          placeholder="{{'Enter Custom Choice' | i18n }}"
+                                          ng-if="itemOption.BankItemOption.CustomLabel"
+                                          maxlength="500"
+                                          ng-disabled="inputIsDisabled || sectionItem.$$Skip"
+                                          type="text"
+                                          ng-change="itemOption.Answer=true"
+                                          ng-model="itemOption.BankItemOption.OptionText" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--radio button for other-->
+            <div class="row" ng-if="!sectionItem.MultiSelectAllow">
+                <div class="col-md-11">
+                    <div id="isAllowMultipleAnswers{{sectionIdex}}_{{sectionIdexPreviewIndex}}" class="radio">
+                        <div class="margin-left-20">
+                            <input type="radio"
+                                   id="{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_' + $index}}"
+                                   name="{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}"
+                                   value="{{ itemOption.BankItemOption.OptionText }}"
+                                   ng-model="sectionItem.FormBankItem.Answer"
+                                   ng-disabled="inputIsDisabled || itemOption.BankItemOption.OptionText.length < 1 || sectionItem.$$Skip" />
+                            <!--NOTE this styling should be refactored and added to less file but all of the custom forms need restyled so just doing inline for now-->
+                            <label class="font-weight-normal control-label margin-left-minus16 customForms__customOption"
+                                   for="{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_' + $index}}"
+                                   id="lbl{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_' + $index}}">
+                                <span ng-hide="itemOption.BankItemOption.CustomLabel">{{ itemOption.BankItemOption.OptionText }}</span>
+                                <textarea text-auto-grow id="txt{{ sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT1_' + $index}}"
+                                          placeholder="{{'Enter Custom Choice' | i18n }}"
+                                          maxlength="500"
+                                          type="text"
+                                          ng-disabled="inputIsDisabled || sectionItem.$$Skip"
+                                          ng-change="sectionItem.FormBankItem.Answer=itemOption.BankItemOption.OptionText"
+                                          ng-if="itemOption.BankItemOption.CustomLabel"
+                                          ng-model="itemOption.BankItemOption.OptionText" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--special handling for invalid list question answer-->
+        <label id="lblSectionFormBankItemRequired_{{sectionItemPreviewIndex}}" class="help-block"
+               ng-show="hasErrors && sectionItem.$$InvalidAnswer===true">
+            {{ 'This field is required.' | i18n }}
+        </label>
+    </div>
+</div>

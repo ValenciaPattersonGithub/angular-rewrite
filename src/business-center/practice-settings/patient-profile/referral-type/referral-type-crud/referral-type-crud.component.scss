@@ -1,0 +1,395 @@
+@import 'variables';
+
+.panel-body {
+    padding: 0px 16px;
+
+    ::ng-deep {
+
+        .k-dropdown-wrap {
+            height: 28px;
+
+            .k-input {
+                padding: 2px;
+            }
+        }
+    }
+}
+
+.required {
+    color: $alert-red;
+}
+
+.validation-required {
+    border-color: $alert-red !important;
+}
+
+.col-no-padding {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+span.required.ng-star-inserted {
+    position: absolute;
+    padding: 2px;
+    word-break: break-word;
+}
+
+span.used-paymentType-warning {
+    padding: 2px;
+    word-break: break-word;
+    color: $alert-red;
+}
+
+.add_referral_box {
+    width: 500px;
+    height: auto;
+    border-radius: 5px;
+    background-color: #ffffff;
+    background-size: cover;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.popup_heading {
+    // width: 160px;
+    font-family: Open Sans;
+    font-size: 18px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+    line-height: 18px;
+    padding: 15px 0px 0px 15px;
+    font-weight: bold;
+}
+
+.control-label {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 14px;
+    color: $text-black;
+}
+
+.radio-inline {
+    padding-top: 0px;
+}
+
+.fuse_input {
+    width: 449px;
+    height: 30px;
+    padding: 0px 8px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-size: cover;
+    font-family: Open Sans;
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+    border-color: $page-search-input-border-color;
+}
+
+.fuse_small_input {
+    width: 200px;
+    height: 30px;
+    padding: 0px 8px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-size: cover;
+    font-family: Open Sans;
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+    margin-right: 10px;
+    border-color: $page-search-input-border-color;
+}
+
+.fuse_x_small_input {
+    width: 131px !important;
+}
+
+.fuse_input_xs {
+    width: 151px;
+    height: 30px;
+    padding: 0px 8px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-size: cover;
+    font-family: Open Sans;
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+    margin-right: 10px;
+    border-color: $page-search-input-border-color;
+}
+
+.fuse_select {
+    height: 25px;
+    padding: 0px;
+    text-align: left;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    border-width: 1px;
+    border-style: solid;
+    background-color: $page-search-input-background;
+    color: $page-form-input-color;
+    border-color: $page-search-input-border-color;
+    width: 207px;
+}
+
+.fuse_select_small {
+    width: 107px;
+    margin-right:10px;
+    height: 30px;
+    padding: 0px;
+    border: 1px solid #dddddd;
+    font-family: Open Sans;
+    font-size: 14px;
+    color: #333333;
+    text-decoration: none solid rgb(51, 51, 51);
+
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-size: cover;
+    border-color: $page-search-input-border-color;
+}
+
+.add_referral_footer {
+    border-color: #DDDDDD;
+    border-width: 1px 0px 0px 0px;
+    border-style: solid;
+    padding: 10px 15px 15px 15px;
+}
+
+.btn-toolbar {
+    float: right;
+}
+
+::ng-deep {
+    .fuse_button {
+        background-size: cover;
+        border-radius: 5px;
+        border: none;
+        padding: 0;
+        width: 100px;
+        height: 25px;
+        margin-left: 10px !important;
+        background-color: #2dabcb;
+    }
+
+
+    .fuse_button :hover {
+        background-color: #27bfe6;
+    }
+}
+    .fuse_submit_button {
+        border-color: none;
+        border-width: 0px;
+    }
+
+    .btn-default {
+        color: $breadcrumbs-active;
+        background-color: $page-primary-button-color;
+        border-color: $page-content-select-border-color;
+        height: 7px;
+        width: 75px;
+        line-height: 2px !important;
+        font-size: 12px !important;
+    }
+
+    .k-window .k-window-content {
+        background-color: transparent;
+    }
+
+    .required_text {
+        color: $page-header-color;
+    }
+
+    .radiocontainer {
+        ::ng-deep {
+            label {
+                margin: 0px 10px 0px 0px;
+            }
+
+            span {
+                font-weight: normal;
+                margin: 1px;
+            }
+        }
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        margin: 0px;
+    }
+
+    .form-group {
+        flex: 1;
+        margin-bottom: 10px;
+
+        > div {
+            margin-bottom: 0px;
+        }
+    }
+
+    ::ng-deep {
+
+        .form-control {
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+        }
+
+        .form-control :focus {
+            border-color: #DDDDDD; /* Set the focused border color */
+            box-shadow: 0 0 5px #B3D7FE, 0 0 3px #B3D7FE inset; /* Add focused shadow with spread */
+            outline: none; /* Remove the default focus outline */
+        }
+
+        .k-popup.k-popup.k-list-container {
+            width: 100px;
+        }
+
+        .k-dialog .k-content {
+            overflow: hidden !important;
+            padding: 0px;
+        }
+    }
+
+    .help-text {
+        color: #ff0500;
+        font-size: 12px;
+        font-weight: 500 !important;
+    }
+
+    .referral-type-crud-hr {
+        margin-top: 15px !important;
+        margin-bottom: 0px !important;
+    }
+
+    ::ng-deep {
+        label.switch {
+            margin-top: 5px;
+        }
+    }
+
+    .error-message {
+        padding: 0px;
+        color: red;
+    }
+
+    .error-icon {
+        padding: 3px;
+        float: right;
+        color: #cc0000;
+        cursor: pointer;
+        margin-left: 2px;
+    }
+
+    .invalid {
+        border: 1px #CC0000 solid !important;
+    }
+
+    .ng-tooltip-show {
+        z-index: 100005 !important;
+    }
+
+    ::ng-deep {
+        label.label {
+            font-family: "Open Sans", sans-serif;
+            font-weight: normal !important;
+            font-size: 14px !important;
+            color: #333333 !important;
+            padding: 0;
+            margin: 0;
+            margin-top: 5px !important;
+        }
+    }
+
+    ::ng-deep {
+        .btn-toolbar .btn {
+            font-size: 12px !important;
+        }
+    }
+
+    ::ng-deep {
+        .panel-body {
+            padding: 15px 15px 15px !important;
+        }
+
+        kendo-dropdownlist {
+            height: 30px !important;
+        }
+
+        .k-nodata{
+            display: none !important;
+        }
+
+        // .k-dialog {
+        //     z-index: 100000 !important;
+        //     position: absolute;
+        //     top: 50%;
+        //     left: 50%;
+        //     transform: translate(-50%, -50%);
+        // }
+
+        // .k-popup .k-group .k-item {
+        //     padding: 10px;
+        //     min-width: 500px !important;
+        //     width: auto !important;
+        // }
+        .practice-ac-item{
+            width: 100% !important;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+        }   
+
+        // .k-item:first-child {
+        //     background-color: transparent !important;
+        // }
+        
+        .k-list-container {
+            min-width: 467px;
+            width: 100%;
+        }
+
+        .k-list-container .k-item {
+            background-color: inherit !important;
+            border-bottom: 1px solid gray;
+        }
+
+        .k-list-container .k-item:hover {
+            background-color: #2dabcb !important;
+            color: white !important;
+        }
+
+        .k-dropdown {
+            border: none !important;
+            box-shadow: none !important;    
+            background-color: transparent !important;
+            background-image: none !important;
+            box-sizing: none !important;
+            border-radius: 8px !important;
+        }
+    }
+
+    .validation-error-msg{
+        color: red;
+        font-size: 11px;
+        font-style: italic;
+    }
+
+    .phoneEmailRequired {
+        font-size: 11px;
+        margin-bottom: 10px;
+    }
+
+    .search-header{
+        font-size: 12px;
+        margin-bottom: 0px;
+    }
+
+    .practice-label{
+        margin-bottom: 0px;
+    }

@@ -1,0 +1,113 @@
+.conditions {
+
+	.conditions__header {
+		width: 96%;
+		max-width: 96%;
+		margin: 0 auto;
+	}
+
+	.conditions__title>h1 {
+		margin: 8px 0;
+		padding: 0;
+		font-size: 26px;
+		line-height: 1;
+	}
+
+	.conditions__list {
+		width: 96%;
+		margin: 0 auto;
+		padding-top: 1%;
+
+		::ng-deep .k-window {
+			left: 39%;
+			top: 30%;
+			width: 40rem;
+		}
+
+		.conditions__actions {
+			padding-bottom: 1%;
+		}
+	}
+
+	.modal-header row {
+		display: flex;
+		align-items: center;
+	}
+
+	.conditionsCrud {
+		padding: 2% !important;
+	}
+
+	.conditionsCrud__btn {
+		padding-right: 2%;
+		float: right;
+	}
+
+	.modal-body {
+		border-bottom: 0.5px solid lightgray;
+		padding-bottom: 0;
+	}
+
+	.form-input {
+		width: 92% !important;
+	}
+
+	.form-input:focus {
+		box-shadow: 0 0 8px #90909099;
+	}
+
+	.form-input:focus-visible {
+		outline: none;
+	}
+
+	.modal-header {
+		padding: unset !important;
+		padding-inline: 4% !important;
+	}
+
+	.modal-header .row span {
+		display: inline-block;
+		padding-top: 1%;
+		font-size: 17px;
+	}
+
+	.btn.btn-link {
+		border: 1px solid #2dabcb;
+		border-radius: 4px;
+		margin-right: 10px;
+	}
+
+	.btn.btn-link:hover {
+		background-color: #e6e6e6;
+	}
+
+	.modal-body {
+		::ng-deep .k-tooltip-validation {
+			background-color: #fff7e3;
+			color: #f9591f;
+			min-width: 2rem;
+			position: absolute;
+			left: 17px;
+			padding: 5px 5px 5px 6px;
+			margin: 7px;
+
+			&.top-0 {
+				top: 0;
+			}
+		}	
+	}
+
+	.conditions__body {
+		::ng-deep .k-button:disabled {
+			opacity: 1;
+			cursor: pointer;
+		}
+	}
+	.icon-button b {
+		font-size: 14px;
+	}
+
+	::ng-deep .k-grid-content {
+		max-height: 36rem !important;
+	}
+}

@@ -1,0 +1,46 @@
+﻿<!-- <business-nav></business-nav> -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div ng-class="'fade-in'" ng-form="frmFeeSchdl" >
+    <div class="feeSchedDetails">
+        <div class="rowFull white">
+            <div class="feeSchedDetails__header">
+               
+                <!--Title Placeholder-->
+                <div id="feeSchedTitle" class="feeSchedDetails__title">
+                    <h1>{{feeSchedule.FeeScheduleName}}{{' Fee Schedule' | i18n }}</h1>
+                </div>
+                <!--Action buttons-->
+                <div class="feeSchedDetails__actions">
+                    <button id="btnFeeSchdlEdit" icon="fa-pencil-alt" ng-click="openFeeScheduleTab()" class="btn btn-primary" check-auth-z="soar-ins-ifsch-edit">
+                        {{ 'Edit Fee Schedule' | i18n }}
+                    </button>
+                    <button id="btnFeeSchdlCopy" icon="fa-pencil-alt" ng-click="copyFeeSchedule()" class="btn btn-primary" check-auth-z="soar-ins-ifsch-edit">
+                        {{ 'Create a copy of this fee schedule' | i18n }}
+                    </button>
+                </div>
+                <div class="feeSchedDetails__filter">
+                    <fee-service-code-selector all-service-codes="feeScheduleDetailsList" ></fee-service-code-selector>
+                </div>
+            </div>
+        </div>
+        <div class="rowFull">
+            <!--Main body-->
+            <div class="feeSchedDetails__body">
+                <!--Kendo Grid for Fee Schedules-->
+                <div class="feeSchedDetails__primary">
+                    <label ng-if="!feeScheduleForLoggedInLoc">{{ "This fee schedule does not apply to your logged in location. You can continue to view the fee schedule for other locations by selecting 'Edit'." | i18n}}</label>
+                    <div ng-if="feeScheduleForLoggedInLoc" class="feeSchedDetails__grid">
+                        <kendo-grid id="feeScheduleDetailsGrid" k-columns="feeScheduleColumns" k-options="feeScheduleDetailsList">
+                        </kendo-grid>
+                        <!--loading spinner-->
+                        <div ng-show="loadingDetails==true">
+                            <no-results loading-message='loadingMessageNoResults' loading="loadingDetails==true"></no-results>
+                        </div>
+
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

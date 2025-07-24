@@ -1,0 +1,38 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{ setFiltersMessage }}</div>
+    <div ng-if="data.Answers.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Answers.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-9 cell">{{ 'Question' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Responses' | i18n }}</th>
+                    <th class="col-sm-1 cell"></th>
+                    <th class="col-sm-1 cell"></th>
+                <tr class="stripOdd">
+                    <th class="col-sm-9 cell"></th>
+                    <th class="col-sm-1 cell">{{ 'Yes' | i18n }}</th>
+                    <th class="col-sm-1 cell align_left">{{ 'No' | i18n }}</th>
+                    <th class="col-sm-1 cell align_right">{{ 'Unanswered' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="answer in data.Answers" ng-class-odd="'stripOdd'" ng-class-Even="'stripEven'" >
+                    <td class="col-sm-9 cell">{{ answer.Question }}</td>
+                    <td class="col-sm-1 cell">{{ answer.Yes }}</td>
+                    <td class="col-sm-1 cell align_left">{{ answer.No }}</td>
+                    <td class="col-sm-1 cell align_right">{{ answer.Unanswered }}</td>
+                </tr>
+            </tbody>
+            <tbody class="reportGrid__footer" ng-if="data.Answers.length > 0 && !showFilterMessage">
+                <tr class="stripEven">
+                    <td class="col-sm-9 cell  reportGrid__label">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell">{{data.Yes}}</td>
+                    <td class="col-sm-1 cell">{{data.No}}</td>
+                    <td class="col-sm-1 cell">{{data.Unanswered}}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

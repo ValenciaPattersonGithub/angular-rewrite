@@ -1,0 +1,43 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.ServiceCodes.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.ServiceCodes.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{'Service Code' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'CDT Code' | i18n}}</th>
+                    <th class="col-sm-5 cell">{{'Description' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Location Fee' | i18n}}</th>
+                    <th class="col-sm-3 cell">{{'Fee Schedule' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Allowed Amount' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="serviceCode in data.ServiceCodes" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-1 cell">{{serviceCode.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{serviceCode.CdtCode}}</td>
+                    <td class="col-sm-5 cell">{{serviceCode.Description}}</td>
+                    <td class="col-sm-1 cell text-right">{{serviceCode.FeeSchedules[0].LocationFee | currency}}</td>
+                    <td class="col-sm-3 cell">{{serviceCode.FeeSchedules[0].FeeSchedule}}</td>
+                    <td class="col-sm-1 cell text-right">{{serviceCode.FeeSchedules[0].AllowedAmount | currency}}</td>
+                </tr>
+                <tr ng-repeat="feeSchedule in serviceCode.FeeSchedules | startFrom: 1">
+                    <td class="col-sm-7 cell" colspan="3"></td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.LocationFee | currency}}</td>
+                    <td class="col-sm-3 cell">{{feeSchedule.FeeSchedule}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.AllowedAmount | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.ServiceCodes.length > 0 && !showFilterMessage">
+                
+                <tr class="reportGrid__row reportGrid__footer">
+                    <td class="col-sm-12 cell text-align-center" colspan="6">
+                        {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

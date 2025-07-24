@@ -1,0 +1,169 @@
+<div class="patient-checkout-summary">
+    <div kendoDialogContainer></div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p id="checkoutSummaryTitle" class="text-left panel_heading_title">{{'Checkout Summary'| translate }}</p>
+        </div>
+        <div class="panel-body">
+            <span  id="checkoutSummarySubTitle" class="text-left panel_sub_title">{{'Charges'| translate }}</span>
+            <div class="row ">
+                <div class="col-sm-12">
+                    <div id="lblTodaysVisit" class="col-sm-8">{{'Today\'s Visit'| translate}}</div>
+                    <div id="lblTodaysVisitTotal" class="col-sm-4 text-align-right">{{todaysVisit| currency}}</div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-sm-12">
+                    <div id="lblLessEstimatedInsurance" class="col-sm-8">{{'Less Estimated Insurance'| translate}}</div>
+                    <div id="lblLessEstimatedInsuranceTotal" *ngIf="totalEstimatedInsurance!==0" class="col-sm-4 text-align-right">({{totalEstimatedInsurance| currency}})</div>
+                    <div id="lblLessEstimatedInsuranceTotal0" *ngIf="totalEstimatedInsurance===0" class="col-sm-4 text-align-right">{{totalEstimatedInsurance| currency}}</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12" >
+                    <div class="col-sm-8" *ngIf="includePriorBalance===true">
+                        <span id="lblPriorAccountBalance" >{{'Prior Account Balance'| translate}}</span>
+                        <br />
+                        
+                    </div>
+                    <div id="lblPriorAccountBalanceTotal" *ngIf="includePriorBalance===true" class="col-sm-4 text-align-right" >
+                        {{priorAccountBalance| currency}}
+                    </div>
+                    <a class="padding-left-15" id="lblPriorAccountLink" (click)="addRemovePriorBalance()">{{ priorBalanceLinkText | translate}}</a>
+                </div>
+            </div>
+            <div class="row totals-row">
+                <div class="col-sm-12">
+                    <div id="lblTotalCharges" class="col-sm-8">{{'Total Charges'| translate}}</div>
+                    <div id="lblTotalChargesTotal" class="col-sm-4 text-align-right">{{totalCharges| currency}}</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-body">
+            <span class="text-left panel_sub_title">{{'Credits, Payments, and Adjustments'| translate }}</span>
+
+            <div class="row"  *ngFor="let creditTransaction of filteredCreditTransactions ; index as x;">
+                <!-- display unapplied credits -->
+                <div id="lblCreditTransactionText{{x}}" class="col-sm-12" kendoTooltip position="top" 
+                    tooltipClass="app-tooltip" title="{{creditTransaction.Description}}"                    
+                    *ngIf="creditTransaction.TransactionTypeId === transactionTypes.CreditPayment && creditTransaction.IsFeeScheduleWriteOff === false">
+                    <div  id="lblCreditTransactionDescription{{x}}" class="col-sm-8" >                        
+                        <span id="lblCreditTransactionDescription{{x}}" >{{'Unapplied Account Payment'| translate | truncateText:20 }}</span>
+                        <br />
+                        <a id="lblRemoveUnappliedAccountLink" (click)="removeUnappliedCreditTransaction(creditTransaction)">{{ 'Remove' | translate}}</a>
+                    </div>
+                    <div id="lblCreditTransactionAmount{{x}}" class="col-sm-4 text-align-right">{{creditTransaction.Amount | currency}}</div>
+                </div>
+                <!-- display payments -->
+                <div id="lblPaymentCreditTransactionText{{x}}" class="col-sm-12" kendoTooltip position="top" 
+                    tooltipClass="app-tooltip" title="{{creditTransaction.FormattedDescription}}"                     
+                    *ngIf="creditTransaction.TransactionTypeId === transactionTypes.Payment && creditTransaction.IsFeeScheduleWriteOff === false">
+                    <div  id="lblPaymentCreditTransactionDescription{{x}}" class="col-sm-8">                       
+                        <span id="spanPaymentCreditTransactionDescription{{x}}" >{{creditTransaction.FormattedDescription | truncateText:20 }}</span>
+                        <br />
+                        <a id="lblRemovePaymentAccountLink" (click)="removeCreditTransaction(creditTransaction)">{{ 'Remove' | translate}}</a>
+                    </div>
+                    <div id="lblPaymentCreditTransactionAmount{{x}}" class="col-sm-4 text-align-right">{{creditTransaction.Amount | currency}}</div>
+                </div>
+                <!-- display adjustments other than fee schedule adjustments -->
+                <div id="lblAdjustmentCreditTransactionText{{x}}" class="col-sm-12" kendoTooltip position="top" 
+                    tooltipClass="app-tooltip" title="{{creditTransaction.Description}}" 
+                    *ngIf="creditTransaction.TransactionTypeId === transactionTypes.NegativeAdjustment && creditTransaction.IsFeeScheduleWriteOff === false">
+                    <div  id="lblAdjustmentCreditTransactionDescription{{x}}" class="col-sm-8">                                            
+                        <span id="lblAdjustmentCreditTransactionDescription{{x}}" >{{ creditTransaction.Description | truncateText:20 }}</span>
+                        <br />
+                        <a id="lblRemoveAdjustmentAccountLink" (click)="removeCreditTransaction(creditTransaction)">{{ 'Remove' | translate}}</a>
+                    </div>
+                    <div id="lblAdjustmentCreditTransactionAmount{{x}}" class="col-sm-4 text-align-right">{{creditTransaction.Amount | currency}}</div>
+                </div>
+            </div>
+            <!-- fee schedule adjustments -->
+            <div class="row"  *ngFor="let feeScheduleAdjustmentItem of feeScheduleAdjustmentItems ; index as x;">
+                <div id="lblFeeScheduleAdjustmentText{{x}}" class="col-sm-12" kendoTooltip position="top" tooltipClass="app-tooltip" 
+                    title="{{feeScheduleAdjustmentItem.FormattedDescription}}">
+                    <div id="lblFeeScheduleAdjustmentType{{x}}" class="col-sm-8">{{feeScheduleAdjustmentItem.Description | truncateText:20}}</div>
+                    <div id="lblFeeScheduleAdjustmentAmount{{x}}" class="col-sm-4 text-align-right">{{feeScheduleAdjustmentItem.Amount | currency}}</div>
+                    <br />
+                    <a id="lblRemoveAdjustmentAccountLink" class="padding-left-15" (click)="removeFeeScheduleAdjustmentItem(feeScheduleAdjustmentItem)">{{ 'Remove' | translate}}</a>
+                </div>
+            </div>
+            <div class="row totals-row">
+                <div class="col-sm-12">
+                    <div id="lbltotalCreditsPaymentsAdjustments" class="col-sm-8">{{'Total Credits, Payments, and Adjustments'| translate}}</div>
+                    <div id="totalCreditsPaymentsAdjustments" class="col-sm-4 text-align-right">({{totalCreditsPaymentsAdjustments| currency}})</div>
+                </div>
+            </div>
+            <div class="row balance-row">
+                <div class="col-sm-12">
+                    <div id="lblBalanceDue" class="col-sm-8 text-align-right">{{'Balance Due'| translate}}</div>
+                    <div id="lblBalanceDueTotal" class="col-sm-4 text-align-right">{{totalBalanceDue| currency}}</div>
+                </div>
+            </div>
+            <!-- display unapplied credits from checkout and allow user to select a provider to assign these to -->
+            <div id="divUnassignedRow" class="row unassigned-row" *ngIf="unappliedAmount > 0">
+                <div id="divUnassignedRowLeft" class="unassigned-row-left">
+                    <div id="divUnassignedRowLeftText" class="unassigned-amount-text">{{'Assign unapplied amount to:'| translate}}</div>
+                    <div id="divUnassignedRowLeftDD" class="unassigned-amount-select">
+                        <!-- default to Leave as Unassigned -->
+                        <provider-selector id="selProviderOnUnapplied" 
+                            [(selectedProvider)]="providerOnUnapplied"
+                            [providerTypeIds]="[1,2,3,5]" 
+                            [patientInfo]="patientData"
+                            [defaultItemText]="defaultAssignTo" 
+                            (providerChanged)="onProviderOnUnapplied($event)">
+                        </provider-selector>
+                    </div>
+                </div>
+                <div id="divUnassignedRowRight" class="unassigned-row-right">
+                    <div id="divUnassignedRowRightAmount" class="unassigned-amount-currency">{{unappliedAmount| currency}}</div>
+                    <div id="divUnassignedRowRightAmountApply" class="unassigned-amount-text">{{' Unapplied'}}</div>
+                </div> 
+            </div>           
+        </div>        
+        <!-- Claims area -->
+        <div class="claims-area">
+            <div class="row claims-row" *ngFor="let benefitPlan of benefitPlansWithClaims ; index as i">
+                <div id="lblNumberOfClaims{{i}}" class="col-sm-12 claims-count text-align-right">
+                    <b>({{benefitPlan.NumberOfClaims}}) {{'Claims'|translate}}</b> {{ 'will be generated' | translate}}
+                </div>
+                <div class="col-sm-12 text-align-right">
+                    <span id="lblBenefitPlanInfo{{i}}" class="text-align-right"><b>{{'Carrier: ' | translate}}</b>{{benefitPlan.CarrierName}}
+                        <b>{{'Plan: ' | translate}}</b>{{benefitPlan.PlanName}}</span>
+                </div>
+            </div>
+        </div>
+       
+        <div class="panel-footer">
+            <div class="grid-container align-right">
+               <div class="button-margin">
+                    <button-menu id="encounterListSelect" buttonText="{{'Back to Cart' | translate }}"  
+                        *ngIf="!encounterId" [isPrimButton]="false"              
+                        [options]="encounterList"
+                        [isDisabled]="false" 
+                        (selectedOption)="backToCart($event)">
+                    </button-menu>
+               </div>
+                <div >
+                    <app-button id="btnBackToCart" buttonLabel="{{'Back to Cart' | translate }}" *ngIf="encounterId"
+                        [isDisabled]="false"
+                        variation="secondary" (onClick)="backToCart($event)">
+                    </app-button>
+                </div>
+                <div >
+                    <app-button id="btnCancelCheckout" buttonLabel="{{'Cancel' | translate }}" 
+                        [isDisabled]="false"
+                        variation="secondary" (onClick)="cancelCheckout()">
+                    </app-button>
+                </div>
+                <div >
+                    <app-button id="btnFinishCheckout" buttonLabel="{{'Finish Checkout' | translate }}" 
+                        [isDisabled]="disableSave===true || disableFinish===true"
+                        variation="primary" (onClick)="finishCheckout()">
+                    </app-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

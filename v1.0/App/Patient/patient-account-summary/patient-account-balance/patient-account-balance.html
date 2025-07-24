@@ -1,0 +1,45 @@
+﻿<div id="balanceBarDiv" class="patAcctBal__chart">
+    <patient-account-aging data="graphData.totalBalance" graph-data="graphData" graph-id="0"></patient-account-aging>
+</div>
+<div class="patAcctBal__content">
+    <span id="lblTotalBalanceTitle" class="patAcctBal__title">{{'Balance' | i18n | uppercase}}</span>
+    <span id="lblAccountBalance" class="patAcctBal__total" ng-show="accountTotalLoading == false">{{ accountTotal | formatCurrencyWithParensIfNeg }}</span>
+    <no-results ng-show="accountTotalLoading == true" loading="accountTotalLoading==true"></no-results>
+        
+    <div class="patAcctBalDtl">
+        <a class="patAcctBalDtl__ctrl" id="dLabel" ng-click="patAcctBalDtlPopover = true">
+            {{ 'view details' | i18n }}
+        </a>
+        <div class="patAcctBalDtl__popover" ng-class="{active: patAcctBalDtlPopover}" click-off="closePopover()" click-off-if="patAcctBalDtlPopover">
+            <div class="patAcctBalDtl__chart">
+                <patient-account-aging data="detailGraphData.totalBalance" graph-data="detailGraphData" graph-id="1"></patient-account-aging>
+            </div>
+            <div class="patAcctBalDtl__content">
+                <div class="patAcctBalDtl__fltr">
+                    <a id="linkAllAccountMembersBalances" class="patAcctBalDtl__fltrItem" ng-click="loadGraphData()">{{'All' | i18n }}</a>
+                    <a id="linkPatientOnlyAccountMembersBalance" class="patAcctBalDtl__fltrItem" ng-click="loadGraphData('patient')">{{'Patient Only' | i18n }}</a>
+                    <a id="linkInsuranceOnlyAccountMembersBalance" class="patAcctBalDtl__fltrItem" ng-click="loadGraphData('insurance')">{{'Insurance Only' | i18n }}</a>
+                </div>
+                <div class="patAcctBalDtl__key">
+                    <span id="lblAgeBand0to30Type">{{'{0} Days:' | i18n:['0-30']}} </span>
+                    <span id="lblAgeBand0to30Name" ng-if="detailGraphData.currentBalance> 0 || detailGraphData.currentBalance< 0">{{detailGraphData.currentBalance| formatCurrencyWithParensIfNeg}}</span>
+                </div>
+
+                <div class="patAcctBalDtl__key t30">
+                    <span id="lblAgeBand31to60Type">{{'{0} Days:' | i18n:['31-60']}} </span>
+                    <span id="lblAgeBand31to60" ng-if="detailGraphData.moreThanThirtyBalance> 0">{{detailGraphData.moreThanThirtyBalance| formatCurrencyWithParensIfNeg}}</span>
+                </div>
+
+                <div class="patAcctBalDtl__key t60">
+                    <span id="lblAgeBand61to90Type">{{'{0} Days:' | i18n:['61-90']}} </span>
+                    <span id="lblAgeBand61to90" ng-if="detailGraphData.moreThanSixtyBalance>0">{{detailGraphData.moreThanSixtyBalance| formatCurrencyWithParensIfNeg}}</span>
+                </div>
+
+                <div class="patAcctBalDtl__key t90">
+                    <span id="lblAgeBandAbove90Type">{{'{0} Days:' | i18n:['> 90']}} </span>
+                    <span id="lblAgeBandAbove90Name" ng-if="detailGraphData.moreThanNintyBalance>0">{{detailGraphData.moreThanNintyBalance| formatCurrencyWithParensIfNeg}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

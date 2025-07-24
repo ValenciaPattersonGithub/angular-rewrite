@@ -1,0 +1,146 @@
+﻿@import "variables";
+// todo: update multiselect, tooth select, and surface select components to use the library.
+// These styles are directly imported from the component library
+@import '../@shared/components/form-controls/select-list/select-list.component';
+
+.rangeOfTeethSelector {
+
+    .form-control {
+        width: 100%;
+        height: 25px;
+        font-family: $global-font-family;
+        font-size: 12px;
+        border-radius: 5px;
+        border-color: $border-grey;
+        line-height: 25px;
+        padding: 0px;
+        box-shadow: none;
+    }
+
+    &__displayedTeeth {
+        float: left;
+        padding: 0px 25px 0px 8px;
+        width: 100%;
+        min-height: 25px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        button {
+            margin: 2px 0 2px 2px;
+        }
+    }
+
+    &__selectedTeethTags {
+        float: left;
+        padding: 8px;
+        width: 100%;
+
+        .teethTag {
+            margin: 1px;
+            height: 25px;
+            border-radius: 5px;
+        }
+
+        input {
+            float: right;
+            width: 50%;
+        }
+    }
+
+    &__toothInput {
+        float: left;
+        width: 100%;
+
+        input {
+            border: none;
+            padding: 0px 25px 0px 8px;
+            width: 100%;
+        }
+
+        // todo: investigate why this isn't working
+        //input::placeholder {
+        //    color: #555555;
+        //    opacity: 1;
+        //}
+
+        input:focus {
+            outline: none;
+        }
+
+        i {
+            float: right;
+            position: absolute;
+            right: 8px;
+            line-height: 25px;
+            color: $border-grey;
+        }
+    }
+
+    &__toothDropdown {
+        background-color: $polar-white;
+        border: solid 1px #E3E5E5;
+        clear: left;
+        max-height: 250px;
+        margin-top: 23px;
+        overflow-y: scroll;
+        position: relative;
+        min-width: 250px;
+        z-index: 99;
+    }
+
+    &__teethList {
+        float: left;
+        width: 100%;
+
+        div {
+            cursor: pointer;
+            padding: 0px 8px;
+        }
+
+        div:hover {
+            background-color: $action-blue;
+            color: $polar-white;
+        }
+    }
+    /*&__toothDropdown {
+        background-color: $polar-white;
+        border: solid 1px #E3E5E5;
+        clear: left;
+        max-height: 250px;
+        margin-top: 23px;
+        overflow-y: scroll;
+        position: relative;
+        width: 100%;
+        z-index: 99;
+    }*/
+    &__highlight {
+        background-color: $action-blue;
+        color: $polar-white;
+    }
+}
+
+
+
+
+
+
+/*::ng-deep .k-multiselect-wrap .k-input {
+    min-width: 1px;
+    width: 1px;
+    background-color: transparent;
+}
+
+::ng-deep .multiselect.surfaces {
+    height: 25px;
+    background-color: $polar-white;
+    background-size: cover;
+    font-size: 12px;
+    color: $text-black;
+    text-decoration: none solid rgb(51, 51, 51);
+    width: 100%;
+}*/
+
+.redBorder {
+    border: 2px solid $alert-red !important;
+}

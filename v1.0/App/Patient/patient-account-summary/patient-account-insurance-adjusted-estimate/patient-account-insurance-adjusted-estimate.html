@@ -1,0 +1,12 @@
+﻿<div class="patAcctSmry__content">
+    <div class="box-info">
+        <span id="lblTotalAdjEst" class="font-weight-bold">{{'Estimated Ins. Adj.' | i18n}}</span>
+    </div>
+    <div ng-show="adjEstimateLoading == true ">
+        <no-results loading="loading == true "></no-results>
+    </div>
+    <div class="box-info">
+        <span ng-hide="calculatingBalance" id="valueTotalAdjustedEst" class="font-weight-bold">{{adjustedEstIns | currency}}</span>
+        <i id="idInsuranceSpinner" ng-show="calculatingBalance" class="fa fa-spinner fa-spin loading"></i>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+﻿<div class="form-row">
+    <div class="form-group form-col-6" title="{{PatientName}}">
+        <label class="control-label"> Patient</label>
+        <button class="btn btn-success btn-md" disabled style="opacity: 1;" title="{{PatientName}}">
+            {{ PatientName| truncate:20 | i18n}}
+            <i ng-show="PatientName.length > 20 ">...</i>
+        </button>
+    </div>
+    <div class="form-col-6" ng-if="patientData.AddressReferrerId">
+        <div class="" ng-show="patientData.AddressReferrer.AddressLine1 && patientData.AddressReferrer.AddressLine1 != ''">
+            <span class="word-wrap" id="lblPatientAddressLineOne">{{ patientData.AddressReferrer.AddressLine1 }}</span>
+        </div>
+        <div class="" ng-show="patientData.AddressReferrer.AddressLine2 && patientData.AddressReferrer.AddressLine2 != ''">
+            <span class="word-wrap" id="lblPatientAddressLineOne">{{ patientData.AddressReferrer.AddressLine2 }}</span>
+        </div>
+        <div class="" ng-show="(patientData.AddressReferrer.City && patientData.AddressReferrer.City != '') || (patientData.AddressReferrer.State && patientData.State != '') || (patientData.AddressReferrer.ZipCode && patientData.AddressReferrer.ZipCode != '')">
+            <!-- had to put these on the same line or else the browser would insert a phantom space - no idea why -->
+            <span id="lblPatientCity">{{ patientData.AddressReferrer.City }}</span><span ng-show="(patientData.AddressReferrer.City && patientData.AddressReferrer.City != '') && (patientData.AddressReferrer.State && patientData.AddressReferrer.State != '')">, </span>
+            <span id="lblPatientState">{{ patientData.AddressReferrer.State }} </span>
+            <span id="lblPatientZip">{{   patientData.AddressReferrer.ZipCode | zipCode }}</span>
+        </div>
+    </div>
+    <div class="form-col-6" ng-if="!patientData.AddressReferrerId">
+        <div class="" ng-show="patientData.AddressLine1 && patientData.AddressLine1 != ''">
+            <span class="word-wrap" id="lblPatientAddressLineOne">{{ patientData.AddressLine1 }}</span>
+        </div>
+        <div class="" ng-show="patientData.AddressLine2 && patientData.AddressLine2 != ''">
+            <span class="word-wrap" id="lblPatientAddressLineOne">{{ patientData.AddressLine2 }}</span>
+        </div>
+        <div class="" ng-show="(patientData.City && patientData.City != '') || (patientData.State && patientData.State != '') || (patientData.ZipCode && patientData.ZipCode != '')">
+            <!-- had to put these on the same line or else the browser would insert a phantom space - no idea why -->
+            <span id="lblPatientCity">{{ patientData.City }}</span><span ng-show="(patientData.City && patientData.City != '') && (patientData.State && patientData.State != '')">, </span>
+            <span id="lblPatientState">{{ patientData.State }} </span>
+            <span id="lblPatientZip">{{   patientData.ZipCode | zipCode }}</span>
+        </div>
+    </div>
+
+</div>
+<div class="form-row">
+    <div class="form-group form-col-6">
+        <div class="form-row">
+            <div class="form-col-4">
+                <label class="control-label"> Patient ID</label>
+                <span class="control-label"> {{ patientData.PatientCode }}</span>
+            </div>
+            <div class="form-col-8">
+                <label class="control-label"> Date of Birth</label>
+                <span class="control-label" ng-show="patientData.DateOfBirth"> {{ patientData.DateOfBirth | toShortDisplayDateUtc }}</span>
+                <span class="control-label" ng-show="!patientData.DateOfBirth"> N/A </span>
+            </div>
+        </div>
+        <div class="form-row">
+            <label class="control-label"> Responsible Person </label>
+            <span class="control-label"> {{ ResponsibleParty | i18n }}</span>
+            <span class="mergeDupicate_section__warning padding-left-5" ng-show="warningRP && selectedLeft === false && section === 2"><i class="fa fa-exclamation-triangle"></i></span>
+        </div>
+    </div>
+
+    <div class="form-col-6">
+        <div class="" ng-repeat="phone in phones | limitTo:3">
+            <div ng-if="!phone.PhoneReferrerId">
+                <label id="lblPatientPhoneOneType{{$index}}" ng-if="phone.PhoneNumber">
+                    {{ phone.Type }} :
+                </label>
+                <span id="lblPatientPhoneView{{$index}}" >
+                    {{ phone.PhoneNumber | tel }}
+                </span>
+            </div>
+            <div ng-if="phone.PhoneReferrerId ">
+                <label id="lblPatientPhoneOneType{{$index}}" >
+                    {{ phone.PhoneReferrer.Type }} :
+                </label>
+                <span id="lblPatientPhoneView{{$index}}" >
+                    {{ phone.PhoneReferrer.PhoneNumber | tel }}
+                </span>
+            </div>
+        </div>
+        <div class="" ng-repeat="email in emails | limitTo:3">
+            <a ng-if="email.AccountEMail" class="btn btn-link padding-none word-wrap" id="btnPatientEmailOneAddress" ng-href="mailto:{{ email.AccountEMail.Email }}">
+                {{email.AccountEMail.Email}}
+            </a>
+            <a ng-if="!email.AccountEMail" class="btn btn-link padding-none word-wrap" id="btnPatientEmailOneAddress" ng-href="mailto:{{ email.Email }}">
+                {{email.Email}}
+            </a>
+        </div>
+        &nbsp;
+        <div class="" ng-show="section === 2">
+            <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="{{patientData.PatientId}}" ng-click="primarySelected()" ng-checked="{{selectedLeft}}">
+            <span>Use as Primary</span>
+        </div>
+    </div>
+</div>
+ &nbsp;
+<div class="form-row" ng-show="section === 2 && selectedLeft === false && warningRP == false && patientData.IsActive === false">
+    <span>
+        This Patient will be merged with <strong>{{primaryPatientName | i18n}} </strong>PID  <strong>{{ primaryPID | i18n }}</strong>, the Primary Patient Record. All account and clinical history will be assigned to the Primary.
+    </span>
+    <br/>
+    <br/>
+    <span> Patient address and patient preferences will use the primary patient record over this patient record unless no conflict exists.</span>
+</div>
+<div class="form-row" ng-show="warningRP  && section !== 0">
+    <span class="mergeDupicate_section__warning"> WARNING! </span>
+    <span>
+        This Patient cannot be merged as they are the Responsible Person for an account that still has members.
+    </span>
+    <br />
+    <br />
+    <span> Please move all members to another account and then try again.</span>
+</div>
+<div class="form-row" ng-show="patientData.IsActive === false && warningRP === false && section !== 0">
+    <span class="mergeDupicate_section__warning"> WARNING! </span>
+    <span>
+        {{'This Patient cannot be merged as they have an Inactive status.'|i18n }}
+    </span>
+    <br />
+    <br />
+    <span> {{'Please change their status to Active and try again.' | i18n}} </span>
+</div>

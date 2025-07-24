@@ -1,0 +1,97 @@
+<div class="preference-detail-container" id="preference-container">
+
+    <div class="preference-header" id="preference-header">
+        <span class="preference-header-title">{{'Preferences' | translate}}</span>
+        <div class="preference-header-actionButtons">
+            <app-button id="btnrefedit" buttonLabel="{{'Edit' | translate }}" variation="secondary" class="ml-10"
+                (onClick)="updatePerson()" [isDisabled]='!hasEditAccess'></app-button>
+        </div>
+    </div>
+    <hr>
+    <div class="preferenceDetailContent" id="preference-personalDetailContent">
+        <div class="preferenceDetailContent-preferred-location" id="preference-preferred-location">
+            <div class="personalDetailContent-preferred-location-label ">
+                <app-label class="preferenceDetailContent-preference-details-label" [label]="'Primary Location'">
+                </app-label>
+            </div>
+            <span>{{preferedLocation}}</span>
+        </div>
+        <div class="preferenceDetailContent-alternate-location" id="preference-alternate-location">
+            <div class="preferenceDetailContent-alternate-location-label ">
+                <app-label class="preferenceDetailContent-preference-details-label" [label]="'Alternate Location'">
+                </app-label>
+            </div>
+            <span class="providerlocationdetail-alternateLocations">
+                <span *ngFor="let location of alternateLocations">{{location}}<br></span>
+                <span *ngIf="!(alternateLocations && alternateLocations.length)">{{'N/A' | translate}}</span>
+            </span>
+        </div>
+        <div class="preferenceDetailContent-preferred-dentist" id="preference-preferred-dentist">
+            <div class="preferenceDetailContent-preferred-dentist-label ">
+                <app-label class="preferenceDetailContent-preference-details-label" [label]="'Preferred Dentist'">
+                </app-label>
+            </div>
+            <span>{{dentist}}</span>
+        </div>
+        <div class="preferenceDetailContent-preferred-hygienist" id="preference-preferred-hygienist">
+            <div class="preferenceDetailContent-preferred-hygienist-label ">
+                <app-label class="preferenceDetailContent-preference-details-label" [label]="'Preferred Hygienist'">
+                </app-label>
+            </div>
+            <span>{{hygenist}}</span>
+        </div>
+        <div class="preferenceDetailContent-flags" id="preference-flags">
+            <div class="preferenceDetailContent-flags-label ">
+                <app-label class="preferenceDetailContent-preference-details-label" [label]="'Alerts & Flags'">
+                </app-label>
+            </div>
+            <div class="medical-info" *ngFor="let medicalAlert of medicalAlerts" id="medical-info">
+                <i *ngIf="medicalAlert.MedicalHistoryAlertTypeId === 1" class="fi-allergies"></i>
+                <i *ngIf="medicalAlert.MedicalHistoryAlertTypeId === 2" class="fa fa-heart"></i>
+                <i *ngIf="medicalAlert.MedicalHistoryAlertTypeId === 3" class="fi-premed"></i>
+                <span class="medical-info-title" id="medical-info-title"
+                    tooltip="{{(medicalAlert.MedicalHistoryAlertDescription && medicalAlert.MedicalHistoryAlertDescription.length > 30) ? medicalAlert.MedicalHistoryAlertDescription : ''}}"
+                    placement="top" delay="500">
+                    {{ medicalAlert.MedicalHistoryAlertDescription | truncateText: 30 }}
+                </span>
+            </div>
+            <div id="alerts-info" class="alerts-info" *ngFor="let flag of flags">
+                <i class="fa {{ getClass(flag.SymbolId) }}"></i>
+                <span id="alerts-info-sub-title" class="alerts-info-sub-title" placement="top" delay="500"
+                    tooltip="{{(flag.Description && flag.Description.length > 30) ? flag.Description : ''}}">
+                    {{ flag.Description | truncateText: 30 }}
+                </span>
+            </div>
+        </div>
+        <div class="preferenceDetailContent-discount" id="preference-discount">
+            <div class="preferenceDetailContent-discount-label ">
+                <app-label class="preferenceDetailContent-preference-details-label" [label]="'Discounts'"></app-label>
+            </div>
+            <span>{{patientDiscount}}</span>
+        </div>
+        <div class="preferenceDetailContent-groups" id="preference-groups">
+            <div class="preferenceDetailContent-groups-label ">
+                <app-label class="preferenceDetailContent-preference-details-label" [label]="'Groups'"></app-label>
+            </div>
+            <span>
+                <span *ngFor="let group of patientGroups">{{group ? group : 'N/A' }}<br></span>
+                <span *ngIf="!(patientGroups && patientGroups.length)">{{'N/A' |
+                    translate}}</span>
+            </span>
+        </div>
+        <div class="preferenceDetailContent-statements" id="preference-statements">
+            <div class="preferenceDetailContent-statements-label ">
+                <app-label class="preferenceDetailContent-preference-details-label"
+                    [label]="'Account receives statements?'"></app-label>
+            </div>
+            <span>{{receiveStatements ? 'Yes' : 'No' | translate}}</span>
+        </div>
+        <div class="preferenceDetailContent-finance-charges" id="preference-finance-charges">
+            <div class="preferenceDetailContent-finance-charges-label ">
+                <app-label class="preferenceDetailContent-preference-details-label"
+                    [label]="'Account receives finance charges?'"></app-label>
+            </div>
+            <span>{{receiveFinanceCharges ? 'Yes' : 'No' | translate}}</span>
+        </div>
+    </div>
+</div>

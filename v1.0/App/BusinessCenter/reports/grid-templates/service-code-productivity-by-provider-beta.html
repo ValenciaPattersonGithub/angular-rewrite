@@ -1,0 +1,76 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.ProviderDetails.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.ProviderDetails.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="reportGrid__row stripOdd">
+                    <th class="col-sm-2 cell">{{'Provider' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Service Type' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Service Code' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'CDT Code' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Description' | i18n}}</th>
+                    <th class="col-sm-2 cell text-right">{{'Number' | i18n}}</th>
+                    <th class="col-sm-2 cell text-right">{{'Fee' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody class="stripEven" ng-repeat="provider in data.ProviderDetails">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-2 cell">{{provider.Provider}}</td>
+                    <td class="col-sm-10 cell" colspan="6"></td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat-start="serviceType in provider.ServiceTypes">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-2 cell">{{serviceType.ServiceType}}</td>
+                    <td class="col-sm-1 cell">{{serviceType.Details[0].ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{serviceType.Details[0].CdtCode}}</td>
+                    <td class="col-sm-2 cell">{{serviceType.Details[0].Description}}</td>
+                    <td class="col-sm-2 cell text-right">{{serviceType.Details[0].Number}}</td>
+                    <td class="col-sm-2 cell text-right">{{serviceType.Details[0].Fee | currency}}</td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat-end ng-repeat="detail in serviceType.Details | startFrom: 1">
+                    <td class="col-sm-4 cell" colspan="2"></td>
+                    <td class="col-sm-1 cell">{{detail.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{detail.CdtCode}}</td>
+                    <td class="col-sm-2 cell">{{detail.Description}}</td>
+                    <td class="col-sm-2 cell text-right">{{detail.Number}}</td>
+                    <td class="col-sm-2 cell text-right">{{detail.Fee | currency}}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-5 cell" colspan="3"></td>
+                    <td class="col-sm-3 cell text-right" colspan="2">{{'Total for' | i18n }} {{provider.Provider}}</td>
+                    <td class="col-sm-2 cell text-right">{{provider.Number}}</td>
+                    <td class="col-sm-2 cell text-right">{{provider.Fee | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr class="reportGrid__row reportGrid__footer stripEven">
+                    <td class="col-sm-3 cell  reportGrid__label" colspan="2">
+                        {{'Report Totals' | i18n}}
+                    </td>
+                    <td class="col-sm-5 cell" colspan="3"></td>
+                    <td class="col-sm-2 cell text-right">
+                        {{data.Number}}
+                    </td>
+                    <td class="col-sm-2 cell text-right">
+                        {{data.Fee | currency}}
+                    </td>
+                </tr>
+                <tr class="reportGrid__row stripEven">
+                    <td class="col-sm-12 text-align-center" colspan="7">
+                        {{
+'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association
+                        (ADA). All rights reserved.' | i18n
+                        }}
+                    </td>
+                </tr>
+                <tr class="reportGrid__row stripEven">
+                    <td class="col-sm-12 text-align-center" colspan="7">
+                        {{'Fee does not reflect taxes and/or discounts' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

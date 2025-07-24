@@ -1,0 +1,33 @@
+﻿<div ngClass="fade-in">
+  <div class="drawTypes">
+    <form name="frmDrawTypes" role="form" novalidate>
+      <div class="rowFull white">
+        <!--header-->
+        <div class="drawTypes__header">
+          <!--Breadcrumbs-->
+          <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+          <div class="drawTypes__title">
+            <h1>{{ 'Draw Types' | translate }}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="drawTypes__body">
+        <div class="drawTypes__list">
+          <!--comman kindo grid-->
+          <app-kendo-grid [data]="drawTypes"
+                          [gridHeight]="'455'"
+                          [state]="state"
+                          [isFilterable]="true"
+                          [isSortable]="true"
+                          [columns]="columns"
+                          [hasKendoAddEdit]="false"
+                          [editSection]="{showActionIcons: false}"
+                          [noRecordsMessage]="loadingMessageNoResults">
+          </app-kendo-grid>
+          <!--loading spinner-->
+          <no-results *ngIf="loadingList" [loading]="loadingList"></no-results>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

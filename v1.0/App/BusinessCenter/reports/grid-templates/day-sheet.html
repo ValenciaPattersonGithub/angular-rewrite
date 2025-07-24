@@ -1,0 +1,68 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Dates.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Types.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-4 cell">{{ 'Type' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Production' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Collections' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Adjustments' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'A.R. Impact' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="type in data.Types" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr ng-if="data.Types.indexOf(type) <= 5">
+                    <td class="col-sm-4 cell">{{ type.Type }}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Production >=0">{{ type.Production | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Production < 0">({{ type.Production * -1 | currency}})</td>
+                    <td class="col-sm-4 cell" colspan="2"></td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.ARImpact >=0">{{ type.ARImpact | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.ARImpact < 0">({{ type.ARImpact * -1 | currency}})</td>
+                </tr>
+                <tr ng-if="data.Types.indexOf(type) > 5 && data.Types.indexOf(type) <= 11">
+                    <td class="col-sm-4 cell">{{ type.Type }}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Production >=0">{{ type.Production | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Production < 0">({{ type.Production * -1| currency}})</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Collections >=0">{{ type.Collections | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Collections < 0">({{ type.Collections * -1 | currency}})</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Adjustments >=0">{{ type.Adjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Adjustments < 0">({{ type.Adjustments *-1 | currency}})</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.ARImpact >=0">{{ type.ARImpact | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.ARImpact < 0">({{ type.ARImpact * -1 | currency}})</td>
+                </tr>
+                <tr ng-if="data.Types.indexOf(type) > 11 && data.Types.indexOf(type) <= 13">
+                    <td class="col-sm-4 cell">{{ type.Type }}</td>
+                    <td class="col-sm-4 cell" colspan="2"></td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Adjustments >=0">{{ type.Adjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Adjustments < 0">({{ type.Adjustments  * -1| currency}})</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.ARImpact >=0">{{ type.ARImpact | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.ARImpact < 0">({{ type.ARImpact * -1 | currency}})</td>
+                </tr>
+                <tr ng-if="data.Types.indexOf(type) > 13">
+                    <td class="col-sm-4 cell">{{ type.Type }}</td>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Collections >=0">{{ type.Collections | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.Collections < 0">({{ type.Collections * -1| currency}})</td>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.ARImpact >=0">{{ type.ARImpact | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="type.ARImpact < 0">({{ type.ARImpact  * -1| currency}})</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="fusePrintGrid pull-left reportGrid__footer avoidPageBreak stripEven" ng-if="data.Types.length > 0&& !showFilterMessage">
+        <div>
+            <div class="col-sm-4 cell"><b>{{'Totals' | i18n}}</b></div>
+            <div class="col-sm-2 cell text-right" ng-if="data.Production >=0"><b>{{ data.Production | currency}}</b></div>
+            <div class="col-sm-2 cell text-right" ng-if="data.Production < 0"><b>({{ data.Production * -1 | currency}})</b></div>
+            <div class="col-sm-2 cell text-right" ng-if="data.Collections >=0"><b>{{ data.Collections | currency}}</b></div>
+            <div class="col-sm-2 cell text-right" ng-if="data.Collections < 0"><b>({{ data.Collections * -1 | currency}})</b></div>
+            <div class="col-sm-2 cell text-right" ng-if="data.Adjustments >=0"><b>{{ data.Adjustments | currency}}</b></div>
+            <div class="col-sm-2 cell text-right" ng-if="data.Adjustments < 0"><b>({{ data.Adjustments * -1 | currency}})</b></div>
+            <div class="col-sm-2 cell text-right" ng-if="data.ARImpact >=0"><b>{{ data.ARImpact | currency}}</b></div>
+            <div class="col-sm-2 cell text-right" ng-if="data.ARImpact < 0"><b>({{ data.ARImpact * -1| currency}})</b></div>
+        </div>
+    </div>
+</div>

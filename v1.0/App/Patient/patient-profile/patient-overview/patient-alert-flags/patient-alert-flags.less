@@ -1,0 +1,42 @@
+﻿.patAlerts {
+    &__alert {
+    }
+
+    &__content {
+        max-height: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        .make-md-column(12);
+    }
+
+    &__alertContent {
+        .alerts-item-small;
+
+        div {
+            margin-right: @brand-margin_xs;
+        }
+    }
+
+    &__faIcons {
+        .pull-left;
+    }
+
+    &__description {
+        padding-left: 5px;
+    }
+    &__medicalHistoryFlagColor{
+        color:@patient-medical-history-flag-color;
+    }
+
+    &__svgIcon {
+        overflow: hidden;
+        width: 20px !important;
+        height: 20px !important;
+        display: inline-flex;
+        font-size: inherit !important;
+
+        &:after {
+            padding: 0px;
+        }
+    }
+}

@@ -1,0 +1,16 @@
+﻿<div ng-controller="CaseAcceptanceHalfDonutWidgetController" class="soarWidget">
+    <div class="panel-heading soarWidget__header">
+        <label class="widget-handle w_row">{{ data.Title }}</label>
+        <div>
+            <widget-date-range-filter date-filter="caseAccDateFilter"
+                                      options="caseAccDateFilterOptions"
+                                      from-date="caseAccFromDate"
+                                      to-date="caseAccToDate"
+                                      on-change="onDateFilterChange"
+                                      on-clear= "clearFilters"></widget-date-range-filter>
+        </div>
+    </div>
+    <div class="soarWidget__body">
+        <simple-half-donut data="caseAccSeriesData" tooltip="tooltip" drilldown="drilldown"></simple-half-donut>
+    </div>
+</div>

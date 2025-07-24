@@ -1,0 +1,265 @@
+<div [ngClass]="['bulk-payment', isEra ? 'bulk-payment-era' : '']">
+    <div class="unapplied-payments" *ngIf="isPaymentProviderEnabled && !isEra && unappliedBulkPaymentTransactions.length > 0">
+        <notification-badge 
+            [badgeCount]="unappliedBulkPaymentTransactions.length" 
+            badgeText="Unapplied Payments" 
+            hasOverlayContent="true"
+            [triggerOverlayClose]="triggerOverlayClose">
+            <div class="unapplied-payments-grid">
+                <div class="unapplied-payments-grid-header">
+                    <div>{{ 'Date' | translate }}</div>
+                    <div>{{ 'Carrier' | translate }}</div>
+                    <div>{{ 'Card Last Four Digits' | translate }}</div>
+                    <div>{{ 'Amount' | translate }}</div>
+                    <div>{{ 'Action' | translate }}</div>
+                </div>
+
+                <div *ngFor='let payment of unappliedBulkPaymentTransactions; trackBy: unappliedPaymentIdentity; let i = index' 
+                    [ngClass]="['unapplied-payments-grid-row', i % 2 == 0 ? 'unapplied-payments-grid-row-even' : 'unapplied-payments-grid-row-odd']">
+                    <div>{{ payment.PaymentDate | date: 'MM/dd/yyyy' }}</div>
+                    <div class="unapplied-payment-carrier">{{ payment.CarrierName }}</div>
+                    <div class="align-right">{{ payment.CardLastFour }}</div>
+                    <div class="align-right">{{ payment.Amount | currency }}</div>
+                    <div><a (click)="applyUnappliedBulkInsurancePayment(payment)">{{ 'Resolve' | translate }}</a></div>
+                </div>
+            </div>
+        </notification-badge>
+    </div>
+    <div class="bulk-payment-card-container">
+        <div class="header-container">
+            <div class="bulk-payment-header-label">{{"Apply a Bulk Insurance Payment "}}</div>
+            <div class="mr-15">
+                <app-button id="uploadFile" 
+                            variation="primary" 
+                            (onClick)="addDocument()"
+                            buttonLabel="{{'Upload EOB'|translate}}" 
+                            [isDisabled]="!hasClinicalDocumentsAddAccess || !hasValidClaimPayments"
+                            [hidden]="!isBulkPaymentEobUploadEnabled">
+                </app-button>
+            </div>        
+        </div>
+            
+        <hr class="bulk-payment-header-line-primary"/>
+
+        <div class="form-row flex-wrap">
+            <div class="form-group date-picker-override">
+                <label class="control-label">{{ 'Date' | translate }}</label>
+                <app-date-picker [id]="'filterDate'"
+                                    [(value)]="filter.DateEntered" [maxDate]="today"
+                                    (dateChanged)="onDateChanged($event)">
+                </app-date-picker>
+            </div>
+            <div class="form-group location-selector-override">
+                <label class="control-label">{{'Location(s)' | translate }}</label>
+                <access-based-location-selector [id]="'bulkLocations'" check-auth-z="'soar-biz-bizrcv-view'"
+                                                [expanded]="true"
+                                                [selectedLocationIds]="selectedLocationIds"
+                                                [disabled]="disableLocationSelector"
+                                                [showActiveOnly]="false"
+                                                (selectedValueChanged)="onSelectedValueChanged($event)"
+                                                [amfaAccess]="'soar-acct-aipmt-add'">
+                </access-based-location-selector>
+            </div>
+            <div class="form-group carrier-override">
+                <label class="control-label">{{'Select a Carrier' | translate}}</label>
+                <search-bar-autocomplete    [inputValueBind]="selectedCarrierName"
+                                            [list]="filteredCarrierList"
+                                            [placeholder]="carrierSearchPlaceholder"
+                                            [template]="template"
+                                            [isDisabled]="disableCarrier"
+                                            [valueF]="'CarrierId'"
+                                            (selectedValueChange)="onCarrierChanged($event)"
+                                            (filterValueChange)="filterCarriers($event)">
+                </search-bar-autocomplete> 
+            </div>
+            <div class="form-group insurance-payment-types-dropdown" [hidden]="selectedUnappliedBulkInsurancePayment != null">
+                <label class="control-label">{{'Payment Type' | translate}}</label>
+                <div [ngClass]="{'input-error': (showErrors && selectedPaymentTypeId === 0)}">
+                    <insurance-payment-types-dropdown id="insPaymentTypesDropdown"
+                                                        [initialSelectedPaymentType]="selectedPaymentTypeId"
+                                                        (selectedPaymentTypeChange)="selectedPaymentTypeWatcher($event)">
+                    </insurance-payment-types-dropdown>
+                </div>
+                <span *ngIf="showErrors && selectedPaymentTypeId === 0" class="error help-text">
+                    {{'Payment Type is required' | translate}}
+                </span>
+            </div>
+
+        
+            <div class="form-group" *ngIf="showCardReaderDropDown">
+                <div>
+                  <card-reader-select [location]="currentLocation"
+                    (onCardReaderChange)="cardReaderChanged($event)"
+                    (isCardReaderExist)="isCardReaderExist($event)"
+                    [showLabel]="true">
+                  </card-reader-select>
+                </div>
+                <span *ngIf="showErrors && isPaymentDevicesExist && (!selectedCardReader || selectedCardReader == '0')"
+                  class="error help-text"
+                  data-qa="card-reader-select-error">
+                    {{ 'Please select a Card Reader' | translate }}
+                </span>
+              </div>
+
+
+            <div class="form-group currency-input-override" [hidden]="selectedUnappliedBulkInsurancePayment != null">
+                <label class="control-label">{{'Amount' | translate}}</label>
+                <currency-input id="amountInput" [(amount)]="filter.Amount"
+                    (amountChange)="processPaymentChange($event)" >
+                </currency-input>
+            </div>
+            <div class="form-group" *ngIf="paymentPrompt && paymentPrompt !== ''" [hidden]="selectedUnappliedBulkInsurancePayment != null">
+                <label class="control-label">{{ paymentPrompt }}</label>
+                <div class="">
+                    <input class="bulk-payment-form-control" id="paymentPrompt" type="text" [(ngModel)]="filter.PaymentTypePromptValue"
+                            maxlength="25" />
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="selectedUnappliedBulkInsurancePayment != null">
+            <span class="unapplied-payment-info-amount">{{ selectedUnappliedBulkInsurancePayment.Amount | currency }}</span> is saved and ready to be applied.&nbsp;
+            <span class="unapplied-payment-info-heading">{{ 'Payment Type' | translate }}:</span> {{ selectedUnappliedBulkInsurancePayment.PaymentTypeDescription }}&nbsp;
+            <span class="unapplied-payment-info-heading" *ngIf="selectedUnappliedBulkInsurancePayment.CardLastFour != null">{{ 'Card Last Four Digits' | translate }}:</span> {{ selectedUnappliedBulkInsurancePayment.CardLastFour }}
+        </div>
+
+        <hr class="bulk-payment-header-line-secondary"/>
+
+        <claim-payment-table class="claim-table-component"
+            [claims]="insurancePayments"
+            (serviceAmountBlurChange)="serviceAmountBlurEvent($event)"
+            (serviceAllowedAmountBlurChange)="serviceAllowedAmountBlurChange($event)"       
+            (finalPaymentChange)="finalPaymentChangeEvent($event)"
+            (paymentAmountBlurChange)="distributePaymentAmount($event)"
+            (patientNameClick)="navToPatientProfile($event)"
+            [masterNote]="filter.Note"
+            (masterNoteChange)="masterNoteChangeEvent($event)"
+             [triggerRefresh]="triggerRefreshEmitter"
+            [canEditAllowedAmount]="canEditAllowedAmount">
+        </claim-payment-table>
+
+        <div class="row padding-10 footer">
+            <div class="pull-right">
+                <div class="form-row">
+                    <div class="form-group" data-qa="ins-pmt-reset-allowed-amounts">
+                        <app-button 
+                          id="resetAllowedAmountsButton"
+                          variation="secondary"
+                          data-qa="ins-pmt-form-reset-allowed-amounts-button"
+                          (onClick)="resetAllowedAmounts()"
+                          buttonLabel="{{ 'Reset Allowed Amounts' | translate }}"
+                          [isDisabled]="!hasEditedAllowedAmounts">
+                        </app-button>              
+                    </div>
+                    <div class="form-group">
+                        <app-button id="clearCancel" variation="secondary" (onClick)="cancelPaymentConfirm()"
+                                    buttonLabel="{{cancelButtonText}}" [isDisabled]="!filterHasChanges">
+                        </app-button>
+                    </div>
+                    <div class="form-group">
+                        <app-button id="applyButton" class="" variation="primary" (onClick)="apply()"
+                                    buttonLabel="{{'Apply'|translate}}"
+                                    [isDisabled]="isApplyButtonDisabled()">
+                        </app-button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-offset-9 col-sm-3 error">
+                <span class="help-text" *ngIf="showNoClaimsMessage"> No submitted claims for the selected payer </span>
+                <span class="pull-right">
+                    <!-- Non ERA Error -->
+                    <span *ngIf="!isEra">
+                        <span *ngIf="(unappliedAmount > 0.009999)" class="error help-text">{{ 'You have'| translate }}
+                            {{ unappliedAmount | currency }}
+                            {{ 'left to distribute. Please correct before proceeding.' | translate }}</span>
+        
+                        <span *ngIf="(unappliedAmount < -0.009999)" class="error help-text">{{ 'The distributed amount of' |
+                            translate }}
+                            {{ (totalForServices) | currency }} {{ 'exceeds the payment amount of' | translate }}
+                            {{ filter.Amount | currency }}
+                            {{ '. Please correct before proceeding.' | translate }}</span>
+                    </span>
+
+                    <!-- ERA Errors -->
+                    <span *ngIf="isEra">
+                        <!-- Claim and Provider Level Errors -->
+                        <span *ngIf="!claimsHaveErrors">
+                            <span *ngIf ="unappliedAmount == 0" class="error help-text">
+                                {{ '' | translate }}
+                            </span>
+
+                            <span *ngIf="(unappliedAmount > 0.009999)" class="error help-text">
+                                {{ 'The ERA has Claim or Provider Level Adjustments that need to be reconciled manually.' | translate }}
+                                <br />{{'You have'| translate }} {{ unappliedAmount | currency }} {{ 'left to distribute. Please correct before proceeding.' | translate }}
+                            </span>
+                            <span *ngIf="(unappliedAmount < -0.009999)" class="error help-text">
+                                {{ 'The ERA has Claim or Provider Level Adjustments that need to be reconciled manually.' | translate }}
+                                <br />{{'The distributed amount of' | translate }} {{ (totalForServices) | currency }}
+                                {{ 'exceeds the payment amount of' | translate }} {{ filter.amount | currency }}
+                                {{ '. Please correct before proceeding.' | translate }}
+                            </span>
+                        </span>
+
+                        <span *ngIf="claimsHaveErrors || hasEraInitialDistributionError">
+                            {{ 'The ERA has distribution errors that need to be reconciled manually. Please correct before proceeding.' | translate }}
+                            <!-- User-based Distribution Level Errors -->
+                            <span *ngIf="claimsHaveErrors && (unappliedAmount > 0.009999)" class="error help-text">
+                                <br />{{'You have'| translate }} {{ unappliedAmount | currency }}
+                                {{ 'left to distribute. Please correct before proceeding.' | translate }}
+                            </span>
+                            <span *ngIf="claimsHaveErrors && (unappliedAmount < -0.009999)" class="error help-text">
+                                <br />{{'The distributed amount of' | translate }}
+                                {{ (totalForServices) | currency }}
+                                {{'exceeds the payment amount of' | translate }} {{ filter.Amount | currency }}
+                                {{ '. Please correct before proceeding.' | translate }}
+                            </span>
+                            <!-- Initial ERA data Distribution Level Error (477244) -->
+                            <!-- NOTE this needs localization -->
+                            <span *ngIf="hasEraInitialDistributionError" class="error help-text">
+                                <br />The ERA payment amount of {{ eraDistributionErrorPaymentAmount | currency }}
+                                does not match the amount distributed to services ({{ eraDistributionErrorServiceTotal | currency }}).
+                                You have {{ (eraDistributionErrorPaymentAmount - eraDistributionErrorServiceTotal) | currency }} left to distribute.
+                            </span>
+                        </span>
+
+                        <span *ngIf="!filter.InsurancePaymentTypeId" class="error help-text">
+                            {{ 'Payment type is not valid.' | translate }}
+                        </span>
+
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #templateRef>
+    <div class="doc-modal">
+        <div class="btnFlexContainer">
+            <p id="modal-header" class="doc-modal-header">
+                {{'Upload a document' | translate}}
+            </p>
+            <div class="closeModal" (click)="closeModal()">
+                <svg-icon [name]="'closeIcon'" [iconHeight]="'24px'" [iconWidth]="'24px'"></svg-icon>
+            </div>
+        </div>
+        <div class="doc-modal-body">
+            <div class="containerPadding">
+                <!-- 'patientListForFileUploadFirstPatient' is a placeholder for 'patientListForFileUpload' until we decide whether to send a list of patients to upload files for -->
+                <doc-uploader [patientId]="patientListForFileUploadFirstPatient"
+                              [bulkPaymentEob]="true"
+                              (uploadCancel)="onUploadCancel($event)"
+                              (uploadSuccess)="onUploadSuccess($event)"></doc-uploader>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<paypage-modal
+  [isVisible]="showPayPageModal"
+  [iframeSrc]="payPageUrl"
+  (close)="closePaypage()"
+  (paypageRedirectCallBackEvent)="handlePayPageTransactionCallback()"
+></paypage-modal>

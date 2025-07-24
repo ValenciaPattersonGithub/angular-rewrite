@@ -1,0 +1,90 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="claim grid header">
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom">{{ 'Referral Categories' | translate }}</div>
+        <div class="col-sm-3-migration ref-grid-header rpt-cell-custom">{{ 'Referring From' | translate }}</div>
+        <div class="col-sm-3-migration ref-grid-header rpt-cell-custom">{{ 'Referred Patient Name' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'Referred Patient Code' | translate }}</div>
+        <div class="col-sm-1-migration ref-grid-header rpt-cell-custom">{{ 'First Visit Date' | translate }}</div>
+        <div class="col-sm-2-migration ref-grid-header rpt-cell-custom rpt-brd-last">{{ 'Referred Patient Location' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="10" tabindex="0" id="referredPatients">
+            <div *cdkVirtualFor="let type of reportData; index as i" [ngClass]="{'odd-row': i % 2 !== 0}" [class]="type.Class">
+              <div class="claim grid item grid-item" *ngIf="type.IsReferralTypeHeader" style="background-color: white !important;">
+                <div class="col-sm-2-migration rpt-cell-custom">{{ type.ReferralType }}</div>                
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last"></div>
+              </div>
+              <div class="claim grid item grid-item" *ngIf="type.IsReferralSourceHeader">
+                <div class="col-sm-2-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom">{{ type.ReferralSource }}</div>
+                <div class="col-sm-3-migration rpt-cell-custom">{{type.ReferredPatientName}}</div>
+                <div class="col-sm-1-migration rpt-cell-custom">{{type.ReferredPatientCode}}</div>
+                <div class="col-sm-1-migration rpt-cell-custom">{{type.FirstVisitDate | date: 'MM/dd/yyyy'}}</div>
+                <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last">{{type.ReferredPatientLocation}}</div>
+              </div>
+              <div class="claim grid item grid-item" *ngIf="!type.IsReferralSourceHeader && !type.IsFooter && type.ReferredPatientCode">
+                <div class="col-sm-2-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom">{{ type.ReferredPatientName }}</div>
+                <div class="col-sm-1-migration rpt-cell-custom">{{ type.ReferredPatientCode }}</div>
+                <div class="col-sm-1-migration rpt-cell-custom">{{ type.FirstVisitDate | date: 'MM/dd/yyyy' }}</div>
+                <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last">{{ type.ReferredPatientLocation }}</div>
+              </div>
+              <div class="claim grid item grid-item" *ngIf="type.IsFooter && type.ShowPatientTotal" style="font-weight: bold;">
+                <div class="col-sm-2-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom">{{'Total referrals' | translate}}: {{type.TotalReferral}}</div>
+                <div class="col-sm-1-migration rpt-cell-custom"></div>
+                <div class="col-sm-1-migration rpt-cell-custom"></div>
+                <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last"></div>
+              </div>
+              <div class="claim grid item grid-item" *ngIf="type.IsCategoryFooter && type.ShowCategoryTotal" style="font-weight: bold;">
+                <div class="col-sm-2-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom">{{'Total referrals for ' + type.FooterReferralType | translate}}: {{type.TotalCategoryReferral}}</div>
+                <div class="col-sm-1-migration rpt-cell-custom"></div>
+                <div class="col-sm-1-migration rpt-cell-custom"></div>
+                <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last"></div>
+              </div>
+              <div class="claim grid item grid-item" id="divMainInfo21{{i}}"
+                    *ngIf="type.IsFinalReportTotals == true" style="font-weight: bold;">
+                <div class="col-sm-2-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom"></div>
+                <div class="col-sm-3-migration rpt-cell-custom ref-grid-report-total">{{'Total referrals' | translate}}: {{totalRecords}}</div>
+                <div class="col-sm-1-migration rpt-cell-custom"></div>
+                <div class="col-sm-1-migration rpt-cell-custom"></div>
+                <div class="col-sm-2-migration rpt-cell-custom rpt-brd-last"></div>
+                </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+          
+        <div class="pgr-pager" *ngIf="numberOfPages > 0">
+          <!-- First and Previous buttons -->
+          <span class="pgr-page-nxt-prev" (click)="onPageChange(1)" [ngClass]="{'disabled': isFirstPage()}">&laquo;</span>
+          <span class="pgr-page-nxt-prev" (click)="onPageChange(currentPageNumber - 1)" [ngClass]="{'disabled': isFirstPage()}">&lt;</span>
+      
+          <!-- Show first page if not included in the range -->
+          <span *ngIf="pagesArray[0] > 1" (click)="onPageChange(1)">1</span>
+          <span *ngIf="showFirstEllipsis()">...</span>
+      
+          <!-- Page numbers range -->
+          <span *ngFor="let page of pagesArray"
+                [ngClass]="{ 'pgr-active-page-nm': currentPageNumber === page, 'pgr-page-nm': currentPageNumber !== page }"
+                (click)="onPageChange(page)">
+              {{page}}
+          </span>
+      
+          <!-- Show last page if not included in the range -->
+          <span *ngIf="showLastEllipsis()">...</span>
+          <span *ngIf="pagesArray[pagesArray.length - 1] < numberOfPages" (click)="onPageChange(numberOfPages)">{{numberOfPages}}</span>
+      
+          <!-- Next and Last buttons -->
+          <span class="pgr-page-nxt-prev" (click)="onPageChange(currentPageNumber + 1)" [ngClass]="{'disabled': isLastPage()}">&gt;</span>
+          <span class="pgr-page-nxt-prev" (click)="onPageChange(numberOfPages)" [ngClass]="{'disabled': isLastPage()}">&raquo;</span>
+      </div>
+    </ng-container>
+</div>

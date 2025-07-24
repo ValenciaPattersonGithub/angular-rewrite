@@ -1,0 +1,34 @@
+﻿<div class="ellipsisMenu" 
+     ng-class="{dropup: orientV}"
+     uib-dropdown 
+     dropdown-append-to-body
+     on-toggle="eMenuToggle($event)">
+
+    <button uib-dropdown-toggle
+            class="btn btn-link btn-lg" 
+            icon="fa-ellipsis-v" 
+            tabindex="{{menuTabindex}}"></button>
+
+    <ul uib-dropdown-menu 
+        role="menu"
+        class="ellipsisMenu__list dropdown-menu">
+
+        <li role="menuitem" 
+            ng-repeat="action in menuActions" 
+            ng-class="{divider:action.Seperator}">
+            
+            <button href="#"
+                    class="btn btn-link"
+                    ng-class="{actionhighlight:action.highlight}"
+                    ng-disabled="menuDisabled || action.Disabled"
+                    ng-if="!action.Seperator" 
+                    ng-mousedown="callMenuActionsFunction(action.FunctionName)"
+                    check-auth-z="{{action.AuthZ}}">
+                {{action.LinkText}}
+            </button>
+
+        </li>
+
+    </ul>
+
+</div>

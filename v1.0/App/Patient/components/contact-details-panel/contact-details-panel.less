@@ -1,0 +1,115 @@
+﻿/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 32px;
+}
+
+.switch-mail-reminders {
+    float: right;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    display: none;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2DABCB;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2DABCB;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.switch_main {
+    margin-right: 15px;
+    top: 5px;
+}
+
+.switch_main_label {
+    padding-left: 10px;
+    margin-right: 20px;
+    margin-top: 13px;
+    color: #2DABCB;
+}
+
+.switch_main_label_border {
+    border-bottom: solid #2DABCB 1px;
+    border-left: solid #2DABCB 1px;
+    border-top: solid #2DABCB 1px;
+    border-bottom-left-radius: 7px;
+    border-top-left-radius: 7px;
+    background-color: white;
+}
+
+.switch_main_toggle_border {
+    border-bottom: solid #2DABCB 1px;
+    border-right: solid #2DABCB 1px;
+    border-top: solid #2DABCB 1px;
+    border-bottom-right-radius: 7px;
+    border-top-right-radius: 7px;
+    background-color: white;
+    height: 44px;
+}
+
+.form-body-new {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.mailing-address-section {
+    margin-right: 35%;
+}
+
+.opt-out-mail-reminders-label {
+    text-align: right;
+    margin-top: 5px;
+    margin-left: 30px;
+}
+
+.opt-out-mail-reminders-padding {
+    padding-top: 25px;
+}

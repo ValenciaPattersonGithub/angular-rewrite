@@ -1,0 +1,13 @@
+<div [ngClass]="'toast-'+data.type" class="toast" [@fadeAnimation]="{value: animationState, params:
+        { fadeIn: toastConfig.animation.fadeIn, fadeOut: toastConfig.animation.fadeOut }}"
+    (@fadeAnimation.done)="onFadeFinished($event)">
+    <span class="toast-title">{{data.title?data.title:(data.type | titlecase)}}</span>
+    <span class="toast-icon">
+        <svg-icon class="chips-remove-icon" name="closeIcon" iconHeight="20px" role="button" (click)="close()"
+            iconWidth="20px" id="rp-clear-icon"></svg-icon>
+    </span>
+    <div class="toast-content" *ngIf="!content">{{ data.text }}</div>
+    <div class="toast-content" *ngIf="content">
+        <ng-container *ngTemplateOutlet="content" class="toast-content"></ng-container>
+    </div>
+</div>

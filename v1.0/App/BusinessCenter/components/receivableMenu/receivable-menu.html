@@ -1,0 +1,38 @@
+﻿<div class="receivableMenu">
+    <div id="btnGroup{{receivableId}}" class="btn-group">
+        <button id="btnActionMenu{{receivableId}}"  data-toggle="{{'dropdown'}}" class="btn btn-link dropdown-toggle padding-right-10" >
+            <i class="fa fa-ellipsis-v"></i>
+        </button>
+        <ul class="pull-right dropdown-menu col-md-12">
+            <li>
+                <div class="row">
+                    <a id="lnkReceivableMenuCreateStatement" check-auth-z="soar-acct-astmt-view" class="margin-left-5 col-md-12" ng-click="createStatement(receivable)">{{ 'Create Statement' | i18n }}</a>
+                </div>
+                <div class="row">
+                    <a id="lnkReceivableMenuApplyPayment" check-auth-z="soar-acct-aapmt-add" class="margin-left-5 col-md-12" ng-click="applyPayment(receivable)" ng-class="{ disabled: disablePayments }">{{ 'Apply Payment' | i18n }}</a>
+                </div>
+                <div class="row">
+                    <a id="lnkReceivableMenuViewInsurance" check-auth-z="soar-ins-ibplan-view" class="margin-left-5 col-md-12" ng-click="viewInsurance(receivable)">{{ 'View Insurance' | i18n }}</a>
+                </div>
+                <div class="row">
+                    <a id="lnkReceivableMenuCreateCommunication" class="margin-left-5 col-md-12" ng-click="createCommunication(receivable)">{{ 'Create Communication' | i18n }}</a>
+                </div>
+                
+                <div class="row">
+                    <a id="lnkReceivableMenuViewOverview" check-auth-z="soar-per-perdem-inactv" class="margin-left-5 col-md-12" ng-click="viewOverview(receivable)">{{ 'View Overview' | i18n }}</a>
+                </div>
+                <div class="row">
+                    <a id="lnkReceivableMenuViewProfile" check-auth-z="soar-per-perdem-inactv" class="margin-left-5 col-md-12" ng-click="viewProfile(receivable)">{{ 'View Profile' | i18n }}</a>
+                </div>
+                <div class="row">
+                    <a id="lnkReceivableMenuAddANote" check-auth-z="soar-per-perdem-add" class="margin-left-5 col-md-12" ng-click="createNote(receivable)">{{ 'Add a Note' | i18n }}</a>
+                </div>
+                <div class="row">
+                    <a id="lnkReceivableMenuInCollections" check-auth-z="soar-acct-coll-edit" class="margin-left-5 col-md-12" ng-click="updateAccountInCollections(receivable)">
+                        {{ receivable.InCollections?  ('Remove From Collections' | i18n ) : ( 'Place In Collections' | i18n)}}
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

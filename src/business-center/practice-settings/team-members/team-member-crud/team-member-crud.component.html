@@ -1,0 +1,449 @@
+<div [ngClass]="'fade-in'">
+    <div class="userCrudParent">
+        <form [formGroup]="frmUserCrud" name="frmUserCrud" role="form" action="javascript:;">
+            <div class="rowFull white userCrud__header-container">
+                <div class="userCrud__header" keep-top>
+                    <!--Breadcrumbs-->
+                    <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                    <div class="userCrud__title col-md-12">
+                        <h1 *ngIf="!editMode">{{ 'Add a Team Member' | translate }}</h1>
+                        <h1 *ngIf="editMode">{{ 'Edit Team Member' | translate }}</h1>
+                    </div>
+                    <div class="userCrud__actions ">
+                        <div class="col-md-6">
+                            <button id="btnCancel" (click)="cancelChanges();" [disabled]="savingUser"
+                                class="btn btn-default btn-margin-right" tabindex="-1">{{ 'Cancel' | translate
+                                }}</button>
+                            <button id="btnSave" (click)="saveUser();" checkRoleAccess="{{ !hasAccess }}"
+                                [disabled]="savingUser || hasInvalidTimes" class="btn btn-primary" tabindex="32">{{
+                                'Save' | translate }}</button>
+                        </div>
+                        <div class="col-md-6 error help-text" *ngIf="invalidDataForRx">
+                            <div>{{'Unable to add/update your team member for e-prescriptions, please verify the
+                                following:'| translate }}</div>
+                            <div>{{'Must have a valid phone number.' | translate }}</div>
+                            <div>{{'Must have a valid zip code.' | translate }}</div>
+                            <div *ngIf="user?.RxUserType === 1">{{'Must have a valid NPI Number.' | translate }}
+                            </div>
+                        </div>
+                        <span class="pull-right">
+                            <strong>{{ 'Last Modified: ' | translate }}</strong>
+                            {{lastModifiedMessage}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rowFull white">
+                <div id="workArea" class="userCrud__form">
+                    <span class="pull-right">* {{ 'required' | translate }}</span>
+
+                    <div class="form-container">
+                        <!-- personal information header -->
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    {{ 'Personal Information' | translate }}
+                                </h4>
+                            </div>
+                            <!-- personal information section -->
+                            <div id="personalInfo" class="panel-body">
+                                <div class="col-xs-8">
+                                    <div class="clearfix">&nbsp;</div>
+
+                                    <!-- first name and middle initial -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'First Name' | translate }} *</label>
+                                            <div
+                                                [ngClass]="{error:!formIsValid && !frmUserCrud?.get('FirstName')?.valid}">
+                                                <input formControlName="FirstName" class="form-input required valid"
+                                                    id="inpFirstName" placeholder="{{ 'First name' | translate }}"
+                                                    CapitalizeFirst name="inpFirstName" maxlength="64" type="text"
+                                                    required charPattern="{{personalInfoRegex}}" />
+                                                <label id="lblFirstNameRequired" class="help-text "
+                                                    *ngIf="!formIsValid && frmUserCrud?.get('FirstName')?.errors?.required">
+                                                    {{ 'This field is required.' | translate }}
+                                                </label>
+                                                <label id="firstNameCharacterValidationLabel" class="help-text"
+                                                    *ngIf="!formIsValid && frmUserCrud?.get('FirstName')?.errors?.regexMatch">
+                                                    {{ 'Name contains invalid characters. Please only use letters, numbers, apostrophes, periods, spaces, and hyphens.' }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-2">
+                                            <label class="control-label">{{'MI' | translate }}</label>
+                                            <input formControlName="MiddleName" class="form-input" id="inpMiddleInitial"
+                                                placeholder="{{ 'M.I.' | translate }}" CapitalizeFirst
+                                                name="inpMiddleInitial" maxlength="1" type="text"
+                                                charPattern="{{personalInfoRegex}}" />
+                                        </div>
+                                    </div>
+
+                                    <!-- last name -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'Last Name' | translate }} *</label>
+                                            <div
+                                                [ngClass]="{error:!formIsValid && !frmUserCrud?.get('LastName')?.valid}">
+                                                <input formControlName="LastName" class="form-input required valid"
+                                                    id="inpLastName" placeholder="{{ 'Last name' | translate }}"
+                                                    CapitalizeFirst name="inpLastName" maxlength="64" type="text"
+                                                    required charPattern="{{personalInfoRegex}}" />
+                                                <label id="lblLastNameRequired" class="help-text "
+                                                    *ngIf="!formIsValid && frmUserCrud?.get('LastName')?.errors?.required">
+                                                    {{ 'This field is required.' | translate }}
+                                                </label>
+                                                <label id="lastNameCharacterValidationLabel" class="help-text"
+                                                    *ngIf="!formIsValid && frmUserCrud?.get('LastName')?.errors?.regexMatch">
+                                                    {{ 'Name contains invalid characters. Please only use letters, numbers, apostrophes, periods, spaces, and hyphens.' }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-2">
+                                            <label class="control-label">{{'Suffix' | translate }}</label>
+                                            <input formControlName="SuffixName" class="form-input" id="inpMiddleInitial"
+                                                placeholder="{{ 'Jr., Sr., IV' | translate }}" CapitalizeFirst
+                                                name="inpMiddleInitial" maxlength="20" type="text"
+                                                charPattern="{{personalInfoRegex}}" />
+                                        </div>
+                                    </div>
+
+                                    <!-- preferred name -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{ 'Preferred Name' | translate }} </label>
+                                            <input formControlName="PreferredName" class="form-input"
+                                                id="inpPreferredName"
+                                                placeholder="{{ 'Prefers to be called...' | translate }}"
+                                                CapitalizeFirst name="inpPreferredName" maxlength="64" type="text"
+                                                charPattern="{{personalInfoRegex}}" />
+                                        </div>
+                                        <div class="form-group col-xs-2">
+                                            <label class="control-label">{{'Date of Birth' | translate }} </label>
+                                            <div
+                                                [ngClass]="{error:!formIsValid && !user?.DateOfBirth && rxAccessRequirements}">
+                                                <app-date-selector [defaultEmpty]="defaultEmpty"
+                                                    [invalidMaxDateOfBirth]="invalidMaxDateOfBirth" formControlName="DateOfBirth"
+                                                    ngDefaultControl [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"
+                                                    [value]="user?.DateOfBirth" [minDate]="minDate"
+                                                    [maxDate]="maxDateOfBirth"
+                                                    (dateChanged)="onDateOfBirthChanged($event)">
+                                                </app-date-selector>
+                                                <label id="lblRxAccessRequiresDOB" class="help-text "
+                                                    *ngIf="!formIsValid && !user?.DateOfBirth && rxAccessRequirements">
+                                                    {{ 'This field is required for Rx Access.' | translate }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- professional designation -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">
+                                                {{ 'Professional Designation' | translate }}
+                                            </label>
+                                            <input formControlName="ProfessionalDesignation" class="form-input"
+                                                id="inpProfessionalDesignation"
+                                                placeholder="{{ 'Professional designation' | translate }}"
+                                                CapitalizeFirst name="inpProfessionalDesignation" maxlength="20"
+                                                type="text" />
+                                        </div>
+                                    </div>
+
+                                    <!-- username -->
+                                    <div class="row">
+                                        <div class="form-group align-right col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <ng-container *ngIf="ssoEnabled">
+                                                <label class="control-label">{{'Enterprise User ID *' | translate }}</label>
+                                                <label class="control-label">{{'(Select email domain from list)' | translate }}</label>
+                                            </ng-container>
+                                            <ng-container *ngIf="!ssoEnabled">
+                                                <label class="control-label">{{'Username' | translate }} *</label>
+                                                <label class="control-label" *ngIf="!editMode">{{'(username@domain.ext)' | translate }}</label>
+                                            </ng-container>
+                                            <div
+                                                [ngClass]="{error: (!formIsValid && !frmUserCrud?.get('UserName')?.valid && editMode==false) || !userNameValid || duplicateEmailAdd}">
+                                                <input (change)="clearValidation()" class="form-input" id="inpUserName"
+                                                    placeholder="{{ 'Username' | translate }}"
+                                                    formControlName="UserName" name="inpUserName" type="text"
+                                                    [disabled]="editMode" maxlength="{{usernameMaxLength}}" 
+                                                    required />
+
+                                                <label id="lblUserNameRequired" class="help-text"
+                                                    *ngIf="!formIsValid && frmUserCrud?.get('UserName')?.errors?.required">
+                                                    {{ 'This field is required.' | translate }}
+                                                </label>
+                                                <label id="lblUserNameInvalidEmail" class="help-text"
+                                                    *ngIf="!formIsValid && frmUserCrud?.get('UserName')?.errors?.email">
+                                                    {{ 'This field requires a valid email address.' | translate }}
+                                                </label>
+                                                <label id="lblUserNameInvalidUsername" class="help-text"
+                                                    *ngIf="!formIsValid && frmUserCrud?.get('UserName')?.errors?.usernameInvalid">
+                                                    {{ 'To continue, type only your enterprise user id and pick your email domain from the dropdown list. For example:
+                                                    userid@domain.ext' | translate }}
+                                                </label>
+                                                <label id="lblUserNameNotUnique" class="help-text"
+                                                    *ngIf="(!formIsValid && frmUserCrud?.get('UserName')?.valid) && !userNameValid">
+                                                    {{ 'Username must be unique.' | translate }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-3" *ngIf="ssoEnabled">
+                                            <label class="control-label" for="ssoDomain">{{ 'SSO Domain' | translate }} *</label>
+                                            <div [ngClass]="{error: !formIsValid && !frmUserCrud?.get('SsoDomain')?.valid}">
+                                                <soar-select-list [optionList]="ssoDomainOptions" [textField]="'text'" [valueField]="'value'"
+                                                    [placeHolder]="'Select Domain' | translate" [required]="true" formControlName="SsoDomain"
+                                                    [ngClass]="{error: !formIsValid && !frmUserCrud?.get('SsoDomain')?.valid}">
+                                                </soar-select-list>
+                                                <label id="lblSsoDomainRequired" class="help-text"
+                                                    *ngIf="!formIsValid && frmUserCrud?.get('SsoDomain')?.errors?.required">
+                                                    {{ 'Please pick an email domain from the dropdown list.' | translate }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-2" *ngIf="editMode">
+                                            <label class="full-width">&nbsp;</label>
+                                            <button class="btn btn-primary"
+                                                (click)="changePassword()"
+                                                *ngIf="user?.UserName">
+                                                {{ 'Change Password' | translate }}
+                                            </button>
+                                        </div>
+                                        <div class="form-group col-xs-2" *ngIf="editMode">
+                                            <label class="full-width">&nbsp;</label>
+                                            <button class="btn btn-primary"
+                                                (click)="confirmReverification()"
+                                                [disabled]="resendVerificationButtonClicked"
+                                                *ngIf="user?.UserName && !userIsVerified">
+                                                    {{'Resend Verification Email' | translate}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!--Job Title-->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'Job Title' | translate }} </label>
+                                            <input formControlName="JobTitle" class="form-input" id="inpJobTitle"
+                                                placeholder="{{ 'Job Title' | translate }}" CapitalizeFirst
+                                                name="inpJobTitle" maxlength="64" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <!--user rx access-->
+                                    <div class="row" checkRoleAccess="{{ !rxUserCreatePermissions }}">
+                                        <div class="form-group col-xs-2"></div>                                        
+                                        <rx-user-setup *ngIf="rxUserCreatePermissions"
+                                            [model]="rxSettings" (modelChange)="rxSettingsChanged($event)"
+                                            [userId]="user?.UserId"></rx-user-setup>
+                                    </div>
+
+                                    <!-- user employment start date -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">
+                                                {{'Employment Start Date' | translate }}
+                                            </label>
+                                            <app-date-selector [defaultEmpty]="defaultEmpty"
+                                                formControlName="EmployeeStartDate" ngDefaultControl
+                                                [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"
+                                                [value]="user?.EmployeeStartDate" [minDate]="minDate"
+                                                [maxDate]="maxDate" (dateChanged)="onStartDateChanged($event)"
+                                                (isValid)="onStartDateStateChange($event)">
+                                            </app-date-selector>
+                                        </div>
+                                    </div>
+
+                                    <!-- user employment end date -->
+                                    <div class="row" *ngIf="editMode">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'Employment End Date' | translate }} </label>
+                                            <app-date-selector [defaultEmpty]="defaultEmpty"
+                                                formControlName="EmployeeEndDate" ngDefaultControl
+                                                [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"
+                                                [value]="user?.EmployeeEndDate" [minDate]="minDate" [maxDate]="maxDate"
+                                                (dateChanged)="onEndDateChanged($event)"
+                                                (isValid)="onEndDateStateChange($event)">
+                                            </app-date-selector>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" *ngIf="editMode">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-10"
+                                            [ngClass]="{error:hasErrors && !frmUserCrud?.datesChecking?.valid}">
+                                            <label id="lblDatesComparisionRequired" class="help-text "
+                                                *ngIf="hasErrors && !frmUserCrud?.datesChecking?.valid">
+                                                {{ datesComparionValidationMessage | translate }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">&nbsp;</div>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <div class="clearfix">&nbsp;</div>
+                                    <div class="clearfix">&nbsp;</div>
+                                    <!-- upload image -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-11">
+                                            <div class="col-xs-12 text-align-center">
+                                                <img id="imgLocationImage" class="form-image-new"
+                                                    src="Images/Smiley.png" />
+                                            </div>
+                                            <div class="col-xs-12 text-align-center">
+                                                <a id="btnLocationImage"
+                                                    class="disabled flex-shrink-1 font-16 btn btn-link padding-none">{{
+                                                    'Upload User Image' | translate }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix">&nbsp;</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- contact information header -->
+                        <team-member-contact-information [formIsValid]="formIsValid" [user]="user"
+                            [rxAccessRequirements]="rxAccessRequirements"
+                            (onUpdateAddress)="updateAddress($event)"></team-member-contact-information>
+
+                        <!-- location setup -->
+                        <team-member-locations [user]="user" [userLocationsErrors]="userLocationsErrors"
+                            (userLocationSetupsDataChanged)="onUserLocationSetupsDataChanged($event)"
+                            (userAccessChanged)="user.IsActive = $event" [updatedLicensesArgs]="sendUpdatedLicensesArgs"
+                            (stateLicenseValidation)="setLicenseStates($event)"
+                            (changeReasonData)="sendStatusChangeNote($event)"
+                            (onUpdateUserInfo)="updateUserInfo($event)"></team-member-locations>
+
+                        <!--user identification-->
+                        <div *ngIf="canViewProviderInfo">
+                            <div class="panel">
+                                <div class="col-xs-12 panel-heading">
+                                    <h4 class="panel-title">
+                                        {{ 'Licenses & IDs' | translate }}
+
+                                        <button (click)="userIdentificationSectionOpen = !userIdentificationSectionOpen"
+                                            class="pull-right icon-button fa fa-lg"
+                                            [ngClass]="{'fa-minus': userIdentificationSectionOpen, 'fa-plus': !userIdentificationSectionOpen}"
+                                            id="btnToggleUserIdentification" data-toggle="collapse"
+                                            data-target="#userIdentification"></button>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div id="userIdentification" class="collapse in">
+                                <team-member-federal-identification [user]="user"
+                                    [userLocationSetups]="userLocationSetups"
+                                    [userLocationSetupsDataChanged]="userLocationSetupsDataChanged"
+                                    [isPrescribingUser]="isPrescribingUser"></team-member-federal-identification>
+
+                                <team-member-state-identification [user]="user" [needLicenseStates]="LicenseStates"
+                                    (sendLicensesToValidate)="sendLicensesToValidateArgs($event)"
+                                    (StateLicenseData)="setLicenseData($event)"></team-member-state-identification>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                        </div>
+
+                        <div *ngIf="loginTimePhase2 && loginTimeEnabled">
+                            <user-login-time-panel [user]="user" (loginTimeChanged)="loginTimesChange($event)">
+                            </user-login-time-panel>
+                        </div>
+
+                        <!-- additional identifiers header -->
+                        <team-member-additional-identifiers [user]="user"></team-member-additional-identifiers>
+
+                        <!-- user status / activation -->
+                        <div class="panel" *ngIf="editMode">
+                            <div class="col-xs-12 panel-heading">
+                                <h4 class="panel-title">
+                                    {{ 'Activation History' | translate }}
+                                    <button (click)="toggleHistory()" class="pull-right icon-button fa fa-lg"
+                                        [ngClass]="{'fa-minus': activationHistorySectionOpen, 'fa-plus': !activationHistorySectionOpen}"
+                                        id="btnToggleActivationInfo" data-toggle="collapse"
+                                        data-target="#activationHistory"></button>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div id="activationHistory" *ngIf="editMode" class="form-section-container collapse in">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-9">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2"></div>
+                                        <div class="col-xs-12 col-sm-9 col-md-10">
+                                            <div class="row fuseGrid_scroll" id="activationHistoryGrid">
+                                                <div class="col-xs-12">
+                                                    <div class="padding-top-20">
+                                                        <div class="fuseGrid pull-left col-md-12">
+                                                            <div class="gridActions">
+                                                                <span class="gridActions__icons">
+                                                                </span>
+                                                                <span>
+                                                                    {{activationHistory?.length}} of
+                                                                    {{activationHistory?.length}} records
+                                                                </span>
+                                                            </div>
+                                                            <div class="row header">
+                                                                <div *ngFor="let column of header"
+                                                                    class="{{getColumnSize(column)}} fuseGrid_cell_header">
+                                                                    <div *ngIf="column?.sortable"
+                                                                        (click)="sort(column)">
+                                                                        <i class="fa fa-caret-down"
+                                                                            *ngIf="column?.sorted && sortedColumn[0] == '-'"></i>
+                                                                        <i class="fa fa-caret-up"
+                                                                            *ngIf="column?.sorted && sortedColumn[0] != '-'"></i>
+                                                                        {{ column?.label }}
+                                                                    </div>
+                                                                    <div *ngIf="!column.sortable">
+                                                                        {{ column?.label }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row body"
+                                                                *ngFor="let activation of  activationHistory | orderBy: sortedColumn">
+                                                                <div
+                                                                    class="col-sm-1 fuseGrid_cell fuseGrid_cell_body date-column">
+                                                                    {{ activation?.DateModified | date : "MM/dd/yyyy"}}
+                                                                </div>
+                                                                <div
+                                                                    class="col-sm-3 fuseGrid_cell fuseGrid_cell_body status-column">
+                                                                    {{ activation?.StatusName }}
+                                                                </div>
+                                                                <div class="col-sm-5 fuseGrid_cell fuseGrid_cell_body reason-column"
+                                                                    title="{{activation?.Note?.length > 40 ? activation?.Note : ''}}">
+                                                                    {{ activation?.Note?.length > 40 ?
+                                                                    activation?.Note?.substring(0, 40) + '...' :
+                                                                    activation?.Note }}
+                                                                </div>
+                                                                <div class="col-sm-3 fuseGrid_cell fuseGrid_cell_body">
+                                                                    {{ activation?.UserModifiedName }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div kendoDialogContainer></div>

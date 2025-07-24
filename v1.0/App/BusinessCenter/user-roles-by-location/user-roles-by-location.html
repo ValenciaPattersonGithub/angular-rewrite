@@ -1,0 +1,213 @@
+﻿<!-- <business-nav></business-nav> -->
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <form name="frmUserRolesByLocation" role="form" novalidate>
+        <div class="practiceSettings">
+            <div class="rowFull white">
+                <div class="practiceSettings__header">
+                    <!--breakcrumb-->
+                    <ul class="practiceSettings__breadcrumb">
+                        <li>
+                            <span><a href="#/BusinessCenter/PracticeSettings/">{{ 'Practice Settings' | i18n }}</a></span>
+                        </li>
+                        <li>
+                            <span>{{ 'Assign Roles' | i18n }}</span>
+                        </li>
+                    </ul>
+                    <!--header-->
+                    <div class="practiceSettings__title">
+                        <h1>{{ 'Roles for Team Members at ' | i18n }}{{locationName}}</h1>
+                    </div>
+
+
+                </div>
+            </div>
+            <!--team members area-->
+            <div class="practiceSettings__body">
+                <div class="practiceSettings__list">
+                    <div class="form-group">
+                        <!--filters and search-->
+                        <div class="row">
+                            <div class="practiceSettings__actions">
+                                <div class="col-md-1 pull-left">
+
+                                    <!--basically a placeholder until we implement-->
+                                    <button id="btnFilterUserRoles"
+                                            class="btn soar-link icon-button font-14 margin-left-5"
+                                            icon="fa-filter"
+                                            ng-disabled=false
+                                            ng-click="showHideFilter()">
+                                        {{ showHideFilterLabel | i18n }}
+                                    </button>
+                                </div>
+
+                                <!--locations filter-->
+                                <div class="col-md-2">
+                                    <!--locations area-->
+                                    <locations-selector disable-select="dataHasChanged" multi-select="false" selected-locations="selectedLocations" current-location="currentLocation"></locations-selector>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <a id="btnViewRoles" ng-click="viewRoles();" class="btn btn-default pull-left">{{ 'View Roles' | i18n }}</a>
+                                    <a id="btnCompareRoles" ng-click="compareRoles();" class="btn btn-default pull-left">{{ 'Compare Roles' | i18n }}</a>
+                                </div>
+
+                                <div class="col-md-2">
+
+                                </div>
+
+                                <!--search by contains user name-->
+                                <div class="col-sm-4 pull-right">
+                                    <div class="col-xs-12">
+                                        <input class="form-control border-solid-black" id="inpSearchName" placeholder="{{'Search by name...'|i18n}}" type="text" ng-model="searchNamesKeyword" />
+                                    </div>
+                                    <div class="col-xs-1 searchIcon">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div>
+                                <no-results loading="loadingUsers" ng-hide="!loadingUsers"></no-results>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--additional filters-->
+                    <div id="filterSlideOut" ng-show="showFilter" class="col-md-3 pull-left">
+                        <slide-out-filter filters="additionalFilters"
+                                          hide-expand-collapse-btn='false'
+                                          reset-filters-fn="resetFilters()"
+                                          apply-filters-fn="applyFilters(filters)"
+                                          hide-filters-fn="showHideFilter()"
+                                          collapse="collapseSlideout"></slide-out-filter>
+                    </div>
+                    <div  class="pull-left" ng-class="{'col-md-9': showFilter, 'col-md-12': !showFilter}">
+                        <!--fuse grid-->
+                        <div class="fuseGrid container pull-right">
+
+                            <!--grid row headers-->
+                            <div class="row header">
+                                <div class="col-sm-1"></div>
+                                <div id="gridHeaderTeamMemberName" class="col-sm-2 cell sortCursor"
+                                     ng-click="changeSortingForGrid('LastName')">
+                                    {{'Team Member'|i18n}}
+                                    <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'LastName'"></span>
+                                </div>
+                                <div id="gridHeaderSelectRoles" class="col-sm-2 cell"></div>
+                                <div class="col-sm-1"></div>
+                                <div id="gridHeaderRoles" class="col-sm-6 cell ">
+                                    {{'Security Roles'|i18n}}
+                                </div>
+                            </div>
+
+                            <!--List of team members filtered by selected location-->
+                            <div class="row body" ng-repeat="teamMember in (users | filter:teamMemberRoleByLocationFilter | orderBy:orderBy.field:!orderBy.asc | searchOnParticularColumn:searchNamesKeyword:['FirstName','LastName','PreferredName'])">
+
+                                <div class='col-xs-1 cell'
+                                     ng-click="status.isCustomHeaderOpen=!status.isCustomHeaderOpen">
+                                    <i class="fa fa-chevron-right float-right padding-6" ng-class="{'fa fa-chevron-down': status.isCustomHeaderOpen, 'fa fa-chevron-right': !status.isCustomHeaderOpen}"></i>
+                                </div>
+                                <!--team member name TODO truncate-->
+                                <div class="col-sm-2 cell">
+                                    <a ng-href="#/BusinessCenter/Users/Edit/{{teamMember.UserId}}?fromAssignRoles=true">{{teamMember | getDisplayNamePerBestPractice}}</a>
+                                </div>
+
+                                <div class="col-sm-2 pull-left">
+                                    <!--team member Add Roles--><!--TODO directive?-->
+                                    <div ng-repeat="userLocation in  (teamMember.$$UserLocations |  filter: locationsFilter )  ">
+                                        
+                                        <span class="padding-top-4 padding-bottom-4" check-auth-z="plapi-user-usrrol-create">
+                                            <ui-select ng-model="userLocation.$$SelectedRole" ng-disabled="!authAccess.Create || teamMember.$$UserPracticeRoles.length > 0"
+                                                       theme="bootstrap"
+                                                       close-on-select="false" multiple
+                                                       on-select="addLocationRole($item, userLocation)">
+                                                <ui-select-match placeholder="{{'Select role to add' | i18n}}">
+                                                    <span ng-bind="$select.selected.RoleName || selectedRole.RoleName"></span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="availableRole in userLocation.$$AvailableRoles track by availableRole.RoleId">
+                                                    <span ng-bind="availableRole.RoleName"></span>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </span>
+                                    </div>                                     
+
+                                </div>
+                                <div class="col-sm-1"></div>
+                                <!--display roles by location-->
+                                <div class="col-sm-6 cell" >
+                                    <!--practice roles-->
+                                    <tag base-id="userPracticeRole_{{$index}}"
+                                         ng-repeat="practiceRole in (teamMember.$$UserPracticeRoles | filter: rxRoleFilter ) track by practiceRole.RoleId" 
+                                         hide-remove="true" 
+                                         title="{{ practiceRole.RoleName }}" is-primary="true"></tag>
+                                    <!--location roles-->
+                                    <div base-id="userLocationRoleLocation_{{$index}}"ng-repeat="userLocation in (teamMember.$$UserLocations |  filter: locationsFilter ) track by userLocation.LocationId" 
+                                         ng-class="{'error': !formIsValid && userLocation.$$NoRoleError}">
+                                        <tag base-id="userLocationRole_{{$index}}" 
+                                             ng-repeat="locationRole in (userLocation.$$UserLocationRoles | filter: deletedRolesFilter  | orderBy: 'RoleName' ) track by locationRole.RoleId" 
+                                             title="{{ locationRole.RoleName }}" 
+                                             remove-function="removeLocationRole(locationRole, userLocation)" 
+                                             hide-remove="false"  
+                                             is-primary="true"
+                                             ng-class="{'practiceSettings__noPermission' : !authAccess.Delete}"
+                                             ng-mouseover="showTitle($event)"></tag>
+                                        <label class="help-text" ng-show="!formIsValid && userLocation.$$NoRoleError">{{ 'Your team member must have at least one role assigned per location' | i18n }}</label>                                        
+                                    </div>
+                                </div>
+                                
+                                <!--history TODO-->
+                                <div class="row sub-section-header padding-top-6 padding-bottom-6" ng-if="status.isCustomHeaderOpen">
+
+                                    <div class="col-sm-1 cell"></div>
+                                    <div id="gridHeaderRolesHistory" class="col-sm-10 cell ">                                       
+
+                                        <!--{{'History'|i18n}}-->
+
+
+                                    </div>
+                                    <div class="col-sm-1 cell"></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="clearfix"></div>
+                        <div class="practiceSettings__footer">
+                            <div class="practiceSettings__actions">
+
+                                <!--TODO combine amfas if deletes and adds-->
+                                <button id="btnSave" ng-show="true" class="btn btn-primary"
+                                        ng-click="saveRolesByLocation()" check-auth-z="plapi-user-usrrol-create"
+                                        ng-disabled="savingRoles || loadingUsers || dataHasChanged===false || hasErrors ">
+                                    {{ 'Save' |i18n }}
+                                </button>
+
+                                <button id="btnCancel" ng-hide="false" class="btn btn-default"
+                                        ng-click="cancelListChanges()"
+                                        ng-disabled="savingRoles || loadingUsers">
+                                    {{ 'Cancel' |i18n }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--TODO
+
+    truncate names ? Show Filters?
+
+     -->

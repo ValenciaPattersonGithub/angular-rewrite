@@ -1,0 +1,65 @@
+﻿<div id="myModal">
+    <div>
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="pat-communication-close">
+                <button class="btn soar-link icon-button font-size-20" ng-click="closePreview()"><b>x</b></button>
+            </div>
+            <div class="modal-header">
+                <h4 class="modal-title">{{templateName}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="prev-max-height">
+                    <p ng-bind-html="letterTemplate"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div  ng-if="selectedMediaTypeId === 3" style="padding-left:0px;" class="col-md-12">
+                    <div style="padding-left:0px;" class="col-md-9">
+                        <div>
+                            <div style="margin-bottom:5px;text-align:left;height:50px; padding-left:0px;" class="modal-header">
+                                <label class="control-label sub-header">{{'Send Email Using' | i18n}}</label>
+                            </div>
+                            <div ng-show="!sendDisabled" style="padding-left:0px; text-align:left; margin-top:8px; margin-bottom:8px" ng-repeat="emailInfo in patientEmailAddresses" class="col-sm-12">
+                                <div style="padding-left:0px;padding-right:0px;" class="col-sm-4">
+                                    <input ng-change="onEmailChange()" ng-model="emailInfo.IsSelected" type="checkbox" /><span ng-if="patientName.length < 20">{{patientName}}</span><span title="{{patientName}}" ng-if="patientName.length > 19">{{patientName.substr(0, 20)}}...</span>
+                                </div>
+                                <div style="padding-left:0px;" class="col-sm-4">
+                                    <span ng-if="emailInfo.Email.length < 20">{{emailInfo.Email}}</span><span title="{{emailInfo.Email}}" ng-if="emailInfo.Email.length > 19">{{emailInfo.Email.substr(0, 20)}}...</span>
+                                </div>
+                                <div style="padding-left:0px;" class="col-sm-1"><span ng-if="emailInfo.IsPrimary">Preferred</span></div>
+                                <div style="padding-left:0px;" class="col-sm-3"><button ng-if="emailInfo.ReminderOK" class="btn btn-success btn-md email-reminder-ok" disabled="" style="opacity: 1; cursor: default; pointer-events: none;">Reminders Okay</button></div>
+                            </div>
+                            <div class="margin-top-10 text-left" ng-show="sendDisabled"><div>&nbsp;</div><span class="warning-font-style margin-left-30 margin-top4">{{'No emails exist for this user.' | i18n}}</span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <!--<div ng-hide="sendDisabled" class="btn-save-newCommunication"><button title="No cell number exists for patient" ng-disabled="true" ng-click="printAndSave()" type="button" class="btn btn-primary">{{printSaveName}}</button></div>-->
+                        <div ng-hide="sendDisabled" class="btn-save-newCommunication"><button ng-disabled="noSelectedEmail" ng-click="printAndSave()" type="button" class="btn btn-primary">{{printSaveName}}</button></div>
+                        <div ng-hide="!sendDisabled" class="btn-save-newCommunication">
+                            <div class="btn-tooltip">
+                                <button ng-disabled="true" type="button" class="btn btn-primary">{{printSaveName}}</button>
+                                <span class="btn-tooltiptext">{{buttonTooltip}}</span>
+                            </div>
+                        </div>
+                        <div class="btn-save-newCommunication"><button ng-click="closePreview()" type="button" class="btn btn-primary">{{closeButtonName}}</button></div>
+                    </div>
+                </div>
+                <div ng-if="selectedMediaTypeId !== 3">
+                    <div ng-hide="sendDisabled" class="btn-save-newCommunication"><button ng-click="printAndSave()" type="button" class="btn btn-primary">{{printSaveName}}</button></div>
+                    <div ng-hide="!sendDisabled" class="btn-save-newCommunication">
+                        <div class="btn-tooltip">
+                            <button ng-disabled="true" type="button" class="btn btn-primary">{{printSaveName}}</button>
+                            <span class="btn-tooltiptext">{{buttonTooltip}}</span>
+                        </div>
+                    </div>
+                    <div class="btn-save-newCommunication"><button ng-click="closePreview()" type="button" class="btn btn-primary">{{closeButtonName}}</button></div>
+
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+</div>

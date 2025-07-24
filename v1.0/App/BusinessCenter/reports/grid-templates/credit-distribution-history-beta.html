@@ -1,0 +1,80 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.creditDistributionHistoryReportDto.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.creditDistributionHistoryReportDto.length === $index+1 }" ng-if="data.creditDistributionHistoryReportDto.length > 0 && !showFilterMessage" ng-repeat="credit in data.creditDistributionHistoryReportDto">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-2 cell summaryHeader" colspan="2">{{ 'Transaction Type' | i18n }}</th>
+                    <th class="col-sm-2 cell summaryHeader" colspan="2">{{ 'Responsible Party' | i18n }}</th>
+                    <th class="col-sm-1 cell summaryHeader">{{ 'Location' | i18n }}</th>
+                    <th class="col-sm-1 cell summaryHeader">{{ 'Amount' | i18n }}</th>
+                    <th class="col-sm-1 cell summaryHeader">{{ 'Date' | i18n }}</th>
+                    <th class="col-sm-2 cell summaryHeader">{{ 'Description' | i18n }}</th>
+                    <th class="col-sm-3 cell summaryHeader" colspan="3">{{ 'Impaction' | i18n }}</th>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell summaryData normalFontWeightOnPrint" colspan="2">{{ credit.TransactionType | i18n }}</td>
+                    <td class="col-sm-2 cell summaryData normalFontWeightOnPrint" colspan="2">{{ credit.ResponsibleParty | i18n }}</td>
+                    <td class="col-sm-1 cell summaryData normalFontWeightOnPrint">{{ credit.Location | i18n }}</td>
+                    <td class="col-sm-1 cell summaryData normalFontWeightOnPrint">{{ credit.Amount | currency }}</td>
+                    <td class="col-sm-1 cell summaryData normalFontWeightOnPrint">{{ credit.Date |  date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-2 cell summaryData normalFontWeightOnPrint wordWrapOnPrint">{{ credit.Description | i18n }}</td>
+                    <td class="col-sm-3 cell summaryData normalFontWeightOnPrint" colspan="3">{{ credit.Impaction | i18n }}</td>
+                </tr>
+                <tr class="summaryRowBorder">
+                    <td class="col-sm-12 cell" colspan="11"></td>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-2 cell transactions" colspan="2">{{ 'Distribution Dates' | i18n }}</th>
+                    <th class="col-sm-10 cell transactions" colspan="9">{{ 'Applied to Transactions' | i18n }}</th>
+                </tr>
+                <tr class="stripEven transactionsEmptyRow"></tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Posted Date' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Service Date' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Date of Service' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Location' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Team Member' | i18n }}</th>
+                    <th class="col-sm-2 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Description' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Tooth' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint">{{ 'Area' | i18n }}</th>
+                    <th class="col-sm-1 tableCell tableHeader headerHeightOnPrint removeBorderOnPrint text-right">{{ 'Amount' | i18n }}</th>
+                </tr>                
+            </thead>
+            <tbody ng-repeat="trans in credit.AppliedToTransactions" ng-class-even="'stripEven'" ng-class-odd="'stripOdd'">
+                <tr ng-class="{'modifiedData': trans.IsDeleted === true, 'tableData': trans.IsDeleted === false }">
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint">{{ trans.PostedDate|  date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint">{{ trans.ServiceDate|  date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint" ng-if="trans.DateOfService !== null">{{ trans.DateOfService|  date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint" ng-if="trans.DateOfService === null">{{'N/A' | i18n}}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint wordWrapOnPrint">{{ trans.Patient }}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint wordWrapOnPrint">{{ trans.Provider }}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint wordWrapOnPrint">{{ trans.Location }}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint wordWrapOnPrint">{{ trans.TeamMember }}</td>
+                    <td class="col-sm-2 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint wordWrapOnPrint">{{ trans.Description }}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint">{{ trans.Tooth }}</td>
+                    <td class="col-sm-1 tableCell cellBorder rowHeight rowHeightOnPrint removeBorderOnPrint">{{ trans.Area }}</td>
+                    <td class="col-sm-1 cell cellBorder rightAllign rowHeight rowHeightOnPrint removeBorderOnPrint" ng-if="trans.Amount < 0">({{ trans.Amount * -1 | currency }})</td>
+                    <td class="col-sm-1 cell cellBorder rightAllign rowHeight rowHeightOnPrint removeBorderOnPrint"  ng-if="trans.Amount >= 0">{{ trans.Amount| currency }}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven">
+                <tr class="stripEven totalEmptyRowOne"></tr>
+                <tr class="reportGrid__row summaryRowBorder">
+                    <td class="col-sm-12 cell" colspan="11"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-10 cell reportGrid__label" colspan="9"></td>
+                    <td class="col-sm-1 cell reportGrid__label grandTotal">{{'Total' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right reportGrid__label grandTotal">{{credit.Total | currency}}</td>
+                </tr>
+                <tr class="stripEven totalEmptyRowTwo">
+                </tr>
+            </tbody>
+            <tbody ng-if="data.creditDistributionHistoryReportDto.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

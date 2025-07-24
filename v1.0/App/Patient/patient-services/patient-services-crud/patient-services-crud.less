@@ -1,0 +1,135 @@
+﻿// Add Conditions Architecture
+.addServ {
+
+    .modal-dialog {
+        width: 90%;
+        max-width: 1250px;
+    }
+
+    .modal-footer {
+        background-color: @brand-color_dark-gray;
+        text-align: left;
+
+        .k-dropdown {
+            margin-left: 10px;
+        }
+
+        .btn-primary {
+            float: left;
+        }
+
+        .btn-link {
+            float: right;
+        }
+    }
+
+    &__body {
+        .clearfix;
+    }
+
+    &__form {
+        .make-xs-column(4);
+    }
+
+    &__formItem {
+        .clearfix;
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    &__formLbl {
+        width: 25%;
+        float: left;
+        padding-top: 10px;
+        padding-right: 10px;
+        text-align: right;
+        font-weight: bold;
+    }
+
+    &__formCtrl {
+        width: 75%;
+        float: right;
+
+        .date-selector-input {
+            padding: 8px 6px;
+        }
+
+        .date-selector-input,
+        .date-selector-input-group {
+            width: auto;
+        }
+    }
+
+    &__chart {
+        .make-xs-column(8);
+    }
+
+    &__teeth {
+        .make-xs-column(12);
+    }
+
+    &__surfaces {
+        .make-xs-column(12);
+        border-top: @brand-line_break;
+    }
+
+    &__surfHeader {
+        text-align: center;
+    }
+
+    &__toothTitle {
+        display: inline-block;
+        font-size: 2em;
+        transform: translateY(4px);
+    }
+    &__TXPlanLabel {
+        display: inline-block;
+        margin-top:6px;
+        margin-left: 20px;        
+    }
+    &__btnSkip {
+        .btn;
+        .btn-default;
+        float: right;
+        margin-right: @brand-margin_sm;       
+    }
+    &__btnCancel {
+        .btn;
+        .btn-link;
+        float: right;
+        margin-right: @brand-margin_sm;
+    }
+    &__btnSave {
+        .btn;
+        .btn-primary;
+        float: right;
+    }
+    &__TXPlanSection {
+        display: inline-block;
+        float: left;        
+        width:80%;
+    }
+     &__TXPlan {
+        display: inline-block;
+        width:40%;
+    }
+      &__TXPlanStage {
+        display: inline-block;
+        width:10%;
+    }
+    &__selectedService {
+        padding: 8px 10px 4px 6px;
+
+        &:after {
+            color: @remove-color;
+            content: 'X';
+            display: inline-block;
+            float: right;
+            font-weight: 700;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

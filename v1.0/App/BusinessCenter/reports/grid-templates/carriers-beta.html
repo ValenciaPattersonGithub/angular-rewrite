@@ -1,0 +1,36 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Carriers.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Carriers.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-3 cell">{{ 'Carrier' | i18n }}</th>
+                    <th class="col-sm-3 cell">{{ 'Address' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Email' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Payer ID' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Phone Numbers' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="carrier in data.Carriers" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-3 cell">{{ carrier.CarrierName }}</td>
+                    <td class="col-sm-3 cell">
+                        <div ng-if="carrier.CarrierAddress">{{ carrier.CarrierAddress }}</div>
+                        <div ng-if="carrier.CarrierAddress2">{{ carrier.CarrierAddress2 }}</div>
+                        <div>{{ carrier.CarrierCity }}<span ng-if="carrier.CarrierCity">,</span> {{ carrier.CarrierState }} {{ carrier.CarrierZipCode }}</div>
+                    </td>
+                    <td class="col-sm-2 cell">{{ carrier.CarrierEmail }}</td>
+                    <td class="col-sm-2 cell">{{ carrier.PayerId }}</td>
+                    <td class="col-sm-2 cell"><div ng-repeat="phoneNumber in carrier.CarrierPhoneNumber">{{ phoneNumber | tel }}</div></td>
+                </tr>
+            </tbody>
+            <tbody class="reportGrid__row reportGrid__footer stripEven" ng-if="data.Carriers.length > 0 && !showFilterMessage">
+                <tr>
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="5">{{'Total' | i18n}} {{'Carriers' | i18n}}{{':' | i18n}} {{ data.Carriers.length }}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

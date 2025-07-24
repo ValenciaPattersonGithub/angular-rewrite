@@ -1,0 +1,24 @@
+<div class="form-group col-md-3 col-sm-4" *ngIf="initialized">
+    <label class="control-label">{{'Rx Locations' | translate }}</label>
+    <app-multiselect id="rxlocations" [listItems]="locationList" [(model)]="model.locations" (modelChange)="onChange()"></app-multiselect>
+</div>
+<div class="form-group col-md-3 col-sm-4" *ngIf="initialized && model.locations.length > 0">
+    <label class="control-label">{{'Rx Roles' | translate }}</label><br />
+    <app-multiselect id="rxroles" [listItems]="roleList" [(model)]="model.roles" (modelChange)="onChange()"></app-multiselect>
+</div>
+<div class="form-group col-md-3 col-sm-4 epcsCheckbox" *ngIf="initialized && model.locations.length > 0 && showEpcsCheckbox">
+    <label class="control-label"></label>
+    <app-check-box [value]="model.isEPCSRequested"
+                   [label]="'Request EPCS'"
+                   (checkChanged)="toggleEpcs()">
+    </app-check-box>
+</div>
+<div class="form-group col-xs-10 col-xs-offset-2" *ngIf="initialized && showRxChangeWarning">
+    <span class="error">{{ 'This team member will need to logout and log back in for this change to take effect.' | translate }}</span>
+</div>
+<div class="form-group col-xs-6" *ngIf="showError">
+    <span class="error">{{ 'Unable to retrieve Rx data for this user.' | translate }}</span>
+</div>
+<div class="form-group col-xs-10 col-xs-offset-2" *ngIf="model.invalid">
+    <span class="error">{{ model.validationMessage }}</span>
+</div>

@@ -1,0 +1,7 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Appointments.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid avoidPageBreak" ng-if="data.Appointments.length > 0 && !showFilterMessage">
+        <scheduled-appointments-report [data]="data" ></scheduled-appointments-report>
+    </div>
+</div>

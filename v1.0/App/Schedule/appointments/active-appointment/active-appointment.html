@@ -1,0 +1,134 @@
+﻿<div id="actAppt" class="actAppt" ng-class="{'active': actApptActive}" ng-if="activeAppointment && hasClinicalAppointmentEditAccess">
+    <div class="actAppt__container" id="detailsTab">
+        <!--Layout for kendo window charting controls-->
+        <div class="chartingControls__activeLayout">
+            <div kendo-window="toothCtrls" k-title="'Tooth Controls'" k-visible="false" k-on-open="toothCtrlsOpen = true" k-on-close="toothCtrlsOpen = false"
+                id="toothCtrlsWindow">
+            </div>
+        </div>
+        <uib-tabset active="$parent.actApptActiveTab">
+            <uib-tab index="actApptTabs.title.index" disable="actApptTabs.title.disabled">
+                <uib-tab-heading>
+                    <!-- The 'select' feature wasn't activating the toggle properly, so I had to add another link to allow the toggle -->
+                    <a class="actAppt__titleTab" ng-click="actApptToggle()">
+                        <span ng-show="activeAppointment.PlannedServices.length != 1">
+                            {{ 'Appointment: {0} Services' | i18n:[{skip:activeAppointment.PlannedServices.length} ] }}
+                        </span>
+                        <span ng-show="activeAppointment.PlannedServices.length == 1">
+                            {{ 'Appointment: {0} Service' | i18n:[{skip:activeAppointment.PlannedServices.length} ] }}
+                        </span>
+                        <elapsed-time [start-time]="activeAppointment.ActualStartTime" [end-time]="activeAppointment.ActualEndTime"></elapsed-time>
+                    </a>
+                </uib-tab-heading>
+            </uib-tab>
+
+        </uib-tabset>
+        <div class="actAppt__tabContainer" ng-if="actApptActive">
+            <div class="actAppt__buttonRow">
+
+                <!--TODO localize preventive due dates-->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <span class="font-18">{{ 'Add {0}' | i18n:['Services'] }} {{ ::('From' | i18n) }}: </span>
+                            <button id="proposedBtn" class="btn btn-default" ng-disabled="reloadingAppointment==true" check-auth-z="soar-sch-sptapt-edit"
+                                    ng-click="showProposedFlyout()">
+                                <span>{{ ::('Proposed' | i18n) }}</span>
+                                <i id="iDefaultMessage" ng-show="dataLoadingProposed.loading" class="fa fa-spinner fa-spin loading"></i>
+                            </button>
+
+                            <button id="txplanBtn" class="btn btn-default" ng-disabled="reloadingAppointment==true" check-auth-z="soar-sch-sptapt-edit"
+                                    ng-click="showTxPlansFlyout()">
+                                <span>{{ ::('Treatment Plans' | i18n) }}</span>
+                                <i id="iDefaultMessage" ng-show="dataLoadingTreatment.loading" class="fa fa-spinner fa-spin loading"></i>
+                            </button>
+                            <button id="prevcareBtn" class="btn btn-default" ng-disabled="reloadingAppointment==true" check-auth-z="soar-sch-sptapt-edit"
+                                    ng-click="showPreventiveFlyout()">
+                                <!--TODO Due date must be localized-->
+                                <span>
+                                    {{ ::('Preventive Care' | i18n) }} {{
+(preventiveDate.dueDate) ? preventiveDate.dueDate
+                                    : '(Due NA)' | date : "(Due MM/dd/yyyy)"
+                                    }}
+                                </span>
+                                <i id="iDefaultMessage" ng-show="dataLoadingPreventive.loading" class="fa fa-spinner fa-spin loading"></i>
+                            </button>
+                            <button id="servicesBtn" class="btn btn-default" ng-disabled="reloadingAppointment==true" check-auth-z="soar-sch-sptapt-edit"
+                                    ng-click="showServiceFlyout()">
+                                <span>{{ ::('New' | i18n) }}</span>
+                                <i id="iDefaultMessage" ng-show="dataLoadingNewService.loading" class="fa fa-spinner fa-spin loading"></i>
+                            </button>
+                        </div>
+                        <!--proposed service directive-->
+                        <proposed-selector chosen-location="locationChosen" patient="patientInfo" flyout="true" service-filter="appointment" add-selected-services="addServices"
+                                           loading-check="dataLoadingProposed" ng-if="patientInfo!=null" services-on-plan="plannedServiceIds"></proposed-selector>
+                        <!--tx plan services directive-->
+                        <treatment-selector chosen-location="locationChosen" patient="patientInfo" flyout="true" service-filter="appointment" add-selected-services="addServices"
+                                            loading-check="dataLoadingTreatment" appointment="activeAppointment" ng-if="patientInfo!=null"></treatment-selector>
+                        <!--preventive care services directive-->
+                        <preventive-care-selector data="preventiveCareServices" flyout="true" service-filter="appointment" add-selected-services="addPreventiveServices"
+                                                  loading-check="dataLoadingPreventive" appointment="activeAppointment" due-date="preventiveDate" ng-if="preventiveCareServices"></preventive-care-selector>
+                        <!--new service selector directive-->
+                        <service-selector-refactor patient="patientInfo" flyout="true" service-filter="appointment" add-selected-services="addServices"
+                                                   loading-check="dataLoadingNewService" appointment="activeAppointment" ng-if="patientInfo!=null"></service-selector-refactor>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-left: 28px;">
+                <label class="control-label">{{ ::('Set provider on all claims to:' | i18n) }}</label>
+                <practice-provider-selector id="appointmentSetAllProvidersOnClaims" 
+                                            sb-change="onProviderOnClaimsOnChange"
+                                            selected-provider="selectedGlobalProviderId"
+                                            provider-on-claims-only="true">
+                </practice-provider-selector>
+            </div>
+            <!--Details-->
+            <div ng-if="actApptActiveTabToggle == 1">
+                <div class="actAppt__tabContent">
+                    <div class="actAppt__fullRow" ng-show="reloadingAppointment==false">
+                        <div class="actAppt__services">
+                            <div class="actAppt__fullRow">
+                                <appointment-planned-services planned-services="activeAppointment.PlannedServices" 
+                                                              on-remove-service="onRemoveService" 
+                                                              disable-actions="disableActions">
+                                </appointment-planned-services>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actAppt__fullRow" ng-show="reloadingAppointment==false">
+                        <div class="actAppt__apptNotes">
+                            <span class="actAppt__apptNts">{{::('Appointment Notes'|i18n)}}</span>
+                            <textarea id="inpAppointmentNotes" ng-model="noteData.current" ng-disabled="disableActions" class="actAppt__apptNotesInput"
+                                      maxlength="500" tabindex="1"></textarea>
+                        </div>
+                    </div>
+                    <div class="actAppt_fullRow" ng-show="reloadingAppointment">
+                        <no-results loading="reloadingAppointment" loading-message="' '">
+                        </no-results>
+                    </div>
+                    <div class="actAppt__fullRow">
+                        <div class="actAppt__finishAppt">
+                            <span class="pull-left" ng-if="hasClinicalAppointmentFinishAccess && activeAppointment.PlannedServices.length == 0">
+                                <i class="fas fa-exclamation-triangle padding-right-10"></i>{{::('You must add a service to finish this appointment.'|i18n)}}
+                            </span>
+                            <br />
+                            <span class="pull-left" ng-if="!patient.PersonAccount">
+                                <span class="glyphicon glyphicon-exclamation-sign lnkResponsiblePersonNav padding-right-10"></span>
+                                <a id="lnkResponsiblePersonNav" class="lnkResponsiblePersonNav" ng-click="openEditPersonalModal()">
+                                    {{ 'You must assign a Responsible Person to finish this appointment. (Click to assign).' | i18n }}
+                                </a>
+                            </span>
+                            <a id="lnkResetAppt" ng-click="resetAppointment()" check-auth-z="{{ !hasClinicalAppointmentEditAccess }}" ng-disabled="disableActions">
+                                <span class="actAppt__cancel">{{::('Cancel'|i18n)}}</span>
+                            </a>
+                            <button id="btnFinishAppt" type="button" class="btn btn-primary" check-auth-z="{{ !hasClinicalAppointmentFinishAccess }}"
+                                    ng-click="refreshAppointment()" ng-disabled="!patient.PersonAccount || disableActions || activeAppointment.PlannedServices.length == 0">
+                                {{::('Finish Appointment'|i18n)}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

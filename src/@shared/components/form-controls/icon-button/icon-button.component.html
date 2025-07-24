@@ -1,0 +1,11 @@
+<button [id]="id"
+        class="icon-button"
+        [ngClass]="[variation, selected ? 'selected' : '']"
+        [class.disabled]="isDisabled"
+        (click)="onClickButton($event)"
+        [disabled]="isDisabled"
+        [attr.aria-label]="ariaLabel">
+    <svg-icon [name]="iconName" [iconHeight]="iconHeight" [iconWidth]="iconWidth"></svg-icon>
+</button>
+
+

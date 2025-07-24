@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(SoarEnableJsTests)' != 'True'">
+    <NpmFile></NpmFile>
+  </PropertyGroup>
+  <Target Name="Karma" AfterTargets="AfterBuild" DependsOnTargets="EnsureNodeModules" Condition="'$(SoarEnableJsTests)' == 'True'">
+    <PropertyGroup>
+      <KarmaCommand>"$(NodePath)\node" node_modules\karma-cli\bin\karma start App\Test\ci.conf.js --no-colors</KarmaCommand>
+    </PropertyGroup>
+    <Exec Command="$(KarmaCommand)"
+          ContinueOnError="true" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="KarmaExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="KarmaOutput" />
+    </Exec>
+    <Warning Condition="'$(KarmaExitCode)' != '0'" Text="Error in karma test run.  See test results for details." />
+  </Target>
+</Project>

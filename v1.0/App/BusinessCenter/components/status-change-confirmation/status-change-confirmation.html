@@ -1,0 +1,42 @@
+﻿<div class="panel statusChangeConfirmation" ng-if="layout==1">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{'Status Change Confirmation' | i18n}}</h4>
+        </div>
+        <div class="modal-body">
+            <p>{{confirmationMessage}}</p>
+            <br>
+            <div ng-if="!userData.IsActive">
+                <p>{{'This user is a provider and inactivation will result in: ' | i18n}}</p>
+                <ul style="margin-left: -5%;list-style-type: none;">
+                    <li>{{'- Inability to schedule new appointments for this Provider after the effective date.' | i18n}}</li>
+                    <li>{{'- Inability for this Provider to complete clinical work after the effective date.' | i18n}}</li>
+                    <li>{{'- Inability to file claims on behalf of this Provider with the date of services delivery after the effective date.' | i18n}}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default cancel" ng-click="close()">{{'Cancel' | i18n}}</button>
+            <button ng-if="!userData.IsActive" class="btn btn-primary cancel" ng-click="save()">{{'Continue' | i18n}}</button>
+            <button ng-if="userData.IsActive" class="btn btn-primary cancel" ng-click="save()">{{'Continue' | i18n}}</button>
+        </div>
+    </div>
+</div>
+
+<div class="panel statusChangeConfirmation" ng-if="layout==2">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{'Disable User Access' | i18n}}</h4>
+        </div>
+        <div class="modal-body">
+            <p>Disabling user access will prevent this user from logging in to Fuse.</p>
+            <br />            
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default cancel" ng-click="close()">{{'Cancel' | i18n}}</button>
+            <button class="btn btn-primary cancel" ng-click="continueDisable()">{{'Continue' | i18n}}</button>            
+        </div>
+    </div>
+</div>

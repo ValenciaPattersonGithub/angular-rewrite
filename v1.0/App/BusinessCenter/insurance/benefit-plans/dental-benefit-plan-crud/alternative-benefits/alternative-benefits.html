@@ -1,0 +1,95 @@
+﻿<div id="AlternativeBenefitsHeader" class="row">
+    <div class="col-xs-12" ng-click="showAlternativeBenefits = !showAlternativeBenefits">
+        <label class="benefitPlanCrud__section">
+            <i ng-class="showAlternativeBenefits ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-right'"></i>
+            {{ 'View Alternative Benefits' | i18n }}
+        </label>
+    </div>
+</div>
+<div class="altben" ng-show="showAlternativeBenefits">
+    <div class="white">
+        <div class="row">
+            <div class="altBenefits__header col-md-6 codeSearch">
+                <button data-qa="alt-ben-plan-form-btn-add" ng-disabled="disableAddAlternativeBenefits" icon="fa-plus" class="btn btn-primary" ng-click="cancelAlternativeBenefits()">Add</button>
+                <div ng-show="showAddAlternativeBenefits">
+                    <div class="row">
+                        <div class="col-md-12 text-center">Treat As If</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">Code</div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-5">Code</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <typeahead class="soar-typeahead" placeholder="{{ 'Service code, CDT Code, description...'|i18n }}" items="childServiceCodes" loading="fetchingChildData" term="childSearch" search="searchForChildCodes(term)" cancel="cancelChild" select="selectChild(item)" clear-content="cancelChild()">
+                                <ul ng-show="childServiceCodes.length > 0">
+                                    <li typeahead-item="code" ng-repeat="code in childServiceCodes" class="results">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <span id="lblChildCodeCode{{ $index }}">{{ code.Code }}</span>
+                                            </div>
+                                            <div class="col-xs-9">
+                                                <span id="lblChildDescription{{ $index }}">
+                                                    {{ code.Description | truncate:25 }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div ng-show="childServiceCodes.length == 0 && !fetchingChildData && childSearch !== '' && currentChild === null">
+                                    No service codes were found.
+                                </div>
+                            </typeahead>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <div class="fa fa-arrow-right"></div>
+                        </div>
+                        <div class="col-md-5">
+                            <typeahead class="soar-typeahead" placeholder="{{ 'Service code, CDT Code, description...'|i18n }}" items="parentServiceCodes" loading="fetchingParentData" term="parentSearch" search="searchForParentCodes(term)" cancel="cancelParent" select="selectParent(item)" clear-content="cancelParent()">
+                                <ul ng-show="parentServiceCodes.length > 0">
+                                    <li typeahead-item="code" ng-repeat="code in parentServiceCodes" class="results">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <span id="lblParentCode{{ $index }}">{{ code.Code }}</span>
+                                            </div>
+                                            <div class="col-xs-9">
+                                                <span id="lblParentDescription{{ $index }}">
+                                                    {{ code.Description | truncate:25 }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div ng-show="parentServiceCodes.length == 0 && !fetchingParentData && parentSearch !== '' && currentParent === null">
+                                    No service codes were found.
+                                </div>
+                            </typeahead>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6 codeSearchButtons text-right">
+                            <button data-qa="alt-ben-plan-form-btn-cancel" class="btn btn-primary" ng-click="cancelAlternativeBenefits()">Cancel</button>
+                            <button data-qa="alt-ben-plan-form-btn-save" class="btn btn-primary" ng-click="addAlternativeBenefit()">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="search col-md-6" ng-show="!showAddAlternativeBenefits && alternativeBenefits && alternativeBenefits.length > 0">
+                        <div>Search</div>
+                        <input data-qa="alt-ben-plan-form-inp-ser-code" id="altBenSearch" class="typeahead-input" placeholder="Search by service code, CDT Code, description..." ng-model="altBenSearch" ng-change="filterGrid()">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="altben__body">
+            <span ng-show="alternativeBenefits && alternativeBenefits.length > 0">
+                <kendo-grid options="alternativeBenefitsOptions" data-source="alternativeBenefitsDataSource" id="alternativeBenefitsGrid"></kendo-grid>
+            </span>
+            <div ng-show="!alternativeBenefits || alternativeBenefits.length == 0">
+                This plan has no alternative benefits
+            </div>
+        </div>
+    </div>
+</div>

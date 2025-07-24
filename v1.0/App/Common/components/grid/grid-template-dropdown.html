@@ -1,0 +1,4 @@
+﻿<select class="form-input" style="height: 38px" ng-model="column.filter" ng-change="refreshGrid()">
+    <option value="">- {{'Select' | i18n}} -</option>
+    <option ng-repeat="option in data[column.dropDown]" value="{{option.Key}}">{{option.Value}}</option>
+</select>

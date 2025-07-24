@@ -1,0 +1,92 @@
+<div class="userIdentifier">
+    <form name="frmTeamMemberIdentifier" role="form" novalidate>
+        <div class="rowFull white">
+            <div class="userIdentifier__header">
+                <!--Breadcrumbs-->
+                <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                <!--header-->
+                <div class="userIdentifier__title">
+                    <h1>{{ 'Additional Identifiers' | translate }}</h1>
+                </div>
+            </div>
+         
+        </div>
+        <div class="userIdentifier__body">
+            <!--show the master list if not in edit mode-->
+            <div [ngClass]="{'slide-animation': 'forward', 'slide-backward-animation': '!forward'}">
+                <div class="userIdentifier__list">                 
+                    <kendo-grid [data]="gridData" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" [loading]="loading"
+                                (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)"
+                                [height]="455" [sortable]="true"
+                                [sort]="state.sort" (sortChange)="sortChange($event)"
+                                [filterable]="true"
+                                [filter]="state.filter"
+                                (dataStateChange)="dataStateChange($event)"
+                                [navigable]="true">
+                        <div class="userIdentifier__actions">
+                            <ng-template kendoGridToolbarTemplate>
+                                <button kendoGridAddCommand
+                                        checkRoleAccess="{{ !hasCreateAccess }}"
+                                        id="createButton"
+                                        class="btn btn-primary" [iconClass]="'k-icon k-i-plus'">
+                                    {{'Additional Identifier' | translate }}
+                                </button>
+                            </ng-template>
+                        </div>
+                        <kendo-grid-column field="Description" title="Team Member Identifiers" width="400">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem?.Description}}
+                            </ng-template>
+                            <ng-template kendoGridEditTemplate let-column="column" let-formGroup="formGroup"
+                                         let-isNew="isNew">
+                                <input #input class="k-textbox" [formControl]="formGroup.get(column.field)"
+                                       maxlength="24">
+                                <div class="k-tooltip-validation"
+                                     *ngIf="formGroup.get(column.field).invalid && !(isNew && formGroup.get(column.field).untouched)">
+                                    <span class="k-icon k-i-warning"></span>
+                                    {{ 'Team Member Identifier Name is required.' | translate }}
+                                </div>
+                            </ng-template>
+
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+                                <kendo-grid-string-filter-cell [column]="column" [filter]="state.filter"
+                                                               [filterDelay]="100" [showOperators]="false">
+                                </kendo-grid-string-filter-cell>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="Qualifier" title="Qualifier" width="400">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{ dataItem?.Qualifier != null? getQualifier(dataItem?.Qualifier)?.Text : 'None'}}
+                            </ng-template>
+                            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-column="column"
+                                         let-formGroup="formGroup">
+                                <kendo-dropdownlist [data]="masterTeamMemberIdentifierQualifiers" textField="Text" valueField="Value"
+                                                    [valuePrimitive]="true" [formControl]="formGroup.get('Qualifier')">
+                                </kendo-dropdownlist>
+                            </ng-template>
+
+                            <ng-template kendoGridFilterCellTemplate let-filter>
+                                <drop-down-list-filter field="Qualifier" [filter]="state.filter" [data]="masterTeamMemberIdentifierQualifiers" textField="Text" valueField="Value">
+                                </drop-down-list-filter>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-command-column title="" width="100">
+                            <ng-template kendoGridCellTemplate let-isNew="isNew">
+                                <button kendoGridEditCommand [iconClass]="'fas fa-pencil-alt'"
+                                   *ngIf="hasEditAccess">
+                                </button>
+                                <button kendoGridRemoveCommand [iconClass]="'fas fa-trash-alt'"
+                                   *ngIf="hasDeleteAccess"></button>
+                                <a kendoGridCancelCommand [iconClass]="'k-icon k-i-cancel'"></a>
+                                <a kendoGridSaveCommand [disabled]="formGroup?.invalid"
+                                   [iconClass]="'k-icon k-i-check'"></a>
+                            </ng-template>
+                        </kendo-grid-command-column>
+                        <kendo-grid-messages [noRecords]="noRecordsMessageVal"></kendo-grid-messages>
+                    </kendo-grid>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

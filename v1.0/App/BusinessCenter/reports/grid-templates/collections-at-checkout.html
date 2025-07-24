@@ -1,0 +1,119 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-12 cell" colspan="6">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-2 cell">{{ 'Date' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Transaction Type' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Responsible Party' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Payment Type' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Amount' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="date in location.Dates" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'" ng-if="!data.isSummaryView">
+                <tr>
+                    <td class="col-sm-2 cell">{{date.Date | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-10 cell" colspan="5"></td>
+                </tr>
+                <tr ng-repeat-start="provider in date.Providers">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-2 cell">{{provider.Provider}}</td>
+                    <td class="col-sm-2 cell">{{provider.TransactionTypes[0].TransactionType | i18n}}</td>
+                    <td class="col-sm-6 cell" colspan="3"></td>
+                </tr>
+                <tr ng-repeat="trans in provider.TransactionTypes[0].Transactions">
+                    <td class="col-sm-6 cell" colspan="3"></td>
+                    <td class="col-sm-2 cell">{{trans.ResponsibleParty}}</td>
+                    <td class="col-sm-2 cell">{{trans.PaymentType}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="trans.Amount >=0">{{trans.Amount | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="trans.Amount < 0">({{trans.Amount * -1 | currency}})</td>
+                </tr>
+                <tr ng-repeat-start="type in provider.TransactionTypes | startFrom: 1">
+                    <td class="col-sm-4 cell" colspan="2"></td>
+                    <td class="col-sm-2 cell">{{type.TransactionType | i18n}}</td>
+                    <td class="col-sm-6 cell" colspan="3"></td>
+                </tr>
+                <tr ng-repeat-end ng-repeat="transaction in type.Transactions">
+                    <td class="col-sm-6 cell" colspan="3"></td>
+                    <td class="col-sm-2 cell">{{transaction.ResponsibleParty}}</td>
+                    <td class="col-sm-2 cell">{{transaction.PaymentType}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="transaction.Amount >=0">{{transaction.Amount | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="transaction.Amount < 0">({{transaction.Amount *-1 | currency}})</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="2">{{provider.Provider}} {{'Totals' | i18n}}:</td>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{'Account Payments' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="provider.AccountPayments >=0">{{provider.AccountPayments | currency}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="provider.AccountPayments < 0">({{provider.AccountPayments  *-1| currency}})</td
+                </tr>
+                <tr ng-repeat-end>
+                    <td class="col-sm-8 cell" colspan="4"></td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{'Negative Adjustments' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="provider.NegativeAdjustments >=0">{{provider.NegativeAdjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="provider.NegativeAdjustments < 0">({{provider.NegativeAdjustments * -1| currency}})</td>
+                </tr>
+            </tbody>
+            <tbody class="stripOdd" ng-if="!data.isSummaryView">
+                <tr>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-4 cell reportGrid__label" colspan="2">{{location.Location}} {{'Totals' | i18n}}:</td>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-2 cell text-right  reportGrid__label">{{'Account Payments' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="location.AccountPayments >=0">{{location.AccountPayments | currency}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="location.AccountPayments < 0">({{location.AccountPayments* -1 | currency}})</td>
+
+                </tr>
+            </tbody>
+            <tbody class="stripOdd" ng-if="data.isSummaryView">
+                <tr>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-4 cell" colspan="2"></td>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-2 cell text-right">{{'Account Payments' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="location.AccountPayments >=0">{{location.AccountPayments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-if="location.AccountPayments < 0">({{location.AccountPayments * -1| currency}})</td>
+                </tr>
+            </tbody>
+            <tbody class="stripOdd">
+                <tr>
+                    <td class="col-sm-8 cell" colspan="4"></td>
+                    <td class="col-sm-2 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }">{{'Negative Adjustments' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }" ng-if="location.NegativeAdjustments >=0">{{location.NegativeAdjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right" ng-class="{'reportGrid__label': !data.isSummaryView }" ng-if="location.NegativeAdjustments < 0">({{location.NegativeAdjustments  * -1| currency}})</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.Locations.length > 0 && !showFilterMessage && data.Locations.length === $index+1">
+                <tr class="reportGrid__row reportGrid__footer">
+                    <td class="col-sm-12 cell" colspan="6"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-6 cell" colspan="3"></td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{'Account Payments' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="data.AccountPayments >=0">{{data.AccountPayments | currency}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="data.AccountPayments < 0">({{data.AccountPayments *-1 | currency}})</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-8 cell" colspan="4"></td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{'Negative Adjustments' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="data.NegativeAdjustments >=0">{{data.NegativeAdjustments | currency}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label" ng-if="data.NegativeAdjustments < 0">({{data.NegativeAdjustments * -1 | currency}})</td>
+
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>   
+</div>

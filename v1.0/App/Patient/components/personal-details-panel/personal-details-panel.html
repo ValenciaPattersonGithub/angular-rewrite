@@ -1,0 +1,156 @@
+﻿<div id="contact-details-panel">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4>{{ panelTitle | i18n  }}</h4>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div id="personalInfoSection" class="form-body" ng-form="frmPersonalInfo">
+                <!-- First Name / Middle Initial-->
+                <div class="form-row">
+                    <div class="form-group form-col-10" ng-class="{'has-error':hasErrors && !frmPersonalInfo.inpFirstName.$valid}">
+                        <label class="control-label">{{'First Name' | i18n }} *</label>
+                        <input id="inpFirstName" class="form-control required valid" placeholder="{{ 'First name' | i18n }}" set-focus
+                               ng-model="patientData.Profile.FirstName" capitalize-first-with-override name="inpFirstName" maxlength="64"
+                               required char-pattern="{{personalInfoRegex}}" />
+                        <span id="lblFirstNameRequired" class="help-block" ng-show="hasErrors && !frmPersonalInfo.inpFirstName.$valid">
+                            {{ 'This field is required.' | i18n }}
+                        </span>
+                    </div>
+                    <div class="form-group form-col-2">
+                        <label class="control-label">{{'MI' | i18n }}</label>
+                        <input id="inpMiddleName"
+                               class="form-control"
+                               placeholder="{{ 'M.I.' | i18n }}"
+                               ng-model="patientData.Profile.MiddleName"
+                               capitalize-first-with-override
+                               name="inpMiddleName"
+                               maxlength="1"
+                               char-pattern="{{personalInfoRegex}}" />
+                    </div>
+                </div>
+                <!--Last Name / Suffix-->
+                <div class="form-row">
+                    <div class="form-group form-col-10" ng-class="{'has-error':hasErrors && !frmPersonalInfo.inpLastName.$valid}">
+                        <label class="control-label">{{'Last Name' | i18n }} *</label>
+                        <input id="inpLastName"
+                               class="form-control required valid"
+                               placeholder="{{ 'Last name' | i18n }}"
+                               ng-model="patientData.Profile.LastName"
+                               capitalize-first-with-override
+                               name="inpLastName" maxlength="64"
+                               required char-pattern="{{personalInfoRegex}}" />
+                        <span id="lblLastNameRequired" class="help-block" ng-show="hasErrors && !frmPersonalInfo.inpLastName.$valid">
+                            {{ 'This field is required.' | i18n }}
+                        </span>
+                    </div>
+                    <div class="form-group form-col-2">
+                        <label class="control-label">{{'Suffix' | i18n }}</label>
+                        <input id="inpSuffix"
+                               class="form-control"
+                               placeholder="{{ 'Jr., Sr., IV' | i18n }}"
+                               ng-model="patientData.Profile.Suffix"
+                               capitalize-first-with-override
+                               name="inpSuffix" maxlength="20" char-pattern="{{suffixPattern}}" />
+                    </div>
+                </div>
+                <!--Preferred Name-->
+                <div class="form-row">
+                    <div class="form-group form-col-4">
+                        <label class="control-label">{{ 'Preferred {0}' | i18n:['Name'] }} </label>
+                        <input id="inpPreferredName"
+                               class="form-control"
+                               placeholder="{{ 'Prefers to be called...' | i18n }}"
+                               ng-model="patientData.Profile.PreferredName"
+                               capitalize-first-with-override
+                               name="inpPreferredName"
+                               maxlength="64" char-pattern="{{personalInfoRegex}}" />
+                    </div>
+                    <!--Date of Birth-->
+                    <div class="form-group form-col-4">
+                        <label class="control-label">{{ 'Date of Birth' | i18n }} </label>
+                        <date-selector input-id="inpDateOfBirth"
+                                       placeholder="MM/DD/YYYY"
+                                       date-var="patientData.Profile.DateOfBirth"
+                                       valid="validDob"
+                                       format="MM/dd/yyyy"
+                                       max-date="maxDate">
+                        </date-selector>
+                    </div>
+                    <!-- Age -->
+                    <div class="form-group form-col-4" ng-show="patientData.Profile.DateOfBirth">
+                        <label class="control-label">{{ 'Age' | i18n }} </label>
+                        <span class="control-span">{{ patientData.Profile.DateOfBirth | age }}</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <!--Gender -->
+                    <div class="form-group form-col-4">
+                        <label class="control-label">{{ 'Gender' | i18n }}</label>
+                        <radiogroup unique-id="inpSex"
+                                    value="patientData.Profile.Sex"
+                                    options="personSexOptions"
+                                    labels="personSexLabels">
+                        </radiogroup>
+                    </div>
+                    <!--Patient Status-->
+                    <div class="form-group form-col-4">
+                        <label class="control-label">{{'Status' | i18n }} </label>
+                        <div ng-if="!editing">
+                            <checkbox checkbox-id="inpPatientStatus"
+                                      checkbox-value="patientData.Profile.IsPatient"
+                                      checkbox-label="'Patient'"></checkbox>
+                        </div>
+                        <div ng-if="editing">
+                            <checkbox checkbox-id="inpPatientStatus"
+                                      class="patientPersonalInfo__status"
+                                      checkbox-value="patientData.Profile.IsPatient"
+                                      change-function="isPatientBooleanChanged()"
+                                      checkbox-label="'Patient'"></checkbox>
+
+                            <checkbox checkbox-id="inpPatientIsActive"
+                                      auth-z="soar-per-perdem-inactv"
+                                      class="patientPersonalInfo__status"
+                                      checkbox-value="patientData.Profile.IsActive"
+                                      change-function="activeStatusChange()"
+                                      checkbox-label="'Active'"></checkbox>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <!-- Responsible Party -->
+                    <div class="form-col-4">
+                        <label class="control-label"> {{ 'Responsible Person' | i18n }}</label>
+                    </div>
+                    <div class="form-col-4">
+                        <label class="control-label"> {{ 'Signature on File' | i18n }}</label>
+                    </div>
+                    <div id="respParty" class="form-group form-col-12">
+                        <patient-responsible-party patient="patientData.Profile"
+                                                   show-header="false"
+                                                   responsible-person="responsiblePerson"
+                                                   age-check="ageCheck"
+                                                   show-error="hasErrors && !validResponsiblePerson"
+                                                   default-focus="focusOnResponsiblePerson"
+                                                   disable-party="false"
+                                                   is-valid="validResponsiblePerson">
+                        </patient-responsible-party>
+                        <!--todo move this logic to the personal info directive-->
+                        <!--contact info from responsible party if one is selected-->
+                        <!--Removed for PBI 243041-->
+                        <!--<checkbox checkbox-id="inpCopyContactInfo"
+                                  checkbox-value="useResponsiblePersonContact"
+                                  checkbox-label="'Use Responsible Person\'s Contact Information'"
+                                  change-function="copyContactInfo($event)"
+                                  ng-show="patientData.Profile.ResponsiblePersonId">
+                        </checkbox>-->
+                    </div>
+                </div>
+                <div class="form-row">
+                    <patient-duplicates patient="patientData.Profile"></patient-duplicates>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

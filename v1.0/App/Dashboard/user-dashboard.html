@@ -1,0 +1,20 @@
+﻿<div class="userDashboard">
+    <div ng-if="isAppointmentViewVisible" class="appointment-view-full-screen">
+        <appointment-view time-increment="TimeIncrement"></appointment-view>
+    </div>
+    <!-- need a second window to handle clicking on unscheduled appointments in view opening a new view while closing the existing one -->
+    <div ng-if="isSecondaryAppointmentViewVisible" class="appointment-view-full-screen">
+        <appointment-view time-increment="TimeIncrement"></appointment-view>
+    </div>
+    <div class="rowFull">
+        <div class="userDashboard__header">
+            <div class="userDashboard__title">
+                <h1>{{ 'Welcome' | i18n }} {{ displayName }}</h1>
+            </div>
+            <strong>{{ dayDateDisplay }}</strong>
+        </div>
+    </div>
+    <div class="userDashboard__body">
+        <dashboard-container data="dashboardDefinition" />
+    </div>
+</div>

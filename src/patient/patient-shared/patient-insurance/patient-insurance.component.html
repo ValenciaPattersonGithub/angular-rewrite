@@ -1,0 +1,26 @@
+<div class="patient-insurance-container">
+    <div class="patient-insurance-header">
+        <span class="patient-insurance-header-title">{{'Insurance' | translate}}</span>
+        <span class="patient-insurance-header-total">
+            {{plansShowCount}}
+        </span>
+        <span class="patient-insurance-header-optout">
+            <app-toggle [id]="'optAllInsurance'" [isDisabled]="totalPlans.length <= 2" (checkChanged)="optAllPlans($event)"
+                [label]="'Show All'" [labelDirection]="'left'"></app-toggle>
+        </span>
+        <span class="patient-insurance-header-edit">
+            <app-button id="btninsuranceedit" buttonLabel="{{'Insurance Information' | translate }}" variation="secondary" class="ml-10"
+            (onClick)="updatePerson()" ></app-button>
+        </span>
+    </div>
+    <hr class="patient-insurance-hr-border">
+    <div class="patient-insurance-no-records" *ngIf="!patientBenefitPlans.length && isLoading"> <i
+            class="fa fa-spinner fa-spin"></i>
+        <span> {{ 'Loading Insurances...' | translate }}</span>
+    </div>
+    <div class="patient-insurance-no-records" *ngIf="!patientBenefitPlans.length && !isLoading">{{ 'No insurance was found.' |
+        translate }}
+    </div>
+    <app-patient-insurance-card *ngIf="patientBenefitPlans.length" [plans]="patientBenefitPlans">
+    </app-patient-insurance-card>
+</div>

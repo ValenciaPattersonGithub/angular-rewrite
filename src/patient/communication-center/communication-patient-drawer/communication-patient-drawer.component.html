@@ -1,0 +1,11 @@
+<div class="patientCommunicationWrapper">
+    <communication-appointments></communication-appointments>
+    <general-info [patientProfile]="patientDetail.Profile"></general-info>
+    <alerts-flags></alerts-flags>
+    <patient-contact [patientProfile]="patientDetail.Profile"> </patient-contact>
+    <providers-locations [patientProfile]="patientDetail.Profile" [patientLocations]="patientDetail.Profile.Locations"> </providers-locations>
+    <patient-financial [patientProfile]="patientDetail.Profile"></patient-financial>
+    <account-members></account-members>
+    <patient-insurance></patient-insurance>
+    <additional-info [nextAppointment]="nextAppointment"></additional-info>
+</div>

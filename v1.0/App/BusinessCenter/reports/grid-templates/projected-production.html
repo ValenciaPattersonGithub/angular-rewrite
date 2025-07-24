@@ -1,0 +1,7 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container" ng-if="data.Locations.length > 0 && !showFilterMessage">
+        <projected-net-production-report [data]="data"></projected-net-production-report>
+    </div>
+</div>

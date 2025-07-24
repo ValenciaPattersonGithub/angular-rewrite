@@ -1,0 +1,157 @@
+﻿@media screen {
+    .perioComparePrint {
+        font-size: @brand-font_md;
+        margin: @brand-margin_lg auto;             
+        width: 80%;
+        background-color: @white;
+        body.perioComparePrint {
+            padding: 0;
+            background-color: @white;
+            margin-top: 0;
+        }        
+        &__header {
+            width: 100%;
+            min-height: 90px;
+            margin-top: 0;
+            font-weight: bold;
+            margin-bottom: @brand-margin_sm;
+        }
+        &__practice {
+            margin-top: 0;
+        }
+
+        &__exams {
+            margin-top: @brand-margin_md;
+            margin-bottom: 40px;
+        }
+
+        &__row {
+            display: flex;
+            margin-bottom: @brand-margin_xs;
+            min-height: 20px;            
+        }
+
+        &__hdr {
+            margin: @brand-margin_md 0 @brand-margin_md 0;
+        }
+
+        &__subHdr {
+            font-weight: bold;
+            margin: @brand-margin_md @brand-margin_sm @brand-margin_md @brand-margin_sm;
+        }
+
+        &__col {
+            flex: 1;
+            
+            .perioAlertLevel {
+                color: @perio-alert-level-color;
+            }
+        }
+
+        &__sideLabel {
+            font-size: @brand-font_lg;
+            font-weight: bold;
+            left: -20px;
+            position: absolute;
+            top: -18px;
+
+            &.singleCompare {
+                top: -3px;
+            }
+        }
+        &__quadGap {
+            display: block;
+            height: 40px;            
+        }
+        &__quad {
+                    
+        }
+    }
+}
+
+@media screen, print {     
+    .perioComparePrint { 
+        background-color: @white;       
+        .top-header,
+        .feedback-container,
+        .walkme-player {
+            display: none !important;
+        }  
+        .view-container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 0 8pt;
+            background-color: white !important;
+        }        
+    }
+}
+
+@media print {    
+    body.perioComparePrint {        
+        background-color: white!important;        
+    }
+    .perioComparePrint {
+        font-size: 8pt;
+        margin: 15pt auto;             
+        width: 100%;
+        background-color: @white;  
+        &__header {
+            width: 100%;
+            min-height: 70pt;
+            margin-top: 0;
+            font-weight: bold;
+            margin-bottom: 3pt;
+        }
+        &__practice {
+            margin-top: 0;
+        }
+
+        &__exams {
+            margin-top: 12pt;
+            margin-bottom: 15pt;
+        }
+
+        &__row {
+            display: flex;            
+            max-height: 20pt;            
+        }
+
+        &__hdr {
+            margin: 12pt 0 12pt 0;
+        }
+
+        &__subHdr {
+            font-weight: bold;
+            margin: 12pt 6pt 12pt 6pt;
+        }
+
+        &__col {
+            flex: 1;
+
+            .perioAlertLevel {
+                color: @perio-alert-level-color;
+                font-weight: bold;
+
+            }
+        }
+
+        &__sideLabel {
+            font-size: 10pt;
+            font-weight: bold;
+            left: -15pt;
+            position: absolute;
+            top: -13pt;
+
+            &.singleCompare {
+                top: -2pt;
+            }
+        }
+        &__quadGap {
+            display: block;
+            height: 30pt;            
+        }
+        &__quad {             
+            height: 10pt;            
+        }
+    }
+}

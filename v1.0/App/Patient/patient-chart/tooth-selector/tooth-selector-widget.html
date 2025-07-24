@@ -1,0 +1,73 @@
+﻿<div class="toothChartWidget">
+    <button id="clinicalNotesToothBtn" class="toothChartWidget__toggle" ng-click="toggleTChartActive()" >{{ toggleLabel }}</button>
+    <div id="clinicalNotesToothChartWidget" class="toothChartWidget__content" ng-class="{active: tChartPopoverActive}">
+        <div class="toothChartWidget__row">
+            <div class="toothChartWidget__perm">
+                <div class="toothChartWidget__permTop">
+                    <button id="{{tooth.USNumber}}"
+                            class="toothChartWidget__toothCtrl"
+                            ng-click="selectTooth(tooth)"
+                            ng-class="{active: tooth.Selected}"
+                            ng-disabled="disableSelection"
+                            ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Upper', Description: 'Permanent'}">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+                <div class="toothChartWidget__permBtm">
+                    <button id="{{tooth.USNumber}}"
+                            class="toothChartWidget__toothCtrl"
+                            ng-click="selectTooth(tooth)"
+                            ng-class="{active: tooth.Selected}"
+                            ng-disabled="disableSelection"
+                            ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Lower', Description: 'Permanent'} | orderBy : 'USNumber' : true">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="toothChartWidget__row">
+            <div class="toothChartWidget__regions">
+                <button id="UA" class="toothChartWidget__regionCtrl" ng-click="selectMultipleTeeth('Upper', 'ArchPosition');" ng-disabled="!multiselectEnabled || disableSelection || quadrantSelectionOnly">UA</button>
+                <button id="LA" class="toothChartWidget__regionCtrl" ng-click="selectMultipleTeeth('Lower', 'ArchPosition');" ng-disabled="!multiselectEnabled || disableSelection || quadrantSelectionOnly">LA</button>
+                <button id="Prm" class="toothChartWidget__regionCtrl" ng-click="toggleToothStructure()" ng-class="{active: selectedToothStructure === 'Primary'}" ng-disabled="!multiselectEnabled || disableSelection">Prm</button>
+                <button id="Clr" class="toothChartWidget__regionCtrl" ng-click="clearTeeth()" ng-disabled="!multiselectEnabled || disableSelection">Clr</button>
+            </div>
+            <div class="toothChartWidget__prim">
+                <div class="toothChartWidget__primTop">
+                    <button id="{{tooth.USNumber}}"
+                            class="toothChartWidget__toothCtrl"
+                            ng-click="selectTooth(tooth)"
+                            ng-class="{active: tooth.Selected}"
+                            ng-disabled="disableSelection"
+                            ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Upper', Description: 'Primary'}">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+                <div class="toothChartWidget__primBtm">
+                    <button id="{{tooth.USNumber}}"
+                            class="toothChartWidget__toothCtrl"
+                            ng-click="selectTooth(tooth)"
+                            ng-class="{active: tooth.Selected}"
+                            ng-disabled="disableSelection"
+                            ng-repeat="tooth in allTeeth | filter: {ArchPosition: 'Lower', Description: 'Primary'} | orderBy : 'ToothId' : true">
+                        {{tooth.USNumber}}
+                    </button>
+                </div>
+            </div>
+            <div class="toothChartWidget__regions">
+                <button id="UR" class="toothChartWidget__regionCtrl" ng-click="selectMultipleTeeth('Upper Right', 'QuadrantName');" ng-disabled="!multiselectEnabled || disableSelection">UR</button>
+                <button id="UL" class="toothChartWidget__regionCtrl" ng-click="selectMultipleTeeth('Upper Left', 'QuadrantName');" ng-disabled="!multiselectEnabled || disableSelection">UL</button>
+                <button id="LR" class="toothChartWidget__regionCtrl" ng-click="selectMultipleTeeth('Lower Right', 'QuadrantName');" ng-disabled="!multiselectEnabled || disableSelection">LR</button>
+                <button id="LL" class="toothChartWidget__regionCtrl" ng-click="selectMultipleTeeth('Lower Left', 'QuadrantName');" ng-disabled="!multiselectEnabled || disableSelection">LL</button>
+            </div>
+        </div>
+        <div class="toothChartWidget__actions">
+            <button class="btn btn-default" ng-if="cancelButtonLabel" ng-click="cancel();">
+                {{cancelButtonLabel |i18n }}
+            </button>
+            <button id="btnToothChartWidgetApply" class="btn btn-primary" ng-click="tChartPopoverActive = false; applyTeeth();">
+                {{applyButtonLabel |i18n }}
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<div>
+    <search-bar-autocomplete [template]="'familySchedulingTemplate'"
+                             [inputFieldLabel]="'Search a patient that belongs to a family account to select additional family members:'"
+                             [list]="data" (selectedValueChange)="handlePatientSelection($event)" (filterValueChange)="handlePatientSearch($event)"
+                             [valueF]="'Name'">
+    </search-bar-autocomplete>
+</div>

@@ -1,0 +1,204 @@
+﻿.patLedger {
+
+    &__table {
+        .table;
+        .soarTblSort;
+        border: 1px solid @brand-tbl_border-color;
+    }
+
+    &__duplicatePatients {      
+        margin-right: 15px;
+        float:left;
+        
+    }
+
+    &__header {
+
+        > tr {
+            background-color: @brand-color_white;
+            border-bottom: 1px solid @brand-tbl_border-color;
+
+            > td {
+                position: relative;
+                padding: 10px 6px;
+                vertical-align: middle !important;
+                text-align: left;
+                font-size: 0.9em;
+                cursor: pointer;
+                font-weight: 100;
+
+                &:first-child {
+                    padding-left: 10px;
+                }
+
+                &.action {
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                &.fee {
+                    .text-right;
+                    padding-right: 25px;
+                }
+            }
+        }
+    }
+
+    &__body {
+
+        > tr {
+            height: 47px;
+            background-color: @brand-color_white;
+            border-bottom: 1px solid @brand-tbl_border-color;
+
+            &.serv {
+                color: @brand-tbl_ledger-serv;
+            }
+
+            &.cond {
+                color: @brand-tbl_ledger-cond;
+            }
+
+            &.prop {
+                color: @brand-tbl_ledger-prop;
+            }
+            &.ref {
+                color: @brand-tbl_ledger-ref;
+            }
+            &.rej {
+                color: @brand-tbl_ledger-rej;
+            }
+            &.comp {
+                color: @brand-tbl_ledger-comp;
+            }
+            &.pend {
+                color: @brand-tbl_ledger-pend;
+            }
+            &.exis {
+                color: @brand-tbl_ledger-exis;
+            }
+            &.acc {
+                color: @brand-tbl_ledger-acc;
+            }
+            &.rcomp {
+                color: @brand-tbl_ledger-rcomp;
+            }
+            &.cond-pres {
+                color: @brand-tbl_ledger-cond-pres;
+            }
+            &.cond-rslv {
+                color: @brand-tbl_ledger-cond-rslv;
+            }
+
+            > td {
+                position: relative;
+                padding: 10px 6px;
+                vertical-align: middle !important;
+                text-align: left;
+                font-size: 0.9em;
+                font-weight: 100;
+
+                > span {
+                    display: inline-block;
+                    position: absolute;
+                    width: 90%;
+                    margin-top: -9px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                &.defaultCol {
+                    width: 12%;
+                }
+
+                &.scheduleselect {
+                    width: 12%;
+                    cursor: pointer !important;
+                    color: #2DABCB;                   
+                }
+
+                &.minCol {
+                    width: 8%;
+                }
+
+                &.date {
+                    padding-left: 10px;
+                    width: 10%;
+                }
+
+                &.tooth,
+                &.surface,
+                &.status {
+                    width: 9%;
+                    min-width: 78px;
+                }
+
+                &.fee {
+                    width: 7%;
+                    min-width: 78px;
+
+                    > span {
+                        .text-right;
+                    }
+                }
+
+                &.provider {
+                    width: 18%;
+                }
+
+                &.appt {
+                    width: 10%;
+                }
+
+                &.action {
+                    width: 5%;
+                }
+            }
+        }
+    }
+
+    &__toggle {
+        .btn;
+        .btn-link;
+    }
+
+    &__actionBtns {
+        padding: 10px 0 10px 10px;
+
+        a{
+            text-align: left;
+        }
+    }
+
+    &__actions {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 10px;
+        z-index: 999;
+        padding: 10px;
+        min-width: 100px;
+        background-color: @brand-color_white;
+        border: 1px solid @brand-color_darker-gray;
+        box-shadow: @brand-shadow_default;
+
+        &.active {
+            display: inline-block;
+        }
+
+        &.orientTop {
+            top: auto;
+            bottom: 40px;
+        }
+
+        .btn {
+            font-size: 1em;
+
+            &[disabled] {
+                color: @brand-color_link-disabled;
+            }
+        }
+    }
+}

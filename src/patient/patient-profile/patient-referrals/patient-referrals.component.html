@@ -1,0 +1,199 @@
+<div kendoDialogContainer></div>
+<ng-container #container></ng-container>
+<div class="referrals-detail-container">
+    <div class="referrals-header">
+        <span class="referrals-header-title">{{'Recent Referrals' | translate}}</span>
+        <div class="referrals-header-actionButtons">
+            <!-- <app-button id="btnrefedit" buttonLabel="{{'View All Referrals' | translate }}" variation="secondary" class="ml-10"
+                (onClick)="viewAllReferrals()" [isDisabled]='patientReferralsList == undefined || patientReferralsList.length == 0'></app-button> -->
+            <app-button id="btnrefedit" buttonLabel="{{'View All Referrals' | translate }}" variation="secondary" class="ml-10"
+                (onClick)="viewAllReferrals()" [isDisabled]='true'></app-button>
+                &nbsp;
+            <app-button id="btnrefedit" buttonLabel="{{'Add Referral' | translate }}" variation="primary" class="ml-10"
+                (onClick)="showReferralForm('','addReferral')" [isDisabled]='!hasEditAccess'></app-button>
+        </div>
+    </div>
+    <hr>
+    <div class="referralsDetailContent">
+        
+        <div *ngIf="patientReferralsList != undefined && patientReferralsList.length > 0">
+            <kendo-grid class="kendoNewStyle" [data]="patientReferralsList" [sortable]="true">
+                <kendo-grid-column field="dateCreated" title="{{'Date' | translate }}">
+                    <ng-template kendoGridHeaderTemplate let-dataItem>
+                        <span i18n>
+                            {{'Date' | translate }}
+                            <div class="icon-right">
+                                <span
+                                    *ngIf="(!isDescending && sortColumnName === 'dateCreated') || sortColumnName !== 'dateCreated'"
+                                    class="fa fa-caret-up fa-sm sort-icon" (click)="sortReferrals('dateCreated', 1)"></span>
+                                <span
+                                    *ngIf="(isDescending && sortColumnName === 'dateCreated') || sortColumnName !== 'dateCreated'"
+                                    class="fa fa-caret-down fa-sm sort-icon"
+                                    (click)="sortReferrals('dateCreated', -1)"></span>
+                            </div>
+                        </span>
+                    </ng-template>
+                    
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.dateCreated | date:'MM/dd/yyyy' }}
+                    </ng-template>                    
+                </kendo-grid-column>
+
+                <kendo-grid-column field="referralDirectionType" title="{{'Referral Directions' | translate }}">
+                    <ng-template kendoGridHeaderTemplate let-dataItem>
+                        <span i18n>
+                            {{'Referral Directions' | translate }}
+                            <div class="icon-right">
+                                <span
+                                    *ngIf="(!isDescending && sortColumnName === 'referralDirectionType') || sortColumnName !== 'referralDirectionType'"
+                                    class="fa fa-caret-up fa-sm sort-icon" (click)="sortReferrals('referralDirectionType', 1)"></span>
+                                <span
+                                    *ngIf="(isDescending && sortColumnName === 'referralDirectionType') || sortColumnName !== 'referralDirectionType'"
+                                    class="fa fa-caret-down fa-sm sort-icon"
+                                    (click)="sortReferrals('referralDirectionType', -1)"></span>
+                            </div>
+                        </span>
+                    </ng-template>
+                    
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.referralDirectionType }}
+                    </ng-template>                    
+                </kendo-grid-column>
+
+                <kendo-grid-column field="referralCategory" title="{{'Referral Categories' | translate }}">
+                    <ng-template kendoGridHeaderTemplate let-dataItem>
+                        <span i18n>
+                            {{'Referral Categories' | translate }}
+                            <div class="icon-right">
+                                <span
+                                    *ngIf="(!isDescending && sortColumnName === 'referralCategory') || sortColumnName !== 'referralCategory'"
+                                    class="fa fa-caret-up fa-sm sort-icon" (click)="sortReferrals('referralCategory', 1)"></span>
+                                <span
+                                    *ngIf="(isDescending && sortColumnName === 'referralCategory') || sortColumnName !== 'referralCategory'"
+                                    class="fa fa-caret-down fa-sm sort-icon"
+                                    (click)="sortReferrals('referralCategory', -1)"></span>
+                            </div>
+                        </span>
+                    </ng-template>
+                    
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.referralCategory }}
+                    </ng-template>                    
+                </kendo-grid-column>
+
+                <kendo-grid-column field="referringFrom" title="{{'Referring From' | translate }}">
+                    <ng-template kendoGridHeaderTemplate let-dataItem>
+                        <span i18n>
+                            {{'Provider' | translate }}
+                            <div class="icon-right">
+                                <span
+                                    *ngIf="(!isDescending && sortColumnName === 'referringFrom') || sortColumnName !== 'referringFrom'"
+                                    class="fa fa-caret-up fa-sm sort-icon" (click)="sortReferrals('referringFrom', 1)"></span>
+                                <span
+                                    *ngIf="(isDescending && sortColumnName === 'referringFrom') || sortColumnName !== 'referringFrom'"
+                                    class="fa fa-caret-down fa-sm sort-icon"
+                                    (click)="sortReferrals('referringFrom', -1)"></span>
+                            </div>
+                        </span>
+                    </ng-template>
+                    
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.referringFrom }}
+                    </ng-template>                    
+                </kendo-grid-column>
+
+                <kendo-grid-column field="referringTo" title="{{'Referring To' | translate }}">
+                    <ng-template kendoGridHeaderTemplate let-dataItem>
+                        <span i18n>
+                            {{'Referring To' | translate }}
+                            <div class="icon-right">
+                                <span
+                                    *ngIf="(!isDescending && sortColumnName === 'referringTo') || sortColumnName !== 'referringTo'"
+                                    class="fa fa-caret-up fa-sm sort-icon" (click)="sortReferrals('referringTo', 1)"></span>
+                                <span
+                                    *ngIf="(isDescending && sortColumnName === 'referringTo') || sortColumnName !== 'referringTo'"
+                                    class="fa fa-caret-down fa-sm sort-icon"
+                                    (click)="sortReferrals('referringTo', -1)"></span>
+                            </div>
+                        </span>
+                    </ng-template>
+                    
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.referringTo }}
+                    </ng-template>                    
+                </kendo-grid-column>
+
+                <kendo-grid-column field="referringTo" title="{{'Referral Affiliates' | translate }}">
+                    <ng-template kendoGridHeaderTemplate let-dataItem>
+                        <span i18n>
+                            {{'Referring From' | translate }}
+                            <div class="icon-right">
+                                <span
+                                    *ngIf="(!isDescending && sortColumnName === 'referralAffiliateName') || sortColumnName !== 'referralAffiliateName'"
+                                    class="fa fa-caret-up fa-sm sort-icon" (click)="sortReferrals('referralAffiliateName', 1)"></span>
+                                <span
+                                    *ngIf="(isDescending && sortColumnName === 'referralAffiliateName') || sortColumnName !== 'referralAffiliateName'"
+                                    class="fa fa-caret-down fa-sm sort-icon"
+                                    (click)="sortReferrals('referralAffiliateName', -1)"></span>
+                            </div>
+                        </span>
+                    </ng-template>
+                    
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.referralAffiliateName }}
+                    </ng-template>                    
+                </kendo-grid-column>
+                
+                <kendo-grid-column title="" width="40">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <div class="btn-group tooltipDisable" (mouseover)="!hasEditAccess ? editAccessToolTipText : ''">
+                            <button class="btn-link dropdown-toggle" data-toggle="dropdown" [disabled]="!hasEditAccess" [ngClass]="{'disableMenu': !hasEditAccess}">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <span *ngIf="!hasEditAccess" class="toolTipText">
+                                    {{ editAccessToolTipText }}
+                                </span>
+                            </button>
+                            <ul class="pull-right dropdown-menu">
+                                <li>
+                                    <a id="document-editLink" class="menuLink"
+                                        (click)="showReferralForm(dataItem,'editReferral')"
+                                        placement="top" delay="500">
+                                        {{ 'Edit' | translate }}        
+                                    </a>
+                                    <a id="document-editLink" class="menuLink"
+                                        (click)="deleteReferral(dataItem, confirmationRef, dialogActions)"
+                                        placement="top" delay="500">
+                                        {{ 'Delete' | translate }}        
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+
+    </div>
+    <div *ngIf="patientReferralsList == undefined || patientReferralsList.length == 0" class="noContent" id="div-patientReferralsList-noContent">
+        No Content Available.&nbsp;
+        <app-button buttonLabel="Add Referral" variation="primary" id="btnAddReferral"
+            [isDisabled]="!hasAddAccess" class="lnkButton"
+            title="{{!hasAddAccess? 'You do not have permission to view this information.' : ''}}" placement="left"
+            (click)="showReferralForm('','addReferral')"> </app-button>
+    </div>
+</div>
+
+<ng-template #confirmationRef>
+    <div class="popup_heading">
+        <h4 class="head-bold">{{'Delete Referral' | translate }}</h4>
+    </div>
+    <div class="confirmationMessage">
+        <hr class="top-hr" />
+        <p>{{'Are you sure you want to delete this referral record?' | translate }}</p>
+        <hr class="bottom-hr" />
+    </div>
+</ng-template>
+<ng-template #dialogActions>
+    <button class="secondary_button btn-width" (click)="dialog.close()">No</button>
+    <button class="primary_button secondary_button btn-width" (click)="dialog.close({ primary: true })">Yes</button>
+</ng-template>

@@ -1,0 +1,19 @@
+<div class="identifiers-detail-container">
+    <div class="identifiers-header">
+        <span class="identifiers-header-title">{{'Additional Identifiers' | translate}}</span>
+        <div class="identifiers-header-actionButtons" >
+            <app-button id="btnaiedit" buttonLabel="{{'Edit' | translate }}" variation="secondary" class="ml-10"
+                (onClick)="updatePerson()" [isDisabled]='!hasEditAccess' ></app-button>
+        </div>
+    </div>
+    <hr>
+    <div class="identifiersDetailContent" *ngFor="let patientAdditionalIdentifier of patientAdditionalIdentifiers">
+        <div class="identifiersDetailContent-identifiers">
+            <div class="identifiersDetailContent-identifiers-label">
+                <app-label class="contactDetailContent-contact-details-label" [label]="patientAdditionalIdentifier.Description">
+                </app-label>
+            </div>
+            <span>{{patientAdditionalIdentifier.Value  ? patientAdditionalIdentifier.Value : 'N/A'}}</span>
+        </div>
+    </div>
+</div>

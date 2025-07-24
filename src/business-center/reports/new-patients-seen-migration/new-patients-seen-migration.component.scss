@@ -1,0 +1,38 @@
+.new-patients-seen-report {
+    grid-template-columns: 2fr 2fr 1fr 2fr 1fr 2fr 1fr 1fr
+}
+.new-patients-seen-report-header {
+    grid-template-columns: 2fr 2fr 1fr 2fr 1fr 2fr 1fr 1fr;
+    background: transparent;
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display: grid;
+
+    &.header {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.new-patients-seen-report {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+
+        > div {
+            padding: 4px;
+            align-items: center;
+        }
+    }
+}
+.new-patients-seen-report-hr {
+    border-top: 2px solid #333333;
+    opacity: .5;
+    margin: 0;
+}

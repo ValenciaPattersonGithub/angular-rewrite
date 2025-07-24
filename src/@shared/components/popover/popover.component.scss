@@ -1,0 +1,199 @@
+@import 'src/stylings/variables.scss';
+
+.popover-container-left {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  margin-right: 15px;
+  transform: translateY(-50%);
+  min-width: 200px;
+  background-color: $polar-white;
+  z-index: 1;
+  border:1px solid rgba(0, 0, 0, 0.2);
+
+  .popover-content {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    color: $polar-white;
+  }
+
+
+  .popover-content::after {
+    content: " ";
+    position: absolute;
+    top: 53%;
+    left: 100%;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent transparent $polar-white;
+    transform: translateY(-50%);
+    filter: drop-shadow(1px 0 0 #CAD5E0) drop-shadow(0 .5px 0 #CAD5E0);
+  }
+}
+
+.popover-container-leftMargin {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 200px;
+  background-color: $polar-white;
+  z-index: 1;
+  border:1px solid rgba(0, 0, 0, 0.2);
+
+  .popover-content {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    color: $polar-white;
+  }
+
+
+  .popover-content::after {
+    content: " ";
+    position: absolute;
+    top: 53%;
+    left: 100%;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent transparent $polar-white;
+    transform: translateY(-50%);
+    filter: drop-shadow(1px 0 0 #CAD5E0) drop-shadow(0 .5px 0 #CAD5E0);
+  }
+}
+
+.popover-container-right {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin-left: 15px;
+  transform: translateY(-50%);
+  min-width: 200px;
+  background-color: $polar-white;
+  z-index: 1;
+  border:1px solid rgba(0, 0, 0, 0.2);
+
+  .popover-content {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    color: $polar-white;
+  }
+
+
+  .popover-content::before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent $polar-white transparent transparent;
+    transform: translateY(-50%);
+    filter: drop-shadow(0 1px 0 #CAD5E0) drop-shadow(0 -1px 0 #CAD5E0);
+  }
+}
+
+
+
+.popover-container-top {
+  position: absolute;
+  transform: translateX(0%) translateY(-108%);
+  right: 50%;
+  bottom: 100%;
+  margin-bottom: 15px;
+  transform: translateX(50%);
+  min-width: 200px;
+  background-color: $polar-white;
+  z-index: 1;
+
+  .popover-content {
+    font-size: 14px;
+    font-family: $global-font-family;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    color: $polar-white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+
+  .popover-content::before {
+    content: " ";
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    border-width: 10px;
+    border-style: solid;
+    border-color: $polar-white transparent transparent transparent;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 1px 0 #CAD5E0) drop-shadow(0 .5px 0 #CAD5E0);
+  }
+}
+
+.popover-container-bottom {
+  position: absolute;
+  right: 50%;
+  top: 100%;
+  margin-top: 15px;
+  transform: translateX(50%);
+  min-width: 200px;
+  background-color: rgb(255, 255, 255);
+  z-index: 1;
+  border:1px solid rgba(0, 0, 0, 0.2);
+
+  .popover-content {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    color: $polar-white;
+  }
+
+
+  .popover-content::before {
+    content: " ";
+    position: absolute;
+    top: -100%;
+    left: 45%;
+    border-width: 10px;
+    border-style: solid;
+    border-color: $polar-white transparent transparent transparent;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 1px 0 #CAD5E0) drop-shadow(0 .5px 0 #CAD5E0);
+    transform: rotate(180deg);
+  }
+}
+
+.popover-container-dateRangepicker {
+  position: absolute;
+  top: 81%;
+  left: 1%;
+}
+
+.popover-container-dateRangepicker-schduleUtilization {
+  position: absolute;
+  top: 23%;
+  width: 100%;
+
+  .popover-content {
+    padding: 0px;
+  }
+
+}
+
+  .popover-container-dateRangepicker-patientGrid {
+    position: absolute;  
+    z-index: 999;
+    .popover-content {
+      padding: 0px;
+    }  
+  }

@@ -1,0 +1,62 @@
+﻿<div class="closeClaimCancelModal">
+    <div class="modal-header"><h4 id="lblWarningModalHeader">{{ 'Create A Claim' | i18n }}</h4></div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-6 closeClaimCancelModal__message">
+                <label id="lblWarningModalMessage">{{ 'Would you like to create a claim for another benefit plan?' | i18n }}</label>
+            </div>
+            <div class="col-sm-4 closeClaimCancelModal__benefitPlanSelect">
+                <typeahead class="typeahead soar-typeahead typeaheadResults"
+                           id="inpInsurancePlan"
+                           name="inpInsurancePlan"
+                           appearance="form-control"
+                           select="selectPlan(item)"
+                           show-search-button="true"
+                           items="plans"
+                           term="searchTerm"
+                           placeholder="{{ 'Search {0}'| i18n:['Plans'] }}"
+                           tab-index="100"
+                           clear-content="clearContent()">
+                    <ul id="lstFilteredCarriers">
+                        <li ng-repeat="plan in plans track by plan.PatientBenefitPlanId" typeahead-item="plan" ng-animate="'animate'">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Benefit Plan:</label>
+                                    <span ng-show="plan.Name" id="lblPlanName" ng-bind-html="plan.Name | boldTextSearchCriteriaSpecialCharacters:searchTerm"></span>
+                                    <br>
+                                    <label>Carrier:</label>
+                                    <span ng-show="plan.PolicyHolderBenefitPlanDto.BenefitPlanDto.CarrierName" id="lblCarrierName" ng-bind-html="plan.PolicyHolderBenefitPlanDto.BenefitPlanDto.CarrierName | boldTextSearchCriteriaSpecialCharacters:searchTerm"></span>
+                                    <br>
+                                    <label>Group:</label>
+                                    <span ng-show="plan.PolicyHolderBenefitPlanDto.BenefitPlanDto.PlanGroupNumber"
+                                          id="lblPlanGroupNumber"
+                                          ng-bind-html="plan.PolicyHolderBenefitPlanDto.BenefitPlanDto.PlanGroupNumber | boldTextSearchCriteriaSpecialCharacters:searchTerm">
+                                    </span>
+                                    <span ng-show="plan.PolicyHolderBenefitPlanDto.BenefitPlanDto.PlanGroupName"
+                                          id="lblPlanGroupName"
+                                          ng-bind-html="plan.PolicyHolderBenefitPlanDto.BenefitPlanDto.PlanGroupName | boldTextSearchCriteriaSpecialCharacters:searchTerm">
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li ng-show="plans.length==0">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <span class="text-muted" id="lblNoResultMessage">
+                                        {{ 'No search results.'| i18n }}
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </typeahead>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div>
+            <button id="btnCancelNo" ng-click="cancelDiscard();" class="btn btn-default" ng-disabled="creatingClaims">{{ 'No' | i18n }}</button>
+            <button id="btnCancelYes" ng-click="confirmDiscard();" class="btn btn-primary" ng-disabled="selectedPlanId == null || selectedPlanId.length === 0 || creatingClaims || gettingServiceTransactions">{{ 'Create' | i18n }}</button>
+        </div>
+    </div>
+</div>

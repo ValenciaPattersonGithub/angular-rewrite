@@ -1,0 +1,839 @@
+<div>
+    <form name="frmAppointment" class="appointmentView" ng-click="closeProviderDropdown()">
+        <div class="appointmentView__modalHeader">
+            <div class=".appointmentView__modalHeader__headerRow modal-header-text" id="modalScroll">
+                <div ng-if="appointment.Data.ObjectState==saveStates.Add">
+                    <div class="">
+                        <h1 ng-if="appointment.Data.Classification == 0">+{{ ::(appointmentModalText.appointment) }}</h1>
+                        <h1 ng-if="appointment.Data.Classification == 2">+{{ ::(appointmentModalText.unscheduledAppointment) }}</h1>
+                    </div>
+                </div>
+                <div ng-if="appointment.Data.ObjectState!=saveStates.Add">
+                    <div class="">
+                        <h1 ng-if="appointment.Data.Classification == 0">+{{ ::(appointmentModalText.appointment) }}</h1>
+                        <h1 ng-if="appointment.Data.Classification == 2 && appointmentDate != null">+{{ ::(appointmentModalText.unscheduledAppointment) }}</h1>
+                        <h1 ng-if="appointment.Data.Classification == 2 && appointmentDate == null">+{{ ::(appointmentModalText.unscheduledAppointment) }}</h1>
+                    </div>
+                </div>
+
+                <div class="close-button">
+                    <button id="btnClose" class="btn btn-link" ng-click="showCancelModal();"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="appointmentView__modalHeader__headerRow">
+                <div class="appointmentView__modalHeader__contentSection">
+                    <div class="appointment-button-display">
+                        <!--saveClicked: {{saveClicked}} | removeClicked: {{removeClicked}} | readyOnly: {{readonly}} |
+                        conflicts.IsBlock: {{conflicts.IsBlock}} | overwriteHasChanges: {{overwriteHasChanges}} | hasChanges: {{hasChanges}}-->
+                        <!--Show this Save Appointment button for a scheduled appointment that HAS NOT BEEN Completed or is ReadyForCheckout.-->
+                        <!--The hideButtonsOnCompletedOrReadyForCheckout=false will show the id="btnSave" and id="btnAddToClipboard" and hide the id="btnSaveNotesOnly"-->
+                        <!--The appointment.Saving disables the button when the button is clicked. It is enabled if validation fails-->
+                        <button check-auth-z="{{editing?'soar-sch-sptapt-edit':'soar-sch-sptapt-add'}}"
+                                id="btnSave"
+                                ng-show="!hideButtonsOnCompletedOrReadyForCheckout"
+                                ng-click="save();"
+                                ng-disabled="appointment.Saving || providerHasLocationConflict && appointment.Data.Classification == 0 ||
+                                examiningDentistHasLocationConflict && appointment.Data.Classification == 0 || readOnly ||
+                                !patientSelected || !patient.IsActive"
+                                class="btn btn-primary btn-save-appointment" tabindex="1">
+                            <span ng-show="appointment.Data.Classification == 0">{{ ::(appointmentModalText.save) }} {{ ::(appointmentModalText.appointment)}}</span>
+                            <span ng-show="appointment.Data.Classification == 2">{{ ::(appointmentModalText.save) }} {{ ::(appointmentModalText.unscheduledAppointment) }}</span>
+                        </button>
+
+                        <!--Show this Save Appointment button for a scheduled appointment that HAS BEEN Completed or is ReadyForCheckout. This button is used for Saving Notes only.-->
+                        <!--The hideButtonsOnCompletedOrReadyForCheckout=true will hide the id="btnSave" and id="btnAddToClipboard" and show the id="btnSaveNotesOnly"-->
+                        <!--The appointment.Saving disables the button when the button is clicked. It is enabled if validation fails-->
+                        <button check-auth-z="{{editing?'soar-sch-sptapt-edit':'soar-sch-sptapt-add'}}"
+                                id="btnSaveNotesOnly"
+                                ng-click="updateNote();"
+                                ng-show="hideButtonsOnCompletedOrReadyForCheckout"
+                                ng-disabled="appointment.Saving || providerHasLocationConflict && appointment.Data.Classification == 0 || disableSaveNotesButton ||
+                                examiningDentistHasLocationConflict && appointment.Data.Classification == 0 || !patientSelected || !patient.IsActive"
+                                class="btn btn-primary btn-save-appointment" tabindex="1">
+                            <span ng-show="appointment.Data.Classification == 0">{{ ::(appointmentModalText.save) }} {{ ::(appointmentModalText.appointment)}}</span>
+                        </button>
+
+                        <!--Show this Add to Clipboard button for a scheduled appointment that HAS NOT BEEN Completed or is ReadyForCheckout.-->
+                        <!--The hideButtonsOnCompletedOrReadyForCheckout=false will show the id="btnSave" and id="btnAddToClipboard" and hide the id="btnSaveNotesOnly"-->
+                        <!--The appointment.Saving disables the button when the button is clicked. It is enabled if validation fails-->
+                        <!--The appointment.Data.IsPinned disables the button when the appointment is already on the clipboard. Otherwise, button should be enabled-->
+                        <button ng-if="appointment.Data.Classification == 2 || appointment.Data.Classification == 0"
+                                id="btnAddToClipboard"
+                                class="btn btn-primary btn-save-appointment ng-scope"
+                                ng-show="!hideButtonsOnCompletedOrReadyForCheckout"
+                                ng-disabled="appointment.Saving || appointment.Data.IsPinned || readOnly || !patientSelected || !patient.IsActive" ng-click="addToClipboard()">
+                            <span class="fa fa-clipboard"></span>
+                            <span>{{ ::(appointmentModalText.addToClipBoard) }}</span>
+                        </button>
+
+                        <!-- Appointment Status New Code -->
+                        <div class="flexbox-container" ng-if="appointment.Data.Classification < 1">
+                            <div class="schedule-appointment-status-container">
+                                <downgraded-appointment-status-selector [disable-status-dropdown]="disableStatusDropdown" id="appointmentStatusSelector" [(appointment)]="appointment" (set-disable-status-dropdown)="setDisableStatusDropdown($event)" (appointment-status-changed)="appointmentStatusChangedNew($event)"></downgraded-appointment-status-selector>
+                                <a class="icon-button soar-link margin-right-5" ng-click="addStatusNote()" ng-hide="appointment.Data.StatusNote > '' || addNote || readOnly" ng-if="false">+ {{ ::(appointmentModalText.addStatusNote) }}</a>
+                            </div>
+                            <button class="btn btn-primary btn-save-appointment ng-scope" title="Create Block" ng-if="!editing && appointment.Data.Classification === 0 || appointment.Data.Classification === 1" ng-show="!(patientSelected)" ng-click="switchToBlock()">
+                                Create Block
+                            </button>
+                        </div>
+                    </div>
+                    <div class="section-divider"></div>
+                </div>
+            </div>
+            <div class="">
+                <div id="tabSection">
+                    <div class="col-xs-12 apptCrud__addServiceButton" ng-show="false">
+                        <button check-auth-z="soar-sch-apt-svcs" class="btn btn-default" ng-click="showTabset = true; activeApptTab = 2;" ng-bind="::(appointmentModalText.addNewService)"></button>
+                    </div>
+                    <div>
+                        <div class="appointment-view-columns">
+                            <div class="appointment-modal-left">
+                                <div class="col-md-12 apptCrud__tabs" ng-class="{'active':showTabset}" ng-show="showTabset" ng-if="false">
+                                    <uib-tabset active="activeApptTab">
+                                        <uib-tab select="getPreventiveCareInfo()" heading="{{ ::(appointmentModalText.preventativeCare)}}">
+                                            <preventive-care-appt ng-if="preventiveCareServices" data="preventiveCareServices" appointment="appointment" planned-services="plannedServices" date="preventiveDate"></preventive-care-appt>
+                                        </uib-tab>
+                                        <uib-tab disable="true" heading="{{ ::(appointmentModalText.treatmentPlan) }}">
+                                        </uib-tab>
+                                        <uib-tab disable="true" heading="{{ ::(appointmentModalText.addAService) }}">
+                                            <service-selector planned-services="plannedServices"></service-selector>
+                                        </uib-tab>
+                                    </uib-tabset>
+                                </div>
+                                <div id="upperLeftSection">
+                                    <div class=".appointmentView__modalBody__patientInfo">
+                                        <!-- Person -->
+                                        <div class="">
+                                            <div class=".appointmentView__modalHeader__contentSection__patient ng-scope">
+                                                <label class="" id="patient-label">Patient</label>
+                                            </div>
+                                            <span class=".appointmentView__modalBody__in-collection" ng-show="patient.PersonAccount.InCollection">
+                                                {{ ::(appointmentModalText.inCollections) }}
+                                            </span>
+                                        </div>
+                                        <div class="">
+                                            <div class="appointmentView__modalHeader__contentSection__patient">
+                                                <label id="btnGoToPatient" class="large-text-patient-name" ng-if="patient  && (appointmentSaveState != saveStates.Add || isPatientReadOnly)">
+                                                    {{ patient.FirstName }} <span ng-show="patient.PreferredName">({{ patient.PreferredName }}) </span><span ng-show="patient.MiddleName > ''">{{ patient.MiddleName }}. </span>{{ patient.LastName }} {{ patient.Suffix }}
+                                                </label>
+
+                                                <div ng-show="!editing && appointmentSaveState == saveStates.Add && !isPatientReadOnly"
+                                                     ng-class="{'error': !appointment.Valid && !patient && appointment.Data.Classification!=1 }" class="padding-bottom-4">
+                                                    <search-bar base-id="patientUnscheduledSearch"
+                                                                header="false"
+                                                                select-mode="true"
+                                                                selected="newAppt.patient"
+                                                                b-focus="true"
+                                                                tab-index="100"
+                                                                show-search-button="true"
+                                                                show-clear-button="true"
+                                                                hold-search-term="true"
+                                                                view-result="fillSearch"
+                                                                from-apt-modal="true"
+                                                                apt-location="appointment.Data.Location"
+                                                                filtered-locations="filteredLocations">
+                                                    </search-bar>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="vertical-spacing" ng-if="patient">
+                                            <div class="appointmentView__modalHeader__contentSection__patient ng-scope">
+                                                <div id="lblSelectedDateOfBirth" class="container-flex">
+                                                    <span ng-show="patient.DateOfBirth" class="margin-right-5 padding-top-8">
+                                                        {{ patient.DateOfBirth | toShortDisplayDate }} ({{ ::(appointmentModalText.age) }} {{ patient.DateOfBirth | age }})
+                                                    </span>
+                                                    <span ng-show="patient.Sex" class="margin-right-5 padding-top-8">|</span>
+                                                    <span ng-show="patient.Sex" class="margin-right-5 padding-top-8">
+                                                        <span ng-show="patient.Sex=='M'">{{ ::(appointmentModalText.male) }}</span>
+                                                        <span ng-show="patient.Sex=='F'">{{ ::(appointmentModalText.female) }}</span>
+                                                    </span>
+                                                    <span ng-show="patient.PhoneNumber || patient.ReferrerPhoneNumber" class="margin-right-5 padding-top-8">|</span>
+                                                    <span ng-show="patient.PhoneNumber" class="padding-top-8">{{ patient.PhoneNumber | tel }}</span>
+                                                    <!-- show alternative phone number if PhoneNumber is not set if it exists -->
+                                                    <span ng-show="!patient.PhoneNumber && patient.ReferrerPhoneNumber" class="padding-top-8">{{ patient.ReferrerPhoneNumber | tel }}</span>
+                                                    <span ng-show="patient.DateOfBirth || patient.Sex || patient.PhoneNumber || patient.ReferrerPhoneNumber" class="margin-right-5 padding-top-8">|</span>
+                                                    <span>
+                                                        <real-time-eligibility ng-if="!loadingEligibilityData" patient-id="patient.PatientId" benefit-plans="patientBenefitPlans" eligibility="locationEligibility"></real-time-eligibility>
+                                                        <!--<eligibility ng-if="!loadingEligibilityData" place-holder="'Check Eligibility'" patient-id="patient.PatientId" benefit-plans="patientBenefitPlans" patient-eligibility="locationEligibility"></eligibility>-->
+                                                    </span>
+                                                </div>
+
+                                                <div id="lblSelectedPatientEmailAddress" ng-show="false">
+                                                    <a class="btn btn-link .appointmentView__modalBody__email" title="{{ patient.EmailAddress }}" id="btnPatientEmailOneAddress" ng-href="mailto:{{ patient.EmailAddress }}">
+                                                        <span>{{ patient.EmailAddress }}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="vertical-spacing" ng-if="patient != null && patient != undefined">
+                                            <!--rel="noreferrer" we used to set this when isChrome was used ... we are not doing it any more because tabLauncher does not have that logic in it.-->
+                                            <ul class="menu">
+                                                <li ng-init="overviewHover = false" class="menu-one"
+                                                    ng-mouseover="overviewHover = true" ng-mouseleave="overviewHover = false">
+                                                    <div class="main-li-head">
+                                                        <button id="btnPatientOverviewView" class="btn btn-link top-link"
+                                                                ng-click="navigationUrl('overview', patient.PatientId)">
+                                                            <div class="float-left">{{::(appointmentModalText.overview)}}</div>
+                                                            <i class="fa chevron" ng-class="{'fa-chevron-up': overviewHover, 'fa-chevron-down': !overviewHover}"></i>
+                                                        </button>
+                                                    </div>
+                                                    <ul class="sub-menu first-sub-menu">
+                                                        <li>
+                                                            <button id="btnPatientProfileView" class="btn btn-link sub-link" check-auth-z="soar-clin-chlth-view"
+                                                                    ng-click="navigationUrl('patientProfile', patient.PatientId)">
+                                                                <div class="float-left">Patient Profile</div>
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="menu-one">
+                                                    <div class="main-li extra-padding">
+                                                        <button id="btnAppointmentsView" class="btn btn-link"
+                                                                ng-click="navigationUrl('appointments', patient.PatientId)">
+                                                            <div class="float-left">{{::(appointmentModalText.appointments)}}</div>
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                                <li ng-init="clinicalHover = false" class="menu-one"
+                                                    ng-mouseover="clinicalHover = true" ng-mouseleave="clinicalHover = false">
+                                                    <div class="main-li">
+                                                        <button id="btnClinicalView" class="btn btn-link top-link"
+                                                                ng-click="navigationUrl('clinical', patient.PatientId)">
+                                                            <div class="float-left">{{::(appointmentModalText.clinical) }}</div>
+                                                            <i class="fa chevron" ng-class="{'fa-chevron-up': clinicalHover, 'fa-chevron-down': !clinicalHover}"></i>
+                                                        </button>
+                                                    </div>
+                                                    <ul class="sub-menu">
+                                                        <li>
+                                                            <button id="btnClinicalHealthView" class="btn btn-link sub-link" check-auth-z="soar-clin-chlth-view"
+                                                                    ng-click="navigationUrl('health', patient.PatientId)">
+                                                                <div class="float-left">Health</div>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="btnClinicalLedgerView" class="btn btn-link sub-link" check-auth-z=""
+                                                                    ng-click="navigationUrl('ledger', patient.PatientId)">
+                                                                <div class="float-left">Ledger</div>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="btnClinicalPerioView" class="btn btn-link sub-link" check-auth-z="soar-clin-cperio-view"
+                                                                    ng-click="navigationUrl('perio', patient.PatientId)">
+                                                                <div class="float-left">Perio</div>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="btnClinicalImagesView" class="btn btn-link sub-link" check-auth-z="soar-clin-cimgs-view"
+                                                                    ng-click="navigationUrl('images', patient.PatientId)">
+                                                                <div class="float-left">Images</div>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="btnClinicialRxView" class="btn btn-link sub-link" check-auth-z="soar-clin-clinrx-view"
+                                                                    ng-click="navigationUrl('rx', patient.PatientId)">
+                                                                <div class="float-left">Rx</div>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="btnClinicalChartingView" class="btn btn-link sub-link" check-auth-z="soar-clin-cpsvc-view"
+                                                                    ng-click="navigationUrl('charting', patient.PatientId)">
+                                                                <div class="float-left">Charting</div>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="btnClinicalTreatmentPlansView" class="btn btn-link sub-link" check-auth-z="soar-clin-cplan-view"
+                                                                    ng-click="navigationUrl('treatmentPlans', patient.PatientId)">
+                                                                <div class="float-left">Treatment Plans</div>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="btnClinicalNotesView" class="btn btn-link sub-link" check-auth-z="soar-clin-cnotes-view"
+                                                                    ng-click="navigationUrl('notes', patient.PatientId)">
+                                                                <div class="float-left">Notes</div>
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li ng-init="accountHover = false" class="menu-one"
+                                                    ng-mouseover="accountHover = true" ng-mouseleave="accountHover = false">
+                                                    <div class="main-li">
+                                                        <button id="btnAccountView" class="btn btn-link top-link"
+                                                                ng-click="navigationUrl('account', patient.PatientId)">
+                                                            <div class="float-left">{{::(appointmentModalText.account)}}</div>
+                                                            <i class="fa chevron" ng-class="{'fa-chevron-up': accountHover, 'fa-chevron-down': !accountHover}"></i>
+                                                        </button>
+                                                    </div>
+                                                    <ul class="sub-menu">
+                                                        <li>
+                                                            <button id="btnAccountTransactionHistoryView" class="btn btn-link sub-link" check-auth-z="soar-acct-trxhis-view"
+                                                                    ng-click="navigationUrl('transactionHistory', patient.PatientId)">
+                                                                <div class="float-left">Transaction History</div>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="btnAccountInsuranceInformationView" class="btn btn-link sub-link" check-auth-z="soar-acct-insinf-view"
+                                                                    ng-click="navigationUrl('insuranceInformation', patient.PatientId)">
+                                                                <div class="float-left">Insurance Information</div>
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="vertical-spacing flag-grid" ng-if="patient">
+                                            <div ng-repeat="alert in sortedAlerts" class="appointmentDescription">
+                                                <div id="lblPatientFlag{{$index}}" class="appointmentDescriptionInline" ng-class="{'appointmentDescriptionColor': alert.IsMedicalHistoryAlert }">
+                                                    <span class="{{ alert.IconClass}}"></span>
+                                                    <span title="{{alert.Description}}"><strong>{{ alert.Description | truncate:40 }}</strong><strong ng-show="{{alert.Description.length > 40}}">...</strong></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Date -->
+                                        <div class="ng-scope date-time-container vertical-spacing">
+                                            <div class="date-label-container">
+                                                <label class="label-date" id="lblDate">Date and Time</label>
+                                                <!--TODO when checkbox-disabled is set to expression, disable if disableButtonWhenPatientInactive-->
+                                                <checkbox ng-if="appointment.Data" checkbox-id="lblSoonerIfPossible" checkbox-label="'Sooner if Possible'" checkbox-value="appointment.Data.IsSooner" checkbox-disabled="readOnly"></checkbox>
+                                            </div>
+                                            <div class="date-selector-container padding-right-8">
+                                                <schedule-date-selector input-id="inpDate" date-var="appointmentDate" disable-date-input="!disableWhenPatientInactiveOrReadOnly && patientSelected && !readOnly" min-date="minDate" max-date="maxDate" valid="dateIsValid" tab-index="1" format="MM/dd/yyyy"></schedule-date-selector>
+                                            </div>
+                                            <div ng-show="!appointment.Valid && !appointmentDate && appointment.Data.Classification!=2" class="date-error error padding-top-8 padding-right-8">
+                                                <label id="errDateRequired" class="help-text">{{ ::('This field is required.' | i18n) }}</label>
+                                            </div>
+                                            <div class="time-selector-container">
+                                                <span ng-class="{'error': !appointment.Valid && !appointmentTime.start && appointment.Data.Classification!=2 }" class="appointment-time-container padding-right-8">
+                                                    <appointment-view-start-time-dropdown ng-if="timeIncrement" input-id="inpStartTime" ng-class="{'transparent-text': appointment.Data.Classification != 0 }" tp-disabled="appointment.Data.Classification != 0 || saveClicked || disableWhenPatientInactive || readOnly || !patientSelected" selected-time="appointmentTime.start" begin="appointmentTime.date" increment="timeIncrement"></appointment-view-start-time-dropdown>
+                                                </span>
+                                                <span ng-bind="::(appointmentModalText.to)" class="padding-top-8 padding-right-8"></span>
+                                                <span class="padding-right-8">
+                                                    <span ng-class="{'error': ((!appointment.Valid && !appointmentTime.end) || appointmentTime.start > appointmentTime.end) && appointment.Data.Classification!=2 }" class="appointment-time-container">
+                                                        <appointment-view-end-time-dropdown ng-if="timeIncrement" input-id="inpEndTime" ng-class="{'transparent-text': appointment.Data.Classification != 0 }" tp-disabled="appointment.Data.Classification != 0 || saveClicked ||disableWhenPatientInactive || readOnly || !patientSelected" selected-time="appointmentTime.end" begin="appointmentTime.start" end="appointmentEndTimeLimit" increment="timeIncrement"></appointment-view-end-time-dropdown>
+                                                    </span>
+                                                </span>
+                                                <span ng-if="appointment.Data.Classification == 0" class="padding-top-8 padding-right-8"><label>({{timezoneInfo.Abbr}})</label></span>
+                                            </div>
+                                            <div class="padding-top-8 appointment-duration-label"><label>* Duration</label></div>
+                                            <div class="appointment-duration-container">
+                                                <div ng-if="appointment.Data.Classification == 2">
+                                                    <select kendo-combo-box
+                                                            id="inpProposedDuration"
+                                                            k-suggest="true"
+                                                            k-filter="'startsWith'"
+                                                            k-data-text-field="'duration'"
+                                                            k-data-value-field="'duration'"
+                                                            k-data-source="minutesString"
+                                                            ng-model="appointmentTime.Duration"
+                                                            ng-disabled="!patientSelected"
+                                                            tabindex="100"></select>
+                                                </div>
+                                                <div ng-show="appointment.Data.Classification != 2">
+                                                    <div class="padding-8">{{appointmentTime.Duration}}</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="date-error error" ng-if="isInitializing === false && !appointment.Valid  && appointment.Data.Classification!=2">
+                                                <label id="errAppointmentTimeRequired" class="help-text" ng-show="!appointmentTime.start">{{ ::('This field is required.' | i18n) }}</label>
+                                                <label id="errStartGreaterThanEnd" class="help-text" ng-show="appointmentTime.start > appointmentTime.end">{{ ::('The end time must be greater then start time.' | i18n) }}</label>
+                                                <label id="errBlockExists" class="help-text" ng-show="conflicts.IsBlock">{{ blockExistsMsg }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="lowerLeftSection">
+                                    <!-- Appointment Type -->
+                                    <div class="vertical-spacing">
+                                        <label id="lblAppointmentType" class="" ng-bind="::(appointmentModalText.type)"></label>
+                                    </div>
+                                    <div class="appointmentView__modalHeader__contentSection__patient">
+                                        <div class="">
+                                            <appointment-view-appointment-type-dropdown
+                                                place-holder="appointmentModalText.selectAppointmentType"
+                                                id="inpAppointmentType" input-id="appointmentTypeSelection"
+                                                control-disabled="readOnly || !patientSelected"
+                                                selected-appointment-type="appointment.Data.AppointmentTypeId"
+                                                appointment-types="appointmentTypes"
+                                                tabindex="1"></appointment-view-appointment-type-dropdown>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Patient Unscheduled Appointments -->
+                                    <div class="" ng-if="!isInitializing && unscheduledPatientAppointments.length > 0">
+                                        <button class="btn btn-link no-padding-left" data-toggle="collapse" data-target="#unscheduledList" ng-click="toggleIcon()">{{unscheduledPatientAppointments.length}} Unscheduled Appointment(s) <i id="unschedPatientApptsCountIcon" class="fa fa-angle-down"></i></button>
+                                    </div>
+                                    <div class="row" ng-if="!isInitializing && unscheduledPatientAppointments.length > 0" style="margin-left: 0px;">
+                                        <div id="unscheduledList" class="collapse">
+                                            <div class="" style="overflow-y: auto; height: 127px; overflow-x: hidden; margin-right:15px;">
+                                                <div class="list-group">
+                                                    <a id="unscheduledPatientAppointment" ng-repeat="appointment in unscheduledPatientAppointments track by $index"
+                                                       class="list-group-item col-xs-12"
+                                                       ng-style="{'border-left': appointment.AppointmentType ? '10px solid ' + appointment.AppointmentType.AppointmentTypeColor : '1px solid white' }"
+                                                       ng-dblclick="openAppointmentModal(appointment)"
+                                                       ng-mousedown="selectUnscheduledAppointment(appointment)">
+
+                                                        <appointment-unscheduled-item data="appointment"
+                                                                                      unique-id="'Patient'"
+                                                                                      alerts="alerts"
+                                                                                      provider-function="getProviderString"
+                                                                                      delete-function="showDeleteUnscheduledAppointmentModal"
+                                                                                      k-cursor-offset="{ top: -10, left: -10 }"
+                                                                                      k-group="appointment">
+                                                        </appointment-unscheduled-item>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Notes -->
+                                    <div class="vertical-spacing">
+                                        <div class=".appointmentView__modalHeader__contentSection__patient">
+                                            <label id="lblNotes" class="" ng-bind="::(appointmentModalText.appointmentNotes)"></label>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class=".appointmentView__modalHeader__contentSection__patient">
+                                            <textarea id="inpAppointmentNotes" ng-model="appointment.Data.Note" ng-change="noteChanged()" ng-disabled="!patientSelected" class="form-input" maxlength="500" tabindex="1"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-8" ng-if="appointment.Data.PlannedServices && serviceCodes">
+                                                <service-fee-rollback-options services="plannedServices" service-codes="serviceCodes" on-rollback="onRollback"></service-fee-rollback-options>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="appointment-modal-right">
+                                <!-- Location -->
+                                <label id="lblLocation" class="pull-left" ng-bind="::(appointmentModalText.location)"></label>
+                                <appointment-view-location-dropdown id="inpLocation"
+                                                                    class="full-screen-view-dropdown"
+                                                                    input-id="locationSelection"
+                                                                    control-disabled="appointment.Data.Status == 3 || !patientSelected"
+                                                                    ng-if="!isInitializing && filteredLocationsDDL != null && filteredLocationsDDL != undefined && filteredLocationsDDL.data.length > 0"
+                                                                    selected-location="dropDownLocation.LocationId"
+                                                                    locations="groupedLocations"></appointment-view-location-dropdown>
+
+                                <div ng-init="isNotPatientPrefLocation = false" ng-if="isNotPatientPrefLocation && !readOnly">
+                                    <label id="lblPrefLocationWarning" class="warning" ng-bind="::(appointmentModalText.notPreferredLocation)"></label>
+                                </div>
+
+                                <!-- Provider -->
+
+                                <label class="margin-top-10" id="lblProvider" ng-bind="::(appointmentModalText.provider)"></label>
+                                <div>
+                                    <multi-select-fixed-width class="fill-width btn-schedule-multi-select"
+                                                              ng-class="{'no-provider-error': multipleProviders.selectedProviders < 1  && DisableStatusIconFeatureFlag}"
+                                                              ng-if="multipleProviders && localProviders && appointment.Data.Classification == 0"
+                                                              id="Provider"
+                                                              auth-z="'soar-sch-sch-view'"
+                                                              list="localProviders"
+                                                              selected="multipleProviders.selectedProviders"
+                                                              display-field="Name"
+                                                              type="Providers"
+                                                              open="multiSelect.open"
+                                                              id-field="UserCode"
+                                                              initial-selection="initialProviderSelection"
+                                                              ms-disabled="appointment.Data.Classification != 0 || readOnly || !patientSelected"
+                                                              allow-blank="true"></multi-select-fixed-width>
+
+                                    <div ng-if="appointment.Data.Classification == 2 && localProviders && localProviders.length > 0">
+                                        <provider-selector ng-if="dropDownLocation"
+                                                           place-holder="appointmentModalText.defaultPlaceHolder"
+                                                           input-id="inpProvider"
+                                                           class-name="fill-width-location"
+                                                           selected-provider="appointment.Data.ProviderId"
+                                                           set-preferred="true"
+                                                           sb-changed="providerChanged"
+                                                           provider-type-ids="[1,2,3,5]"
+                                                           patient-info="patient"
+                                                           filter-by-location-id="dropDownLocation.LocationId"
+                                                           filter-show-on-schedule="true"
+                                                           filter-inactive-providers="true"
+                                                           required="true"
+                                                           disable-input="readOnly || providersLoaded===false || !patientSelected">
+                                        </provider-selector>
+                                    </div>
+                                </div>
+
+                                <div ng-init="prefProviderNotAvailable = false" ng-if="prefProviderNotAvailable && !readOnly">
+                                    <label id="lblPrefProviderWarning" class="warning" ng-if="::(appointmentModalText.providerNotAvailable)"></label>
+                                </div>
+                                <div class="appointment-providers-container">
+                                    <schedule-appointment-providers appointment="appointment.Data"
+                                                                    selected-providers="multipleProviders.selectedProviders"
+                                                                    slots="slots"
+                                                                    provider-schedules="providerSchedules"
+                                                                    on-change="getConflicts()"
+                                                                    conflicts="conflicts"
+                                                                    loading="loadingDependancies"
+                                                                    read-only="readOnly || providersLoaded===false || !patientSelected">
+                                    </schedule-appointment-providers>
+                                </div>
+                                <div ng-if="!isInitializing && appointment.Data.Classification == 0">
+                                    <div ng-show="!validStartAndEndTime">
+                                        <p class="error">Please select a valid time range.</p>
+                                    </div>
+                                </div>
+                                <!-- Examining Dentist -->
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <label id="lblExaminingDentist" class="pull-left vertical-spacing" ng-bind="::(appointmentModalText.examiningDentist)"></label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12 col-md-12" ng-if="examiningDentistLoading == false && examiningDentists.length > 2">
+                                               <appointment-view-exam-provider-dropdown place-holder="appointmentModalText.examiningDentistPlaceHolder"
+                                                                                         control-disabled="readOnly || (selectedAppointmentType.PerformedByProviderTypeId != 2 || !patientSelected)"
+                                                                                         input-id="inpExaminingDentist"
+                                                                                         selected-provider="appointment.Data.ExaminingDentist"
+                                                                                         set-preferred="false"
+                                                                                         provider-type-ids="[1]"
+                                                                                         filter-by-location-id="dropDownLocation.LocationId"
+                                                                                         patient-info="patient"
+                                                                                         required="true"
+                                                                                         for-examining-dentist="true"
+                                                                                         options-for-examining-dentist="null"
+                                                                                         filter-inactive-providers="true"
+                                                                                         filter-show-on-schedule="true">
+                                                </appointment-view-exam-provider-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12" ng-if="appointment.Data.ExaminingDentist">
+                                                <!-- filter this by the examining dentist user id-->
+                                                <div ng-repeat="providerConflict in conflicts.ProviderConflicts | filter: appointment.Data.ExaminingDentist">
+                                                    <label id="lblProviderLocationConflictWarning" ng-show="providerConflict.IsAnotherLocation" class="warning">
+                                                        {{
+                                                    'The provider {0} has another appointment at {1} from {2} to {3} {4}!' |
+                                                    i18n:[providerConflict.$$ProviderName,
+                                                    providerConflict.LocationName,providerConflict.$$From,conflict.$$To,conflict.tzAbbr]
+                                                        }}
+                                                    </label>
+                                                    <label id="lblProviderLocationConflictWarning" class="warning" ng-show="!providerConflict.IsAnotherLocation">
+                                                        {{
+                                                    'The provider {0} has another appointment from {1} to {2} {3}!' | i18n:[providerConflict.$$ProviderName,
+                                                    providerConflict.$$From,providerConflict.$$To,providerConflict.tzAbbr]
+                                                        }}
+                                                    </label>
+                                                </div>
+                                                <div ng-show="preferredDentistNotSelected">
+                                                    <label id="lblPreferredDentistNotSelectedWarning" class="warning" ng-bind="::(appointmentModalText.notPatientsPreferredProvider)"></label>
+                                                </div>
+                                                <div ng-repeat="outsideWorkingHoursConflict in conflicts.OutsideWorkingHours | filter: appointment.Data.ExaminingDentist">
+                                                    <!-- display warning provider is not scheduled within provider hours -->
+                                                    <label id="lblProviderWarning" class="warning">
+                                                        {{ 'You are scheduling {0} outside of scheduled hours.' | i18n:[outsideWorkingHoursConflict.$$ProviderName]}}
+                                                    </label>
+                                                </div>
+                                                <div class="error">
+                                                    <label id="errBlockExists" class="help-text" ng-show="conflicts.IsExaminingDentistBlock">{{ examiningDentistBlockMsg }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Room -->
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <label id="lblRoom" class="vertical-spacing pull-left">{{ ::(appointmentModalText.room) }} <span ng-if="appointment.Data.Classification != 2">*</span></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <div ng-class="{error:!appointment.Valid && !appointment.Data.TreatmentRoomId && appointment.Data.Classification != 2}">
+                                                            <appointment-view-room-dropdown ng-if="rooms && rooms.length > 0"
+                                                                                            id="inpRoom" input-id="roomSelection"
+                                                                                            place-holder="appointmentModalText.selectRoom"
+                                                                                            control-disabled="readOnly || !patientSelected"
+                                                                                            selected-room="appointment.Data.TreatmentRoomId"
+                                                                                            rooms="rooms"
+                                                                                            required="appointment.Data.Classification === 0"
+                                                                                            tabindex="1"></appointment-view-room-dropdown>
+                                                            <div ng-repeat="conflict in conflicts.RoomConflicts | orderBy : 'From'">
+                                                                <label id="lblRoomHasConflictWarning" class="warning">{{ 'An existing block or appointment is already scheduled from {0} to {1}.' | i18n:[conflict.$$From, conflict.$$To] }}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12" ng-if="!isInitializing">
+                                                        <label ng-show="!appointment.Valid && !appointment.Data.TreatmentRoomId && appointment.Data.Classification!=2" id="lblRoomRequired" class="error">{{ ::('This field is required.' | i18n) }}</label>
+                                                        <label ng-show="!treatmentRoomAssigned" id="lblRoomNotAssigned" class="warning">{{ ::("Not provider's assigned room" | i18n) }}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vertical-spacing">
+                            <div class="">
+                                <div>
+                                    <div>
+                                        <div class="appointment-services-area">
+                                            <label>{{ ::(appointmentModalText.appointment) }} {{ ::(appointmentModalText.services) }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <div class="appointment-service-area">
+                                            <div class="">
+                                                <div class="item-zebra-dark fill-width">
+                                                    <!-- ng-disabled="readOnly || disableIfStatusComplete || canAddServices()"-->
+                                                    <span class="ng-binding font-14" ng-bind="::(appointmentModalText.addServicesFrom)"></span>
+                                                    <button id="propnbtn" class="btn btn-default ng-binding font-14" check-auth-z="soar-sch-apt-svcs" ng-click="showProposedFlyout()" ng-disabled="readOnly || blockServiceActions">
+                                                        <span ng-bind="::(appointmentModalText.proposed)"></span>
+                                                    </button>
+                                                    <button id="txplanbtn" class="btn btn-default ng-binding font-14" check-auth-z="soar-sch-apt-svcs" ng-click="showTxPlansFlyout()" ng-disabled="readOnly || blockServiceActions">
+                                                        <span ng-bind="::(appointmentModalText.treatmentPlans)"></span>
+                                                    </button>
+                                                    <button id="prevcarebtn" class="btn btn-default ng-binding font-14" check-auth-z="soar-sch-apt-svcs" ng-click="showPreventiveFlyout()" ng-disabled="readOnly || blockServiceActions">
+                                                        <span>{{ ::(appointmentModalText.preventiveCare) }} {{(preventiveDate.dueDate) ? preventiveDate.dueDate : '(Due NA)' | date : "(Due MM/dd/yyyy)" }}</span>
+                                                    </button>
+                                                    <button id="servicesbtn" class="btn btn-default ng-binding font-14" check-auth-z="soar-sch-apt-svcs" ng-click="showServiceFlyout()" ng-disabled="readOnly || blockServiceActions">
+                                                        <span ng-bind="::(appointmentModalText.new)"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="appointmentServicesNewContainer">
+                                    <table class="fuseGrid fuseTable container appointmentServices">
+                                        <tr class="header appointment-service-row">
+                                            <th class="grid-column-desc">
+                                                <div>{{ ::('Description' | i18n) }}</div>
+                                            </th>
+                                            <th class="grid-column-teeth">
+                                                {{ ::('Tooth' | i18n) }}
+                                            </th>
+                                            <th class="grid-column-surface">
+                                                {{ ::('Surface' | i18n ) }}
+                                            </th>
+                                            <th class="grid-column-provider">
+                                                {{ ::('Provider' | i18n) }}<br />{{ ::('(Services)' | i18n) }}
+                                            </th>
+                                            <!--<th class="grid-column-provider" ng-if="!drawerState">
+                                                {{ ::('Provider' | i18n) }}<br />{{ ::('(Claims)' | i18n) }}
+                                            </th>-->
+                                            <th class="text-align-right no-wrap-column grid-column-money">
+                                                {{ ::('Fee' | i18n) }}
+                                            </th>
+                                            <!--<th class="text-align-right optional-no-wrap grid-column-money">
+                                                {{ ::('Allowed' | i18n) }}<br />{{ ::('Amount' | i18n) }}
+                                            </th>-->
+                                            <!--<th class="text-align-right optional-no-wrap grid-column-money">
+                                                {{ ::('Est' | i18n) }}<br />{{ ::('Ins Adj' | i18n) }}
+                                            </th>-->
+                                            <th class="text-align-right no-wrap-column grid-column-money">
+                                                {{ ::('Charges' | i18n) }}
+                                            </th>
+                                            <th class="no-wrap-column grid-column-tooltip">
+                                                <!--placeholder for tool tip-->
+                                            </th>
+                                            <th class="text-align-right optional-no-wrap grid-column-money">
+                                                {{ ::('Est' | i18n) }}<br />{{ ::('Insurance' | i18n) }}
+                                            </th>
+                                            <th class="grid-column-tooltip">
+                                                <!--placeholder for tool delete-->
+                                            </th>
+                                            <th class="text-align-right optional-no-wrap grid-column-money">
+                                                {{ ::('Est Pat' | i18n) }}<br />{{ ::('Balance' | i18n) }}
+                                            </th>
+                                        </tr>
+                                        <tr id="{{'serviceRow' + $index}}" class="body appointment-service-row" ng-repeat="service in plannedServices | orderBy:['!!InsuranceOrder','InsuranceOrder'] track by $index">
+                                            <td id="{{'description' + $index}}"
+                                                class="tx-row text-table-column"
+                                                tooltip-enable="{{(service.Code.length + service.Description.length) > 98}}"
+                                                tooltip-placement="top-auto"
+                                                tooltip-append-to-body="true"
+                                                uib-tooltip="{{service.Code + ': ' + service.Description}}"
+                                            >
+                                                {{ service.Code + ': ' + service.Description  | truncate: 100 }}
+                                            </td>
+                                            <td id="{{'tooth' + $index}}" class="tx-row text-table-column">
+                                                <div ng-if="service.AffectedAreaId != 1">
+                                                    <div ng-class="{'error': !appointment.Valid && (!service.Tooth || service.Tooth == '')}" class="appointment-service-input item-tooth">
+                                                        <span>{{service.Tooth | convertToothRangeToQuadrantOrArchCode}}</span>
+                                                    </div>
+                                                </div>
+                                                <!--need to look at why this formatting for tooth was diff for tx plan page than appt modal-->
+                                                <!--{{ps.ServiceTransaction.Tooth != 0 ? ps.ServiceTransaction.Tooth : '' | convertToothRangeToQuadrantOrArchCode }}-->
+                                            </td>
+                                            <td id="{{'surface' + $index}}" class="tx-row text-table-column">
+                                                <div ng-if="service.AffectedAreaId == 4">
+                                                    <div ng-class="{'error': !appointment.Valid && (!service.Surface || service.Surface == '')}" class="appointment-service-input item-area">
+                                                        <span class="service-tooth">{{service.SurfaceSummaryInfo}}</span>
+                                                    </div>
+                                                </div>
+                                                <div ng-if="service.AffectedAreaId == 3">
+                                                    <div ng-class="{'error': !appointment.Valid && (!service.Roots || service.Roots == '')}" class="appointment-service-input item-area">
+                                                        <span class="service-tooth">{{service.RootSummaryInfo}}</span>
+                                                    </div>
+                                                </div>
+                                                <!--{{ ps.ServiceTransaction.$$Area }}-->
+                                            </td>
+                                            <td id="{{'provider' + $index}}" class="tx-row text-table-column">
+                                                <div title="Provider">
+                                                    <appointment-view-provider-dropdown input-id="lstProviderServ{{ $index }}"
+                                                                                        class-name="serviceCmb"
+                                                                                        sb-change="onSelectedServiceProviderChange(service)"
+                                                                                        placeholder="placeHolder"
+                                                                                        required="true"
+                                                                                        set-preferred="false"
+                                                                                        patient-info="patient"
+                                                                                        selected-provider="service.ProviderUserId"
+                                                                                        filter-by-location-id="dropDownLocation.LocationId"
+                                                                                        filter-inactive-providers="true"
+                                                                                        disable-input="disableIfStatusComplete || readOnly"
+                                                                                        obj-trans="service">
+                                                    </appointment-view-provider-dropdown>
+                                                </div>
+                                                <!--{{ ps.ServiceTransaction.ProviderFullName | truncate: 50 }}-->
+                                            </td>
+                                            <!--<td class="tx-row text-table-column">
+                                                {{ ps.ServiceTransaction.ProviderOnClaimsFullName | truncate: 50 }}
+                                            </td>-->
+                                            <td id="{{'fee' + $index}}" class="text-align-right no-wrap-column tx-row">
+                                                {{ service.Fee | currency }}
+                                            </td>
+                                            <!--<td class="text-align-right no-wrap-column tx-row">
+                                                {{ ps.ServiceTransaction.AllowedAmount | currency }}
+                                            </td>-->
+                                            <!--<td class="text-align-right no-wrap-column tx-row">
+                                                {{ ps.ServiceTransaction.$$AdjEst | currency}}
+                                            </td>-->
+                                            <td id="{{'charges' + $index}} " class="text-align-right no-wrap-column tx-row">
+                                                {{service.Amount | currency}}
+
+                                                <!--{{ ps.ServiceTransaction.Amount | currency}}-->
+                                            </td>
+                                            <td id="{{'chargesEditIcon' + $index}}" class="no-wrap-column tx-row grid-column-tooltip">
+                                                <patient-encounter-charge ng-if="!readOnly && !angular.isUndefined(service.Tax) && service.Tax != null && !angular.isUndefined(service.Discount) && service.Discount != null"
+                                                                          service-transaction="service" close-all="popOverTracker" recalculate="recalculateReturnUpdatedInputFees" save="recalculateServiceTransactions" style="left:10px;"></patient-encounter-charge>
+                                            </td>
+                                            <td id="{{'estInsurance' + $index}}" class="text-align-right no-wrap-column tx-row">
+                                                {{(service.TotalEstInsurance + service.TotalAdjEstimate) | currency}}
+                                                <!--{{ ps.ServiceTransaction.$$EstInsurance | currency}}-->
+                                            </td>
+                                            <td id="{{'estInsuranceEditIcon' + $index}}" class="no-wrap-column tx-row grid-column-tooltip">
+                                                <patient-encounter-estins ng-if="!readOnly && !angular.isUndefined(service.InsuranceEstimates[0].EstInsurance) && service.InsuranceEstimates[0].EstInsurance!=null" pop-over-placement="'top'"
+                                                                          service-transaction="service" service="service.service" close-all="popOverTracker" recalculate="recalculateServiceTransactions" has-patient-benefit-plan="patientBenefitPlanExists"></patient-encounter-estins>
+                                            </td>
+                                            <td id="{{'estPatBalance' + $index}}" class="text-align-right no-wrap-column tx-row">
+                                                <span class="item-ptportion">{{service.Balance | currency}}</span>
+                                            </td>
+                                            <td id="{{'deleteServiceIcon' + $index}}" class="no-wrap-column tx-row grid-column-tooltip">
+                                                <button id="btnRemoveService{{$index}}" check-auth-z="soar-sch-apt-svcs" class="icon-button soar-link fa fa-times pull-left" ng-click="confirmRemovePlannedService(service, $index)" ng-disabled="readOnly"></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="clearfix">&nbsp;</div>
+
+                                <!-- Estimated Amounts -->
+                                <div id="estimatedAmountRow" class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-8 col-md-7">
+                                                <label class="pull-right appointment-estimates">
+                                                    {{ ::(appointmentModalText.estAmount) }}:
+                                                    <span id="estimatedAmountValue" class="appointment-estimates-amount" ng-show="plannedServices && plannedServices.length > 0">
+                                                        {{ estimatedAmount | currency : symbol }}
+                                                    </span>
+                                                    <span id="lblEstimatedAmountValueNoServices" ng-show="plannedServices == null || plannedServices.length < 1">
+                                                        $-
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="estimatedInsuranceRow" class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-4 col-md-5">
+                                            </div>
+                                            <div class="col-xs-12 col-sm-8 col-md-7">
+                                                <span class="italic pull-right appointment-estimates">
+                                                    {{ ::(appointmentModalText.estIns) }}:
+                                                    <span id="estimatedInsuranceValue" class="appointment-estimates-amount" ng-show="plannedServices && plannedServices.length > 0 && patientBenefitPlanExists">
+                                                        {{ estimatedInsurance | currency : symbol }}
+                                                    </span>
+                                                    <span id="lblEstimatedInsuranceNoServices" ng-show="plannedServices == null || plannedServices.length < 1 || !patientBenefitPlanExists">
+                                                        $-
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="estimatedPatientPortionRow" class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-4 col-md-5">
+                                            </div>
+                                            <div class="col-xs-12 col-sm-8 col-md-7">
+                                                <span id="lblEstimatedAmountValue" class="italic pull-right appointment-estimates">
+                                                    {{ ::(appointmentModalText.estPatientPortion) }}:
+                                                    <span id="estimatedPatientPortionValue" class="appointment-estimates-amount" ng-show="plannedServices && plannedServices.length > 0">
+                                                        {{ estimatedAmount - estimatedInsurance | currency : symbol }}
+                                                    </span>
+                                                    <span id="lblEstimatedPatientPortionNoServices" ng-show="plannedServices == null || plannedServices.length < 1">
+                                                        $-
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <proposed-selector chosen-location="locationChosen" patient="patient" flyout="true" service-filter="appointment" add-selected-services="addServices" loading-check="dataLoadingProposed" ng-if="patient!=null" services-on-plan="plannedServiceIds"></proposed-selector>
+                        <!--Using location as active appointment for the locationId, dont change and dont use appointment variables outside the locationId-->
+                        <treatment-selector chosen-location="locationChosen" patient="patient" flyout="true" service-filter="appointment" add-selected-services="addServices" loading-check="dataLoadingTreatment" active-appointment="location" ng-if="patient!=null" services-added="servicesOnAppointment"></treatment-selector>
+                        <service-selector-refactor patient="patient" flyout="true" service-filter="appointment" add-selected-services="addServices" appointment="appointment" loading-check="dataLoadingNewService" ng-if="patient!=null"></service-selector-refactor>
+                        <preventive-care-selector class="preventive-care-vertical-height-override" data="preventiveCareServices" flyout="true" service-filter="appointment" add-selected-services="addServices" appointment="appointment" due-date="preventiveDate" ng-if="preventiveCareServices"></preventive-care-selector>
+
+                        <!--appointment-modal.html<ng-include src="treatmentTemplate"></ng-include>-->
+                        <!--Layout for kendo window charting controls-->
+                        <div class="chartingControls__activeLayout">
+                            <div kendo-window="toothCtrls"
+                                 k-title="'Tooth Controls'"
+                                 k-visible="false"
+                                 k-on-open="toothCtrlsOpen = true"
+                                 k-on-close="toothCtrlsOpen = false"
+                                 id="toothCtrlsWindow">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="appoitmentView__modal-footer">
+                    <label class="pull-left">
+                        {{::(appointmentModalText.lastModified)}}:
+                    </label>
+                    <span class="pull-left margin-left-5" ng-if="appointment.Data.UserModified">
+                        {{lastModifiedMessage}}
+                    </span>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="popover-overlay" ng-show="popOverTracker.closeAllCharge || popOverTracker.closeAllEstIns">
+            </div>
+    </form>
+</div>

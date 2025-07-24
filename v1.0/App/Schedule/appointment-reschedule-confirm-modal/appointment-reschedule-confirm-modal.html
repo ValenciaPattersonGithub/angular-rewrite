@@ -1,0 +1,44 @@
+﻿<div class="modal-header">
+    <div class="row reschedule-modal-title-responsive">
+        <div class="col-xs-12">
+            <label >{{ ::('Confirm Reschedule' | i18n) }}</label>
+        </div>
+    </div>
+
+    <div class="clearfix">&nbsp;</div>
+    <div class="row ">
+        <div class="col-xs-12 text-align-center">
+            <strong id="lblAppointmentReschedukeModalMessage">{{ ::('Do you wish to reschedule the appointment' | i18n) }}</strong>
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="row ">
+        <div class="col-xs-5 text-align-right">
+            <strong id="lblFromMessage">{{ ::('From' | i18n) }} </strong>
+        </div>
+        <div class="col-xs-7 padding-right-0 text-align-left">
+            {{appointment.StartTimeOriginal | toDisplayDate}} {{appointment.StartTimeOriginal | toDisplayTime}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-5 text-align-right">
+            <strong id="lblFromMessage">{{ ::('To' | i18n) }} </strong>
+        </div>
+        <div class="col-xs-7 padding-right-0 text-align-left">
+            {{appointment.NewStartTime | toDisplayDate}} {{appointment.NewStartTime | toDisplayTime}}
+        </div>
+    </div>
+    <div class="row text-align-center">
+        <div class="clearfix">&nbsp;</div>
+        <div class="col-xs-12">
+            <checkbox auth-z="soar-sch-sptapt-edit" checkbox-id="lblUnconfirmedAppointmentCheckbox" checkbox-value="checkBoxAction" checkbox-label="' Set to Unconfirmed'"></checkbox>
+        </div>
+    </div>
+</div>
+<div class="modal-footer appointment-modal-footer">
+        <div class="pull-right">
+            <button id="btnReschedule" ng-click="confirmReschedule();" class="btn btn-primary form-btn-save-new">{{ ::('Reschedule' | i18n) }}</button>
+            <button id="btnCancel" ng-click="cancelReschedule();" class="btn form-btn-cancel-new">{{ ::('Cancel' | i18n) }}</button>
+        </div>
+    <div class="clearfix"></div>
+</div>

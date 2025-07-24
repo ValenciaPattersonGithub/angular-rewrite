@@ -1,0 +1,109 @@
+<div [ngClass]="'fade-in'">
+    <div class="teamLanding">
+        <form name="frmUserLanding" ngForm="frmUserLanding" #frmUserLanding role="form" action="javascript:;" novalidate>
+            <div class="rowFull white">
+                <div class="userLanding__header">
+                    <!--Breadcrumbs-->
+                    <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                    <!--header-->
+                    <div class="userLanding__title">
+                        <h1>{{ 'Team Members' | translate }}</h1>
+                    </div>
+                    <div class="userLanding__actions">
+                        <a href="{{teamMemberCrudCreateURL}}" class="btn btn-primary" icon="fa-user-plus" checkRoleAccess="soar-biz-bizusr-add" id="btnAddUser">{{ 'Add a Team Member' | translate }}</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rowFull">
+                <div class="userLanding__search">
+                    <div class="userSearch">
+                        <form name="frmUserSearch" #frmUserSearch="ngForm">
+                            <!--Filter-->
+                            <div class="userSearch__search">
+                                <div class="form-inline">
+                                    <div class="form-group has-feedback">
+                                        <input class="form-control" id="filterUser" name="filterUser"
+                                               placeholder="{{ 'Find Team Member' | translate }}" (ngModelChange)="userFilter($event)" type="text"
+                                               [(ngModel)]="filter" #filterUser="ngModel" #inputfilterUser setFocus />
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Secondary Filter-->
+                            <div class="userSearch__primary">
+                                <!--Results-->
+                                <div class="col-xs-12 col-sm-12 col-md-9">
+                                    <div class="row search-item-container" *ngFor="let user of filteredUsers | orderBy:{sortColumnName:['LastName','FirstName'], sortDirection: 1}; index as $index;let even = even; let odd = odd;"
+                                         [ngClass]="{'inactiveItem': !user?.IsActive,'item-zebra-dark': even, 'item-zebra-light': odd}">
+                                        <div class="col-xs-12">
+                                            <div class="pull-left search-item-index">
+                                                <div>{{ $index + 1 }}</div>
+                                            </div>
+                                            <div class="media">
+                                                <div class="pull-left">
+                                                    <div class="initialBadge">
+                                                        {{ user?.FirstName[0]?.toUpperCase() + "" + user?.LastName[0]?.toUpperCase() }}
+                                                    </div>
+                                                </div>
+                                                <div class="media-body search-item-body">
+                                                    <p>
+                                                        <a class="soar-link" checkRoleAccess="soar-biz-bizusr-edit"
+                                                           href="{{teamMemberCrudURL + user?.UserId }}">
+                                                            <strong class="font-16" id="btnUserLastName{{$index}}"
+                                                                    [innerHTML]="user?.LastName | boldTextIfContains:filter?.trim()"></strong>,
+                                                            <strong class="font-16" id="btnUserFirstName{{$index}}"
+                                                                    [innerHTML]="user?.FirstName | boldTextIfContains:filter?.trim()"></strong>
+                                                            <span *ngIf="user?.PreferredName">
+                                                                (<strong class="font-16"
+                                                                         id="btnUserPreferredName{{$index}}"
+                                                                         [innerHTML]="user?.PreferredName | boldTextIfContains:filter?.trim()"></strong>)
+                                                            </span>
+                                                        </a>
+                                                    </p>
+                                                    <p id="lblUserInformation" class="search-item-info">
+                                                        <span [innerHTML]="user?.ProviderTypeName | boldTextIfContains:filter?.trim()" class=""
+                                                              *ngIf="user?.ProviderTypeName" id="lblrProviderType{{$index}}"></span>
+                                                        <span class="search-result-item-separator" *ngIf="user?.ProviderTypeName">|</span>
+                                                        <span [innerHTML]="user?.DepartmentName | boldTextIfContains:filter?.trim()"
+                                                              class="hidden-xs" *ngIf="user?.DepartmentName"
+                                                              id="lblDepartment{{$index}}"></span>
+                                                        <span class="search-result-item-separator hidden-xs"
+                                                              *ngIf="user?.DepartmentName">|</span>
+                                                        <span [innerHTML]="user?.UserName | boldTextIfContains:filter?.trim()" class="hidden-xs"
+                                                              *ngIf="user?.UserName" id="lblUserName{{$index}}"></span>
+                                                        <span class="search-result-item-separator hidden-xs" *ngIf="user?.UserName">|</span>
+                                                        <span [innerHTML]="user?.UserCode | boldTextIfContains:filter?.trim()" class=""
+                                                              *ngIf="user?.UserCode" id="lblUserCode{{$index}}"></span>
+                                                        <span class="search-result-item-separator" *ngIf="user?.IsActive==false">|</span>
+                                                        <span *ngIf="user?.IsActive==false" class="" id="lblStatus{{$index}}"> {{ 'User Access Off' | translate }} </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Additional Filters-->
+                                <div class="col-xs-12 col-sm-12 col-md-2">
+                                    <div class="col-xs-12 search-item-filter userSearch__secondary">
+                                        <app-multiselect [listItems]="listItems" [id]="'chkLocationFilter'" [model]="selectedList"
+                                                         (modelChange)="getSelectedList($event)" [showSpecificList]="true"></app-multiselect>
+
+                                        <div class="teamMemberLoc">
+                                            <app-chips class="pull-left custom-margin" variation="primary" [chipsText]="item?.text"
+                                                       placement="top-error" delay="500" [showIcon]="!item.IsDisabled" (removeChips)="removeChips($event,rowId)"
+                                                       [attr.id]="'chkLocationFilter'+ rowId" *ngFor="let item of selectedList;let rowId= index"></app-chips>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+

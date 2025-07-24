@@ -1,0 +1,49 @@
+﻿<div class="rangeOfTeethSelector fui-select-container" id="{{customid}}">
+    <div class="form-control fui-select" 
+         [ngClass]="{'redBorder' : !selectedTeeth || selectedTeeth.length === 0}"
+         >
+
+        <div tabindex="0" class="rangeOfTeethSelector__displayedTeeth" title="{{translatedTeeth ? translatedTeeth.join(',') : '&nbsp;'}}" (focus)="toggleDropdown()"> <!--(click)="focusInput()">-->
+                {{translatedTeeth ? translatedTeeth.join(',') : '&nbsp;'}}
+
+        </div>
+        <div class="rangeOfTeethSelector__toothDropdown" *ngIf="showDropdown">
+            <!--<div class="rangeOfTeethSelector__selectedTeethTags">
+                <form (keydown.enter)="enter($event)" autocomplete="off">
+                    <button class="teethTag btn btn-primary btn-sm" id="selectedTeethTags{{i}}" *ngFor="let tooth of selectedTeeth; let i = index" (click)="remove(tooth)">
+                        {{tooth}}
+                        <i class="fa fa-times"></i>
+                    </button>
+
+                    <input id="toothInput" type="text" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" (ngModelChange)="inputChanged($event, input)"
+                           #toothInput isAlphaNumericWithDashAndComma />
+                </form>
+            </div>-->
+
+            <div class="rangeOfTeethSelector__selectedTeethTags">
+                <button class="teethTag btn btn-primary btn-sm" id="selectedTeethTags{{i}}" *ngFor="let tooth of translatedTeeth; let i = index" (click)="remove(tooth)">
+                    {{tooth}}
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="rangeOfTeethSelector__toothInput">
+                <form (keydown.enter)="enter($event)" autocomplete="off">
+                    <input (keydown)="inputKeydown($event)" id="toothInput" type="text" placeholder="Search" [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" (ngModelChange)="inputChanged($event, inputValue)"
+                           #toothInput isAlphaNumericWithDashAndComma />
+                    <i class="fa fa-search"></i>
+                </form>
+            </div>
+            <div class="rangeOfTeethSelector__teethList" *ngIf="showTeethList">
+                <div id="toothDropdown{{i}}" *ngFor="let tooth of possibleTeeth | rotTeethDisplay; let i = index" (mousedown)="select(tooth)" [ngClass]="{'rangeOfTeethSelector__highlight' : tooth.highlight}">{{tooth.USNumber}}</div>
+                <!-- using ng-container ... because we cannot do *ngFor and *ngif on the same element. -->
+                <ng-container *ngFor="let quadrant of quadrants | rotTeethDisplay; let i = index">
+                    <div id="toothDropdownQuadrant{{i}}" *ngIf="quadrant.type === 'permanent'"
+                         (mousedown)="selectQuadrant(quadrant)" [ngClass]="{'rangeOfTeethSelector__highlight' : quadrant.highlight}">
+                        {{quadrant.USNumber}}
+                    </div>
+                </ng-container>
+            </div>
+
+        </div>
+    </div>
+</div>

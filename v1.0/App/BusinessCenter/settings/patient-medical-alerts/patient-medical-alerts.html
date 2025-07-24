@@ -1,0 +1,35 @@
+﻿<!-- <business-nav></business-nav> -->
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="medicalHistoryAlerts">
+        <div class="rowFull white">
+            <div class="medicalHistoryAlerts__header">
+                <!--Breadcrumbs-->
+                <ul class="medicalHistoryAlerts__breadcrumb">
+                    <li ng-repeat="breadcrumb in breadCrumbPaths.BreadCrumbs">
+                        <ng-switch on="$last">
+                            <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+                            <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePath(breadcrumb)"><a>{{breadcrumb.name | i18n }}</a></span>
+                        </ng-switch>
+                    </li>
+                </ul>
+                <div class="medicalHistoryAlerts__title">
+                    <button id="btnBackToSettings" class="medicalHistoryAlerts__btnCancel" title="{{'Cancel'|i18n}}"
+                            ng-click="closeForm();">
+                        {{ "Back to Practice Settings" | i18n }}
+                    </button>
+                    <h1>{{ pageTitle }}</h1> 
+                </div>               
+            </div>
+        </div>
+
+        <div class="medicalHistoryAlerts__body">            
+            <div ng-repeat="(alertTypeId, alerts) in medicalHistoryAlerts |  filter: filterByMedicalHistoryAlertTypeId| orderBy:'MedicalHistoryAlertTypeId' | groupBy: 'MedicalHistoryAlertTypeId'">               
+                <patient-medical-alerts-section medical-alerts="alerts" alert-type-id="alertTypeId"></patient-medical-alerts-section>
+            </div>
+        </div>
+
+        <!--TODO handle empty-->
+    </div>
+</div>
+                
+        

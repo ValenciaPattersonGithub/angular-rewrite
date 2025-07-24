@@ -1,0 +1,98 @@
+<div class="reportGrid">
+  <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+  <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+  <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+      <table>
+          <thead>
+              <tr>
+                  <th class="col-sm-12 cell" colspan="9">
+                      <div class="text-center">
+                          <h4>{{location.Location}}</h4>
+                      </div>
+                  </th>
+              </tr>
+              <tr class="stripOdd">
+                  <th class="col-sm-1 cell">{{ 'Payment Type' | i18n }}</th>
+                  <th class="col-sm-1 cell">{{ 'Service Date' | i18n }}</th>
+                  <th class="col-sm-1 cell">{{ 'Posted Date' | i18n }}</th>
+                  <th class="col-sm-2 cell">{{ 'Posted By' | i18n }}</th>
+                  <th class="col-sm-2 cell">{{ 'Responsible Party' | i18n }}</th>
+                  <th class="col-sm-2 cell">{{ 'Description' | i18n }}</th>
+                  <th class="col-sm-1 cell">{{ 'Distributed Location' | i18n }}</th>
+                  <th class="col-sm-1 cell text-right">{{ 'Distributed Amount' | i18n }}</th>
+                  <th class="col-sm-1 cell text-right">{{ 'Amount' | i18n }}</th>
+              </tr>
+          </thead>
+          <tbody ng-repeat="type in location.PaymentTypes" class="stripOdd">
+              <tr ng-if="!data.isSummaryView">
+                  <td class="col-sm-1 cell" colspan="1" >{{type.PaymentType}}</td>
+                  <td class="col-sm-11 cell" colspan="8"></td>
+              </tr>
+              <tr ng-repeat="payment in type.Payments" ng-if="!data.isSummaryView">
+                  <td  class="col-sm-12 cell" colspan="9">
+                      <table>
+                          <tbody>
+                              <tr>
+                                  <td class="col-sm-1 cell" colspan="1"></td>
+                                  <td class="col-sm-1 cell" >{{payment.ServiceDate | date: 'MM/dd/yyyy'}}</td>
+                                  <td class="col-sm-1 cell">{{payment.PostedDate | date: 'MM/dd/yyyy'}}</td>
+                                  <td class="col-sm-2 cell">{{payment.PostedBy}}</td>
+                                  <td class="col-sm-2 cell">{{payment.ResponsibleParty}}</td>
+                                  <td class="col-sm-2 cell">{{payment.Description}}</td>
+                                  <td class="col-sm-1 cell"></td>
+                                  <td class="col-sm-1 cell"></td>
+                                  <td class="col-sm-1 cell text-right">
+                                      <span ng-if="payment.Amount >= 0"> {{payment.Amount | currency}} </span>
+                                      <span ng-if="payment.Amount < 0"> ({{payment.Amount * -1 | currency}})</span>
+                                  </td>
+                              </tr>
+                              <tr ng-repeat="da in payment.DistributedAmounts" ng-if="!data.isSummaryView">
+                                  <td class="col-sm-9 cell" colspan="6"></td>
+                                  <td class="col-sm-3 cell" colspan="2">
+                                      <table>
+                                          <tr>
+                                              <td class="col-sm-3 cell">{{ da.DistributedLocation }}</td>
+                                              <td class="col-sm-4 cell text-right">{{ da.DistributedAmount | currency }}</td>
+                                          </tr>
+                                      </table>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </td>
+              </tr>
+              <tr>
+                  <td class="col-sm-8 cell" colspan="5"></td>
+                  <td class="col-sm-3 cell reportGrid__label" colspan="3">{{type.PaymentType}} {{'Totals' | i18n}}:</td>
+                  <td class="col-sm-1 cell text-right  reportGrid__label">
+                      <span ng-if="type.Amount >= 0"> {{type.Amount | currency}} </span>
+                      <span ng-if="type.Amount < 0"> ({{type.Amount * -1 | currency}})</span>
+                  </td>
+              </tr>
+          </tbody>
+          <tbody class="stripOdd">
+              <tr>
+                  <td class="col-sm-8 cell" colspan="5"></td>
+                  <td class="col-sm-3 cell  reportGrid__label" colspan="3">
+                      {{location.Location}} {{'Totals' | i18n}}:
+                  </td>
+                  <td class="col-sm-1 cell text-right  reportGrid__label" colspan="1">
+                      <span ng-if="location.Amount >= 0"> {{location.Amount | currency }} </span>
+                      <span ng-if="location.Amount < 0"> ({{location.Amount * -1 | currency}})</span>
+                  </td>
+              </tr>
+          </tbody>
+          <tbody ng-if="data.Locations.length > 0 && !showFilterMessage && data.Locations.length === $index+1">
+              <tr class="reportGrid__footer">
+                  <td class="col-sm-8 cell" colspan="5"></td>
+                  <td class="col-sm-3 cell  reportGrid__label" colspan="3">{{'Report Totals' | i18n}}</td>
+                  <td class="col-sm-1 cell text-right  reportGrid__label">
+                      <span ng-if="data.Amount >= 0"> {{data.Amount | currency }} </span>
+                      <span ng-if="data.Amount < 0"> ({{data.Amount * -1 | currency}})</span>
+                  </td>
+              </tr>
+          </tbody>
+          <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+      </table>
+  </div>
+</div>

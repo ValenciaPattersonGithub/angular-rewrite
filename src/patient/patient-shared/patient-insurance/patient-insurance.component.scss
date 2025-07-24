@@ -1,0 +1,48 @@
+@import "variables";
+
+.patient-insurance {
+    &-container {
+        padding: 15px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 5px;
+    }
+    &-hr-border {
+        border-top: 1px solid #2b144e;
+        margin-top:15px;
+        margin-bottom: 15px;
+    }
+    &-header {
+        display: grid;
+        grid-template: 1fr / 1fr 100px 115px 180px;
+        grid-template-areas: "TitleRow";
+        &-title {
+            font-family: $global-font-family;
+            font-size: 16px;
+            color: $patient-registration-title-color;
+            line-height: 16px;
+            font-weight: bold;
+            grid-area: TitleRow / 1;
+        }
+        &-total {
+            grid-area: TitleRow / 2;
+            text-align: right;
+        }
+        &-optout {
+            grid-area: TitleRow / 3;
+            padding-top: 3px;
+        }
+        &-edit {
+            grid-area: TitleRow / 4;
+            justify-self: end;
+
+        }
+    }
+    &-no-records {
+        font-family: $global-font-family;
+        font-size: 14px;
+        color: $placeholder-grey;
+        text-align: center;
+        top: 50%;
+        position: sticky;
+    }
+}

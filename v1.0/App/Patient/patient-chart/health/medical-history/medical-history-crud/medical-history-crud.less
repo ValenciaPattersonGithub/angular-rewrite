@@ -1,0 +1,99 @@
+﻿.medicalHistoryCrud {
+
+    position: relative;
+    padding: @brand-padding_lg;
+    background-color: @brand-color_gray;
+
+    &__header {
+        .clearfix;
+        margin-bottom: @brand-margin_sm;
+    }
+    &__btnCancel {
+        .btn;
+        .btn-default;
+    }
+    &__btnSave,
+    &__btnUpdate,
+    &__btnPrint {
+        .btn;
+        .btn-primary;
+    }
+
+    &__close {
+        .btn;
+        .btn-link;
+        position: absolute;
+        right: 0;
+        top: 20%;
+        transform: translateY(-50%);
+        padding: 0 0 @brand-padding_sm @brand-padding_md;
+    }
+    &__default {
+        .btn;
+    }
+    &__status {
+        position: absolute;
+        left: 0;
+        transform: translateY(8px);
+    }
+
+    &__title {
+        display: inline-block;
+        margin: 0 @brand-margin_sm @brand-margin_sm 0;
+        transform: translateY(2px);
+    }
+
+    &__titleEdit {
+        padding: 0 @brand-padding_sm;
+        margin-top: -2px;
+        margin-bottom: -4px;
+        transform: translateY(-4px);
+        font-size: .8em;
+    }
+
+    &__details {
+        display: inline-block;
+        margin-bottom: @brand-margin_sm;
+        &Flag {
+            color:  @patient-medical-history-flag-color;
+        }
+    }
+
+    &__actions {
+        .clearfix;
+        float:right;
+        padding-bottom: @brand-padding_sm;
+    }
+
+    &__edit {
+        display: inline-block;
+        margin-left: @brand-margin_md;
+        transform: translateY(-4px);
+    }
+    &__body {
+        max-height: 500px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding-bottom: @brand-padding_lg;
+    }
+
+    &__footer {
+        width:100%;
+        min-height:200px;
+        background-color: @brand-color_white;
+    }
+    &__signature{
+         background-color: @brand-color_white;
+         padding-top: @brand-padding_md;
+         padding-bottom: @brand-padding_md;
+         max-width: 50%;
+         float:right;
+    }
+
+    &__delete {
+        .btn-link {
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+}

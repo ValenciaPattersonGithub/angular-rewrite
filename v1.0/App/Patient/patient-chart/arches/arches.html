@@ -1,0 +1,5 @@
+﻿<div class="archCmpct">
+    <button ng-repeat="arch in data" class="btn btn-default btnStateReset" id="{{arch.ArchName}}" ng-click="selectArch(arch)" ng-class="{active:arch.selected}">
+        {{arch.ArchName | i18n}}
+    </button>
+</div>

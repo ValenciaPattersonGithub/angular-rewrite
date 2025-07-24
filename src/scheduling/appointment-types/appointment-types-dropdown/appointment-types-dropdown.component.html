@@ -1,0 +1,18 @@
+﻿<div id="appointmentType{{inputId}}" class="dropdown" [ngClass]="{'disabled': isDisabled}">
+    <button id="btnDropDown{{inputId}}" (click)="btnClick()" (blur)="onBlur()" class="typeButton">
+        <span *ngIf="!selectedItem" id="defaultSelectedDescription{{inputId}}" class="selectedDescriptionDefault"> {{ placeholder }}</span>
+        <span *ngIf="selectedItem" id="lblSelectedAppointmentTypePreview{{inputId}}" class="icon iconCircle padding-right-10" [ngStyle]="{'background-color': selectedItem.AppointmentTypeColor}"></span>
+        <span *ngIf="selectedItem" id="lblSelectedAppointmentTypeName{{inputId}}" [ngStyle]="{'cursor': 'pointer'}" class="selectedDescription">
+            {{ selectedItem.Name }}
+        </span>
+    </button>
+    <div id="dropdownListBox{{inputId}}" class="dropdownListBox" *ngIf="isOpen">
+        <div id="default{{inputId}}" class="dropdown-padding emptySelection" (mousedown)="selectItem(null)"> {{ placeholder }} </div>
+        <div id="dropdownListItems{{inputId}}{{i}}" *ngFor="let dataItem of appointmentTypes; let i=index"
+             (mousedown)="selectItem(dataItem)" class="displayFlex dropdownPadding">
+            <span id="icon{{inputId}}{{i}}" class="icon iconCircle paddingRight10" [ngStyle]="{'background-color': dataItem.AppointmentTypeColor}">
+            </span>
+            <span id="description{{inputId}}{{i}}" class="description"> {{ dataItem.Name }} </span>
+        </div>
+    </div>
+</div>

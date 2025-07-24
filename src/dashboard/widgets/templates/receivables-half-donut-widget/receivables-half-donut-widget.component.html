@@ -1,0 +1,17 @@
+<div class="soarWidget ReceivablesHalfDonut">    
+    <div class="panel-heading landingContainer__heading soarWidget__header">
+        <div class="widget-handle w_row">
+            <label>{{ data?.Title | translate }}</label>
+        </div>
+        <div class="soarSelectList">
+            <soar-select-list id="receivablesFilter" name="receivablesFilter" [textField]="'name'"
+                [valueField]="'value'" [optionList]="displayTypeOptions" [selectedItemValue]="selectedDisplayType"
+                (selectedItemValueChange)="filterChanged($event)">
+            </soar-select-list>
+        </div>
+    </div>
+    <div class="soarWidget__body">
+        <simple-half-donut [HalfDonutChartData]="receivablesData" [chartType]="chartType"
+            [isReceivables]="isReceivables"></simple-half-donut>
+    </div>
+</div>

@@ -1,0 +1,202 @@
+﻿<!--<business-nav></business-nav>-->
+<div ng-class="'fade-in'" class="deposit-view">
+    <div class="rowFull white">
+        <div class="deposit-view__container">
+            <div class="deposit-view__header">
+                <div class="deposit-view__nav">
+                    <div class="pill-bar">
+                        <a ng-repeat="item in depositViewOptions" ng-click="selectView(item)">{{item.Plural | i18n}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row header">
+                <div class="col-xs-12">
+                    <div class="deposit-view__page-header-title col-sm-10">{{'Single Deposit View'}}</div>
+                </div>
+                <div class="row">
+                    <hr />
+                    <div class="col-xs-12 pad-left-30">
+                        <div class="deposit-view__column-title col-sm-2 cell tableLabel">{{'Date'}}</div>
+                        <div class="deposit-view__column-title col-sm-2 cell tableLabel">{{'Bank'}}</div>
+                        <div class="deposit-view__column-title col-sm-1 cell tableLabel">{{'Account Number'}}</div>
+                        <div class="deposit-view__column-title col-sm-2 cell tableLabel">{{'Routing Number'}}</div>
+                        <div class="deposit-view__column-title col-sm-2 cell tableLabel">{{'Deposited By'}}</div>
+                        <div class="deposit-view__column-title col-sm-2 cell tableLabel">{{'Total'}}</div>
+                        <div class="deposit-view__column-title col-sm-1 cell tableLabel">{{' '}}</div>
+                    </div>
+                    <br />
+                    <hr />
+                </div>
+            </div>
+
+            <div class="row body">
+                <div class="col-xs-12 cell-container" ng-if="!isLoading">
+
+                    <div class="fuseGrid">
+                        <div class="row body rowWordWrap" ng-class="row.rowStyle">
+                            <div class="col-sm-12">
+                                <div class="row" ng-class="{ 'deletedRow' : depositItem.IsDeleted }">
+                                    <div class="col-sm-2 cell" ng-style="setStyle(0)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="tooltip(depositItem)">
+                                        <div>
+                                            <a ng-click="toggleIcon($event, depositItem, true)">
+                                                <i class='indicator soar-link font-weight-bold padding-left-5 padding-right-10 glyphicon glyphicon-chevron-down'></i>
+                                            </a>
+                                            <span>{{depositItem.dateToDisplay}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 cell" ng-style="setStyle(1)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="tooltip(depositItem)">
+                                        <div>
+                                            <span>{{depositItem.BankAccount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 cell" ng-style="setStyle(2)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="tooltip(depositItem)">
+                                        <div>
+                                            <span title="{{depositItem.AccountNumberTitle}}">{{depositItem.BankAccountNumber}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 cell" ng-style="setStyle(3)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="tooltip(depositItem)">
+                                        <div>
+                                            <span title="{{depositItem.RoutingNumberTitle}}">{{depositItem.RoutingNumber}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 cell" ng-style="setStyle(4)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="tooltip(depositItem)">
+                                        <div>
+                                            <span>{{depositItem.DepositedBy}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 cell" ng-style="setStyle(5)">
+                                        <div ng-if="!depositItem.IsDeleted">
+                                            <span class='pull-right padding-left-10'><deposit-menu deposit="depositItem"></deposit-menu></span>
+                                            <span class="pull-right">{{depositItem.totalToDisplay}}</span>
+                                        </div>
+                                        <div ng-if="depositItem.IsDeleted">
+                                            <span class="pull-right padding-right-30">{{depositItem.totalToDisplay}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 cell">
+                                        <div ng-if="depositItem.IsEdited">
+                                            <i class="fa fa-exclamation-circle exclamationIcon" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="'Last ' + renderToolTipDepositModified(depositItem, true)"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="subRow{{depositItem.DepositId}}" class="collapse in"  ng-class="{ 'deletedRow' : depositItem.IsDeleted }">
+                                    <div class="fuseGrid pull-left container subContainer" ng-if="hasDepositHistory">
+                                        <div class="row subHeader">
+                                            <a ng-click="toggleIcon($event, 'divDepositHistory', false)">
+                                                <i class='indicator soar-link font-weight-bold padding-left-5 padding-right-10 glyphicon glyphicon-chevron-right'></i>
+                                            </a>
+                                            <span class="text-bold">Deposit History</span>
+                                        </div>
+                                        <div id="divDepositHistory" class="collapse" ng-if="hasDepositHistory">
+                                            <div class="row col-sm-12">
+                                                <div class="col-sm-{{column.size}} cell" ng-repeat="column in depHistoryColumnDefinition">
+                                                    <div class="text-bold" title="{{column.title | i18n}}" ng-if="column.sortable" ng-click="subRowSort(row)">
+                                                        {{column.title | i18n}}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row body col-sm-12" ng-repeat="historyItem in depositHistoryItems | orderBy: '-ModifiedDate'"  ng-class="subGridRowStyle(historyItem)">
+                                                <div class="col-sm-2 cell" ng-style="setStyle(0)">
+                                                    <div>
+                                                        <span>{{historyItem.DepositDate | date : 'MM/dd/yyyy'}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(1)">
+                                                    <div>
+                                                        <span>{{historyItem.BankName}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(2)">
+                                                    <div>
+                                                        <span>{{historyItem.AccountNumber}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(3)">
+                                                    <div>
+                                                        <span>{{historyItem.RoutingNumber}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(4)">
+                                                    <div>
+                                                        <i class="fa fa-exclamation-circle exclamationIcon" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="renderToolTipDepositModified(historyItem, false)"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(5)">
+                                                    <div>
+                                                        <span class="pull-right"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-header" ng-if="hasDepositDetails">
+                                        <a ng-click="toggleIcon($event, 'divPayments', false)">
+                                            <i class='indicator soar-link font-weight-bold padding-left-5 padding-right-10 glyphicon glyphicon-chevron-down'></i>
+                                        </a>
+                                        <span class="text-bold">Payments</span>
+                                    </div>
+                                    <div id="divPayments" class="collapse in" ng-if="hasDepositDetails">
+                                        <div class="fuseGrid pull-left container subContainer">
+                                            <div class="row subHeader">
+                                                <div class="col-sm-{{column.size}} cell" ng-repeat="column in expandableColumnDefinition">
+                                                    <div class="tableLabel clickable {{column.titleClass}}" title="{{column.title | i18n}}" ng-if="column.sortable" ng-click="subRowSort(column.title)">
+                                                        {{column.title | i18n}}<i class="{{column.sortIcon}}"></i>
+                                                    </div>
+                                                    <div class="tableLabel" title="{{column.title | i18n}}" ng-if="!column.sortable">{{column.title | i18n}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="row body" ng-repeat="detail in depositDetails" ng-class="subGridRowStyle(detail)">
+                                                <div class="col-sm-2 cell" ng-style="setStyle(0)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="renderToolTip(depositItem, detail)">
+                                                    <div>
+                                                        <span>{{detail.PatientName}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(1)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="renderToolTip(depositItem, detail)">
+                                                    <div>
+                                                        <span>{{detail.PaymentDate | date : 'MM/dd/yyyy'}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(2)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="renderToolTip(depositItem, detail)">
+                                                    <div>
+                                                        <span>{{detail.TransactionType}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-1 cell" ng-style="setStyle(3)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="renderToolTip(depositItem, detail)">
+                                                    <div>
+                                                        <span>{{detail.PaymentType}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(4)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="renderToolTip(depositItem, detail)">
+                                                    <div>
+                                                        <span>{{detail.Note}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 cell" ng-style="setStyle(5)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="renderToolTip(depositItem, detail)">
+                                                    <div>
+                                                        <span class="pull-right">{{detail.Amount | currency : '$' : 2}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-1 cell" ng-style="setStyle(5)">
+                                                    <div ng-if="detail.Status === 3 || (detail.Status === 1 && detail.DateAdded !== null)">
+                                                        <i class="fa fa-exclamation-circle exclamationIcon" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="renderToolTipPaymentHistory(depositItem, detail)"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="clear-fix"></div>
+            </div>
+        </div>
+    </div>
+</div>

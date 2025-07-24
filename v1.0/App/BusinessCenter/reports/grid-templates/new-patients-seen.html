@@ -1,0 +1,63 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-12 cell" colspan="8">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-2 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Address' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Phone Number' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Responsible Party' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'First Service Date' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Description' | i18n }}</th>
+                    <th class="col-sm-1 cell text-center">{{ 'Tooth' | i18n }}</th>
+                    <th class="col-sm-1 cell text-center">{{ 'Area' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="patient in location.Patients" ng-class-even="'stripEven'" ng-class-odd="'stripOdd'">
+                <tr>
+                    <td class="col-sm-2 cell">{{ patient.Patient }}</td>
+                    <td class="col-sm-2 cell">
+                        <div ng-if="patient.Address">{{ patient.Address }}</div>
+                        <div ng-if="patient.Address2">{{ patient.Address2 }}</div>
+                        <div>
+                            {{ patient.City }}<span ng-if="patient.City">,</span> {{ patient.State }} {{ patient.ZipCode }}
+                        </div>
+                    </td>
+                    <td class="col-sm-1 cell">
+                        <div ng-if="patient.PhoneNumber">
+                            {{ patient.PhoneNumber | tel }}
+                        </div>
+                    </td>
+                    <td class="col-sm-2 cell"> {{patient.ResponsibleParty}}</td>
+                    <td class="col-sm-1 cell">{{ patient.ServiceDate | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-2 cell">{{patient.Description}}</td>
+                    <td class="col-sm-1 cell text-center">{{patient.Tooth}}</td>
+                    <td class="col-sm-1 cell text-center">{{patient.Area}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven">
+                <tr>
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="8">{{'New Patients Seen:' | i18n}} {{location.TotalNewPatientsSeen}}</td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length > 0 && !showFilterMessage && data.Locations.length === $index+1">
+                <tr class="reportGrid__row reportGrid__footer">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="8">{{'Total' | i18n}} {{'New Patients Seen:' | i18n}} {{ data.TotalNewPatientsSeen }}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="8">{{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}</td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

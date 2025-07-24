@@ -1,0 +1,43 @@
+<account-statement-billing-message-crud [messageData]="messageData" (closeModal)="closeMessagePopup($event)"></account-statement-billing-message-crud>
+<div class="accountStatementBillingMessage">
+    <div class="accountStatementBillingMessage__body">
+        <div class="row">
+            <button class="btn btn-primary" (click)="addNewMessage()">{{ 'Add a Billing Statement Message' | translate }}</button>
+        </div>
+        <br />
+        <div class="row" *ngIf="!messages || messages.length == 0">
+            <span>{{ 'No messages' | translate }}</span>
+        </div>
+        <div class="row" *ngIf="messages && messages.length > 0">
+            <div class="fuseGrid pull-left col-md-12">
+                <div class="row header">
+                    <div class="col-xs-4 data-column">
+                        {{ 'Name' | translate }}
+                    </div>
+                    <div class="col-xs-6 data-column">
+                        {{ 'Message' | translate }}
+                    </div>
+                    <div class="col-xs-2 data-column">
+                    </div>
+                </div>
+                <hr />
+                <div class="row body" *ngFor="let message of messages | orderBy: {sortColumnName: 'Name', sortDirection: 1}">
+                    <div class="col-xs-4 data-column">
+                        {{ message?.Name }}
+                    </div>
+                    <div class="col-xs-6 data-column">
+                        {{ message?.Message }}
+                    </div>
+                    <div class="col-xs-2 data-column">
+                        <span class="fa fa-edit margin-right-10" (click)="editMessage(message)"></span>
+                        <span class="fa fa-trash" (click)="deleteMessage(message)"></span>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+</div>
+

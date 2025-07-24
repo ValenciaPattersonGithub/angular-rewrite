@@ -1,0 +1,31 @@
+export interface PatientCommunication {
+    PatientCommunicationId?: number;
+    PatientId?: any;
+    CommunicationType?: number;
+    CommunicationCategory?: number;
+    Reason?: number;
+    Notes?: string;
+    CommunicationDate?: Date;
+    Status?: number;
+    AddedBy?: string;
+    UserModified?: string;
+    AccountId?: string;
+    PersonId?: string;
+    Description?: string;
+    LocationId?: number;
+    Index?: number;
+    EditedBy?: any;
+    DateModified?: Date;
+    CreatedBy?: any;
+    PersonAccountNoteId?: number;
+    IsComplete?: boolean;
+    DueDate?: Date;
+    IsDisabled?: boolean;
+    IsModified?: boolean;
+    CommunicationMode?: 0;
+    LetterTemplateName?: any;
+    CommunicationTemplateId?: number;
+    LetterTemplate?: any;
+    PatientInfo?: any;
+    ReferralDirectionTypeId?: any;
+}

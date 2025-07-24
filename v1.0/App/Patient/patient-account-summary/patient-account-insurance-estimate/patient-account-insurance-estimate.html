@@ -1,0 +1,14 @@
+﻿<div class="patAcctSmry__content">
+    <div>
+        <span id="lblInsuranceEstTitle" class="font-weight-bold">{{'Estimated Ins.' | i18n }} </span>
+    </div>
+    <div ng-show="insEstimateLoading == true ">
+        <no-results loading="loading == true "></no-results>
+    </div>
+    <div class="box-info" ng-show="insEstimateLoading == false ">
+        <span id="lblInsuranceEstimate" class="font-weight-bold">{{ insuranceEstimate | currency}}</span>
+    </div>
+    <div ng-if="hasPatientInsurancePaymentViewAccess">
+        <button id="insPaymentLink" class="btn-link patAcctSmry__btn-link" check-auth-z="soar-acct-aipmt-add" ng-click="makeInsurancePayment()" ng-class="{disabled : !hasPatientInsurancePaymentViewAccess}" ng-disabled="{{disablePayments}}">{{ 'Apply an insurance payment' | i18n }}</button>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+﻿
+<soar-select-list id="{{ stateListId }}"
+				  name="{{ stateListId }}"
+				  sb-tab="{{tabIndex}}"
+				  placeholder="{{ 'Select {0}' | i18n:['State'] }}"
+				  text-field="Name"
+				  value-field="Abbreviation"
+				  option-list="stateList"
+				  ng-model="source"
+				  disable-input="disableInput" 
+				  sb-blur="comboBoxBlur({event: $event})"></soar-select-list>

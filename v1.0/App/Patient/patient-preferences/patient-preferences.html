@@ -1,0 +1,252 @@
+﻿<div class="patientPref">
+    <div class="patientPref__form" ng-form="frmPatientPreferences" ng-show="doneLoading==true">
+        
+        <!-- View Preferences -->
+        <div class="patientPref__view" ng-if="editing == false">
+            <div class="patientPref__edit-item">
+                <div class="sub-section-header">
+                    <div class="sub-section-title">
+                        <h5>{{'Locations'|i18n}}</h5>
+                    </div>
+                </div>
+                <div class="patientPref__view-item patientPref__altloc">
+                    <div class="patientPref__location-tag col-xs-12">
+                        <div class="col-xs-3 col-sm-3 col-md-2 patientPref__location-tag">
+                            <label class="patientPref__location-tag">
+                                {{ 'Primary' | i18n }}:
+                            </label>
+                        </div>
+                        <div class="col-xs-9 col-sm-9 col-md-10 patientPref__location-tag">
+                            <span id="lblPatientPreferredLocation" class="col-xs-12 patientPref__location-tag">
+                                {{ selectedLocation ? selectedLocation.NameLine1 +' ('+ selectedLocation.tzAbbr +')': 'No Location Selected' | i18n }}
+                            </span>
+                            <!-- <span id="lblPatientPreferredLocation">
+                                {{ selectedLocation ? selectedLocation.NameLine2 : '' }}
+                            </span> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="patientPref__location-tag patientPref__altloc">
+                    <div class="patientPref__location-tag">
+                        <div class="col-xs-3 col-sm-3 col-md-2 patientPref__location-tag">
+                            <label class="patientPref__location-tag patientPref__label-fix">
+                                {{ 'Alternate' | i18n }}:
+                            </label>
+                        </div>
+                        <div class="col-xs-9 col-sm-9 col-md-10 patientPref__location-tag">
+                            <div ng-repeat="location in tempPerson.PatientLocations track by location.LocationId"
+                                ng-if="!location.IsPrimary && location.ObjectState != 'Delete'"
+                                class="pull-left patientPref__location-tag col-xs-12">
+                                <span class="col-xs-12 patientPref__location-tag">
+                                    {{location.LocationName}}
+                                </span>
+                            </div>
+                            <div ng-if="tempPerson && tempPerson.PatientLocations.length < 2"
+                                class="pull-left patientPref__location-tag col-xs-12">
+                                <span>{{'No Preferred Alternate Location'|i18n}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="patientPref__edit-item">
+                <div class="sub-section-header">
+                    <div class="sub-section-title">
+                        <h5>{{'Dental Team'|i18n}}</h5>
+                    </div>
+                </div>
+        
+                <div class="patientPref__view-item patientPref__altloc">
+                    <label class="col-xs-4 col-sm-4 col-md-4 patientPref__location-tag">
+                        {{ 'Preferred {0}' | i18n:['Dentist'] }}:
+                    </label>
+                    <span id="lblPatientPreferredDentist" class="col-xs-8 col-sm-8 col-md-8 patientPref__location-tag">
+                        {{ selectedDentist ? selectedDentist.Name : 'No Preferred Dentist' | i18n }}
+                        
+                        <!-- selected provider is not a dentist     -->
+                        <i class="fas fa-exclamation-triangle patientPref__orange-warning" ng-show="selectedDentist && preferredDentistValidForLocation===false"
+                            title="{{ 'This patient\'s preferred dentist is no longer valid for this location, please update the preferred provider.' }}"></i>
+                    </span>
+                </div>
+        
+                <div class="patientPref__view-item patientPref__altloc">
+                    <label class="col-xs-4 col-sm-4 col-md-4 patientPref__location-tag">
+                        {{ 'Preferred {0}' | i18n:['Hygienist'] }}:
+                    </label>
+                    <span id="lblPatientPreferredHygienist" class="col-xs-8 col-sm-8 col-md-8 patientPref__location-tag">
+                        {{ selectedHygienist ? selectedHygienist.Name : 'No Preferred Hygienist' | i18n }}
+                         <!-- selected provider is not a dentist     -->
+                    <i class="fas fa-exclamation-triangle patientPref__orange-warning" ng-show="selectedHygienist && preferredHygienistValidForLocation===false"
+                         title="{{ 'This patient\'s preferred hygienist is no longer valid for this location, please update the preferred provider. ' }}"></i>
+                        
+                    </span>
+                </div>
+            </div>
+        
+            <div class="patientPref__edit-item">
+                <div class="sub-section-header">
+                    <div class="sub-section-title">
+                        <h5>{{'Financial'|i18n}}</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="patientPref__view-item">
+                        <div class="col-xs-6 patientPref__location-tag no-padding">
+                            <checkbox checkbox-id="receivesStatements" checkbox-Disabled="true"
+                                checkbox-value="person.Profile.PersonAccount.ReceivesStatements"></checkbox>
+                            <span class="font-weight-bold">{{'Account receives statements?'|i18n}}</span>
+                        </div>
+                    </div>
+                    <div class="patientPref__view-item">
+                        <div class="col-xs-6 patientPref__location-tag">
+                            <checkbox checkbox-id="receivesFinanceCharges" checkbox-Disabled="true"
+                                checkbox-value="person.Profile.PersonAccount.ReceivesFinanceCharges"></checkbox>
+                            <span class="font-weight-bold">{{'Account receives finance charges?'|i18n}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Edit Preferences providerSelectory requires patientInfo-->
+        <div class="patientPref__edit" ng-if="editing == true && tempPerson.Profile && locationsDDL">
+
+        <!-- NOTE Primary location must be selected first, list of potential preferred providers 
+        and preferred hygienists will be based on the primary location only -->
+        <div class="sub-section">
+                <div class="sub-section-header">
+                    <div class="sub-section-title">
+                        <h5>{{'Locations'|i18n}}</h5>
+                    </div>
+                </div>
+                <!-- Primary Location -->                
+                <div class="patientPref__edit-item" ng-class="{'has-error': (valid == false)}" ng-if="doneLoading===true">
+                    <label class="col-sm-3">{{ 'Primary' | i18n }} *</label>
+                    <soar-select-list name="inpLocation"
+                                      id="inpLocation"
+                                      placeholder="{{'No Location Selected' | i18n }}"
+                                      text-field="LocationNameWithDate"
+                                      value-field="LocationId"
+                                      option-list="locationsDDL"
+                                      ng-model="tempPerson.Profile.PreferredLocation"
+                                      sb-tab="1"
+                                      sb-required="required"
+                                      required>
+                    </soar-select-list>
+                    <label id="lblPrimaryLocationRequired" class="help-block col-sm-offset-3 col-sm-9" ng-if="!valid && !frmPatientPreferences.inpLocation.$valid">
+                        {{ 'This field is required.' |i18n }}
+                    </label>
+                </div>
+                <!-- Alternate Locations -->
+                <div class="patientPref__edit-item">
+                    <label class="col-sm-3">{{ 'Alternate' | i18n }}</label>
+                    <soar-select-list name="inpAltLocation"
+                                      id="inpAltLocation"
+                                      placeholder="{{'Select Location' | i18n }}"
+                                      text-field="LocationNameWithDate"
+                                      value-field="LocationId"
+                                      option-list="alternateOptionsDDL"
+                                      ng-model="patientAlternateChosenLocation.LocationId"
+                                      sb-tab="1">
+                    </soar-select-list>
+                </div>
+                <!-- Alternate Location Tags-->
+                <tag ng-repeat="location in tempPerson.PatientLocations"
+                     ng-if="!location.IsPrimary && location.ObjectState != 'Delete'"
+                     class="pull-left col-sm-offset-3 col-sm-9 patientPref__location-tag"
+                     uib-tooltip="Cannot remove this location Due to patient activity"
+                     tooltip-enable="{{location.PatientActivity}}"
+                     tooltip-placement="{{top-right}}"
+                     title="{{location.LocationName}}"
+                     remove-function="removePatientLocation(location)"
+                     is-primary="true"
+                     hide-remove="location.PatientActivity"
+                     base-id="{{location.LocationId}}"></tag>
+            </div>
+            <div class="sub-section">
+                <div class="sub-section-header">
+                    <div class="sub-section-title">
+                        <h5>{{'Dental Team' | i18n}}</h5>
+                    </div>
+                </div>
+                <!-- Dentist -->
+                <div class="patientPref__edit-item">
+                    <label class="col-sm-4">{{ 'Preferred {0}' | i18n:['Dentist'] }}</label>
+                    <!-- use provider-selector limit to ProviderTypeIds 1,5 for dentist-->
+                    <provider-selector
+                        place-holder="dentistPlaceHolder"
+                        input-id="inpDentist"
+                        patient-info="tempPerson"
+                        set-preferred="false"
+                        sb-change="onChangeDentist"
+                        provider-type-ids="[1,5]"
+                        selected-provider="tempPerson.Profile.PreferredDentist"                       
+                        filter-by-location-id="preferredLocationId"
+                        filter-inactive-providers="true"
+                        disable-input="tempPerson.Profile.PreferredLocation===null">
+                    </provider-selector>
+
+                </div>
+                <!-- Hygienist -->
+                <div class="patientPref__edit-item">
+                    <label class="col-sm-4"> {{ 'Preferred {0}' | i18n:['Hygienist'] }} </label>
+
+                    <!-- use provider-selector limit to ProviderTypeIds 1,2,3,5 for hygienist-->
+                    <provider-selector
+                        place-holder="hygienistPlaceHolder"
+                        input-id="inpHygienist"
+                        patient-info="tempPerson"
+                        set-preferred="false"
+                        sb-change="onChangeHygienist"
+                        provider-type-ids="[1,2,3,5]"
+                        selected-provider="tempPerson.Profile.PreferredHygienist"
+                        filter-by-location-id="preferredLocationId"     
+                        filter-inactive-providers="true"
+                        is-on-patient-overview="true"
+                        disable-input="tempPerson.Profile.PreferredLocation===null">
+                    </provider-selector>
+                </div>
+            </div>
+
+            
+            <div class="sub-section">
+                <div class="sub-section-header">
+                    <div class="sub-section-title">
+                        <h5>{{'Financial' | i18n}}</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="patientPref__edit-item col-xs-5 no-padding">
+                        <div>
+                            <div uib-tooltip="This option can be modified by editing the patient's responsible person."
+                                 tooltip-enable="tempPerson.Profile.PatientId !== person.Profile.ResponsiblePersonId"
+                                 tooltip-placement="top-right"
+                                 tooltip-append-to-body="true">
+                                <checkbox checkbox-id="receivesStatements"
+                                          checkbox-Disabled="tempPerson.Profile.PatientId !== person.Profile.ResponsiblePersonId"
+                                          checkbox-value="tempPerson.Profile.PersonAccount.ReceivesStatements">
+                                </checkbox>
+                                <span class="font-weight-bold">{{'Account receives statements?'|i18n}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="patientPref__edit-item col-xs-7">
+                        <div>
+                            <div uib-tooltip="This option can be modified by editing the patient's responsible person."
+                                 tooltip-enable="tempPerson.Profile.PatientId !== person.Profile.ResponsiblePersonId"
+                                 tooltip-placement="top-right"
+                                 tooltip-append-to-body="true">
+                                <checkbox checkbox-id="receivesFinanceCharges"
+                                          checkbox-Disabled="tempPerson.Profile.PatientId !== person.Profile.ResponsiblePersonId"
+                                          checkbox-value="tempPerson.Profile.PersonAccount.ReceivesFinanceCharges">
+                                </checkbox>
+                                <span class="font-weight-bold">{{'Account receives finance charges?'|i18n}}</span>
+                            </div>
+                        </div>
+                    </div></div>
+            </div>
+        </div>
+    </div>
+    <no-results loading="loading===true" loading-messag="' '" ng-hide="loading==false"></no-results>
+</div>

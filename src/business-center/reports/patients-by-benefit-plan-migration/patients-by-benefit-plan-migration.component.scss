@@ -1,0 +1,33 @@
+.patients-by-benefit-report {
+    grid-template-columns: 3fr 3fr 2fr 2fr 2fr
+}
+.patients-by-benefit-report-header {
+    grid-template-columns: 12fr;
+    background: transparent;
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.patients-by-benefit-report {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+        }
+      }
+}

@@ -1,0 +1,15 @@
+﻿@import "variables";
+.label {
+  font-family: $global-font-family;
+  font-weight: 600;
+  font-size: 12px;
+  color: $label-black; // non-standard black, see design system
+  padding: 0; // reset padding
+  margin: 0; // reset margin
+  &.error {
+    color: $alert-red;
+  }
+  &.bold{
+      font-weight:bold!important;
+  }
+}

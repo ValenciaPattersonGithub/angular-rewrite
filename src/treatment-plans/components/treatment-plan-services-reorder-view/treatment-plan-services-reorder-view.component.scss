@@ -1,0 +1,167 @@
+@import "variables";
+
+.txPlanReorderServices {
+    clear: both;
+}
+
+.txPlanReorderServices .fuseGrid .header {
+    padding: 15px 0 15px 0;
+}
+
+.txPlanReorderServices td, .txPlanEditServices th {
+    padding: 5px;
+}
+
+.txPlanReorderServices .treatment-plan-service-row th {
+    height: 50px;
+    vertical-align: bottom;
+}
+
+.txPlanReorderServices .treatment-plan-service-row .tx-row {
+    height: 50px;
+    vertical-align: middle;
+    border-bottom: 1px solid #DADCDC;
+    padding-bottom: 0px;
+}
+
+.txPlanReorderServices .treatment-plan-service-footer-row td {
+    height: 50px;
+    font-weight: 700;
+}
+
+.txPlanReorderServices .stageText {
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.txPlanReorderServices .grid-column-drag-area {
+    width: 44px;
+}
+
+
+.txPlanReorderServices .grid-column-desc {
+    min-width: 120px;
+}
+
+.txPlanReorderServices .grid-column-teeth {
+    width: 50px;
+}
+
+.txPlanReorderServices .grid-column-surface {
+    width: 65px;
+}
+
+.txPlanReorderServices .grid-column-status {
+    width: 85px;
+}
+
+.txPlanReorderServices .grid-column-provider {
+    width: 132px;
+}
+
+.txPlanReorderServices .grid-column-location {
+    width: 95px;
+}
+
+.txPlanReorderServices .grid-column-money {
+    width: 85px;
+    min-width: 85px;
+}
+
+.txPlanReorderServices .delete-stage-btn {
+    margin-bottom: 8px;
+}
+
+.txPlanReorderServices .text-table-column {
+    word-break: break-word;
+}
+
+/////////////////////////////////
+/* Drag and Drop Styles */
+/////////////////////////////////
+.drag-svg {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.drag-svg svg {
+    fill: $action-blue;
+    margin: 10px 5px 5px 5px
+}
+
+.drag-svg:hover svg {
+    fill: $light-action-blue;
+}
+
+.cdk-drag-preview {
+}
+
+.previewReorder {
+    transform: translate(-27px, -27px);
+    min-height: 50px;
+    vertical-align: middle;
+    width: 550px;
+    border-radius: 5px;
+    background-color: $polar-white;
+    background-size: cover;
+    box-shadow: $global-drop-shadow;
+}
+
+.previewReorder td {
+    padding-bottom: 0px;
+}
+
+.previewReorder .drag-area {
+    width: 55px;
+    padding: 0px 8px 0px 8px;
+    vertical-align: middle;
+}
+
+.previewReorder .description {
+    width: 350px;
+    word-break: break-word;
+}
+
+.previewReorder .preview-text {
+    width: 80px;
+    text-align: center;
+}
+
+.previewReorder .preview-highlight {
+    font-weight: 700;
+    word-break: break-word;
+}
+
+// just a default background
+/*.cdk-drag-placeholder {
+    opacity: 0;
+}*/
+
+.cdk-drag-handle:hover {
+    cursor: pointer;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.txPlanPart__grid.cdk-drop-list-dragging .treatment-plan-service-row:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.customReorder-placeholder {
+    background: #ccc;
+    //border: dotted 3px #999 !important;
+    height: 50px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}

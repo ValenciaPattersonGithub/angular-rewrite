@@ -1,0 +1,100 @@
+﻿<div class="perioComparePrint">
+    <div class="perioComparePrint__header">
+
+        <div class="col-xs-12">
+            <div class="col-xs-4">
+                <span id="lblTodaysTime" class="pull-left">{{ todaysDate |toDisplayTime }}</span>
+            </div>
+            <div class="col-xs-4 text-align-center">
+                <span id="lblTodaysLocation" class="perioComparePrint__practice">{{ currentPractice.name }}</span>
+            </div>
+            <div class="col-xs-4">
+                <span id="lblTodaysDate" class="pull-right ">{{ todaysDate | toShortDisplayDate }}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <div class="col-xs-4">
+                <span></span><br />
+                <span id="lblPatientName" class="pull-left">
+                    {{'Patient: '|i18n}}{{patientName}}
+                    <span id="lblPatientCode" class="">{{ patient.PatientCode }}</span>
+                </span><br />
+                <span id="lblPatientDateOfBirth" ng-show="patient.DateOfBirth">
+                    {{'DOB: '|i18n}}{{ patient.DateOfBirth | toShortDisplayDateUtc }} <br />
+                </span>
+
+            </div>
+            <div class="col-xs-4 text-align-center">
+                <h4><span id="lblExamTitle" class="perioComparePrint__title">{{ 'Perio Exam Comparison' | i18n }} - {{ perioExamComparison.ExamType | i18n }}</span></h4>
+            </div>
+            <div class="col-xs-4 padding-top-4">
+                <button id="btnPrint" ng-disabled="loadingPatient"
+                        class="btn btn-default pull-right no-print" onclick="window.print()">
+                    <i class="fa fa-print"></i> {{ 'Print exam' | i18n }}
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="perioComparePrint__exams" ng-repeat="exam in exams">
+        <!--header-->
+        <div class="col-md-12 perioComparePrint__row perioComparePrint__subHdr" ng-if="$first">
+            <div class="perioComparePrint__col">
+                {{ 'Date' | i18n }}
+            </div>
+            <div class="perioComparePrint__col text-center" ng-repeat="detail in exam.ExamDetails">
+                {{ detail.ToothId }}
+            </div>
+        </div>
+        <!--line between arches-->
+        <hr ng-if="$index === exams.length/2" />
+        <!--extra space between quadrants-->
+        <div class="perioComparePrint__quad" ng-if="$index === (exams.length/4)"></div>
+        <div class="perioComparePrint__quad" ng-if="$index === (exams.length/4)*2"></div>
+        <div class="perioComparePrint__quad" ng-if="$index === (exams.length/4)*3"></div>
+        <!--row content-->
+        <div class="col-md-12 perioComparePrint__row">
+            <div class="perioComparePrint__col">
+                <div class="perioComparePrint__sideLabel" ng-class="{'singleCompare': exams.length / 4 === 1}" ng-if="$index === labelPos[0]">{{'B'|i18n}}</div>
+                <div class="perioComparePrint__sideLabel" ng-class="{'singleCompare': exams.length / 4 === 1}" ng-if="$index === labelPos[1]">{{'L'|i18n}}</div>
+                <div class="perioComparePrint__sideLabel" ng-class="{'singleCompare': exams.length / 4 === 1}" ng-if="$index === labelPos[2]">{{'L'|i18n}}</div>
+                <div class="perioComparePrint__sideLabel" ng-class="{'singleCompare': exams.length / 4 === 1}" ng-if="$index === labelPos[3]">{{'B'|i18n}}</div>
+                {{ exam.ExamDate + 'Z' | toShortDisplayDate }}
+            </div>
+            <div class="perioComparePrint__col" ng-repeat="detail in exam.ExamDetails ">
+                <!--Depth Pocket-->
+                <div class="perioComparePrint__row" ng-if="selectedExamType === 'Pocket Depth'">
+                    <div class="perioComparePrint__col" ng-repeat="reading in detail.DepthPocket track by $index"
+                         ng-class="{'text-right' : $index === 0, 'text-center' : $index === 1, 'text-left' : $index === 2}">
+                        <span ng-class="{'perioAlertLevel' : reading >= dpAlertLevel}">{{ reading }}</span>
+                    </div>
+                </div>
+                <!--Gingival Margin-->
+                <div class="perioComparePrint__row" ng-if="selectedExamType === 'Gingival Margin'">
+                    <div class="perioComparePrint__col" ng-repeat="reading in detail.GingivalMarginPocket track by $index"
+                         ng-class="{'text-right' : $index === 0, 'text-center' : $index === 1, 'text-left' : $index === 2}">
+                        <span ng-class="{'perioAlertLevel' : reading >= gmAlertLevel}">{{ reading }}</span>
+                    </div>
+                </div>
+                <!--M-G Junction-->
+                <div class="perioComparePrint__row" ng-if="selectedExamType === 'M-G Junction'">
+                    <div class="perioComparePrint__col" ng-repeat="reading in detail.MgjPocket track by $index"
+                         ng-class="{'text-right' : $index === 0, 'text-center' : $index === 1, 'text-left' : $index === 2}">
+                        <span>{{ reading }}</span>
+                    </div>
+                </div>
+            </div>
+            <span class="perioComparePrint__quadGap" ng-if="quadrantGap.indexOf($index) > -1"></span>
+
+        </div>
+        <!--footer-->
+        <div class="col-md-12 perioComparePrint__row perioComparePrint__subHdr" ng-if="$last">
+            <div class="perioComparePrint__col"></div>
+            <div class="perioComparePrint__col text-center" ng-repeat="tooth in exam.ExamDetails">
+                {{ tooth.ToothId }}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+﻿<div class="imaging_full">
+    <iframe ng-if="showImaging" ng-src="{{frameSource}}" id="imagingFrame" class="imaging_full__frame"></iframe>
+    <div ng-if="errorMessage" class="imaging_full__error">
+        <div>{{ errorMessage }}</div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+﻿<div class="activeBtnLayout">
+    <div class="activeBtnLayout__selected" kendo-droptarget k-drop="onDrop">
+        <div class="activeBtnLayout__dropTarget" ng-if="selectedLayoutItems.length === 0">
+            {{ ::'Drag items to create your favorites' | i18n }}
+        </div>
+        <div id="selectedButtons">
+            <button class="btn  chartBtnLayoutServices__btn "
+                    ng-mouseover="showCloseButton=true" ng-mouseleave="showCloseButton=false"
+                    title="{{layoutItem.Text}}"
+                    ng-class="getButtonColorClass(layoutItem)"
+                    ng-click="remove(layoutItem)"
+                    ng-repeat="layoutItem in selectedLayoutItems track by $index">
+                <img ng-if="layoutItem.IconUrl" class="chartBtnLayoutServices__btnIcon" ng-src="{{layoutItem.IconUrl}}" />
+                <span class="chartBtnLayoutServices__btnText" ng-bind-html="layoutItem.Text | boldTextIfContains:filterBy.text"></span>
+                <span title="{{::removeFavoriteMessage | i18n}}"
+                      ng-if="showCloseButton===true"
+                      class="activeBtnLayout__removeBtn">
+                    <i class="fa fa-times-circle-o fa-2x"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+</div>

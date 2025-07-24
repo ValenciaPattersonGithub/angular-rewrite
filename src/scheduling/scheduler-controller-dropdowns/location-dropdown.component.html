@@ -1,0 +1,28 @@
+﻿<div id="locationDropDown" class="multi-select" #locationDropDown>
+    <div class="dropdown">
+        <button class="btn multi-select__button" type="button" (click)="btnClick()">
+            <span #toggleButton *ngIf="masterSelected" class="multi-select__button__text">All Locations </span>
+            <span #toggleButton *ngIf="!masterSelected && checkedList.length === 1" class="multi-select__button__text">{{checkedList.length}} Location</span>
+            <span #toggleButton *ngIf="!masterSelected && checkedList.length === 0 || checkedList.length > 1 && checkedList.length !== list.length" class="multi-select__button__text">{{checkedList.length}} Locations</span>
+            <i #caretButton class="fa fa-caret-down multi-select__button__i"></i>
+        </button>
+        <div #menu class="drop-show" [hidden]="!showDropDown" (mouseleave)="showDropDown = false;onBlur();">
+            <label class="container">
+                <input id="selectAllCheckBox" value={{masterSelected}} [(ngModel)]="masterSelected" type="checkbox" (change)="selectOrDeselectAllValues($event)" />
+                <span class="checkmark"><svg-icon class="svgIcon" name="checkmarkIcon" iconWidth="14px" iconHeight="14px"></svg-icon></span>
+                <span>Select All</span>
+            </label>
+            <div  class="scrollbar">
+                <div *ngFor="let a of list">
+                    <label class="container">
+                        <input type="checkbox" value={{a.checked}} [(ngModel)]="a.checked" (change)="getSelectedValue(a.checked,a)" />
+                        <span class="checkmark"><svg-icon class="svgIcon" name="checkmarkIcon" iconWidth="14px" iconHeight="14px"></svg-icon></span>
+                        <span class="displayText">{{a.displayText}}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

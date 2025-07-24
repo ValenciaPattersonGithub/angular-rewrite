@@ -1,0 +1,43 @@
+﻿<div>
+    
+    <div id="lstGroupTypes" class="row" ng-show="editing == false">
+        <div class="col-xs-12">
+            <!-- Date of Birth View -->
+            <div ng-repeat="groupType in patientGroupTypes">
+                <label id="lblGroupTypeView">{{ groupType.Description }}</label>
+            </div>
+        </div>
+    </div>
+   
+	<div class="row" ng-show="editing == true">
+		<div class="col-xs-12 col-sm-12 col-md-10">
+			<!-- State -->
+            <soar-select-list id="inpGroupType"
+                              name="inpGroupType"
+                              placeholder="{{ 'Select {0}' | i18n:['Group'] }}"
+                              text-field="GroupTypeName"
+                              value-field="MasterPatientGroupId"
+                              option-list="filteredGroupTypes"
+                              ng-model="patientGroupType"></soar-select-list>
+			<div id="lblMaxpanelGroupTypesMessage" uib-collapse="patientGroupTypes.length < 10">
+				<b>{{ 'A patient may only belong to 10 groups at any given time.' | i18n }}</b>
+			</div>
+		</div>
+
+		<div class="col-xs-12 ">
+			<div class="row" uib-collapse="!deleteMode">
+				<!--Are you sure message-->
+				<are-you-sure message="{{ 'Are you sure you want to {0}' | i18n:['remove this group type from patient?'] }} " if-yes="confirmRemove()" if-no="exitDeleteMode()"></are-you-sure>
+
+			</div>
+		</div>
+
+		<!-- group types -->
+		<div class="col-xs-12">
+			<div class="alerts-item-small" ng-repeat="groupType in patientGroupTypes">
+				<tag title="{{ groupType.Description }}" remove-function="removePatientGroupType($index, groupType)"></tag>
+			</div>
+		</div>
+
+	</div>
+</div>

@@ -1,0 +1,18 @@
+﻿<table class="rootChart">
+    <tr  ng-repeat="root in teethDefinitions.Roots">
+        <td></td>
+        <td></td>
+        <td>
+            <button id="tdRootValue{{root.RootAbbreviation}}" ng-click="selectRoot(root)"
+                    ng-show="showRootsForTooth(root)"
+                    ng-class="{active: hasSelectedRoots(root)}"
+                    class="rootChart__ctrl">{{root.RootName | i18n}}
+            </button>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+<label id="lblRootsRequired" class="help-text pull-right" ng-show="showRootMessage">
+    {{ '*Roots required.' | i18n }}
+</label>

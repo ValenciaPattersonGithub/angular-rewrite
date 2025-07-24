@@ -1,0 +1,145 @@
+@import 'variables';
+
+:host {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0, 0.6);
+}
+
+// Style was not being put in place without the ng-deep I would rather not utilize that however now it works.
+::ng-deep .app-confirmation-modal-overlay-backdrop {
+    position: relative !important;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5 !important; // important was added otherwise this is overwritten by a different style
+    background: #000000;
+}
+
+:host .app-confirmation-modal-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.app-modal {
+    height: 100%;
+    display: grid;
+    grid-template: 40px 1fr auto / auto;
+    grid-template-areas:
+        'header' 'content' 'footer';
+}
+
+.app-modal-header {
+    grid-area: header;
+    font-size: $app-modal-header-font-size;
+    font-weight: $app-modal-header-font-weight;
+    font-family: $global-font-family;
+    border-bottom: $app-modal-header-border;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.app-modal-body {
+    grid-area: content;
+    padding: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+
+    .bodyItem {
+        margin-bottom: 10px;
+        width: 240px;
+        position: relative;
+    }
+
+    .fui-select-container {
+        width: 240px;
+    }
+
+    .bodyItem:last-child {
+        margin-bottom: 0px;
+    }
+
+    .invalidDate {
+        ::ng-deep .k-picker-wrap {
+            border-radius: 5px;
+            border: 2px solid #cc0000 !important;
+        }
+    }
+
+    .providerUserIdError {
+        ::ng-deep .k-dropdown-wrap {
+            border: 2px solid #cc0000;
+        }
+    }
+
+    ::ng-deep .k-dropdown {
+        width: 100%;
+
+        > .k-dropdown-wrap {
+            width: inherit;
+            height: 25px;
+            font-family: $global-font-family;
+            font-size: 12px;
+            border-radius: 5px;
+            border-color: $border-grey;
+
+            > .k-input {
+                line-height: 24px;
+                padding: 0px 8px;
+            }            
+        }
+    }
+
+    .providerUserIdError {
+        ::ng-deep .k-dropdown-wrap {
+            border: 2px solid #cc0000;
+        }
+    }
+
+    .providerErrorMessage {
+        position: absolute;
+        left: calc( 100% + 10px );
+        width: 150px;
+        top: 50%;
+        color: #cc0000;
+    }
+
+    .locationErrorMessage {
+        position: absolute;
+        left: calc( 100% + 10px );
+        width: 150px;
+        top: calc( 50% - 3px );
+        color: #cc0000;
+    }
+
+    .locationRequiredError {
+        .fui-select {
+            border: 2px solid #cc0000;
+        }
+    }    
+}
+
+.app-modal-footer {
+    grid-area: footer;
+    padding: 15px;
+    border-top: $app-modal-header-border;
+    display: flex;
+    justify-content: flex-end;
+
+    app-button{
+        margin-left:10px;
+    }
+}
+
+.app-modal-bold-text {
+    font-weight: bold;
+}
+
+.app-modal-text {
+    font-weight: normal;
+}

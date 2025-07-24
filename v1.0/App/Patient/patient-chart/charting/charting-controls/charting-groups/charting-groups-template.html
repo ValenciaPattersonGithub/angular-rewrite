@@ -1,0 +1,17 @@
+﻿<div id="divChartingGroups" class="panel chartingGroups">
+    <div class="panel-heading">
+        <span class="panel-title">{{'Create Group' | i18n}}</span>
+    </div>
+    <div class="panel-body">
+        <div class="form">
+            <label for="groupName" class="">{{'Group Name' | i18n}}</label>
+            <input id="groupName" type="text" class="form-control chartingGroups__groupNameInput" ng-model="groupName" maxlength="25" autofocus/>
+            <span class="error" ng-if="groupName == ''">{{'Please enter a group name.' | i18n}}</span>
+
+            <div class="chartingGroups__panelButtons pull-right">
+                <button class="btn btn-default cancel" ng-click="close()">{{'Cancel' | i18n}}</button>
+                <button id="btnGroupSave" class="btn btn-primary save" ng-disabled="groupName == ''" ng-click="save()">{{'Save' | i18n}}</button>
+            </div>
+        </div>
+    </div>
+</div>

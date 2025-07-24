@@ -1,0 +1,27 @@
+﻿<div class="quadOptn">
+    <div class="quadOptn__header">
+        <div class="quadOptn__title">
+            <span ng-bind="::(viewText.selectionTools)"></span>
+        </div>
+        <div class="quadOptn__actions">
+            <a class="btn btn-link" ng-click="clearSelection()" ng-bind="::(viewText.clear)"></a>
+        </div>
+    </div>
+    <div class="quadOptn__body">
+        <div class="quadOptn__arch">
+            <button id="UP" class="btn btn-default" ng-click="selectToothGroup('arch','u')" ng-bind="::(viewText.upper)"></button>
+            <button id="LO" class="btn btn-default" ng-click="selectToothGroup('arch','l')" ng-bind="::(viewText.lower)"></button>
+            <button id="AL" class="btn btn-default" ng-click="selectToothGroup('mouth','')" ng-bind="::(viewText.all)"></button>
+        </div>
+    </div>
+    <div class="quadOptn__header">
+        <div class="quadOptn__title">
+            <span ng-bind="::(viewText.actions)"></span>
+        </div>
+    </div>
+    <div class="quadOptn__body">
+        <div class="quadOptn__arch">
+            <button id="SPR" class="btn btn-default" ng-click="openSupernumeraryModal()" check-auth-z="{{ogmEditAuthAbbrev}}" ng-bind="::(viewText.supernumerary)"></button>
+        </div>
+    </div>
+</div>

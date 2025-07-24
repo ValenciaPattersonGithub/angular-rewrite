@@ -1,0 +1,66 @@
+﻿<div class="row">
+    <div class="col-xs-6">
+        <span>
+            <contact-details-search-bar tab-index="0" auth-z="soar-per-perdem-search" base-id="Email" patient-info="patientInfo" selected="emails"></contact-details-search-bar>
+        </span>
+    </div>
+    <div class="col-xs-4">
+        <label class="control-label opt-out-mail-reminders-label">{{'Opt out of all email reminders' | i18n }}</label>
+    </div>
+    <div class="col-xs-2" style="padding-right:7%;">
+        <!--<label class="switch switch-mail-reminders">
+            <input name="emailReminders" type="checkbox" ng-model="optOutEmailReminders" ng-change="toggleOptions()">
+            <span class="slider round"></span>
+        </label>-->
+        <div class="onoffswitch emailPhoneReminderToggle">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="optOutEmail" ng-model="optOutEmailReminders" ng-change="toggleOptions()">
+            <label class="onoffswitch-label" for="optOutEmail" style="margin-bottom:0px;"></label>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div>
+    <div class="row" ng-show="emails.length > 0">
+        <div class="col-xs-3">
+            <label>Email Owner</label>
+        </div>
+        <div class="col-xs-4">
+            <label>Email</label>
+        </div>
+        <div class="col-xs-1">
+            <label>Primary</label>
+        </div>
+        <div class="col-xs-4">
+            <label>Email Reminders</label>
+        </div>
+    </div>
+    <div class="phone-item" ng-repeat="email in emails | filter: filterState('ObjectState') track by $index">
+        <div class="email-container">            
+            <patient-email-item show-label="showLabel"
+                             focus="$index == focusIndex && focusIf"
+                             email-id="$index"
+                             email="email"
+                             valid-form="validForm"                             
+                             disable-input="disableInput"
+                             edit-mode="flags.editing"
+                             show-remove-option="true"
+                             show-is-primary="showIsPrimaryCheckBox"
+                             remove-function="removeEmail(email)"
+                             has-notes="hasNotes"
+                             has-texts="hasTexts"
+                             ></patient-email-item>
+        </div>
+    </div>
+</div>
+
+<!--<div class="phoneInfo__add" ng-show="!disableInput">
+    <button id="btnAddPhone"
+            class="btn btn-link"
+            icon="fa-plus"
+            tabindex="{{ tabIndex }}"
+            ng-click="addPhone()"
+            check-auth-z="soar-per-perdem-add">
+        {{ 'Add another email' | i18n }}
+    </button>    
+</div>-->

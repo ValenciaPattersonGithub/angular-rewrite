@@ -1,0 +1,18 @@
+﻿<div class="container ">
+    <div class="row">
+        <div id="sectionIsVisible{{sectionIndex}}" class="col-md-2" ng-hide="formType === 'note'">
+            {{ 'Visible' | i18n}}:
+            <input id="inpSectionIsVisible{{sectionIndex}}" type="checkbox" ng-model="section.IsVisible" />
+        </div>
+
+        <div id="sectionShowTitle{{sectionIndex}}" class="col-md-2" ng-hide="formType === 'note'">
+            {{ 'Show {0}' | i18n:['Title'] }}:
+            <input id="inpSectionShowTitle{{sectionIndex}}" type="checkbox" ng-model="section.ShowTitle" />
+        </div>
+
+        <div id="sectionShowBorder{{sectionIndex}}" class="col-md-2" ng-hide="formType === 'note'">
+            {{ 'Show {0}' | i18n:['Border'] }}:
+            <input id="inpSectionShowBorder{{sectionIndex}}" type="checkbox" ng-model="section.ShowBorder" />
+        </div>
+    </div>
+</div>

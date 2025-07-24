@@ -1,0 +1,91 @@
+<div class="dentalRecords-container" id="dr-container">
+    <div class="dentalRecords-header" id="dr-header">
+        <span id="dr-title" class="dentalRecords-title">{{'Dental Records' | translate}}</span>
+    </div>
+    <hr>
+    <form [formGroup]="dentalRecords" class="form-horizontal" id="dr-form-horizontal" *ngIf="dentalRecords" autocomplete="off">
+        <div class="dentalRecords-content" id="dr-dentalRecords">
+            <div class="dentalRecords-content-previousdentist" id="dr-previousdentist">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'Previous Dentist'"></app-label>
+                </div>
+                <input class="dentalRecords-input" id="dr-previousDentist" formControlName="PreviousDentist" autocomplete="new-PreviousDentist"
+                    placeholder="Name" type="text" maxlength="64">
+            </div>
+            <div class="dentalRecords-content-phoneNumber" id="dr-phonenumber">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'Phone Number'"></app-label>
+                </div>
+                <input class="dentalRecords-input" id="dr-phoneNumber" formControlName="PhoneNumber" autocomplete="new-PhoneNumber"
+                    [ngClass]="{'dentalRecords-errorControl': !isValidPhoneNumber}" placeholder="Phone Number"
+                    type="text" maxlength="10" spellcheck="false" (blur)=isPhoneNumberValid($event)
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                <svg-icon [attr.id]="'phoneErrorIcon'" class="dentalRecords-errorIcon" name="tooltipIcon"
+                    iconHeight="15px" tooltip="Phone number requires full 10 digit number" placement="top-error"
+                    delay="500" *ngIf="!isValidPhoneNumber" iconWidth="15px"></svg-icon>
+            </div>
+            <div class="dentalRecords-content-email" id="dr-email">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'Email'"></app-label>
+                </div>
+                <input class="dentalRecords-input" id="dr-email" formControlName="Email" placeholder="Email" type="text" autocomplete="new-Email"
+                    [ngClass]="{'dentalRecords-errorControl': !isValidEmail}" (blur)=isEmailValid($event)
+                    maxlength="64">
+                <svg-icon [attr.id]="'EmailErrorIcon'" class="dentalRecords-errorIcon" name="tooltipIcon"
+                    iconHeight="15px" tooltip="Email requires a valid email format" placement="top-error" delay="500"
+                    *ngIf="!isValidEmail" iconWidth="15px"></svg-icon>
+            </div>
+            <div class="dentalRecords-content-Address1" id="dr-Address1">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'Street Address'"></app-label>
+                </div>
+                <input class="dentalRecords-input" id="dr-Address1" formControlName="AddressLine1" autocomplete="new-AddressLine1"
+                    placeholder="Street Address" type="text" maxlength="128">
+            </div>
+            <div class="dentalRecords-content-Address2" id="dr-Address2">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'Street Address 2'"></app-label>
+                </div>
+                <input class="dentalRecords-input" id="dr-Address2" formControlName="AddressLine2" autocomplete="new-AddressLine2"
+                    placeholder="Street Address 2" type="text" maxlength="128">
+            </div>
+            <div class="dentalRecords-content-City" id="dr-City">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'City'"></app-label>
+                </div>
+                <input class="dentalRecords-input" id="dr-City" formControlName="City" placeholder="Enter City" autocomplete="new-City"
+                    type="text" maxlength="64">
+            </div>
+            <div class="dentalRecords-content-State" id="dr-State">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'State'"></app-label>
+                </div>
+                <select formControlName="State" class="dentalRecords-selectlist">
+                    <option value="" selected>{{'Select State' | translate}}</option>
+                    <option [ngValue]="state.value" *ngFor="let state of states">
+                        {{state.text}}
+                    </option>
+                </select>
+            </div>
+            <div class="dentalRecords-content-ZipCode" id="dr-Zipcode">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'Zip'"></app-label>
+                </div>
+                <input class="dentalRecords-input zipcode" id="dr-Zip" formControlName="ZipCode" placeholder="Zip Code" autocomplete="new-ZipCode"
+                    type="text" maxlength="9" (blur)=isZipCodeValid($event)
+                    [ngClass]="{'zipcode-error': !isValidZipCode}" OnlyNumber NumberType="zipCode">
+                <svg-icon [attr.id]="'ZipCodeErrorIcon'" class="dentalRecords-errorIcon" name="tooltipIcon"
+                    iconHeight="15px" *ngIf="!isValidZipCode" tooltip="ZIP code must be 5 to 9 numeric characters"
+                    placement="top-error" delay="500" iconWidth="15px"></svg-icon>
+            </div>
+            <div class="dentalRecords-content-Notes" id="dr-Notes">
+                <div class="dentalRecords-label mb-5">
+                    <app-label class="dentalRecords-label" [label]="'Notes'"></app-label>
+                </div>
+                <textarea class="dentalRecords-textarea" id="dr-Notes" formControlName="Notes" type="text" autocomplete="new-Notes"
+                    maxlength="500"></textarea>
+            </div>
+
+        </div>
+    </form>
+</div>

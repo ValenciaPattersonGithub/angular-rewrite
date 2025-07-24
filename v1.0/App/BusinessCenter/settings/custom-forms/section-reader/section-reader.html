@@ -1,0 +1,10 @@
+<div class="container-fluid">
+    <div class="row">
+        <h4 class="col-md-12 sectionReader__title" ng-style="section.$$isMHF ? {'margin-top':'0'} : ''" id="title{{sectionIndex}}">{{ section.Title }}</h4>
+    </div>
+    <div ng-repeat="(sectionItemReaderIndex,sectionItem) in section.FormSectionItems">
+        <section-item-reader-directive ng-if="sectionItem.FormItemType != 6" section-item="sectionItem"></section-item-reader-directive>
+        <section-emergency-contact-reader-directive ng-if="sectionItem.FormItemType == 6" section-item="sectionItem"></section-emergency-contact-reader-directive>
+        <hr class="sectionReader__headerRow" ng-if="!$last && section.$$isMHF" />
+    </div>
+</div>

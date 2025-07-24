@@ -1,0 +1,67 @@
+﻿.patApptTile {    
+    background-color: @brand-color_white;
+    transition: all 0.5s ease 0s;
+    width: 100%;          
+
+    &.active {
+        background-color: @brand-color_gray;
+    }   
+    &__details {
+        .clearfix;
+        width: 100%;
+        min-height: 70px;
+        padding: 0;
+        margin-left: 5px;
+        background-color: @brand-color_white;
+        border: 1px solid @brand-color_dark-gray;
+    }
+
+    &__dtlLeft {
+        .clearfix;
+        width: 70%;
+        float: left;        
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    &__dtlRight {
+        float: right;        
+        width: 30%;
+        text-align: center;
+    }
+
+    &__svc {
+        width: 100%;
+        float: left;
+    }
+
+    &__time {
+        width: 100%;
+        float: left;
+        padding-right: 5px;
+    }
+
+    &__pvdr {
+        width: 100%;
+    }
+
+
+
+
+    &__apptType {
+        font-weight: 500;
+        width: 100%;
+        float: left;
+    }
+
+    &__strtAppt {
+        height: 40px;
+    }
+
+
+    &__lblStatus {
+        height: 40px;
+        margin-top: 20px;
+        color: @brand-color_font-dark;
+    }
+}

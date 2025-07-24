@@ -1,0 +1,27 @@
+﻿<div ng-controller="ScheduleUtilizationGaugeController" class="soarWidget">
+    <div class="panel-heading soarWidget__header">
+        <label class="widget-handle w_row">{{data.Title| i18n}}</label>
+        <div>
+            <!--PBI:362173 Hide this feature for userdashboard-->
+            <!--<soar-select-list ng-if="isUserWidget"
+                      class="inlineFilter"
+                      text-field="display"
+                      value-field="id"
+                      option-list="providerFilterOptions"
+                      ng-model="providerFilter"
+                      sb-change="filterChanged">
+            </soar-select-list>-->
+            <widget-date-range-filter class="inlineFilter"
+                                      date-filter="schedUtilDateFilter"
+                                      options="schedUtilDateFilterOptions"
+                                      from-date="schedUtilFromDate"
+                                      to-date="schedUtilToDate"
+                                      on-change="onDateFilterChange"
+                                      on-clear= "clearFilters">
+            </widget-date-range-filter>
+        </div>
+    </div>
+    <div class="gaugeWidget__body">
+        <gauge data="schedUtilUtilizationData"></gauge>
+    </div>
+</div>

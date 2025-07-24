@@ -1,0 +1,77 @@
+<div ng-show="!loadingPatient && !loadingForm">
+
+    <div class="medHistPrint__top">
+        <div class="row">
+            <span class="medHistPrint__topPatientMeta col-xs-6 vertical-align-center">
+                {{ (isBlank ? today : form.DateModified)  | toShortDisplayDateLocal }}
+            </span>
+            <button id="btnPrint" class="btn btn-default medHistPrint__button pull-right" onclick="window.print();">
+                {{' Print Form' | i18n}}
+            </button>
+        </div>
+        <div>
+            <h3 class="text-align-center">{{ 'Medical History Form' | i18n }}</h3>
+        </div>
+
+        <div class="row">
+            <div class="medHistPrint__topPatientMeta col-xs-5">
+                <div class="row PatientInfoRow">
+                    <span class="col-xs-5">
+                        {{ 'Patient Name' | i18n }}:
+                    </span>
+                    <span class="PatientInfo col-xs-7">
+                        <span>{{ patient.FirstName }} {{ patient.LastName }}</span><span ng-show="patient.MiddleName">, {{ patient.MiddleName }}.</span>
+                        <span ng-show="patient.PreferredName">({{ patient.PreferredName }})</span><span ng-show="patient.Suffix">&nbsp;{{ patient.Suffix }}</span>
+                    </span>
+                </div>
+                <div class="row PatientInfoRow">
+                    <span class="col-xs-5">{{ 'Date of Birth' | i18n }}:&nbsp;</span>
+                    <span class="PatientInfo col-xs-7">{{ patient.DateOfBirth | toShortDisplayDate}}</span>
+                </div>
+                <div class="row PatientInfoRow">
+                    <span class="col-xs-5">{{ 'Sex' | i18n }}:&nbsp;</span>
+                    <span class="PatientInfo col-xs-7">{{ patient.Sex }}</span>
+                </div>
+            </div>
+            <div class="col-xs-7">
+                <div class="row PatientInfoRow">
+                    <span class="col-xs-6">{{ 'Emergency Contact' | i18n }}</span>
+                    <span class="col-xs-5 EmergencyInfo">{{ isBlank ? "" : patient.EmergencyContactName }}</span>
+                </div>
+                <div class="row PatientInfoRow">
+                    <span class="col-xs-6">{{ 'Emergency Contact Phone' | i18n }}</span>
+                    <input type="text" class="col-xs-5 EmergencyInfo"
+                           ng-model="patient.EmergencyContactPhone"
+                           rows="4" ng-disabled="true"
+                           ui-mask="(999) 999-9999">
+                </div>
+                <div class="row PatientInfoRow">
+                    <span class="col-xs-6">{{ 'Emergency Contact Relationship' | i18n }}</span>
+                    <span class="col-xs-5 EmergencyInfo">{{ isBlank ? "" : patient.EmergencyContactRelationship }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="medHistPrint__formContainer">
+        <medical-history-form-directive medical-history-form-sections="formSections"
+                                        view-only="false"
+                                        input-is-disabled="true"
+                                        on-render="onMedicalHistoryFormDirectiveRender()">
+
+        </medical-history-form-directive>
+    </div>
+    <div class="medHistPrint__signature" ng-if="!medicalHistoryForm.FileAllocationId">
+        {{ signatureTitle | i18n }}
+    </div>
+    <div class="col-xs-12" ng-if="medicalHistoryForm.FileAllocationId">
+        <div class="pull-right">
+            <signature-display ng-if="medicalHistoryForm.FileAllocationId"
+                               sig-title="signatureTitle"
+                               file-allocation-id="medicalHistoryForm.FileAllocationId"></signature-display>
+        </div>
+
+    </div> 
+</div>
+<div ng-if="loadingPatient || loadingForm" class="medHistPrint__loading">
+    <span class="fa fa-spinner fa-spin fa-4x"></span>
+</div>

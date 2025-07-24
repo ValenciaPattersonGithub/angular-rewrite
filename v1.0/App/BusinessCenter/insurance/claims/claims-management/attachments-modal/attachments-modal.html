@@ -1,0 +1,242 @@
+﻿<div class="attachments">
+    <div class="row attachment-row">
+        <h4 ng-if="claim.Type === 1 && isReadOnly" class="col-xs-12 headerRow">{{'Attached files for claim from ' | i18n}}{{claim.startDatetoEndDate}}{{' for ' | i18n}}{{claim.patientName}}</h4>
+        <h4 ng-if="claim.Type === 1 && !isReadOnly" class="col-xs-12 headerRow">{{'Attaching file to claim from ' | i18n}}{{claim.startDatetoEndDate}}{{' for ' | i18n}}{{claim.patientName}}</h4>
+        <h4 ng-if="claim.Type === 2 && isReadOnly" class="col-xs-12 headerRow">{{'Attached files for predetermination for ' | i18n}}{{claim.patientName}}</h4>
+        <h4 ng-if="claim.Type === 2 && !isReadOnly" class="col-xs-12 headerRow">{{'Attaching file to predetermination for ' | i18n}}{{claim.patientName}}</h4>
+    </div>
+    <div id="claimAttachment" class="row attachment-row">
+        <div class="col-xs-4" ng-if="!isReadOnly">
+            <div class="row form-group">
+                <div class="dirList preview-row col-xs-12">
+                    <div uib-accordion close-others="true">
+                        <div uib-accordion-group ng-repeat="folder in documentGroupsList" is-open="folder.open"
+                             is-disabled="folder.Description==='Sidexis Images' && sidexisImagesLoading===true"
+                             uib-tooltip="Loading images."
+                             tooltip-enable="folder.Description==='Sidexis Images' && sidexisImagesLoading===true"
+                             tooltip-placement="top-left"
+                             tooltip-append-to-body="true"
+                             ng-show="!folder.Hide">
+                            <div uib-accordion-heading>
+                                <span class="rootDir fas fa-folder" ng-class="{'active':folder.open}"><span class="foldout">{{folder.Description}}</span></span>
+                            </div>
+                            <div uib-accordion close-others="true">
+                                <div uib-accordion-group ng-repeat="group in folder.Children" is-open="group.open">
+                                    <div uib-accordion-heading>
+                                        <span class="rootDir fas fa-folder folder-tab" ng-class="{'active':group.open}"><span class="foldout">{{group.Description}}</span></span>
+                                    </div>
+                                    <div uib-accordion close-others="true">
+                                        <div uib-accordion-group ng-repeat="childGroup in group.Children" is-open="childGroup.open">
+                                            <div uib-accordion-heading>
+                                                <span class="rootDir fas fa-folder inner-folder-tab" ng-class="{'active':childgroup.open}"><span class="foldout">{{childGroup.Description}}</span></span>
+                                            </div>
+                                            <div ng-repeat="file in childGroup.files"
+                                                 uib-tooltip="{{'Perio Exam Loading...' | i18n }}"
+                                                 tooltip-placement="top"
+                                                 tooltip-enable="perioIsLoading">
+                                                <a class="rootDir fas fa-folder file-inner-folder-tab btn btn-link "
+                                                   ng-class="{'attachments__disabled' : file.$$ValidAttachmentTypeForClaims===false||(file.ClaimAttachmentType === ClaimAttachmentTypes.SidexisImage && imagingProvider.error===true)}"
+                                                   ng-disabled="perioIsLoading===true||file.$$ValidAttachmentTypeForClaims===false||(file.ClaimAttachmentType === ClaimAttachmentTypes.SidexisImage && imagingProvider.error===true )"
+                                                   uib-tooltip="{{ ((file.ClaimAttachmentType === ClaimAttachmentTypes.SidexisImage && imagingProvider.error===true) ? imagingProvider.message  : 'Invalid Type' ) | i18n }}"
+                                                   tooltip-enable="file.$$ValidAttachmentTypeForClaims===false || (file.ClaimAttachmentType === ClaimAttachmentTypes.SidexisImage && imagingProvider.error===true)"
+                                                   tooltip-placement="top-left"
+                                                   tooltip-append-to-body="true"
+                                                   ng-click="perioIsLoading===false && setCurrentDocument(file)">
+                                                    <span class="fas fa-check checkmark" ng-if="file.$$selected"></span>&nbsp;<span class="foldout">{{file.Name}}{{file.$$AppendText}}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div uib-accordion close-others="true">
+                                        <div ng-repeat="file in group.files"
+                                             uib-tooltip="{{'Perio Exam Loading...' | i18n }}"
+                                             tooltip-placement="top"
+                                             tooltip-enable="perioIsLoading">
+                                            <a class="rootDir fas fa-folder inner-folder-tab btn btn-link "
+                                               ng-class="{'attachments__disabled' : file.$$ValidAttachmentTypeForClaims===false||(file.ClaimAttachmentType === ClaimAttachmentTypes.SidexisImage && imagingProvider.error===true )}"
+                                               ng-disabled="perioIsLoading===true||file.$$ValidAttachmentTypeForClaims===false||(file.ClaimAttachmentType === ClaimAttachmentTypes.SidexisImage && imagingProvider.error===true)"
+                                               uib-tooltip="{{ ((file.ClaimAttachmentType === ClaimAttachmentTypes.SidexisImage && imagingProvider.error===true) ? imagingProvider.message  : 'Invalid Type' ) | i18n }}"
+                                               tooltip-enable="file.$$ValidAttachmentTypeForClaims===false || (file.ClaimAttachmentType === ClaimAttachmentTypes.SidexisImage && imagingProvider.error===true)"
+                                               tooltip-placement="top-left"
+                                               tooltip-append-to-body="true"
+                                               ng-click="perioIsLoading===false && setCurrentDocument(file)">
+                                                <span class="fas fa-check checkmark" ng-if="file.$$selected"></span>&nbsp;<span class="foldout">{{file.Name}}{{file.$$AppendText}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div uib-accordion close-others="true">
+                                <div ng-repeat="file in folder.files"
+                                     uib-tooltip="{{'Perio Exam Loading...' | i18n }}"
+                                     tooltip-placement="top"
+                                     tooltip-enable="perioIsLoading">
+                                    <a class="rootDir fas fa-folder folder-tab btn btn-link "
+                                       ng-disabled="perioIsLoading===true||file.$$ValidAttachmentTypeForClaims===false"
+                                       uib-tooltip="{{'Invalid Type' | i18n}}"
+                                       tooltip-enable="file.$$ValidAttachmentTypeForClaims===false"
+                                       tooltip-placement="top-left"
+                                       tooltip-append-to-body="true"
+                                       ng-click="perioIsLoading===false && setCurrentDocument(file)">
+                                        <span class="fas fa-check checkmark" ng-if="file.$$selected"></span>&nbsp;<span class="foldout">{{file.Name}}{{file.$$AppendText}}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row attachment-row form-group">
+                <soar-select-list id="attachmentTypeList"
+                                  name="attachmentTypeList"
+                                  placeholder="{{'Select Attachment Type' | i18n }}"
+                                  option-list="attachmentDocumentTypesList"
+                                  text-field="displayDocumentName"
+                                  value-field="attachmentDocumentType"
+                                  class-name="width100"
+                                  disable-input="claim.Status !== 3 || currentDocument && (currentDocument | isInList: selectedAttachments) || currentDocument && currentDocument.ClaimAttachmentType === ClaimAttachmentTypes.PerioExam"
+                                  ng-model="currentDocument.attachmentType"
+                                  sb-change="attachmentTypeSelected">
+                </soar-select-list>
+            </div>
+            <div class="row attachment-row form-group">
+                <soar-select-list id="attachmentOrientationList"
+                                  name="attachmentOrientationList"
+                                  placeholder="{{'Select Orientation' | i18n }}"
+                                  option-list="attachmentOrientationList"
+                                  text-field="Description"
+                                  value-field="Value"
+                                  class-name="width100"
+                                  disable-input="!currentDocument || (currentDocument | isInList: selectedAttachments) || !(currentDocument.attachmentType | needsOrientation : attachmentDocumentTypesList)"
+                                  ng-model="currentDocument.attachmentOrientation"
+                                  sb-change="attachmentOrientationSelected">
+                </soar-select-list>
+            </div>
+            <div class="row attachment-row form-group" ng-if="showUploadInvalidTypeMessage">
+                <span class="warning">{{ ::('This file type is not valid for eAttachments.' | i18n) }}</span>
+            </div>
+            <div class="row attachment-row form-group btn-row">
+                <button class="btn btn-default attachment-button" ng-click="launchDocumentUpload()" check-auth-z="soar-doc-docimp-add">{{ ::('Upload File' | i18n) }}</button>
+                <button class="btn btn-default attachment-button"
+                        ng-disabled="perioIsLoading===true||claim.Status !== 3||!currentDocument ||
+                 (currentDocument | isInList: selectedAttachments) ||
+                 (currentDocument.$$IsNarrative===true && currentDocument.attachmentNotes ==='') ||
+                 currentDocument.attachmentType === '0' ||
+                 currentDocument.attachmentType === '' ||
+                 ((currentDocument.attachmentType | needsOrientation : attachmentDocumentTypesList ) && !currentDocument.attachmentOrientation)"
+                        ng-click="perioIsLoading===false && addCurrentAttachment()">
+                    {{ 'Add Attachment' | i18n }}
+                </button>
+            </div>
+        </div>
+        <div class="text-align-center"
+             ng-class="{'image-div': currentDocument && currentDocument.data && (currentDocument.ext | canPreview: imageExtensions), 'perio-div': currentDocument && currentDocument.data && currentDocument.ext === '.perio', 'col-xs-8': !isReadOnly, 'col-xs-12': isReadOnly}">
+            <div class="no-document-centered" ng-if="!currentDocument">
+                {{ 'Please select a document to preview' | i18n }}
+            </div>
+            <div class="loading-centered" ng-if="currentDocument && currentDocument.gettingData">
+                <i class="fa fa-spinner fa-4x fa-spin"></i>
+            </div>
+            <div class="no-preview-centered"
+                 ng-if="currentDocument && !currentDocument.data && !currentDocument.gettingData && !currentDocument.$$IsNarrative===true">
+                {{ 'No preview available' |i18n }}
+            </div>
+            <iframe ng-if="currentDocument && currentDocument.data && !currentDocument.gettingData && currentDocument.ext === '.pdf'"
+                    id="currentDocumentContent" name="currentDocumentContent"
+                    src="{{currentDocument && currentDocument.ext === '.pdf' ? currentDocument.data : ''}}"></iframe>
+            <span class="helper" ng-if="!currentDocument || currentDocument.ext !== '.perio'"></span><img ng-if="currentDocument && currentDocument.data && (currentDocument.ext | canPreview: imageExtensions)"
+                                                                                                          id="currentImageContent" alt="{{currentDocument.Name}}"
+                                                                                                          ng-src="{{currentDocument && (currentDocument.ext | canPreview: imageExtensions) ? currentDocument.data : ''}}" />
+            <div ng-if="currentDocument && currentDocument.ClaimAttachmentType===ClaimAttachmentTypes.UnallocatedDocument && currentDocument.$$IsClinicalNote===true && currentDocument.ext !== '.pdf'">
+                <textarea readonly unique-id="txtUnallocatedDocument" name="clinicalNoteText" rows="20" ng-model="currentDocument.UnallocatedDocumentAttachment"></textarea>
+            </div>
+            <div
+                ng-if="currentDocument && currentDocument.ClaimAttachmentType===ClaimAttachmentTypes.DocumentManager && currentDocument.ext == '.txt' && currentVendor == vendorEnum.DentalXChange && !currentDocument.gettingData">
+                <textarea readonly unique-id="txtContent" name="textContent" rows="20" ng-model="currentDocument.data"></textarea>
+            </div>
+            <div id="perio-include" class="perio-include"
+                 ng-if="currentDocument && currentDocument.ext === '.perio' && currentDocument.data"
+                 ng-include="currentDocument.url" ng-controller="PerioChartPrintController"></div>
+        </div>
+    </div>
+    <div class="row attachment-row">
+        <div class="col-xs-12 narrative-div" ng-show="false">
+            <textarea id="narrative" class="form-control text-align-left"
+                      ng-disabled="!currentDocument || (currentDocument | isInList: selectedAttachments )"
+                      placeholder="Write your narrative here..." maxlength="2000"
+                      ng-model="currentDocument.attachmentNotes"></textarea>
+        </div>
+    </div>
+    <div class="row files-row">
+        <div ng-repeat="file in selectedAttachments"
+             uib-tooltip="{{file.Name + (file.ClaimAttachmentType === 2 ? '.jpg' : '') +
+            (file.ClaimAttachmentType === 4 && file.Name.length > 4 && file.Name.substring(file.Name.length-4, file.Name.length)!== '.jpg' ? '.jpg' : '') +
+            (file.ClaimAttachmentType === 3 ? '.png' : '')}}"
+             tooltip-placement="top"
+             class="col-xs-1 attachment-thumbnail"
+             ng-click="setCurrentDocument(file)">
+            <button ng-if="!isReadOnly && !file.canNotDelete" class="btn btn-link thumbnail-delete fa fa-times-circle" ng-click="deleteAttachment(file)"></button>
+            <div ng-class="{'current': currentDocument && currentDocument.UniqueListId === file.UniqueListId}">
+                <div id="currentImageContentThumbnail" class="icon-image-container" ng-if="file.ClaimAttachmentType === 1">
+                    <span class="fas fa-folder-open folder-attachment" aria-hidden="true"></span>
+                    <p class="icon-label font-awesome-label"><span class="fileAttachmentDescription">{{'File'| i18n}}</span></p>
+                </div>
+                <div class="icon-image-container" ng-if="file.ClaimAttachmentType === 2 || file.ClaimAttachmentType === 4 || file.ClaimAttachmentType === 6">
+                    <img class="icon-image" ng-src="Images/TimelineFilterIcons/updated_image.svg" />
+                    <p class="icon-label"><span class="attachmentDescription">{{'Image'| i18n}}</span></p>
+                </div>
+                <div class="icon-image-container" ng-if="file.ClaimAttachmentType === 3">
+                    <img class="perio-icon-image" ng-src="Images/TimelineFilterIcons/updated_perio.svg" />
+                    <p class="icon-label"><span class="attachmentDescription">{{'Perio'| i18n}}</span></p>
+                </div>
+                <div id="noteContent" class="icon-image-container" ng-if="file.ClaimAttachmentType === 5 && file.$$IsNarrative===true">
+                    <span class="fas fa-pen-square folder-attachment" aria-hidden="true"></span>
+                    <p class="icon-label font-awesome-label">{{'Narrative'| i18n}}</p>
+                </div>
+                <div id="noteContent" class="icon-image-container" ng-if="file.ClaimAttachmentType === 5 && file.$$IsClinicalNote===true">
+                    <span class="fas fa-pen-square folder-attachment" aria-hidden="true"></span>
+                    <p class="icon-label font-awesome-label">{{'Note'| i18n}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="currentVendor == vendorEnum.DentalXChange " class="row attachment-row claim-narrative">
+        <div class="col-xs-12">
+            <textarea id="claimNarrative"
+                      class="form-control"
+                      placeholder="{{ 'Enter Claim Narrative' | i18n }}"
+                      ng-model="$parent.claimNarrative"
+                      name="claimNarrative"
+                      maxlength="2000"></textarea>
+            <p style="float:right;">{{claimNarrative.length ? claimNarrative.length : 0 }}/2000</p>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <div class="col-xs-12" ng-class="{'read-only-close-div': isReadOnly}">
+            <div class="col-xs-8 text-align-center">
+                <span ng-if="claim.Status !== 3">{{'Attachments can not be modified on submitted claims.'| i18n}}</span>
+            </div>
+            <div class="col-xs-4 align-right right-padding top-padding" ng-class="{'read-only-close-div': isReadOnly}">
+                <button id="btnCancel" class="btn btn-default" ng-click="cancel()">{{ 'Close' | i18n }}</button>
+                <button id="btnSubmit" class="btn btn-primary" ng-if="claim.Status === 3" ng-if="!isReadOnly"
+                        ng-disabled="!(selectedAttachments.length > 0 && originalClaimNarrative !== claimNarrative)
+                            && (!selectedAttachments
+                            || (selectedAttachments.length === 0 && originalSelectedAttachments.length === 0)
+                            || !misMatched()
+                            || (showErrors && (claim.Status === 5 || claim.Status === 6) && !referenceNumber)
+                            || disableSubmit)" ng-click="submit()">
+                    {{ 'Complete Attachment' | i18n }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="docCtrlsWindow"
+         kendo-window="docCtrls"
+         k-visible="false"
+         k-on-open="docCtrlsOpen = true"
+         k-on-close="docCtrlsOpen = false">
+    </div>
+</div>

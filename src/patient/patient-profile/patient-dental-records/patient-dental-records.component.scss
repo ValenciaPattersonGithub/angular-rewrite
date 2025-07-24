@@ -1,0 +1,66 @@
+@import "variables";
+
+.dentalRecords-header {
+    display: grid;
+    grid-template: 1fr / 50% 50%;
+    grid-template-areas: "title actionbuttons";
+    &-title {
+        font-family: $global-font-family;
+        font-size: 16px;
+        color: $patient-registration-title-color;
+        font-weight: bold;
+        grid-area: title;
+    }
+    &-actionButtons {
+        grid-area: actionbuttons;
+        justify-self: end;
+    }
+}
+.dentalRecords-detail-container {
+    padding: 15px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 5px;
+    hr {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border-top: 1px solid #2b144e;
+    }
+}
+.dentalRecordsDetailContent {
+    display: grid;
+    row-gap: 20px;
+    position: relative;
+    grid-template: 1fr / 100%;
+    grid-template-areas:
+        "PreviousDentist"
+        "PhoneNumber"
+        "Email"
+        "Address"
+        "Notes";
+    // 100% = Column
+    // PreviousDentist = 1st Row
+    // PhoneNumber = 2nd Row
+    // Email = 3rd Row
+    // Address = 4th Row
+    // Notes = 5th Row
+    &-previous-dentist {
+        grid-area: PreviousDentist / 1;
+    }
+    &-phone-number {
+        grid-area: PhoneNumber / 1;
+    }
+    &-email {
+        grid-area: Email / 1;
+    }
+    &-address {
+        grid-area: Address / 1;
+    }
+    &-notes {
+        grid-area: Notes / 1;
+    }
+}
+::ng-deep {
+    .label {
+        font-size: 14px !important;
+    }
+}

@@ -1,0 +1,171 @@
+﻿#accountFilterBar {
+    .newNav & {
+        margin: 0px 20px;
+    }
+    &.account-filter-bar {
+        padding-top: 20px;
+    }
+
+    .flex-container {
+        display: flex;
+        background-color: @brand-color_white;
+        /* Borders and shadow */
+        border-radius: 5px 5px 5px 5px;
+        -moz-box-shadow: 3px 3px 5px 6px @brand-color_light-gray;
+        -webkit-box-shadow: 3px 3px 5px 6px @brand-color_light-gray;
+        box-shadow: 3px 3px 5px 6px @brand-color_light-gray;
+    }
+
+    .filterBarTooltip {
+        margin-left: 40%;
+        margin-top: 15px;
+    }
+
+    .buttonSection {
+        display: flex;
+        padding: 15px 15px 15px 15px;
+        flex: 1;
+        justify-content: flex-end;
+        padding-top: 45px;
+
+        .padding-right-10 {
+            padding-right: 10px;
+        }
+
+        .disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    }
+
+    .showMoreLinkSection {
+        display: flex;
+        padding: 15px;
+        flex: 1;
+
+        .inner {
+            display: flex;
+            justify-content: center;
+        }
+
+        .buttonLabel {
+            padding-top: 25px;
+            display: block;
+        }
+    }
+
+    .hidden {
+        visibility: hidden;
+    }
+
+    .patientFilter {
+        display: flex;
+        padding: 15px 5px 15px 15px;
+        flex-wrap: wrap;
+        flex: 1;
+
+        > *:not(.no-flex) {
+            flex: 1;
+        }
+
+        .no-flex {
+            padding: 2px;
+            padding-right: 5px;
+        }
+
+        .patientError {
+            flex: 0 0 100%;
+            flex-wrap: wrap;
+        }
+    }
+
+    .locationFilter {
+        display: flex;
+        padding: 15px 5px;
+        flex-wrap: wrap;
+        flex: 1;
+
+        > *:not(.no-flex) {
+            flex: 1;
+        }
+
+        .no-flex {
+            padding: 2px;
+            padding-right: 5px;
+        }
+
+        .locationError {
+            flex: 0 0 100%;
+            flex-wrap: wrap;
+        }
+    }
+
+    .dateFilterSection {
+        display: flex;
+        padding: 15px 15px 15px 5px;
+        flex: 2;
+        flex-wrap: wrap;
+
+        .datePicker {
+            display: flex;
+            flex: 2;
+            flex: 0 0 50%;
+        }
+
+        .no-flex {
+            padding: 2px;
+            padding-right: 5px;
+        }
+
+        .dateError {
+            flex: 0 0 100%;
+            flex-wrap: wrap;
+        }
+    }
+
+    .moreFilters {
+        background-color: @brand-color_white;
+        padding: 15px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        flex: 0 0 25%;
+
+        .header {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .outer {
+            display: flex;
+
+            .outer-item {
+                &.dropdowns {
+                    flex-grow: 1;
+                }
+
+                &.tooth, &.spacer {
+                    flex-grow: 2;
+                }
+
+                padding-bottom: 15px;
+                padding-right: 10px;
+            }
+
+            .error {
+                flex: 0 0 100%;
+                flex-wrap: wrap;
+            }
+        }
+
+        .inner {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    }
+}

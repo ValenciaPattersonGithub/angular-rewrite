@@ -1,0 +1,224 @@
+﻿<div class="informedConsent" ng-if="mode==='select'">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4>
+                    {{::('Add Informed Consent' |i18n )}}
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="informedConsent__content panel panel-default">
+        <div class="panel-body">
+            <!--services-->
+            <div class="row">
+                <div class="col-xs-12" ng-repeat="(key, value) in treatmentPlan.TreatmentPlanServices|  groupBy: 'TreatmentPlanServiceHeader.TreatmentPlanGroupNumber'">
+                    <div class="informedConsent__stageHeader"><h4>{{::('Stage: '|i18n) }}{{key}}</h4></div>
+                    <div class="fuseGrid container pull-left">
+                        <!--column headers-->
+                        <div class="row header">
+                            <div id="gridHeaderCheckBox" class="col-sm-1 cell" uib-tooltip="{{ ::('Select all for stage'|i18n) }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                <checkbox checkbox-value="value[0].$$StageSelected" change-function="selectAllForStage(key,value[0].$$StageSelected)" checkbox-id="selectAllForStage" />
+                            </div>
+                            <div id="gridHeaderDescription" class="col-sm-4 cell">
+                                {{::('Description'|i18n)}}
+                            </div>
+                            <div id="gridHeaderTooth" class="col-sm-1 cell">
+                                {{::('Tooth'|i18n)}}
+                            </div>
+                            <div id="gridHeaderStatus" class="col-sm-1 cell">
+                                {{::('Status'|i18n)}}
+                            </div>
+                            <div id="gridHeaderScheduled" class="col-sm-1 cell">
+                                {{::('Scheduled'|i18n)}}
+                            </div>
+                            <div id="gridHeaderFee" class="col-sm-2 cell">
+                                {{::('Fee'|i18n)}}
+                            </div>
+                            <div id="gridHeaderConsent" class="col-sm-2 cell">
+                                {{::('Consent'|i18n)}}
+                            </div>
+                        </div>
+                        <!--<div class="feeLists__grid">-->
+                        <div class="row body" ng-repeat="tps in value | orderBy:'TreatmentPlanServiceHeader.Priority'">
+
+                            <div id="gridRowCheckbox_{{$index}}" class="col-sm-1 cell">
+                                <checkbox checkbox-disabled="tps.$$SelectDisabled" change-function="checkSelected(key,tps.ServiceTransaction.$$AddToConsent)" checkbox-value="tps.ServiceTransaction.$$AddToConsent" checkbox-hidden="false"></checkbox>
+                            </div>
+                            <div id="gridRowDescription_{{$index}}" class="col-sm-4 cell" uib-tooltip="{{::tps.ServiceTransaction.Description }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{::tps.ServiceTransaction.Description }}
+                            </div>
+                            <div id="gridRowTooth_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.ServiceTransaction.Tooth }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{ ::tps.ServiceTransaction.Tooth }}
+                            </div>
+                            <div id="gridRowStatus_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.ServiceTransaction.$$ServiceTransactionStatusName }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{ ::tps.ServiceTransaction.$$ServiceTransactionStatusName | truncate:8:'...' }}
+                            </div>
+                            <div id="gridRowScheduled_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::tps.$$Status }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{ ::tps.$$Status }}
+                            </div>
+                            <div id="gridRowFee_{{$index}}" class="col-sm-2 cell" uib-tooltip="{{::tps.ServiceTransaction.Amount }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{::tps.ServiceTransaction.Amount | currency}}
+                            </div>
+                            <div id="gridRowConsent_{{$index}}" class="col-sm-2 cell">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="informedConsent__footer">
+        <div class="informedConsent__actions">
+            <!--TODO currently this just closes the modal - future functionality -->
+            <button id="btnGenerateInformedConsent"
+                    class="btn btn-primary pull-right"
+                    check-auth-z="soar-clin-cplan-icadd"
+                    type="button"
+                    ng-disabled="noneSelected"
+                    ng-click="generateInformedConsent()">
+                {{ ::('Next' | i18n) }}
+            </button>
+            <button class="btn btn-default" type="button" ng-click="closeModal()">{{ ::('Cancel' | i18n) }}</button>
+        </div>
+    </div>
+</div>
+<div class="informedConsent" ng-if="mode==='create'">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4>{{::('Patient Informed Consent Agreement' | i18n) }}</h4>
+                <h4>{{::patientName}} ({{::patient.PatientCode}}) ({{::treatmentPlan.TreatmentPlanHeader.TreatmentPlanName}})  </h4>
+            </div>
+        </div>
+    </div>
+    <div class="informedConsent__contentNew panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+
+                <div class="col-xs-12">
+                    <div class="fuseGrid container pull-left">
+                        <!--column headers-->
+                        <div class="row header">
+                            <div id="gridHeaderDescription" class="col-sm-5 cell">
+                                {{::('Description'|i18n)}}
+                            </div>
+                            <div id="gridHeaderTooth" class="col-sm-1 cell">
+                                {{::('Tooth'|i18n)}}
+                            </div>
+                            <div id="gridHeaderTooth" class="col-sm-1 cell">
+                                {{::('Surface'|i18n)}}
+                            </div>
+                            <div id="gridHeaderTooth" class="col-sm-1 cell">
+                                {{::('Provider'|i18n)}}<br />{{'(Services)'|i18n}}
+                            </div>
+                            <div id="gridHeaderTooth" class="col-sm-2 cell">
+                                {{::('Status'|i18n)}}
+                            </div>
+                            <div id="gridHeaderStatus" class="col-sm-2 cell">
+                                {{::('Fee'|i18n)}}
+                            </div>
+                        </div>
+                        <!--<div class="feeLists__grid">-->
+                        <div class="row body" ng-repeat="ics in informedConsent.Services">
+
+                            <div id="gridRowDescription_{{$index}}" class="col-sm-5 cell" uib-tooltip="{{ ::ics.$$ServiceTransaction.Description }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{::ics.$$ServiceTransaction.Description }}
+                            </div>
+                            <div id="gridRowTooth_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::ics.$$ServiceTransaction.Tooth | convertToothRangeToQuadrantOrArchCode }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{::ics.$$ServiceTransaction.Tooth | convertToothRangeToQuadrantOrArchCode }}
+                            </div>
+                            <div id="gridRowArea_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::ics.$$ServiceTransaction.$$Area }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{ ::ics.$$ServiceTransaction.$$Area }}
+                            </div>
+                            <div id="gridRowArea_{{$index}}" class="col-sm-1 cell" uib-tooltip="{{ ::ics.$$ServiceTransaction.UserCode }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{:: ics.$$ServiceTransaction.ProviderFullName }}
+                            </div>
+                            <div id="gridRowScheduled_{{$index}}" class="col-sm-2 cell" uib-tooltip="{{ ::ics.$$ServiceTransaction.$$ServiceTransactionStatusName }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{:: ics.$$ServiceTransaction.$$ServiceTransactionStatusName }}
+                            </div>
+                            <div id="gridRowFee_{{$index}}" class="col-sm-2 cell" uib-tooltip="{{ ::ics.$$ServiceTransaction.Amount }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{::ics.$$ServiceTransaction.Amount | currency}}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--provider comments-->
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="padding-6">{{ ::('Provider Comments' | i18n) }}</label>
+                    <textarea class="form-control"
+                              id="txaProviderComments"
+                              maxlength="500"
+                              ng-model="informedConsent.ProviderComments"
+                              rows="3" cols="3"></textarea>
+                </div>
+            </div>
+            <!--additional notes-->
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="padding-6">{{ ::('Additional Notes' | i18n) }}</label>
+                    <textarea class="form-control"
+                              id="txaNotes"
+                              maxlength="500"
+                              ng-model="informedConsent.Notes"
+                              rows="3" cols="3"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="padding-6">{{ informedConsent.Message }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--create agreement-->
+    <div class="informedConsent__footer">
+
+        <div class="col-xs-12 padding-bottom-12">
+            <!--display-->
+            <div class="col-xs-6" ng-show="informedConsent.PatientSignatureFileAllocationId">
+                <signature-display ng-if="informedConsent.PatientSignatureFileAllocationId" sig-title="patientSignatureTitle" file-allocation-id="informedConsent.PatientSignatureFileAllocationId"></signature-display>
+            </div>
+            
+            <div class="col-xs-6" ng-show="!hasSignatures">
+                <div class="col-xs-10 pull-right">
+                    <signature-capture sig-title="signatureTitle"
+                                       clear-entry ="clearSignature"
+                                       file-allocation-id="informedConsent.SignatureFileAllocationId"
+                                       patient-info="patient"></signature-capture>
+                </div>
+            </div>
+            <!--display-->
+            <div class="col-xs-6 pull-right" ng-show="!informedConsent.PatientSignatureFileAllocationId || hasSignatures">
+                <signature-display sig-title="witnessSignatureTitle" file-allocation-id="informedConsent.WitnessSignatureFileAllocationId"></signature-display>                
+            </div>
+        </div>
+
+
+        <div class="informedConsent__actions">
+            <button id="btnCreateInformedConsent"
+                    class="btn btn-primary pull-right"
+                    check-auth-z="soar-clin-cplan-icadd"
+                    type="button"
+                    ng-disabled="noneSelected || !hasSignatures"
+                    ng-click="createInformedConsent()">
+                {{ ::('Create Consent' | i18n) }}
+            </button>
+            <button id="btnPrintInformedConsent"
+                    class="btn btn-default pull-right"
+                    check-auth-z="soar-clin-cplan-icadd"
+                    type="button"
+                    ng-disabled="noneSelected"
+                    ng-click="printUnsignedInformedConsent()">
+                {{ ::('Print Unsigned' | i18n) }}
+            </button>
+            <button class="btn btn-default" type="button" ng-click="closeModal()">{{ ::('Cancel' | i18n) }}</button>
+        </div>
+    </div>
+</div>
+

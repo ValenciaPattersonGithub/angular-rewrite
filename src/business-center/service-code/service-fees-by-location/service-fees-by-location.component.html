@@ -1,0 +1,45 @@
+<ng-template #templateRef>
+    <div class="modal-content">
+        <div class="feesByLocation panel panel-default">
+            <div class="panel-heading feesByLocation__heading-main">
+                <span class="panel-title">{{ 'Fees By Location' | translate }}</span>
+                <div class="feesByLocation__locationSearch pull-right">
+                    <input type="text" id="locationsSearch" class="form-input search" [(ngModel)]="searchTerm"
+                           placeholder="Search Locations" />
+                    <span class="fa fa-times remove" *ngIf="searchTerm?.length > 0" (click)="clearLocation()"></span>
+                </div>
+            </div>
+
+            <div class="feesByLocation__locationList" [ngClass]="{'setScroll': locations?.length > 3}">
+                <div clss="panel-body" *ngFor="let location of filteredLocations | search1:{NameLine1:searchTerm} | orderBy:{sortColumnName:'NameLine1', sortDirection: 1};">
+                    <div class="panel panel-default feesByLocation__feesEditPanel">
+                        <div class="panel-heading feesByLocation__heading-loc">
+                            <div id="location{{ location?.LocationId }}">
+                                <span class="panel-title">{{ location?.NameLine1 }}</span>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-5">
+                                <label>{{ 'Location Fee: ' | translate }}</label>
+                                <label id="lblLocationFee" name="lblLocationFee">{{location?.$$LocationOverrides?.$$FeeOverride | currency}}</label>
+                            </div>
+                            <div class="col-md-7">
+                                <label>{{ 'Tax Type: ' | translate }}</label>
+                                <label id="lblLocationTaxableService" name="lblLocationTaxableService">{{location?.$$LocationOverrides?.$$TaxableServiceTypeIdType }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="feesByLocation__footer">
+                <div class="feesByLocation__btn" (click)="cancel()">
+                    <a id="btnCancel" class="btn btn-link">{{ 'Close' |translate }}</a>
+                </div>
+            </div>           
+        </div>
+    </div>
+</ng-template>
+<ng-container #container></ng-container>
+<div kendoDialogContainer></div>

@@ -1,0 +1,810 @@
+﻿<div ng-if="isAppointmentViewVisible" class="appointment-view-full-screen">
+    <appointment-view time-increment="TimeIncrement"></appointment-view>
+</div>
+<!-- need a second window to handle clicking on unscheduled appointments in view opening a new view while closing the existing one -->
+<div ng-if="isSecondaryAppointmentViewVisible" class="appointment-view-full-screen">
+    <appointment-view time-increment="TimeIncrement"></appointment-view>
+</div>
+<div class="row" ng-if="isMissingRequiredItems">
+    <div class="col-xs-12 col-sm-3 col-md-2 col-lg-1">
+        <div>
+            <label class="form-label-newer" ng-bind="::(schedulePageText.scheduleSetup)"></label>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-10 ">
+        <div>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="#/BusinessCenter/PracticeSettings/Locations/?locationId=-1" id="btnAddLocation">
+                        <span ng-show="locations.length > 0" class="fa fa-check color-success"></span>
+                        <span ng-show="locations.length > 0" ng-bind="::(schedulePageText.location)"></span>
+                        <span ng-hide="locations.length > 0" class="fa fa-exclamation-circle color-error"></span>
+                        <span ng-hide="locations.length > 0" ng-bind="::(schedulePageText.addALocation)"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-href="#/Schedule/Locations/TreatmentRooms/?locationId={{selectedLocation.LocationId}}"
+                       id="btnAddTreatementRooms">
+                        <span ng-show="selectedLocation.Rooms.length > 0" class="fa fa-check color-success"></span>
+                        <span ng-show="selectedLocation.Rooms.length > 0" ng-bind="::(schedulePageText.treatmentRoom)"></span>
+                        <span ng-hide="selectedLocation.Rooms.length > 0" class="fa fa-exclamation-circle color-error"></span>
+                        <span ng-hide="selectedLocation.Rooms.length > 0"
+                              ng-bind="::(schedulePageText.addATreatmentRoom)"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/BusinessCenter/Users/Create/" id="btnAddUser">
+                        <span ng-show="doesProviderExistForSelectedLocation === true" class="fa fa-check color-success"></span>
+                        <span ng-show="doesProviderExistForSelectedLocation === true" ng-bind="::(schedulePageText.providerFull)"></span>
+                        <span ng-hide="doesProviderExistForSelectedLocation === true" class="fa fa-exclamation-circle color-error"></span>
+                        <span ng-hide="doesProviderExistForSelectedLocation === true" ng-bind="::(schedulePageText.addAProvider)"></span>
+                    </a>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="banner hide-for-print" ng-if="showBanner">
+    <div class="banner-container">
+        <span class="banner-title">
+            <i class="fa fa-info-circle"></i>
+            <strong>{{ bannerTitle }}</strong>
+        </span>
+        <div class="banner-content">
+            {{ bannerContentTitle }}
+            <div class="banner-expanded-content" ng-if="bannerIsExpanded" ng-bind-html="bannerContentDescription"></div>
+        </div>
+        <span role="button" class="banner-toggle" ng-click="onBannerToggle()" ng-hide="bannerIsExpanded === true">
+            View More
+        </span>
+        <span role="button" class="banner-toggle" ng-click="onBannerToggle()" ng-show="bannerIsExpanded === true">
+            View Less
+        </span>
+    </div>
+</div>
+<div class="row row-vertical-align schedule-nav container">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 margin-left-5 responsive-toolbar-div no-space-on-print schedule-date-scaled">
+        <span class="font-18 hide-for-print">
+            <strong ng-if="previewMode"><i class="fa fa-eye"></i> Previewing</strong>
+            <strong ng-if="scheduler.view().name == 'day'" ng-bind="pageTitle"></strong>
+            <strong class="margin-left-30 holiday-scaled" ng-if="scheduler.view().name !== 'week' && matchingHoliday"
+                    ng-bind-html="matchingHoliday.Description">
+            </strong>
+            <strong ng-if="scheduler.view().name == 'week'" ng-bind="pageTitle"></strong>
+        </span>
+        <span class="font-18 schedule-print-title">
+            <strong> {{ pageTitle }} </strong>
+            <br />
+            {{ printTitleText }}
+        </span>
+    </div>
+
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 responsive-toolbar-div hide-for-print" ng-if="!previewMode">
+        <div class="col-xs-12 toolbar-controls-wrapper">
+            <div class="btn-group schedule-nav-btn-group responsive-schedule-nav schedule-nav-margin schedule-nav-elements">
+                <button id="btnSchedulerNavJumpPrevWeek" check-auth-z="soar-sch-sch-view"
+                        ng-click="uxChangeDate('-week')" class="btn btn-default hide-for-print btn-scaled" ng-disabled="missingReqs == true"
+                        title="{{ 'Back {0}' | i18n:[routeParams.view == 'week' ? '4 weeks' : '1 week'] }}">
+                    <div>
+                        <i class="fa fa-chevron-left"></i>
+                        <i class="fa fa-chevron-left"></i>
+                    </div>
+                </button>
+                <button id="btnSchedulerNavJumpPrevDay" check-auth-z="soar-sch-sch-view"
+                        ng-click="uxChangeDate('-day')" class="btn btn-default hide-for-print btn-scaled" ng-disabled="missingReqs == true"
+                        title="{{ 'Back {0}' | i18n:[routeParams.view == 'week' ? '1 week' : '1 day'] }}">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <button id="btnToday" check-auth-z="soar-sch-sch-view" ng-click="uxChangeDate('today')"
+                        class="btn btn-default hide-for-print btn-scaled" ng-disabled="missingReqs == true || todayButtonDisabled">
+                    <div class="" ng-bind="::(schedulePageText.today)">
+                    </div>
+                </button>
+                <button id="btnSchedulerNavJumpNextDay" check-auth-z="soar-sch-sch-view"
+                        ng-click="uxChangeDate('day')" class="btn btn-default hide-for-print btn-scaled" ng-disabled="missingReqs == true"
+                        title="{{ 'Forward {0}' | i18n:[routeParams.view == 'week' ? '1 week' : '1 day'] }}">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+                <button id="btnSchedulerNavJumpNextWeek" check-auth-z="soar-sch-sch-view"
+                        ng-click="uxChangeDate('week')" class="btn btn-default hide-for-print btn-scaled" ng-disabled="missingReqs == true"
+                        title="{{ 'Forward {0}' | i18n:[routeParams.view == 'week' ? '4 weeks' : '1 week'] }}">
+                    <div>
+                        <i class="fa fa-chevron-right"></i>
+                        <i class="fa fa-chevron-right"></i>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Moved Prov/Room buttons -->
+            <div class="btn-group schedule-nav-btn-group-small schedule-nav-margin schedule-nav-elements responsive-schedule-nav">
+                <button id="btnProviderView" check-auth-z="soar-sch-sch-view"
+                        ng-click="setUpGroupView('provider')" class="btn btn-default btn-scaled"
+                        ng-class="{ 'soar-link-active': routeParams.group == 'provider' }"
+                        ng-disabled="missingReqs == true">
+                    <div class="iconAlignMiddle iconAlignMiddle-scaled" ng-bind="::(schedulePageText.provider)"></div>
+                </button>
+                <button id="btnRoomView" check-auth-z="soar-sch-sch-view" ng-click="setUpGroupView('room')"
+                        class="btn btn-default btn-scaled" ng-class="{ 'soar-link-active': routeParams.group == 'room' }"
+                        ng-disabled="missingReqs == true">
+                    <div class="iconAlignMiddle iconAlignMiddle-scaled" ng-bind="::(schedulePageText.room)"></div>
+                </button>
+            </div>
+            <!-- Appt Color/Prov Color buttons -->
+            <div class="btn-group schedule-nav-btn-group-small schedule-nav-margin responsive-schedule-nav" ng-if="routeParams.group == 'room' && ApptColorProvColorToggleFF">
+                <button id="btnApptColor" check-auth-z="soar-sch-sch-view" ng-click="updateUserDefaultSettings(constRoomViewAppointmentColorType.AppointmentColor, 5)"
+                        class="btn btn-default soar-link btn-scaled" ng-class="{ 'soar-link-active': roomViewAppointmentColorType === constRoomViewAppointmentColorType.AppointmentColor}"
+                        ng-disabled="missingReqs == true">
+                    <div class="iconAlignMiddle iconAlignMiddle-scaled" ng-bind="::(schedulePageText.apptColor)"></div>
+                </button>
+                <button id="btnProvColor" check-auth-z="soar-sch-sch-view" ng-click="updateUserDefaultSettings(constRoomViewAppointmentColorType.ProviderColor, 5)"
+                        ng-class="{ 'soar-link-active': roomViewAppointmentColorType === constRoomViewAppointmentColorType.ProviderColor }"
+                        class="btn btn-default soar-link btn-scaled">
+                    <div class="iconAlignMiddle iconAlignMiddle-scaled" ng-bind="::(schedulePageText.provColor)">
+                    </div>
+                </button>
+            </div>
+            <!-- there is a problem when this elements are hidden for print so we are not hiding them at the moment ... will have to see why later -->
+            <div class="schedule-nav-margin-top responsive-schedule-nav" ng-if="routeParams.group == 'room'">
+                <downgraded-room-dropdown-component [reorder-columns-changed]="reorderRoomColumnsList" (share-checked-list)="updateActiveResourcesForRoom($event)" (location-dropdown-loaded)="locationDropdownLoaded($event)">
+                </downgraded-room-dropdown-component>
+            </div>
+            <div class="schedule-nav-margin-top responsive-schedule-nav" ng-if="routeParams.group == 'provider'">
+                <downgraded-provider-on-schedule-dropdown-component [reorder-columns-changed]="reorderProviderColumnsList" (share-checked-list)="updateActiveResourcesForProvider($event)" (location-dropdown-loaded)="locationDropdownLoaded($event)"></downgraded-provider-on-schedule-dropdown-component>
+                <!--<multi-select-fixed-width id="Provider"
+                                      class=""
+                                      auth-z="'soar-sch-sch-view'"
+                                      list="localProviders"
+                                      selected="selectedFilter.selectProviders"
+                                      display-field="Name"
+                                      type="Providers"
+                                      open="multiSelectOpen"
+                                      id-field="UserCode"
+                                      initial-selection="initialProviderSelection"
+                                      ms-disabled="missingReqs == true">
+            </multi-select-fixed-width>-->
+            </div>
+            <div class="schedule-nav-margin-top responsive-schedule-nav">
+                <downgraded-location-dropdown-component [list]="locations" [global-selected-location]="globalSelectedLocation" [current-schedule-view]="currentScheduleView">
+                </downgraded-location-dropdown-component>
+                <!--<multi-select-fixed-width id="Location"
+                                      class=""
+                                      auth-z="'soar-sch-sch-view'"
+                                      list="locations"
+                                      selected="selectedFilter.selectedLocations"
+                                      display-field="displayText"
+                                      type="Locations"
+                                      open="locationMultiSelectOpen"
+                                      id-field="LocationId"
+                                      initial-selection="initialLocationSelection"
+                                      ms-disabled="locationDisabled == true"
+                                      is-grouped="true">
+            </multi-select-fixed-width>-->
+            </div>
+            <!-- Moved Day/Week buttons -->
+            <div class="btn-group schedule-nav-btn-group-small schedule-nav-margin schedule-nav-elements responsive-schedule-nav">
+                <button id="btnDayView2" check-auth-z="soar-sch-sch-view" ng-click="changeToDay()"
+                        class="btn btn-default soar-link btn-scaled" ng-class="{ 'soar-link-active': scheduler.view().name == 'day' }"
+                        ng-disabled="missingReqs == true">
+                    <div class="iconAlignMiddle iconAlignMiddle-scaled" ng-bind="::(schedulePageText.day)"></div>
+                </button>
+                <button id="btnWeekViewScope" check-auth-z="soar-sch-sch-view" ng-click="changeToWeek()"
+                        ng-class="{ 'soar-link-active': scheduler.view().name == 'week' }"
+                        class="btn btn-default soar-link btn-scaled">
+                    <div class="iconAlignMiddle iconAlignMiddle-scaled" ng-bind="::(schedulePageText.week)">
+                    </div>
+                </button>
+            </div>
+            <div class="display-privacymode-label">
+                <span class="font-16 text-nowrap" ng-bind="::(schedulePageText.privacyMode)"></span>
+            </div>
+            <div class="btn-group schedule-nav-btn-group-small responsive-schedule-nav schedule-nav-margin">
+                <button id="btnPrivacyModeOn" check-auth-z="soar-sch-sch-view" ng-click="updateUserDefaultSettings(true, 4)"
+                        class="btn btn-default soar-link btn-scaled" ng-class="{ 'soar-link-active': isScheduleInPrivacyMode === true}"
+                        ng-disabled="missingReqs == true">
+                    <div class="iconAlignMiddle iconAlignMiddle-scaled" ng-bind="::(schedulePageText.on)"></div>
+                </button>
+                <button id="btnPrivacyModeOff" check-auth-z="soar-sch-sch-view" ng-click="updateUserDefaultSettings(false, 4)"
+                        ng-class="{ 'soar-link-active': isScheduleInPrivacyMode === false }"
+                        class="btn btn-default soar-link btn-scaled">
+                    <div class="iconAlignMiddle iconAlignMiddle-scaled" ng-bind="::(schedulePageText.off)">
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-9" style="text-align:right;" ng-if="previewMode">
+        <span class="font-22" style="width:100%;">
+            <strong style="margin-right:10%;" ng-bind="(mockAppt.ProposedDuration) + ' minutes'"></strong>
+            <strong style="margin-right:10%;" ng-bind=" mockAppt.AppointmentType.Name"></strong>
+            <strong style="margin-right:10%;" ng-bind="mockAppt.Provider.Name"></strong>
+            <strong style="margin-right:2%;" ng-if="mockAppt.ExaminingDentist != null"
+                    ng-bind="mockDentist.Name"></strong>
+        </span>
+    </div>
+</div>
+<div id="scheduler-wrapper" class="schedule2">
+    <div id="scheduler-slideout-wrapper" class="hide-for-print">
+        <!-- CALENDAR -->
+        <div>
+            <calendar-picker input-id="inpcalendarpicker" auth-z="'soar-sch-apt-svcs'" open="calendarPickerOpen"
+                             hide-control="hideCalendarPicker"
+                             date-var="calendarPickerDate" valid="validDate" max-date="calendarPickerMaxDate"
+                             min-date="calendarPickerMinDate" disable-today="todayButtonDisabled"></calendar-picker>
+        </div>
+        <!-- CLIPBOARD APPOINTMENTS -->
+        <div>
+            <button class="btn-unscheduled-appts"
+                    ng-click="toggleClipboard()" ng-if="!showClipboard">
+                <svg-icon name="moreIcon" icon-height="16" icon-width="16"></svg-icon>
+                Clipboard ({{
+(pinnedAppointments.length || '0')
+                }} Unscheduled)
+            </button>
+            <div class="clipboard-appointments" ng-if="showClipboard">
+                <button class="btn-unscheduled-appts"
+                        ng-click="toggleClipboard()">
+                    <svg-icon name="lessIcon" icon-height="16" icon-width="16"></svg-icon>
+                    Clipboard ({{(pinnedAppointments.length || '0')}} Unscheduled)
+                </button>
+                <div class="clipboard-appointments-content">
+                    <div class="row" ng-if="pinnedAppointments.length > 0">
+                        <div class="col-xs-12">
+                            <div class="list-group row">
+                                <a id="unscheduledClipboardAppointment"
+                                   class="list-group-item col-xs-12" ng-repeat="data in pinnedAppointments | orderBy:prioritizeSort:true track by $index"
+                                   ng-class="{'clipboardItemBorder': $index == 0 && openClipboard}"
+                                   style="border-left-style: solid; border-left-width:10px; border-left-color: {{ data.AppointmentType? data.AppointmentType.AppointmentTypeColor : 'white'}}"
+                                   ng-dblclick="editAppointment(data)"
+                                   ng-mousedown="selectUnscheduledAppointment(data)">
+                                    <!-- k-cursor-offset must be greater than -10 on top. If not, date/times are not selected on 5 minute appointments -->
+                                    <div class="row" kendo-draggable id="draggable" k-hint="draggableHint" k-cursor-offset="{ top: -9, left: -10 }" k-group="appointment">
+                                        <div class="col-xs-12 truncate">
+                                            <button class="btn btn-link pull-right padding-none" style="margin-right:10px;" id="btnDragArrow"><span><i class="fas fa-arrows-alt fa-lg"></i></span></button>
+                                            <!-- <button class="btn btn-link pull-left padding-none" id="btnSearchBino"><span><i class="fa fa-binoculars fa-lg"></i></span></button> --->
+                                            <span id="lblClipboardUnscheduledName{{$index}}">
+                                                <!-- Patient Name -->
+                                                <strong style="margin-left: 10px;" ng-if="data.patientCode === ''">{{ data.Patient.FirstName }} {{ data.Patient.LastName }}</strong>
+                                                <!-- Patient Age -->
+                                                <br />
+                                                <strong style="margin-left: 10px;" ng-if="data.patientCode === ''">{{ data.Patient && data.Patient.DateOfBirth ? (data.Patient.DateOfBirth | age) : '' }} </strong>
+                                                <!-- Privacy View Field -->
+                                                <strong style="margin-left: 10px;" ng-if="data.patientCode !== ''">{{ data.patientCode }}</strong>
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-12 truncate">
+                                            <span style="margin-left: 10px;" id="lblClipboardNoAppointmentType{{$index}}" class="text-muted" ng-if="!data.AppointmentType">
+                                                {{ ::('No Appointment Type' | i18n) }}
+                                            </span>
+                                            <span style="margin-left: 10px;" id="lblClipboardUnscheduledAppointmentType{{$index}}" ng-if="data.AppointmentType">
+                                                {{ data.AppointmentType.Name }}
+                                            </span>
+                                            <span id="lblClipboardUnscheduledAppointmentTypeDuration{{$index}}" ng-if="data.ProposedDuration">
+                                                ({{ data.ProposedDuration }} {{ ::('mins' | i18n) }})
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-12 truncate">
+                                            <span style="margin-left: 10px;" id="lblClipboardExaminingDentist{{$index}}" ng-if="data.ExaminingDentist">
+                                                {{ data.examiningDentistName }}
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-12 truncate">
+                                            <span style="margin-left: 10px;" id="lblClipboardAnyProvider{{$index}}" ng-if="!data.UserId">{{ ::('Any Provider' | i18n) }}</span>
+                                            <span style="margin-left: 10px;" id="lblClipboardUnscheduledProvider{{$index}}" ng-if="data.UserId">
+                                                {{ data.providerName }}
+                                            </span>
+                                            <span ng-if="data.patientCode === ''">, </span>
+                                            <span id="lblClipboardUnscheduledAppointmentAmount{{$index}}" ng-if="data.patientCode === ''">{{ data.amount | currency }}</span>
+                                            <span ng-repeat="alert in data.Alerts" class="pull-right">
+                                                <span id="lblClipboardUnscheduledAlert{{$index}}" ng-if="$index < 4" class="error fa {{ alerts.getClassById(alert.SymbolId) }}" title="{{ alert.Description }}"></span>
+                                                <span id="lblClipboardUnscheduledAlertTotal" ng-if="$index >= 4 && $last">+{{ $last - 4 }}</span>
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-12 truncate">
+                                            <button check-auth-z="soar-sch-sptapt-delete" id="btnClipboardUnscheduledAppointmentDelete" ng-click="showRemoveClipboardAppointmentModal(data)" class="btn btn-link pull-right padding-none" style="margin-right:10px;"><span><i class="far fa-times-circle fa-lg"></i></span></button>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- SEARCH APPOINTMENTS -->
+            <div class="form-group has-feedback" ng-hide="true">
+                <!--need to hide for bug 260230-->
+                <input class="form-control" type="text" placeholder="Search Appointments" id="searchAppts" />
+                <i class="glyphicon glyphicon-search form-control-feedback"></i>
+            </div>
+            <!-- DISPLAY SLIDERS -->
+            <div class="scheduler-slider-container" ng-show="!showClipboard">
+                <!-- provider slider -->
+                <div class="scheduler-slider slider-unscheduled-appts"
+                     ng-show="routeParams.group == 'provider' && localProviders.length > 0" ng-cloak>
+
+                    <div class="display-slider-label">
+                        <span class="font-16 text-nowrap" ng-bind="::(schedulePageText.maxProviderDisplay)"></span>
+                    </div>
+                    <div class="scheduler-slider-icon">
+                        <span class="fa fa-sort rot90"></span>
+                    </div>
+                    <div class="scheduler-slider-input">
+                        <input id="inpProviderColumnSlider" check-auth-z="soar-sch-apt-svcs" type="range" min="1"
+                               ng-attr-max="{{providerMaxLength}}" step="1" ng-model="sliderValues.providersToShow"
+                               ng-disabled="userSettingsBeingSaved"
+                               ng-mouseup="updateUserDefaultSettings(sliderValues.providersToShow, 1)" />
+                    </div>
+                    <output class="slider-counter" for="inpProviderColumnSlider" id="providerSliderLabel"
+                            ng-bind="sliderValues.providersToShow"></output>
+                </div>
+                <!-- room slider -->
+                <div class="scheduler-slider slider-unscheduled-appts"
+                     ng-show="routeParams.group == 'room' && treatmentRooms.length > 0" ng-cloak>
+                    <div class="display-slider-label">
+                        <span class="font-16 text-nowrap" ng-bind="::(schedulePageText.maxRoomDisplay)"></span>
+                    </div>
+                    <div class="scheduler-slider-icon">
+                        <span class="fa fa-sort rot90"></span>
+                    </div>
+                    <div class="scheduler-slider-input">
+                        <input ng-if="sliderValues && sliderValues.roomsToShow && roomMaxLength > 0"
+                               id="inpRoomColumnSlider" check-auth-z="soar-sch-apt-svcs" type="range" min="1"
+                               ng-attr-max="{{roomMaxLength}}" step="1" ng-model="sliderValues.roomsToShow"
+                               ng-disabled="userSettingsBeingSaved"
+                               ng-mouseup="updateUserDefaultSettings(sliderValues.roomsToShow, 2)" />
+                    </div>
+                    <output class="slider-counter" for="inpRoomColumnSlider" id="roomSliderLabel"
+                            ng-bind="sliderValues.roomsToShow"></output>
+                </div>
+                <div class="scheduler-slider slider-unscheduled-appts" ng-cloak>
+                    <div class="display-slider-label">
+                        <span class="font-16 text-nowrap">Hour Display</span>
+                    </div>
+                    <div class="scheduler-slider-icon">
+                        <span ng-bind="::(schedulePageText.less)"></span>
+                    </div>
+                    <div class="scheduler-slider-input">
+
+                        <input id="inpTimeIncrementSlider" check-auth-z="soar-sch-apt-svcs" type="range" min="0" max="4"
+                               step="1" ng-model="sliderValues.activeIncrementIndex"
+                               ng-disabled="userSettingsBeingSaved"
+                               ng-mouseup="updateUserDefaultSettings(sliderValues.activeIncrementIndex, 3)" />
+                    </div>
+                    <div class="scheduler-slider-icon-right">
+                        <span ng-bind="::(schedulePageText.more)"></span>
+                    </div>
+                </div>
+                <!-- this one is just for show -->
+                <div class="scheduler-slider text-muted slider-unscheduled-appts"
+                     ng-show="routeParams.group != 'provider' && routeParams.group != 'room'">
+                    <div class="scheduler-slider-icon">
+                        <span class="fa fa-sort rot90"></span>
+                    </div>
+                    <div class="scheduler-slider-input">
+                        <input id="inpProviderColumnSlider" check-auth-z="soar-sch-apt-svcs" type="range" min="1"
+                               ng-attr-max="{{providers.length}}" step="1" ng-model="sliderValues.providersToShow"
+                               ng-disabled="true" />
+                    </div>
+                </div>
+            </div>
+            <div ng-if="!showClipboard">
+                <button class="btn btn-default slider-order-columns-btn" check-auth-z="soar-sch-apt-svcs"
+                        icon="fa-arrows-alt" ng-click="toggleReorderCols()" id="btnOrderColumns"
+                        ng-bind="::(schedulePageText.orderColumns)"></button>
+            </div>
+        </div>
+    </div>
+    <div id="scheduler-content-wrapper">
+        <div class="container-fluid no-space-on-print">
+            <div class="row no-space-on-print">
+                <div class="col-lg-12 no-space-on-print">
+                    <table class="k-scheduler-layout k-scheduler-dayview k-scrollbar-h">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="k-scheduler-times">
+                                        <div id="topnav" class="slider-top-nav-show hide-for-print">
+                                            <button class="btn soar-link icon-button font-14" ng-click="toggleView(!toggle)"
+                                                    ng-disabled="showReorderCols"
+                                                    ng-bind="toggle == true ? schedulePageText.slideInText : schedulePageText.slideOutText"></button>
+                                            <div id="topnav-icons" class="dropdown slider-top-nav-icons-show">
+                                                <button class="btn soar-link icon-button" type="button"
+                                                        ng-click="printScheduler()">
+                                                    <i class="fa fa-print fa-lg"></i>
+                                                </button>
+                                                <button class="btn soar-link icon-button" type="button"
+                                                        ng-click="showFilters()" check-auth-z="soar-sch-apt-svcs">
+                                                    <i class="fa fa-binoculars fa-lg"></i>
+                                                </button>
+                                                <div class="btn-group" uib-dropdown>
+                                                    <button id="navSettings" class="btn soar-link icon-button"
+                                                            title="Settings" type="button" uib-dropdown-toggle
+                                                            ng-disabled="disabled">
+                                                        <i class="fas fa-cog fa-lg hide-for-print"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu model-top" uib-dropdown-menu role="menu"
+                                                        aria-labelledby="navSettings">
+                                                        <li>
+                                                            <a id="btnProviderHours" ng-href="{{ ::providerHoursUrl}}"
+                                                               check-auth-z="soar-sch-swkstp-view"
+                                                               ng-bind="::(schedulePageText.providerHours)"></a>
+                                                        </li>
+                                                        <li>
+                                                            <a id="btnIdealDays" ng-href="{{ ::providerHoursIdealDayUrl}}"
+                                                               check-auth-z="soar-sch-swkstp-view"
+                                                               ng-bind="::(schedulePageText.idealDayTemplates)"></a>
+                                                        </li>
+                                                        <li>
+                                                            <a id="btnHolidays" ng-href="{{ ::holdaysUrl}}"
+                                                               check-auth-z="soar-sch-schhol-view"
+                                                               ng-bind="::(schedulePageText.setHolidays)"></a>
+                                                        </li>
+                                                        <li>
+                                                            <a id="btnSettings" ng-href="{{ ::scheduleSettingsUrl}}"
+                                                               check-auth-z="soar-biz-biz-edit"
+                                                               ng-bind="::(schedulePageText.timeIncrements)"></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="k-scheduler-table scheduler-slider-table">
+                                            <tbody>
+                                                <tr class="scheduler__customHeaderRow"></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- current custom header for the provider and room 'Day' view
+                                        headers for the weekly view are the native k-scheduler-header k-state-default-->
+                                    <div class="k-scheduler-header k-state-default2" ng-if="schedViewName !== 'week'">
+                                        <!--still working on this style changing temporarily to New for now-->
+                                        <div class="k-scheduler-header-wrap">
+                                            <table class="scheduler__customHeaderTable">
+                                                <tbody>
+                                                    <tr class="scheduler__customHeaderRow">
+                                                        <th class="k-slot-cell" colspan="1"
+                                                            ng-repeat="resource in activeResources">
+                                                            <div class="scheduler__customHeaderContainer">
+                                                                <div class="scheduler__customHeaderPrimaryRow">
+                                                                    <span class="scheduler__customHeaderLeftArrowContainer hide-for-print"
+                                                                          ng-if="$index == 0">
+                                                                        <a id="btnShiftRoomsLeft"
+                                                                           check-auth-z="soar-sch-sch-view"
+                                                                           class="soar-link"
+                                                                           ng-click="createQueue('shift', [scheduler.options.group.resources[0] == 'provider' ? -sliderValues.providersToShow : -sliderValues.roomsToShow])">
+                                                                            <span class="fa fa-arrow-left"></span>
+                                                                        </a>
+                                                                    </span>
+
+                                                                    <span id="lblResource{{$index}}Name"
+                                                                          class="scheduler__customHeaderResourceName">
+                                                                        <b ng-bind="resource.text"></b>
+                                                                        <!-- multipleLocationsSelected indicates multiple locations selected, so show locationAbbr -->
+                                                                        <span ng-if="resource.locationAbbr && multipleLocationsSelected === true"
+                                                                              class="scheduler__customHeaderResourceLocationName"
+                                                                              uib-tooltip="{{resource.locationAbbr}}"
+                                                                              style="display:block"
+                                                                              ng-bind="resource.locationAbbr"></span>
+                                                                    </span>
+
+                                                                    <span class="scheduler__customHeaderRightArrowContainer hide-for-print"
+                                                                          ng-if="$index == activeResources.length - 1">
+                                                                        <a id="btnShiftRoomsRight"
+                                                                           check-auth-z="soar-sch-sch-view"
+                                                                           class="soar-link"
+                                                                           ng-click="createQueue('shift', [scheduler.options.group.resources[0] == 'provider' ? sliderValues.providersToShow : sliderValues.roomsToShow])">
+                                                                            <span class="fa fa-arrow-right"></span>
+                                                                        </a>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="scheduler__customHeaderSecondaryRow">
+                                                                    <div class="text-center"
+                                                                         ng-show="resource.isDentist && routeParams.view != 'week'">
+                                                                        <span ng-if="resource.isDentist"
+                                                                              class="scheduler__secondaryRowViewButtonContainer hide-for-print"
+                                                                              ng-init="resource.isInRegularView">
+                                                                            <button type="button"
+                                                                                    id="btnRegular{{$index}}"
+                                                                                    check-auth-z="soar-sch-sch-view"
+                                                                                    class="scheduler__secondaryRowViewButton"
+                                                                                    ng-click="createQueue('provider', [resource, 1]); isRegular = true;"
+                                                                                    ng-class="{'soar-link-active': resource.isInRegularView == true}"
+                                                                                    ng-bind="::(schedulePageText.regular)"></button>
+                                                                            <span>|</span>
+                                                                            <button type="button"
+                                                                                    id="btnHygiene{{$index}}"
+                                                                                    check-auth-z="soar-sch-sch-view"
+                                                                                    class="scheduler__secondaryRowViewButton"
+                                                                                    ng-click="createQueue('provider', [resource, 2]); isRegular = false;"
+                                                                                    ng-class="{'soar-link-active': resource.isInRegularView == false }"
+                                                                                    ng-bind="::(schedulePageText.hygiene)"></button>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="reorder" ng-show="showReorderCols">
+                        <div class="pull-right">
+                            <button id="btnCloseReorderDlg" class="btn btn-link" ng-click="updateColumnOrder()">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="reorder-header">
+                            <h4>Reorder Columns</h4>
+                        </div>
+                        <div class="reorder-content">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <ul class="list-unstyled table-hover reorder-content-list">
+                                        <li ng-repeat="item in list" id="lblColumn{{$index}}"
+                                            class="reorder-content-list-item"
+                                            ng-class="{ 'bg-success': dragIndex == $index, 'bg-info': (dragIndex == -1 && hoverIndex == $index), 'hovering-up': (dragIndex > -1 && hoverIndex == $index && dragIndex > hoverIndex), 'hovering-down': (dragIndex > -1 && hoverIndex == $index && dragIndex < hoverIndex) }"
+                                            ng ng-mouseenter="mouseEnter($index, $event)"
+                                            ng-mousedown="mouseDown($index, $event)"
+                                            ng-mouseup="mouseUp($index, $event)">
+                                            <!-- class: drag-hint -->
+                                            <!--This ng-if statement is hiding duplicate providers in provider dropdown list. We need duplicates so that we can
+                                            save the providers for the locations selected in the proper order in User Settings. We have to check for room to make sure rooms show
+                                            up when in room view.-->
+                                            <div class="reorder-content-list-item-content" ng-if="(routeParams.group == 'provider' && ($index === 0)) || (routeParams.group == 'provider' && ($index > 0) && (item.ProviderId !== list[$index-1].ProviderId)) || (routeParams.group == 'room')">
+                                                <div class="row">
+                                                    <button class="btn soar-link icon-button pull-left reorder-content-list-item-content-button"
+                                                            type="button">
+                                                        <i class="fas fa-arrows-alt"></i>
+                                                    </button>
+                                                    <h5 ng-bind-html="item.Name"></h5>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scheduler-grid-container" ng-init="initialize()" id="scheduler-grid"
+                         style="height:100%;">
+                        <!-- scheduler -->
+                        <!-- NOTE: k-group needs to be the same value as the kendo-draggable k-group -->
+                        <div id="scheduler"
+                             class="scheduler__hoursZoom"
+                             ng-class="schedulerHoursZoomClass"
+                             kendo-scheduler="scheduler"
+                             k-options="schedulerOptions"
+                             kendo-droptarget k-drop="dropToSchedule"
+                             k-group="appointment"
+                             ng-click="setBlur()"
+                             ng-mousedown="beginDrag($event)"
+                             ng-mouseover="mouseMove($event)"
+                             ng-mouseup="endDrag($event)"
+                             ng-mouseleave="leaveScheduler($event)"
+                             tabindex="1">
+
+                            <!-- event actions -->
+                            <div k-event-template class="event appointment" ng-class="dataItem.AppointmentId"
+                                 check-auth-z="{{ dataItem.Classification == 1 ? 'soar-sch-schblk-edit' : 'soar-sch-sptapt-edit' }}"
+                                 ng-click="editAppointment(dataItem, $event)"
+                                 ng-mouseover="enterAppointment(dataItem)"
+                                 ng-mousedown="stopEverythingIfSavingAppointment($event)"
+                                 ng-mouseleave="leaveAppointment(dataItem)" tabindex="1"
+                                 style="background-color: rgba( {{dataItem.typeColor.Display}}, 0.35) !important; color: {{ dataItem.typeColor.Font}} !important; -webkit-print-color-adjust: exact;">
+
+                                <div class="event-appointment-line"
+                                    style="padding-left: 2px; background-color: rgba( {{dataItem.typeColor.Display}}, 1.0) !important; z-index: 10; -webkit-print-color-adjust: exact;"></div>
+                                <!-- keep this div it is used to show provider appointment coloring on provider view-->
+                                <div id="providerTime" class="hide-provider"></div>
+                                <div id="roomViewProviderTime" ng-if="ApptColorProvColorToggleFF && routeParams.group == 'room' && roomViewAppointmentColorType.toLowerCase() === constRoomViewAppointmentColorType.ProviderColor.toLowerCase()  && dataItem.Providers && dataItem.Providers.length > 0">
+                                    <span ng-repeat="providerTime in dataItem.ProviderAppointments"
+                                          id="provider_time_{{$index}}"
+                                          ng-dblclick="editAppointment(dataItem, $event)"
+                                          style="background: {{getTimeslotBackgroundColor(dataItem, providerTime)}}; z-index: 9; display: inline-block; position: absolute; top: {{getTimeslotTop(dataItem, providerTime)}}; left: 0; width: 100%; height: {{getTimeslotHeight(dataItem, providerTime)}};"
+                                    >
+                                    </span>
+                                </div>
+
+                                <div id="appointment-status-icons" ng-mouseover="stopEverythingIfSavingAppointment($event)" ng-mousedown="stopEverythingIfSavingAppointment($event)">
+
+                                    <div class="scheduler-event-data-container"
+                                         ng-if="schedViewName === 'day' && dataItem.Classification !== 1 && dataItem.type !== 'lunch'"
+                                         ng-style="{ 'color': dataItem.AppointmentTypeFontColor }">
+
+                                        <div id="appointmentData" class="appointment-data-container">
+                                            <div>
+                                                <div style="word-break: break-all;">
+                                                    <span class="appointment-icon-container" onclick="event.stopPropagation(); window.event.cancelBubble = true;"
+                                                          ng-if="!dataItem.isPreview">
+                                                        <button class="btn btn-default event-appointment-status fa"
+                                                                ng-if="DisableStatusIconFeatureFlag"
+                                                                uib-tooltip="Appointment is missing information" tooltip-append-to-body="true" tooltip-placement="right" tooltip-enable="dataItem.IsProviderInvalid === true"
+                                                                id="appointment-status" ng-show="dataItem.Classification < 1 && dataItem.StatusIcon > ''"
+                                                                ng-class="dataItem.StatusIcon"
+                                                                ng-click="clickStatusIcon($event, dataItem.AppointmentId)"
+                                                                ng-disabled="dataItem.IsProviderInvalid === true || dataItem.AppoinmentIsCheckedOutWithEncounter === true"></button>
+                                                        <button class="btn btn-default event-appointment-status fa"
+                                                                ng-if="!DisableStatusIconFeatureFlag"
+                                                                id="appointment-status" ng-show="dataItem.Classification < 1 && dataItem.StatusIcon > ''"
+                                                                ng-class="dataItem.StatusIcon"
+                                                                ng-click="clickStatusIcon($event, dataItem.AppointmentId)"
+                                                                ng-disabled="disableAppointmentCardStatusDropdown(dataItem) === true"></button>
+                                                    </span>
+                                                    <span class="appointment-icon-container" onclick="event.stopPropagation(); window.event.cancelBubble = true;"
+                                                          ng-if="dataItem.isPreview">
+                                                        <button class="btn btn-default event-appointment-status fa fa-eye"
+                                                                disabled></button>
+                                                        <button class="btn btn-default event-appointment-status fa fa-plus"
+                                                                title="Schedule Appointment"
+                                                                ng-click="editAppointment(dataItem)"></button>
+                                                    </span>
+                                                    <span class="appointment-card-user" id="{{'patientName' + dataItem.AppointmentId}}" ng-if="isScheduleInPrivacyMode === false">
+                                                        <b ng-bind-html="dataItem.patientDisplayName"></b>&nbsp;
+                                                    </span>
+                                                    <span class="appointment-card-user" id="{{'patientCode' + dataItem.AppointmentId}}" ng-if="isScheduleInPrivacyMode === true">
+                                                        <b ng-bind-html="dataItem.patientCode"></b>&nbsp;
+                                                    </span>
+                                                    <span class="appointment-card-user" ng-show="dataItem.Patient && dataItem.Patient.DateOfBirth">
+                                                        {{ dataItem.Patient.DateOfBirth | age }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!-- alertsElement -->
+                                            <div class="scheduler-event-data truncate-event-data">
+                                                <div class="appointment-alerts-container flags flex flex-center">
+                                                    <!-- if TypeId 3 Pre-medications-->
+                                                    <span ng-if="dataItem.premedicationDescription !== null"
+                                                          class="patAlerts__svgIcon fi-premed scheduler-event-alert"
+                                                          title="{{ dataItem.premedicationDescription }}"></span>
+                                                    <!-- if TypeId 2 Medical Alerts ?? -->
+                                                    <span ng-if="dataItem.medicalAlertText"
+                                                          class="fa fa-lg scheduler-event-alert scheduler-event-alert-icon flex-shrink-1"
+                                                          ng-class="dataItem.medicalAlertClass"
+                                                          title="{{ dataItem.medicalAlertText }}"></span>
+                                                    <!-- if TypeId 1 Allergy -->
+                                                    <span ng-if="dataItem.allergyText"
+                                                          class="patAlerts__svgIcon fi-allergies scheduler-event-alert flex-shrink-1"
+                                                          title="{{ dataItem.allergyText }}"></span>
+                                                    <!-- (for each) Master Flags -->
+                                                    <span ng-if="dataItem.masterFlags !== null && dataItem.masterFlags.length > 0"
+                                                          ng-repeat="masterFlag in dataItem.masterFlags">
+                                                        <span class="fa fa-lg scheduler-event-alert flex-shrink-1"
+                                                              ng-class="masterFlag.class"
+                                                              title="{{ masterFlag.desc }}"></span>
+                                                    </span>
+                                                    <!-- Custom Flag -->
+                                                    <span ng-if="dataItem.customFlagText !== null"
+                                                          class="fa fa-lg scheduler-event-alert scheduler-event-alert-icon flex-shrink-1"
+                                                          ng-class="dataItem.customFlagClass"
+                                                          title="{{ dataItem.customFlagText }}"></span>
+                                                    <!-- ... Notes -->
+                                                    <span ng-if="dataItem.noteAlertText !== null"
+                                                          class="far fa-lg fa-sticky-note scheduler-event-alert scheduler-event-alert-icon flex-shrink-1"
+                                                          title="{{ dataItem.noteAlertText }}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="scheduler-event-planned-services">
+                                                <span ng-bind-html="dataItem.concatinatedServices"></span>
+                                            </div>
+                                            <!-- 4: timeElement -->
+                                            <div class="scheduler-event-data truncate-event-data">
+                                                <span ng-if='dataItem.hasConflicts'
+                                                      id='apptWarning{{dataItem.AppointmentId}}'
+                                                      class="warning-format">
+                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                </span>
+                                                <span ng-bind="dataItem.displayTime"></span>
+                                            </div>
+                                            <!-- 5: providerRoomElement -->
+                                            <div class="scheduler-event-data"
+                                                 ng-if="dataItem.providerName != '' && scheduler.options.group.resources[0] == 'room'">
+                                                <span ng-bind-html="dataItem.providerName"></span>
+                                            </div>
+                                            <div class='scheduler-event-data'
+                                                 ng-if="scheduler.options.group.resources[0] == 'provider'">
+                                                <span ng-bind="dataItem.locationName"></span> : <strong ng-bind-html="dataItem.treatmentRoomName"></strong>
+                                            </div>
+                                            <!-- 6: providerHygieneViewElements -->
+                                            <div class='scheduler-event-data' ng-if="scheduler.options.group.resources[0] == 'provider'">
+                                                <span ng-if="dataItem.examiningDentistName === '' || !dataItem.showExaminingDentist" ng-bind-html="dataItem.providerName"></span>
+                                                <span ng-if="dataItem.examiningDentistName !== '' && dataItem.showExaminingDentist" ng-bind-html="dataItem.examiningDentistName"></span>
+                                            </div>
+
+                                            <!-- 7: appointmentEstimate -->
+                                            <div class="scheduler-event-data" ng-show="isScheduleInPrivacyMode === false" ng-bind="dataItem.amount">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event-center event-container"
+                                         ng-if="dataItem.type == 'lunch' || dataItem.Classification == 1">
+                                        <span ng-if="dataItem.type == 'lunch'" class="truncate"
+                                              ng-bind="(dataItem.Name | uppercase)"></span>
+                                        <span ng-if="dataItem.Classification == 1 && dataItem.Description && schedViewName === 'day'"
+                                              style="width:95%; white-space:normal;word-wrap:break-word"
+                                              ng-bind="'Blocked: ' + dataItem.Description "></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div k-all-day-event-template></div>
+                            <div k-major-time-header-template class="time-header">
+                                #: kendo.toString(date, 'h:mm tt').toLowerCase() #
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-if="newTarget">
+    <overview id="overview"
+              height="200" width="0"
+              target="newTarget"
+              hide-arrow="true">
+        <schedule-appointment-status id="inpSchedulerAppointmentStatus" appointment="newTarget.Data"
+                                     person="newTarget.Data.Patient"
+                                     time-increment="TimeIncrement" class="schedule-appointment-status pull-right"
+                                     open-list="true" on-change="appointmentStatusChanged" \
+                                     before-delete="beforeStatusChangeDelete"
+                                     auth-z="soar-sch-sptapt-edit"></schedule-appointment-status>
+
+    </overview>
+</div>
+<div ng-if="showOpenTimeSearch">
+    <open-time-search minutes-string="minutesString"
+                      appointment-types="appointmentTypes"
+                      treatment-rooms="treatmentRooms"
+                      clipboard-data="clipboardData"
+                      clear-slots="clearSlots"
+                      selected-locations="selectedFilter.selectedLocations"
+                      providers="localProviders"
+                      preview-param="previewParam"
+                      on-schedule="scheduleAppointment()"
+                      on-preview="previewAppointment()"
+                      current-schedule-view="currentScheduleView"
+                      providers-by-location="providersByLocation">
+    </open-time-search>
+</div>
+
+<slot-preview-list open-time-slots="openTimeSlots"
+                   preview-param="previewParam"
+                   search-group="searchGroup"
+                   on-preview="onPreview()"
+                   on-close="closePreviewSlideout()">
+</slot-preview-list>
+
+<div id="newAppointmentBottom">
+
+    <div class="schedule-tooltip create-block-tooltip" ng-if="displayBlockTooltip">Create Block</div>
+
+
+    <button id="btnOpenBlockBottom" check-auth-z="soar-sch-sptapt-add"
+            ng-click="openNewBlockModal()" class="btn btn-default btn-cal hidden-print"
+            ng-disabled="missingReqs == true"
+            ng-hide="isAppointmentViewVisible"
+            ng-mouseover="displayBlockTooltip=true"
+            ng-mouseout="displayBlockTooltip=false">
+        <i class="fa fa-ban"></i>
+    </button>
+
+    <family-scheduling-modal id="btnOpenFamilyBottom" ng-hide="isAppointmentViewVisible"></family-scheduling-modal>
+
+    <div class="schedule-tooltip create-unscheduled-tooltip" ng-if="displayUnscheduledTooltip">Schedule New Appointment</div>
+
+    <button id="btnOpenUnscheduledBottom" check-auth-z="soar-sch-sptapt-add"
+            ng-click="openNewUnscheduledModal()" class="btn btn-default btn-cal hidden-print"
+            ng-disabled="missingReqs == true"
+            ng-hide="isAppointmentViewVisible"
+            ng-mouseover="displayUnscheduledTooltip=true"
+            ng-mouseout="displayUnscheduledTooltip=false">
+        <svg-icon name="individualScheduleIcon"></svg-icon>
+    </button>
+</div>

@@ -1,0 +1,343 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<div class="patient-transaction-print">
+    <table >
+        <tr class="patient-header">
+            <td>
+                {{ printDisplayDate | date: 'MM/dd/yyyy' }} - {{ printDisplayDate | date: 'hh:mm' }}
+            </td>
+            <td class="center-content">
+                <h4>{{ practiceName }}</h4>
+            </td>
+            <td *ngIf="printOptions" id="divUserCode{{i}}" name="divUserCode" class="pull-right">
+                {{ printOptions.UserCode }}
+            </td>
+        </tr>
+        <tr class="patient-header">
+            <td></td>
+            <td class="center-content" id="divPrintHeader">
+                <h2>{{ 'Transaction History' | translate }} </h2>
+            </td>
+            <td id="divPrintHeader">
+                <div class="pull-right no-print">
+                    <app-button id="btnCancel" (onClick)="close()" buttonLabel="{{ 'Cancel' | translate }}"
+                        variation="secondary">
+                    </app-button>
+                    <app-button id="btnPrintReport" [isDisabled]="disablePrint" class="margin-left-5"
+                        (onClick)="print()" buttonLabel="{{'Print' | translate }}" variation="primary">
+                    </app-button>
+                </div>
+            </td>
+        </tr>
+        <tr class="patient-header">
+            <td></td>
+            <td *ngIf="printOptions" class="center-content" id="trxhResponsibleParty">
+                {{ printOptions.ResponsiblePartyInfo }}>
+            </td>
+            <td></td>
+        </tr>
+        <tr class="patient-header">
+            <td></td>
+            <td class="center-content" id="trxhDateRange" *ngIf="printOptions && printOptions.FilterDateRange">
+                {{ printOptions.FilterDateRange }}
+            </td>
+            <td></td>
+        </tr>
+    </table>    
+
+    <table class="transaction-history-table" *ngIf="printOptions">
+        <thead *ngIf="(transactionHistories)">
+            <tr class="transaction-history grid header">
+                <th class="txhDate" id="trxhDateHeader">
+                    {{'Date' | translate }}
+                </th>
+                <th class="txhPatientName" id="trxhPatientHeader">
+                    {{'Patient' | translate }}
+                </th>
+                <th class="txhProvider" id="trxhProviderHeader">
+                    {{'Provider'| translate }}
+                </th>
+                <th class="txhLocation" id="trxhLocationHeader">
+                    {{'Location'| translate }}
+                </th>
+                <th class="txhType" id="trxhTypeHeader">
+                    {{'Type'| translate }}
+                </th>
+                <th class="txhDescription" id="trxhDescriptionHeader">
+                    {{'Description'| translate }}
+                </th>
+                <th class="txhTooth" id="trxhToothHeader">
+                    {{'Tooth'| translate }}
+                </th>
+                <th class="txhArea" id="trxhAreaHeader">
+                    {{'Area'| translate }}
+                </th>
+                <th class="txhAmount" id="trxhAmountHeader">
+                    {{'Amount'| translate }}
+                </th>
+                <th class="txhAllowedAmount" id="trxhAllowedAmountHeader">
+                    {{'Allowed Amt'| translate }}
+                </th>
+                <th class="txhInsAdjAmount" id="trxhInsAdjAmountHeader">
+                    {{'Ins Adj'| translate }}
+                </th>
+                <th class="txhEstIns" id="trxhEstInsHeader">
+                    {{'Est Ins'| translate }}
+                </th>
+                <th class="txhBalance" id="trxhBalanceHeader">
+                    {{'Balance'| translate }}
+                </th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="(transactionHistories && transactionHistories.length > 0)">
+            <tr *ngFor="let row of transactionHistories; ; index as i; odd as isOdd; even as isEven" [class.odd]="isOdd"
+                [class.even]="isEven" class="transaction-history grid item">        
+                <td class="txhDate" title="{{row.Date | date: 'MM/dd/yyyy'}}" id="trxhDate{{i}}">
+                    {{row.Date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td class="txhPatientName" id="trxhPatient{{i}}" title="{{ row.PatientName }}">
+                    {{ (row.PatientName | truncateText: 36) }}
+                </td>
+                <td class="txhProvider" id="trxhProvider{{i}}" title="{{ row.ProviderUserName }}">
+                    {{ row.ProviderUserName }}
+                </td>
+                <td class="txhLocation" id="trxhLocation{{i}}" title="{{ row.LocationName  }}">
+                    {{ (row.LocationName | truncateText: 24) }}
+                </td>
+                <td class="txhType" id="trxhType{{i}}" title=" {{ row.Type  }}">
+                    {{ row.Type }}
+                </td>
+                <td class="txhDescription" id="trxhDescription{{i}}" title="{{ row.Description }}">
+                    {{ (row.Description | truncateText: 150) }}
+                </td>
+                <td class="txhTooth" id="trxhTooth{{i}}" title="{{ row.Tooth  }}">
+                    {{ row.Tooth }}
+                </td>
+                <td class="txhArea" id="trxhArea{{i}}" title="{{ row.Area }}">
+                    {{ row.Area }}
+                </td>
+                <td class="txhAmount margin-right " id="trxhAmount{{i}}" title="{{ row.Amount | formatCurrencyIfNeg }}">
+                    {{ row.Amount | formatCurrencyIfNeg }}
+                </td>
+                <td class="txhAllowedAmount margin-right " id="trxhAllowedAmount{{i}}"
+                    title=" {{ row.AllowedAmount | formatCurrencyIfNeg }}">
+                    {{ row.AllowedAmount | formatCurrencyIfNeg }}
+                </td>
+                <td class="txhInsAdjAmount margin-right " id="trxhInsAdjAmount{{i}}"
+                    title="{{ row.AdjustedAmount | formatCurrencyIfNeg }}">
+                    {{ row.AdjustedAmount | formatCurrencyIfNeg }}
+                </td>
+                <td class="txhEstIns margin-right " id="trxhEstIns{{i}}"
+                    title="{{ row.TotalEstInsurance | formatCurrencyIfNeg }}">
+                    {{ row.TotalEstInsurance | formatCurrencyIfNeg }}
+                </td>
+                <td class="txhBalance margin-right " id="trxhBalance{{i}} " title="{{ row.Balance | formatCurrencyIfNeg }}">
+                    {{ row.Balance | formatCurrencyIfNeg }}
+                </td>
+        
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="printOptions" class="printingTxnHistory"><strong>{{ 'Filters:' | translate }}</strong>
+        <table>
+            <tr><td><b>{{'Locations' | translate}}</b> : {{ printOptions.FilterLocations}}</td></tr>
+            <tr><td><b>{{'Account Members' | translate}}</b> : {{ printOptions.FilterAccountMembers }}</td></tr>
+            <tr><td><b>{{ 'Date Range'| translate }}</b> : {{ printOptions.FilterDateRange }}</td></tr>
+            <tr><td><b>{{ 'Tooth' | translate }}</b> : {{ printOptions.FilterTooth }}</td></tr>
+            <tr><td><b>{{ 'Transaction Types' | translate }}</b> : {{ printOptions.FilterTransactionTypes }}</td></tr>
+            <tr><td><b>{{ 'Distribution Statuses' | translate }}</b> : {{ printOptions.FilterDistributionTypes }}</td></tr>
+            <tr><td><b>{{ 'Providers' | translate }}</b> : {{ printOptions.FilterProviders }}</td></tr>
+            <tr><td><b>{{ 'Status' | translate }}</b>: {{ printOptions.FilterStatus }}</td></tr>            
+        </table>
+    </div>
+
+    <div class="row footer">
+        <div class="col-sm-12 cell text-align-center ">{{'The Code on Dental Procedures and Nomenclature is
+            Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights
+            reserved.' |translate}}
+        </div>
+    </div>    
+</div>
+
+
+<!-- 
+
+
+<div class="patient-transaction-print">
+    <ng-container>
+        <div class="patient-header">
+            <div id="divPrintDateTime" name="divPrintDateTime">
+                {{ printDisplayDate | date: 'MM/dd/yyyy' }} - {{ printDisplayDate | date: 'hh:mm' }}
+            </div>
+            <div id="divPracticeName" id="" name="divPracticeName" class="center-content">
+                <h4>{{ practiceName }}</h4>
+            </div>
+            <div *ngIf="printOptions" id="divUserCode{{i}}" name="divUserCode" class="pull-right">
+                {{ printOptions.UserCode }}
+            </div>
+        </div>
+        <div class="patient-header">
+            <div></div>
+            <div class="txhDate center-content" id="divPrintHeader" >
+                <h2>{{ 'Transaction History' | translate }} </h2>
+
+            </div>
+            <div class="pull-right no-print">
+                <app-button id="btnCancel" (onClick)="close()" buttonLabel="{{ 'Cancel' | translate }}" 
+                    variation="secondary">
+                </app-button>
+                <app-button id="btnPrintReport" [isDisabled]="disablePrint" class="margin-left-5" (onClick)="print()" buttonLabel="{{'Print' | translate }}"
+                    variation="primary">
+                </app-button>
+                
+            </div>
+        </div>
+        <div class="patient-header">
+            <div></div>
+            <div *ngIf="printOptions" class="txhDate center-content" id="trxhResponsibleParty" >
+                {{ printOptions.ResponsiblePartyInfo }}
+            </div>
+            <div> </div>
+
+        </div>
+        <div class="patient-header">
+            <div></div>
+            <div class="txhDate center-content" id="trxhDateRange" *ngIf="printOptions && printOptions.FilterDateRange">
+                {{ printOptions.FilterDateRange }}
+            </div>
+            <div> </div>
+        </div>
+    </ng-container>
+
+    <ng-container>
+        <div class="transaction-history grid header">
+            <div class="txhDate" id="trxhDateHeader">
+                {{'Date' | translate }}
+            </div>
+            <div class="txhPatientName" id="trxhPatientHeader">
+                {{'Patient' | translate }}
+            </div>
+            <div class="txhProvider" id="trxhProviderHeader">
+                {{'Provider'| translate }}
+            </div>
+            <div class="txhLocation" id="trxhLocationHeader">
+                {{'Location'| translate }}
+            </div>
+            <div class="txhType" id="trxhTypeHeader">
+                {{'Type'| translate }}
+            </div>
+            <div class="txhDescription" id="trxhDescriptionHeader">
+                {{'Description'| translate }}
+            </div>
+            <div class="txhTooth" id="trxhToothHeader">
+                {{'Tooth'| translate }}
+            </div>
+            <div class="txhArea" id="trxhAreaHeader">
+                {{'Area'| translate }}
+            </div>
+            <div class="txhAmount" id="trxhAmountHeader">
+                {{'Amount'| translate }}
+            </div>
+            <div class="txhAllowedAmount" id="trxhAllowedAmountHeader">
+                {{'Allowed Amt'| translate }}
+            </div>
+            <div class="txhInsAdjAmount" id="trxhInsAdjAmountHeader">
+                {{'Ins Adj'| translate }}
+            </div>
+            <div class="txhEstIns" id="trxhEstInsHeader">
+                {{'Est Ins'| translate }}
+            </div>
+            <div class="txhBalance" id="trxhBalanceHeader">
+                {{'Balance'| translate }}
+            </div>
+        </div>
+    
+        <div *ngIf="(transactionHistories && transactionHistories.length > 0)">
+            <div *ngFor="let row of transactionHistories; ; index as i; odd as isOdd; even as isEven" [class.odd]="isOdd"
+                [class.even]="isEven">
+                <div class="transaction-history grid item">
+                    <div class="txhDate" id="trxhDate{{i}}" title="{{row.Date | date: 'MM/dd/yyyy'}}">
+                        {{row.Date | date: 'MM/dd/yyyy'}}
+                    </div>
+                    <div class="txhPatentName" id="trxhPatient{{i}}" title="{{ row.PatientName }}">
+                        {{ (row.PatientName | truncateText: 36) }}
+                    </div>
+                    <div class="txhProvider" id="trxhProvider{{i}}" title="{{ row.ProviderUserName }}">
+                        {{ row.ProviderUserName }}
+                    </div>
+                    <div class="txhLocation" id="trxhLocation{{i}}" title="{{ row.LocationName  }}">
+                        {{ (row.LocationName | truncateText: 24) }}
+                    </div>
+                    <div class="txhType" id="trxhType{{i}}" title=" {{ row.Type  }}">
+                        {{ row.Type }}
+                    </div>
+                    <div class="txhDescription" id="trxhDescription{{i}}" title="{{ row.Description }}">
+                        {{ (row.Description | truncateText: 150) }}
+                    </div>
+                    <div class="txhTooth" id="trxhTooth{{i}}" title="{{ row.Tooth  }}">
+                        {{ row.Tooth }}
+                    </div>
+                    <div class="txhArea" id="trxhArea{{i}}" title="{{ row.Area }}">
+                        {{ row.Area }}
+                    </div>
+                    <div class="txhAmount margin-right " id="trxhAmount{{i}}"
+                        title="{{ row.Amount | formatCurrencyIfNeg }}">
+                        {{ row.Amount | formatCurrencyIfNeg }}
+                    </div>
+                    <div class="txhAllowedAmount margin-right " id="trxhAllowedAmount{{i}}"
+                        title=" {{ row.AllowedAmount | formatCurrencyIfNeg }}">
+                        {{ row.AllowedAmount | formatCurrencyIfNeg }}
+                    </div>
+                    <div class="txhInsAdjAmount margin-right " id="trxhInsAdjAmount{{i}}"
+                        title="{{ row.AdjustedAmount | formatCurrencyIfNeg }}">
+                        {{ row.AdjustedAmount | formatCurrencyIfNeg }}
+                    </div>
+                    <div class="txhEstIns margin-right " id="trxhEstIns{{i}}"
+                        title="{{ row.TotalEstInsurance | formatCurrencyIfNeg }}">
+                        {{ row.TotalEstInsurance | formatCurrencyIfNeg }}
+                    </div>
+                    <div class="txhBalance margin-right " id="trxhBalance{{i}} "
+                        title="{{ row.Balance | formatCurrencyIfNeg }}">
+                        {{ row.Balance | formatCurrencyIfNeg }}
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </ng-container>
+    
+    <div *ngIf="printOptions" class="printingTxnHistory"><strong>{{ 'Filters:' | translate }}</strong>
+        <div>
+            <b>{{'Locations' | translate}}</b> : {{ printOptions.FilterLocations}}
+        </div>
+        <div>
+            <b>{{'Account Members' | translate}}</b> : {{ printOptions.FilterAccountMembers }}
+        </div>
+        <div>
+            <b>{{ 'Date Range'| translate }}</b> : {{ printOptions.FilterDateRange }}
+        </div>
+        <div>
+            <b>{{ 'Tooth' | translate }}</b> : {{ printOptions.FilterTooth }}
+        </div>
+        <div>
+            <b>{{ 'Transaction Types' | translate }}</b> : {{ printOptions.FilterTransactionTypes }}
+        </div>
+        <div>
+            <b>{{ 'Distribution Statuses' | translate }}</b> : {{ printOptions.FilterDistributionTypes }}
+        </div>
+        <div>
+            <b>{{ 'Providers' | translate }}</b> : {{ printOptions.FilterProviders }}
+        </div>
+        <div>
+            <b>{{ 'Status' | translate }}</b>: {{ printOptions.FilterStatus }}
+        </div>
+
+        <div class="row footer">
+            <div class="col-sm-12 cell text-align-center ">{{'The Code on Dental Procedures and Nomenclature is
+                Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights
+                reserved.' |translate}}</div>
+        </div>
+    </div>
+
+</div> -->

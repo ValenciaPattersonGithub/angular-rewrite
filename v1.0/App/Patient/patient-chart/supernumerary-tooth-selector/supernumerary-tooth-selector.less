@@ -1,0 +1,40 @@
+﻿.supernumeraryToothChart {
+
+    &__toothCtrl {
+        .btn;
+        .btn-default;
+        .btnStateReset;
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin-right: 2px;
+        margin-bottom: 2px;
+        padding: 0;
+        border-radius: 100%;
+        box-shadow: none;
+        outline: none;
+        &.active {
+            .btn-primary;
+        }        
+    }
+
+    &__row {
+        .clearfix;
+        margin: @brand-margin_sm 0;
+    }
+
+    &__perm {
+        .make-xs-column(12);
+        .clearfix;
+        box-sizing: border-box;
+        text-align: center;        
+    }
+
+    &__prim {
+        .make-xs-column(12);
+        .clearfix;
+        padding: 0;
+        box-sizing: border-box;
+        text-align: center;
+    }
+}

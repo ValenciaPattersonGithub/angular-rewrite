@@ -1,0 +1,326 @@
+﻿// #region List
+
+.list-header-group {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    
+    > label, 
+    > strong {
+        margin-right: 10px;
+    }
+}
+
+.list-header-dropdown {
+    > button {        
+        background-color: transparent;
+        font-size: 22px;
+        border: none;
+        padding: 0;
+        font-weight: bold;
+
+        > span {
+            position: relative;
+            bottom: 5px;
+        }
+    }
+
+    > ul {
+        font-size: 20px;
+        min-width: 200px;
+        box-shadow: -3px 3px 2px 0 rgba(0, 0, 0, 0.175);
+
+        > li {
+            background: @dropdown-bg;
+
+            &hover {
+                background: @dropdown-bg-hover;
+            }
+            
+            > a {
+                color: @dropdown-color;
+                padding: 3px 10px;
+
+                &hover {
+                    color: @dropdown-color-hover;
+                }
+            }
+        }
+    }
+}
+
+.list-header-filter {
+
+    > input {
+        border: 1px solid #000;
+        min-width: 300px;
+        padding-left: 10px;
+    }
+
+    > span {
+        position: absolute;
+        bottom: 9px;
+        right: 6px;
+    }
+}
+
+.list-table {    
+    border: 1px solid #000;
+}
+
+
+
+.list-container {
+    overflow: hidden;
+    position: relative;
+    height: 550px;
+    width: @list-width+250;
+}
+
+.list-option {
+    cursor: pointer;
+    background: @list-option-bg;
+    width: @list-width;
+    padding: 10px;
+
+    &:hover {
+        background: @list-option-bg-hover;
+    }
+
+    > i {
+        position: relative;
+        bottom: 5px;
+    }
+}
+
+.list-option-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.list-option-container-payment-types {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.list-option-container-payment-types-crud {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.list-option-header {
+    background: @list-option-header-bg;
+    padding: 10px;
+
+    > i {
+        cursor: pointer;
+        position: relative;
+        font-size: 20px;
+    }
+}
+
+.list-option-item {
+    cursor: pointer;
+    background: @list-option-item-bg;
+    width: @list-width;
+    padding: 10px;
+
+    &:hover {
+        background: @list-option-item-bg-hover;
+    }
+
+    > i {
+        position: relative;
+        bottom: 2px;
+    }
+}
+
+.display-list-results {    
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.display-list-item {
+    padding: @padding10;
+
+    &:hover {
+        background: @master-list-item-bg-hover;
+        text-decoration: none;
+    }
+}
+
+.list-striped > li:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+
+// #endregion
+
+// #region MasterList  
+// Mix-ins
+.borderRadius(@radius) {
+	-moz-border-radius: @radius;
+	-webkit-border-radius: @radius;
+	border-radius: @radius;
+}
+
+.master-list-nav-button {
+    height: 400px;
+    width: 500px;
+    background: #fff;
+    white-space: normal;
+    font-weight: bold;
+    word-wrap: normal;
+    border: 1px solid;
+}
+
+.soar-box {
+    height: 250px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.soar-box-img {
+    opacity: 0.5;
+}
+
+.master-list-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.master-list-crud-container {
+    width: @list-width;
+    margin: 10px 0 0 0;
+}
+
+.master-list-header {
+    background: @list-option-header-bg;
+    padding: 10px;
+
+    > i {
+        cursor: pointer;
+        position: relative;
+        font-size: 20px;
+    }
+}
+
+.master-list-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: inherit;
+}    
+  
+.symbol-dropdown-button {
+    width: 100px;
+    background-color: transparent;
+    border: 1px solid @symbol-dd-btn-border-color;
+    padding: @padding5;
+    border-radius: 4px;
+}    
+
+.master-list-button {
+    
+    //width: 150px;
+    //background-color: @master-list-button-bg-color;
+    //border: 1px solid @master-list-btn-border-color;
+    //padding: @padding10;
+    //border-radius: 0;
+    .btn;
+    .btn-default;
+    &:hover {
+        //background: @master-list-button-bg-hover;
+        //text-decoration: none;
+    }
+
+    &:focus {
+        background: @master-list-button-bg-active;
+    }
+}
+    
+.master-list-item {
+    padding: @padding10;
+
+    &:nth-child(even) {
+        background: @brand-color_light-gray;
+    }
+
+    button {
+        color: @brand-color_link;
+        &:hover {
+            color: @brand-color_link-hover;
+        }
+        &[disabled="disabled"] {
+            color: @brand-color_disabled;
+
+            &:hover {
+                cursor: default;
+                color: @brand-color_disabled;
+            }
+        }
+    }
+}
+    
+.master-list-search-wrapper {
+    border: @master-list-search-wrapper-border-color;
+        border-width: 1px;
+        cursor: pointer;
+    }
+
+.master-list-results {
+    height: 450px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.master-list-search {
+        position: relative;
+        width: 100%;
+    }
+
+.master-list-search > i {
+            position: absolute;
+            right: 10px;
+            z-index: 1001;
+            font-size: 20px;
+        }
+
+.master-list-search > input,
+.master-list-input {
+    .form-input;
+}
+
+.master-list-search > input:focus {
+        border-color: transparent;
+    }
+
+.list-item {
+    padding: @padding5;
+}
+    
+.master-list-warning-msg {
+    margin: 10px 0 0 0;
+    padding: 5px 10px 5px 10px;
+    background: @master-list-warning-bg;
+    border-radius: @borderRadius5;
+    border: 1px solid @master-list-warning-msg-border-color;
+    }
+
+.master-list-warning-button {
+    //width: 150px;
+    //background-color: @master-list-warning-button-bg-color;
+    //border: 1px solid @master-list-warning-button-border-color;
+    //margin: 10px;
+    //padding: @padding10;
+    .btn;
+    .btn-default;
+    &:hover {
+        //background: @master-list-item-bg-hover;
+        //text-decoration: none;
+                  }     
+}
+
+// #endregion

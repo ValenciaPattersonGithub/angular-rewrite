@@ -1,0 +1,256 @@
+﻿@media screen {
+    .perioReadPrint {
+        display: block;
+        border-bottom: none;
+        transition: @brand-transition;
+
+        &.active {
+            background-color: @brand-color_dark-gray;
+        }
+
+        .clearfix;
+
+        &__header {
+            .clearfix;
+            display: inline-block;
+            width: 10%;
+            float: left;
+            padding: @brand-padding_xs;
+        }
+
+        &__footer {
+            .clearfix;
+            display: inline-block;
+            text-align: left;
+            float: left;
+            width: 10%;
+            padding: @brand-padding_xs;
+        }
+
+        &__title {
+            display: block;
+            text-align: right;
+        }
+
+        &__body {
+            .clearfix;
+            display: inline-block;
+            width: 80%;
+            float: left;
+        }
+    }
+
+    .strikethrough {
+        text-decoration: line-through;
+    }
+
+    .perioInputsPrint {
+        display: table;
+        width: 100%;
+        padding: 0 @brand-padding_xs;
+        margin: 0;
+        font-size: 8pt;
+
+        &__row {
+            display: table-row;
+        }
+
+        &__tooth {
+            display: table-cell;
+            text-align: center;
+            padding-top: 3px;
+            /*border-right: 1px gray solid;*/
+            .perioAlertLevel {
+                color: @perio-alert-level-color;
+            }
+        }
+
+        &__ctrl {
+            background-color: @brand-color_white;
+            border: none;
+            cursor: pointer;
+            float: left;
+            min-height: 20px;
+            height: 25%;
+            margin: 1px;
+            min-width: 15px;
+            width: 25%;
+            text-align: center;
+        }
+
+        &__bleedingSuppurationCircle {
+            background-color: @brand-color_white;
+            border: @brand-border_light;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-block;
+            float: left;
+            height: 14px;
+            margin: 6px 0 6px 3px;
+            width: 14px;
+
+            &.missing {
+                opacity: 0;
+            }
+
+            &.bleeding {
+                background-color: @perio-alert-level-color;
+            }
+
+            &.suppuration {
+                background-color: @perio-chart-suppuration-color;
+            }
+
+            &.both {
+                background-color: @perio-alert-level-color;
+                border: @perio-chart-suppuration-color solid 3px;
+            }
+        }
+
+        &__toothNumber {
+            background-color: none;
+            border-radius: 50%;
+            clear: left;
+            font-size: 1.4em;
+            height: 24px;
+            margin: @brand-margin_xs 0 0 15px;
+            padding-top: 3px;
+            text-align: center;
+            width: 24px;
+
+            &.missing {
+                opacity: 0;
+            }
+        }
+    }
+}
+
+@media print {
+    .perioReadPrint {
+        display: block;
+        border-bottom: none;
+        transition: @brand-transition;
+
+        &.active {
+            background-color: @brand-color_dark-gray;
+        }
+
+        .clearfix;
+
+        &__header {
+            .clearfix;
+            display: inline-block;
+            width: 10%;
+            float: left;
+            padding: 3pt;
+        }
+
+        &__footer {
+            .clearfix;
+            display: inline-block;
+            text-align: left;
+            float: left;
+            width: 10%;
+            padding: 3pt;
+        }
+
+        &__title {
+            display: block;
+            text-align: right;
+        }
+
+        &__body {
+            .clearfix;
+            display: inline-block;
+            width: 80%;
+            float: left;
+        }
+    }
+
+    .strikethrough {
+        text-decoration: line-through;
+    }
+
+    .perioInputsPrint {
+        display: table;
+        width: 100%;
+        padding: 0 3pt 0 3pt;
+        margin: 0;
+        font-size: 6pt;
+
+        &__row {
+            display: table-row;
+        }
+
+        &__tooth {
+            display: table-cell;
+            text-align: center;
+            padding-top: 3pt;
+            /*border-right: 1pt gray solid;*/
+            .perioAlertLevel {
+                color: @perio-alert-level-color !important;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+        &__ctrl {
+            background-color: @brand-color_white;
+            border: none;
+            cursor: pointer;
+            float: left;
+            min-height: 10pt;
+            height: 10pt;
+            margin: .5pt;
+            min-width: 8pt;
+            width: 8pt;
+            text-align: center;
+        }
+
+        &__bleedingSuppurationCircle {
+            background-color: @brand-color_white;
+            border: @brand-border_light;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-block;
+            float: left;
+            height: 8pt;
+            margin: .5pt;
+            width: 8pt;
+
+            &.missing {
+                opacity: 0;
+            }
+
+            &.bleeding {
+                background-color: @perio-alert-level-color !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+            &.suppuration {
+                background-color: @perio-chart-suppuration-color !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+            &.both {
+                background-color: @perio-alert-level-color !important;
+                -webkit-print-color-adjust: exact;
+                border: @perio-chart-suppuration-color solid 3pt !important;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+        &__toothNumber {
+            clear: left;
+            font-size: 9pt;
+            height: 15pt;
+            margin: 4pt 0 0 8pt;
+            padding-top: 2pt;
+            text-align: center;
+            width: 8pt;
+
+            &.missing {
+                opacity: 0;
+            }
+        }
+    }
+}

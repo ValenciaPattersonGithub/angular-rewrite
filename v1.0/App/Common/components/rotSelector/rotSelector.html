@@ -1,0 +1,19 @@
+﻿<div class="rotSelector">
+    <div class="form-control" ng-click="focusInput()">
+        <div class="rotSelector__selectedTeethTags">
+            <button class="btn btn-primary btn-sm" id="selectedTeethTags{{$index}}" ng-repeat="tooth in selectedTeeth" ng-click="remove(tooth)">
+                {{tooth}}
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="rotSelector__toothInput">
+            <form ui-keypress="{13:'enter($event)'}" autocomplete="off">
+                <input id="toothInput" type="text" ng-model="input" char-pattern="[^[a-zA-Z0-9-,]+$" placeholder="{{selected.length === 0 ? placeholderText : '' }}" />
+            </form>
+        </div>
+        <div class="rotSelector__toothDropdown" ng-show="showTeethList">
+            <div id="toothDropdown{{$index}}" ng-repeat="tooth in teethDefinitions.Teeth | filter: {$$Selected: false, $$Visible: true, $$PositionAlreadyTaken: false} track by tooth.ToothId " ng-mousedown="select(tooth)" ng-class="{'rotSelector__highlight' : tooth.$$Highlight}">{{tooth.USNumber}}</div>
+            <div id="toothDropdown{{$index}}" ng-repeat="quadrant in quadrants | filter: {$$Selected: false, $$Visible: true, $$PositionAlreadyTaken: false} track by $index" ng-if="quadrant.type == 'permanent'" ng-mousedown="selectQuadrant(quadrant)" ng-class="{'rotSelector__highlight' : quadrant.$$Highlight}">{{quadrant.USNumber}}</div><br />
+        </div>
+    </div>
+</div>

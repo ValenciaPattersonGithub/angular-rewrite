@@ -1,0 +1,15 @@
+﻿<div class="modal-header">
+    <h4 id="lblEligibilityAlertHeader">{{ ::('Eligibility Alerts' | i18n) }}</h4>
+</div>
+<div id="" class="row margin-left-15 margin-bottom10" ng-repeat="error in data">
+    <div class="col-xs-12" ng-if="error.Message">
+        <label>
+            {{error.Message | i18n}}
+        </label>
+    </div>
+</div>
+<div class="modal-footer">
+    <div>
+        <button id="btnCancel" ng-click="close();" class="btn btn-default">{{ ::('Close' | i18n) }}</button>
+    </div>
+</div>

@@ -1,0 +1,251 @@
+﻿<div id="serviceCodeLanding" class="serviceCodeLanding rowFull white">
+  <swiftpick-code-crud [data]="swiftPickServiceCode" (closeModal)="onSwiftCodeModalClose($event)"></swiftpick-code-crud>
+  
+  <div class="rowFull white">
+      <div class="serviceCodeLanding__header">
+          <!--Breadcrumbs-->
+          <app-page-navigation [navigationData]="breadCrumbs"(currentPath)="changePageState($event)"></app-page-navigation>
+          <div class="serviceCodeLanding__title">
+              <h1>{{ 'Service & Swift Codes' | translate }}</h1>
+          </div>
+          <div class="serviceCodeLanding__actions">
+              <button id="addServiceCodeLblId" checkRoleAccess="{{ addServiceCodeAmfa }}"
+                  class="btn btn-primary btn-margin-right" icon="fa-plus" (click)="createServiceCode()" tabindex="1"
+                  [disabled]="dataForCrudOperation?.ShowServiceCodesList == false || updatingList == true">
+                  {{ 'Add Service Code' | translate }}
+              </button>
+
+              <button id="addSwiftPickCodeLblId"
+                  class="btn btn-primary btn-margin-right" icon="fa-plus" (click)="createSwiftPickCode()" tabindex="1"
+                  [disabled]="dataForCrudOperation?.ShowServiceCodesList == false || updatingList == true"
+                  checkRoleAccess="{{ addSwiftCodeAmfa }}">
+                  {{ 'Add Swift Code' | translate }}
+              </button>                
+
+              <button id="btnUpdateListUpdate" checkRoleAccess="soar-biz-bsvccd-aswift" class="btn btn-primary"
+                  *ngIf="!updatingList"
+                  [disabled]="dataForCrudOperation?.ShowServiceCodesList == false || updateDisabled" tabindex="1"
+                  (click)="updatedList()">{{ 'Update' | translate }}</button>
+
+              <button id="btnUpdateListCancel" checkRoleAccess="soar-biz-bsvccd-aswift"
+                  class="btn btn-default btn-margin-right" *ngIf="updatingList"
+                  (click)="cancelUpdatedList()">{{'Cancel' | translate}}</button>
+
+              <button id="btnUpdateListSave" checkRoleAccess="soar-biz-bsvccd-aswift" 
+                  class="btn btn-primary"
+                  *ngIf="updatingList" 
+                  (click)="saveUpdatedList()"
+                  [disabled]="updatedServiceCodes?.length === 0 || updatedServiceCodesWithErrors?.length > 0">
+                  {{'Save'| translate}}
+              </button>
+              <soar-select-list *ngIf="hasReportAccess && reports?.length > 0" id="selectReport" name="selectReport"
+                  class="selectReport" [placeHolder]="'Reports' | translate" [textField]="'ReportTitle'"
+                  [valueField]="'ReportValue'" [optionList]="reports" [disableInput]="false"
+                  [selectedItemValue]="selectedReport?.ReportId" [sbTab]="10" (selectedItemValueChange)="selectedReportChange($event)" (blurEvent)="reportListBlur()"></soar-select-list>
+
+          </div>
+      </div>
+  </div>
+  <!--service code list-->
+  <div class="serviceCodeLanding__body rowFull white" *ngIf="dataForCrudOperation?.ShowServiceCodesList == false">
+      <div id="serviceCodeCrudWindow" class="serviceCodeCrudWindow">
+          <service-code-crud [data]="dataForCrudOperation"
+                             (updateServiceCodeList)="dataForCrudOperation?.IsCreateOperation ? serviceCodeCreated($event) : serviceCodeUpdated($event)">
+          </service-code-crud>
+      </div>
+  </div>
+  <div class="serviceCodeLandingNewGrid" *ngIf="dataForCrudOperation?.ShowServiceCodesList == true">
+      <!--Input Box-->
+      <div class="row">
+          <div class="form-group">
+              <div class="inner-addon right-addon">
+                <div class="col-xs-4">
+                  <input class="form-control border-solid-black" id="searchBoxServiceCodes"
+                         placeholder="{{'Search service code, CDT code, description, fee...'| translate}}"
+                         type="text"
+                         [(ngModel)]="searchServiceCodesKeyword"
+                         (ngModelChange)="onSearchServiceCodesKeywordChange()"
+                         [disabled]="updatingList" />
+                </div>
+                  <div class="col-xs-1 searchIcon">
+                      <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                  <div class="col-xs-3" *ngIf="!loadingServiceTypes && serviceAndSwiftTypes?.length>0">
+                      <soar-select-list id="filterList" name="filterList"
+                          [placeHolder]="'All Service Types' | translate" [textField]="'Description'"
+                          [valueField]="'Description'" [optionList]="serviceAndSwiftTypes"
+                          [disableInput]="updatingList" (selectedItemValueChange)="changeFilter($event)"
+                          [selectedItemValue]="filterServiceList" [sbTab]="10"></soar-select-list>
+                  </div>
+                  <div class="col-xs-2 searchIcon">
+                      <app-check-box [label]="'Show Inactive'"
+                                     [isDisabled]="updatingList"
+                                     [checked]="allowInactive"
+                                     (checkChanged)="onCheckChanged($event)">
+                      </app-check-box>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Grid -->
+      <div class="fuseGrid container pull-left">
+        <kendo-grid #grid [kendoGridBinding]="filteredServiceCodes"
+                    [sortable]="true"
+                    [sort]="sort"
+                    (edit)="editOptionClicked($event)"
+                    [pageSize]="state.take"
+                    [pageable]="pageable"
+                    [skip]="state.skip"
+                    [rowClass]="rowClass"
+                    (pageChange)="pageChange($event)"
+                  >
+
+          <!--Grid Columns-->
+          <kendo-grid-column title="Service Code" field="Code" [width]="130">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span [innerHTML]="dataItem.Code | boldTextIfContains: searchServiceCodesKeyword"></span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="CDT Code" field="CdtCodeName" [width]="100">
+            <ng-template kendoGridCellTemplate let-dataItem >
+              <span [innerHTML]="dataItem.CdtCodeName | boldTextIfContains: searchServiceCodesKeyword"></span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Description" field="Description" [width]="350">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <span [innerHTML]="dataItem.Description | boldTextIfContains: searchServiceCodesKeyword" [title]="dataItem.Description"></span>
+            </ng-template>
+
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+              <input [(ngModel)]="dataItem.Description"
+                     name="Description"
+                     id="inlineEditDescription{{rowIndex}}" 
+                     (keyup)="dataChanged(dataItem, rowIndex)" 
+                     maxlength="256" 
+                     placeholder="{{ 'Description' | translate }}"/>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column title="Service Type" field="ServiceTypeDescription" [width]="130">
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+              <kendo-dropdownlist [data]="serviceAndSwiftTypes"
+                                  [textField]="'Description'"
+                                  [valueField]="'ServiceTypeId'"
+                                  [defaultItem]="{ ServiceTypeId: null, Description: 'Select Service Type' }"
+                                  [popupSettings]="{ animate: false }"
+                                  [valuePrimitive]="true"
+                                  [value]="dataItem.ServiceTypeId"
+                                  (valueChange)="onKendoSelectionChange($event, 'ServiceTypeId', dataItem, rowIndex)">
+              </kendo-dropdownlist>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Affected Area" field="$$AffectedAreaName" [width]="130">
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+              <kendo-dropdownlist [data]="dataForCrudOperation?.AffectedAreas"
+                                  [textField]="'Name'"
+                                  [valueField]="'Id'"
+                                  [defaultItem]="{ Id: null, Name: 'Select Affected Area' }"
+                                  [popupSettings]="{ animate: false }"
+                                  [valuePrimitive]="true"
+                                  [value]="+dataItem.AffectedAreaId"
+                                  (valueChange)="onKendoSelectionChange($event, 'AffectedAreaId', dataItem, rowIndex)">
+              </kendo-dropdownlist>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Usually Performed by" field="$$UsuallyPerformedByProviderTypeName" editor="string" [width]="130">
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+              <kendo-dropdownlist [data]="dataForCrudOperation?.UsuallyPerformedByProviderTypes"
+                                  [textField]="'Name'"
+                                  [valueField]="'Id'"
+                                  [defaultItem]="{ Id: null, Name: 'Select Usually Performed By' }"
+                                  [popupSettings]="{ animate: false }"
+                                  [valuePrimitive]="true"
+                                  [value]="+dataItem.UsuallyPerformedByProviderTypeId"
+                                  (valueChange)="onKendoSelectionChange($event, 'UsuallyPerformedByProviderTypeId', dataItem, rowIndex)">
+              </kendo-dropdownlist>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Submit on Insurance" field="$$SubmitOnInsuranceName" editor="string" [width]="130">
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+              <label class="fui-check-box">
+                <input type="checkbox"
+                       [checked]="dataItem.$$SubmitOnInsuranceYes"
+                       [value]="dataItem.$$SubmitOnInsuranceYes"
+                       (click)="checkboxChanged($event, dataItem, 'SubmitOnInsurance', true, rowIndex)" />
+                <span class="checkmark"></span>
+                <span class="label">{{ 'Yes' | translate }}</span>
+              </label>
+
+              <label class="fui-check-box">
+                <input type="checkbox"
+                       [checked]="dataItem.$$SubmitOnInsuranceNo"
+                       [value]="dataItem.$$SubmitOnInsuranceNo"
+                       (click)="checkboxChanged($event, dataItem, 'SubmitOnInsurance', false, rowIndex)" />
+                <span class="checkmark"></span>
+                <span class="label">{{ 'No' | translate }}</span>
+              </label>  
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Eligible for Discount" field="$$IsEligibleForDiscountName" editor="string" [width]="130">
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+              <label class="fui-check-box">
+                <input type="checkbox"
+                       [checked]="dataItem.$$IsEligibleForDiscountYes"
+                       [value]="dataItem.$$IsEligibleForDiscountYes"
+                       (click)="checkboxChanged($event, dataItem, 'IsEligibleForDiscount', true, rowIndex)" />
+                <span class="checkmark"></span>
+                <span class="label">{{ 'Yes' | translate }}</span>
+              </label>
+
+              <label class="fui-check-box">
+                <input type="checkbox"
+                       [checked]="dataItem.$$IsEligibleForDiscountNo"
+                       [value]="dataItem.$$IsEligibleForDiscountNo"
+                       (click)="checkboxChanged($event, dataItem, 'IsEligibleForDiscount', false, rowIndex)" />
+                <span class="checkmark"></span>
+                <span class="label">{{ 'No' | translate }}</span>
+              </label>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column title="Active" field="$$IsActiveName" editor="string" [width]="130">
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+              <label class="fui-check-box">
+                <input type="checkbox"
+                       [checked]="dataItem.$$IsActiveYes"
+                       [value]="dataItem.$$IsActiveYes"
+                       (click)="checkboxChanged($event, dataItem, 'IsActive', true, rowIndex)" />
+                <span class="checkmark"></span>
+                <span class="label">{{ 'Yes' | translate }}</span>
+              </label>
+
+              <label class="fui-check-box">
+                <input type="checkbox"
+                       [checked]="dataItem.$$IsActiveNo"
+                       [value]="dataItem.$$IsActiveNo"
+                       (click)="checkboxChanged($event, dataItem, 'IsActive', false, rowIndex)" />
+                <span class="checkmark"></span>
+                <span class="label">{{ 'No' | translate }}</span>
+              </label>
+</ng-template>
+          </kendo-grid-column>
+          <!--Edit Icon-->
+          <kendo-grid-command-column title="" [width]="100">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              <button kendoGridEditCommand 
+                      checkRoleAccess="{{ dataItem.IsSwiftPickCode ? editSwiftCodeAmfa : editServiceCodeAmfa }}"
+                      class="btn btn-default btn-link pull-left visible-md visible-lg hidden-sm hidden-xs cursor-pointer" 
+                      [disabled]="updatingList">
+                <i class="far fa-edit fa-lg"></i>
+              </button>
+            </ng-template>
+          </kendo-grid-command-column>
+        </kendo-grid>
+      </div>
+  </div>    
+</div>

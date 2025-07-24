@@ -1,0 +1,99 @@
+<ng-template #templateRef>
+    <div class="cdt-model">
+        <div class="row">
+            <div class="pull-right margin-2" (click)="close()">
+                <span id="lblCloseModal" class="glyphicon glyphicon-remove-circle no-border cursor-pointer color-dodgerblue padding-right-15">
+                </span>
+            </div>
+        </div>
+        <div class="cdt-modal-header">
+            <div class="col-md-4">
+                <label class="control-label font-24">{{ 'CDT Codes' | translate }}</label>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <div class="inner-addon right-addon">
+                        <input class="form-input border-solid color-dodgerblue" id="searchBoxCdtCodes"
+                               placeholder="{{'Search code, description' | translate}}" type="text" (ngModelChange)="getFilterCDTLength($event)"
+                               [(ngModel)]="searchCdtCodesKeyword" />
+                        <span class="glyphicon glyphicon-search"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-y-400">
+            <table *ngIf="cdtCodes?.length!=undefined" id="tableCdtCodes" class="table table-striped border-solid-black table-hover">
+                <thead>
+                    <tr>
+                        <td id="tdCdtCode" class="width-12-percent">
+                            <div id="columnCdtCodeId" class="color-dodgerblue cursor-pointer " (click)="changeSortingForGrid('Code')">
+                                <div class="col-md-6">{{'CDT Code' | translate}}</div>
+                                <div *ngIf="orderBy?.field == 'Code'">
+                                    <div class="float-right" [ngClass]="{'non-display': orderBy?.asc}">
+                                        <div>
+                                            <span class="caret-desc up"> </span>
+                                        </div>
+                                        <div>
+                                            <span class="margin-top-minus5 caret-desc down"></span>
+                                        </div>
+                                    </div>
+                                    <div class="float-right" [ngClass]="{'non-display': !orderBy?.asc}">
+                                        <div>
+                                            <span class="caret-asc up"></span>
+                                        </div>
+                                        <div>
+                                            <span class="margin-top-minus5 caret-asc down"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td id="tdDescription" class="width-35-percent">
+                            <div id="columnDescription" class="color-dodgerblue cursor-pointer "
+                                 (click)="changeSortingForGrid('Description')">
+                                <div class="col-md-3">{{'Description' | translate}}</div>
+                                <div *ngIf="orderBy?.field == 'Description'" class="col-md-1">
+                                    <div class="float-right" [ngClass]="{'non-display': orderBy?.asc}">
+                                        <div>
+                                            <span class="caret-desc up"> </span>
+                                        </div>
+                                        <div>
+                                            <span class="margin-top-minus5 caret-desc down"></span>
+                                        </div>
+                                    </div>
+                                    <div class="float-right" [ngClass]="{'non-display': !orderBy?.asc}">
+                                        <div>
+                                            <span class="caret-asc up"></span>
+                                        </div>
+                                        <div>
+                                            <span class="margin-top-minus5 caret-asc down"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-template [ngIf]="cdtCodes?.length!=undefined">
+                        <tr *ngFor="let cdtCode of cdtCodes | orderBy:{sortColumnName:orderBy?.field, sortDirection: (orderBy?.asc==true ? 1:-1)} | search1:{'Code':searchCdtCodesKeyword,'Description':searchCdtCodesKeyword};let i = index">
+                            <td id="tdCode{{i}}" (click)="onSelectCode(cdtCode)"
+                                class="preserve-white-space overflow-hidden cursor-pointer soar-link"
+                                title="{{cdtCode?.Code}}"
+                                [innerHTML]="cdtCode?.Code | highlightTextIfContains:searchCdtCodesKeyword"></td>
+                            <td id="tdDescription{{i}}" class="preserve-white-space overflow-hidden" title="{{cdtCode?.Description}}" 
+                            [innerHTML]="cdtCode?.Description | highlightTextIfContains:searchCdtCodesKeyword:65" ></td>
+                        </tr>
+                    </ng-template>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="cdtCodes?.length==0 || filterCDTCodes?.length==0">
+            <no-results [loadingMessage]="loadingMessageNoResults" [loading]="loadingCodes"
+                        [filtering]="filteringCodes" [filteringMessage]="filteringMessageNoResults"></no-results>
+        </div>
+    </div>
+</ng-template>
+<div kendoDialogContainer></div>
+
+

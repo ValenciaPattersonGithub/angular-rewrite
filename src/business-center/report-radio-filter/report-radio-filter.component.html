@@ -1,0 +1,74 @@
+<div class="panel-heading collapseExpand">
+    <a attr.data-target="#{{reportRadioFilterModel?.FilterId}}" 
+    attr.id="{{reportRadioFilterModel?.FilterId}}View" class="soar-link font-weight-bold padding-2 text-left"
+     data-toggle="collapse">
+     <i class="indicator fa fa-chevron-up"></i>  {{reportRadioFilterModel?.Name}}
+    </a>
+</div>
+<div class="filter-option panel-collapse collapse reports-slideout" attr.id="{{reportRadioFilterModel?.FilterId}}">
+    <ul attr.id="{{reportRadioFilterModel?.data[0]?.Field}}"  *ngIf="reportRadioFilterModel?.Name !== 'Locations'">
+		<ng-container *ngFor="let item of reportRadioFilterModel?.data">
+			<li  *ngIf="item.isVisible">
+				<input type="radio" attr.id="{{item.Value}}" class="rprtsFilters" attr.name="{{item.Field}}" attr.data-field="{{item.Field}}" attr.data-key="{{item.Key}}" [checked]="item.Checked" (click)="toggleRadio(item.Value)" />
+            <span *ngIf ="item.Value == 'Service Date' || item.Value == 'Posted Date'" data-html="true" data-placement="right" attr.title="{{'Service Date: The actual date the service, adjustment, or payment was performed or received. (user editable)'| translate}}     {{'&#009;&#013;&#010;Posted Date: The date the service, adjustment, or payment was entered into Fuse. (system assigned)' | translate}}">
+					{{item.Value}}
+				</span>
+            <span *ngIf ="item.Value != 'Service Date' && item.Value != 'Posted Date'">
+					{{item.Value}}
+				</span>
+				<div *ngIf="item.ErrorMsg && item.Field =='Payer ID'">
+					<input id="inpText" name="inpText" type="text" attr.placeholder="{{reportRadioFilterModel.Name}}" [(ngModel)]="item.Id" alpha-numeric pattern="/^([a-zA-Z'-. \d]{0}|[a-zA-Z'-. \d]{2,10})$/" maxlength="10" (keyup)="onChangeText()" />
+					<label id="err" class="help-text" *ngIf="item.Id.length < 2 || item.Id.length > 10">
+						{{item.ErrorMsg}}
+					</label>
+				</div>
+				<div *ngIf="item.ErrorMsg && item.Field !='Payer ID'">
+					<input id="inpText" name="inpText" type="text" attr.placeholder="{{reportRadioFilterModel.Name}}" [(ngModel)]="item.Id" alpha-numeric pattern="/^([a-zA-Z'-. \d]{0}|[a-zA-Z'-. \d]{5})$/" maxlength="5" (keyup)="onChangeText()"/>
+					<label id="err" class="help-text" *ngIf="item.Id.length != 5">
+						{{item.ErrorMsg}}
+					</label>
+				</div>
+			</li>
+	</ng-container>
+    </ul>
+	 <ul attr.id="{{reportRadioFilterModel.data[0]?.Field}}" *ngIf="reportRadioFilterModel.Name === 'Locations'" style="padding-left: 0px">
+		<div *ngIf="hasLocations(reportRadioFilterModel.data, 'Active')" class="multi-selector__aligned-status-header">{{'Active' | translate}}</div>
+		<ng-container *ngFor="let item of reportRadioFilterModel.data">
+		<li  *ngIf="item.LocationStatus === 'Active' && item.isVisible" class="multi-selector__aligned-status">
+			<input type="radio" attr.id="{{item.Value}}" class="rprtsFilters" attr.name="{{item.Field}}" attr.data-field="{{item.Field}}" attr.data-key="{{item.Key}}" [checked]="item.Checked" (click)="toggleRadio(item.Value)" />{{item.Value}}
+			<div *ngIf="item.ErrorMsg">
+				<input id="inpText" name="inpText" type="text" attr.placeholder="{{reportRadioFilterModel.Name}}" [(ngModel)]="item.Id" alpha-numeric ng-pattern="/^([a-zA-Z'-. \d]{0}|[a-zA-Z'-. \d]{5})$/" maxlength="5" />
+				<label id="err" class="help-text" *ngIf="item.Id.length != 5">
+					{{item.ErrorMsg}}
+				</label>
+			</div>
+		</li>
+	</ng-container>
+		<div *ngIf="hasLocations(reportRadioFilterModel.data, 'Pending Inactive')" class="multi-selector__aligned-status-header multi-selector__with-border-top">{{'Pending Inactive' | translate}}</div>
+		<ng-container *ngFor="let item of reportRadioFilterModel.data">
+		
+		<li   *ngIf="item.isVisible && item.LocationStatus === 'Pending Inactive'" class="multi-selector__aligned-status">
+			<input type="radio" attr.id="{{item.Value}}" class="rprtsFilters" attr.name="{{item.Field}}" attr.data-field="{{item.Field}}" attr.data-key="{{item.Key}}" [checked]="item.Checked" (click)="toggleRadio(item.Value)" />{{item.Value}}
+			<div *ngIf="item.ErrorMsg">
+				<input id="inpText" name="inpText" type="text" attr.placeholder="{{reportRadioFilterModel.Name}}" [(ngModel)]="item.Id" alpha-numeric ng-pattern="/^([a-zA-Z'-. \d]{0}|[a-zA-Z'-. \d]{5})$/" maxlength="5" />
+				<label id="err" class="help-text" *ngIf="item.Id.length != 5">
+					{{item.ErrorMsg}}
+				</label>
+			</div>
+		</li>
+	</ng-container>
+		<div *ngIf="hasLocations(reportRadioFilterModel.data, 'Inactive')" class="multi-selector__aligned-status-header multi-selector__with-border-top">{{'Inactive' | translate}}</div>
+		<ng-container  *ngFor="let item of reportRadioFilterModel.data">
+		<li *ngIf="item.LocationStatus === 'Inactive' && item.isVisible"  class="multi-selector__aligned-status">
+			<input type="radio" attr.id="{{item.Value}}" class="rprtsFilters" attr.name="{{item.Field}}" attr.data-field="{{item.Field}}" attr.data-key="{{item.Key}}" [checked]="item.Checked" (click)="toggleRadio(item.Value)" />{{item.Value}}
+			<div *ngIf="item.ErrorMsg">
+				<input id="inpText" name="inpText" type="text" attr.placeholder="{{reportRadioFilterModel.Name}}" [(ngModel)]="item.Id" alpha-numeric ng-pattern="/^([a-zA-Z'-. \d]{0}|[a-zA-Z'-. \d]{5})$/" maxlength="5" />
+				<label id="err" class="help-text" *ngIf="item.Id.length != 5">
+					{{item.ErrorMsg}}
+				</label>
+			</div>
+		</li>
+	</ng-container>
+	</ul> 
+    <span class="showMore" *ngIf="reportRadioFilterModel.data.length > 5" (click)="showMoreButton()" type="button">{{showMoreButtonText}}</span>    
+</div> 

@@ -1,0 +1,171 @@
+@import 'variables';
+@import 'toolTip.scss';
+
+::ng-deep body {
+    font-family: $font-family !important;
+    background-color: $page-content-background;
+    height: 100vh;
+}
+
+.referral-types-container {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-top: 0px;
+}
+
+.db-migration-btn {
+    margin-left: 7px;
+}
+
+.subheader-container {
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+
+.referraltypes-hr {
+    border-top: 1px solid #333333 !important;
+    opacity: .5 !important;
+    margin: 0 !important;
+    width: 100%;
+}
+
+.page_sub_title {
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+    font-family: $font-family !important;
+    color: $page-content-header;
+    line-height: 18px;
+    padding-top: 15px;
+    padding-bottom: 2px;
+}
+
+.add_button {
+    margin-top: 10px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.grid-header {
+    width: 50vh;
+    display: inline-block;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 100%;
+    }
+
+    body {
+        height: 100vh;
+    }
+}
+
+::ng-deep {
+    .side-drawer {
+        top: 152px !important;
+        position: absolute !important;
+    }
+}
+
+.main-lt {
+    padding-left: 5px;
+    background: $polar-white;
+    width: 50%;
+    display: inline-block;
+}
+
+.main-lt-market-place {
+    float: right;
+    padding-top: 18px;
+    padding-left: 5px;
+    background: $polar-white;
+    width: 50%;
+    display: inline-block;
+}
+
+.topnavbar-heading {
+    font-family: $global-font-family;
+    font-weight: bold;
+    font-size: 18px;
+    color: $text-black;
+    line-height: 18px;
+    margin: 20px 20px 8px 20px;
+}
+
+.marketPlace {
+    color: $action-blue;
+    float: left;
+    margin-right: 5px;
+    margin-top: -2px;
+}
+
+.topnavbar-heading-pattersonmarket {
+    font-family: $global-font-family;
+    font-weight: bold;
+    font-size: 14px;
+    color: $action-blue;
+    line-height: 18px;
+    margin: 2px 20px 5px 5px;
+    float: right;
+}
+
+.topnavbar-marketplace:hover {
+    color: $light-action-blue;
+}
+
+.topnavbar-header-area h5 .light-border {
+    color: #dfdfdf;
+}
+
+.marketPlace:hover {
+    color: $light-action-blue;
+}
+
+.topnavbar-header-area h5 .light-color {
+    font-weight: lighter;
+}
+
+.topnavbar-header-quick-info {
+    font-size: 12px;
+    color: $label-black;
+    padding: 0 20px 15px 0;
+    padding-left: 6px;
+    background: $polar-white;
+    border-bottom: 1px solid #ececec;
+    width: 100%;
+
+    label {
+        margin-bottom: 0;
+    }
+
+    label:not(:first-of-type) {
+        border-left: 1px solid #7a7a7a;
+        padding-left: 5px;
+    }
+
+    div {
+        display: inline-block;
+    }
+}
+
+.topnavbar-mainmenu-container {
+    border-top: 1px solid #ececec;
+    display: grid;
+    padding: 20px 0px 20px 15px;
+    margin-left: 10px;
+}
+
+.view-container {
+    overflow: hidden !important;
+    position: absolute !important;
+}
+
+::ng-deep {
+    .add-btn button {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        width: 145px !important;
+    }
+}

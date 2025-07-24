@@ -1,0 +1,62 @@
+﻿<div class="txPlanTile" ng-class="groupingClassCss"
+     ng-click="expandPlan(txPlan)">
+    <i class="fa fa-link txPlanTile__iconLink fa-inverse" ng-if="timelineView && txPlan.$$GroupingClass === 'groupedTop'"></i>
+    <div class="txPlanTile__tileBox" ng-class="{ tileBoxPadding : !timelineView }">
+        <div class="txPlanTile__actions" ng-if="!timelineView">
+            <a href="" class="txPlanTile__expand" ng-if="!viewSettings.expandView" ng-class="{disabled : viewSettings.expandView}" ng-click="planToggle(txPlan, $event)" tooltip-append-to-body="true" uib-tooltip="Preview">
+                <i class="fa fa-chevron-right" ng-class="txPlan.TreatmentPlanHeader.CollapsedViewVisible ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>
+            </a>
+        </div>
+
+        <div class="txPlanTile__details" ng-class="{ timelineDetails : timelineView}">
+            <div class="timelineTile" ng-class="{timelineTileBorder : timelineView && !txPlan.$$GroupingClass}">
+                <div class="timelineTile__row">
+                    <div ng-if="timelineView" class="timelineTile__iconContainer">
+                        <img class="timelineTile__icon" ng-src="{{ 'Images/TimelineFilterIcons/txplans.svg' }}" />
+                    </div>
+                    <div class="timelineTile__content">
+                        <span class="txPlanTile__title">{{txPlan.TreatmentPlanHeader.TreatmentPlanName + ' - ' }}{{ txPlan.TreatmentPlanHeader.CreatedDate | date: 'MM/dd/yyyy' }}</span>
+                        <div class="txPlanTile__summary">
+                            <span ng-if="!txPlan.TreatmentPlanHeader.FullTreatmentPlanHasLoaded">
+                                loading...
+                            </span>
+
+                            <div class="txPlanTile__recommend2" uib-tooltip="{{ tooltip }}" ng-class="{ icons: timelineView }" tooltip-placement="left">
+
+                                <i class="fa fa-info-circle statusIcon2" ng-if="txPlan.TreatmentPlanHeader.HasAtLeastOnePredetermination" uib-tooltip="{{ txPlan.TreatmentPlanHeader.PredeterminationMessage }}" tooltip-placement="left" tooltip-append-to-body="true"></i>
+                                <i class="fa fa-certificate fa-2x statusIcon2" ng-if="txPlan.TreatmentPlanHeader.IsRecommended"></i>
+                                <i class="fa far fa-thumbs-up fa-2x statusIcon2" ng-if="txPlan.TreatmentPlanHeader.Status == 'Accepted'"></i>
+                                <i class="fa far fa-thumbs-down fa-2x statusIcon2" ng-if="txPlan.TreatmentPlanHeader.Status == 'Rejected'"></i>
+                                <i class="fa fa-question-circle fa-2x statusIcon2" ng-if="txPlan.TreatmentPlanHeader.Status == 'Proposed'"></i>
+                                <i class="fa fa-play-circle fa-2x statusIcon2" ng-if="txPlan.TreatmentPlanHeader.Status == 'Presented'"></i>
+                                <i class="fa fa-check fa-2x statusIcon2" ng-if="txPlan.TreatmentPlanHeader.Status == 'Completed'"></i>
+                                <span class="txPlanTile__predetermination2" uib-tooltip="{{ tooltip }}" ng-click="viewPredetermination()" tooltip-placement="left">
+                                    <i class="fa fa-umbrella" ng-if="hasCarrierResponse" uib-tooltip="{{ tooltipPredeterminationResponseTrue }}" tooltip-placement="left" tooltip-append-to-body="true"></i>
+                                </span>
+
+                            </div>
+                            <div ng-if="txPlan.TreatmentPlanHeader.FullTreatmentPlanHasLoaded">
+                                {{'{0} of {1} services completed'| i18n:[txPlan.TreatmentPlanHeader.$$ServicesCompleted,txPlan.TreatmentPlanServices.length]}}
+                            </div>
+                            <div ng-if="txPlan.TreatmentPlanHeader.FullTreatmentPlanHasLoaded">
+                                {{txPlan.TreatmentPlanHeader.$$ServicesAmountLeft | currency}}{{' remaining '}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+
+    <div class="txPlanTile__body" ng-repeat="stage in planStages|orderBy:'stageno'"  ng-class="{active: txPlan.TreatmentPlanHeader.CollapsedViewVisible}">
+        <treatment-plans-stage expanded-view="true"
+                               treatment-plan="txPlan"
+                               timeline-view="timelineView"
+                               stage-index="{{$index+1}}"
+                               stage="stage"
+                               plan-stages="planStages"
+                               patient="patientInfo"
+                               proposed-services="txPlan.TreatmentPlanServices"></treatment-plans-stage>
+        <a id="txPlanTileCollapse" class="txPlanTile__close" ng-if="txPlan.TreatmentPlanHeader.CollapsedViewVisible" ng-click="txPlanCollapseTile(txPlan, $event)"><i class="fa fa-caret-up"></i></a>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+.patients-by-flags-report {
+    grid-template-columns: 6fr 6fr
+}
+.patients-by-flags-report-header {
+    grid-template-columns: 6fr 6fr;
+    background: transparent;
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.patients-by-flags-report {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+        }
+      }
+}

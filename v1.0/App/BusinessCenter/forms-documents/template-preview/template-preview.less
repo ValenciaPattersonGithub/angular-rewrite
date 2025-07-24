@@ -1,0 +1,91 @@
+﻿.postcard-body-preview {
+    background-color: #dddddd;
+    padding: 0;
+    border: 0;
+    margin: 0;
+
+    padding-top: 10px;
+}
+
+.postcard-template-page {
+    background-color: #ffffff;
+    width: 11in;
+    height: 8.5in;
+    margin: .25in auto;
+    outline: 1px dashed #888888;
+}
+
+.page-content {
+}
+
+.page-content::after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+.postcard {
+    width: 5.5in;
+    height: 4.25in;
+    float: left;
+    overflow: hidden;
+    outline: 1px dotted #888888;
+}
+
+.bg-area{
+    background-color: #dddddd;
+    padding-top: 0px !important;
+    padding-bottom: 50px;
+}
+
+.postcard-content {
+    position: relative;
+    padding-top: 1.525in;
+}
+
+.postcard-message {
+    width: 2.75in;
+    float: left;
+    padding-top: .25in;
+    padding-left: .25in;
+    max-height: 390px;
+    overflow: hidden;
+    min-height: 250px;
+}
+
+.postcard-address {
+    float: left;
+    padding-top: .25in;
+    padding-left: .5in;
+    width: 250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media screen {
+    .postcard-stamp {
+        width: .87in;
+        height: .979in;
+        position: absolute;
+        top: .125in;
+        right: .125in;
+        outline: 4px double #888888;
+    }
+}
+
+@media print {
+    .body {
+        background-color: transparent;
+    }
+    .page {
+        background-color: transparent;
+        outline: none;
+        height: auto;
+        margin: 0;
+    }
+    .postcard {
+        outline: none;
+    }
+}

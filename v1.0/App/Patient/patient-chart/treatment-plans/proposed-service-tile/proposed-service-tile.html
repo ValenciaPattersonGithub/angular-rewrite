@@ -1,0 +1,35 @@
+﻿<div class="txSrvTile">
+
+    <button id="txSrvTileToggle" class="txSrvTile__toggle" ng-click="menuToggle($event, service)" ng-blur="service.ActionsVisible = false"><i class="fa fa-ellipsis-v"></i></button>
+    <div class="txSrvTile__actions" ng-class="{active : service.ActionsVisible, orientTop : service.orientV}" >
+        <div>
+            <!-- parts are renamed to stages  -->
+            <button id="txSrvTileRemove" class="btn btn-link" ng-mousedown="remove(service)" check-auth-z="soar-clin-cplan-dsvccd">{{ 'Remove from Plan' | i18n }}</button>
+            <button id="txSrvTileMoveToNewPart" ng-repeat="planStage in planStages|orderBy:'stageno'"
+                    ng-if="$index!=stageIndex-1 && planStages.length>1"  ng-hide="servCount<=1" class="btn btn-link" check-auth-z="soar-clin-cplan-edit" ng-mousedown="move(service,planStage.stageno)">
+                {{ 'Move to Stage ' + ($index+1) | i18n }}
+            </button>
+            <button id="txSrvTileAddToNewPart" ng-hide="servCount<=1" class="btn btn-link" ng-disabled="actions[1].Disabled"
+                    ng-mousedown="addToNewStage(service);">{{'Add to New Stage'|i18n}}
+            </button>
+        </div>
+    </div>
+    <div class="txSrvTile__details" ng-class="{expand: expandView}">
+        <div class="desc" title="{{service.ServiceTransaction.Description}}">
+            {{service.ServiceTransaction.Description}}
+        </div>
+        <div class="tooth">
+            {{service.ServiceTransaction.Tooth | convertToothRangeToQuadrantOrArchCode}}
+        </div>
+        <div class="area">
+            {{service.ServiceTransaction.SurfaceSummaryInfo}}{{service.ServiceTransaction.RootSummaryInfo}}
+        </div>
+        <div class="provider">
+            {{service.ServiceTransaction.UserCode}}
+        </div>
+        <div class="fee">
+            {{service.ServiceTransaction.Fee | currency}}
+        </div>
+    </div>
+
+</div>

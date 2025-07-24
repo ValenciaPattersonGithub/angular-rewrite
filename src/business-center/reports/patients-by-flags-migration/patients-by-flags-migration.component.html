@@ -1,0 +1,58 @@
+<ng-container *ngIf="reportData$ | async as reportData">
+    <div *ngIf="isDataLoaded" class="no-outline">
+        <div class="patients-by-flags-report grid header">
+            <!-- <div class="col-sm-4-migration">{{ 'Location' | translate }}</div> -->
+            <!-- <div class="col-sm-6-migration">{{ 'Flag' | translate }}</div>
+            <div class="col-sm-6-migration">{{ 'Patient' | translate }}</div> -->
+        </div>
+        <ng-container>
+            <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="30" tabindex="0">
+                <div *cdkVirtualFor="let rowdata of reportData.patientsFlagsLocations; index as i" class="">
+                    <div class="patients-by-flags-report grid item" class="stripEven">
+                        <div class="col-sm-12-migration center">
+                            <h4>{{ rowdata.location | translate }}</h4>
+                        </div>
+                    </div>
+                    <div class="stripOdd">
+                        <div class="patients-by-flags-report grid item">
+                            <div class="col-sm-6-migration"><b>{{ 'Flag' | translate }}</b></div>
+                            <div class="col-sm-6-migration"><b>{{ 'Patient' | translate }}</b></div>
+                        </div>
+                    </div>
+                    <div *ngFor="let flag of rowdata.flagPatients; let i = index" class="stripOdd">
+                        <div class="patients-by-flags-report grid item"
+                            *ngFor="let patient of flag.patients; let j = index">
+                            <div class="col-sm-6-migration">{{ j == 0 ? flag.name : '' }}</div>
+                            <div class="col-sm-6-migration">
+                                {{ patient.lastName | translate }}, {{ patient.firstName | translate }} {{
+                                patient.middleName && patient.middleName.trim() !== '' ? patient.middleName + '.' : ''
+                                }} {{patient.suffixName}} - {{ patient.patientCode | translate }}
+                            </div>
+                        </div>
+                        <div class="patients-by-flags-report grid item">
+                            <div class="col-sm-6-migration"></div>
+                            <div class="col-sm-2-migration"><b>Total: {{ flag.total | translate }}</b></div>
+                        </div>
+                    </div>
+                    <div *ngFor="let flag of rowdata.customFlagPatients; let k = index" class="stripOdd">
+                        <div class="patients-by-flags-report grid item"
+                            *ngFor="let patient of flag.patients; let l = index">
+                            <div class="col-sm-6-migration" *ngIf="k==0"><b>{{ 'Custom Flag' | translate }}</b></div>
+                            <div class="col-sm-6-migration" *ngIf="k==0"><b>{{ 'Patient' | translate }}</b></div>
+                            <div class="col-sm-6-migration">{{ l == 0 ? flag.name : '' }}</div>
+                            <div class="col-sm-6-migration">
+                                {{ patient.lastName | translate }}, {{ patient.firstName | translate }} {{
+                                patient.middleName && patient.middleName.trim() !== '' ? patient.middleName + '.' : ''
+                                }} {{patient.suffixName}} - {{ patient.patientCode | translate }}
+                            </div>
+                        </div>
+                        <!-- <div class="patients-by-flags-report grid item">
+                            <div class="col-sm-6-migration"></div>
+                            <div class="col-sm-2-migration"><b>Total: {{ flag.total | translate }}</b></div> 
+                        </div> -->
+                    </div>
+                </div>
+            </cdk-virtual-scroll-viewport>
+        </ng-container>
+    </div>
+</ng-container>

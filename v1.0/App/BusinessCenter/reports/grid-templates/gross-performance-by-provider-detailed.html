@@ -1,0 +1,18 @@
+﻿<div class="reportGrid">
+    <div ng-if="data.CustomMessage == undefined || data.CustomMessage == null">
+        <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+        <div ng-if="data.ProviderDetails.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+        <div class="fusePrintGrid container avoidPageBreak"
+            ng-if="data.ProviderDetails.length > 0 && !showFilterMessage">
+            <performance-by-provider-detailed-report [data]="data"></performance-by-provider-detailed-report>
+        </div>
+    </div>
+    <div class="asyncMessage" ng-if="data.CustomMessage != null && data.CustomMessage != ''">
+        <img src="Images/spinner-small.gif" width="40px" height="40px">
+        <br /><br />
+        Your report is being prepared.<br />
+        Feel free to stay or work on other tasks.<br />
+        <br />
+        <b>We’ll notify you when it’s ready!</b>
+    </div>
+</div>

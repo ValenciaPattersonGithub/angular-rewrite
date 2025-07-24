@@ -1,0 +1,33 @@
+﻿<div id="provider{{inputId}}" class="examining-provider-dropdown dropdown">
+    <button id="btnDropDown" ng-click="btnClick()" ng-blur="onBlur()"
+            ng-if="DisableStatusIconFeatureFlag"
+            uib-tooltip="Examining Dentist required" tooltip-append-to-body="true" tooltip-placement="left" tooltip-enable="!selectedItem && !controlDisabled"
+            ng-disabled="controlDisabled"
+            class=""
+            ng-class="{'errorBorder': !selectedItem}">
+        <span ng-if="!selectedItem" id="defaultSelectedDescription{{inputId}}" class="selected-description"> {{ ::(placeHolder) }}</span>
+        <span ng-if="selectedItem" id="selectedDescription{{inputId}}" class="selected-description"
+              ng-style="{'font-weight': selectedItem.IsPreferred ? 'bold' : 'normal'}">{{ selectedItem.Name }}</span>
+        <span class="arrow"></span>
+    </button>
+    <button id="btnDropDown" ng-click="btnClick()" ng-blur="onBlur()"
+            ng-if="!DisableStatusIconFeatureFlag"
+            ng-disabled="controlDisabled"
+            class="">
+        <span ng-if="!selectedItem" id="defaultSelectedDescription{{inputId}}" class="selected-description"> {{ ::(placeHolder) }}</span>
+        <span ng-if="selectedItem" id="selectedDescription{{inputId}}" class="selected-description"
+              ng-style="{'font-weight': selectedItem.IsPreferred ? 'bold' : 'normal'}">{{ selectedItem.Name }}</span>
+        <span class="arrow"></span>
+    </button>
+    <div id="dropdownListBox" class="dropdownListBox" ng-if="isOpen">
+        <div id="default{{inputId}}" class="option" ng-mousedown="selectItem(null)"> {{ ::(placeHolder) }} </div>
+        <div id="dropdownListItems{{inputId}}{{$index}}" ng-repeat="dataItem in providers track by $index">
+            <span id="lblOptionName{{inputId}}{{$index}}" ng-mousedown="selectItem(dataItem)"
+                  class="option"
+                  ng-class="{'active': selectedProvider === dataItem.ProviderId,'noClick': dataItem.disabled == true}"
+                  ng-style="{'font-style': dataItem.IsActive ? 'normal' : 'italic','font-weight': dataItem.IsPreferred ? 'bold' : 'normal'}">{{ dataItem.Name }}</span>
+        </div>
+    </div>
+</div>
+
+

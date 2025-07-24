@@ -1,0 +1,571 @@
+﻿
+<!-- location information header -->
+<div class="panel">
+    <div class="panel-heading">
+        <label class="panel-title">
+            {{ 'Location & Contact Info' | translate }}
+        </label>
+    </div>
+    <!-- location information section -->
+    <div class="panel-body">
+        <div class="col-xs-12 col-sm-6">
+            <!-- location name 1 -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="col-xs-12">{{'Location Name' | translate }}</label>
+                    <span class="col-xs-12 truncate" id="lblName" title="{{ selectedLocation?.NameLine1 }} {{ selectedLocation?.NameLine2 }}"> {{ selectedLocation?.NameLine1 }} <span class="text-muted" *ngIf="selectedLocation?.NameLine2">|</span> {{ selectedLocation?.NameLine2 }} </span>
+                    <span class="col-xs-12" id="lblNameAbbreviation"> {{ selectedLocation?.NameAbbreviation }} </span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Location Id' | translate }}</label>
+                    <span class="col-xs-12 truncate" id="lblLocationId" title="{{ selectedLocation?.LocationId }}"> {{ selectedLocation?.LocationId }} </span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Email' | translate }}</label>
+                    <span class="col-xs-12 truncate" id="lblEmail" title="{{ selectedLocation?.Email }}"> {{ selectedLocation?.Email }} </span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Website' | translate }}</label>
+                    <span class="col-xs-12 truncate" id="lblWebsite" title="{{ selectedLocation?.Website }}"> {{ selectedLocation?.Website }} </span>
+                    <div class="clearfix">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="col-xs-12">{{'Address' | translate }}</label>
+                    <span class="col-xs-12 truncate" id="lblAddress1" title="{{ selectedLocation?.AddressLine1 }}"> {{ selectedLocation?.AddressLine1 }} </span>
+                    <span class="col-xs-12 truncate" id="lblAddress2" title="{{ selectedLocation?.AddressLine2 }}"> {{ selectedLocation?.AddressLine2 }} </span>
+                    <span class="col-xs-12 truncate" title="{{ selectedLocation?.City }}{{selectedLocation?.City && selectedLocation?.State ? ', ' : ' '}}{{ selectedLocation?.State }} {{ selectedLocation?.ZipCode | zipCode }}" id="lblCity">
+                        {{ selectedLocation?.City }}{{selectedLocation?.City && selectedLocation?.State ? ', ' : ' '}}{{ selectedLocation?.State }} {{ selectedLocation?.ZipCode | zipCode }}
+                    </span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Phone & Fax' | translate }}</label>
+                    <span class="col-xs-12" id="lblPrimaryPhone" *ngIf="selectedLocation?.PrimaryPhone"> {{ selectedLocation?.PrimaryPhone | phoneNumber }} ({{ 'primary' | translate }}) </span>
+                    <span class="col-xs-12" id="lblSeSecondaryPhonecondaryPhone" *ngIf="selectedLocation?.SecondaryPhone"> {{ selectedLocation?.SecondaryPhone | phoneNumber }} ({{ 'secondary' | translate }}) </span>
+                    <span class="col-xs-12" id="lblFax" *ngIf="selectedLocation?.Fax"> {{ selectedLocation?.Fax | phoneNumber }} ({{ 'fax' | translate }})</span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Time Zone' | translate }}</label>
+                    <span class="col-sm-12" id="lblTimeZone" *ngIf="selectedLocation?.Timezone">{{ selectedLocation?.Timezone }}</span>
+                    <div class="clearfix">&nbsp;</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- images -->
+<div class="panel">
+    <div class="panel-heading">
+        <div class="col-xs-12 col-sm-12">
+            <label class="panel-title">
+                {{ 'Images' | translate }}
+            </label>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="col-xs-12 col-sm-6" *ngFor="let value of ['Image', 'Logo']">
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="col-xs-12">{{ 'Location ' + value | translate }}</label>
+
+                    <div class="col-xs-12">
+                        <div class="locCrud__noImg">
+                            <div>
+                                <span class="text-muted">{{ 'No file selected' | translate }}</span>
+                            </div>
+                        </div>
+                        <img id="imgLocationImage" class="locCrud__img hidden" src="Images/Smiley.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule & Rooms -->
+<div class="panel">
+    <div class="panel-heading">
+        <label class="panel-title">{{ 'Schedule' | translate }}</label>
+    </div>
+
+    <div class="panel-body">
+        <div class="col-xs-12 col-xs-6">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h5><label class="col-xs-12">{{ 'Schedules' | translate }} </label></h5>
+                </div>
+            </div>
+        </div>
+        <!-- A little different display handling for rooms -->
+        <div class="col-xs-12 col-xs-6" *ngIf="hasTreatmentRoomsViewAccess">
+            <div class="row">
+                <div class="col-xs-12" *ngIf="selectedLocation?.Rooms && selectedLocation.Rooms.length <= 6">
+                    <h5><label class="col-xs-12">{{ 'Treatment Rooms' | translate }} ({{ selectedLocation?.Rooms.length }})</label></h5>
+                    <div class="col-xs-6">
+                        <span id="lblRoom" class="col-xs-12 locCrud__room" *ngFor="let room of selectedLocation?.Rooms">{{ room.Name }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12" *ngIf="selectedLocation?.Rooms && selectedLocation?.Rooms.length > 6">
+                    <h5><label class="col-xs-12">{{ 'Treatment Rooms' | translate }} ({{ selectedLocation?.Rooms.length }})</label></h5>
+                    <div class="col-xs-6">
+                        <ng-container *ngFor="let room of selectedLocation?.Rooms; let $index = index">
+                            <span id="lblRoom" class="col-xs-12 locCrud__room" *ngIf="selectedLocation?.Rooms.length < 6 || (selectedLocation?.Rooms.length > 6 && $index <= selectedLocation?.Rooms.length / 2)">{{ room.Name }}</span>
+                        </ng-container>
+                    </div>
+                    <div class="col-xs-6">
+                        <ng-container *ngFor="let room of selectedLocation?.Rooms; let $index = index">
+                            <span id="lblRoom" class="col-xs-12 locCrud__room" *ngIf="(selectedLocation?.Rooms.length > 6 && $index > selectedLocation?.Rooms.length / 2)">{{ room.Name }}</span>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Identification Numbers -->
+
+<div class="panel">
+    <div class="panel-heading">
+        <label class="panel-title">
+            {{ 'Identification Numbers' | translate }}
+        </label>
+    </div>
+
+    <div class="panel-body">
+        <div class="col-xs-12 col-sm-6">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h5><label class="col-xs-12">{{ 'Federal' | translate }}</label></h5>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Tax ID' | translate }}</label>
+                    <span class="col-xs-12" id="lblTaxId"> {{ selectedLocation?.TaxId }} </span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Billing Entity NPI (Type 2)' | translate }}</label>
+                    <span class="col-xs-12" id="lblBillingEntityNPI"> {{ selectedLocation?.TypeTwoNpi }} </span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Taxonomy Code/Specialty' | translate }}</label>
+                    <span class="col-xs-12" id="lblTaxonomyId" *ngIf="selectedLocation?.TaxonomyId"> {{ taxonomyCodeSpeciality }} </span>
+                    <div class="clearfix">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h5><label class="col-xs-12">{{ 'State' | translate }}</label></h5>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Billing Entity License' | translate }}</label>
+                    <span class="col-xs-12" id="lblBillingEntityLicense"> {{ selectedLocation?.LicenseNumber }} </span>
+                    <div class="clearfix">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Identifiers -->
+<div class="panel" *ngIf="hasAdditionalIdentifierViewAccess">
+    <div class="panel-heading" *ngIf="selectedLocation?.AdditionalIdentifiers && selectedLocation?.AdditionalIdentifiers.length > 0">
+        <label class="panel-title">
+            {{ 'Additional Identifiers' | translate }}
+        </label>
+    </div>
+
+    <div class="panel-body">
+        <div class="col-xs-12 col-sm-6">
+            <div *ngFor="let additionalIdentifier of selectedLocation?.AdditionalIdentifiers | orderBy: {sortColumnName: 'Description', sortDirection: 1}">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="col-xs-12 col-sm-4 control-label locCrud__additionalIdentifier">{{ additionalIdentifier.Description}}</label>
+                        <span class="col-xs-12" id="lblAdditionalIdentifierValue"> {{ additionalIdentifier.Value }} </span>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="clearfix">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tax Rates -->
+
+<div class="panel">
+    <div class="panel-heading">
+        <label class="panel-title">
+            {{ 'Financial Settings' | translate }}
+        </label>
+    </div>
+
+    <div class="panel-body">
+        <div class="col-xs-12 col-sm-6">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <fee-list-location [editMode]="false" [location]="selectedLocation" [locationFeeList]="selectedLocation?.FeeListId"></fee-list-location>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Provider Tax Rate' | translate }}</label>
+                    <span class="col-xs-12" id="lblProviderTaxRate"> {{ selectedLocation?.ProviderTaxRate / 100 | percent:'1.0-5' }} </span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Sales & Use Tax Rate' | translate }}</label>
+                    <span class="col-xs-12" id="lblSalesAndUseTaxRate"> {{ selectedLocation?.SalesAndUseTaxRate / 100 | percent:'1.0-5' }} </span>
+                    <div class="clearfix">&nbsp;</div>
+
+
+                    <label class="col-xs-12">{{'Default Finance Charge' | translate }}</label>
+                    <span class="col-xs-12" id="lblDefaultFinanceCharge"> {{ selectedLocation?.DefaultFinanceCharge }}<span *ngIf="selectedLocation?.DefaultFinanceCharge || selectedLocation?.DefaultFinanceCharge == 0 ">%</span></span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Accounts overdue by' | translate }}</label>
+                    <span class="col-xs-12" id="lblAccountsOverdue"> {{ selectedLocation?.AccountsOverDue}} <span *ngIf="selectedLocation?.AccountsOverDue">days</span></span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Minimum Finance Charge' | translate }}</label>
+                    <span class="col-xs-12" id="lblMinimumFinanceCharge"> {{ selectedLocation?.MinimumFinanceCharge | currency}} </span>
+                    <div class="clearfix">&nbsp;</div>
+
+                    <label class="col-xs-12">{{'Billing Remittance Site' | translate }}</label>
+                    <span class="col-xs-12">{{'This determines what address to use on the "Remit Payment To" address on your billing statements and Invoices' | translate }}</span>
+                    <span class="col-xs-12 locationFields">
+                        <input type="radio" name="billingRemittanceSiteOptionsView" id="billingRemittanceSiteOptionThisLocationView" [checked]="selectedLocation?.RemitAddressSource === 0" value="0" disabled />{{ 'Use this location as its own billing remittance site' | translate }}
+                    </span>
+                    <span class="col-xs-12 locationFields">
+                        <input type="radio" name="billingRemittanceSiteOptionsView" id="billingRemittanceSiteOptionDifferentLocationView" [checked]="selectedLocation?.RemitAddressSource === 1" value="1" disabled />{{ 'Use a different location as the billing remittance site' | translate }}
+                    </span>
+                    <span class="col-xs-12 locationFields">
+                        <soar-select-list *ngIf="selectedLocation?.RemitAddressSource == 1"
+                                          id="billingRemittanceSiteLocationsView" class="locCrud__dropdown"
+                                          name="inpBillingRemittanceSiteLocations" sb-tab="10"
+                                          placeHolder="{{'Locations' | translate}}"
+                                          [disableInput]="true" [textField]="'NameLine1'" [valueField]="'LocationId'"
+                                          [optionList]="locations" [ngModel]="selectedLocation?.RemitOtherLocationId"
+                                          [selectedItemValue]="selectedLocation?.RemitOtherLocationId">
+                        </soar-select-list>
+                    </span>
+                    <span class="col-xs-12 locationFields">
+                        <input type="radio" name="billingRemittanceSiteOptionsView" id="billingRemittanceSiteOptionDifferentAddressView" [checked]="selectedLocation?.RemitAddressSource === 2" value="2" disabled />{{ 'Use a different address as the billing remittance site' | translate }}
+                    </span>
+                    <div *ngIf="selectedLocation?.RemitAddressSource == 2" class="col-xs-12  panel panel-default">
+                        <div class="panel-body">
+                            <!-- Name -->
+                            <div class="col-xs-12 col-sm-8">
+                                <label id="lblRemitToNameLine1View" class="col-xs-12 " for="inpRemitToNameLine1View">{{'Name Line 1' | translate }}</label>
+                                <input id="inpRemitToNameLine1View" class="form-control required valid col-xs-12" [ngModel]="selectedLocation?.RemitToNameLine1" disabled name="inpRemitToNameLine1" maxlength="128" tabindex="10" type="text" />
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <label id="lblRemitToNameLine2View" class="col-xs-12 " for="inpRemitToNameLine2View">{{'Name Line 2' | translate }}</label>
+                                <input id="inpRemitToNameLine2View" class="form-control valid col-xs-12" [ngModel]="selectedLocation?.RemitToNameLine2" disabled name="inpRemitToNameLine2View" maxlength="128" tabindex="10" type="text" />
+                            </div>
+                            <!-- Address -->
+                            <div class="col-xs-12">
+                                <label class="col-xs-12 " for="inpRemitAddressLine1View">{{ 'Address Line 1' | translate }}</label>
+                                <div>
+                                    <input id="inpRemitAddressLine1View"
+                                           class="form-control required valid col-xs-12"
+                                           placeholder="{{ 'Address Line 2' | translate }}"
+                                           [ngModel]="selectedLocation?.RemitToAddressLine1" disabled
+                                           name="inpRemitToAddressLine1"
+                                           maxlength="128" tabindex="10" type="text"
+                                           [required]="selectedLocation?.RemitAddressSource == 2" alphaNumeric />
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <label class="col-xs-12 " for="inpRemitToAddressLine2View">{{ 'Address Line 2' | translate }}</label>
+                                <input id="inpRemitToAddressLine2View" class="form-control" [ngModel]="selectedLocation?.RemitToAddressLine2" disabled name="inpRemitToAddressLine2View" maxlength="128" tabindex="10" type="text" alphaNumeric />
+                            </div>
+
+                            <div class="col-xs-12">
+                                <!-- City -->
+                                <div class="col-xs-4 no-padding">
+                                    <label class="col-xs-12 " for="inpRemitToCityView">{{ 'City' | translate }}</label>
+                                    <div class="col-xs-12 no-padding">
+                                        <div>
+                                            <input id="inpRemitToCityView" class="form-control" [ngModel]="selectedLocation?.RemitToCity" capitalize-first-with-override name="inpRemitToCityView" maxlength="64" tabindex="10" type="text" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- State -->
+                                <div class="col-xs-4">
+                                    <label class="col-xs-12 text-nowrap" for="inpRemitToStateView">{{ 'State' | translate }}</label>
+                                    <div class="col-xs-3 no-padding">
+                                        <state-list [stateListId]="'inpRemitToStateView'" name="inpRemitToStateView" [disableInput]="true" [source]="selectedLocation?.RemitToState" class="required valid locCrud__state-select-list" [tabIndex]="10"></state-list>
+                                    </div>
+                                </div>
+
+                                <!-- Zip -->
+                                <div class="col-xs-4">
+                                    <label class="col-xs-12 text-nowrap" for="inpRemitToZipCodeView">{{ 'ZIP Code' | translate }}</label>
+                                    <div>
+                                        <input id="inpRemitToZipCodeView" class="form-control required valid" [ngModel]="selectedLocation?.RemitToZipCode" name="inpRemitToZipCodeView"
+                                               tabindex="10" type="text" disabled mask="00000-0000" />
+                                    </div>
+                                </div>
+
+                                <!-- Phone Number -->
+                                <div class="col-xs-12 no-padding">
+                                    <label id="lblRemitToPrimaryPhoneView" class="col-xs-12" for="inpRemitToPrimaryPhoneView">{{ 'Phone Number' }}</label>
+                                    <div class="col-xs-4 no-padding">
+                                        <div>
+                                            <input id="inpRemitToPrimaryPhoneView" class="form-control" mask="(000) 000-0000"
+                                                   [ngModel]="selectedLocation?.RemitToPrimaryPhone"
+                                                   name="inpRemitToPrimaryPhoneView" tabindex="10" type="text" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="col-xs-12">{{ 'Insurance Remittance Site' | translate }}</label>
+                    <span class="col-xs-12">{{'This determines what address to use as the "Billing Dentist/Entity Info" on your insurance claims' | translate }}</span>
+                    <span class="col-xs-12 locationFields">
+                        <input type="radio" name="billingInsuranceRemittanceSiteOptionsView" id="billingInsuranceRemittanceSiteOptionThisLocationView" [checked]="selectedLocation?.InsuranceRemittanceAddressSource === 0" value="0" disabled />{{ 'Use this location as its own insurance remittance site' | translate }}
+                    </span>
+                    <span class="col-xs-12 locationFields">
+                        <input type="radio" name="billingInsuranceRemittanceSiteOptionsView" id="billingInsuranceRemittanceSiteOptionDifferentLocationView" [checked]="selectedLocation?.InsuranceRemittanceAddressSource === 1" value="1" disabled />{{ 'Use a different location as the insurance remittance site' | translate }}
+                    </span>
+                    <span class="col-xs-12 locationFields">
+                        <soar-select-list id="billingInsuranceRemittanceSiteLocationsView"
+                                          class="locCrud__dropdown" name="inpBillingInsuranceRemittanceSiteLocations"
+                                          *ngIf="selectedLocation?.InsuranceRemittanceAddressSource == 1" sb-tab="10"
+                                          placeHolder="{{'Locations' | translate}}"
+                                          [disableInput]="true" [textField]="'NameLine1'"
+                                          [valueField]="'LocationId'" [optionList]="locations"
+                                          [ngModel]="selectedLocation?.InsuranceRemittanceOtherLocationId"
+                                          [selectedItemValue]="selectedLocation?.InsuranceRemittanceOtherLocationId">
+                        </soar-select-list>
+                    </span>
+                    <span class="col-xs-12 locationFields">
+                        <input type="radio" name="billingInsuranceRemittanceSiteOptionsView" id="billingInsuranceRemittanceSiteOptionDifferentAddressView" [checked]="selectedLocation?.InsuranceRemittanceAddressSource === 2" value="2" disabled />{{ 'Use a different address as the insurance remittance site' | translate }}
+                    </span>
+                    <div *ngIf="selectedLocation?.InsuranceRemittanceAddressSource == 2" class="col-xs-12  panel panel-default">
+                        <div class="panel-body">
+                            <!-- Name -->
+                            <div class="col-xs-12 col-sm-8">
+                                <label id="lblRemitInsToNameLine1View" class="col-xs-12 " for="inpRemitInsToNameLine1View">{{'Name Line 1' | translate }}</label>
+                                <input id="inpRemitInsToNameLine1View" class="form-control required valid col-xs-12" [ngModel]="selectedLocation?.InsuranceRemittanceNameLine1 " disabled name="inpRemitInsToNameLine1" maxlength="128" tabindex="10" type="text" />
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <label id="lblRemitInsToNameLine2View" class="col-xs-12 " for="inpRemitInsToNameLine2View">{{'Name Line 2' | translate }}</label>
+                                <input id="inpRemitInsToNameLine2View" class="form-control valid col-xs-12" [ngModel]="selectedLocation?.InsuranceRemittanceNameLine2 " disabled name="inpRemitInsToNameLine2View" maxlength="128" tabindex="10" type="text" />
+                            </div>
+                            <!-- Address -->
+                            <div class="col-xs-12">
+                                <label class="col-xs-12 " for="inpRemitInsAddressLine1View">{{ 'Address Line 1' | translate }}</label>
+                                <div>
+                                    <input id="inpRemitInsAddressLine1View" class="form-control required valid col-xs-12" placeholder="{{ 'Address Line 2' | translate }}" [ngModel]="selectedLocation?.InsuranceRemittanceAddressLine1 " disabled name="inpRemitInsToAddressLine1" maxlength="128" tabindex="10" type="text" [required]="selectedLocation?.InsuranceRemittanceAddressSource == 2" alphaNumeric />
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <label class="col-xs-12 " for="inpRemitInsToAddressLine2View">{{ 'Address Line 2' | translate }}</label>
+                                <input id="inpRemitInsToAddressLine2View" class="form-control" [ngModel]="selectedLocation?.InsuranceRemittanceAddressLine2 " disabled name="inpRemitInsToAddressLine2View" maxlength="128" tabindex="10" type="text" alphaNumeric />
+                            </div>
+
+                            <div class="col-xs-12">
+                                <!-- City -->
+                                <div class="col-xs-4 no-padding">
+                                    <label class="col-xs-12 " for="inpRemitInsToCityView">{{ 'City' | translate }}</label>
+                                    <div class="col-xs-12 no-padding">
+                                        <div>
+                                            <input id="inpRemitInsToCityView" class="form-control" [ngModel]="selectedLocation?.InsuranceRemittanceCity " capitalize-first-with-override name="inpRemitInsToCityView" maxlength="64" tabindex="10" type="text" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- State -->
+                                <div class="col-xs-4">
+                                    <label class="col-xs-12 text-nowrap" for="inpRemitInsToStateView">{{ 'State' | translate }}</label>
+                                    <div class="col-xs-3 no-padding">
+                                        <state-list [stateListId]="'inpRemitInsToStateView'" name="inpRemitInsToStateView" [disableInput]="true" [source]="selectedLocation?.InsuranceRemittanceState" [tabindex]="10"
+                                                    class="required valid locCrud__state-select-list"></state-list>
+                                    </div>
+                                </div>
+
+                                <!-- Zip -->
+                                <div class="col-xs-4">
+                                    <label class="col-xs-12 text-nowrap" for="inpRemitInsToZipCodeView">{{ 'ZIP Code' | translate }}</label>
+                                    <div>
+                                        <input id="inpRemitInsToZipCodeView" class="form-control required valid" [ngModel]="selectedLocation?.InsuranceRemittanceZipCode " name="inpRemitInsToZipCodeView" tabindex="10" type="text" disabled mask="00000-0000" />
+                                    </div>
+                                </div>
+
+                                <!-- Phone Number -->
+                                <div class="col-xs-12 no-padding">
+                                    <div class="col-xs-6 no-padding">
+                                        <label id="lblRemitInsToPrimaryPhoneView" class="col-xs-12" for="inpRemitInsToPrimaryPhoneView">{{ 'Phone Number' }}</label>
+                                        <div class="col-xs-12 no-padding">
+                                            <div>
+                                                <input id="inpRemitInsToPrimaryPhoneView" class="form-control"
+                                                       mask="(000) 000-0000"
+                                                       [ngModel]="selectedLocation?.InsuranceRemittancePrimaryPhone"
+                                                       name="inpRemitInsToPrimaryPhoneView"
+                                                       tabindex="10" type="text" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <label id="lblRemitInsTaxId" class="col-xs-12" for="inpRemitInsTaxId">{{ 'Tax ID' }}</label>
+                                        <div class="col-xs-12 no-padding">
+                                            <div>
+                                                <input id="inpRemitInsTaxId" class="form-control"
+                                                       [ngModel]="selectedLocation?.InsuranceRemittanceTaxId "
+                                                       name="inpRemitInsTaxId"
+                                                       mask="00-0000000" tabindex="10" type="text" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <div class="col-xs-6 no-padding">
+                                        <label id="lblRemitInsBillingEntityNPI" class="col-xs-12" for="inpRemitInsBillingEntityNPI">{{ 'Billing Entity NPI (Type 2)' }}</label>
+                                        <div class="col-xs-12 no-padding">
+                                            <div>
+                                                <input id="inpRemitInsBillingEntityNPI" class="form-control"
+                                                       [ngModel]="selectedLocation?.InsuranceRemittanceTypeTwoNpi "
+                                                       name="inpRemitInsBillingEntityNPI" disabled
+                                                       placeholder="{{ 'Billing Entity NPI (Type 2)' }}" tabindex="10" type="text" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <label id="lblRemitInsLicenseNumber" class="col-xs-12" for="inpRemitInsLicenseNumber">{{ 'Billing Entity License' }}</label>
+                                        <div class="col-xs-12 no-padding">
+                                            <div>
+                                                <input id="inpRemitInsLicenseNumber" class="form-control"
+                                                       [ngModel]="selectedLocation?.InsuranceRemittanceLicenseNumber "
+                                                       name="inpRemitInsLicenseNumber" placeholder="{{ 'Billing Entity License' }}"
+                                                       tabindex="10" type="text" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="clearfix">&nbsp;</div><div class="clearfix">&nbsp;</div>
+
+                        <app-check-box class="col-xs-6" id="inpEnableCreditDebitCardProcessing"
+                                       [isDisabled]="true" [label]="'Enable Credit Card/Debit Card Processing'"
+                                       [checked]="selectedLocation?.IsPaymentGatewayEnabled"
+                                       [value]="selectedLocation?.IsPaymentGatewayEnabled">
+                        </app-check-box>
+                        <div class="clearfix">&nbsp;</div><div class="clearfix">&nbsp;</div>
+                        <ng-container *ngIf="showPaymentProvider">
+                            <label class="col-xs-12">Payment Provider</label>
+                            <span class="col-xs-12 locationFields" id="lblPaymentProvider"> {{ paymentProviders[selectedLocation?.PaymentProvider]?.Text}}</span>
+                            <div class="clearfix">&nbsp;</div>
+                        </ng-container>
+
+                        <label class="col-xs-12">{{'Account Credential' | translate }}</label>
+                        <input class="col-xs-12 no-border-input" *ngIf="selectedLocation?.PaymentProvider === 1" disabled id="lblMerchantId" [value] ="selectedLocation?.PaymentProviderAccountCredential "
+                                                    type="password"
+                                           />
+                        <span  *ngIf="selectedLocation?.PaymentProvider !== 1"class="col-xs-12 locationFields" id="lblMerchantId" >
+                            {{selectedLocation?.MerchantId }}
+                        </span>
+                        <div class="clearfix">&nbsp;</div>
+
+                        <div *ngIf="isEstatementsEnabled">
+                            <label class="col-xs-12">{{'Billing eStatement Credit Card Options' | translate }}</label>
+                            <span class="col-xs-12 locationFields"> {{ 'Options will be reflected on eStatements ONLY' | translate }}</span>
+                            <div class="clearfix">&nbsp;</div>
+
+                            <span class="col-xs-12 locationFields">
+                                <input type="radio" name="creditCardOptionsSelect" disabled id="creditCardOptionsSelectShow" [checked]="selectedLocation?.DisplayCardsOnEstatement === true" value="true" />{{ 'Display what cards you accept' | translate }}
+                            </span>
+                            <div *ngIf="selectedLocation?.DisplayCardsOnEstatement">
+                                <span class="col-xs-12 error" *ngIf="selectedLocation.DisplayCardsOnEstatement &&
+                    !selectedLocation.AcceptMasterCardOnEstatement &&
+                    !selectedLocation.AcceptDiscoverOnEstatement &&
+                    !selectedLocation.AcceptVisaOnEstatement &&
+                    !selectedLocation.AcceptAmericanExpressOnEstatement">
+                                    <span class="help-text">{{'Select a card type to continue' | translate}}</span>
+                                </span>
+                                <div class="clearfix">&nbsp;</div>
+
+                                <app-check-box class="col-xs-6" [isDisabled]="true" [label]="'Mastercard'" id="inpAcceptMasterCardOnEstatement" [value]="selectedLocation?.AcceptMasterCardOnEstatement"
+                                            [checked]="selectedLocation?.AcceptMasterCardOnEstatement"></app-check-box>
+                                <app-check-box class="col-xs-6" [isDisabled]="true" [label]="'Discover'" id="inpAcceptDiscoverOnEstatement" [value]="selectedLocation?.AcceptDiscoverOnEstatement"
+                                            [checked]="selectedLocation?.AcceptDiscoverOnEstatement"></app-check-box>
+                                <div class="clearfix">&nbsp;</div>
+
+                                <app-check-box class="col-xs-6" [isDisabled]="true" [label]="'Visa'" id="inpAcceptVisaOnEstatement" [value]="selectedLocation?.AcceptVisaOnEstatement"
+                                            [checked]="selectedLocation?.AcceptVisaOnEstatement"></app-check-box>
+                                <app-check-box class="col-xs-6" [isDisabled]="true" [label]="'American Express'"
+                                            id="inpAcceptAmericanExpressOnEstatement"
+                                            [value]="selectedLocation?.AcceptAmericanExpressOnEstatement"
+                                            [checked]="selectedLocation?.AcceptAmericanExpressOnEstatement"></app-check-box>
+                                <div class="clearfix">&nbsp;</div>
+
+                                <app-check-box class="col-xs-12" [isDisabled]="true" [label]="'Include a CVV CODE'"
+                                            id="inpIncludeCvvCodeOnEstatement" [value]="selectedLocation?.IncludeCvvCodeOnEstatement"
+                                            [checked]="selectedLocation?.IncludeCvvCodeOnEstatement"></app-check-box>
+                                <div class="clearfix">&nbsp;</div>
+                            </div>
+                            <span class="col-xs-12 locationFields">
+                                <input type="radio" name="creditCardOptionsSelect" disabled id="creditCardOptionsSelectHide" [checked]="selectedLocation?.DisplayCardsOnEstatement === false" value="false" />{{ 'Remove credit card options and instruct recipient to call office for credit card payment' | translate}}
+                            </span>
+                            <div class="clearfix">&nbsp;</div>
+                        </div>
+
+                        <div>
+                            <label class="col-xs-12">{{'Place of Treatment(Box 38)' | translate }}</label>
+                            <span *ngIf="!placeOfTreatmentDescription" class="col-xs-12" id="lblPlaceOfTreatment"> {{  selectedLocation?.PlaceOfTreatment   }} </span>
+                            <span *ngIf="placeOfTreatmentDescription" class="col-xs-12" id="lblPlaceOfTreatmentDescription"> {{  placeOfTreatmentDescription }} </span>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6">
+            <div class="row form-horizontal">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <!-- Nothing goes here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Insurance Credentials -->
+<div class="panel">
+    <div class="panel-heading">
+        <label class="panel-title">
+            {{ 'DentalXChange Setup' | translate }}
+        </label>
+    </div>
+    <!-- NOTE, should the vendor be hard coded like this -->
+    <div class="panel-body" *ngIf="selectedLocation?.LocationId">    
+        <insurance-credentials [locationId]="selectedLocation?.LocationId"  [vendor]="'DentalXChange'" [feature]="featureName"></insurance-credentials>        
+    </div>
+</div>
+
+

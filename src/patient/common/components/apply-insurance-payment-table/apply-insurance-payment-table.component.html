@@ -1,0 +1,269 @@
+<div class="apply-insurance-payment-table">
+  <ng-container>
+    <div class="claim grid header" data-qa="ins-pmt-grid-header">
+      <div *ngFor="let column of header" data-qa="--header-column">
+        {{ column.label }}
+      </div>
+          <div class="button-container">
+              <app-icon-button iconName="pencilIcon" data-qa="--header-note-button"
+                               variation="secondary"
+                               ariaLabel="Edit Default Note"
+                               [selected]="masterNote && masterNote.length > 0"
+                               (onClick)="masterNoteClickEvent()">
+              </app-icon-button>
+          </div>      
+    </div>
+
+    <div *ngIf="!claims || claims.length == 0" class="col-md-12 row text-center padding-10">
+      {{
+        'No search
+      results'
+      }}
+    </div>
+    <div *ngIf="!(!claims || claims.length == 0)" data-qa="ins-pmt-claims-list">
+      <cdk-virtual-scroll-viewport class="payment-table-viewport" [itemSize]="50" id="bulkInsuranceVirtualScrollId">
+        <div
+          *cdkVirtualFor="let payment of claims; index as i; odd as isOdd; even as isEven"
+          [class.odd]="isOdd"
+          [class.even]="isEven">
+          <div class="claim grid item" data-qa="ins-pmt-claims-list-item">
+            <div class="click" (click)="payment.expanded = !payment.expanded" data-qa="--item-expand">
+              <span
+                class="fas"
+                [ngClass]="{
+                  'fa-caret-right': !payment.expanded,
+                  'fa-caret-down': payment.expanded
+                }"></span>
+              {{
+                (payment.MinServiceDate | toShortDisplayDateUtc) == (payment.MaxServiceDate | toShortDisplayDateUtc)
+                  ? (payment.MinServiceDate | toShortDisplayDateUtc)
+                  : (payment.MinServiceDate | toShortDisplayDateUtc) +
+                    ' - ' +
+                    (payment.MaxServiceDate | toShortDisplayDateUtc)
+              }}
+            </div>
+            <div>
+              <a
+                (click)="patientNameClickEvent(payment.PatientId)"
+                data-qa="--item-patient-name-nav"
+                name="btnPatientName"
+                >{{ payment.PatientName }}
+              </a>
+            </div>
+            <div data-qa="--item-provider-name">{{ payment.ProviderName }}</div>
+            <div data-qa="--item-carrier-name">
+              {{
+                !payment.CarrierName || payment.CarrierName == ''
+                  ? 'No carrier
+              assigned'
+                  : payment.CarrierName + ' - ' + payment.PrimaryClaim
+              }}
+              <div>
+                <div *ngIf="payment.FeeScheduleId" data-qa="--item-fee-list-nav">
+                  <a (click)="openFeeScheduleEvent(payment.FeeScheduleId)">{{ 'Fee Schedule' }}</a>
+                </div>
+              </div>
+            </div>
+            <div data-qa="--item-surface">{{ payment.Tooth }}</div>
+            <div>{{ payment.Surface }}</div>
+
+            <div data-qa="--item-total-charges">
+              <p class="text-right">{{ payment.TotalCharges | currency }}</p>
+            </div>
+            <div data-qa="--item-allowed-amount">
+              <p class="text-right">{{ payment.AllowedAmount | currency }}</p>
+            </div>
+            <div data-qa="--item-total-est-ins">
+              <p class="text-right">
+                {{ payment.TotalEstimatedInsurance | currency }}
+              </p>
+            </div>
+            <div data-qa="--item-total-est-adj">
+              <p class="text-right">
+                {{ payment.TotalEstInsuranceAdj | currency }}
+              </p>
+            </div>
+            <div data-qa="--item-total-patient-balance">
+              <p class="text-right">
+                {{ payment.TotalPatientBalance | currency }}
+              </p>
+            </div>
+            <div data-qa="--item-payment-amount-input">
+              <currency-input
+                id="inpAmountClaim{{ payment.ClaimId }}"
+                data-qa="apply-ins-pmt-input-payment-amount"
+                #Ins
+                [(amount)]="payment.PaymentAmount"
+                [emitOnBlur]="true"
+                [isDisabled]="editMode || isInsTransactionDeposited===true"
+                [inError]="payment.highlightAmountError"
+                (amountChanging)="onAmountChanging({ claim: payment })"
+                (amountChange)="
+                  paymentAmountBlurEvent({
+                    amount: payment.PaymentAmount.NewValue ? payment.PaymentAmount.NewValue : 0,
+                    claim: payment
+                  })
+                ">
+              </currency-input>
+            </div>
+
+            <div class="checkBtn" >
+              <div>
+                <app-check-box data-qa="--item-final-payment-input"
+                  id="inpFinalPaymentClaim{{ payment.ClaimId }}"
+                  (checkChanged)="finalPaymentChangeEvent(payment)"
+                  [checked]="payment.FinalPayment"
+                  [isDisabled]="
+                    payment.Status === 7 ||
+                    payment.Status === 8 ||
+                    payment.Status === 4 ||
+                    payment.Status === 9 ||
+                    isInsTransactionDeposited === true
+                  ">
+                </app-check-box>                
+              </div>
+            </div>
+                <div class="button-container">
+                    <app-icon-button iconName="pencilIcon" data-qa="--item-note-button"
+                                     variation="secondary"
+                                     ariaLabel="Edit Note"
+                                     [selected]="payment.Note && payment.Note.length > 0"
+                                     (onClick)="individualNoteClickEvent(payment)">
+                    </app-icon-button>
+                </div>
+          </div>
+
+          <div class="expand" *ngIf="payment.expanded" >
+            <div
+              class="service grid item"
+              *ngFor="
+                let service of payment.ServiceTransactionToClaimPaymentDtos;
+                index as i;
+                odd as isOdd;
+                even as isEven
+              "
+              [class.odd]="isOdd"
+              [class.even]="isEven"
+              data-qa="--service-item">
+              <div data-qa="--service-item-date-entered">
+                {{ service.DateEntered | toShortDisplayDateUtc }}
+              </div>
+              <div data-qa="--service-item-patient-name">{{ service.PatientName }}</div>
+              <div data-qa="--service-item-provider-name">{{ service.ProviderName }}</div>
+              <div data-qa="--service-item-description">{{ service.Description }}</div>
+              <div data-qa="--service-item-tooth">{{ service.Tooth }}</div>
+              <div data-qa="--service-item-surface">{{ service.Surface }}</div>
+              <div data-qa="--service-item-charges">
+                <p class="text-right">{{ service.Charges | currency }}</p>
+              </div>
+              <div data-qa="--service-item-allowed-amount" *ngIf="!shouldAllowEdit(service)"
+                  kendoTooltip
+                  position="top"
+                  tooltipClass="app-tooltip"
+                  title="{{ getAllowedAmountTooltip(service) }}">
+                <p class="text-right">{{ service.AllowedAmount | currency }}</p>
+              </div>
+              <div data-qa="--service-item-allowed-amount"  
+                [ngClass]="{ 'modified-allowed-amount': service.AllowedAmount !== service.OriginalAllowedAmount || service.AllowedAmountOverride != null }"
+                *ngIf="shouldAllowEdit(service)">
+                <currency-input
+                  id="inpAllowedAmount{{ service.ServiceTransactionId }}"
+                  [(amount)]="service.AllowedAmount"
+                  [isDisabled]="editMode || isInsTransactionDeposited===true"
+                  [emitOnBlur]="true"
+                  (amountChanging)="onAllowedAmountChanging({ claim: allowedAmount })"
+                  (amountChange)="onAllowedAmountBlurEvent({ claim: payment, service: service })">
+                </currency-input>
+                <span
+                  class="error help-text"
+                  data-qa="--service-allowed-amount-error"
+                  *ngIf="
+                    service.AllowedAmount > service.Charges ">
+                  {{
+                    'Allowed Amount cannot be more than the charge.'
+                  }}
+                </span>
+                <span
+                  class="error help-text"
+                  data-qa="--service-allowed-amount-error"
+                  *ngIf="
+                    service.AllowedAmount < 0 ">
+                  {{
+                    'Allowed Amount cannot be a negative amount.'
+                  }}
+                </span>
+              </div>
+              <div data-qa="--service-item-ins-estimate">
+                <p class="text-right">
+                  {{ service.InsuranceEstimate | currency }}
+                </p>
+              </div>
+              <div data-qa="--service-item-adj-estimate">
+                <p class="text-right">
+                  {{ service.AdjustedEstimate | currency }}
+                </p>
+              </div>
+              <div data-qa="--service-item-balance">
+                <p class="text-right">{{ service.Balance | currency }}</p>
+              </div>
+              <div data-qa="--service-item-payment-amount">
+                <currency-input
+                  id="inpAmount{{ service.ServiceTransactionId }}"
+                  [(amount)]="service.PaymentAmount"
+                  [isDisabled]="editMode || isInsTransactionDeposited===true"
+                  [emitOnBlur]="true"
+                  (amountChanging)="onAmountChanging({ claim: payment })"
+                  (amountChange)="serviceAmountBlurEvent({ claim: payment, service: service })">
+                </currency-input>
+
+                <span
+                  class="error help-text"
+                  data-qa="--service-item-error"
+                  *ngIf="arePaymentsMoreThanCharge(service)"> 
+                  Payment amount cannot be greater than the remaining amount of  {{ (service.Charges - service.TotalInsurancePayments | currency) }}. 
+                </span>
+                <span
+                  class="error help-text"
+                  data-qa="--service-allowed-amount-payment-error"
+                  *ngIf="arePaymentsMoreThanAllowedAmount(service)"> 
+                  Payment amount can not be more than the maximum allowed amount remaining for the service {{ (service.AllowedAmount - service.TotalInsurancePayments) | currency }}.                  
+                </span>
+              </div>
+              <div></div>
+            </div>
+          </div>
+        </div>
+      </cdk-virtual-scroll-viewport>
+    </div>
+        <side-drawer data-qa="master-note-side-drawer" anchor="right" height="420" width="400" [isOpen]="isMasterNoteDrawerOpen">
+            <div>
+                <div class="claims-drawer-header">
+                    <div class="claims-drawer-title">Default Note</div>
+                    <div class="claims-drawer-buttons">
+                        <app-button data-qa="master-note-cancel-button" class="claims-drawer-button" variation="secondary" buttonLabel="Cancel" (onClick)="cancelMasterNote()"></app-button>
+                        <app-button data-qa="master-note-save-button" class="claims-drawer-button" variation="primary" buttonLabel="Save" (onClick)="applyMasterNote()"></app-button>
+                    </div>
+                </div>
+                <div class="claims-drawer-content">
+                    <p>This note will be applied to all insurance payments.</p>
+                    <textarea data-qa="master-note-textarea" [(ngModel)]="editableMasterNote" maxlength="500"></textarea>
+                </div>
+            </div>
+        </side-drawer>
+        <side-drawer data-qa="individual-note-side-drawer" anchor="right" height="435" width="400" [isOpen]="isIndividualNoteDrawerOpen">
+            <div>
+                <div class="claims-drawer-header">
+                    <div class="claims-drawer-title">Note</div>
+                    <div class="claims-drawer-buttons">
+                        <app-button data-qa="individual-note-cancel-button" class="claims-drawer-button" variation="secondary" buttonLabel="Cancel" (onClick)="closeIndividualNoteDrawer()"></app-button>
+                        <app-button data-qa="individual-note-save-button"class="claims-drawer-button" variation="primary" buttonLabel="Save" (onClick)="applyIndividualNote()"></app-button>
+                    </div>
+                </div>
+                <div class="claims-drawer-content">
+                    <p>This note will override the default note if one has been saved.</p>
+                    <textarea data-qa="individual-note-textarea" [(ngModel)]="editableIndividualNote" maxlength="500"></textarea>
+                </div>
+            </div>
+        </side-drawer>
+  </ng-container>
+</div>

@@ -1,0 +1,25 @@
+<div class="alertsFlagsInfo" id="alerts-flags-info">
+    <div class="alertsFlagsInfo-main" id="alerts-flags-info-main">
+        <div class="alertsFlagsInfo-title" id="alerts-flags-info-title">
+            <span class="alertsFlagsInfo-main-title" id="alerts-flags-info-main-title">{{ 'Alerts & Flags' | translate
+                }}</span>
+        </div>
+    </div>
+    <div class="medical-info" *ngFor="let medicalAlert of medicalAlerts" id="medical-info">
+        <i *ngIf="medicalAlert.MedicalHistoryAlertTypeId === 1" class="fi-allergies"></i>
+        <i *ngIf="medicalAlert.MedicalHistoryAlertTypeId === 2" class="fa fa-heart"></i>
+        <i *ngIf="medicalAlert.MedicalHistoryAlertTypeId === 3" class="fi-premed"></i>
+        <span class="medical-info-title" id="medical-info-title" kendoTooltip position="top" tooltipClass="app-tooltip"
+            title="{{medicalAlert.MedicalHistoryAlertDescription.length > 30 ? medicalAlert.MedicalHistoryAlertDescription : ''}}">
+            {{ medicalAlert.MedicalHistoryAlertDescription | truncateText: 30 }}
+        </span>
+    </div>
+    <div id="alerts-info" class="alerts-info" *ngFor="let flag of flags">
+        <i class="fa {{ getClass(flag.SymbolId) }}"></i>
+        <span id="alerts-info-sub-title" kendoTooltip
+            position="top" tooltipClass="app-tooltip" title="{{flag.Description.length > 30 ? flag.Description : ''}}"
+            class="alerts-info-sub-title">
+            {{ flag.Description | truncateText: 30 }}
+        </span>
+    </div>
+</div>

@@ -1,0 +1,405 @@
+﻿.prevCareEncounter {
+    position: fixed;
+    top: auto;
+    bottom: auto;
+    max-width: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    opacity: 0;
+    background-color: @brand-color_white;
+    box-shadow: initial;
+    z-index: 999;
+    padding: 16px;
+
+     &.open{
+        max-width: 100%;
+        opacity: 1;
+    }
+
+    .prHeader {
+        position: relative;
+        width: 100%;
+
+        h4 {
+            margin-top: 0;
+        }
+    }
+
+    .prClose {
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+
+    .filteringMask {
+        background: none;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 100;
+    }
+
+    .filteringMessage {
+        font-weight: bold;
+        position: absolute;
+        right: 200px;
+        top: 7px;
+    }
+
+    .prBody {
+        position: relative;
+        width: 100%;
+    }
+
+    &.tabView {
+        margin-top: -456px;
+        margin-left: 13px;
+        height: 400px;
+        max-width: 64.7%;
+    }
+    .fee{
+        > span{
+            padding-right: 10px !important;
+        }
+    }
+    .k-grid-content {
+        border-bottom: 1px solid @brand-color_darker-gray;
+        border-left: none;
+        border-right: none;
+
+            .grid-checkbox {
+                text-align: left;
+            }
+    }
+    .k-grid {
+        .serviceindent{
+            background-color: @brand-color_dark-gray;
+        }
+       .k-grid-toolbar {
+           padding: @brand-padding_horizontal;
+        }
+
+       .k-grouping-row {   
+               
+            > td {
+                padding: @brand-heading_padding;
+                    > p,
+
+                    > .k-reset {
+                    display: none;
+                }
+            }
+
+            .k-group-custom-header {
+                display: inline-block;
+                position: relative;
+
+                > table {
+
+                    .k-reset {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+
+    i.inactive-service-warning {
+        color: #f7b82d;
+        vertical-align: text-top;
+        margin-left: 2px;
+        margin-top: 1px;
+    }
+
+    i.inactive-service-warning + div.popover {
+        background: #106c90;
+        color: #fff;
+        font-size: 12px;
+    }
+}
+.prevCareAppointment {
+    position: absolute;
+    top: 0px;
+    max-width: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    opacity: 0;
+    background-color: @brand-color_white;
+    box-shadow: initial;
+    width: 98%;
+    height: 100%;
+
+    &.open{
+        padding: 16px;
+        max-width: 100%;
+        opacity: 1;
+        z-index: 999;
+    }
+    .btn-primary{
+        height:initial;
+    }
+    .prHeader {
+        position: relative;
+        width: 100%;
+
+        h4 {
+            margin-top: 0;
+        }
+    }
+
+    .prClose {
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+
+    .filteringMask {
+        background: none;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 100;
+    }
+
+    .filteringMessage {
+        font-weight: bold;
+        position: absolute;
+        right: 200px;
+        top: 7px;
+    }
+
+    .prBody {
+        position: relative;
+        width: 100%;
+    }
+
+    &.tabView {
+        margin-top: -456px;
+        margin-left: 13px;
+        height: 400px;
+        max-width: 64.7%;
+    }
+    .fee{
+        > span{
+            padding-right: 5px !important;
+        }
+    }
+    .k-grid-content {
+        border-bottom: 1px solid @brand-color_darker-gray;
+        border-left: none;
+        border-right: none;
+        overflow: scroll;
+            .grid-checkbox {
+                text-align: left;
+            }
+    }
+    .k-grid {
+        .serviceindent{
+            background-color: @brand-color_dark-gray;
+        }
+       .k-grid-toolbar {
+           padding: @brand-padding_horizontal;
+        }
+
+       .k-grouping-row {   
+               
+            > td {
+                padding: @brand-heading_padding;
+                    > p,
+
+                    > .k-reset {
+                    display: none;
+                }
+            }
+
+            .k-group-custom-header {
+                display: inline-block;
+                position: relative;
+
+                > table {
+
+                    .k-reset {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+
+    .warning-container {
+        padding: 0 !important;
+    }
+
+    i.inactive-service-warning {
+        color: #f7b82d;
+        vertical-align: text-top;
+        margin-left: 2px;
+        margin-top: 1px;
+    }
+
+    i.inactive-service-warning + div.popover {
+        background: #106c90;
+        color: #fff;
+        font-size: 12px;
+    }
+}
+.prevCareTxPlan {
+    position: absolute;
+    top: 0px;
+    max-width: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    opacity: 0;
+    background-color: @brand-color_white;
+    box-shadow: initial;
+    padding: 16px;
+    width: 98%;
+    height: 100%;
+
+    &.open {
+        max-width: 100%;
+        opacity: 1;
+        z-index: 999;
+    }
+
+    .btn-primary {
+        height: initial;
+    }
+
+    .prHeader {
+        position: relative;
+        width: 100%;
+
+        h4 {
+            margin-top: 0;
+        }
+    }
+
+    .prClose {
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+
+    .filteringMask {
+        background: none;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 100;
+    }
+
+    .filteringMessage {
+        font-weight: bold;
+        position: absolute;
+        right: 200px;
+        top: 7px;
+    }
+
+    .prBody {
+        position: relative;
+        width: 100%;
+    }
+
+    &.tabView {
+        margin-top: -456px;
+        margin-left: 13px;
+        height: 400px;
+        max-width: 64.7%;
+    }
+
+    .fee {
+        > span {
+            padding-right: 5px !important;
+        }
+    }
+
+    .k-grid-content {
+        border-bottom: 1px solid @brand-color_darker-gray;
+        border-left: none;
+        border-right: none;
+        overflow: scroll;
+
+        .grid-checkbox {
+            text-align: left;
+        }
+    }
+
+    .k-grid {
+        .serviceindent {
+            background-color: @brand-color_dark-gray;
+        }
+
+        .k-grid-toolbar {
+            padding: @brand-padding_horizontal;
+        }
+
+        .k-grouping-row {
+
+            > td {
+                padding: @brand-heading_padding;
+
+                > p,
+                > .k-reset {
+                    display: none;
+                }
+            }
+
+            .k-group-custom-header {
+                display: inline-block;
+                position: relative;
+
+                > table {
+
+                    .k-reset {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+
+    .warning-container {
+        padding: 0 !important;
+    }
+
+    i.inactive-service-warning {
+        color: #f7b82d;
+        vertical-align: text-top;
+        margin-left: 2px;
+        margin-top: 1px;
+    }
+
+    i.inactive-service-warning + div.popover {
+        background: #106c90;
+        color: #fff;
+        font-size: 12px;
+    }
+}
+.prevCareRunningApt{
+    height: 360px;
+    overflow: hidden;
+    background-color: @brand-color_white;
+    .k-grid-content{
+        height: 259px;
+    }
+    .k-header{
+        &.k-grid-toolbar{
+            padding-bottom: 0px;
+            border-bottom: 0px;
+        }
+    }
+
+    i.inactive-service-warning {
+        color: #f7b82d;
+        vertical-align: text-top;
+        margin-left: 2px;
+        margin-top: -2px;
+    }
+
+    i.inactive-service-warning + div.popover {
+        background: #106c90;
+        color: #fff;
+        font-size: 12px;
+    }
+}

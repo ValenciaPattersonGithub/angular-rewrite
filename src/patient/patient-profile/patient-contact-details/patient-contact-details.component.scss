@@ -1,0 +1,99 @@
+@import "variables";
+
+.contactdetail-header {
+    display: grid;
+    grid-template: 1fr / 50% 50%;
+    grid-template-areas: "title actionbuttons";
+    &-title {
+        font-family: $global-font-family;
+        font-size: 16px;
+        color: $patient-registration-title-color;
+        font-weight: bold;
+        grid-area: title;
+    }
+    &-actionButtons {
+        grid-area: actionbuttons;
+        justify-self: end;
+    }
+}
+.contact-detail-container {
+    padding: 15px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 5px;
+    hr {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border-top: 1px solid #2b144e;
+    }
+}
+.contactDetailContent {
+    display: grid;
+    column-gap: 10px;
+    position: relative;
+    grid-template: 1fr / 30% 70%;
+    grid-template-areas:
+        "primaryphone"
+        "email"
+        "address";
+    & * {
+        box-sizing: border-box;
+    }
+    & > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+    &-phone {
+        grid-area: primaryphone / span 2;
+
+        &-wrapper {
+            display: grid;
+            grid-template: 1fr / 30% 70%;
+            grid-template-areas: "phonenumber";
+            &-addresses {
+                grid-area: phonenumber / 1;
+            }
+            &-reminder {
+                grid-area: phonenumber / 2;
+            }
+            &-text-reminder {
+                grid-area: phonenumber / 2;
+            }
+        }
+        &-phone-wrapper {
+            display: grid;
+            grid-template: 1fr / 30% 70%;
+            grid-template-areas: "label";
+            &-lable {
+                grid-area: label / 1;
+            }
+            &-opt-out {
+                grid-area: label / 2;
+            }
+        }
+    }
+    &-address {
+        grid-area: address / 1;
+    }
+    &-email {
+        grid-area: email / span 2;
+
+        &-wrapper {
+            display: grid;
+            grid-template: 1fr / 30% 70%;
+            grid-template-areas: "emailaddress";
+            &-addresses {
+                grid-area: emailaddress / 1;
+            }
+            &-reminder {
+                grid-area: emailaddress / 2;
+            }
+        }
+    }
+    &-opt-out {
+        grid-area: primaryphone / 2;
+    }
+}
+::ng-deep {
+    .label {
+        font-size: 14px !important;
+    }
+}

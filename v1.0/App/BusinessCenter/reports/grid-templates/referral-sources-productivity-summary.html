@@ -1,0 +1,52 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr class="stripEven">
+                    <th class="col-sm-12 cell" colspan="5">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-2 cell">{{ 'Rank' | i18n }}</th>
+                    <th class="col-sm-4 cell">{{ 'Referral Source' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ '# Referred' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Productivity' | i18n }}</th>
+                    <th class="col-sm-2 cell text-right">{{ 'Avg. Productivity' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody class="stripOdd" >
+                <tr ng-repeat="source in location.Sources">
+                    <td class="col-sm-2 cell">{{ source.Rank }}</td>
+                    <td class="col-sm-4 cell">{{ source.ReferralSource }}</td>
+                    <td class="col-sm-2 cell text-right">{{ source.NumberReferred }}</td>
+                    <td class="col-sm-2 cell text-right">{{ source.Productivity | currency }}</td>
+                    <td class="col-sm-2 cell text-right">{{ source.AverageProductivity | currency }}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-6 cell reportGrid__label" colspan="2">{{'Totals for' | i18n}} {{location.Location}}</td>
+                    <td class="col-sm-2 cell text-right">{{location.NumberReferred}}</td>
+                    <td class="col-sm-2 cell text-right">{{location.Productivity | currency}}</td>
+                    <td class="col-sm-2 cell text-right">{{location.AverageProductivity | currency}}</td>
+                </tr>
+            </tbody>
+
+            <tbody class="stripEven" ng-if="data.Locations.length > 0 && !showFilterMessage && data.Locations.length === $index+1">
+                <tr class="reportGrid__footer"><td class="col-sm-12 cell" colspan="5"></td></tr>
+                <tr>
+                    <td class="col-sm-6 cell reportGrid__label" colspan="2">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right">{{data.NumberReferred}}</td>
+                    <td class="col-sm-2 cell text-right">{{data.Productivity | currency}}</td>
+                    <td class="col-sm-2 cell text-right">{{data.AverageProductivity | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody ng-show="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>
+
+

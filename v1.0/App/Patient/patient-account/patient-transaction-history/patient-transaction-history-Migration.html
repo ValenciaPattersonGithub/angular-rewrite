@@ -1,0 +1,214 @@
+﻿<div class="transaction-history-refactor">
+	<div ng-controller="TransactionHistoryMigrationController">
+		<!-- NOTE: do not put an if-case on this element. The `doRefresh` is used as a side-effect to update data and there seems
+		to be a change in behavior on the binding when the element is conditionally rendered. -->
+		<balance-detail-row data="dataForBalanceDetailRow"
+			selected-patient-id="filterObject.members"
+			get-latest-details="doRefresh"
+			refresh-transaction-history="refreshTransactionHistoryPageData"
+			filtered-account-members="selectedAccountMembers"></balance-detail-row>
+		<div class="encounterActions row">
+			<div class="col-md-12 text-center">
+				<span
+					ng-if="isCreateCustomInvoice || showCreateClaimView || filterBarProperties.hideRunningBalance || sortingApplied"
+					class="text-info strong text-center font-16"
+					id="noRunningBalanceMsgHere">{{::('Running balance not
+					available in this filtered view' | i18n) }}</span>
+			</div>
+			<div class="col-md-12">
+				<div class="patTransHist__createClaimBtn col-md-6">
+
+					<span ng-show="!isCreateCustomInvoice">
+						<span class="font-weight-bold"
+							ng-if="showCreateClaimView">{{ 'Select Plan' | i18n }}:</span>
+						<span ng-show="showCreateClaimView">
+							<soar-select-list option-list="plansTrimmed"
+								text-field="Name"
+								value-field="PatientBenefitPlanId"
+								placeholder="Select Benefit Plan"
+								ng-model="selectedPlanId">
+							</soar-select-list>
+						</span>
+						<a id="btnCreateClaim"
+							uib-tooltip="{{((accountMembersOptionsTemp.length > 1 && (filterObject.members == '0' || filterObject.members.length > 1))?('You must have a specific patient selected.' | i18n) : ((plansTrimmed.length === 0)?('There are no insurance plans attached to this account' | i18n) : ''))}}"
+							tooltip-placement="right"
+							tooltip-append-to-body="true"
+							ng-class="{'disabled': (accountMembersOptionsTemp.length > 1 && (filterObject.members == '0' || filterObject.members.length > 1)) || plansTrimmed.length === 0}"
+							class="btn btn-primary"
+							check-auth-z="soar-ins-ibplan-add"
+							ng-click="openCreateClaimView()"
+							ng-if="!showCreateClaimView">
+							<span>{{ 'Create Claim' }}</span>
+						</a>
+						<a id="btnCreateClaim"
+							uib-tooltip="{{((rows.length === 0)?('There are no available services for this plan' | i18n) : (!selectedPlanId || !(rows | serviceSelected)) ? ('You must select a Benefit Plan and at least one service to create a claim.' | i18n) :'')}}"
+							tooltip-placement="right"
+							tooltip-append-to-body="true"
+							ng-class="{'disabled': rows.length === 0 || !selectedPlanId || !(rows | serviceSelected)}"
+							class="btn btn-primary margin-left-5"
+							check-auth-z="soar-ins-ibplan-add"
+							ng-click="completeCreateClaim()"
+							ng-if="showCreateClaimView">
+							<span>{{ 'Complete Create Claim' }}</span>
+						</a>
+						<button id="btnCreateClaim"
+							class="btn btn-default"
+							check-auth-z="soar-ins-ibplan-add"
+							ng-click="closeCreateClaimView(false)"
+							ng-if="showCreateClaimView">
+							<span>{{ 'Cancel' }}</span>
+						</button>
+					</span>
+					<span ng-if="showInvoiceButtons">
+						<button ng-hide="isCreateCustomInvoice"
+							id="btnCreateCustomInvoice"
+							class="btn btn-primary margin-left-5"
+							ng-click="showCreateCustomInvoice()">
+							<span>{{ ::('Custom Invoice' | i18n) }}</span>
+						</button>
+						<span ng-if="isCreateCustomInvoice">{{'Select transactions for your invoice:'}} </span>
+						<button id="btnCreateInvoice"
+							class="btn btn-primary"
+							check-auth-z="soar-ins-ibplan-add"
+							ng-click="createCustomInvoice()"
+							ng-if="isCreateCustomInvoice"
+							ng-disabled="!(rows | anySelected)"
+							title="{{ rows.length === 0 ? 'There are no available items for a custom invoice' : '' }}">
+							<span>{{ ::('Create Invoice' | i18n) }}</span>
+						</button>
+						<button id="btnCancelInvoice"
+							class="btn btn-default"
+							check-auth-z="soar-ins-ibplan-add"
+							ng-click="cancelCreateCustomInvoice()"
+							ng-if="isCreateCustomInvoice">
+							<span>{{ ::('Cancel' | i18n) }}</span>
+						</button>
+					</span>
+					<span id="spnSelectedCount"
+						class="selectorCount"
+						ng-if="isCreateCustomInvoice || showCreateClaimView">({{ selectedCount
+						}}) {{ 'Selected' || i18n }}</span>
+				</div>
+				<div class="encounterActions__add text-right">
+					<button class="peopleMgmt__actions-link__transparent btn btn-print"
+						ng-click="printFilter()"
+						ng-disabled="rows.length === 0"
+						ng-class="{notActive: (rows.length === 0)}">
+						<i class="fa fa-print fa-2x"></i>
+					</button>
+					<button class="peopleMgmt__actions-link__transparent btn btn-print"
+						ng-click="exportFilter()"
+						ng-disabled="rows.length === 0"
+						ng-class="{notActive: (rows.length === 0)}">
+						<i class="far fa-share-square fa-2x"></i>
+					</button>
+					<button id="btnResetSort"
+						class="btn btn-default"
+						type="button"
+						ng-show="sortingApplied"
+						ng-click="resetSorting()">{{ 'Reset Sort' | i18n }}</button>
+				</div>
+			</div>
+		</div>
+		<div class="printingTxnHistory">
+			<div class="row">
+				<label class="col-md-5 printingTxnHistory__topHeaderRight">{{printedDate}}</label>
+				<label class="col-md-5 printingTxnHistory__topHeaderRight">{{currentUserCode}}</label>
+			</div>
+			<div class="printingTxnHistory__headerInfo">{{ practiceName | i18n }}</div>
+			<div class="printingTxnHistory__headerInfo">{{ responsiblePartyInfo | i18n }}</div>
+			<span class="printingTxnHistory__title"><strong>Transaction History</strong></span>
+			<div ng-if="printingDateRangeFrom && printingDateRangeTo"
+				class="printingTxnHistory__headerInfo">From
+				{{printingDateRangeFrom}} - To {{printingDateRangeTo}}</div>
+			<br />
+		</div>
+
+
+
+		<div ng-if="!(!rows)"
+			class="divHistoryItems">
+
+			<patient-transaction-grid id="patientTransactionGrid"
+				[rows]="rows"
+				[is-selection-view]="isSelectionView"
+				[is-create-custom-invoice]="isCreateCustomInvoice"
+				[show-create-claim-view]="showCreateClaimView"
+				[sorting-applied]="sortingApplied"
+				[hide-running-balance]="filterBarProperties.hideRunningBalance"
+				[keep-create-claim-view-open]="keepCreateClaimViewOpen"
+				(refresh-data-tx)="refreshTransactionHistoryPageData()"
+				[refresh-transaction-history-page-data]="refreshTransactionHistoryPageData"
+				(sort-column-field)="sortColumn($event)"
+				[current-patient-id]="currentPatientId"
+				[remove-show-more-button]="removeShowMoreButton"
+				(show-more-grid)="showMoreResults()"
+				[reset-paging]="resetPaging"
+				[patient-det]="patientDet"
+				(view-details-action-function)="viewRowItem($event)"
+				(delete-action-function)="deleteRowItem($event)"
+				(edit-action-function)="editRowItem($event)"
+				(view-complete-encounter-action-function)="viewCompleteEncounter($event)"
+				(change-payment-or-adjustment-action-function)="changePaymentOrAdjustment($event)"
+				(view-carrier-response-function)="viewCarrierResponse($event)"
+				(view-invoice-function)="viewInvoice($event)"
+				(print-receipt-function)="printReceipt($event)"
+				(view-eob-action-function)="viewEra($event)"
+				[sort-object]="sortObject"
+				(selected-count-change)="selectedCountChange($event)"
+				[selected-plan-id]="selectedPlanId">
+			</patient-transaction-grid>
+
+		</div>
+
+		<div class="printingTxnHistory">
+			<strong>Filters</strong>
+			<div class="printingTxnHistory__filters">
+				<ul>
+					<li>
+						<b>{{'Locations' | i18n}}</b> : {{FilterLocations | i18n}}
+					</li>
+					<li>
+						<b>{{'Account Members' | i18n}}</b> : {{FilterAccountMembers | i18n}}
+					</li>
+					<li>
+						<b>Date Ranges</b> : {{FilterDateRange | i18n}}
+					</li>
+					<li>
+						<b>Tooth</b> : {{FilterTooth | i18n }}
+					</li>
+					<li>
+						<b>Transaction Types</b> : {{FilterTransactionTypes | i18n}}
+					</li>
+					<li>
+						<b>Providers</b> : {{ FilterProviders| i18n}}
+					</li>
+					<li>
+						<b>Status</b>: {{ FilterStatus| i18n }}
+					</li>
+				</ul>
+			</div>
+			<div class="row printingTxnHistory__footer">
+				<div class="col-sm-12 cell text-align-center ">{{'The Code on Dental Procedures and Nomenclature is
+					Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights
+					reserved.' | i18n}}</div>
+			</div>
+		</div>
+		<div id="docCtrlsWindow"
+			kendo-window="docCtrls"
+			k-visible="false"
+			k-on-open="docCtrlsOpen = true"
+			k-on-close="docCtrlsOpen = false">
+		</div>
+		<ng-include [src]="htmlSrc">
+		</ng-include>
+		<div class="backToTop"
+			ng-if="!removeBackToTop()">
+			<a tabindex="2"
+				id="btnPatientPageScrollTop"
+				class="btn btn-primary"
+				icon="fa-arrow-circle-up"
+				ng-click="scrollToTop()">Top</a>
+		</div>
+	</div>
+</div>

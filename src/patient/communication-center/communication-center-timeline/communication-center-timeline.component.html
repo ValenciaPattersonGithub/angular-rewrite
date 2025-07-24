@@ -1,0 +1,14 @@
+<div class="timeline-wrapper">
+   <div class="communication-no-records" *ngIf="!patientCommunications.length">{{ 'There are no records.' | translate }}
+   </div>
+   <div class="timeline-row" *ngFor="let groups of patientCommunications">
+      <div class="timeline-group-wrapper" *ngIf="groups.Communications.length">
+         <div class="timeline-group-name">{{groups.GroupName | translate}}</div>
+         <div class="timeline-group-row" *ngFor="let communication of groups.Communications">
+            <app-communication-card [communicationModel]="communication" [index]="communication.Index"
+               [selectedCommunication]="selectedCommunication">
+            </app-communication-card>
+         </div>
+      </div>
+   </div>
+</div>

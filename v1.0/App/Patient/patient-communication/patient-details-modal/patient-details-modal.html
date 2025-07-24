@@ -1,0 +1,161 @@
+﻿<div class="patientDetailsModal">
+    <div class="rowFull white">
+        <div class="patientHeader">
+            <div class="patientHeader__nav">
+                <a id="patientTab{{tab.Area}}" href="{{tab.Url}}" ng-repeat="tab in tabs" ng-if="!tab.Hidden" class="patientHeader__nav-item"
+                   ng-class="{active: tab.Selected, disabled: tab.Disabled}" check-auth-z="{{tab.amfa}}">
+                    <span id="imgTabIconLeft" ng-if="tab.ShowIcon && !tab.IconRight" class="glyphicon margin-right-5 error {{tab.IconClass}}" aria-hidden="true"></span>
+                    {{ tab.Title | i18n }}
+                    <span id="imgTabIconRight" ng-if="tab.ShowIcon && tab.IconRight" class="glyphicon margin-left-5 error {{tab.IconClass}}" aria-hidden="true"></span>
+                </a>
+
+            </div>
+        </div>
+        <div>
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4 data-toggle="collapse" id="collapsePatientDet" data-target="#patient-detail" class="ng-binding" onclick="return false;" aria-expanded="true">
+                            <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                            Information
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body panel-collapse collapse in" id="patient-detail">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="word-wrap">
+                                <div>
+                                    <initial-badge class="initialBadgeColorOverride" person="addressReferrer" ng-show="addressReferrer"></initial-badge>
+                                    <label ng-class="{ 'referred' : isReferred && addressReferrer == null}">{{ address.AddressLine1 }}</label>
+                                </div>
+                                <div>
+                                    <label ng-class="{ 'referred' : isReferred}" ng-show="address.AddressLine2 && address.AddressLine2 != ''">
+                                        {{ address.AddressLine2 }} <br />
+                                    </label>
+                                </div>
+                                <div ng-class="{ 'referred' : isReferred}" ng-show="(address.City && address.City != '') || (address.State && adresses.State != '') || (adresses.ZipCode && adresses.ZipCode != '')">
+                                    <!-- had to put these on the same line or else the browser would insert a phantom space - no idea why -->
+                                    <label id="lblPatientCity">{{ address.City }}</label><label ng-show="(address.City && address.City != '') && (address.State && address.State != '')">, </label>&nbsp;
+                                    <label id="lblPatientState">{{ address.State }} </label>&nbsp;
+                                    <label id="lblPatientZip">{{ address.ZipCode | zipCode }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div ng-repeat="email in emailAddresses track by $index">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <initial-badge class="initialBadgeColorOverride" person="email.Referrer"  ng-show="email.ReferrerId"></initial-badge>
+                                        <a class="word-wrap" id="btnPatientEmailOneAddress" ng-href="mailto:{{ email.Email }}" ng-class="{ 'referred' : isReferred && !email.ReferrerId}">
+                                            {{ email.Email }}
+                                        </a>
+                                    </div>
+                                        <div class="col-xs-2">
+                                            <label id="lblPatientEmailOneIsPrimary">
+                                                {{ email.IsPrimary ? 'Preferred' : ' ' | i18n }}
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <div class="patientDetailsModal__reminder">
+                                                <button class="btn btn-success reminderButton " disabled ng-show="email.ReminderOK">{{ 'Reminders OK' | i18n }}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div ng-repeat="phone in phones | orderBy:'DateModified': reverse track by $index">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <initial-badge class="initialBadgeColorOverride" person="phone.Referrer" ng-show="phone.ReferrerId"></initial-badge>
+                                        <label id="lblPatientPhoneView{{$index}}" class="word-wrap"  ng-class="{ 'referred' : isReferred && !phone.ReferrerId}">
+                                            {{ phone.PhoneNumber | tel }}
+                                        </label>
+                                        <label id="lblPatientPhoneOneType{{$index}}" ng-show="phone.Type" class="word-wrap" ng-class="{ 'referred' : isReferred}">
+                                            ({{ phone.Type | lowercase }})
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <label id="lblPatientPhonePreferred{{$index}}">
+                                            {{ phone.IsPrimary ? 'Preferred' : ' '| i18n }}
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <div class="patientDetailsModal__reminder">
+                                            <button class="btn btn-default phone-reminder-btn-text-ok reminderButton" disabled ng-show="phone.ReminderOK">
+                                                <span class="far fa-comment" ng-show="phone.Type == 'Mobile' && phone.TextOk"></span>
+                                                <span class="fa fa-phone" ng-show="phone.ReminderOK"></span>
+                                            </button>
+                                            <button class="btn btn-success phone-reminder-btn-reminder-ok reminderButton" disabled ng-show="phone.TexOk || phone.ReminderOK">{{ 'Reminders OK' | i18n }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <sub-section section-title="Alerts & Flags">
+                        <div class="patAlerts">
+                            <div class="patAlerts__alert" ng-show="masterAlerts.length == 0 && customAlerts.length == 0">
+                                <no-results loading="loading" loading-message='loadingMessageNoResults'></no-results>
+                            </div>
+                            <div class="patAlerts__content" ng-hide="alerts.length == 0">
+                                <!--medical history flags-->
+                                <div class="patAlerts__alertContent patAlerts__medicalHistoryFlagColor" ng-repeat="flag in patientMedicalHistoryAlerts | orderBy:'MedicalHistoryAlertDescription'" title="{{ flag.MedicalHistoryAlertDescription}}">
+                                    <div class="patAlerts__faIcons {{ flag.IconClass }}"></div>
+                                    <strong class="patAlerts__description">{{ flag.MedicalHistoryAlertDescription | truncate:40}}</strong>
+                                    <strong class="patAlerts__description" ng-show="{{flag.MedicalHistoryAlertDescription.length > 40}}">...</strong>
+                                </div>
+                                <!-- account's current alerts -->
+                                <div class="patAlerts__alertContent" ng-repeat="malert in masterAlerts | orderBy:'Description'" title="{{ malert.Description}}">
+                                    <div class="patAlerts__faIcons {{ getClass(malert.SymbolId) }}"></div>
+                                    <strong class="patAlerts__description">{{ malert.Description | truncate:40}}</strong>
+                                    <strong class="patAlerts__description" ng-show="{{malert.Description.length > 40}}">...</strong>
+                                </div>
+                                <div class="patAlerts__alertContent" ng-repeat="calert in customAlerts | orderBy:'Description'" title="{{ calert.Description}}">
+                                    <div class="patAlerts__faIcons {{ getClass(calert.SymbolId) }}"></div>
+                                    <strong class="patAlerts__description">{{ calert.Description | truncate:40}}</strong>
+                                    <strong class="patAlerts__description" ng-show="{{calert.Description.length > 40}}">...</strong>
+                                </div>
+
+                            </div>
+                        </div>
+                    </sub-section>
+                    <patient-preferences preferences="patient" editing="false"></patient-preferences>
+                    <sub-section section-title="Account Members">
+                        <div class="accountMembersWidget">
+                            <ul id="lstAccountMembers" class="accountMembersWidget__list" ng-show="loadingAccountMembers==false">
+                                <li id="liAccountMembersWidget{{$index}}" class="accountMembersWidget__list-item" ng-repeat="accountMember in accountMembers | orderBy:['LastName','FirstName']">
+                                    <div id="dvAccountMember{{$index}}" title="{{accountMember.FirstName  +  ((accountMember.PreferredName!=null && accountMember.PreferredName!='')? ' (' + accountMember.PreferredName +')' :'') + ((accountMember.MiddleName!=null && accountMember.MiddleName!='' ) ? ' ' + accountMember.MiddleName +'.':'' ) + ' ' + accountMember.LastName + ((accountMember.SuffixName!=null && accountMember.SuffixName!='') ? ', ' + accountMember.SuffixName :'') }} {{ (accountMember.IsResponsiblePerson ? '(RP)':'' | i18n) }}">
+                                        <a id="lnkAccountMember{{$index}}" class="accountMembersWidget__link btn btn-link" ng-class="{'disabled-link': patientId == accountMember.PatientId || ! accountMember.IsActiveAccountMember}" ng-disabled="patientId == accountMember.PatientId || ! accountMember.IsActiveAccountMember" ng-click="navigate((patientId != accountMember.PatientId && accountMember.IsActiveAccountMember)? '#/Patient/'+ accountMember.PatientId +'/Overview' :'')" ng-attr-target="{{target}}" check-auth-z="soar-per-perdem-view">
+                                            <span id="lblAccountMemberName{{$index}}" class="accountMembersWidget__name">
+                                                {{accountMember.FirstName  +  ((accountMember.PreferredName!=null && accountMember.PreferredName!='')? ' (' + accountMember.PreferredName +')' :'') + ((accountMember.MiddleName!=null && accountMember.MiddleName!='' ) ? ' ' + accountMember.MiddleName +'.':'' ) + ' ' + accountMember.LastName + ((accountMember.SuffixName!=null && accountMember.SuffixName!='') ? ', ' + accountMember.SuffixName :'') }}
+                                                <span id="lblAccountMemberIsRP{{$index}}" class="accountMembersWidget__rp">
+                                                    {{ accountMember.IsResponsiblePerson?'(RP)':'' | i18n }}
+                                                </span>
+                                            </span>
+                                            <span id="lblAccountMemberDOB{{$index}}" class="accountMembersWidget__date">
+                                                {{ accountMember.DateOfBirth | toShortDisplayDate }}
+                                            </span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                            <no-results id="lstAccountMembersLoading" loading="loadingAccountMembers==true" loading-messag="' '" ng-hide="loadingAccountMembers==false"></no-results>
+                            <div class="clearfix">&nbsp;</div>
+                        </div>
+                    </sub-section>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

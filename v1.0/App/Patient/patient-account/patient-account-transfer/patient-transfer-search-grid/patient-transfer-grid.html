@@ -1,0 +1,45 @@
+﻿<div class="fuseGrid container pull-left" infinite-scroll="loadPatientGrid()" infinite-scroll-disabled="allDataDisplayed || isUpdating">
+    <div class="row header">
+        <div class="form-inline  col-md-3">
+            <div class="form-group has-feedback">
+                <input set-focus class="form-input border-solid-black" id="inpSearchServiceCodes" ng-change="searchGrid()" ng-model="searchQuery" placeholder="search" />
+                <span id="lblFeedback" class="glyphicon glyphicon-search form-control-feedback"></span>
+            </div>
+           
+        </div>
+        <div class="col-xs-12 text-left cell">
+            <div ng-if="isUpdating">refreshing...</div>
+        </div>
+        <div ng-class="column.size" ng-repeat="column in header">
+            <div ng-if="column.sortable" ng-click="sort(column.label)">
+                <i class="fa fa-caret-down" ng-if="column.sorted && sortedColumn[0]=='-'"></i>
+                <i class="fa fa-caret-up" ng-if="column.sorted && sortedColumn[0]!='-'"></i>
+                {{column.label}}
+            </div>
+            <div ng-if="!column.sortable">
+                {{column.label}}
+            </div>
+        </div>
+        <hr />
+        <div class="patientTransferGridBody ">
+            <div class="row body" ng-repeat="patient in patientGrid "
+                 ng-class="{highlighted : patient.highlighted}"
+                  ng-click="highlightRow(patient)"
+                 >
+                <div class="col-sm-2 cell" ng-bind-html="patient.FirstName">
+                </div>
+                <div class="col-sm-2 cell" ng-bind-html="patient.MiddleName">
+
+                </div>
+                <div class="col-sm-2 cell" ng-bind-html="patient.LastName">
+                </div>
+                <div class="col-sm-2 cell" ng-bind-html="patient.DateOfBirth | toShortDisplayDateUtc">
+                </div>
+                <div class="col-sm-2 cell" ng-bind-html="patient.PatientCode">
+                </div>
+                <hr />
+            </div>
+
+        </div>
+    </div>
+</div>

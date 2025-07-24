@@ -1,0 +1,46 @@
+﻿<div class="mhfUpload">
+    <div class="form-row">
+        <div class="kendoOverride">
+            <input type="file"
+                   ng-model="vm.imageName"
+                   kendo-upload
+                   k-multiple="false"
+                   k-select="onSelect"
+                   k-remove="remove"
+                   k-localization="localizationObject"
+                   ng-disabled="scanMode" />
+            <button class="btn btn-default" ng-click="toggleScanMode()" style="margin-left:30px !important;">
+                {{ 'Scan...'| i18n }}
+            </button>
+        </div>
+    </div>
+    <div ng-if="scanMode">
+        <doc-scanner (scan-success)="scanSuccess()" (scan-failure)="scanFailure()"></doc-scanner>
+    </div>
+    <div class="file" ng-if="selectedFile.scanComplete && scanMode">
+        <input type="text"
+               id="scannedFileName"
+               class="form-input search fileName"
+               ng-model="selectedFile.name"
+               ng-change="onScannedFileNameChange($event)"
+               ng-readonly="false" />
+        <span class="fa fa-times remove" ng-click="onRemoveScannedFile()"></span>
+        <div ng-if="scannedFileValidationMessage" class="message">
+            <span class="error">{{ scannedFileValidationMessage | i18n }}</span>
+        </div>
+    </div>
+    <div class="form-row error">
+        {{errorMessage}}
+    </div>
+    <div class="form-footer">
+        <button class="btn btn-primary" ng-click="onCancel()">
+            {{'Cancel' | i18n }}
+        </button>
+        <button class="btn btn-primary" 
+                ng-click="onSave()" 
+                ng-disabled="selectedFile === null || errorMessage || saving || saveDisabled" 
+                check-auth-z="soar-per-perhst-add">
+            {{'Save' | i18n }}
+        </button>
+    </div>
+</div>

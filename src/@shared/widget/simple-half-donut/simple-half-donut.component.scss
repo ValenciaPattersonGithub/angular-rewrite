@@ -1,0 +1,25 @@
+.k-widget {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border: none;
+    justify-content: center;
+}
+
+.half-donut {
+    ::ng-deep svg {
+        overflow: visible !important;
+    }
+
+    ::ng-deep .k-chart text {
+        font-family: "Open Sans", sans-serif !important;
+        font-size: 12px !important;
+        cursor: text;
+    }
+    
+    ::ng-deep svg > g > g > g > g > g text {
+        cursor: pointer !important;
+    }
+}
+
+ 

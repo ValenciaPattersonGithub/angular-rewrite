@@ -1,0 +1,5 @@
+﻿<a id="skipPrompt_{{sectionItemPreviewIndex}}" ng-if="!sectionItem.IsRequired && !sectionItem.$$isMHF && !inputIsDisabled" ng-click="sectionItem.$$Skip = !sectionItem.$$Skip">
+    &nbsp;
+    <span ng-if="!sectionItem.$$Skip">{{'Skip' | i18n}}</span>
+    <span ng-if="sectionItem.$$Skip">{{'Skipped' | i18n}}</span>
+</a>

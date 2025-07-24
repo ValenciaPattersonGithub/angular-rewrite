@@ -1,0 +1,10 @@
+﻿<div ng-class="'fade-in'">
+    <form name="frmBusinessCenter" role="form" action="javascript:;" novalidate>
+        <!--<business-nav></business-nav>-->
+        <ng-include ng-if="templates[selectedCategoryIndex].Category !== 'MassUpdate' && templates[selectedCategoryIndex].Category !== 'MassUpdateResults'
+        && templates[selectedCategoryIndex].Category !== 'AppointmentsTransfer'" src="activeUrl"></ng-include>
+        <mass-update ng-if="templates[selectedCategoryIndex].Category == 'MassUpdate'"></mass-update>
+        <mass-update-results ng-if="templates[selectedCategoryIndex].Category == 'MassUpdateResults'"></mass-update-results>
+        <mass-update-appointments-transfer ng-if="templates[selectedCategoryIndex].Category == 'AppointmentsTransfer'"></mass-update-appointments-transfer>
+    </form>
+</div>

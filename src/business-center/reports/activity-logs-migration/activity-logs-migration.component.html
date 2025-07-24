@@ -1,0 +1,85 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="activity-log-report grid header">
+        <div class="col-sm-1-migration">{{ 'Date/Time' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'TeamMember' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Location' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Area' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Type' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Action' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Provider' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Patient' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Description' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Amount' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Total Amount' | translate }}</div>
+      </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+            id="activityLogScroll">
+            <div *cdkVirtualFor="let activityLog of data.ActivityEvents" class="activity-log-report grid item">
+                <div class="col-sm-1-migration">
+                    {{ activityLog.EventDate | date: 'MM/dd/yyyy'  }}<br />
+                    {{ activityLog.EventDate | date:'h:mm a' }}
+                </div>
+                <div class="col-sm-1-migration">{{ activityLog.EventUserName }}</div>
+                <div class="col-sm-1-migration">{{ activityLog.Location }}</div>
+                <div class="col-sm-1-migration">{{ activityLog.AreaName  }}</div>
+                <div class="col-sm-1-migration">{{ activityLog.TypeName  }}</div>
+                <div class="col-sm-1-migration">{{ activityLog.ActionName  }}</div>
+                <div class="col-sm-1-migration">{{ activityLog.ProviderName }}</div>
+                <div class="col-sm-1-migration">{{ activityLog.PatientName }}</div>
+                <div class="col-sm-2-migration respectCRLF">
+                    <ng-container [ngSwitch]="true">
+                        <p *ngSwitchCase="activityLog.Type === 22 && activityLog.Action === 1">
+                            The clinical note
+                            <a href="" (click)="launchClinicalTab(activityLog.PatientId, activityLog.Type, null)">
+                                {{ activityLog.Description }}
+                            </a>
+                            was saved.
+                        </p>
+                        <p *ngSwitchCase="activityLog.Type === 22 && activityLog.Action === 2">
+                            {{ activityLog.Description }}
+                            <a href="" (click)="launchClinicalTab(activityLog.PatientId, activityLog.Type, null)">Click
+                                to view.</a>
+                        </p>
+                        <p *ngSwitchCase="activityLog.Type === 22 && activityLog.Action === 3">
+                            The clinical note
+                            <a href="" (click)="launchClinicalTab(activityLog.PatientId, activityLog.Type, null)">
+                                {{ activityLog.Description }}
+                            </a>
+                            was deleted.
+                        </p>
+                        <p
+                            *ngSwitchCase="activityLog.Type === 25 && activityLog.Action === 1 && activityLog.Area === 3">
+                            The
+                            <a href=""
+                                (click)="launchClinicalTab(activityLog.PatientId, activityLog.Type, activityLog.Description)">
+                                medical health history
+                            </a>
+                            was added.
+                        </p>
+                        <p
+                            *ngSwitchCase="activityLog.Type === 25 && activityLog.Action === 1 && activityLog.Area === 15">
+                            {{ activityLog.Description }}
+                        </p>
+                        <p
+                            *ngSwitchCase="activityLog.Type === 25 && activityLog.Action === 2 && activityLog.Area === 3">
+                            The
+                            <a href=""
+                                (click)="launchClinicalTab(activityLog.PatientId, activityLog.Type, activityLog.Description)">
+                                medical health history
+                            </a>
+                            was modified.
+                        </p>
+                        <p *ngSwitchDefault>{{ activityLog.Description }}</p>
+                    </ng-container>
+                </div>
+                <div class="col-sm-1-migration text-right">
+                    {{ activityLog.Amount | currency }}
+                </div>
+                <div class="col-sm-1-migration text-right">
+                    {{ activityLog.TotalAmount | currency }}
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

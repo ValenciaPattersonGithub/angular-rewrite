@@ -1,0 +1,53 @@
+﻿.dentChangeAns {
+    .standardHeader;
+
+    &__body {
+        .containerStandard;
+    }
+
+    &__form {
+        .clearfix;
+        background-color: @brand-color_white;
+    }
+
+    &__fieldset {
+        max-width: fit-content;
+        padding: @brand-padding_md;
+    }
+
+    .reference {
+        padding: @brand-padding_md;
+        padding-left: 0px;
+    }
+
+    &__sideLbl {
+
+        .form-control {
+            display: inline-block;
+            width: 90%;
+            float: right;
+        }
+
+        .control-span {
+            display: inline-block;
+            font-weight: @brand-font_heavy;
+        }
+    }
+
+    .invalidTextBox {
+        border-color: #E43122;
+    }
+
+    .invalidDiagnosisBox {
+        border: 1px solid @brand-color_error;
+        padding: 5px;
+        padding-top:15px;
+        margin-bottom: 10px;
+    }
+
+    .invalidDiagnosisCodes {
+        color: @brand-color_error;
+        font-weight: bold;
+        padding: 50 5px;
+    }
+}

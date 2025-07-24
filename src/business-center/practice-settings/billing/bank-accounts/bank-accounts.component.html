@@ -1,0 +1,177 @@
+<div class="bank-accounts">
+    <div class="bankAccounts">
+        <div  [ngClass]="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+            <form name="frmAdjustmentTypes" role="form" novalidate>
+                <div class="rowFull white">
+                    <div class="bankAccounts__header">
+                        <!--Breadcrumbs-->
+                        <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                        <!--header-->
+                        <div class="bankAccounts__title">
+                            <h1>{{ 'Bank Accounts' | translate }}</h1>
+                        </div>
+                        <!--header-->
+                    </div>
+
+                </div>
+                <div class="bankAccounts__body">
+
+                    <div class="bankAccounts__list">
+                        <div
+                            [ngClass]="{'slide-animation': 'forward', 'slide-backward-animation list-option-container': '!forward'}">
+                            <kendo-grid [data]="gridData" [sortable]="true" [sort]="sort" [pageable]="true"
+                                [loading]="loading" (sortChange)="sortChange($event)" (edit)="editHandler($event)"
+                                (add)="addHandler($event)">
+                                <ng-template kendoGridToolbarTemplate>
+                                    <div class="bankAccounts__actions">
+                                        <button kendoGridAddCommand checkRoleAccess="{{ !hasCreateAccess }}"
+                                            id="btnCreate" class="btn btn-primary" [iconClass]="'k-icon k-i-plus'">
+                                            {{ 'Add Bank Account' | translate }}
+                                        </button>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <app-check-box [label]="'Show Inactive'" [isDisabled]="false" [checked]="false"
+                                            (checkChanged)="onCheckChanged($event)">
+                                        </app-check-box>
+                                    </div>
+                                    <ng-template kendoPagerTemplate let-total="total">
+                                        Showing {{total}} of {{total}} records.
+                                    </ng-template>
+                                </ng-template>
+
+                                <kendo-grid-column *ngFor="let gridColumn of columns" [field]="gridColumn.field"
+                                    [title]="gridColumn.title" [width]="gridColumn.width">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        {{ dataItem[gridColumn.field] }}
+                                    </ng-template>
+                                </kendo-grid-column>
+
+                                <ng-container>
+                                    <kendo-grid-command-column title="" width="80">
+                                        <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                                            <span kendoTooltip position="top" tooltipClass="app-tooltip"
+                                                title="{{dataItem?.editTooltipMessage || ''}}">
+                                                <button kendoGridEditCommand [disabled]="!hasEditAccess"
+                                                    [iconClass]="'far fa-edit fa-lg'"></button>
+                                            </span>
+
+                                        </ng-template>
+                                    </kendo-grid-command-column>
+                                </ng-container>
+                            </kendo-grid>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div kendoDialogContainer></div>
+    <ng-template #templateRef>
+        <div class="modal-content modalcontent">
+            <div class="bankAccountModal">
+                <form [formGroup]="bankAccountForm" (ngSubmit)="save()">
+                    <div class="modal-header">
+                        <button type="button" class="prevCare__secClose" icon="fa-times"
+                            (click)="confirmCancelBankAccountChanges()"></button>
+                        <h4 class="modal-title">{{modalMode| translate }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group form-col-10"
+                                [ngClass]="{'has-error': bankAccountForm?.get('name')?.touched && bankAccountForm?.get('name')?.status=='INVALID' }">
+                                <label class="control-label">{{'Bank Account' | translate }}*</label>
+                                <input id="inpAcctName" formControlName="name" class="form-control required valid"
+                                    (change)="onChangeForm($event,'name')"
+                                    placeholder="{{ 'Bank Account' | translate }}" setFocus maxlength="100" />
+                                <span id="lblNameRequired" class="has-error"
+                                    *ngIf="bankAccountForm?.get('name')?.touched && bankAccountForm?.get('name')?.status=='INVALID'">
+                                    {{ 'This field is required.' | translate }}
+                                </span>
+                            </div>
+                            <div class="form-group form-col-2">
+                                <label class="control-label">Active</label>
+                                <div class="bankAccountModal__slider">
+                                    <i class="fa fa-2x fa-toggle-on active" *ngIf="isActive"
+                                        (click)="setActive(false)"></i><i
+                                        class="fa fa-2x fa-toggle-on fa-rotate-180 inactive" *ngIf="!isActive"
+                                        (click)="setActive(true)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group form-col-12" *ngIf="!loadingLocations"
+                                [ngClass]="{'has-error':!selectedLocationsList?.length>0 && ifBankAccountUpdated && ifLocationsUpdated }">
+                                <label class="control-label">{{'Location' | translate }} *</label>
+                                <app-multiselect [listItems]="locationsList" [id]="'multiselect-default'"
+                                    [model]="selectedLocationsList" [groupData]="true"
+                                    (modelChange)="getSelectedList($event)"></app-multiselect>
+                                <div>
+                                    <app-chips [chipsText]="item?.text" placement="top-error" delay="500"
+                                        [showIcon]="true" (removeChips)="removeSelectedLocations($event,rowId)"
+                                        [attr.id]="'appchip'+ rowId"
+                                        *ngFor="let item of selectedLocationsList;let rowId= index"></app-chips>
+                                </div>
+                                <span id="lblInsRequired" class="has-error"
+                                    *ngIf="!selectedLocationsList?.length>0 && ifBankAccountUpdated && ifLocationsUpdated">
+                                    {{ 'Please assign a Location' | translate }}
+                                </span>
+                            </div>
+                            <div class="form-group form-col-12" *ngIf="loadingLocations">
+                                <no-results [loading]="true" [message]="'Loading Locations'"></no-results>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group form-col-12"
+                                [ngClass]="{'has-error': bankAccountForm?.get('institution')?.touched && bankAccountForm?.get('institution')?.status=='INVALID' }">
+                                <label class="control-label">{{'Institution' | translate }}*</label>
+                                <input id="inpIns" formControlName="institution" class="form-control" maxlength="100"
+                                    (change)="onChangeForm($event,'institution')"
+                                    placeholder="{{ 'Institution' | translate }}" />
+                                <span id="lblInsRequired" class="has-error"
+                                    *ngIf="bankAccountForm?.get('institution')?.touched && bankAccountForm?.get('institution')?.status=='INVALID'">
+                                    {{ 'This field is required.' | translate }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group form-col-12"
+                                [ngClass]="{'has-error': bankAccountForm?.get('description')?.touched && bankAccountForm?.get('description')?.status=='INVALID' }">
+                                <label class="control-label">{{'Description' | translate }}*</label>
+                                <textarea maxlength="500" id="inpDesc" formControlName="description"
+                                    class="form-control required valid" (change)="onChangeForm($event,'description')"
+                                    placeholder="{{ 'Description' | translate }}">
+                    </textarea>
+                                <span class="has-error"
+                                    *ngIf="bankAccountForm?.get('description')?.touched && bankAccountForm?.get('description')?.status=='INVALID'">
+                                    {{ 'This field is required.' | translate }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group form-col-6">
+                                <label class="control-label">{{'Account Number' | translate }}</label>
+                                <input id="inpAcctNum" type="text" maxlength="15" formControlName="accountNumber"
+                                    OnlyNumber (change)="onChangeForm($event,'accountNumber')" class="form-control"
+                                    placeholder="{{ '000000000000000' | translate }}" />
+                            </div>
+                            <div class="form-group form-col-6">
+                                <label class="control-label">{{'Routing Number' | translate }}</label>
+                                <input id="inpRouteNum" type="text" formControlName="routingNumber"
+                                    (change)="onChangeForm($event,'routingNumber')" OnlyNumber maxlength="9" class="form-control"
+                                    placeholder="{{ '000000000' | translate }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                            (click)="confirmCancelBankAccountChanges()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </ng-template>
+</div>

@@ -1,0 +1,30 @@
+﻿<div class="fui-toggle-wrapper" [ngClass]="{'label-left' : labelDirection=='left','label-right' : labelDirection=='right'}">
+    <app-label
+            class="fui-toggle-label"
+            ng-if="label"
+            [label]="label"
+            [fieldId]="id + 'AriaLabel'"
+            [ariaLabel]="id + 'AriaLabel'" ></app-label>
+    <div class="fui-toggle-container" >
+        <!--with optional text label-->
+        <input type="checkbox"
+               [id]="id"
+               class="checkbox"
+               [value]="value"
+               [(checked)]="isChecked"
+               [disabled]="isDisabled"
+               (change)="onCheckChange($event)"
+               [attr.aria-labelledby]="id + 'AriaLabel'"
+               *ngIf="label" />
+        <!--without optional text label-->
+        <input type="checkbox"
+               [id]="id"
+               class="checkbox"
+               [value]="value"
+               [(checked)]="isChecked"
+               [disabled]="isDisabled"
+               (change)="onCheckChange($event)"
+               *ngIf="!label" />
+        <label [attr.for]="id" class="switch" (click)="isToggled($event)"></label>
+    </div>
+</div>

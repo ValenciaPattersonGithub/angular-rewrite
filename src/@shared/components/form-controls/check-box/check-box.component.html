@@ -1,0 +1,11 @@
+
+    <label class="fui-check-box">
+        <input type="checkbox" 
+        [value]="value" 
+        [checked]="checked"
+        [disabled]="isDisabled"
+        (change)="onCheckChange($event)"  
+        [id]="name?name:''"/>
+        <span class="checkmark"></span>
+        <span class="label" *ngIf="label !== ''">{{label}}</span>
+    </label>

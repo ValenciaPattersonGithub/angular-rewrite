@@ -1,0 +1,74 @@
+<div class="patientLookup">
+    <div class="app-modal">
+        <div id="modal-header" class="app-modal-header">
+            {{ 'Lookup A Patient' | translate}}
+        </div>
+
+        <div id="modal-message" class="app-modal-body">
+            <div class="form-search-input-ctrls">
+                <input id="inpPatientSearch" class="form-input" type="text"
+                        [(ngModel)]="patientSearchParams.searchFor"
+                        attr.placeholder="{{ 'Search' | translate }}"
+                        (input)="input($event.target.value)" />
+                <!--(keyup)="executePatientSearch(false)"-->
+                <i class="fa fa-search"></i>
+            </div>
+
+            <div class="patientLookupGrid">
+                <div class="patientLookupItemRow header odd">
+                    <div class="patientLookupGridHeader patients"> 
+                        Patient
+                    </div>
+                    <div class="patientLookupGridHeader genders">
+                        Gender
+                    </div>
+                    <div class="patientLookupGridHeader ids">
+                        ID
+                    </div>
+                    <div class="patientLookupGridHeader ages">
+                        Age
+                    </div>
+                </div>
+
+                <div class="patientLookupItemRow listItem" *ngFor="let patient of patientSearch.Results;let i = index;let isOdd=odd; let isEven=even" 
+                     [ngClass]="{even: even, odd: odd, selectedPatient: selectedIndex == i}" (click)="selectPatient(patient, i)">
+                    <div class="patients">
+                        {{ patient.LastName }}, {{ patient.FirstName }} <span *ngIf="patient.MiddleName">{{ patient.MiddleName }}.</span> <span *ngIf="patient.PreferredName"> ({{ patient.PreferredName }})</span>
+                    </div>
+                    <div class="genders">
+                        <div class="display">
+                            {{displayGender(patient.Sex)}}
+                        </div>
+                    </div>
+                    <div class="ids">
+                        <div class="display">
+                            {{patient.PatientCode}}
+                        </div>
+                    </div>
+                    <div class="ages">
+                        <div class="display">
+                            {{calculateAge(patient.DateOfBirth)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-modal-footer">
+            <app-button id="btnPatientLookupCancel"
+                        class=""
+                        variation="secondary"
+                        (onClick)="closeModal()"
+                        buttonLabel="Cancel"
+                        style="padding-right: 10px;">
+            </app-button>
+            <app-button id="btnPatientLookupSubmit"
+                        class=""
+                        variation="primary"
+                        (onClick)="submit()"
+                        [isDisabled]="selectedPatient === null"
+                        buttonLabel="Submit">
+            </app-button>
+        </div>
+    </div>
+</div>

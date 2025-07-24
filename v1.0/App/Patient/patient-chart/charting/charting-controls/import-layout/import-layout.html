@@ -1,0 +1,32 @@
+﻿<div class="panel chartButtonImport">
+        <div class="panel-heading">
+            <span class="panel-title">{{ ::('Import Charting Favorites' | i18n) }}</span>
+        </div>
+        <div class="panel-body">
+            <div class="form-row">
+                <div class="form-col-12">
+                    <label class="control-label">{{ ::('Import favorites from:' | i18n) }}  </label>
+                    <soar-select-list
+                        id="ddlImportSelectUser"
+                        name="ddlImportSelectUser"
+                        placeholder="{{::'Select a Provider' | i18n}}"
+                        text-field="Name"
+                        value-field="UserId"
+                        option-list="users"
+                        ng-model="selectedUserId"
+                        disable-input="users.length === 0"></soar-select-list>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col-12">
+                    <span class="warning" ng-if="selectedUserId">{{ ::("Importing this user's favorites will override your current favorites." | i18n) }}</span>
+                </div>
+            </div>
+            <div class="form-footer">
+                <div class="leftFooter">
+                    <button id="btnImport" class="btn btn-primary save" ng-disabled="!selectedUserId || disableSave" ng-click="save()">{{ ::('Save' | i18n) }}</button>
+                    <button class="btn btn-default cancel" ng-click="close()">{{ ::('Cancel' | i18n) }}</button>
+                </div>
+            </div>
+        </div>
+    </div>

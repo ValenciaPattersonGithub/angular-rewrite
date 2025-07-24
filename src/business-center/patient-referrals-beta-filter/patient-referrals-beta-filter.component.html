@@ -1,0 +1,167 @@
+<div class="panel-heading collapseExpand">
+  <a data-toggle="collapse" data-target="#referralSources" class="soar-link font-weight-bold padding-2">
+    <i class="indicator fa fa-chevron-up"></i>
+    {{ "Referral Categories" | translate }}
+  </a>
+</div>
+
+<div class="filter-option panel-collapse collapse reports-slideout report-referral-filter" style="width: 95%;"
+  id="referralSources">
+  <ul id="ReferralSources" class="referralsKendo">
+    <li>
+      <div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-10 arr-up">
+            <!-- Checkbox List -->
+            <div *ngFor="let item of patientReferralTypeOptions" class="form-check">
+              <input type="checkbox" class="form-check-input" id="{{item.name}}" [(ngModel)]="item.selected"
+                (change)="onCheckboxChange(item)" />
+              <label style="font-weight: normal !important;" class="form-check-label"
+                for="{{item.name == 'Person' ? 'Patient' : (item.name == 'Other' ? 'External Sources' : item.name)}}">{{ item.name == 'Person' ? 'Patient' : (item.name == 'Other' ? 'External Sources' : item.name)
+                }}</label>
+
+              <span *ngIf="item.name ==  'Other'">
+                <!-- External Sources -->
+                <div class="row"
+                  *ngIf="inputReferralFilterModel?.selectedReferralType?.includes(patientReferralTypes.Other) && isAllSelected === false">
+
+                  <p></p>
+
+                  <div class="col-xs-12 col-sm-12 arr-up">
+                    <div [ngClass]="{ error: !valid && attemptedSave }">
+                      <div class="">
+                        <ul id="otherReferralsUl" name="otherReferralsUl" class="otherReferralsUl">
+                          <ng-container *ngFor="let item of referralSources">
+                            <li [hidden]="!item.isVisible">
+                              <input type="checkbox" class="" [name]="otherReferralsUl"
+                                [attr.data-field]="otherReferralsUl" [attr.data-key]="item?.PatientReferralSourceId"
+                                [(ngModel)]="item.selected"
+                                (change)="toggleSelect(item.SourceName, 'otherReferralsUl', referralSources)"
+                                (click)="SelectOther(item?.PatientReferralSourceId)" />
+                              {{item?.SourceName}}
+                            </li>
+                          </ng-container>
+
+                        </ul>
+
+                        <span class="reportPage__showMore" *ngIf="referralSources.length > 5"
+                          (click)="showMoreButton(referralSources)" type="button">{{showMoreButtonText}}</span>
+                      </div>
+
+                      <label id="lblReferralSourceRequired" class="help-text" *ngIf="!valid && attemptedSave">
+                        {{ "This field is required." | translate }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+
+              <span *ngIf="item.name ==  'Person'">
+                <!-- Patients -->
+                <div class="row"
+                  *ngIf="inputReferralFilterModel?.selectedReferralType?.includes(patientReferralTypes.Person) && isAllSelected === false">
+                  <div class="col-xs-12 col-sm-12 form-search-input">
+                    <i class="fa fa-search"></i>
+
+                    <div [class]="{ error: !valid && attemptedSave }">
+                      <input id="inpPatientSearch" class="form-input" type="text"
+                        [(ngModel)]="patientSearchParams.searchFor" (keyup)="executePatientSearch(false)"
+                        attr.placeholder="{{ 'Find a Person' | translate }}" />
+                      <label id="lblPatientReferralRequired" class="help-text" *ngIf="!valid && attemptedSave">
+                        {{ "This field is required." | translate }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row"
+                  *ngIf="inputReferralFilterModel?.selectedReferralType?.includes(patientReferralTypes.Person) && isAllSelected === false">
+                  <!-- search results -->
+                  <div class="col-xs-12 col-sm-12">
+                    <div class="form-search-container background-white" *ngIf="patientSearch.Results.length > 0"
+                      soar-infinite-scroll="executePatientSearch(true)">
+                      <div class="row"
+                        *ngFor="let patient of patientSearch.Results; let i = index; let isOdd = odd; let isEven = even"
+                        [class.item-zebra-dark]="isOdd" [class.item-zebra-light]="isEven"
+                        (click)="SelectPatient(patient)">
+                        <div class="col-xs-12">
+                          <div class="media referred-media">
+                            <i class="pull-left far fa-image fa-3x referred-media-icon"></i>
+                            <div class="media-body referred-media-body">
+                              <p>
+                                <span id="lblReferredByFirstName{{ i }}"
+                                  [innerHtml]="patient.FirstName.length + patient.LastName.length > 22 ? patient.FirstName[0] + '.' : (patient.FirstName | uppercase | highlightTextIfContains: patientSearchParams.searchFor)"></span>
+                                <span id="lblReferredByLastName{{ i }}"
+                                  [innerHtml]="patient.LastName.length > 22 ? ' ' + patient.LastName.substring(0, 21) : (' ' + patient.LastName | uppercase | highlightTextIfContains: patientSearchParams.searchFor)"></span>
+                              </p>
+                              <p id="lblReferredByDOB">{{ patient.DateOfBirth | toShortDisplayDateUtc }}</p>
+                              <p id="lblReferredByAddress" *ngIf="patient.City">{{ patient.AddressLine1 }} {{
+                                patient.City }}, {{ patient.State }} {{ patient.ZipCode }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row"
+                  *ngIf="inputReferralFilterModel?.selectedReferralType?.includes(patientReferralTypes.Person) && isAllSelected === false">
+                  <div class="col-xs-12">
+                    <div class="alerts-item-class" *ngFor="let patient of selectedPatients; let i = index">
+                      <div class="tag-container tag-container__secondary" style="max-width: 100%; height: 100%">
+                        <div class="flex">
+                          <div class="flex flex-center flex-shrink-1 flex-grow-0">
+                            <div>
+                              <div id="lbl" class="flex-shrink-1 padding-right-16">
+                                <label class="margin-bottom-class" id="patientName"
+                                  attr.title="{{ patient.LastName }}, {{ patient.FirstName }}">{{ patient.LastName }},
+                                  {{ patient.FirstName }}</label>
+                              </div>
+                            </div>
+                            <i id="btnRemove" class="fa fa-times-circle tag-container__iconSecondary"
+                              (click)="removeSelectedPatient(i, patient)"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </span>
+
+              <span *ngIf="item.name ==  'External Provider'">
+                <!-- External Providers -->
+                <div class="row"
+                  *ngIf="inputReferralFilterModel?.selectedReferralType?.includes(patientReferralTypes.ExternalProvider) && isAllSelected === false">
+
+                  <div class="col-xs-12 col-sm-12">
+                    <ul id="externalProvidersUl" name="externalProvidersUl" class="externalProvidersUl">
+                      <ng-container *ngFor="let item of allExternalProviders">
+                        <li [hidden]="!item.isVisible">
+                          <input type="checkbox" class="" [name]="externalProvidersUl"
+                            [attr.data-field]="externalProvidersUl" [attr.data-key]="item?.PatientId" 
+                            [(ngModel)]="item.selected"
+                            (change)="toggleSelectExProviders(item.PreferredName, 'externalProvidersUl', allExternalProviders)"
+                            (click)="SelectExternalProvider(item)"
+                            />
+                            {{item?.PreferredName ? (item?.FirstName || item?.LastName ? 
+                              (item?.PreferredName + ' - ' + 
+                               (item?.FirstName || '') + 
+                               (item?.FirstName && item?.LastName ? ' ' : '') + 
+                               (item?.LastName || '')) : 
+                              item?.PreferredName) : 
+                              (item?.FirstName + ' ' + item?.LastName)}}
+                        </li>
+                      </ng-container>
+                    </ul>
+                    <span class="reportPage__showMore" *ngIf="allExternalProviders && allExternalProviders.length > 5"
+                      (click)="showMoreButtonExProvider(allExternalProviders)"
+                      type="button">{{showMoreButtonExProviderText}}</span>
+                  </div>
+                </div>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

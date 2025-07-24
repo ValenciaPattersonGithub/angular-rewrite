@@ -1,0 +1,156 @@
+<form *ngIf="editItem" [formGroup]="questionAdlib" name="questionAdlib" role="form">
+
+    <div class="col-md-6">
+        <!--Prompts-->
+        <div class="container-fluid">
+            <div *ngFor="let formBankItemPromptText of sectionItem?.FormBankItemPromptTexts| orderBy: {sortColumnName: 'ItemSequenceNumber', sortDirection: 1}; index as $index;trackBy:trackByMethod ">
+                <div id="questionAdlibPrompt{{sectionIndex}}_{{sectionItemIndex}}{{$index}}" class="row">
+                    <div *ngIf="formBankItemPromptText.ItemSequenceNumber===1">
+                        {{ 'Text Before Response'  |translate }} :<span class="bold padding5 size-h4">*</span>
+                    </div>
+                    <div *ngIf="formBankItemPromptText.ItemSequenceNumber===2">
+                        {{ 'Text After Response'  |translate }} :<span class="bold padding5 size-h4">*</span>
+                    </div>
+                </div>
+                <div id="questionAdlib{{sectionIndex}}_{{sectionItemIndex}}{{$index}}" class="row">
+                    <input [ngClass]="{'red-border': formBankItemPromptText?.$$Invalid && customForm?.SectionValidationFlag}"
+                           name="questionAdlibText{{$index}}"
+                           formControlName="questionAdlibText{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                           id="questionAdlibText{{sectionIndex}}_{{sectionItemIndex}}{{$index}}"
+                           class="col-md-10" type="text"
+                           maxlength="500"required/>
+                    <br />
+                </div>
+                <div class="row error" *ngIf="formBankItemPromptText?.$$Invalid && customForm?.SectionValidationFlag ">
+                    <span id="requiredMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required' | translate }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-checkbox">
+                    <input type="checkbox" formControlName="questionAdlibRequired"
+                           id="questionAdlibRequired{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="questionAdlibRequiredLabel{{sectionIndex}}_{{sectionItemIndex}}"
+                           class="font-weight-normal ng-binding"
+                           for="questionAdlibRequired{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This question is required' | translate }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <!--Responses-->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8" id="adlibResponsesHeader{{sectionIndex}}_{{sectionItemIndex}}">{{ 'Responses' |translate }} :<span class="bold padding5 size-h4"></span></div>
+            </div>
+            <div id="questionAdlibRpesonses{{sectionIndex}}_{{sectionItemIndex}}">
+                <div id="multipleChoiceOption{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                     *ngFor="let itemOption of sectionItem?.ItemPromptTextsOptions[0] | orderBy: {sortColumnName: 'BankItemOption?.OptionIndex', sortDirection: 1}; index as $index;trackBy:trackByMethod "
+                     class="row margin-bottom15">
+
+                    <!--Are you sure message for list question option delete-->
+                    <div class="col-md-11" *ngIf="confirmOptionRemoveIndex==$index">
+                        <div class="media-body master-list-warning-msg"
+                             id="multipleChoiceOptionDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}">
+                            <are-you-sure [appendId]="0" [isFocusSet]="false"
+                                          message="{{ 'Are you sure you want to delete this answer option?' | translate }}"
+                                          (ifYes)="removeAdlibMultipleChoiceOption(sectionIndex,sectionItemIndex)"
+                                          (ifNo)="cancelRemoveMultipleChoiceOption()">
+                            </are-you-sure>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <input name="questionAdlibSelectValues"
+                               type="text"
+                               id="questionAdlibOptionText{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                               formControlName="questionAdlibOptionText{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                               class="col-md-7"
+                               placeholder="{{'Enter Answer Text' | translate}}"
+                               (blur)="isValidCustomFormCheck(false)"
+                               maxlength="100"/>
+                        &nbsp;
+                        <a checkRoleAccess="soar-biz-bcform-delete"
+                           id="lnkMultipleChoiceOptionDeleteConfirm{{sectionIndex}}_{{sectionItemIndex}}_{{$index}}"
+                           class="cursor-pointer"
+                           (click)="confirmRemoveMultipleChoiceOption(option,$index)"
+                           title="Remove">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 margin-bottom15">
+                    <button id="btnAddAnotherOption{{sectionIndex}}_{{sectionItemIndex}}"
+                            checkRoleAccess="soar-biz-bcform-add" type="button" class="button"
+                            (click)="addNewAdlibResponse(sectionIndex,sectionItemIndex)">
+                        {{ 'Add another response' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form *ngIf="sectionItem && !editItem" id="frmAdlibSectionItem{{sectionIndex}}" class="form-group">
+    <div [ngClass]="{'has-error':hasErrors && sectionItem?.$$InvalidAnswer===true}">
+        <div class="row col-md-11 ">
+            <span *ngFor="let formBankItemPromptText of sectionItem?.FormBankItemPromptTexts | orderBy: {sortColumnName: 'ItemSequenceNumber', sortDirection: 1};let i = index;let last = last;trackBy:trackByMethod;">
+                <label id="lblsectionItemText{{sectionIdex}}_{{sectionIdexPreviewIndex}}" class="control-label">
+                    {{ formBankItemPromptText?.ItemText}}
+                </label>
+                <span *ngIf="!last"> _________________ </span>
+
+            </span>
+            <skip-prompt [sectionItem]="sectionItem" [inputIsDisabled]="inputIsDisabled" (changeSkipMode)="changeSkip($event)"></skip-prompt>
+            <span id="sectionItemIsRequired{{sectionIdex}}_{{sectionIdexPreviewIndex}}"
+                  *ngIf="sectionItem?.IsRequired"
+                  class="bold padding5 size-h4">*</span>
+        </div>
+
+        <div *ngFor="let itemOption of sectionItem?.ItemPromptTextsOptions[0]">
+            <div *ngIf="!(itemOption?.BankItemOption?.OptionText == null || itemOption?.BankItemOption?.OptionText == undefined || itemOption?.BankItemOption?.OptionText == '')">
+                <div class="row col-md-11 radio">
+                    <label>
+                        <input type="radio"
+                               id="{{ sectionItem?.FormItemTypeName + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_1'  }}"
+                               name="{{ sectionItem?.FormItemTypeName + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_1' }}"
+                               value="{{ itemOption?.BankItemOption?.OptionText }}"
+                               [disabled]="inputIsDisabled || sectionItem?.$$Skip" />
+                        {{ itemOption?.BankItemOption?.OptionText }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-11">
+                <div class="radio">
+                    <div class="margin-left-20">
+                        <input type="radio"
+                               id="{{ sectionItem?.FormItemTypeName + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_1'  }}"
+                               name="{{ sectionItem?.FormItemTypeName + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT_1' }}"
+                               value="{{ sectionItem?.ItemPromptTextsOptions[0]?.BankItemOption?.OptionText }}"
+                               checked="true"
+                               [disabled]="inputIsDisabled || sectionItem?.$$Skip" />
+                        <label class="font-weight-normal control-label margin-left-minus16 customForms__customOption">
+                      <!-- text-auto-grow directive is not migrated as this feature not required in preview mode  -->
+                            <textarea rows="0" id="txt{{ sectionItem?.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex + '_OPT1_'}}"
+                                      placeholder="{{'Enter Custom Choice' | translate }}"
+                                      maxlength="500"
+                                      type="text" 
+                                      [disabled]="inputIsDisabled || sectionItem?.$$Skip"></textarea>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--special handling for invalid adlib answer-->
+        <div class="row col-md-11">
+            <label id="lblSectionFormBankItemRequired_{{sectionItemPreviewIndex}}" class="help-block"
+                   *ngIf="hasErrors && sectionItem?.$$InvalidAnswer===true">
+                {{ 'This field is required.' | translate }}
+            </label>
+
+        </div>
+    </div>
+</form>

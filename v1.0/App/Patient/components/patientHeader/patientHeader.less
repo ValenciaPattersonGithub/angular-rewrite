@@ -1,0 +1,827 @@
+﻿// #region Patient
+.headerBorder {
+    border-top: 2px solid #AEB5BA;
+    border-bottom: 2px solid #AEB5BA;
+}
+
+.patientHeader {
+    font-family: @brand-font;
+    padding: 0px;
+    .containerStandard;
+    position: relative;
+    padding: 0px;
+    background-color: @brand-application_bg;
+  
+
+    &__container {
+        padding: 0px;
+        display: flex;
+    }
+
+    &__columnTitle {
+        font-size: 16px;
+    }
+
+    .spacer {
+        padding: 0 20px;
+    }
+
+    &__orange-warning {
+        color: orange;
+        margin-left: 5px;
+    }
+
+    &__info {
+        padding: 0px;
+        display: flex;
+    }
+
+    &__comm {
+        .containerStandard;
+        position: relative;
+        padding: 0px;
+        display: inline-block;
+        //padding-left:35px;
+        &__transparent {
+            background-color: transparent;
+            border-color: transparent;
+            color: @btn-default-color;
+            outline-style: none;
+
+            &.notActive {
+                cursor: not-allowed;
+                opacity: 0.65;
+            }
+        }
+
+        &__modalicons {
+            background-color: transparent;
+            border-color: transparent;
+            color: @btn-default-color;
+            outline-style: none;
+            cursor: default;
+        }
+    }
+
+    &__appt {
+        padding-left: 0px
+    }
+
+    &__img {
+        float: left;
+        font-size: 18px;
+        padding-top: 8px;
+
+        > img {
+            width: 40px;
+        }
+    }
+
+    &__name {
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        padding-left: 0px;
+        padding-top: 8px;
+
+        h2 {
+            margin-top: 0;
+            font-size: @brand-font_xl;
+        }
+    }
+
+    &__nameText {
+        padding-left: 5px;
+        font-size: 18px;
+    }
+
+    &__details {
+        //margin-left: 58px;
+        padding-left: 0px;
+        padding-right: 25px;
+    }
+
+    &__basicInfo {
+        padding: 8px;
+        padding-bottom: 0px;
+        border-left: 2px solid #AEB5BA;
+        border-right: 2px solid #AEB5BA;
+        background-color: #FAFAFA;
+    }
+
+    .expanded {
+        border-bottom: none;
+    }
+
+    &__bringToFront {
+        z-index: 11;
+    }
+
+    &__showMore {
+        color: #2DABCB;
+        cursor: pointer;
+    }
+
+    &__moreInfo {
+        width: 100%;
+        padding: 16px;
+        border-top: 2px solid #AEB5BA;
+        border-bottom: 2px solid #AEB5BA;
+        position: absolute;
+        z-index: 10;
+        background-color: #FAFAFA;
+        margin-top: -2px;
+    }
+
+    &__code {
+        font-size: .6em;
+    }
+
+    &__in-collection {
+        display: inline-block;
+        color: white;
+        line-height: 0.8;
+        padding-left: 5px;
+        background-color: #be0202;
+        padding: 5px;
+        font-size: smaller;
+    }
+
+    &__status {
+        font-size: .6em;
+        margin-left: 36px;
+    }
+
+    .no-wrap {
+        display: inline;
+    }
+
+    &__secondaryNavigation {
+        display: flex;
+        float: right;
+        padding: 0px;
+        border-right: 2px solid #AEB5BA;
+        height: auto;
+    }
+
+    &__nav {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        text-align: right;
+    }
+
+    &__nav-button {
+        padding: 0px;
+        min-width: 100px;
+        min-height: 48px;
+        margin: -2px;
+    }
+
+
+    &__navIcons {
+        padding-top: 16px;
+    }
+
+    &__nav-item {
+        height: auto;
+        border-left: 2px solid #AEB5BA;
+        font-weight: 100;
+        transition: all 0.3s ease;
+        color: #434649;
+        text-align: center;
+
+        &:hover {
+            background-color: lighten(#FAFAFA, 5);
+            color: inherit;
+        }
+
+        &.active {
+            background-color: #434649;
+            font-weight: 500;
+            color: #FFF;
+        }
+
+        &.disabled {
+            color: @brand-color_darker-gray;
+            background-color: @brand-color_dark-gray;
+
+            &:hover {
+                cursor: default;
+                opacity: 1.0;
+            }
+        }
+    }
+
+    &__alertsContainer {
+        padding: 2px;
+        padding-bottom: 0px;
+        background-color: #FAFAFA;
+    }
+}
+
+.secondaryPatientHeader {
+    .containerStandard;
+    position: relative;
+    padding: 0px;
+    max-width: none;
+    width: 100%;
+}
+
+.secondaryIcon {
+    .containerStandard;
+    position: relative;
+    padding: 0px;
+    width: 30%;
+    margin: 0 auto;
+
+    &__moreInfo {
+        width: 100%;
+        padding: 16px;
+        border: 2px solid #AEB5BA;
+        position: absolute;
+        z-index: 1;
+        background-color: #FAFAFA;
+        margin-top: -2px;
+    }
+}
+
+.patient-header {
+    background-color: @brand-color_white;
+
+    > .patient-header-box {
+        width: 96%;
+        max-width: 1600px;
+        margin: 0 auto;
+        position: relative;
+    }
+}
+
+.patient-header-image-container {
+    min-width: 100px;
+}
+
+.patient-header-image {
+    width: 60px;
+    height: 70px;
+    margin-left: 36px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.patient-header-info-container {
+    min-width: 300px;
+}
+
+.patient-header-info {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    margin-left: 20px;
+}
+
+.patient-header-tab {
+}
+
+.patient-header-tabs {
+    margin-right: 20px;
+    min-width: 300px;
+}
+
+.patient-header-tab-container {
+    align-items: flex-end;
+    display: flex;
+    bottom: 6px;
+    right: 65px;
+    position: absolute;
+}
+
+.patient-header-links {
+    align-items: center;
+    display: flex;
+    position: absolute;
+    right: 65px;
+    top: 12px;
+}
+
+.patient-header-remove-icon {
+    flex-shrink: 1;
+    font-size: 28px;
+    padding-left: 20px;
+}
+
+.patient-header-link {
+    padding: 4px;
+    flex-shrink: 1;
+}
+
+ul.patient-sub-tabs {
+    margin-left: -40px;
+
+    li {
+        float: left;
+        list-style: none;
+        margin-right: 1em;
+        padding-right: 2em;
+    }
+
+    li a {
+        border-bottom-style: dashed;
+        border-bottom-width: thin;
+    }
+}
+
+.patient-details-container table {
+    margin: 15px;
+}
+
+.patient-details-container td.start {
+    vertical-align: top;
+    text-align: left;
+    padding: 0px 40px 0px 0px;
+    width: 25%;
+}
+
+.patient-details-container td.middle {
+    vertical-align: top;
+    text-align: left;
+    padding: 0px 40px 0px 40px;
+    width: 25%;
+    border-left: solid 1px #DDDDDD;
+}
+
+.patient-details-container td.end {
+    vertical-align: top;
+    text-align: left;
+    padding: 0px 0px 0px 40px;
+    width: 25%;
+    border-left: solid 1px #DDDDDD;
+}
+
+.patient-details-container h4 {
+    font-family: @global-font-family;
+    margin-top: 0px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.patient-details-container dl {
+    margin-bottom: 0px;
+}
+
+.patient-details-container dt {
+    white-space: nowrap;
+    font-family: @global-font-family;
+    font-weight: normal;
+}
+
+.patient-details-container dd {
+    font-family: @global-font-family;
+}
+
+
+.flex {
+
+    display: flex;
+}
+
+.flex-stretch {
+    align-items: stretch;
+}
+
+.flex-center {
+    align-items: center;
+}
+
+.flex-end {
+    align-items: flex-end;
+}
+
+.flex-basis-auto {
+    flex-basis: auto;
+}
+
+.flex-grow-0 {
+    flex-grow: 0;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.flex-shrink-0 {
+    flex-shrink: 0;
+}
+
+.flex-shrink-1 {
+    flex-shrink: 1;
+}
+
+.flex-vertically {
+    flex-direction: column;
+}
+
+.initialBadgeColorOverride > div {
+    color: #6b7073 !important;
+    border-color: #6b7073 !important;
+}
+
+
+.medicalAlertIcon {
+    padding: 0px;
+
+    &__leftPadding {
+        padding-left: 10px;
+    }
+
+    &__container {
+        height: 26px;
+        padding: 2px;
+        padding-bottom: 0px;
+    }
+
+    &__customFlags {
+        padding: 0px 20px 4px 25px;
+    }
+
+    &__numFlags {
+        position: relative;
+        top: -7px;
+        left: -3px;
+        padding: 3px 6px;
+        border-radius: 100px;
+        background-color: #434649;
+        font-size: 10px;
+        color: @brand-color_white;
+        font-style: normal;
+        font-family: @brand-font_header;
+    }
+
+    &__notificationBadge {
+        position: relative;
+        top: -7px;
+        left: -3px;
+        padding: 3px 6px;
+        border-radius: 100px;
+        background-color: @brand-color_red;
+        font-size: 10px;
+        color: @brand-color_white;
+        font-style: normal;
+        font-family: @brand-font_header;
+    }
+
+    &__svgNotificationBadge {
+        position: relative;
+        top: -5px;
+        left: 17px;
+        padding: 3px 6px;
+        border-radius: 100px;
+        background-color: @brand-color_red;
+        font-size: 10px;
+        color: @brand-color_white;
+        font-style: normal;
+        z-index: 1;
+        font-family: @brand-font_header;
+    }
+
+    &__medicalHistoryIconColor {
+        color: @patient-medical-history-flag-color;
+        font-size: 20px;
+        padding-bottom: 5px;
+    }
+
+    &__medicalHistoryFlagsColor {
+        position: relative;
+        display: inline-block;
+        height: 20px;
+        color: #434649;
+        font-size: 20px;
+    }
+
+    &__showMoreIcon {
+        margin-left: -5px;
+        display: inline-flex;
+        color: #2DABCB;
+        cursor: pointer;
+    }
+
+    .fa {
+        display: block;
+    }
+}
+
+.tooltip-inner {
+    max-width: 100%;
+}
+
+/* Tooltip fix for firefox */
+@-moz-document url-prefix() {
+    .tooltipWidth .tooltip-inner {
+        width: 150%;
+        text-wrap: none;
+    }
+}
+
+@media (min-width: 1450px) {
+    .medicalAlertIcon {
+        .fa {
+            font-size: 20px;
+            display: block;
+        }
+
+        &__customFlags {
+            padding: 0px 20px 4px 25px;
+        }
+
+
+        &__showMoreIcon {
+            padding-top: 60px;
+            margin-left: -5px;
+            display: inline-flex;
+            color: #2DABCB;
+            cursor: pointer;
+
+            .fa {
+                font-size: inherit;
+            }
+        }
+    }
+}
+
+#RTEDropdown-list.k-list-container {
+    width: 352px !important;
+}
+
+@media (max-width: 1350px) {
+    .medicalAlertIcon {
+        .fa {
+            font-size: 22px;
+            display: block;
+        }
+
+        &__customFlags {
+            padding: 2px 12px 0px 24px;
+        }
+
+        &__showMoreIcon {
+            padding-top: 68px;
+            margin-left: -15px;
+
+            .fa {
+                font-size: inherit;
+            }
+        }
+    }
+}
+
+
+.patient2-wrapper {
+    //
+    //wrapper needed to stop patient2 styling from affecting old layout//
+    //
+    .additionalAlerts {
+        text-decoration: underline;
+        padding-left: 2px;
+        margin-left: 10px;
+    }
+
+    .medicalAlertIcon__container .fi-allergies {
+        padding-right: 25px;
+    }
+
+    .medicalAlertIcon__container .fi-allergies {
+        padding-right: 15px;
+    }
+
+    .medicalAlertIcon__customFlags p {
+        display: flex;
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    .form-group > .medicalAlertIcon__customFlags {
+        color: black;
+    }
+
+    ul.medicalAlertIcon__customFlags {
+        list-style: none;
+    }
+
+    a.customPopover {
+        margin-left: -15px;
+    }
+
+    .customStylingDynamicLinks {
+        padding-left: 5px;
+        text-decoration: underline;
+    }
+
+
+    .popover-content {
+        padding: 9px 14px;
+    }
+
+    .popover {
+        background-color: white;
+        border-radius: 14px;
+    }
+
+    .form-group {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .popover.bottom > .arrow:after {
+        border-bottom-color: white;
+        border-top-width: 1px;
+    }
+
+    i.fi-premed {
+        margin-left: 0.5rem;
+    }
+
+    .medicalAlertIcon.cutsomPadding {
+        padding-right: 7px;
+        padding-left: 7px;
+    }
+
+    p {
+        font-family: @global-font-family;
+    }
+
+    .patient-info-container {
+        background-color: @patient-profile_header_bg_color;
+        border-bottom: 1px solid @patient-profile_header_border_color;
+        display: grid;
+        grid-template: 26px auto / auto 1fr auto auto auto auto;
+        grid-template-areas:
+                'initialBadge name communication eligibility edit editbeta'
+                'initialBadge info communication eligibility edit editbeta';
+        padding: 15px 20px 10px 20px;
+        font-family: @brand-font;
+    }
+
+    .patient-header-initial {
+        grid-area: initialBadge;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .patient-header-name {
+        grid-area: name;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .patient-header-quick-info {
+        grid-area: info;
+        margin-left: 10px;
+        font-size: 12px;
+
+        label {
+            margin-bottom: 0; //override global margin on label
+        }
+
+        label:not(:first-of-type) {
+            border-left: 1px solid @patient-profile_header_border_color;
+            padding-left: 5px;
+        }
+
+        div {
+            display: inline-block;
+            padding-right: 5px;
+        }
+    }
+
+    .patient-header-quick-info .patientHeader__more {
+        border-left: 1px solid @patient-profile_header_border_color;
+        padding-left: 5px;
+    }
+
+    .patient-header-eligibility {
+        grid-area: eligibility;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .patient-header-communication {
+        grid-area: communication;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .patient-header-edit-beta {
+        grid-area: editbeta;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    // navigation
+    .navigation-container {
+        background-color: @patient-profile_header_bg_color;
+        border-bottom: 1px solid @patient-profile_header_border_color;
+        box-shadow: 0px 0px 3px rgba(0,0,0,0.2);
+        display: flex;
+        padding: 0 20px;
+        font-family: @brand-font;
+    }
+
+    .patientHeader__nav-item {
+        font-family: @brand-font;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333333;
+        border: none;
+        padding-top: 9px;
+
+        &:not(:last-of-type) {
+            margin-right: 20px;
+        }
+
+        &.active {
+            background-color: transparent;
+            font-weight: @brand-font_heavy; //override styles from patientHeader
+            color: #2DABCB; // todo: make this global variable for primary
+            padding-bottom: 7px;
+            border-bottom: 3px solid #2DABCB;
+        }
+    }
+
+    .drawer-nav-container {
+        margin-left: auto;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .patientHeader_drawer_nav {
+        border-right: 1px solid @patient-profile_header_border_color;
+        height: 40px;
+        width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:first-of-type {
+            border-left: 1px solid @patient-profile_header_border_color;
+        }
+
+        & svg {
+            fill: #2DABCB;
+        }
+
+        &.active {
+            background-color: #2DABCB;
+
+            & svg {
+                fill: #FFFFFF;
+            }
+        }
+    }
+    // temp override until new initial badge design is globalized
+    .initial-badge_profile2 .initialBadge {
+        border: @brand-initial-badge_profile2_border;
+        color: @brand-initial-badge_profile2;
+        height: 40px;
+        width: 40px;
+        font-family: @brand-font;
+    }
+    // new styles for name text
+    .patient-header-name-text {
+        font-family: @brand-font;
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        color: #2DABCB;
+        cursor: pointer;
+    }
+    // override styling from patientHeader
+    .medicalAlertIcon__customFlags {
+        padding: 0 5px;
+    }
+   
+}
+
+
+@media (max-width: 960px) {
+    .medicalAlertIcon {
+        .fa {
+            font-size: 22px;
+            display: block;
+        }
+
+        &__customFlags {
+            padding: 2px 8px 0px 24px;
+        }
+
+        &__showMoreIcon {
+            padding-top: 68px;
+            margin-left: -20px;
+
+            .fa {
+                font-size: inherit;
+            }
+        }
+    }
+}

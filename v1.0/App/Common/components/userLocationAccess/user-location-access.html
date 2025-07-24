@@ -1,0 +1,30 @@
+﻿<div class="panel patientLocationError">
+    <div class="panel-heading">
+            <span class="panel-title">{{'Transaction Location Access Restricted' | i18n}}</span>
+        <button ng-click="close()" class="btn btn-link fa fa-times pull-right">
+        </button>
+    </div>
+   
+    <div class="panel-body patientLocationError__body">
+        <p>
+            {{'You are unable to '}} {{mode}} {{' this transaction as you are not authorized for the location' | i18n}}<br />
+            {{'where the transaction occurred. Please contact an administrator from the' | i18n}}<br />
+            {{'Transaction Location to make these modifications.' | i18n}}
+        </p>
+        <div class="form">
+            <div class="patientLocationError__patientprimaryLocation col-md-12">
+                <label for="primaryLocation" class="">{{'{0} {1}' | i18n:['Transaction', 'Location']}}:</label>&nbsp
+                <span class="primaryLocation">{{patientData.authorization.PatientPrimaryLocationName}}</span>
+            </div>
+
+            <div class="patientLocationError__patientPhone col-md-12">
+                <label for="patientPhone" class="">{{'Phone' | i18n}}:</label>&nbsp
+                <span class="patientPhone">{{patientData.authorization.PatientPrimaryLocationPhone ? patientData.authorization.PatientPrimaryLocationPhone : 'NA' | tel}}</span>
+            </div>
+
+            <div class="patientLocationError__panelButtons pull-right">
+                <button class="btn btn-default cancel" ng-click="close()">{{'Close' | i18n}}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+﻿<div class="modal-header"><h4 id="lblPreVerification">{{ 'Pre-Verification Alerts '  | i18n}}<i ng-show="isSubmissionMode" class="error fa fa-exclamation-triangle"></i></h4>
+    <div ng-repeat="claim in claimSubmissionResultsDto.InvalidClaims">
+        <div class="row" ng-show="!isSubmissionMode">
+            <div class="col-xs-4 ">
+                <label class="error help-text">
+                    {{getPatientName(claim.PatientFirstName, claim.PatientMiddleName, claim.PatientLastName, claim.PatientSuffix)}}
+                </label>
+            </div>
+            <div class="col-xs-3 ">
+                <label class="error help-text">
+                    {{getDate(claim.ServiceStartDate, claim.ServiceEndDate)}}
+                </label>
+            </div>
+            <div class="col-xs-4 ">
+                <label class="error help-text">
+                    {{claim.TotalClaimAmount | currency}}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row margin-left-5 margin-bottom10">
+    <div class="col-xs-12">
+        <h4 id="lblClaimsMissingInfo" class="error help-text" ng-show="isSubmissionMode">{{missingClaims}}{{' claims are missing information and cannot be submitted' | i18n}}</h4>
+    </div>
+</div>
+
+<div class="row margin-left-5 margin-bottom10">
+    <div class="col-xs-12">
+        <h4 id="lbl" ng-show="claimSubmissionResultsDto.InvalidClaims.length === 0 && !isSubmissionMode">{{'All Alerts have been updated.  You may attempt resubmission.' | i18n}}</h4>
+    </div>
+</div>
+
+<div id="" class="row margin-left-15 margin-bottom10" ng-repeat="claim in claimSubmissionResultsDto.InvalidClaims">
+    <div class="col-xs-12" ng-click="showValidationErrors = !showValidationErrors" ng-show="isSubmissionMode">
+
+
+        <div class="row">
+            <div class="col-xs-4 claimHeader">
+                <label>
+                    <i class="error help-text" ng-class="showValidationErrors ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>
+                </label>
+                <label class="error help-text">
+                    {{getPatientName(claim.PatientFirstName, claim.PatientMiddleName, claim.PatientLastName, claim.PatientSuffix)}}
+                </label>
+            </div>
+            <div class="col-xs-3 claimHeader">
+                <label  class="error help-text">
+                    {{getDate(claim.ServiceStartDate, claim.ServiceEndDate)}}
+                </label>
+            </div>
+            <div class="col-xs-4 claimHeader">
+                <label  class="error help-text">
+                    {{claim.TotalClaimAmount | currency}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <div ng-show="showValidationErrors">
+        <div class="margin-left-20" ng-repeat="prop in claim.InvalidProperties">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label>
+                            {{prop.ValidationMessage | i18n}}
+                        </label>
+                    </div>   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div>
+        <button id="btnCancel" ng-click="cancel();" class="btn btn-default">{{ isSubmissionMode ? 'Cancel' : 'Close' | i18n }}</button>
+        <!--<button id="btnPrintReport" ng-show="isSubmissionMode" ng-click="printReport();" class="btn btn-default"><span class="fa fa-print"></span>{{ ' Print Report' | i18n }}</button>-->
+        <button id="btnViewClaimAlerts" ng-show="isSubmissionMode" ng-click="viewClaimAlerts();" class="btn btn-default">{{ 'View Claim Alerts' | i18n }}</button>
+        <button id="btnSubmitValidClaims" ng-show="isSubmissionMode" ng-disabled="claimSubmissionResultsDto.ValidClaims.length === 0" ng-click="submitValidClaims();" class="btn btn-default">{{ 'Submit Claims without Errors' | i18n }}</button>
+    </div>
+</div>
+     

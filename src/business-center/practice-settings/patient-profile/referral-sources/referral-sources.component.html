@@ -1,0 +1,39 @@
+<div class="referralSrc">
+        <form name="frmReferralSources" role="form" novalidate>
+            <div class="rowFull white">
+                <div class="referralSrc__header">
+                    <!--Breadcrumbs-->
+                    <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                    <!--header-->
+                    <div class="referralSrc__title">
+                        <h1>{{ 'Referral Sources' | translate }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="referralSrc__body" >
+                <div [ngClass]="{'slide-animation': 'forward', 'slide-backward-animation': '!forward'}">
+                    <div class="referralSrc__list">
+                        <app-kendo-grid 
+                            [data]="referralSources"
+                            [gridHeight]="'455'" 
+                            [state]="state" 
+                            [isFilterable]="true"
+                            [isSortable]="true" 
+                            [hasCreateAccess]="hasCreateAccess" 
+                            [hasCreateButton]="true"
+                            [createButton]="{class : 'refSrc__actions', icon :'fa-plus', text: 'Add Referral Source'}"
+                            [columns]="columns" 
+                            [formGroup]="formGroup"
+                            [loading]="loading"
+                            (deleteItem)="deleteReferralSource($event)"
+                            (editItem)="editReferralSource($event)" 
+                            (saveItem)="saveReferralSource($event)"
+                            (addNewItem)="createReferralSource()">
+                        </app-kendo-grid>
+                        <!--loading spinner-->
+                        <no-results *ngIf="loading" [loading]="loading"></no-results>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>

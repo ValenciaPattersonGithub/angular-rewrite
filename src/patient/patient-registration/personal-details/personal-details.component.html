@@ -1,0 +1,249 @@
+<div class="personal-detail-container" id="pd-container">
+    <div class="personal-detail-header" id="pd-header">
+        <span id="pd-title" class="personal-detail-title">{{'Personal Details' | translate}}</span>
+    </div>
+    <hr>
+    <form [formGroup]="personalDetails" class="form-horizontal" id="pd-form-horizontal" *ngIf="personalDetails" autocomplete="off">
+        <div class="personalDetailContent" id="pd-personalDetailContent">
+            <div class="photoSection" id="pd-photoSection" *ngIf="showPhoto">
+                <div class="photoSection-photo-wrapper" id="pd-photo-wrapper">
+                    <div class="photoSection-initial" id="pd-initial">
+                        <div class="initialBadge" id="pd-initialBadge">{{'PC'}}
+                        </div>
+                    </div>
+                    <div class="photoSection-photo-detail" id="pd-photo-detail">
+                        <div class="profile-photo-label " id="pd-photo-label">
+                            <app-label class="personal-details-label" [label]="'Profile Photo'">
+                            </app-label>
+                        </div>
+                        <span>{{profilePhotoDetail}}</span>
+                    </div>
+                </div>
+            </div>
+            <label for="autoCompletehack" class="personalDetailContent-autocomplete-hack">Email:</label>
+            <input type="email" id="autoCompletehack" name="autoCompletehack" autocomplete="off" class="personalDetailContent-autocomplete-hack">
+            <div class="personalDetailContent-first-name" id="pd-first-name">
+                <div class="personalDetailContent-first-name-label mb-5">
+                    <app-label class="personalDetailContent-personal-details-label" [label]="'First Name'"></app-label>
+                    <span class="personalDetailContent-required">*</span>
+                </div>
+                <input class="personalDetailContent-name-input" id="firstName" formControlName="FirstName" autocomplete="new-FirstName"
+                    (blur)="checkFirstName()" placeholder="First Name" type="text" maxlength="64"
+                    [ngClass]="{'error-control': !isValidFirstName}">
+                <svg-icon [attr.id]="'firstNameErrorIcon'" class="error-icon" name="tooltipIcon" iconHeight="15px"
+                    *ngIf="!isValidFirstName" tooltip="First Name is required" placement="top-error" delay="500"
+                    iconWidth="15px"></svg-icon>
+            </div>
+            <div class="personalDetailContent-middle-initial" id="pd-middle-initial">
+                <div class="personalDetailContent-middle-initial-label mb-5">
+                    <app-label class="personalDetailContent-personal-details-label" [label]="'MI'"></app-label>
+                </div>
+                <input class="personalDetailContent-short-input" id="middleInitial" formControlName="MiddleInitial" autocomplete="new-MiddleInitial"
+                    placeholder="M.I." type="text" maxlength="1">
+            </div>
+            <div class="personalDetailContent-last-name" id="pd-last-name">
+                <div class="personalDetailContent-last-name-label mb-5">
+                    <app-label class="personalDetailContent-personal-details-label" [label]="'Last Name'"></app-label>
+                    <span class="personalDetailContent-required">*</span>
+                </div>
+                <input class="personalDetailContent-name-input" id="lastName" formControlName="LastName" autocomplete="new-LastName"
+                    (blur)="checkLastName()" placeholder="Last Name" type="text" maxlength="64"
+                    [ngClass]="{'error-control': !isValidLastName}">
+                <svg-icon [attr.id]="'lastNameErrorIcon'" class="error-icon" name="tooltipIcon" iconHeight="15px"
+                    tooltip="Last Name is required" placement="top-error" delay="500" *ngIf="!isValidLastName"
+                    iconWidth="15px"></svg-icon>
+            </div>
+            <div class="personalDetailContent-suffix" id="pd-suffix">
+                <div class="personalDetailContent-suffix-label mb-5">
+                    <app-label class="personalDetailContent-personal-details-label" [label]="'Suffix'"></app-label>
+                </div>
+                <input class="personalDetailContent-short-input" id="suffix" formControlName="Suffix" autocomplete="no-thing"
+                    placeholder="Jr.,Sr.,IV" type="text" maxlength="20">
+            </div>
+            <div class="personalDetailContent-preferred-name" id="pd-preferred-name">
+                <div class="personalDetailContent-preferred-label mb-5">
+                    <app-label class="personalDetailContent-personal-details-label" [label]="'Preferred Name'">
+                    </app-label>
+                </div>
+                <input class="personalDetailContent-name-input" id="preferredName" formControlName="PreferredName" autocomplete="no-thing"
+                    placeholder="Prefers to be called..." type="text" maxlength="64">
+            </div>
+            <div class="personalDetailContent-vitals-wrapper" id="pd-height">
+                <div class="personalDetailContent-vitals-wrapper-date-of-birth-wrapper">
+                    <div class="personalDetailContent-vitals-wrapper-date-of-birth-wrapper-DOB" id="pd-date-of-birth"
+                        #DOB>
+                        <div class="personalDetailContent-date-of-birth-label mb-5">
+                            <app-label class="personal-details-label" [label]="'Date of Birth'">
+                            </app-label>
+                        </div>
+                        <app-date-picker [isValidDate]="isValidDob" [id]="'personal-details-DOB'" autocomplete="no-thing"
+                            formControlName="DateOfBirth" [maxDate]="maxDate" class="date-of-birth">
+                        </app-date-picker>
+                        <div [ngClass]="{'error-icon-alignment': !isValidDob}">
+                            <svg-icon [attr.id]="'DobErrorIcon'" class="error-icon-dob" name="tooltipIcon"
+                                iconHeight="15px" tooltip="{{doberrormessage}}" placement="top-error" delay="500"
+                                *ngIf="!isValidDob" iconWidth="15px"></svg-icon>
+                        </div>
+                    </div>
+                    <div *ngIf="showAge" class="personalDetailContent-vitals-wrapper-date-of-birth-wrapper-age"
+                        id="pd-age">
+                        <div class="personalDetailContent-age-label mb-5">
+                            <app-label class="personal-details-label" [label]="'Age'">
+                            </app-label>
+                        </div>
+                        <div class="mt-1r">
+                            {{dateOfBirth | age:dateOfBirth }}
+                        </div>
+                    </div>
+                </div>
+                <div class="personalDetailContent-vitals-wrapper-gender-wrapper" id="pd-gender">
+                    <div class="personalDetailContent-vitals-wrapper-gender-wrapper-label mb-5">
+                        <app-label class="personal-details-label" [label]="'Gender'">
+                        </app-label>
+                    </div>
+                    <select id="gender" formControlName="Gender" 
+                            class="personalDetailContent-vitals-wrapper-gender-wrapper-select">
+                        <option value="" selected></option>
+                        <option [value]="gender.value" *ngFor="let gender of genders">
+                            {{gender.text}}
+                        </option>
+                    </select>
+                </div>
+                <div class="personalDetailContent-vitals-wrapper-height-wrapper">
+                    <div class="personalDetailContent-vitals-wrapper-height-wrapper-label mb-5">
+                        <app-label [label]="'Height'" class="height-label">
+                        </app-label>
+                        <svg-icon class="personalDetailContent-heighttooltipIcon" *ngIf="!isToolTipShow"
+                            (mouseover)="heightToolTipText()" (mouseout)="showHeightTooltip=false" name="tooltipIcon"
+                            iconHeight="15px" iconWidth="15px"
+                            tooltip="ePrescriptions require weight & height for patients under the age of 18."
+                            placement="top" delay="500">
+                        </svg-icon>
+                    </div>
+                    <div class="personalDetailContent-vitals-wrapper-height-wrapper-ft">
+                        <input class="personalDetailContent-heightbox personalDetailContent-heightft-input" autocomplete="no-thing"
+                            [ngClass]="{'error-heightcontrol': !isValidHeightFeet}" id="heightFeet" type="text"
+                            maxlength="1" formControlName="HeightFt" (blur)="checkHeightFeet()" OnlyNumber>
+                        <svg-icon [attr.id]="'firstNameErrorIcon'" class="error-icon-height" name="tooltipIcon"
+                            iconHeight="15px" tooltip="{{feeterrormessage}}" placement="top-error" delay="500"
+                            *ngIf="!isValidHeightFeet" iconWidth="15px"></svg-icon>
+                    </div>
+                    <span class="personalDetailContent-vitals-wrapper-height-wrapper-ft-label">ft</span>
+                    <div class="personalDetailContent-vitals-wrapper-height-wrapper-inch">
+                        <input
+                            class="personalDetailContent-heightbox personalDetailContent-heightin-input inch-adjustment" autocomplete="no-thing"
+                            [ngClass]="{'error-heightcontrol': !isValidHeighInches}" id="heightInch" type="text"
+                            maxlength="2" formControlName="HeightIn" (blur)="checkHeightInch()" OnlyNumber>
+                        <svg-icon [attr.id]="'firstNameErrorIcon'" class="error-icon-inch" name="tooltipIcon"
+                            iconHeight="15px" tooltip="{{incheserrormessage}}" placement="top-error" delay="500"
+                            *ngIf="!isValidHeighInches" iconWidth="15px"></svg-icon>
+                    </div>
+                    <span class="personalDetailContent-vitals-wrapper-height-wrapper-inch-label">in</span>
+                </div>
+                <div class="personalDetailContent-vitals-wrapper-weight-wrapper ">
+                    <div class="personalDetailContent-vitals-wrapper-weight-wrapper-label mb-5">
+                        <app-label [label]="'Weight'"> </app-label>
+                    </div>
+                    <div class="personalDetailContent-vitals-wrapper-weight-wrapper-lbs">
+                        <input
+                            class="personalDetailContent-heightbox personalDetailContent-weight-input weight-adjustment" autocomplete="no-thing"
+                            [ngClass]="{'error-heightcontrol': !isValidWeight}" placeholder="Enter Weight" id="weight"
+                            type="text" maxlength="5" formControlName="Weight" (blur)="checkWeight()"
+                            DecimalNumber="1">
+                        <svg-icon [attr.id]="'firstNameErrorIcon'" class="error-icon-weight" name="tooltipIcon"
+                            iconHeight="15px" tooltip="{{weighterrormessage}}" placement="top-error" delay="500"
+                            *ngIf="!isValidWeight" iconWidth="15px"></svg-icon>
+                    </div>
+                    <span class="personalDetailContent-vitals-wrapper-weight-wrapper-lbs-label">lbs</span>
+                </div>
+
+
+
+            </div>
+            <div class="personalDetailContent-patient-duplicate-search"
+                *ngIf="patientSearchList.length && checkingForDuplicates">
+                <patient-duplicate-search [isPersonalDetail]="personalDetail" [patientSearchList]="patientSearchList">
+                </patient-duplicate-search>
+            </div>
+
+            <div class="activeInactive" id="pd-activeInactive">
+                <div class="activeInactive-label mb-5">
+                    <app-label class="personal-details-label" [label]="'Status'">
+                    </app-label>
+                </div>
+                <div class="activeInactive-rb-wrapper">
+                    <app-radio-button [disabled]="activeInactiveStatusRadio?null:true" class="activeInactive-active"
+                        id="active" label="{{ 'Active'}}" formControlName="Status" [value]="true"
+                        [checked]="getCheckedStatus(true, 'Status')" [name]="'Status'">
+                    </app-radio-button>
+                    <app-radio-button [disabled]="activeInactiveStatusRadio?null:true" class="activeInactive-inactive"
+                        id="inactive" label="{{ 'Inactive' }}" formControlName="Status" [value]="false"
+                        (change)='onStatusChange()' [checked]="getCheckedStatus(false, 'Status')" [name]="'Status'">
+                    </app-radio-button>
+                </div>
+            </div>
+            <div class="patient" id="pd-patient">
+                <div class="patient-label mb-5">
+                    <app-label class="personal-details-label" [label]="'Patient'">
+                    </app-label>
+                </div>
+                <div class="patient-rb-wrapper">
+                    <app-radio-button class="patient-yes" id="yes" label="{{ 'Yes'}}" formControlName="Patient"
+                        [value]="true" [checked]="getCheckedStatus(true, 'Patient')" [name]="'Patient'">
+                    </app-radio-button>
+                    <app-radio-button class="patient-no" id="no" label="{{ 'No' }}" formControlName="Patient"
+                        [value]="false" [checked]="getCheckedStatus(false, 'Patient')" [name]="'Patient'"
+                        (change)='onPatientStatusChange()'>
+                    </app-radio-button>
+                </div>
+            </div>
+            <div class="responsiblePerson" id="pd-responsiblePerson">
+                <div class="responsiblePerson-label mb-5">
+                    <app-label class="personal-details-label" [label]="'Responsible Person'">
+                    </app-label>
+                </div>
+                <div class="responsiblePerson-rb-wrapper">
+                    <app-radio-button class="responsiblePerson-rdbSelf" id="rdbSelf" label="{{ 'Self'}}"
+                        (change)="responsiblePersonTypeChange('1')" formControlName="ResponsiblePerson" [value]="'1'"
+                        [checked]="getCheckedStatus('1', 'ResponsiblePerson')" [name]="'ResponsiblePerson'">
+                    </app-radio-button>
+                    <app-radio-button class="responsiblePerson-rdbOther" id="rdbOther" label="{{ 'Other' }}"
+                        (change)="responsiblePersonTypeChange('2')" formControlName="ResponsiblePerson" [value]="'2'"
+                        [checked]="getCheckedStatus('2', 'ResponsiblePerson')" [name]="'ResponsiblePerson'">
+                    </app-radio-button>
+                    <svg-icon class="responsiblePerson-tooltipIcon"
+                        *ngIf="personalDetails.get('ResponsiblePerson').disabled" (mouseout)="showTooltip=false"
+                        name="tooltipIcon" iconHeight="15px" iconWidth="15px"
+                        tooltip=" This person already has transactions.  Please use the Account Transfer to change Responsible Party."
+                        placement="top" delay="500"></svg-icon>
+                </div>
+            </div>
+            <div id="pd-responsible-person-search" class="personalDetailContent-responsible-person-search"
+                *ngIf="showSearch">
+                <responsible-party-search [componentName]="'PersonalDetail'"
+                    (selectedValueChanged)="onSelectedValueChanged($event)"
+                    [isDisabled]="personalDetails.get('ResponsiblePerson').disabled"
+                    [isValid]="personalDetails.get('ResponsiblePersonId').valid"
+                    [currentPersonId]="this.route.patientId"
+                    [responsibleParty]="responsiblePersonName"
+                    [errorToolTipMessage]="'Please select responsible person'">
+                </responsible-party-search>
+
+            </div>
+            <div class="personalDetailContent-signature" id="pd-signature">
+                <div class=" personalDetailContent-signature-wrapper mb-5">
+                    <app-label class="personal-details-label personalDetailContent-signature-label"
+                        [label]="'Signature on File'">
+                    </app-label>
+                    <svg-icon class="personalDetailContent-tooltipIcon" (mouseover)="toolTipText()"
+                        (mouseout)="showTooltip=false" name="tooltipIcon" iconHeight="15px" iconWidth="15px"
+                        tooltip="{{toolTipMessage}}" placement="top" delay="500"></svg-icon>
+                </div>
+                <app-check-box id="signature" [label]="'Yes'" formControlName="SignatureOnFile" [value]="true"
+                    [checked]="getCheckedStatus(true, 'SignatureOnFile')" (change)="signatureChanged($event)">
+                </app-check-box>
+            </div>
+            
+        </div>
+    </form>
+</div>

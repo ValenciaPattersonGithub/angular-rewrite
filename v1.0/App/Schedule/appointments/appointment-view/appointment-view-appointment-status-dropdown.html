@@ -1,0 +1,24 @@
+﻿<div id="appointmentStatus{{inputId}}" class="appointment-status-dropdown dropdown">
+    <button id="btnDropDown{{inputId}}" ng-click="btnClick()" ng-blur="onBlur()"
+            ng-disabled="controlDisabled"
+            class="">
+        <span ng-if="!selectedItem" id="defaultSelectedDescription{{inputId}}" class="selected-description"> {{ ::(placeHolder) }}</span>
+        <span ng-if="selectedItem" id="lblSelectedAppointmentStatusPreview{{inputId}}" class="appointment-status-icon">Icon</span>
+        <span ng-if="selectedItem" id="lblSelectedAppointmentStatusName{{inputId}}" ng-style="{'cursor': 'pointer'}">
+            {{ selectedItem.Name }}
+        </span>
+        <span class="arrow"></span>
+    </button>
+    <div id="dropdownListBox{{inputId}}" class="dropdownListBox" ng-if="isOpen">
+        <div id="default{{inputId}}" class="option" ng-mousedown="selectItem(null)"> {{ ::(placeHolder) }} </div>
+        <div id="dropdownListItems{{inputId}}{{$index}}" ng-repeat="dataItem in appointmentStatuses track by $index">
+            <div id="lblOptionName{{inputId}}{{$index}}" ng-mousedown="selectItem(dataItem)"
+                 class="option" ng-class="{'active': selectedAppointmentStatus === dataItem.AppointmentStatusId}">
+                <span class="appointment-status-icon">Icon</span>
+                <span> {{ dataItem.Name }} </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+

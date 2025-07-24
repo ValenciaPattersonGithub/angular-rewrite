@@ -1,0 +1,120 @@
+﻿.serviceCodeLanding {
+    .content__row {
+        padding-top: 0;
+    }
+
+    &__breadcrumb {
+        .breadcrumb;
+        margin-bottom: 0;
+        padding: @brand-padding_sm 0 0;
+    }
+
+    &__body {
+        .rowFull;
+        padding: @brand-padding_horizontal;
+    }
+
+    &__header {
+        .containerStandard;
+        .clearfix;
+        padding: 0;
+    }
+
+    &__title {
+
+        h1 {
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_horizontal;
+            padding-bottom: @brand-padding_horizontal;
+        }
+    }
+
+    &__list {
+        .containerStandard;
+        padding-top: 0;
+    }
+
+    &__actions {
+        .containerStandard;
+        float: left;
+        padding-top: 0;
+        padding-bottom: @brand-padding_horizontal;
+
+        #selectReport {
+
+            .k-dropdown {
+                width: 13.5em;
+            }
+        }
+    }
+
+    .serviceCodeLandingNewGrid {
+        .containerStandard;
+        padding-top: 0;
+
+        .fuseGrid {
+            margin-top: @brand-margin_md;
+        }
+
+        .searchIcon {
+            padding-top: 9px;
+        }
+
+        .serviceCodeGridBody {
+
+            &__description {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .noResults {
+                height: 400px;
+                padding-top: 170px;
+                text-align: center;
+
+                i.loading {
+                    font-size: 50px;
+                }
+            }
+
+            .inactive {
+                font-style: italic;
+            }
+
+            .body {
+                display: block;
+                padding-left: 16px;
+            }
+
+            .odd {
+                background-color: @zebra-dark;
+            }
+
+            .even {
+                background-color: @zebra-light;
+            }
+
+            input {
+                min-height: 30px;
+                padding: 0 @brand-padding_xs 0 @brand-padding_xs;
+                width: 100%;
+            }
+
+            select {
+                cursor: pointer;
+                min-height: 30px;
+                width: 100%;
+            }
+
+            option.optionsPlaceholder {
+                display: none;
+            }
+
+            .utilCheckbox__ctrl {
+                padding: 5px 0 0 0;
+            }
+        }
+    }
+}

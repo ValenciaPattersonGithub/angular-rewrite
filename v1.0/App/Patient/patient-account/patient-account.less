@@ -1,0 +1,87 @@
+﻿.patientProfile {
+    .clearfix;
+    @media screen and (max-width: 1290px) {
+        &__nav {
+            display: none;
+        }
+    }
+    &__nav {
+
+        .nav {
+            float: right;
+            text-align: right;
+
+            > li > a:hover,
+            > li > a:focus {
+                background-color: transparent;
+                font-weight: 700;
+            }
+            > li > a.active {
+                font-weight: 700;
+            }
+            white-space: nowrap;
+        }
+    }
+
+    .keepTop {
+        position: fixed;
+        width: auto;
+        left: 85%;
+    }
+
+    &__header {
+    }
+
+    &__alert {
+    }
+
+    &__navRespPerson {
+        .clearfix;
+
+        .margin-top-15 {
+            margin-top: 15px;
+        }
+    }
+
+    &__formBox {
+        .make-md-column(10);
+    }
+
+    &__form {
+        .make-md-column(6);
+    }
+}
+
+[id^="btnRemove"] > .fa {
+    color: @brand-color_link;
+
+    &:hover {
+        cursor: pointer;
+        color: @brand-color_link-hover;
+    }
+}
+
+.payments-display-color {
+    color: @brand-payments-color;
+}
+
+.negative-adjustments-display-color {
+    color: @brand-negative-adjustments-color;
+}
+
+.positive-adjustments-display-color {
+    color: @brand-positive-adjustments-color;
+}
+
+.deleted-transaction-display-color {
+    color: @brand-deleted-transactions-color;
+    font-style: italic;
+}
+
+.open-claims-display-color {
+    color: @brand-color_blue;
+}
+
+.black-display-color {
+    color: @brand-color_black;
+}

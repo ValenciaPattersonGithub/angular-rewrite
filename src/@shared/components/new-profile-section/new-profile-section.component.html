@@ -1,0 +1,30 @@
+<div class="new-profile-section">
+    <div class="panel-section">
+        <div class="panel-section-heading">
+            <div class="panel-section-title">
+                <ng-container>
+                    <div class="panel-title">{{sectionTitle | translate}}</div>
+                </ng-container>
+                <ng-container>{{count | translate}} </ng-container>
+            </div>
+            <hr />
+            <div class="panel-actions">
+                <span *ngFor="let action of actions; index as i">
+                    <app-button *ngIf="action?.Path" id="{{ baseId }}Link{{i}}" class="btn-secondary"
+                        variation="secondary" (onClick)="redirectTo(action?.Path)"
+                        [isDisabled]="inactive || action?.Inactive==true" checkRoleAccess="{{action?.amfa}}"
+                        buttonLabel="{{action?.Text}}"> </app-button>
+
+                    <app-button *ngIf="!action?.Path && action?.Function" id="{{ baseId }}Link{{i}}"
+                        class="btn-secondary" variation="secondary" (onClick)="clickHandler(action?.Function)"
+                        [isDisabled]="inactive || action?.Inactive==true" checkRoleAccess="{{action?.amfa}}"
+                        buttonLabel="{{action?.Text}}"> </app-button>
+                </span>
+            </div>
+
+            <div>
+                <ng-content select="[layout1]"></ng-content>
+            </div>
+        </div>
+    </div>
+</div>

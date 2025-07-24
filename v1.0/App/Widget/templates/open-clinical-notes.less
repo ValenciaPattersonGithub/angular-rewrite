@@ -1,0 +1,75 @@
+﻿.openClinicalNotes {
+    .note-count {
+        font-size: x-large;
+    }
+
+    thead, tbody {
+        display: block;
+    }
+
+    tbody {
+        height: 240px;
+        overflow-y: auto;
+    }
+
+    .note {
+        width: 130px;
+        max-width: 130px;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+    }
+
+    tbody .note {
+        color: deepskyblue;
+        cursor: pointer;
+    }
+
+    .patient {
+        width: 130px;
+        max-width: 130px;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .time-left {
+        width: 100px;
+        max-width: 100px;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+    }
+
+    tbody .time-left {
+        color: red;
+    }    
+
+    &__header{
+        width:100%;
+    }
+
+    .filterRow{
+        width:100%;
+    }
+
+    .dropdownWrapper {
+        display: inline-block;
+        margin-right: 10px;
+        width:47%;
+
+        .k-dropdown {            
+            width: 100%;
+        }
+
+        .k-dropdown-wrap {
+            height: 26px;
+            width: 100%;
+        }
+
+        .k-input {
+            padding: 0px !important;
+        }
+
+        .k-icon {
+            position: initial;
+        }
+    }
+}

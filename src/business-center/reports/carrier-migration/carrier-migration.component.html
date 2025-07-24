@@ -1,0 +1,54 @@
+<div>
+    <div *ngIf="showFilterMessage">{{setFiltersMessage}}</div>
+    <div *ngIf="shownoResultsMessage">{{noResultsMessage}}</div>
+</div>
+<ng-container *ngIf="reportData$ | async as reportData">
+    <div *ngIf="reportData?.carriers?.length > 0" class="no-outline">
+        <div class="stripOdd">
+            <div class="carrier-report grid header">
+                <div class="col-sm-2-migration"><b>{{ 'Carrier' | translate }}</b></div>
+                <div class="col-sm-2-migration"><b>{{ 'Address' | translate }}</b></div>
+                <div class="col-sm-2-migration"><b>{{ 'Email' | translate }}</b></div>
+                <div class="col-sm-2-migration"><b>{{ 'Payer ID' | translate }}</b></div>
+                <div class="col-sm-2-migration"><b>{{ 'Phone Numbers' | translate }}</b></div>
+            </div>
+        </div>
+        <ng-container>
+            <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="30" tabindex="0">
+                <div *cdkVirtualFor="let rowdata of reportData.carriers; index as i" class="">
+
+
+                    <div class="carrier-report grid item">
+                        <div class="col-sm-5-migration">
+                            {{ rowdata.name | translate }}
+                        </div>
+                        <div class="col-sm-7-migration">
+                            <div>{{ rowdata.address | translate }}</div>
+                            <div>{{ rowdata.address2 | translate }}</div>
+                            <div *ngIf="rowdata.city">
+                                {{ rowdata.city | translate}},
+                            </div>
+                            <div>
+                                {{ rowdata.state| translate }} {{ rowdata.zipCode| translate }}
+                            </div>
+                        </div>
+                        <div class="col-sm-5-migration">
+                            {{ rowdata.email | translate }}
+                        </div>
+                        <div class="col-sm-5-migration">
+                            {{ rowdata.payerId | translate }}
+                        </div>
+                        <div class="col-sm-5-migration">
+                            <div *ngFor="let phonenumber of rowdata.phoneNumbers;">
+                                {{ phonenumber | phoneNumber }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="carrier-report-hr" />
+
+            </cdk-virtual-scroll-viewport>
+        </ng-container>
+    </div>
+</ng-container>

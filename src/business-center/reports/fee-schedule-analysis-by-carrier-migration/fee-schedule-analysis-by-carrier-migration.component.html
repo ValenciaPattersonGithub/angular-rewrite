@@ -1,0 +1,124 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="feeScheduleAnalysisByCarrier grid header stripOdd">
+        <div class="col-sm-3-migration">{{ 'Carrier' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Fee Schedule' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Service Code' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Location Fee' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Allowed Amount' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Count of Service' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Total' | translate }} {{ 'Amount Charged' | translate }}</div>
+        <div class="col-sm-2-migration text-right">{{ 'Total' | translate }} {{ 'Amount of Fee Schedule Adjustments' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{ 'Total' | translate }} {{ 'Net Production' | translate }}</div>
+    </div>
+
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+                                     id="feeScheduleAnalysisByCarrier">
+
+            <div *cdkVirtualFor="let location of reportData.Locations; index as i">
+
+                <div class="col-sm-3-migration text-center">{{ location.Location }}</div>
+               
+                <div *ngFor="let carrier of location.Carriers;" class="stripOdd">
+
+                    <div class="feeScheduleAnalysisByCarrier grid item">
+                        <div class="col-sm-3-migration">
+                            <div class="col-sm-3-migration">{{ carrier.Carrier }}</div>
+                            <div class="col-sm-3-migration" *ngIf="carrier.Address">{{ carrier.Address }}</div>
+                            <div class="col-sm-3-migration" *ngIf="carrier.Address2">{{ carrier.Address2 }}</div>
+                            <div class="col-sm-3-migration">{{ carrier.City }}<span *ngIf="carrier.City">,</span> {{ carrier.State }} {{ carrier.ZipCode }}</div>
+                            <div class="col-sm-3-migration">{{ carrier.PhoneNumber | phoneNumber}}</div>
+                        </div>
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration"></div>
+                    </div>
+                    <div *ngFor="let feeSchedule of carrier.FeeSchedules; index as j">
+
+                        <div  class="feeScheduleAnalysisByCarrier grid item"  *ngFor="let code of feeSchedule.ServiceCodes; index as k">
+
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration" *ngIf="k==0">{{feeSchedule.FeeSchedule}}</div>
+                            <div class="col-sm-3-migration" *ngIf="k>0"></div>
+                            <div class="col-sm-1-migration">{{code.ServiceCode}}</div>
+                            <div class="col-sm-1-migration text-right">{{code.LocationFee | currency}}</div>
+                            <div class="col-sm-1-migration text-right">{{code.AllowedAmount | currency}}</div>
+                            <div class="col-sm-1-migration text-right">{{code.CountOfService}}</div>
+                            <div class="col-sm-1-migration text-right">{{code.AmountCharged | currency}}</div>
+                            <div class="col-sm-1-migration text-right" *ngIf="code.FeeScheduleAdjustmentAmount >= 0">{{code.FeeScheduleAdjustmentAmount | currency}}</div>
+                            <div class="col-sm-1-migration text-right" *ngIf="code.FeeScheduleAdjustmentAmount < 0">({{code.FeeScheduleAdjustmentAmount * -1 | currency}})</div>
+                            <div class="col-sm-1-migration text-right">{{code.NetProduction | currency}}</div>
+                        </div>
+                        
+                        <div class="feeScheduleAnalysisByCarrier grid item" >
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration reportGrid__label">{{'Totals for' | translate}} {{feeSchedule.FeeSchedule}}</div>
+                            <div class="col-sm-1-migration text-right">{{feeSchedule.CountOfService}}</div>
+                            <div class="col-sm-1-migration text-right">{{feeSchedule.AmountCharged | currency}}</div>
+                            <div class="col-sm-1-migration text-right" *ngIf="feeSchedule.FeeScheduleAdjustmentAmount >= 0">{{feeSchedule.FeeScheduleAdjustmentAmount | currency}}</div>
+                            <div class="col-sm-1-migration text-right" *ngIf="feeSchedule.FeeScheduleAdjustmentAmount < 0">({{feeSchedule.FeeScheduleAdjustmentAmount * -1 | currency}})</div>
+                            <div class="col-sm-1-migration text-right">{{feeSchedule.NetProduction | currency}}</div>
+                        </div>
+                        <div class="feeScheduleAnalysisByCarrier grid item"  *ngIf="j+1 == carrier.FeeSchedules.length">
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration"></div>
+                            <div class="col-sm-3-migration reportGrid__label">{{'Totals for' | translate}} {{carrier.Carrier}}</div>
+                            <div class="col-sm-1-migration text-right">{{carrier.CountOfService}}</div>
+                            <div class="col-sm-1-migration text-right">{{carrier.AmountCharged | currency}}</div>
+                            <div class="col-sm-1-migration text-right" *ngIf="carrier.FeeScheduleAdjustmentAmount >= 0">{{carrier.FeeScheduleAdjustmentAmount | currency}}</div>
+                            <div class="col-sm-1-migration text-right" *ngIf="carrier.FeeScheduleAdjustmentAmount < 0">({{carrier.FeeScheduleAdjustmentAmount * -1 | currency}})</div>
+                            <div class="col-sm-1-migration text-right">{{carrier.NetProduction | currency}}</div>
+                        </div>
+
+                    </div>
+                   
+                    
+                 
+                   
+                </div>
+                <div class="feeScheduleAnalysisByCarrier grid item stripOdd">
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration reportGrid__label" colspan="5">{{'Totals for' | translate}} {{location.Location}}</div>
+                    <div class="col-sm-1-migration text-right">{{location.CountOfService}}</div>
+                    <div class="col-sm-1-migration text-right">{{location.AmountCharged | currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="location.FeeScheduleAdjustmentAmount >= 0">{{location.FeeScheduleAdjustmentAmount | currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="location.FeeScheduleAdjustmentAmount < 0">({{location.FeeScheduleAdjustmentAmount * -1 | currency}})</div>
+                    <div class="col-sm-1-migration text-right">{{location.NetProduction | currency}}</div>
+                </div>
+                <div class="feeScheduleAnalysisByCarrier grid item stripEven"  *ngIf="i+1 == reportData.Locations.length">
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-8-migration reportGrid__label" >{{'Report Totals' | translate}}</div>
+                    <div class="col-sm-1-migration text-right">{{reportData.CountOfService}}</div>
+                    <div class="col-sm-1-migration text-right">{{reportData.AmountCharged | currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="reportData.FeeScheduleAdjustmentAmount >= 0">{{reportData.FeeScheduleAdjustmentAmount | currency}}</div>
+                    <div class="col-sm-1-migration text-right" *ngIf="reportData.FeeScheduleAdjustmentAmount < 0">({{reportData.FeeScheduleAdjustmentAmount * -1 | currency}})</div>
+                    <div class="col-sm-1-migration text-right">{{reportData.NetProduction | currency}}</div>
+                </div>
+    
+               
+                <div class="col-sm-12-migration text-center stripEven"  *ngIf="i+1 == reportData.Locations.length">
+                    {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | translate}}
+                </div>
+                
+            </div>
+
+           
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

@@ -1,0 +1,12 @@
+﻿<top-navigation [menu-type]="'Business'"></top-navigation>
+<div ng-class="'fade-in'"
+    ng-controller="ReceivablesController"
+    class="receivables">
+    <div class="rowFull">
+        <div class="receivables__container">
+            <div class="receivables__padding-left-3">
+                <ng-include src="selectedView.Template"></ng-include>
+            </div>
+        </div>
+    </div>
+</div>

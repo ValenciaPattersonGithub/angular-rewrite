@@ -1,0 +1,133 @@
+﻿<div ng-class="'fade-in'">
+    <form name="frmPatientWatchCrud" role="form" action="javascript:;" novalidate>
+        <div class="clearfix">&nbsp;</div>
+
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div id="lblPatientWatchHeader" class="modal-title-responsive">
+                        {{ editMode ? viewOnly ? 'View {0}': 'Edit {0}' : 'Add a {0}' | i18n:['Watch'] }}
+                    </div>
+                    
+                    <div class="pull-right">
+                        <button id="btnClose" ng-click="cancelChanges();" ng-disabled="savingForm" class="btn btn-link fa fa-times icon-click"></button>
+                    </div>
+                    <!--<div class="pull-right" ng-show="viewOnly==true">
+                        <a ng-disabled="true" id="btnEditWatch" ng-click="activateEditMode();" class="btn btn-link fa fa-pencil icon-click"></a>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+
+            <!-- Select Provider -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label id="lblProvider" class="form-label-newer" for="lstProvider">{{'Provider' | i18n }}</label>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+                    <div id="lstProvider" form-input>
+                        <provider-selector input-id="inpLstProvider" view-only="viewOnly" provider-list="providers" selected-provider="patientWatch.ProviderId" selected-provider-inactive="selectedProviderInactive" focus="true"></provider-selector>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!-- Select Watch Date -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label id="lblDate" class="form-label-newer">{{'Date' | i18n }}</label>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <div>
+                        <date-selector input-id="inpWatchDate" placeholder="MM/dd/yyyy" date-var="patientWatch.Date" max-date="maxDate" valid="validDob" disable-date-input="editableDate" format="MM/dd/yyyy"></date-selector>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--Select tooth(R) -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label id="lblTooth" class="form-label-newer" for="inpTooth">{{'Tooth' | i18n }} *</label>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-class="{error: (hasErrors && frmPatientWatchCrud.inpTooth.$error.required) || duplicateWatch ==true }">
+                    <div ng-class="{error: (hasErrors && frmPatientWatchCrud.inpTooth.$error.required) ||duplicateWatch ==true }">
+                        <input ng-disabled="viewOnly" type="text" ng-change="ValidateTooth(patientWatch)" class="form-input form-input-min-width required valid " id="inpTooth" name="inpTooth" ng-model="patientWatch.ToothNumber" char-pattern="{{'[^A-T0-9]'}}"
+                               maxlength="20" placeholder="{{'Tooth'| i18n}}" capitalize-first required />
+                    </div>
+                    <label id="lblToothRequired" class="help-text " ng-show="hasErrors && frmPatientWatchCrud.inpTooth.$error.required">
+                        {{ 'This field is required' | i18n }}
+                    </label>
+                    <label id="lblToothWatched" class="help-text " ng-show="duplicateWatch==true">
+                        {{ 'This tooth has an existing watch' | i18n }}
+                    </label>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--Select Surface-->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label id="lblSurface" class="form-label-newer" for="inpSurface">{{'Surface' | i18n }}</label>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" >
+                    <div>
+                        <input ng-disabled="viewOnly" type="text" class="form-input form-input-min-width valid " id="inpSurface" name="inpSurface" ng-model="patientWatch.Surface" char-pattern="[^a-zA-Z0-9-, ]"
+                               maxlength="20" placeholder="{{'Surface'| i18n}}" />
+                    </div>
+
+                </div>
+                <div>
+
+                </div>
+
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--Select Root-->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label id="lblRoot" class="form-label-newer" for="inpRoot">{{'Root' | i18n }}</label>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <div>
+                        <input ng-disabled="viewOnly" type="text" class="form-input form-input-min-width valid " id="inpRoot" name="inpRoot" ng-model="patientWatch.Root" char-pattern="[^a-zA-Z0-9-, ]"
+                               maxlength="20" placeholder="{{'Root'| i18n}}" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!-- Notes -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label id="lblNotes" class="form-label-newer" for="inpRoot">{{'Notes' | i18n }}</label>
+                </div>
+                <!--NOTE TODO should this be a note directive-->
+                <div class="col-xs-12 col-sm-9 col-md-8 col-lg-8">
+                    <textarea ng-disabled="viewOnly" class="form-input" ng-model="patientWatch.Notes" name="inpNotes" id="inpNotes" maxlength="500" rows="6" placeholder="{{'Notes'| i18n}}" spellcheck="true"></textarea>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <div class="modal-footer background-grey" ng-show="!viewOnly">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="pull-left">
+                            <button id="btnSave" ng-show="!viewOnly" ng-click="savePatientWatch();" ng-disabled="savingForm || !formIsValid || viewOnly || (frmPatientWatchCrud.$pristine && editMode)"
+                                    class="btn btn-primary form-btn-save-new ">
+                                {{ 'Save' | i18n }}
+                            </button>
+                        </div>
+                        <div class="pull-right">
+                            <button id="btnCancel" ng-show="!viewOnly" ng-click="cancelChanges();" ng-disabled="savingForm" class="btn form-btn-cancel-new">{{ 'Cancel' | i18n }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

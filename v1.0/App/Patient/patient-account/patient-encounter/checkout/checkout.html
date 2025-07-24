@@ -1,0 +1,26 @@
+﻿<div ng-if="!loading" class="checkout" >
+    <div class="rowFull white">
+        <patient-header ng-if="patientHeaderObj" patient-data="patientHeaderObj" phones="phones" active-url="activeTemplate"
+            hide-tabs="false" disable-tabs="true"></patient-header>
+    </div>
+
+    <div style="display: flex" ng-if="patientHeaderObj">
+        <div style="flex-grow:8">
+            <patient-checkout [patient-info]="patientHeaderObj" (finish)="navigateToSummary($event)" (cancel)="cancelCheckout($event)"></patient-checkout>
+        </div>
+        <div>
+            <!-- drawer put in place to test responsiveness
+            enable by changing this line in patientHeader
+            if ($routeParams.Category == "Clinical") to check for 'Summary' -->
+            <div class="checkout__drawer" ng-class="{ 'open': drawerIsOpen, 'closed': !drawerIsOpen }" ng-if="enableNewClinicalNavigation===true">
+                <div class="drawer-container">
+                    <div class="drawer-title">
+                        Patient Details
+                        <span class="far fa-arrow-right drawer-close" ng-click="closeDrawer()"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

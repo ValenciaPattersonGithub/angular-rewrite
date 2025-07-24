@@ -1,0 +1,408 @@
+﻿.peopleMgmt {
+    &__header {
+        .containerStandard;
+        .clearfix;
+        padding: 0;
+        
+        .dropdown {
+            .clearfix;
+            display: inline-block;
+
+            > .fa-sort-down {
+                padding-left: 10px;
+                padding-right: 10px;
+                font-size: @brand-font_xl;
+                font-weight: @brand-font_heavy;
+            }
+
+            > h2 {
+                display: inline-block;
+                font-size: @brand-font_h2;
+                margin: 0;
+                padding: 0;
+            }
+
+            .dropdown-menu {
+                max-height: 200px;
+                overflow-y: auto;
+            }
+        }
+    }
+
+    &__title {
+        .containerStandard;
+        float: left;
+        padding: 0;
+
+        h1 {
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_horizontal;
+            padding-bottom: @brand-padding_horizontal;
+        }
+    }
+
+    &__actions {
+        padding-top: @brand-padding_horizontal;
+        padding-bottom: @brand-padding_horizontal;
+    }
+
+    &__actions-link {
+        .containerStandard;
+        max-width: 1500px !important;
+        display: inline-block;
+        text-align: left;
+        padding-bottom: @brand-padding_horizontal;
+
+        &__transparent{
+            background-color: transparent;
+            border-color: transparent;
+            color:  @btn-default-color;
+            &.notActive{
+                cursor: not-allowed;
+                opacity: 0.65;
+            }
+        }
+    }
+
+    &__actions-search {
+        display: inline-block;
+        text-align: right;
+        width: 50%;
+    }
+
+    &__body {
+        .containerStandard;
+        padding: 0px;
+
+        h2 {
+            display: inline-block;
+            font-size: @brand-font_h2;
+            margin-right: @brand-margin_sm;
+        }
+
+        .k-grid-content {
+            overflow-y: hidden;
+            overflow-x: hidden;
+            text-align: left;
+
+            button {
+                text-align: left;
+                padding: 0px;
+            }
+        }
+    }
+
+    &__dropdownNav {
+        display: inline;
+    }
+
+    &__token{
+        position: absolute;
+        padding-top: 8px;
+        padding-left: 20px;
+    }
+
+    &__notification{
+        color: @remove-color;
+        padding-left: 10px;
+    }
+
+    &__list {
+        .unsetList;
+        margin-top: 20px;
+        border: 1px solid @brand-color_dark-gray;
+    }
+
+    &__list-item {
+        display: table;
+        width: 100%;
+        border-bottom: 1px solid @brand-color_dark-gray;
+        background-color: @brand-color_white;
+
+        &:nth-child(even) {
+            background-color: @brand-color_lighter-gray;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    &__id {
+        display: table-cell;
+        width: 50px;
+        padding: 10px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    &__img {
+        display: table-cell;
+        width: 80px;
+        padding: 10px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    &__icon {
+        height: 36px;
+        padding-top: 5px;
+    }
+
+    &__details {
+        display: table-cell;
+        padding: 10px;
+        vertical-align: middle;
+
+        > span {
+            display: block;
+        }
+    }
+
+    &__parens {
+        &:before {
+            content: '(';
+        }
+
+        &:after {
+            content: ')';
+        }
+    }
+
+    &__period {
+        &:after {
+            content: '.';
+        }
+    }
+
+    &__comma {
+        &:after {
+            content: ',';
+        }
+    }
+
+    &__prepend-spaces {
+        &:before {
+            content: '\00a0\00a0\00a0';
+        }
+    }
+
+    &__phone-type {
+        font-style: italic;
+    }
+
+    &__patient-search {
+        .form-input;
+        width: 200px;
+    }
+
+    &__unstyle-button {
+        background: none;
+        border: none;
+    }
+
+    &__toggleCommunication {
+        label{
+            color: @brand-color_link;
+            top: -3px;
+            position: relative;
+            font-weight: normal;
+        }
+        button{
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .active{
+            color: @toggle-switch-color
+        }
+        .inactive{
+            color: @bg-disabled
+        }
+    }
+}
+
+.patient-modal-window .modal-dialog {
+    width: 68%;
+}
+
+.appliedFilter {
+    color: #00BFFF;
+}
+
+.padding-top-0 {
+        padding-top: 0px !important;
+    }
+
+.padding-left-0 {
+        padding-left: 0px !important;
+    }
+.width-10{
+    width: 10%;
+}
+.tabs {
+    .containerStandard;
+    .filterTabs(33%);
+    padding-bottom: @brand-padding_horizontal;
+}
+
+.filterTabs {
+    .filterTabs(20%);
+}
+
+.showMore, .showLess {
+    text-decoration: underline;
+    color: #0F7BBB;
+    cursor: pointer;
+}
+
+#filterbox {
+    position: relative;
+    width: 95%;
+    height: 75%;
+    margin: auto;
+    /*margin-top: 5%;*/
+    border: 1px solid gray;
+    overflow-y: scroll;
+}
+
+#patient-slideout-wrapper {
+    z-index: 999;
+    position: absolute;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: @brand-color_white;
+    margin-top: -100; /*53px;*/
+    border: solid #19a7f8;
+}
+
+#divSlideoutRow {
+    margin-left: 0px;
+}
+
+#divSlideoutmenu {
+    border: none;
+    padding-left: 0px;
+    padding-right: 0px;
+    height: 600px;
+    width: 20%;
+}
+
+#divKendoGridRow {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#divKendoGrid {
+    width: 100%;
+    /*overflow-x: scroll;*/
+}
+
+.k-header > .k-grid-filter {
+    float: left;
+    //position:initial;
+}
+
+.k-grid .k-grid-header .k-grid-header-wrap .k-header .k-link .k-icon {
+    margin-left: 0;
+}
+
+.k-list-scroller {
+    max-height:400px;
+}
+/*.k-grid .k-grid-header .k-grid-header-wrap .k-header .k-link .k-icon{
+
+}*/
+
+/*.k-link{
+                   margin-right:1px;
+               }*/
+/*.k-grid-header th.k-header > .k-link{
+                   margin-right:1px;
+                   //float:left;
+               }*/
+
+/*.k-grid-header th.k-header > .k-link{
+                   float:left;
+               }*/
+
+/*.k-grid td{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.k-grid table {
+    table-layout: fixed;
+}*/
+
+.tx-plans-hover {
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+    color: #0C85AD;
+    box-shadow: 10px 10px 5px #888;
+    max-width: 490px;
+    min-width: 340px;
+}
+
+.tx-plans-header {
+    font-weight: 800;
+}
+
+.tx-plans-item-name {
+    max-width: 200px;
+    min-width: 80px;
+    padding-right: 0px;
+    padding-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tx-plans-item-date {
+    width: 80px;
+    padding-left: 10px;
+    padding-right: 0px;
+}
+
+.tx-plans-item-total {
+    max-width: 110px;
+    min-width: 50px;
+    padding-left: 10px;
+    padding-right: 0px;
+}
+
+.tx-plans-item-status {
+    width: 100px;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+.tx-plans-item-icon {
+    color: black;
+}
+
+.tx-plans-item-cursor {
+    cursor: pointer;
+}
+
+#btnPatientPageScrollTop {
+    position: fixed;
+    bottom: 41px;
+    right: 17px;
+    font-family: @brand-font;
+}
+
+#inpLocationPatientLanding-list {
+    width: auto !important;
+   
+}
+#inpLocationPatientLanding_listbox {
+    overflow: hidden !important;
+    min-width: 180px;
+}

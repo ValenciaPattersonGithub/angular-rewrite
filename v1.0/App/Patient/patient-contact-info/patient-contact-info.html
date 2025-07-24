@@ -1,0 +1,148 @@
+﻿<div class="patientContactInfo" ng-form="frmPatientContactInfo">
+
+    <!-- View Contact Info -->
+
+    <div class="patientContactInfo__view" ng-show="editing == false">
+        <div class="row">
+            <div class="col-xs-2 padding-none patient-contact-info-badge"
+                 ng-show="(contactInfo.AddressLine1 && contactInfo.AddressLine1 != '') ||
+                          (contactInfo.AddressLine2 && contactInfo.AddressLine2 != '')">
+                <div ng-if="contactInfo.AddressReferrerId">
+                    <initial-badge class="initialBadgeColorOverride" person="patientAddressReference"></initial-badge>
+                </div>
+            </div>
+            <div class="col-xs-10 padding-none">
+                <!-- Address Line One -->
+                <div class="patientContactInfo__view-item address-max-width" ng-show="contactInfo.AddressLine1 && contactInfo.AddressLine1 != ''" title="{{contactInfo.AddressLine1}}">
+                    <label id="lblPatientAddressLineOne">{{ contactInfo.AddressLine1 | truncate:45}}</label><label ng-show="{{contactInfo.AddressLine1.length > 45}}">...</label>
+                </div>
+
+                <!-- Address Line Two -->
+                <div class="patientContactInfo__view-item address-max-width" ng-show="contactInfo.AddressLine2 && contactInfo.AddressLine2 != ''" title="{{contactInfo.AddressLine2}}">
+                    <label id="lblPatientAddressLineTwo">{{ contactInfo.AddressLine2 | truncate:45}}</label><label ng-show="{{contactInfo.AddressLine2.length > 45}}">...</label>
+                </div>
+
+                <!-- City/State/Zip -->
+                <div class="patientContactInfo__view-item" ng-show="(contactInfo.City && contactInfo.City != '') || (contactInfo.State && contactInfo.State != '') || (contactInfo.ZipCode && contactInfo.ZipCode != '')">
+                    <!-- had to put these on the same line or else the browser would insert a phantom space - no idea why -->
+                    <label id="lblPatientCity" title="{{contactInfo.City}}">{{ contactInfo.City | truncate:45 }}</label><label ng-show="{{contactInfo.City.length > 45}}" title="{{contactInfo.City}}">...</label><label ng-show="(contactInfo.City && contactInfo.City != '') && (contactInfo.State && contactInfo.State != '')">, </label>&nbsp;
+                    <label id="lblPatientState" title="{{contactInfo.State}}">{{ contactInfo.State }} </label>&nbsp;
+                    <label id="lblPatientZip" title="{{contactInfo.ZipCode}}">{{ contactInfo.ZipCode | zipCode }}</label>
+                </div>
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        <div class="row" ng-repeat="email in contactInfo.Emails | filter: filterState('ObjectState') track by $index">
+            <div class="col-xs-2 padding-none patient-contact-info-badge">
+                <div ng-if="email.AccountEmailId">
+                    <initial-badge class="initialBadgeColorOverride" person="patientEmailReference(email)"></initial-badge>
+                </div>
+            </div>
+            <div class="col-xs-10 padding-none">
+                <!-- Email Address One-->
+                <div class="patientContactInfo__view-item" title="{{ email.Email }}">
+                    <div class="col-xs-6 padding-none patient-contact-info-text" style="display: flex;">
+                        <div class="row">
+                            <a class="btn btn-link padding-none word-wrap" id="btnPatientEmail{{$index}}Address" ng-href="mailto:{{ email.Email }}">{{ email.Email | truncate:23}}</a><label ng-show="{{ email.Email.length > 23}}">...</label>
+                            <span>&nbsp;&nbsp;</span>
+                            <label id="lblPatientEmail{{$index}}IsPrimary" ng-show="email.IsPrimary">
+                                {{ 'Preferred' | i18n }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 padding-none patient-contact-info-button" ng-show="email.ReminderOK">
+                        <button class="btn btn-success btn-md email-reminder-ok" disabled style="opacity: 1; cursor: default; pointer-events: none;">{{ 'Reminders OK' | i18n }}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="patient-contact-info-space" ng-if="email.ReminderOK">&nbsp;</div>
+        </div>
+        <div>&nbsp;</div>
+
+        <div class="row" ng-repeat="phone in phones">
+            <div class="col-xs-2 padding-none patient-contact-info-badge" ng-show="phones.length > 0 && phones[0].PhoneNumber != ''">
+                <div ng-if="phone.PhoneReferrer">
+                    <initial-badge class="initialBadgeColorOverride" person="patientPhoneReference(phone)"></initial-badge>
+                </div>
+            </div>
+            <!-- Patient's First Two Phones -->
+            <div class="col-xs-10 padding-none">
+                <div class="patientContactInfo__view-item">
+                    <div class="col-xs-6 padding-none patient-contact-info-text">
+                        <div class="row">
+                            <label id="lblPatientPhoneView{{$index}}">
+                                {{ phone.PhoneNumber | tel }}
+                            </label>
+                            <label id="lblPatientPhoneOneType{{$index}}" ng-show="phone.Type">
+                                ({{ typeInitial(phone.Type) }})
+                            </label>
+                            <label id="lblPatientPhone{{$index}}IsPrimary" ng-show="phone.IsPrimary">
+                                {{ 'Preferred' | i18n }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 padding-none patient-contact-info-button" ng-show="showReminder(phone)">
+                        <div class="phone-reminder-btn-div">
+                            <button class="btn btn-default btn-md phone-reminder-btn-text-ok" disabled style="opacity: 1; cursor: default; pointer-events: none;"><span class="far fa-comment" ng-style="!showTextIcon(phone) && {'visibility' : 'hidden'}"></span> <span class="fa fa-phone" ng-style="!phone.ReminderOK && {'visibility' : 'hidden'}"></span></button>
+                            <button class="btn btn-success btn-md phone-reminder-btn-reminder-ok" disabled style="opacity: 1; cursor: default; pointer-events: none;">{{ 'Reminders OK' | i18n }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="patient-contact-info-space" ng-if="phone.ReminderOK || phone.TextOk">&nbsp;</div>
+        </div>
+    </div>
+
+    <!-- Edit Contact Info -->
+    <div class="patientContactInfo__edit" ng-show="editing == true">
+        <div class="patientContactInfo__edit-item" ng-class="contactInfoVisible" id="contactInfo">
+            <phone-info class="phone-container-narrow" phones="phones" max-limit="5" valid-phones="validPhones" valid-form="!hasErrors" has-texts="true" has-notes="true"></phone-info>
+        </div>
+        <!-- Street Address -->
+        <div class="patientContactInfo__edit-item">
+            <label>{{ 'Address' | i18n }}</label>
+            <input class="form-input" id="inpAddressLineOne" type="text" placeholder="{{ 'Street address' | i18n }}" ng-model="contactInfo.AddressLine1" maxlength="128" char-pattern="[^ -;=?-~]" />
+            <input class="form-input" id="inpAddressLineTwo" type="text" placeholder="{{ 'Address Line 2' | i18n }}" ng-model="contactInfo.AddressLine2" maxlength="128" char-pattern="[^ -;=?-~]" />
+        </div>
+        <!-- City -->
+        <div class="patientContactInfo__edit-item">
+            <label>{{ 'City' | i18n }}</label>
+            <input class=" form-input" id="inpCity" type="text" placeholder="{{ 'Enter city' | i18n }}" ng-model="contactInfo.City" capitalize-first-with-override maxlength="64" char-pattern="[^a-zA-Z-'. ]" />
+        </div>
+        <!-- State -->
+        <div class="patientContactInfo__edit-item">
+            <label>{{ 'State' | i18n }}</label>
+            <state-list state-list-id="inpState" source="contactInfo.State"></state-list>
+        </div>
+        <!-- ZIP Code -->
+        <div class="patientContactInfo__edit-item">
+            <label>{{ 'ZIP Code' | i18n }}</label>
+            <div ng-class="{error: hasErrors && !frmPatientContactInfo.inpZip.$valid}">
+                <input class="form-input" id="inpZipCode" zip-field="contactInfo.ZipCode" type="text" name="inpZipCode" placeholder="{{ 'ZIP Code' | i18n }}" ng-model="contactInfo.ZipCode" maxlength="10" minlength="5" />
+                <label class="help-text" id="errZipCode" ng-show="hasErrors && frmPatientContactInfo.inpZipCode.$dirty && !frmPatientContactInfo.inpZipCode.$valid">
+                    {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n }}
+                </label>
+            </div>
+        </div>
+
+        <!-- Email Info -->
+        <div class="patientContactInfo__edit-item">
+            <label>{{ 'Email' | i18n }}</label>
+            <!-- Email Address One -->
+            <div ng-class="{error:hasErrors &&  !frmPatientContactInfo.inpPatientEmailOneAddress.$valid}">
+                <input class="form-input" id="inpPatientEmailOneAddress" name="inpPatientEmailOneAddress" type="text" placeholder="{{ 'Email address' | i18n }}" ng-model="contactInfo.EmailAddress" valid-email maxlength="256">
+                <label class="help-text" id="errPatientEmailOneAddress" ng-show="hasErrors && frmPatientContactInfo.inpPatientEmailOneAddress.$dirty && !frmPatientContactInfo.inpPatientEmailOneAddress.$valid">
+                    {{ 'This field requires a valid email address.'| i18n }}
+                </label>
+            </div>
+            <!-- Email Address Two -->
+            <div ng-class="{error: hasErrors  && !frmPatientContactInfo.inpPatientEmailTwoAddress.$valid}">
+                <input class="form-input" id="inpPatientEmailTwoAddress" name="inpPatientEmailTwoAddress" type="text" placeholder="{{ 'Email address' | i18n }}" ng-model="contactInfo.EmailAddress2" valid-email maxlength="256" />
+                <label class="help-text" id="errPatientEmailTwoAddress" ng-show="hasErrors && frmPatientContactInfo.inpPatientEmailTwoAddress.$dirty && !frmPatientContactInfo.inpPatientEmailTwoAddress.$valid">
+                    {{ 'This field requires a valid email address.'|i18n }}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+

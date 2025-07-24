@@ -1,0 +1,52 @@
+﻿.gaugeWidget {
+    &__header {
+        white-space: nowrap;
+
+        label:first-of-type {
+            font-size: 18px;
+        }
+
+        div {
+            display: inline-block;
+        }
+
+        .k-input {
+            text-overflow: clip;
+        }
+    }
+
+    &__body {
+        position: absolute;
+        top: 75px;
+        bottom: 0px;
+        left: 20%;
+        right: 20%;
+
+        svg {
+            g {
+                g {
+                    path {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+
+    &__footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        padding: 8px 12px;
+        text-align: center;
+
+        soar-select-list {
+            text-align: left;
+        }
+
+        .soarWidget__modal {
+            top: -200px;
+            text-align: left;
+        }
+    }
+}

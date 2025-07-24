@@ -1,0 +1,15 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import {BasicInputComponent} from "./basic-input.component";
+
+<Meta title="MDX Files/Basic Input" component='' />
+
+# Input
+
+I'm testing a theory. If a component is downgraded using downgradeComponent, it ceases to show up in storybook.
+However, Button has both the .mdx and the .ts and the .ts file is showing up, but the .mdx is not.
+So if creating this .mdx file for the checkbox allows the .ts to show up, then I have a workaround. And it's super weird.
+
+## This is a false file
+
+The theory is correct. If two files exist, the first file is skipped but the second file will show up. So as a workaround,
+if a component has been downgraded, copy this .mdx file with the components' name and import and it will fix the missing story.

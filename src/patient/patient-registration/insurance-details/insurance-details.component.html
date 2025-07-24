@@ -1,0 +1,188 @@
+<div class="insurance-container">
+    <div class="insurance-header">
+        <span class="insurance-title">{{'Insurance' | translate}}</span>
+    </div>
+    <hr class="insurance-container-hr-border">
+    <form class="form-horizontal" [formGroup]="insuranceDetails" *ngIf="insuranceDetails">
+        <div [formArrayName]="'Policies'">
+            <div class="insurance-content" id="insuranceContent"
+                *ngFor="let insurancePolicy of insuranceDetails.get('Policies')['controls']; let rowId= index"
+                [formGroupName]="rowId">
+                <div class="insurance-policy-number">
+                    <div class="insurance-policy-number-wrapper">
+                        <div class="insurance-policy-number-label">
+                            <app-label [attr.id]="'policyNumber'+rowId" class="insurance-label"
+                                [label]="'Policy ' + (rowId+1)">
+                            </app-label>
+                        </div>
+                        <div class="insurance-policy-number-icon"
+                            *ngIf="insurancePolicy.get('PolicyHolderType').value || insuranceDetails.get('Policies').value.length > 1"
+                            (click)="deletePolicy(rowId, insurancePolicy)">
+                            <svg-icon [attr.id]="'closePolicy'+ rowId" class="insurance-policy-number-close-icon"
+                                name="closeIcon" iconHeight="20px" iconWidth="20px" id="primaryInsuranceCloseIcon">
+                            </svg-icon>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="insurance-policy-holder">
+                    <div class="insurance-mb-5">
+                        <app-label [attr.id]="'policyHolderLabel'+ rowId" class="insurance-label"
+                            [label]="'Policy Holder'">
+                        </app-label>
+                    </div>
+                    <select [attr.id]="'policyHolderSelectList'+ rowId" class="insurance-selectlist"
+                        (change)='onPolicyHolderSelected($event, insurancePolicy, rowId)'
+                        formControlName="PolicyHolderType"
+                        [ngClass]="{'error-control': !insurancePolicy.get('PolicyHolderType').valid}">
+                        <option value="" selected>{{'Select Policy Holder' | translate}}</option>
+                        <option value="1">{{'Self' | translate}}</option>
+                        <option [value]='accountMember.value' *ngFor="let accountMember of filteredAccountMembers">
+                            {{accountMember.text}}
+                        </option>
+                        <option value="2">{{'Other' | translate}}</option>
+                    </select>
+
+                </div>
+                <div class="insurance-person-search" *ngIf="insurancePolicy.showPersonSearch">
+                    <div class="insurance-mb-5">
+                        <app-label [attr.id]="'personSearch'+ rowId" class="insurance-label" [label]="'Find a Person'">
+                        </app-label>
+                    </div>
+                    <div>
+                        <responsible-party-search [attr.id]="'personResponsibleParty'+ rowId"
+                            [componentName]="'Insurance'"
+                            (selectedInsuranceValueChanged)="onSelectedValueChanged($event)"
+                            [isValid]="insurancePolicy.get('PlanName').valid"
+                            [errorToolTipMessage]="'Please select a person'">
+                        </responsible-party-search>
+
+                    </div>
+                </div>
+                <div class="insurance-plan-name"
+                    *ngIf="insurancePolicy.showPlans && !insurancePolicy.showPolicyHolderSearch">
+                    <div class="insurance-mb-5">
+                        <app-label [attr.id]="'planName'+ rowId" class="insurance-label" [label]="'Plan Name'">
+                        </app-label>
+                    </div>
+                    <search-bar-autocomplete-by-id [attr.id]="'planSearchBar'+ rowId" *ngIf="!insurancePolicy.showPlanName"
+                        [list]="filteredBenefitPlans" [placeholder]="placeholder" [template]="template"
+                        (selectedValueChange)="selectPlan($event, insurancePolicy)"
+                        [ngClass]="{'error-control': !insurancePolicy.get('PlanName').valid}">
+                    </search-bar-autocomplete-by-id>
+                    <svg-icon [attr.id]="'planSearchBarError'+ rowId" class="error-icon" name="tooltipIcon"
+                        iconHeight="15px" tooltip="Please select a plan" placement="top-error" delay="500"
+                        *ngIf="!insurancePolicy.get('PlanName').valid" iconWidth="15px"></svg-icon>
+                    <div [attr.id]="'selectedPlan'+ rowId" class="insurance-plan-selected"
+                        *ngIf="insurancePolicy.showPlanName">
+                        <span class="insurance-mr-10">{{insurancePolicy.controls.PlanName.value}}</span>
+                        <span *ngIf="insurancePolicy.showChangeText" class="insurance-change-plan"
+                            (click)="onChangePlan(insurancePolicy)">{{'Change' | translate}}</span>
+                    </div>
+                    <div [attr.id]="'selectAPlan'+ rowId" class="insurance-plan-selected"
+                        *ngIf="insurancePolicy.showPlanName">
+                        <span (click)="getBenefitPlansForPolicyHolder(filteredPolicyHolder)"
+                            *ngIf="insurancePolicy.selectPlan" class="insurance-change-plan">{{'Select a Plan' |
+                            translate}}</span>
+                    </div>
+                </div>
+                <div class="insurance-policy-holder-id" *ngIf="insurancePolicy.showIfPlanSelected">
+                    <div class="insurance-mb-5">
+                        <app-label [attr.id]="'policyHolderId'+ rowId" class="insurance-label"
+                            [label]="'Policy Holder ID'">
+                        </app-label>
+                    </div>
+                    <input [attr.disabled]="isPolicyHolderId" [attr.id]="'policyHolderIdInput'+ rowId" maxlength="20"
+                        formControlName="PolicyHolderStringId" placeholder="Policy Holder ID" type="text"
+                        class="insurance-input" kendoTooltip position="top" tooltipClass="app-tooltip"
+                        title="{{isPolicyHolderId ? 'Policy Holder ID can only be edited from the Policy Holder' : ''}}">
+                </div>
+                <div class="insurance-member-id" *ngIf="insurancePolicy.showIfPlanSelected">
+                    <div class="insurance-mb-5">
+                        <app-label [attr.id]="'memberId'+ rowId" class="insurance-label"
+                                   [label]="'Member ID'">
+                        </app-label>
+                    </div>
+                    <input [attr.id]="'memberIdInput'+ rowId" maxlength="20"
+                           formControlName="MemberId" placeholder="Member ID" type="text"
+                           class="insurance-input" kendoTooltip position="top" tooltipClass="app-tooltip">
+                </div>
+                <div class="insurance-effective-date" *ngIf="insurancePolicy.showIfPlanSelected">
+                    <div class="insurance-mb-5">
+                        <app-label [attr.id]="'effectiveDateLabel'+ rowId" class="insurance-label"
+                            [label]="'Effective Date'">
+                        </app-label>
+                    </div>
+                    <app-date-picker [attr.id]="'effectiveDate'+ rowId" [id]="'effectiveDate'"
+                        formControlName="EffectiveDate" [value]="minDate">
+                    </app-date-picker>
+                </div>
+                <div class="insurance-relationship" *ngIf="insurancePolicy.showRelationships">
+                    <div class="insurance-mb-5">
+                        <app-label [attr.id]="'relationship'+ rowId" class="insurance-label"
+                            [label]="'Relationship to Policy Holder'">
+                        </app-label>
+                    </div>
+                    <select formControlName="RelationshipToPolicyHolder" class="insurance-selectlist"
+                        [attr.id]="'relationship'+ rowId" (change)='onRelationShipSelected($event,insurancePolicy)'
+                        [ngClass]="{'error-control': !insurancePolicy.get('RelationshipToPolicyHolder').valid}">
+                        <option value="" selected>{{'Relationship' | translate}}</option>
+                        <option [value]='relationship.value' *ngFor="let relationship of relationships">
+                            {{relationship.text}}
+                        </option>
+                    </select>
+                    <svg-icon [attr.id]="'RelationshipToPolicyHolder'+ rowId" class="error-icon" name="tooltipIcon"
+                        iconHeight="15px" tooltip="Relationship to policy holder is required" placement="top-error"
+                        delay="500" *ngIf="!insurancePolicy.get('RelationshipToPolicyHolder').valid" iconWidth="15px">
+                    </svg-icon>
+
+                </div>
+                <div class="insurance-priority" *ngIf="insurancePolicy.showIfPlanSelected">
+                    <div class="insurance-mb-5">
+                        <app-label [attr.id]="'priority'+ rowId" class="insurance-label" [label]="'Priority'">
+                        </app-label>
+                    </div>
+                    <select formControlName="Priority" class="insurance-selectlist">
+                        <option [value]='availablePriority.value' *ngFor="let availablePriority of availablePriorities">
+                            {{availablePriority.text}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="insurance-add-policy">
+                <div class="insurance-add-policy-icon-label" id="addEmail" (click)="addPolicy()"
+                    [ngClass]="{'disabled': insuranceDetails.get('Policies')['controls'].length > maxPolicies}"
+                    [attr.id]="addpolicy">
+                    <label [ngClass]="{'disabled': insuranceDetails.get('Policies')['controls'].length > maxPolicies}">
+                        {{'Add Policy' | translate }} </label>
+                </div>
+                <svg-icon class="insurance-add-policy-icon" name="ovalSolidIcon" iconHeight="20px"
+                    [ngClass]="{'disabled': insuranceDetails.get('Policies')['controls'].length > maxPolicies}"
+                    (click)="addPolicy()" iconWidth="20px">
+                </svg-icon>
+                <svg-icon class="insurance-add-policy-icon-add" name="addIcon" iconHeight="20px" (click)="addPolicy()"
+                    iconWidth="20px">
+                </svg-icon>
+            </div>
+            <!-- <div class="insurance-add-policy">
+                <div [ngClass]="{'disabled': insuranceDetails.get('Policies')['controls'].length > maxPolicies}"
+                    class="insurance-main-add-policy" (click)="addPolicy()" [attr.id]="addpolicy">
+                    <div class="insurance-add-policy-label">
+                        <label
+                            [ngClass]="{'disabled': insuranceDetails.get('Policies')['controls'].length > maxPolicies}"
+                            class="insurance-add-label"> {{ 'Add Policy' | translate }} </label>
+                    </div>
+                    <div class="insurance-icon-wrapper">
+                        <svg-icon
+                            [ngClass]="{'disabled': insuranceDetails.get('Policies')['controls'].length > maxPolicies}"
+                            class="insurance-icon-wrapper-oval" name="ovalSolidIcon" iconHeight="20px" iconWidth="20px">
+                        </svg-icon>
+                        <svg-icon class="insurance-icon-wrapper-add" name="addIcon" iconHeight="20px" iconWidth="20px">
+                        </svg-icon>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </form>
+</div>

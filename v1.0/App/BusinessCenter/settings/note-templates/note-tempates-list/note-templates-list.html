@@ -1,0 +1,78 @@
+﻿<div class="noteTempList">
+    <div class="noteTempList__header" ng-if="showHeader">
+        <div class="noteTempList__newNoteTemplate">
+            <button id="addNoteTemplate" class="btn btn-primary" ng-disabled="editMode||isAddCategory||noteCategories.length === 0" check-auth-z="soar-clin-nottmp-add" ng-click="addTemplate()" icon="fa-plus">{{ 'Add a {0}' | i18n:['Template'] }}</button>
+            <button id="addCategory" class="btn btn-primary" ng-disabled="editMode||isAddCategory||editCategory" check-auth-z="soar-clin-nottmp-edit" ng-click="createEmptyCategory()" icon="fa-plus">{{ 'Add a {0}' | i18n:['Category'] }}</button>
+        </div>
+        <div class="noteTempList__search">
+            <typeahead class="typeahead soar-typeahead cdt-code-search-scroll"
+                       id="noteTemplateTypeAhead"
+                       cancel="cancelSearch()"
+                       clear-content="clearNoteTemplatesSearch()"
+                       show-clear-button="showClearButton"
+                       appearance="form-input"
+                       items="searchResults"
+                       term="searchTerm.value"
+                       search="search(term)"
+                       loading="searchIsQueryingServer"
+                       placeholder="{{ 'Search by template name'| i18n }}"
+                       tab-index="0">
+            </typeahead>
+        </div>
+    </div>
+    <div class="noteTempList__body">
+        <div class="noteTempCat" ng-if="isAddCategory">
+            <div class="noteTempCat__header">
+                <input id="inpNoteCategoryName" class="noteTempCat__input" set-focus ng-model="NewCategory.newCategoryName" placeholder="{{ 'Note Category'| i18n }}" maxlength="100" required />
+                <button id="btnAddCategory" class="noteTempCat__save" check-auth-z="soar-clin-nottmp-add" ng-click="addCategory()">{{ 'Save' | i18n }}</button>
+                <button id="btnCancelAddCategory" class="noteTempCat__cancel" check-auth-z="soar-clin-nottmp-add" ng-click="cancelNoteCategory()">{{ 'Cancel' | i18n }}</button>
+                <div class="noteTempCat__alert" ng-show="!formIsValid">
+                    <span ng-show="duplicateNoteCategory === false">{{ 'This field is required.' | i18n }}</span>
+                    <span ng-show="duplicateNoteCategory === true">{{ 'A Note category with this name already exists.' | i18n }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="noteTempCat" ng-repeat="noteCategory in noteCategories">
+            <div class="noteTempCat__header" ng-show="noteCategory.$$Visible === true">
+                <a class="noteTempCat__toggle col-xs-8 col-sm-8 col-md-9" ng-if="!noteCategory.$$editing" ng-click="expandCategory(noteCategory)" ng-class="{noActions: !showMenu}">
+                    <i class="fa fa-chevron-right" ng-class="{active: noteCategory.ntExpand||searchTerm.value}"></i>
+                    <span class="noteTempCat__title" title="{{ noteCategory.CategoryName }}">{{ noteCategory.CategoryName }}</span>
+                    <span class="noteTempCat__tempCount">({{ (noteTemplates | filter: noteCategory.CategoryId).length || 0 }})</span>
+                </a>
+
+                <span class="noteTempCat__toggleActions col-xs-4 col-sm-4 col-md-3" ng-hide="noteCategory.$$editing" ng-if="showMenu">
+                    <a id="lnkToggleCategoryEdit" class="fas fa-pencil-alt" ng-click="toggleCategoryEdit(noteCategory)" ng-class="{'disabled' : editMode}" uib-tooltip="{{'Edit' | i18n}}" tooltip-append-to-body="true" check-auth-z="soar-clin-nottmp-edit"></a>
+                    &nbsp;
+                    <a id="lnkDeleteCategory" class="fa fa-times" ng-click="deleteCategory(noteCategory)" ng-class="{'disabled' : editMode || noteCategory.$$hasTemplates}" uib-tooltip="{{'Delete' | i18n}}" tooltip-append-to-body="true" check-auth-z="soar-clin-nottmp-delete"></a>
+                </span>
+                <div class="noteTempCat__editCat" ng-if="noteCategory.$$editing">
+                    <input id="inpEditNoteCategoryName" class="noteTempCat__input" ng-model="noteCategory.CategoryName" placeholder="{{ 'Note Category'| i18n }}" maxlength="100" />
+                    <button id="btnEditCategory" class="noteTempCat__save" ng-click="updateCategory(noteCategory)" ng-disabled="!noteCategory.CategoryName">{{ 'Save' | i18n }}</button>
+                    <button id="btnCancelEditCategory" class="noteTempCat__cancel" ng-click="cancelUpdateCategory(noteCategory)">{{ 'Cancel' | i18n }}</button>
+                    <div class="noteTempCat__alert" ng-show="noteCategory.duplicateNoteCategory">
+                        <span>{{ 'A Note category with this name already exists.' | i18n }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="noteTempCat__body" ng-class="{active: noteCategory.ntExpand||searchTerm.value}">
+                <div ng-repeat="noteTemplate in noteTemplates | orderBy: 'TemplateName' | filter: noteCategory.CategoryId" ng-if="noteCategory.$$Visible">
+                    <a id="lnkLoadNoteTemplate" class="noteTempCat__item col-xs-8 col-sm-8 col-md-8" ng-init="disableAction(categoryIndex)" ng-click="loadNoteTemplate(noteTemplate, false)" ng-class="{active: isSelectedNoteTemplate(noteTemplate), noActions: !showMenu}" ng-disabled="noteTemplates.length==0" title="{{noteTemplate.TemplateName}}">
+                        {{ noteTemplate.TemplateName }}
+                    </a>
+                    <div class="noteTempCat__itemActions col-xs-4 col-sm-4 col-md-4" ng-class="{active: isSelectedNoteTemplate(noteTemplate)}" ng-if="showMenu">                        
+                        <a id="lnkCopyNoteTemplate" class="fas fa-copy" ng-click="copyNoteTemplete(noteTemplate)" ng-class="{'disabled' : editMode}"  uib-tooltip="{{'Copy' | i18n}}" tooltip-append-to-body="true" check-auth-z="soar-clin-nottmp-add"></a>
+                        &nbsp;
+                        <a id="lnkEditNoteTemplate" class="fas fa-pencil-alt" ng-click="editNoteTemplate(noteTemplate)" ng-class="{'disabled' : editMode}" uib-tooltip="{{'Edit' | i18n}}" tooltip-append-to-body="true" check-auth-z="soar-clin-nottmp-edit"></a>
+                        &nbsp;
+                        <a id="lnkDeleteNoteTemplate" class="fa fa-times" ng-click="deleteNoteTemplate(noteTemplate)" ng-class="{'disabled' : editMode}" uib-tooltip="{{'Delete' | i18n}}" tooltip-append-to-body="true" check-auth-z="soar-clin-nottmp-delete"></a>
+                    </div>
+                </div>
+                <div class="noteTempCat__item" ng-if="!loadingTemplates && noteCategory.$$hasTemplates === false && searchMode === false" ng-bind-html="loadingMessageNoTemplateResults"></div>
+            </div>
+        </div>
+        <div class="noteTempList__msg" ng-if="noteCategories.length === 0">
+            <no-results loading-message='loadingMessageNoCategoryResults' loading="loadingCategories"></no-results>
+        </div>
+        <div class="noteTempCat__item" ng-if="!loadingTemplates && noteTemplates.length === 0 && searchMode === true" ng-bind-html="loadingMessageNoTemplateResults"></div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+﻿<div class="media-body master-list-warning-msg">
+    <span id="discardWarningMessage">
+        {{ message | i18n | uppercase}}
+    </span>
+    <div class="pull-right">
+        <button id="btnConfirmDiscard{{appendId}}" class="btn master-list-warning-button" set-focus ng-click="confirmAction()">
+            {{ 'Yes' | i18n }}
+        </button>
+        <button id="btnCancelDiscard{{appendId}}" class=" btn padding-left-5 master-list-warning-button" ng-click="cancelAction()">
+            {{ 'No' | i18n }}
+        </button>
+    </div>
+</div>

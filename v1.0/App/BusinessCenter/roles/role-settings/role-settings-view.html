@@ -1,0 +1,54 @@
+﻿<div class="roleSettings col-md-12">
+    <div class="pull-right closeButton" id="closeModal" ng-click="close()"><i class="fa fa-times fa-2x"></i></div>
+    <div class="roleSettings__container">
+        <div class="col-md-12  roleSettings__accordion_width  overflow p-0">
+            <div class="row col-md-12">
+                <div class="row col-md-12">  <div class="row col-md-12">
+            <div class="col-md-2">
+                <h2>{{ ::'Fuse' | i18n }}</h2>
+                <h4>{{::'User Security Roles' | i18n}}</h4>
+            </div>
+            <div class="roleSettings__roleHeader roleSettings__roleHeader_pl0_pr0 col-md-10 d-flex">
+                <div class="roleName col-md-1" ng-repeat="role in fuseRoles">
+                    {{::role}}
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        </div>
+        <div class="roleSettings__content">
+            <hr class="clearfix col-md-12 roleSettings__divider roleSettings__divider_width" />
+            <div class="col-md-12 roleSettings__accordion roleSettings__accordion_width  overflow p-0"> 
+                <no-results loading="isLoading" ng-show="isLoading"></no-results>
+                <uib-accordion>               
+                    <div uib-accordion-group id="subSection-{{::subSection.Name}}-{{::$index}}" is-open="subSection.isCustomHeaderOpen" ng-repeat="subSection in roleMatrix.Modules" ng-click="subSection.isCustomHeaderOpen=!subSection.isCustomHeaderOpen">
+                        <div class="panel panel-default">
+                            <uib-accordion-heading>
+                                <i class="fa fa-chevron-right" ng-class="{'fa fa-chevron-down': subSection.isCustomHeaderOpen, 'fa fa--chevron-right': !subSection.isCustomHeaderOpen}"></i> {{::subSection.Name}}
+                            </uib-accordion-heading>
+                        </div>
+                        <div class="compareContainer col-md-12  p-0">
+                            <div id="subSection-{{subSection.Name}}-{{$index}}" is-open="subSection.isCustomHeaderOpen" ng-repeat="function in subSection.Functions">
+                                <span class="col-md-12 heading  p-0">
+                                    {{::function.Name}}
+                                </span>
+                                <div class="col-md-12  p-0" ng-repeat="action in function.Actions">
+                                    <div class="col-md-2">
+                                        {{::action.Name}}
+                                    </div>
+                                    <div class="col-md-10 d-flex p-0">
+                                    <div ng-repeat="role in fuseRoles" class="roleName roleName_pl0_pr0 col-md-1">
+                                        <span class="check" ng-if="checkSelectedRolePermissions(action.Roles, role)"><i class="fa fa-check"></i></span>
+                                        <span class="noCheck" ng-if="!checkSelectedRolePermissions(action.Roles, role)"><i class="fas fa-times"></i></span>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-accordion>
+            </div>
+        </div>
+    </div>
+</div>

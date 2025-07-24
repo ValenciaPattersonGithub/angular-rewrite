@@ -1,0 +1,29 @@
+﻿<ng-form name="frmToothLink">
+    <div class="col-md-6">
+        <div class="container-fluid">
+            <div class="row" id="questionLinkToothText{{sectionIndex}}_{{sectionItemIndex}}">
+                {{ 'Prompt' |i18n }}:<span class="bold padding5 size-h4" id="QuestionTextRequiredStar{{sectionIndex}}_{{sectionItemIndex}}">*</span>
+            </div>
+            <div class="row">
+                <input ng-class="{'red-border': (frmToothLink.questionLinkToothText.$invalid && customForm.SectionValidationFlag) || (frmToothLink.questionLinkToothText.$invalid  && $index == customForm.SectionCopyValidationFlag ) }" 
+                       id="questionLinkToothText{{sectionIndex}}_{{sectionItemIndex}}" 
+                       name="questionLinkToothText" 
+                       type="text" 
+                       class="col-md-10" 
+                       ng-model="sectionItem.FormBankItem.ItemText" 
+                       maxlength="250" 
+                       required />
+                <br />
+            </div>
+            <div class="row error" ng-if="(frmToothLink.questionLinkToothText.$invalid && customForm.SectionValidationFlag) || (frmToothLink.questionLinkToothText.$invalid  && $index == customForm.SectionCopyValidationFlag )">
+                <span id="requiredYesNoTrueFalse{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required.' | i18n }}</span>
+            </div>
+            <div class="row">
+                <div class="form-checkbox">
+                    <input type="checkbox" ng-value="true" ng-selected ng-model="sectionItem.IsRequired" id="questionLinkToothCKB{{sectionIndex}}_{{sectionItemIndex}}">
+                    <label id="lblquestionLinkTooth{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionLinkToothCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This question is required' | i18n }}</label>
+                </div>
+            </div>
+        </div>
+    </div>    
+</ng-form>

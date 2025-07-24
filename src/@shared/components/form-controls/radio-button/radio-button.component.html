@@ -1,0 +1,11 @@
+
+    <label class="fui-radio-button">
+        <input type="radio" 
+        [attr.name]= "name"
+        [value]="value" 
+        [checked]="checked"
+        [attr.disabled]="disabled"
+        (change)="change(value)" />
+        <span class="checkmark"></span>
+        <span class="label" [className]="customClasslbl">{{label}}</span>
+    </label>

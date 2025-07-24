@@ -1,0 +1,23 @@
+.communicationCenter {
+	&_container{
+        display: grid;
+        grid-template: auto / 1fr auto;
+        height: calc(100vh - 230px);
+    }  
+    &_landing{
+        grid-column: 1;
+        grid-row: 1;
+        height: calc(100vh - 230px);
+        border-radius: 5px;
+        background-color: #ffffff;
+        background-size: cover;
+        box-shadow: 0px 1px 2px rgba(0,0,0,0.24);
+        margin: 15px;
+    }
+    &_drawer{
+        grid-column: 2;
+        grid-row: 1;
+        height: auto;
+        background-color: #ffffff;
+    }
+}

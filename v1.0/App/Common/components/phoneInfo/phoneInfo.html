@@ -1,0 +1,99 @@
+﻿<div ng-if="!isPatient">
+    <div class="phone-item" ng-repeat="phone in phones | filter: filterState('ObjectState') track by $index">
+        <div class="phone-container">
+            <phone-info-item show-label="showLabel"
+                             focus="$index == focusIndex && focusIf"
+                             phone-id="$index"
+                             phone="phone"
+                             valid-form="validForm"
+                             phone-types="phoneTypes"
+                             disable-input="disableInput"
+                             edit-mode="flags.editing"
+                             show-remove-option="phones.length > 1"
+                             show-is-primary="showIsPrimaryCheckBox"
+                             remove-function="removePhone(phone)"
+                             has-notes="hasNotes"
+                             has-texts="hasTexts"
+                             phone-tabindex="{{ tabIndex }}"
+                             hide-phone-types="customTypeOnly == true"></phone-info-item>
+        </div>
+    </div>
+
+    <div class="phoneInfo__add" ng-show="!disableInput">
+        <button id="btnAddPhone"
+                class="btn btn-link"
+                icon="fa-plus"
+                tabindex="{{ tabIndex }}"
+                ng-click="addPhone()"
+                check-auth-z="soar-per-perdem-add"
+                ng-show="(phones.length - deletedPhones.length) < maxLimit">
+            {{ 'Add another phone' | i18n }}
+        </button>
+        <span id="lblMaxPhones" class="help-block" ng-show="(phones.length - deletedPhones.length) == maxLimit">{{ 'Maximum number of phones has been reached.' | i18n }}</span>
+    </div>
+</div>
+<div ng-if="isPatient">
+    <div class="row">
+        <div class="col-xs-6">
+            <span>
+                <contact-details-search-bar tab-index="0" auth-z="soar-per-perdem-search" base-id="Phone" patient-info="patientInfo" selected="phones"></contact-details-search-bar>
+            </span>
+        </div>
+        <div class="col-xs-4">
+            <label class="control-label opt-out-mail-reminders-label">{{'Opt out of all phone communications' | i18n }}</label>
+        </div>
+        <div class="col-xs-2" style="padding-right:7%;">
+            <div class="onoffswitch emailPhoneReminderToggle">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="optOutPhone" ng-model="toggle.Checked" ng-change="toggleOptions()">
+                <label class="onoffswitch-label" for="optOutPhone" style="margin-bottom:0px;"></label>
+            </div>
+            <!--<label class="switch switch-mail-reminders">
+                <input id="optOutPhone" name="phoneReminders" type="checkbox" ng-model="toggle" ng-change="toggleOptions()">
+                <span class="slider round"></span>
+            </label>-->
+        </div>
+    </div>
+    <br />
+    <br />
+    <div ng-if="activateAddPhone">
+        <div class="row">
+            <div class="col-xs-2">
+                <label>Phone Owner</label>
+            </div>
+            <div class="col-xs-2">
+                <label>Phone Number</label>
+            </div>
+            <div class="col-xs-2">
+                <label>Phone Type</label>
+            </div>
+            <div class="col-xs-1">
+                <label>Primary</label>
+            </div>
+            <div class="col-xs-2">
+                <label>Phone Reminders</label>
+            </div>
+            <div class="col-xs-3">
+                <label>Text Reminders</label>
+            </div>
+        </div>
+        <div class="phone-item" ng-repeat="phone in phones | filter: filterState('ObjectState') track by $index">
+            <div class="phone-container">
+                <phone-info-item show-label="showLabel"
+                                 focus="$index == focusIndex && focusIf"
+                                 phone-id="$index"
+                                 phone="phone"
+                                 valid-form="validForm"
+                                 phone-types="phoneTypes"
+                                 disable-input="disableInput"
+                                 edit-mode="flags.editing"
+                                 show-remove-option="true"
+                                 show-is-primary="showIsPrimaryCheckBox"
+                                 remove-function="removePhone(phone)"
+                                 has-notes="hasNotes"
+                                 has-texts="hasTexts"
+                                 phone-tabindex="{{ tabIndex }}"
+                                 hide-phone-types="customTypeOnly == true"></phone-info-item>
+            </div>
+        </div>
+    </div>
+</div>

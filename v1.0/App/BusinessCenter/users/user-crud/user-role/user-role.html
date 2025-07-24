@@ -1,0 +1,144 @@
+﻿<div ng-form="userRoleForm" id="userRoles" class="userRoles row roles panel">
+    <!--Roles section header-->
+    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 panel-heading collapse in userRoles">
+        <h4 class="panel-title">
+            {{ 'Security and Locations' | i18n }}
+        </h4>
+        <span class="panel-btn pull-right">
+            <a id="btnViewRoles" href="" ng-click="viewRoles();" class="btn btn-default" target="_blank">{{ 'View Roles' | i18n }}</a>
+            <a id="btnCompareRoles" href="" ng-click="compareRoles();" class="btn btn-default" target="_blank">{{ 'Compare Roles' | i18n }}</a>
+        </span>
+    </div>
+    <!-- location(s) -->
+    <div class="rowFull white col-md-12 panel-body">
+        <div class="col-md-6 userRoles__assignRolesBy">
+            <input id="rdoAssignRolesByPractice" type="radio" name="rbtnAssignRolesBySelection"  ng-model="assignRolesBySelection" value="practice" ng-disabled="!loggedInUserHasPracticeAccess || !user.IsActive"> {{ 'Assign Practice Admin/Exec. Dentist Role (All Locations)' | i18n }}
+            <div>{{ 'or' | i18n }}</div>
+            <input id="rdoAssignRolesByLocation" type="radio" name="rbtnAssignRolesBySelection"  ng-model="assignRolesBySelection" value="location" ng-disabled="practiceOnlyHasOneAdmin || !user.IsActive"> {{ 'Assign Role(s) by Location' | i18n }}
+            <span class="col-md-offset-3 col-sm-offset-0 error padding-top-10" ng-if="userRoleForm.rbtnAssignRolesBySelection.$invalid && userRoleForm.hasErrors == true">{{'Please select user type for this team member.' | i18n}}</span>
+        </div>
+
+        <div class="userRoles__validationErrors"> 
+            <div id="divPracticeRolesChangedMessage" class="col-md-12 padding-top-10 warning" ng-if="!hasRoleErrors && !validating && displayPracticeRolesChangedMessage===true">
+                {{'This team member will need to sign out of Fuse and log back in for any added or removed roles to take effect.' | i18n}}
+            </div>
+            <div class="col-md-12 error padding-top-10" ng-if="practiceOnlyHasOneAdmin">{{'Your Practice must have at least one team member assigned as Practice Admin/Exec. Dentist. Please assign this role to another active user before removing this role from your profile.' | i18n}}</div>
+        </div>
+
+        <div class="col-md-6" ng-if="isEdit">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-6">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>{{'User Access' | i18n }} </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="inpActive" ng-model="user.IsActive">
+                                    <label class="onoffswitch-label userRoles__label" for="inpActive"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="currentStatus!=user.IsActive">
+                <div class="col-xs-12 padding-top-10">
+                    <div class="col-xs-2 col-xs-offset-2">
+                        <label class="control-label float-right">{{ 'Reason*' | i18n }} </label>
+                    </div>
+                    <div class="col-xs-6" ng-class="{error: user.StatusChangeNote == null || user.StatusChangeNote.length == 0}">
+                        <input class="form-input" name="statusChangeNote" id="statusChangeNote"
+                               placeholder="{{ reasonPlaceHolder | i18n }}" required ng-model="user.StatusChangeNote" type="text" />
+                        <span id="errStatusNote" class="text-danger" ng-show="!user.StatusChangeNote">
+                            {{ 'Reason for status change required.' | i18n  }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="assignRolesBySelection === 'location'">
+            <hr class="userRoles__row-hr clearfix" />
+            <div class="userRoles__validationErrors">
+                <div ng-hide="!user.IsActive" ng-if="(hasLocationErrors || user.$$selectedLocations.length === 0) && !validating && assignRolesBySelection === 'location'" class="col-md-12 error">{{ 'Please assign a location for this team member' | i18n }}</div>
+            </div>
+            <div ng-hide="!user.IsActive" class="locationSelect col-md-12">
+                <!--<div class="col-md-2">
+                <label class="">{{'Location(s)' | i18n }} *</label>
+            </div>-->
+                <div class="col-md-3">
+                    <!--<select ng-options="role as role.RoleName for role in roles track by role.RoleId" ng-model="user.$$selectedLocations"></select>-->
+                    <ui-select id="locationSelect" multiple ng-model="user.$$selectedLocations" theme="bootstrap" close-on-select="false" on-select="locationSelected($item)" input-id="inpLocations" reset-search-input="true">
+                        <ui-select-match placeholder="Add Location">{{$item}}</ui-select-match>
+                        <ui-select-choices group-by="'LocationStatus'" repeat="location in (locations | filter:{ NameLine1: $select.search } | limitTo: 500) track by location.LocationId"><div class="margin-left-20">{{location.NameLine1}}{{location.InactiveDate}}</div></ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="margin-top-10" ng-show="isProvider && noStateLicense"><span class="warning-font-style margin-left-30 margin-top4">{{'Please add a State License for' | i18n}} {{needLicenseStates}}</span></div>
+
+            </div>
+            <hr ng-hide="!user.IsActive" class="clearfix col-md-6" />
+            <div class="col-md-12 userRoles__rolesGrid">
+                <div class="userRoles__validationErrors">
+                    <div ng-if="hasRoleErrors && !validating" class="col-md-12" ng-class="{error: hasRoleErrors}">{{'Your team member must have at least one role assigned per location' | i18n}}</div>
+                    <div id="divLocationRolesChangedMessage" ng-if="!hasRoleErrors && !validating && displayRolesChangedMessage===true" class="col-md-12 warning">{{'This team member will need to sign out of Fuse and log back in for any added or removed roles to take effect.' | i18n}}</div>
+                </div>
+                <div class="col-md-12 gridRow" ng-if="user.$$selectedLocations.length > 0">
+                    <div class="col-md-3">
+                        <label>{{'Location' | i18n}}</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>{{'Add Roles' | i18n}}</label>
+                    </div>
+                    <div class="col-md-2">
+                        <label>{{'Roles Assigned' | i18n}}</label>
+                    </div>
+                </div>
+                <div ng-hide="!user.IsActive" class="col-md-12">
+                    <div class="col-md-12 gridRow" ng-repeat="location in user.$$locations track by location.Location.LocationId">
+                        <div class="col-md-3 pull-left" ng-class="{'inactive-loc-color': location.Location.IsLocationInactive}" uib-tooltip="{{location.$$hasAppointmentsTooltip}}" tooltip-placement="right" tooltip-class="offset">
+                            <tag limit-to="true" num-limit="20" is-location-inactive="location.Location.HasDeactivationDate" deactivation-time-utc="location.Location.DeactivationTimeUtc" title="{{ location.Location.NameLine1}}" remove-function="removeSelectedLocation(location)" hide-remove="canRemove(location, 'location')  || location.$$hasAppointments"></tag>
+                        </div>
+                        <div class="col-md-3">
+                            <ui-select id="selectLocationRoles" on-select="roleChanged()" multiple ng-model="location.Roles" theme="bootstrap" close-on-select="false" input-id="inpLocRole{{location.Location.LocationId}}">
+                                <ui-select-match placeholder="Select roles">{{$item}}</ui-select-match>
+                                <ui-select-choices repeat="role in (roles | filter:$select.search | filter:{ RoleName: '!' + practiceAdminRoleName } | filter:rxRoleFilter | limitTo: 500) track by role.RoleId">{{role.RoleName}}</ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-2" ng-if=location.Roles>
+                            <div class="col-md-12" ng-repeat="role in location.Roles track by role.RoleId">
+                                <tag hide-remove="role.$$notRemovable || canRemove(location, 'role')"
+                                     title="{{ role.RoleName }}"
+                                     is-primary="true"
+                                     remove-function="removeLocationRoles(role, location)">
+                                </tag>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-hide="user.IsActive" class="col-md-12">
+                    <div class="col-md-12 gridRow" ng-repeat="loc in originalAssignedRoles">
+                        <div class="col-md-3 pull-left" ng-class="{'inactive-loc-color': loc.Location.IsLocationInactive}" uib-tooltip="{{loc.$$hasAppointmentsTooltip}}" tooltip-placement="right" tooltip-class="offset">
+                            <tag limit-to="true" num-limit="20" is-location-inactive="loc.Location.HasDeactivationDate" deactivation-time-utc="loc.Location.DeactivationTimeUtc" title="{{ loc.Location.NameLine1}}" hide-remove="true"></tag>
+                        </div>
+                        <div class="col-md-3">
+                            <input class="form-input" disabled type="text" />
+                        </div>
+                        <div class="col-md-2" ng-if=loc.Roles>
+                            <div class="col-md-12" ng-repeat="role in loc.Roles track by role.RoleId">
+                                <tag hide-remove="true"
+                                     title="{{ role.RoleName }}"
+                                     is-primary="true"
+                                     remove-function="removeLocationRoles(role, loc)">
+                                </tag>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

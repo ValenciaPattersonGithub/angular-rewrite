@@ -1,0 +1,125 @@
+@import "variables";
+@import "toolTip.scss";
+@import "/src/patient/communication-center/communication-center-variables";
+
+.appointment-card-box {
+  border-radius: 5px;
+  background-color: $polar-white;
+  background-size: cover;
+  margin: 15px 0px 0px 0px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 4px 0px;
+  cursor: pointer;
+}
+.appointment-card-box:focus-within {
+  outline: none;
+  border-bottom: 5px solid $communication-card-primary-color;
+  box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.24);
+  animation: fadeIn ease 1s;
+  -webkit-animation: fadeIn ease 1s;
+  -moz-animation: fadeIn ease 1s;
+  -o-animation: fadeIn ease 1s;
+  -ms-animation: fadeIn ease 1s;
+}
+.appointment-card {
+  padding: 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(min-content, max-content);
+}
+.appointment-title {
+  font-family: $communication-card-font-family;
+  font-size: $communication-card-font-size;
+  color: $communication-card-primary-color;
+  font-weight: bold;
+  margin-left: 5px;
+}
+.appointment-text {
+  margin-left: 5px;
+  font-family: $communication-card-font-family;
+  font-size: $communication-card-font-size;
+  color: $communication-card-label-color;
+  word-break: break-all;
+}
+.titleRow {
+  grid-column: 1/4;
+  grid-row: 1;
+  height: 25px;
+}
+.delete-icon {
+  float: right;
+}
+.typeRow {
+  grid-column: 1/4;
+  grid-row: 2;
+}
+.providerRow {
+  grid-column: 1/4;
+  grid-row: 3;
+}
+.appointmentStatusRow {
+  grid-column: 1/4;
+  grid-row: 4;
+  justify-self: end;
+  align-self: end;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+::ng-deep {
+  .k-window {
+    left: 20%;
+    min-width: 500px;
+    min-height: 400px;
+    max-width: fit-content;
+    top: 20%;
+    right: 20%;
+  }
+}
+.appointment-no-records {
+  font-family: $communication-card-font-family;
+  font-size: 14px;
+  color: $communication-center-no-record-color;
+  text-align: center;
+  top: 50%;
+  position: sticky;
+}
+.appointment-card-main {
+  margin-bottom: 15px;
+}

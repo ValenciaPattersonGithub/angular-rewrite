@@ -1,0 +1,37 @@
+﻿<div class="rowFull white">
+    <div class="delIns__header delIns__body">
+        <div class="delIns__title">
+            <h1>{{ 'Delete Insurance Payment' | i18n }}</h1>
+        </div>
+        <ul class="delIns__breadcrumb">
+            <li>
+                <span><a href="{{'#/'+ PreviousLocationRoute}}">{{ PreviousLocationName | i18n }}</a></span>
+            </li>
+            <li>{{ 'Delete Insurance Payment' | i18n }} </li>
+        </ul>
+    </div>
+</div>
+
+<div class="delIns__body">
+    <div>
+        <span id="lblPatientName" class="font-weight-bold">{{'Patient'| i18n}}{{ ' ' + claimToProcess.PatientName }}</span>
+    </div>
+   
+    <div class="row">
+        <div class="col-sm-12" title="applyInsurancePaymentBackToPatientBenefitTooltip" >
+            <span uib-tooltip="{{'The claim has service(s) from previous benefit year, adjustment to IndividualMaxUsed must be applied manually (if any).' | i18n}}" 
+                tooltip-enable="!canApplyInsurancePaymentBackToPatientBenefit" tooltip-placement="top-left" tooltip-append-to-body="true">
+                <checkbox checkbox-disabled="!canApplyInsurancePaymentBackToPatientBenefit" checkbox-id="applyPaymentToPatientBenefit" ng-model="claimToProcess.ApplyInsurancePaymentBackToPatientBenefit" checkbox-value="claimToProcess.ApplyInsurancePaymentBackToPatientBenefit" checkbox-label="'Apply the amount of this ' + claimToProcess.PaidInsuranceEstimate + ' insurance payment back to patient\'s annual maximum'"></checkbox>
+            </span>
+        </div>
+        <div class="col-sm-12" ng-if="claimToProcess.Status === 7 || claimToProcess.Status === 8"><!-- 7 is status code for Closed claims, 8 is for Paid claims (which implies they are also closed) -->
+            <span uib-tooltip="{{'There is already an open claim for at least one of the services on this claim.' | i18n}}" tooltip-enable="!canRecreate" tooltip-placement="top-left" tooltip-append-to-body="true">
+                <checkbox checkbox-id="recreateClaim" ng-model="claimToProcess.RecreateClaim" checkbox-value="claimToProcess.RecreateClaim" checkbox-label="'Recreate claim'" checkbox-disabled="!canRecreate"></checkbox>
+            </span>
+        </div>
+    </div>
+
+    <div class="delIns__actions">
+        <button id="btnContinue" class="btn btn-primary" ng-click="showNextAndProcess();">{{ ((isProcessingLastClaim) ? 'Apply' : 'Apply and continue') | i18n }}</button>
+    </div>
+</div>

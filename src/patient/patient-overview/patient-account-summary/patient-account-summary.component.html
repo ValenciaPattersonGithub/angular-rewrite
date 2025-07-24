@@ -1,0 +1,27 @@
+<p>patient-account-summary works!</p>
+<div [ngClass]="{ 'fade-in': fadeIn, 'fade-out': fadeOut }" >
+    <form name="frmPatientAccountSummary" role="form" action="javascript:;" novalidate>
+        <div class="patAcctSmry" *ngIf="person?.Profile?.PersonAccount">
+            <div class="patAcctSmry__section">
+                <patient-account-balance [person]="person?.Profile" [accountTotalLoading]="loading" [accountTotal]="accountTotal" [accountBalances]="accountBalances" [graphData]="graphData"></patient-account-balance>
+            </div>
+           <div class="patAcctSmry__section">
+                <patient-account-insurance-estimate [insEstimateLoading]="loading" [disablePayments]="disableInsurancePayments" [insuranceEstimate]="estimatedInsurance" [paymentFunction]="makeInsurancePayment"></patient-account-insurance-estimate>
+            </div>
+             <div class="patAcctSmry__section">
+                <patient-account-insurance-adjusted-estimate [adjEstimateLoading]="loading" [adjustedEstIns]="adjustedEstIns" [providers]="providers" [person]="person"></patient-account-insurance-adjusted-estimate>
+            </div>
+            <div class="patAcctSmry__section">
+                <patient-account-portion [patientPortionLoading]="loading" [disablePayments]="disablePayments" [patientPortion]="patientPortion" [paymentFunction]="makePayment"></patient-account-portion>
+            </div>
+            <div class="patAcctSmry__section">
+                <patient-account-insurance [personId]="personId" [person]="person"></patient-account-insurance>
+            </div>
+            <div class="patAcctSmry__section">
+                <patient-account-latest-statement [personId]="personId" [person]="person?.Profile"></patient-account-latest-statement>
+            </div>
+        </div>
+    </form>
+</div>
+
+

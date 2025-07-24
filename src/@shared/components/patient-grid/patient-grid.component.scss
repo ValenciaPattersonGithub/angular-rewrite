@@ -1,0 +1,230 @@
+@import 'src/stylings/variables.scss';
+
+.fuse_Grid {
+        width: 100%;
+        padding: 0 0px 0 0px;
+
+    ::ng-deep {
+        //TODO: this class is added for temporary fix for close icon, to be replaced with proper solution
+        .k-grid .k-button {
+            position: relative;
+            right: 24px;
+            border: none;
+            background: $brand-initial-badge_bg;
+        }
+        
+        //TODO: this class is added for temporary fix for close icon, to be replaced with proper solution
+        .k-i-filter-clear:before {
+            content: "\e11b" !important;
+            color: red;
+        }
+
+        .k-dropdown .k-dropdown-wrap {
+            height: inherit;
+            > .k-input {
+                height: auto;
+                padding: 2px 0 6px 2px;
+            }
+        }
+
+        .k-grid .k-grid-header .k-grid-header-wrap {
+            overflow: visible;
+        }
+
+        .k-grid .k-grid-header .k-grid-header-wrap .k-header{
+            color: $action-blue;
+            background-color: $polar-white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .k-grid .k-grid-header {
+            border: 1px solid #DADCDC;
+            background-color: $polar-white;
+            padding: 0 !important;
+        }
+
+        .k-grid .k-textbox {
+            width: 100%;
+            color: $action-blue;
+        }
+
+        .k-grid td {
+            border-style: none;
+            text-overflow: unset;
+        }
+
+        .k-toolbar-template {
+            border-width: 0 0 0px;
+            position: absolute;
+            top: 0;
+            background-color: $brand-initial-badge_bg;
+            box-shadow: none;
+            font-weight: 700;
+            color: black;
+        } 
+        
+        .k-grid-norecords {
+            display: none;
+        }
+    
+        .k-grid .k-grid-content {
+            overflow-y: auto;
+            scroll-behavior: smooth;                        
+        }
+
+        .k-grid .k-grid-content tr td {
+            padding: 1px 8px 1px 8px;
+        }
+
+        //Required to display date range and numeric range selectors popup when no records found
+        .k-grid .k-grid-aria-root {
+            overflow: visible;
+        }
+
+        .k-height-container {
+            display: none;
+        }
+
+        .k-grid .k-grid-header .k-grid-header-wrap .k-header .k-link .k-icon {
+            left: 0.1rem;
+        }
+
+        .k-icon:before {
+            margin: 0;
+        }
+
+    }
+
+    .dateRange{
+        width: 100%;
+    }
+
+    ::ng-deep .btnAlign {
+        margin-right: 4%;
+    }
+
+    .icon-right {
+        top: calc(40% - 6px);
+        float: right;
+        display: none;
+    }
+
+    .header-title {
+        cursor: pointer;
+    }
+
+    .patientSelect {
+        height: 3rem;
+        width: 100%;
+        border: 1px solid #A9A9A9;
+        border-radius: 0;
+    }
+
+    .wrapButtonText {
+        white-space: normal;
+        word-wrap: break-word;
+        text-align: left;
+    }
+
+    .noDataSpan {
+        position: relative;
+        margin-left: 1rem;
+    }
+
+    .tPlan {
+        text-align: end;
+    }
+
+    .tx-plans-hover {
+        position: fixed;
+        z-index: 100;
+        background-color: white;
+        color: #0C85AD;
+        box-shadow: 10px 10px 5px #888;
+        max-width: 49rem;
+        min-width: 34rem;
+        right: 2rem;
+    }
+    
+    .tx-plans-header {
+        font-weight: 800;
+    }
+    
+    .tx-plans-item-name {
+        width: 20rem;
+        padding-left: 5px;
+        text-align: justify;
+    }
+    
+    .tx-plans-item-date {
+        width: 8rem;
+        padding-left: 10px;
+        padding-right: 0px;
+    }
+    
+    .tx-plans-item-total {
+        width: 7rem;
+        padding-left: 10px;
+        padding-right: 0px;
+        text-align: left;
+    }
+    
+    .tx-plans-item-status {
+        width: 10rem;
+        padding-left: 10px;
+        padding-right: 5px;
+        text-align: left;
+    }
+    
+    .tx-plans-item-icon {
+        color: black;
+        padding-left: 1rem;
+    }
+    
+    .tx-plans-item-cursor {
+        cursor: pointer;
+    }
+
+    .loading {
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .custom-filter-input{
+        width: 100%;
+        height: 3rem;
+        padding: 0px 3px;
+        border: 1px solid #A9A9A9;
+    }
+
+    .gridTextField{
+        font-family: 'Font Awesome 5 Pro';
+        font-weight: 600;
+        position: relative;
+        input{
+            font-size: 14px;
+            color: $action-blue;
+        }
+        .fa-times{
+            position: absolute;
+            right: 5px;
+            top: 7px;
+            color: red;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    }
+
+    .inactivePatient {
+        font-style: italic;
+        color: gray;
+
+        a, .fa-calendar-alt, .fa-user, .btn-link {
+            color: inherit;
+        }
+    }
+ 
+    .headerMargin {
+        margin-left: 1.5rem;
+    }   
+}

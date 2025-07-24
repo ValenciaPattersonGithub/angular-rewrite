@@ -1,0 +1,21 @@
+﻿<div class="modal-header"><h4 id="lblCreateClaimsHeader">{{ 'Create Claims' | i18n }}</h4></div>
+<div class="modal-body">
+    <label >{{ 'Select benefit plans to create claims' | i18n }}</label>
+    <soar-select-list id="kendoPlanSelect"
+                      name="planList"
+                      sb-tab="{{tabIndex}}"
+                      placeholder="Select Benefit Plan"
+                      option-list="plans"
+                      text-field="Name"
+                      value-field="PatientBenefitPlanId"
+                      ng-model="selectedPlan"
+					  sb-change="updateSelectedPlan(selectedPlan)"
+					  ng-if="plans.length > 0">
+    </soar-select-list>
+</div>
+<div class="modal-footer">
+    <div>
+        <button id="btnCancel" ng-click="cancel()" class="btn btn-primary">{{ 'Cancel' | i18n }}</button>
+        <button id="btnCreateClaims" ng-click="createClaims()" class="btn btn-default" ng-disabled="createClaimButtonDisabled">{{ 'Create Claim' | i18n }}</button>
+    </div>
+</div>

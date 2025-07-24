@@ -1,0 +1,42 @@
+﻿<div ng-class="'fade-in'" ng-controller="FeeScheduleLandingController">
+    <div class="feeSchedLand">
+        <div class="rowFull">
+            <div class="feeSchedLand__header">
+                <div class="insurance__action row">
+                    <div class="col-xs-3">
+                        <a id="addCarrier" class="btn btn-primary" icon="fa-plus" href="{{createFeeSchedule}}" check-auth-z="soar-ins-ifsch-add">{{ 'Add a Fee Schedule' | i18n }}</a>
+                        <soar-select-list id="selectCarrierReport"
+                                          name="selectCarrierReport"
+                                          placeholder="{{'Reports' | i18n }}"
+                                          text-field="ReportTitle"
+                                          value-field="ReportValue"
+                                          option-list="reports"
+                                          ng-model="selectedReport.ReportId"
+                                          ng-if="isReportDataLoaded"
+                                          class-name="feeSchedLand__reportDropDown"
+                                          >
+                        </soar-select-list>
+                    </div>
+                    <!-- possible fee schedule search bar -->
+                    <!--<div class="col-xs-5">
+                        <input class="form-control border-solid-black" id="searchBoxServiceCodes" placeholder="{{'Search service code, CDT code, description, fee...'|i18n}}" type="text" ng-model="searchServiceCodesKeyword" ng-disabled="updatingList" />
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Main body-->
+    <div class="feeSchedLand__body">
+        <!--Kendo Grid for Fee Schedules-->
+        <div class="feeSchedLand__list">
+            <kendo-grid id="feeScheduleGrid" k-options="feeScheduleOptions">
+            </kendo-grid>
+            <!--loading spinner-->
+            <div ng-show="loadingFeeSchedules==true">
+                <no-results loading-message='loadingMessageNoResults' loading="loadingFeeSchedules==true"></no-results>
+            </div>
+
+        </div>
+    </div>
+</div>
+

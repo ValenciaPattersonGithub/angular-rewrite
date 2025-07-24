@@ -1,0 +1,193 @@
+﻿<div class="chartingControls">
+    <div id="selectedButtons" class="chartingControls__layoutContainer">
+        <div id="groupChartingControls" class="chartingControls__groupTitle" ng-if="groupView">
+            <h4 id="editGroupHeader" class="title" ng-show="groupTitle.Title != '' && !editTitle" ng-bind-html="groupTitle.Title"></h4>
+            <span class="editName" ng-if="!editTitle && editMode"><i class="fas fa-pencil-alt" ng-click="editGroupTitle(true)"></i></span>
+            <div id="editGroupName" class="editGroupName" ng-show="editMode && editTitle">
+                <input type="text" id="groupNameEdit" class="form-control groupNameInput" ng-model="groupTitle.Title" maxlength="25" />
+                <span ng-class="{'disabled': groupTitle.Title.length == 0, 'saveName': groupTitle.Title.length > 0}"><i class="fa fa-check" ng-click="updateGroup(groupTitle.Title)"></i></span>
+                <span class="cancel"><i class="fa fa-times" ng-click="editGroupTitle(false)"></i></span>
+            </div>
+        </div>
+        <div id="sortable" class="chartingControls__layout" ng-class="{'droppable': !grouping}" ng-mousedown="showCloseButton=false">
+            <div class="chartBtnLayoutConds__loading" ng-if="layoutItems === null">
+                <no-results loading="layoutItems === null"></no-results>
+            </div>
+            <div class="chartingControls__btnContainer" ng-repeat="layoutItem in layoutItems" ng-mouseover="showCloseButton=true" ng-mouseleave="showCloseButton=false" >
+                <span title="{{::removeFavoriteMessage | i18n}}" class="chartingControls__removeBtn remove">
+                    <i class="far fa-times-circle fa-2x"
+                        ng-show="showCloseButton && viewSettings.expandView && !sorting && !layoutItem.$$button.Buttons || (showCloseButton && editMode && !sorting && !layoutItem.$$button.Buttons)"
+                       ng-click="remove(layoutItem)"></i>
+                </span>
+                <button class="chartingControls__btn"                      
+                        id="layoutItem{{$index}}"
+                        ng-click="utilizeFavorite(layoutItem, $index)"
+                        uib-tooltip-template="getTemplateType(layoutItem)"
+                        tooltip-append-to-body="true"
+                        tooltip-placement="auto + top-right"
+                        ng-attr-data-layoutItem="{{layoutItem.$$button | json}}"
+                        ng-class="[getButtonColorClass(layoutItem),{'sortable': viewSettings.expandView || editMode, 'groupableItem': grouping && !groupView && !layoutItem.$$button.Buttons, 'groupableContainer': grouping && !groupView}]"
+                        ng-disabled="disableWhenPatientInactive===true">
+                    <img ng-if="layoutItem.IconUrl" class="chartingControls__btnIcon" ng-src="{{layoutItem.IconUrl}}" />
+                    <span ng-if="layoutItem.IconUrl == null">{{layoutItem.$$button.Buttons.length}}</span>
+                </button>
+                <span class="chartingControls__btnText">
+                    {{ layoutItem.Service.IsActive ? (layoutItem.Text | limitTo:11) : (layoutItem.Text | limitTo:8) }}<span ng-show="{{layoutItem.Text.length > 11}}">&#8230;</span>
+                    <i class="fas fa-exclamation-triangle patientHeader__orange-warning" ng-show="layoutItem.Service && !layoutItem.Service.IsActive" title="Service Code is inactive"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div id="dotNavigation" class="col-md-12 chartingControls__dotNavigation" ng-if="!groupView" ng-class="{'disabled': !navigationEnabled && !viewSettings.expandView}">
+        <div class="page col-md-2" ng-repeat="a in range track by $index" ng-class="{'droppablePage': viewSettings.expandView}">
+            <div class="data" ng-class="{'active': pageSelected == $index}" ng-attr-data-pageNumber="{{$index}}" ng-click="selectPage($index)"></div>
+        </div>
+    </div>
+    <!--Layout for kendo window charting controls-->
+    <div class="chartingControls__activeLayout">
+        <div kendo-window="propServCtrls"
+             k-title="'Proposed Service Controls'"
+             k-visible="false"
+             k-on-open="propServCtrlsOpen = true"
+             k-on-close="propServCtrlsOpen = false"
+             k-options="propServCtrlsOptions"
+             id="propServCtrlsWindow">
+        </div>
+        <div kendo-window="patientConditionCreateUpdate"
+             k-title="'Patient Condition'"
+             k-visible="false"
+             k-on-open="propServCtrlsOpen = true"
+             k-on-close="propServCtrlsOpen = false"
+             k-options="propServCtrlsOptions"
+             id="patientConditionCreateUpdateWindow2">
+        </div>
+    </div>
+    <div class="chartingControls__controls">
+        <div class="chartingControls__groupBtns">
+            <button id="importFavoritesBtn"
+                    class="btn btn-link import-btn"
+                    ng-if="!groupView && !grouping"
+                    ng-disabled="disableImport"
+                    title="{{disableImportMessage}}"
+                    check-auth-z="{{ layoutItems.length === 0 ? 'soar-biz-bizusr-achbtn' : 'soar-biz-bizusr-echbtn' }}"
+                    ng-click="openChartButtonLayoutImport()">
+                {{ ::('Import...' | i18n) }}
+            </button>
+            <button class="btn btn-default groupFavorites"
+                    id="groupFavorites"
+                    ng-disabled="viewSettings.expandView || groupView"
+                    ng-if="layoutItems.length > 0 && !grouping && !groupView"
+                    ng-click="addGroupingDnD()">
+                {{::'Group' | i18n}}
+            </button>
+            <span id="lblDragMsg" class="" ng-if="grouping && !groupView">{{'Drag and combine  your favorites to create groups' | i18n}}</span>
+            <button class="btn btn-default pull-left"
+                    id="closeGroup"
+                    ng-if="groupView && !editMode"
+                    ng-click="backToFavorites()">
+                {{::'Close' | i18n}}
+            </button>
+            <button class="btn btn-default groupButtons"
+                    id="deleteGroup"
+                    ng-if="groupView && !editMode"
+                    ng-click="enterEditMode()">
+                {{::'Edit' | i18n}}
+            </button>
+            <button class="btn btn-default groupButtons"
+                    id="endGrouping"
+                    ng-if="grouping || editMode"
+                    ng-click="endGrouping()">
+                {{::'Close' | i18n}}
+            </button>
+            <button class="btn btn-default groupButtons"
+                    id="deleteGroup"
+                    ng-if="groupView && !editMode"
+                    ng-click="cancelModal()"
+                    check-auth-z="soar-biz-bizusr-achbtn">
+                {{::'Delete Group' | i18n}}
+            </button>
+        </div>
+        <div class="chartingControls__manageBtns">
+            <button class="btn btn-primary"
+                id="addEditChtBtnLayout"
+                ng-if="layoutItems.length === 0 && !viewSettings.expandView && !groupView"
+                ng-click="openChartButtonLayoutCrud()"
+                check-auth-z="soar-biz-bizusr-achbtn">
+                {{::'Create Favorites' | i18n}}
+            </button>
+            <button class="btn btn-default manage"
+                    id="editEditChtBtnLayout"
+                    ng-disabled="grouping || groupView"
+                    ng-if="layoutItems.length > 0 && !viewSettings.expandView && !groupView"
+                    ng-click="openChartButtonLayoutCrud()"
+                    check-auth-z="soar-biz-bizusr-echbtn">
+                {{::'Manage' | i18n}}
+            </button>
+            <button class="btn btn-default manage"
+                    id="editEditChtBtnLayout"
+                    ng-if="viewSettings.expandView"
+                    ng-click="closeChartButtonLayoutCrud()">
+                {{::'Close' | i18n}}
+            </button>
+        </div>
+    </div>
+</div>
+<!--tooltip template - Charting Favorite-->
+<script type="text/ng-template" id="chartingFavoritesTooltipTemplate.html">
+    <div class="chartingButtonTooltip">
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Service Code'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{layoutItem.Service.Code}}</div>
+        </div>
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'CDT Code'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{layoutItem.Service.CdtCodeName}}</div>
+        </div>
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Description'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{layoutItem.Service.Description}}</div>
+        </div>
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Service Type'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{layoutItem.Service.ServiceTypeDescription}}</div>
+        </div>
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Fee'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{layoutItem.Service.$$locationFee | currency}}</div>
+        </div>
+    </div>
+</script>
+
+<!--Conditions Template-->
+<script type="text/ng-template" id="chartingFavoritesConditionsTooltipTemplate.html">
+    <div class="chartingButtonTooltip">
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Description'|i18n}}:</div>
+            <div class="chartingButtonTooltip__content">{{layoutItem.Text}}</div>
+        </div>
+    </div>
+</script>
+
+<!--Swift Codes Template-->
+<script type="text/ng-template" id="chartingFavoritesSwiftCodeTooltipTemplate.html">
+    <div class="chartingButtonTooltip">
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Service Codes'|i18n}}:</div>
+            <div ng-repeat="service in layoutItem.Service.SwiftPickServiceCodes">
+                {{service.Code}}
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--Swift Codes Template-->
+<script type="text/ng-template" id="chartingFavoritesGroupTooltipTemplate.html">
+    <div class="chartingButtonTooltip">
+        <div class="chartingButtonTooltip__row">
+            <div class="chartingButtonTooltip__title">{{::'Service Codes'|i18n}}:</div>
+            <div ng-repeat="service in layoutItem.$$button.Buttons">
+                {{getServiceCode(service.ItemId)}}
+            </div>
+        </div>
+    </div>
+</script>

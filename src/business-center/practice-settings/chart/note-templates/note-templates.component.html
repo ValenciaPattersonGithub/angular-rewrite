@@ -1,0 +1,75 @@
+<form [formGroup]="frmNoteTemplate" name="frmNoteTemplate" role="form">
+    <div class="noteTemp">
+        <div class="noteTemp__header">
+            <div class="noteTemp__nav">
+                <!--Breadcrumbs-->
+                <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+            </div>
+            <h3>{{ 'Clinical Note Templates' | translate }}</h3>
+        </div>
+        <div class="noteTemp__body">
+            <div class="noteTemp__secondary">
+                <note-templates-list (selectedNoteTemplate)="selectedNoteTemplate($event)"
+                                     [editMode]="editMode"
+                                     [existingTemplateActive]="existingTemplateActive"
+                                     [showHeader]="true"
+                                     [showMenu]="true"
+                                     [parentForm]="parentForm">
+                </note-templates-list>
+            </div>
+            <div class="noteTemp__primary">
+                <div class="noteTempEditor">
+                    <div class="noteTempEditor__body">
+                        <div class="col-sm-12">
+                            <div class="col-sm-9 row">
+                                <h4>{{ 'Note Template Builder' | translate }}</h4>
+                            </div>
+                            <div class="col-sm-3 row noteTempEditor__actions">
+                                <button id="btnNoteTempEditorCancel" class="btn btn-default mr-5" (click)="cancelEdit()" [disabled]="!selectedTemplate?.Template">{{ 'Cancel' | translate }}</button>
+                                <button id="btnNoteTempEditorSave" class="btn btn-primary" checkRoleAccess="soar-clin-nottmp-add" (click)="saveTemplate()" [disabled]="isDisabled()">{{ 'Save' | translate }}</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-5 row">
+                                <h4 *ngIf="!editMode">{{ selectedTemplate?.Template?.TemplateName }}</h4>
+                                <div class="form-group" *ngIf="editMode">
+                                    <label class="control-label">{{ 'Template Name' | translate }}</label> *
+                                    <input id="inpTemplateName"
+                                           class="form-control"
+                                           maxlength="100"  
+                                           CapitalizeFirst setFocus
+                                           placeholder="{{'Template Name'| translate}}"
+                                           formControlName="inpTemplateName" required/>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <h4 *ngIf="!editMode">{{ selectedTemplate?.Template?.CategoryName }}</h4>
+                                <div class="form-group" *ngIf="editMode">
+                                    <label class="control-label">{{ 'Category' | translate }}</label> *
+                                    <soar-select-list id="slctTemplateCategory"
+                                                      class="form-control noteTempEditor__category"
+                                                      placeHolder="{{'Select Category' | translate}}"
+                                                      [textField]="'CategoryName'"
+                                                      [valueField]="'CategoryId'"
+                                                      [optionList]="noteCategories"
+                                                      formControlName="slctTemplateCategory"
+                                                      [required]="true">
+                                    </soar-select-list>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" *ngIf="editMode">
+                            <button *ngIf="canEditForm" id="btnAddSection" class="btn btn-default" (click)="addSection()" [disabled]="checkCanAddSection()">{{ 'Add a Section' | translate }}</button>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div id="sectionAccordion" close-others="oneAtATime" *ngIf="selectedTemplate?.TemplateBodyCustomForm != null && selectedTemplate?.TemplateBodyCustomForm != undefined">
+                                    <accordion [inputIsDisabled]="inputIsDisabled" [showFooterPage]="false" [formType]="'note'" [canEditForm]="canEditForm" [parentForm]="parentForm"></accordion>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

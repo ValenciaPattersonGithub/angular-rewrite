@@ -1,0 +1,42 @@
+﻿<div class="slot-preview-list">
+    <div class="slot-preview-list__box">
+        <div class="slot-preview-list__header">
+        </div>
+        <div class="slot-preview-list__body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div>
+                        <button class="btn soar-link icon-button font-14 previewBtnBack" ng-click="hideFilters()">
+                            <i class="fa fa-angle-left"></i>&nbsp;
+                            {{ ::('Return to Search' | i18n) }}
+                        </button>
+                    </div>
+                    <div>
+                        <h3>{{ ::('Open Appointments' | i18n) }}</h3>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div id="openingsList" style="overflow-x: hidden; overflow-y: scroll; height:400px; max-width:100%; position:relative;">
+                        <!--LIST THE OPENINGS HERE-->
+                        <div ng-repeat="slot in openTimeSlots | orderBy : 'LocationStartTime'  track by $index">
+                            <div class="row previewSlot" ng-click="previewSlot($index, slot)" id="{{$index}}">
+                                <div class="col-sm-12 previewSlotItem" ng-class="{'previewSelectedSlot' : $index == previewParam.SelectedSlotIndex}">
+                                    <div class="previewSlotLabel">
+                                        <span style="float:left" >{{slot.LocationDayOfWeek }} </span>
+                                        <span style="float:right">{{slot.LocationStartTime | date: 'MM/dd/yyyy'}}</span><br />
+                                        {{slot.LocationStartTime | date: 'hh:mm a'}} - {{slot.LocationEndTime | date: 'hh:mm a'}} {{slot.TimeZoneAbbreviation}}<br />
+
+                                        <span ng-if="searchGroup == 1" title="{{slot.ProviderName}}">{{slot.ProviderName | limitTo: 20 }}{{slot.ProviderName.length > 20 ? '...' : ''}}</span>
+                                        <span ng-if="searchGroup == 2" title="{{slot.RoomName}}">{{slot.RoomName | limitTo: 20 }}{{slot.RoomName.length > 20 ? '...' : ''}}</span>
+                                    </div>
+                                </div>
+                            </div><br />
+                        </div>
+                        <!--END OF LIST-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

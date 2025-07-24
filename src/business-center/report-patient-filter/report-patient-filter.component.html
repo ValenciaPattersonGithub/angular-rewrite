@@ -1,0 +1,72 @@
+<div class="panel-heading collapseExpand">
+  <a data-toggle="collapse" data-target="#patientDiv" class="soar-link font-weight-bold padding-2 text-left">
+    <i class="indicator fa fa-chevron-up"></i>
+    {{ "Patient" | translate }}
+  </a>
+</div>
+<div class="filter-option panel-collapse collapse reports-slideout" id="patientDiv">
+  <ul id="Patients">
+    <li>
+      <input type="radio" id="allInput" check-auth-z="soar-report-custom-update" value="true" class="patientFilter" [(ngModel)]="includeAllPatients" (change)="toggleRadio()" />
+      {{ "All" | translate }}
+    </li>
+    <li>
+      <input type="radio" id="patientInput" check-auth-z="soar-report-custom-update" value="false" class="patientFilter" [(ngModel)]="includeAllPatients" (change)="toggleRadio()" />
+      {{ "Patient" | translate }}
+    </li>
+    <li>
+      <div class="row" *ngIf="includeAllPatients != 'true'">
+        <div class="col-xs-12 col-sm-8 form-search-input">
+          <i class="fa fa-search"></i>
+          <div [ngClass]="{ error: !valid && attemptedSave }">
+            <input id="inpPatientSearch" class="form-input" type="text" [(ngModel)]="patientSearchParams.searchFor" (keyup)="executePatientSearch(false)" placeholder="{{ 'Find a Person' | translate }}" />
+            <label id="lblPatientReferralRequired" class="help-text" *ngIf="!valid && attemptedSave">
+              {{ "This field is required." | translate }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="includeAllPatients != 'true'">
+        <div class="col-xs-12 col-sm-8">
+          <div class="form-search-container background-white" *ngIf="patientSearch.Results.length > 0" soar-infinite-scroll="executePatientSearch(true)">
+            <div class="row" *ngFor="let patient of patientSearch.Results; let i = index; let isOdd = odd; let isEven = even" [class.item-zebra-dark]="isOdd" [class.item-zebra-light]="isEven" (click)="selectPatient(patient)">
+              <div class="col-xs-12">
+                <div class="media referred-media">
+                  <i class="pull-left far fa-image fa-3x referred-media-icon"></i>
+                  <div class="media-body referred-media-body">
+                    <p>
+                      <span id="lblReferredByFirstName{{ i }}" [innerHtml]="patient.FirstName.length + patient.LastName.length > 22 ? patient.FirstName[0] + '.' : (patient.FirstName | uppercase | highlightTextIfContains: patientSearchParams.searchFor)"></span>
+                      <span id="lblReferredByLastName{{ i }}" [innerHtml]="patient.LastName.length > 22 ? ' ' + patient.LastName.substring(0, 21) : (' ' + patient.LastName | uppercase | highlightTextIfContains: patientSearchParams.searchFor)"></span>
+                    </p>
+                    <p id="lblReferredByDOB{{ i }}">{{ patient.DateOfBirth | toShortDisplayDateUtc }}</p>
+                    <p id="lblReferredByAddress" *ngIf="patient.City">{{ patient.AddressLine1 }} {{ patient.City }}, {{ patient.State }} {{ patient.ZipCode }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="row" *ngIf="includeAllPatients != 'true'">
+        <div class="col-xs-12">
+          <div class="alerts-item-class" *ngFor="let patient of selectedPatients; let i = index">
+            <div class="tag-container tag-container__secondary" style="max-width: 100%; height: 100%">
+              <div class="flex">
+                <div class="flex flex-center flex-shrink-1 flex-grow-0">
+                  <div>
+                    <div id="lbl" class="flex-shrink-1 padding-right-16">
+                      <label class="margin-bottom-class" attr.title="{{ patient.LastName }}, {{ patient.FirstName }}">{{ patient.LastName }}, {{ patient.FirstName }}</label>
+                    </div>
+                  </div>
+                  <i id="btnRemove" class="fa fa-times-circle tag-container__iconSecondary" (click)="removeSelectedPatient(i, patient)"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

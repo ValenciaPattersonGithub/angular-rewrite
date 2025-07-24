@@ -1,0 +1,31 @@
+<div class="header">
+    <h4>Payment Type Options</h4>
+</div>
+
+<hr>
+
+<div [formGroup]="form"
+    class="content">
+    <app-toggle formControlName="IsAutoApplied"
+        id="payment-type-options-dialog-form-IsAutoApplied"
+        label="Automatically apply Vendor Payments to account balances"
+        data-qa="payment-type-options-dialog-form-IsAutoApplied"
+        (toggled)="onIsAutoAppliedChange($event)"
+        [isChecked]="paymentType.IsAutoApplied"></app-toggle>
+</div>
+
+<hr>
+
+<div class="actions">
+    <app-button type="button"
+        buttonLabel="Cancel"
+        variation="secondary"
+        data-qa="payment-type-options-dialog-form-cancel"
+        (click)="close()"></app-button>
+    <app-button type="button"
+        buttonLabel="Save"
+        variation="primary"
+        [isDisabled]="form.pristine || saving"
+        data-qa="payment-type-options-dialog-form-save"
+        (click)="save()"></app-button>
+</div>

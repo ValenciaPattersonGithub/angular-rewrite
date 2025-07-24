@@ -1,0 +1,50 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="unassignedCreditsreport grid header">
+        <div class="col-sm-6-migration">{{ 'Responsible Person' | translate }}</div>
+        <div class="col-sm-6-migration"></div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+                                     id="unassignedUnappliedCredits">
+            <div *cdkVirtualFor="let transaction of reportData; index as i" class="{{transaction.Class}}">
+                <div *ngIf="transaction.IsHeader">
+                    <div class="col-sm-12-migration"></div>
+                </div>
+                <div class="unassignedCreditsreport grid item balance" *ngIf="transaction.IsHeader" >
+                    <div class="col-sm-6-migration">{{ transaction.ResponsiblePerson | translate }}</div>
+                    <div class="col-sm-6-migration text-right" *ngIf="transaction.AccountBalance >= 0">{{'Account Balance' | translate}}: {{ transaction.AccountBalance | currency }}</div>
+                    <div class="col-sm-6-migration text-right" *ngIf="transaction.AccountBalance < 0">{{'Account Balance' | translate}}: ({{transaction.AccountBalance * -1 | currency}})</div>
+                </div>
+                <div *ngIf="transaction.IsSubHeader">
+                    <div class="col-sm-12-migration"></div>
+                </div>
+                <div class="unassignedCreditsreportsubheader grid header p-5 header-bg" *ngIf="transaction.IsSubHeader">
+                    <div class="col-sm-1-migration transactions header-bg"></div>
+                    <div class="col-sm-1-migration transactions text-left header-bg">{{ 'Date' | translate }}</div>
+                    <div class="col-sm-2-migration transactions text-left header-bg">{{ 'Patient' | translate }}</div>
+                    <div class="col-sm-1-migration transactions text-left header-bg">{{ 'Provider' | translate }}</div>
+                    <div class="col-sm-1-migration transactions text-left header-bg">{{ 'Location' | translate }}</div>
+                    <div class="col-sm-2-migration transactions text-left header-bg">{{ 'Type' | translate }}</div>
+                    <div class="col-sm-2-migration transactions text-left header-bg">{{ 'Description' | translate }}</div>
+                    <div class="col-sm-1-migration transactions text-right header-bg">{{ 'Transaction Amount' | translate }}</div>
+                    <div class="col-sm-1-migration transactions text-right header-bg">{{ 'Unapplied Amount' | translate }}</div>
+                </div>
+
+                <div class="unassignedCreditsreportsubheader grid item tableData"
+                     *ngIf="transaction.IsData">
+                    <div class="col-sm-1-migration transaction-data"></div>
+                    <div class="col-sm-1-migration transaction-data">{{ transaction.Date | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-2-migration transaction-data">{{ transaction.Patient }}</div>
+                    <div class="col-sm-1-migration transaction-data">{{ transaction.Provider }}</div>
+                    <div class="col-sm-1-migration transaction-data">{{ transaction.Location }}</div>
+                    <div class="col-sm-2-migration transaction-data">{{ transaction.TransactionType }}</div>
+                    <div class="col-sm-2-migration transaction-data">{{ transaction.Description }}</div>
+                    <div class="col-sm-1-migration transaction-data text-right" *ngIf="transaction.TransactionAmount >= 0">{{ transaction.TransactionAmount | currency }}</div>
+                    <div class="col-sm-1-migration transaction-data text-right" *ngIf="transaction.TransactionAmount < 0">({{ transaction.TransactionAmount * -1 | currency }})</div>
+                    <div class="col-sm-1-migration transaction-data text-right" *ngIf="transaction.UnappliedAmount >= 0">{{ transaction.UnappliedAmount | currency }}</div>
+                    <div class="col-sm-1-migration transaction-data text-right" *ngIf="transaction.UnappliedAmount < 0">({{ transaction.UnappliedAmount * -1 | currency }})</div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

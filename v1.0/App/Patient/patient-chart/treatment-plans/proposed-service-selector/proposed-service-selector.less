@@ -1,0 +1,259 @@
+﻿.patTxSrvSlct {
+    .clearfix;
+    position: relative;
+    padding: 24px;
+    background-color: @brand-color_white;
+    border: @panel-body-border;
+    border-radius: @borderRadius3;
+
+    &__header {
+        .clearfix;
+        padding-bottom: 24px;
+    }
+
+    &__title {
+        display: inline-block;
+        margin: 0;
+        line-height: 0;
+        //transform: translateY(8px);
+    }
+
+    &__txPlanNameContainer {
+        margin: @brand-margin_lg 0 @brand-margin_md 0;
+    }
+
+    &__txPlanNameInput {
+        font-size: @brand-font_xl;
+        width: 50%;
+    }
+
+    &__actions {
+        display: block;
+        //transform: translateY(60%);
+        margin-top: @brand-margin_sm;
+        margin-bottom: @brand-margin_sm;
+
+        .k-dropdown {
+            width: auto;
+        }
+
+        .k-dropdown-wrap {
+            padding: 2px 4px;
+
+            .k-input {
+                margin-right: 24px;
+            }
+        }
+    }
+
+    &__addSrv {
+        .btn;
+        .btn-primary;
+    }
+
+    &__bckTx {
+        .btn;
+        .btn-primary;
+    }
+
+    &__close {
+        .btn;
+        .btn-link;
+        float: right;
+        padding: 6px 0 6px 12px;
+    }
+
+    &__list {
+        .clearfix;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 500px;
+        padding-bottom: 12px;
+        border: 1px solid @brand-color_gray;
+    }
+
+    &__listHead {
+        .clearfix;
+        padding: 0 33px;
+        background-color: @brand-color_white;
+        border-bottom: 1px solid @brand-color_gray;
+
+        .add,
+        .current {
+            display: inline-block;
+            box-sizing: border-box;
+            padding-right: 6px;
+            opacity: 0;
+        }
+
+        .desc,
+        .tooth,
+        .area,
+        .provider,
+        .fee {
+            display: inline-block;
+            box-sizing: border-box;
+            padding-right: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            //transform: translateY(6px);
+        }
+
+        .desc {
+            width: 40%;
+            text-align: left;
+        }
+
+        .tooth,
+        .area {
+            width: 10%;
+        }
+
+        .fee, .scrollBarX {
+            float: right;
+            margin-right: 40px;
+        }
+    }
+
+    &__listBody {
+        .clearfix;
+        position: relative;
+    }
+
+    &__listItem {
+        .clearfix;
+        position: relative;
+        padding: 12px;
+        background-color: @brand-color_white;
+        border-bottom: 1px solid @brand-color_gray;
+
+        .add,
+        .current {
+            display: inline-block;
+            box-sizing: border-box;
+            padding-right: 6px;
+        }
+
+         &.disabled {
+            color: @brand-color_darker-gray;
+            background-color: @brand-color_dark-gray;
+            opacity: 1.0;
+            cursor: not-allowed;
+
+            button {
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+
+            &:hover {
+                opacity: 1.0;
+            }
+        }
+
+        .desc,
+        .tooth,
+        .area,
+        .provider,
+        .fee {
+            display: inline-block;
+            box-sizing: border-box;
+            padding-right: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            //transform: translateY(6px);
+        }
+
+        .desc {
+            width: 40%;
+            text-align: left;
+        }
+
+        .tooth,
+        .area {
+            width: 10%;
+        }
+
+        .fee {
+            float: right;
+            margin-right: 40px;
+        }
+    }
+
+
+    &__addOpts {
+        text-align: right;
+        display:inline-block;
+
+        &__views {
+            display: inline-block;
+        }
+    }
+
+    &__itemAdd {
+        .btn;
+        .btn-primary;
+    }
+
+    &__itemCheck {
+        .btn;
+        .btn-link;
+        opacity: 0;
+
+        &.active {
+            opacity: 1;
+        }
+    }
+
+    &__itemActions {
+        .btn;
+        .btn-link;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        //transform: translateY(-50%);
+    }
+    &__finish {
+        .btn ;
+        .btn-primary;
+        float: right;
+}
+    &__footer {
+        display: block;
+        //transform: translateY(60%);
+        margin-top: @brand-margin_md;
+        margin-bottom: @brand-margin_sm;
+        }
+
+    &__menuactions {
+        display: none;
+        position: absolute;
+        top: 40px;
+        left: 10px;
+        z-index: 999;
+        padding: 10px;
+        min-width: 100px;
+        background-color: @brand-color_white;
+        border: 1px solid @brand-color_darker-gray;
+        box-shadow: @brand-shadow_default;
+
+        &.active {
+            display: inline-block;
+        }
+
+        &.orientTop {
+            top: auto;
+            bottom: 40px;
+        }
+
+        .btn {
+            font-size: 1em;
+            display: block;
+
+            &[disabled] {
+                color: @brand-color_link-disabled;
+            }
+        }
+    }
+}

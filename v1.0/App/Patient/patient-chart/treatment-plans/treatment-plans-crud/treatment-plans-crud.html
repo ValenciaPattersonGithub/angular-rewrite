@@ -1,0 +1,410 @@
+﻿<div class="txPlanReorder" ng-if="txPlanAreaActive">
+    <div>
+        <treatment-plan-edit-services-view></treatment-plan-edit-services-view>
+    </div>
+</div>
+<div class="txPlanCrud" ng-if="!txPlanAreaActive">
+    <div class="txPlanCrud__header">
+
+        <div class="txPlanCrud__nav">
+            <div class="txPlanCrud__navPrimary">
+                <div class="txPlanCrud__navPrimaryGroup">
+                    <button id="closeTxPlanButton" ng-click="closeTxPlan()" class="btn btn-link txPlanCrud__navIcon pull-right" uib-tooltip="{{ ::('Close' | i18n) }}" tooltip-append-to-body="false" tooltip-placement="bottom" tooltip-enable="true"><i class="fa fa-times"></i></button>
+
+                    <h2 class="txPlanCrud__title">
+                        <!-- display the tx plan name and allow edit  -->
+                        <span title="{{ activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanName | sanitize }}"
+                            ng-show="!editing && activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId">
+                            {{ activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanName | sanitize }}
+                        </span>
+                        <!-- allow user to input name for new tx plan  -->
+                        <input class="txPlanCrud__titleEdit"
+                               ng-show="!activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId" type="text"
+                               ng-model="activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanName"
+                               sanitize-input
+                               placeholder="{{ ::('Treatment Plan Name' | i18n) }}"
+                               set-focus
+                               maxlength="100" ng-maxlength="100" />
+
+                        <!-- allow user to modify name for existing tx plan  -->
+                        <input class="txPlanCrud__titleEdit"
+                               ng-show="editing" type="text"
+                               ng-model="activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanName"
+                               sanitize-input
+                               maxlength="100" ng-maxlength="100" />
+
+                    </h2>
+
+                    <button ng-hide="!activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId" href="" ng-disabled="disableEditFunctions" class="btn txPlanCrud__edit" check-auth-z="soar-clin-cplan-edit" ng-click="update(activeTreatmentPlan)" ng-if="activeTreatmentPlan.TreatmentPlanHeader.Status !='Completed'">
+                        <i class="fa fas" ng-class="editing ? 'fa-save' : 'fa-pencil-alt'" check-auth-z="soar-clin-cplan-edit"></i>
+                    </button>
+
+                </div>
+                <span id="lblTreatmentPlanNameError" class="help-text txPlanCrud__titleError" ng-show="!formIsValid">
+                    <span>{{ ::('This field is required.' | i18n) }}</span>
+                </span>
+                <div class="txPlanCrud__navPrimaryGroup" ng-hide="!activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId">
+                    {{::('Created' | i18n)}} {{activeTreatmentPlan.TreatmentPlanHeader.$$DisplayCreatedDate | toDisplayDate}} ({{activeTreatmentPlan.TreatmentPlanHeader.DaysAgo}} {{::('days ago' | i18n) }})
+                </div>                
+            </div>
+            <div ng-show="true" class="txPlanCrud__navSecondary">
+                <span class="txPlanCrud__navSecondaryGroup">
+                    <!--informed consent-->
+                    <button id="btnInformedConsent"
+                            check-auth-z="soar-clin-cplan-icadd"
+                            class="btn btn-link informed-consent-btn"
+                            ng-click="createInformedConsent()"
+                            ng-disabled="!activeTreatmentPlan.TreatmentPlanServices || disableEditFunctions"
+                            uib-tooltip="{{'Add {0}'|i18n: ['Informed Consent']}}">
+                        <i class="fa fa-plus-square fa-1x doc-icon"
+                           check-auth-z="soar-doc-docimp-view"></i>
+                        <span>{{::('Add Informed Consent'|i18n)}}</span>
+                    </button>
+                    <!--snapshots menu-->
+                    <div class="dropdown txPlanCrud__attachBtn">
+                        <button id="btnSelectSnapshot"
+                                type="button"
+                                class="btn  dropdown-toggle attachDropdown"
+                                data-toggle="dropdown"
+                                uib-tooltip="{{ ::('Attach or View Documents' | i18n) }}">
+                            <i class="fa fa-paperclip txPlanCrud__navIcon"></i>&nbsp;{{ ::('Attachments' | i18n) }}&nbsp;({{ treatmentPlanDocuments.length }})<i class="padding-6 fa fa-caret-down txPlanCrud__navIcon"></i>
+                        </button>
+                        <ul class="dropdown-menu txPlanCrud__dropdown" role="menu">
+                            <li ng-repeat="txPlanDocument in treatmentPlanDocuments | orderBy:'-DateUploaded'">
+                                <a class="txPlanCrud__viewDocument" check-auth-z="soar-doc-docimp-view" uib-tooltip="{{ txPlanDocument.Name }}" ng-click="viewTreatmentPlanDocument(txPlanDocument)" id="option{{txPlanDocument.Name}}">{{ txPlanDocument.Name | i18n }}</a>
+                                <i class="fa fa-times padding-6 txPlanCrud__deleteDocument" check-auth-z="soar-doc-docimp-delete" ng-click="deleteTreatmentPlanDocument(txPlanDocument)"></i>
+                            </li>
+                            <li>
+                                <a id="attachDocument"
+                                ng-disabled="!activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId "
+                                ng-class="{disabled : !activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId }"
+                                class="txPlanCrud__attachDocument"
+                                ng-click="openDocUploader()"
+                                check-auth-z="soar-doc-docimp-add">
+                                    {{ ::('Attach a Document' | i18n) }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </span>
+                <span class="txPlanCrud__navSecondaryGroup">
+                    <div class="txPlanCrud__slider">
+                        <span>{{ ::('Recommended Plan' | i18n) }}</span>
+                        <i id="txPlanTileRecommended"
+                           class="fa fa-2x fa-toggle-on"
+                           ng-class="{'active' : activeTreatmentPlan.TreatmentPlanHeader.IsRecommended, 'fa-rotate-180 inactive' : !activeTreatmentPlan.TreatmentPlanHeader.IsRecommended, 'disabled' : savingPlan || disableEditFunctions }"
+                           ng-click="actionRecommended(activeTreatmentPlan)"
+                           check-auth-z="soar-clin-cplan-edit">
+                        </i>
+                    </div>
+                </span>
+
+                <span class="txPlanCrud__navSecondaryGroup pull-right">
+                    <span >
+                        <button tooltip-placement="auto left" uib-tooltip="{{ (disableCreateApptButton===true) ? 'Please Select at Least One Service' : 'Print/Present to Patient' | i18n }}"
+                                class="btn txPlanCrud__navIcon" id="printPreviewTxPlan" ng-click="printPreviewTreatmentPlan($event)" ng-disabled="disablePrint===true||updatingInsurance===true||printableServicesSelected===false|| disableEditFunctions===true">
+                            <i class="fa fa-print"></i>
+                        </button>
+                    </span>
+                    <span>
+                        <button id="btnMore" ng-disabled="!activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId || disableEditFunctions"
+                                type="button"
+                                class="btn dropdown-toggle more-btn"
+                                ng-click="initializeDropdown();"
+                                data-toggle="dropdown"
+                                uib-tooltip="{{ ::('More' | i18n) }}">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu txPlanCrud__navDropdown" role="menu">
+                            <li>
+                                <button class="btn btn-link"
+                                        id="txPlanTileCreateDuplicateTreatmentPlan"
+                                        ng-click="createDuplicatePlan()"
+                                        ng-disabled="!activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId || isNotDuplicatable || disableEditFunctions"
+                                        ng-class="{'txPlanCrud__disabled':isNotDuplicatable}">
+                                    {{ ::('Duplicate' | i18n) }}
+                                </button>
+
+                            </li>
+                            <li>
+                                <button class="btn btn-link"
+                                        ng-click="delete(activeTreatmentPlan)"
+                                        check-auth-z="{{treatmentPlanDeleteAmfa}}"
+                                        ng-disabled="!activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanId || disableEditFunctions"
+                                        ng-if="activeTreatmentPlan.TreatmentPlanHeader.Status !='Completed'">
+                                    {{ ::('Delete this Plan' | i18n) }}
+                                </button>
+                            </li>
+                        </ul>
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <div class="txPlanCrud__actions">
+
+            <!--Status-->
+            <div class="btn-group" ng-disabled="activeTreatmentPlan.TreatmentPlanHeader.Status==='Completed' || disableEditFunctions" uib-dropdown>
+                <button id="selectStatus" class="btn txPlan-dropDown btn-default" ng-disabled="activeTreatmentPlan.TreatmentPlanHeader.Status==='Completed' || disableEditFunctions" class="btn dropdown-toggle form-control" uib-dropdown-toggle>
+                    <!--current status-->
+                    <span id="selectedStatusLabel">
+                        {{activeTreatmentPlan.TreatmentPlanHeader.Status | i18n}}
+                    </span>
+                    <span id="dropDownArrow"><i class="fa fa-angle-down fa-1x"></i></span>
+                </button>
+
+                <ul class="dropdown-menu txPlanCrud__statusDropdown" ng-disabled="activeTreatmentPlan.TreatmentPlanHeader.Status==='Completed' || disableEditFunctions" uib-dropdown-menu>
+                    <li ng-repeat="statusOption in statusOptions | filter: statusFilter |orderBy:'StatusName'">
+                        <a ng-click="updateStatus(activeTreatmentPlan, statusOption);"
+                           id="StatusOption{{statusOption.StatusId}}">
+                            {{statusOption.StatusName}}
+                        </a>
+                    </li>
+                </ul>
+            </div>&nbsp;&nbsp;
+            <button id="txPlanTileCreate" class="btn txPlan-btn btn-primary" ng-click="createAppointment()" ng-disabled="disableCreateApptButton || disableEditFunctions" title="{{createAppointmentTitle|i18n}}">{{ 'Create Appointment'| i18n }}</button>&nbsp;&nbsp;
+            <button id="txPlanTileCreateAlternatePlan" class="btn txPlan-btn btn-primary" ng-click="CreateAlternatePlan()" ng-disabled="activeTreatmentPlan.TreatmentPlanHeader.Status =='Completed' || disableEditFunctions">{{ 'Create Alternate '| i18n }}</button>&nbsp;&nbsp;
+            <button id="txPlanTileViewPredetermination" class="btn txPlan-btn btn-primary" ng-click="viewPredetermination()" ng-if="hasPredeterminationForCurrentPlan">{{ 'View Carrier Response'| i18n }}</button>
+            <!--<button id="txPlanReorderServices" class="btn txPlan-btn btn-primary"
+            ng-if="!enableNewTreatmentPlanArea" ng-click="reorder(activeTreatmentPlan)"
+            ng-disabled="activeTreatmentPlan.TreatmentPlanHeader.Status ==='Completed'||activeTreatmentPlan.TreatmentPlanServices.length === 0"
+            check-auth-z="soar-clin-cplan-edit">
+        {{ ::('Reorder Services' | i18n) }}
+    </button>-->
+            <button id="txPlanReorderServices" class="btn txPlan-btn btn-primary"
+                    ng-click="editServices(activeTreatmentPlan)"
+                    ng-disabled="activeTreatmentPlan.TreatmentPlanHeader.Status ==='Completed' || disableEditFunctions"
+                    check-auth-z="soar-clin-cplan-edit">
+                {{ ::('Edit Services' | i18n) }}
+            </button>&nbsp;&nbsp;
+            <button id="btnTxInsuranceReset" class="btn txPlan-btn btn-primary"
+                    ng-click="resetEstimatedInsurance(activeTreatmentPlan)"
+                    ng-disabled="!isResetEstimatedInsuranceEnabled || activeTreatmentPlan.TreatmentPlanHeader.Status ==='Completed' || disableEditFunctions"
+                    check-auth-z="soar-clin-cplan-edit">
+                {{ ::('Reset Est. Ins' | i18n) }}
+            </button>            
+        </div>
+        <div class="predOpt">
+            <div class="predOpt__header">
+                <div class="predOpt__title">{{'Predeterminations'|i18n}}</div>
+            </div>
+            <div class="predOpt__body">
+                <div class="form-row">
+                    <div class="form-col-4" ng-show="!loadingBenefitPlans">
+                        <soar-select-list id="inpBenefitPlans" disable-input="false" name="inpBenefitPlans" option-list="patientBenefitPlans" text-field="PolicyHolderBenefitPlanDto.BenefitPlanDto.Name" value-field="PatientBenefitPlanId" ng-model="planOnDetermination"></soar-select-list>
+                    </div>
+                    <div class="form-col-4" ng-show="!loadingBenefitPlans">
+                        <soar-select-list id="lstPredeterminationProvider"
+                                          text-field="Name"
+                                          value-field="ProviderId"
+                                          list-template="predeterminationProviderDropdownTemplate"
+                                          option-list="predeterminationProviders"
+                                          ng-model="providerOnDetermination"
+                                          sb-change="sbChange">
+                        </soar-select-list>
+                    </div>
+                    <div>
+                        <a id="txPlanPrederminationCreate" class="btn txPlan-btn btn-primary pull-right predetermination-btn" ng-show="!loadingBenefitPlans" check-auth-z="soar-ins-ipred-add" ng-disabled="disableCreateDeterminationButton || disableEditFunctions" ng-click="createPredetermination(planOnDetermination)"
+                           tooltip-enable="disableCreateDeterminationButton || disableEditFunctions"
+                           uib-tooltip="{{disableTooltipMessage}}"
+                           tooltip-class="tooltip-wrap">
+                            {{ ::('Create Predeterminations'| i18n) }}
+                        </a>&nbsp;&nbsp;
+
+                    </div>
+                    <div ng-show="loadingBenefitPlans">
+                        <i id="iLoading{{$index}}" ng-show="loadingBenefitPlans" class="fa fa-spinner fa-spin loading"></i>
+                        {{::('Loading BenefitPlans...'|i18n)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="txPlanCrud__body">
+
+        <div class="col-xs-12">
+            <div class="col-xs-7" ng-if="servicesForRollback.length > 0">
+                <service-fee-rollback-options services="servicesForRollback" on-rollback="onRollback"></service-fee-rollback-options>
+            </div>
+        </div>
+        <!-- Will probably bring in some logics for parts later... -->
+        <!--<proposed-service-tile ng-if="planParts.length<=1" treatment-plan="plan" part-index="partIndex" plan-parts="planParts" part="part" tx-service="srvc" expanded-view="lgBtn" ng-repeat="srvc in activeTreatmentPlan.TreatmentPlanServices">
+        </proposed-service-tile>-->
+        <!-- parts are renamed to stages  -->
+        <div id="txPlanStages" class="txPlanCrud__txPart" ng-if="activeTreatmentPlan" ng-repeat="stage in planStages|orderBy:'stageno'">
+            <treatment-plans-stage expanded-view="false" treatment-plan="activeTreatmentPlan" drawer-state="drawerState"
+                                           stage-index="{{$index+1}}" plan-name="activeTreatmentPlan.TreatmentPlanHeader.TreatmentPlanName"
+                                           stage="stage" plan-stages="planStages"
+                                           patient="patientInfo"
+                                           proposed-services="activeTreatmentPlan.TreatmentPlanServices " disable-add-services="disableAddServices"
+                                           add-services="addServices" has-benefit-plan="hasBenefitPlan"
+                                           patient-benefit-plans="patientBenefitPlans"></treatment-plans-stage>            
+        </div>
+        <!--Report template Todo move this to directive-->
+        <div id="txPlanReport" class="txPlanCrud__txPart hidden">
+            <div ng-repeat="stage in planStages|orderBy:'stageno' ">
+                <!--stage-->
+                <div style="font-weight:bold; margin: 10px 0 10px 0;" ng-class="{'lg': lgBtn}"> {{ 'Stage '+ stage.stageno  | i18n }}</div>
+                <table class="txPlanReport">
+                    <thead class="txPlanReport__header">
+                        <tr>
+                            <th class="descriptionCol">
+                                <div id="lblDescription" class="txPlanReport__colHeader">
+                                    {{ ::('Description' | i18n) }}
+                                </div>
+                            </th>
+                            <th class="toothCol">
+                                <div id="lblTooth" class="txPlanReport__colHeader">
+                                    {{ ::('Tooth' | i18n) }}
+                                </div>
+                            </th>
+                            <th class="areaCol">
+                                <div id="lblArea" class="txPlanReport__colHeader">
+                                    {{ ::('Surface' | i18n) }}
+                                </div>
+                            </th>
+                            <th class="statusCol">
+                                <div id="lblStatus" class="txPlanReport__colHeader">
+                                    {{ ::('Status' | i18n) }}
+                                </div>
+                            </th>
+                            <th class="providerCol">
+                                <div id="lblProvider" class="txPlanReport__colHeader">
+                                    {{ ::('Provider (Services)' | i18n) }}
+                                </div>
+                            </th>
+                            <th class="feeCol">
+                                <div id="lblFee" class="txPlanReport__colHeader">
+                                    {{ ::('Charges' | i18n) }}
+                                </div>
+                            </th>
+                            <th class="adjCol">
+                                <div id="lblAdj" class="txPlanReport__colHeader">
+                                    {{ ::('Est Adj Ins' | i18n) }}
+                                </div>
+                            </th>
+                            <th class="estInsCol">
+                                <div id="lblEstins" class="txPlanReport__colHeader">
+                                    {{ ::('Est Insurance' | i18n) }}
+                                </div>
+                            </th>
+                            <th class="patientPortionCol">
+                                <div id="lblPatientPortion" class="txPlanReport__colHeader">
+                                    {{ ::('Est Pat Balance' | i18n) }}
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="txPlanReport__body">
+                        <tr class="txPlanReport__row" ng-repeat="proposedService in activeTreatmentPlan.TreatmentPlanServices | orderBy: ['TreatmentPlanServiceHeader.TreatmentPlanGroupNumber','TreatmentPlanServiceHeader.Priority'] | filter: { TreatmentPlanServiceHeader: { TreatmentPlanGroupNumber: stage.stageno } } :true track by $index">
+                            <td class="descriptionCol" id="colDescription{{$index}}">{{proposedService.ServiceTransaction.Description}}</td>
+                            <td class="toothCol" id="colTooth{{$index}}">{{proposedService.ServiceTransaction.Tooth | convertToothRangeToQuadrantOrArchCode}}</td>
+                            <td class="areaCol" id="colArea{{$index}}">{{proposedService.ServiceTransaction.$$Area}}</td>
+                            <td class="statusCol" id="colStatus{{$index}}">{{proposedService.ServiceTransaction.$$statusName}}</td>
+                            <td class="providerCol" id="colUserCode{{$index}}">{{proposedService.ServiceTransaction.UserCode}}</td>
+                            <td class="feeCol" id="colFee{{$index}}">{{proposedService.ServiceTransaction.Fee - proposedService.ServiceTransaction.Discount + proposedService.ServiceTransaction.Tax | currency}}</td>
+                            <!-- hide ServiceTransaction.TotalAdjEstimate if completed or deleted or Rejected or Referred  serviceTransaction -->
+                            <td ng-if="proposedService.ServiceTransaction.IsDeleted !== true && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 4 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 3 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 2 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 8" class="adjCol">{{proposedService.ServiceTransaction.TotalAdjEstimate | currency}}</td>
+                            <td ng-if="proposedService.ServiceTransaction.IsDeleted === true || proposedService.ServiceTransaction.ServiceTransactionStatusId === 4 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 3 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 2 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 8" class="adjCol"></td>
+
+                            <!-- hide ServiceTransaction.TotalEstInsurance if completed or deleted or Rejected or Referred  serviceTransaction -->
+                            <td ng-if="proposedService.ServiceTransaction.IsDeleted !== true && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 4 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 3  && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 2 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 8" class="adjCol">{{proposedService.ServiceTransaction.TotalEstInsurance | currency}}</td>
+                            <td ng-if="proposedService.ServiceTransaction.IsDeleted === true || proposedService.ServiceTransaction.ServiceTransactionStatusId === 4 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 3 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 2 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 8" class="adjCol"></td>
+
+                            <!-- hide ServiceTransaction.PatientBalance if completed or deleted or Rejected or Referred serviceTransaction -->
+                            <td ng-if="proposedService.ServiceTransaction.IsDeleted !== true && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 4 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 3 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 2 && proposedService.ServiceTransaction.ServiceTransactionStatusId !== 8" class="adjCol">{{proposedService.ServiceTransaction.PatientBalance | currency}}</td>
+                            <td ng-if="proposedService.ServiceTransaction.IsDeleted === true || proposedService.ServiceTransaction.ServiceTransactionStatusId === 4 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 3 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 2 || proposedService.ServiceTransaction.ServiceTransactionStatusId === 8" class="adjCol"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="txPlanReportFooter" class="txPlanReport__footer">
+                    <div class="txPlanPart__totals">
+                        <div class="txPlanReport__totalItem">
+                            {{totalServicesPerStage(activeTreatmentPlan.TreatmentPlanServices, stage.stageno)}} {{::('Service(s)' | i18n)}} {{totalFeesPerStage(activeTreatmentPlan.TreatmentPlanServices, stage.stageno) | currency}}
+                        </div>
+                        <div class="txPlanReport__totalItem">
+                            {{::('Insurance Est:' | i18n) }} {{totalInsuranceEstimatePerStage(activeTreatmentPlan.TreatmentPlanServices, stage.stageno) | currency}}
+                        </div>
+                        <div class="txPlanReport__totalItem">
+                            {{::('Adjustment Est:' | i18n)}} {{totalAdjustedEstimatePerStage(activeTreatmentPlan.TreatmentPlanServices, stage.stageno) | currency}}
+                        </div>
+                        <div class="txPlanReport__totalItem">
+                            {{::('Est Pat Balance:' | i18n)}} {{totalPatientPortionPerStage(activeTreatmentPlan.TreatmentPlanServices, stage.stageno) | currency}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end report template-->
+    </div>
+    <button id="txPlanTileAdd" class="btn txPlan-btn btn-primary pull-right add-stages-btn" ng-click="addSection()" ng-disabled="activeTreatmentPlan.TreatmentPlanHeader.Status =='Completed' || disableEditFunctions">+ {{ 'Add Stage' | i18n}}</button>
+</div>
+
+<!--show animation while updating the insurance estimates?-->
+<span ng-if="updatingInsurance === true">
+    {{::('Updating Insurance Estimates...'|i18n)}}
+    <i id="iLoading{{$index}}" ng-if="updatingInsurance === true" class="fa fa-spinner fa-spin loading"></i>
+</span>
+<!--show animation while loading saved appointment?-->
+<span ng-if="loadingAppointment">
+    {{::('Loading Appointment...'|i18n)}}
+    <i id="iLoading{{$index}}" ng-if="loadingAppointment" class="fa fa-spinner fa-spin loading"></i>
+</span>
+
+<div class="txPlanCrud__footer" ng-if="!txPlanAreaActive">
+    <div class="notes">
+        <label class="control-label">{{::('Notes' | i18n)}}</label>
+        <textarea id="txplanNote" class="form-control txplanNote" uib-tooltip="Cannot edit notes on completed treatment plan" tooltip-enable="activeTreatmentPlan.TreatmentPlanHeader.Status == 'Completed'" maxlength="2000" placeholder="Add note text here..." rows="3" cols="50" ng-model="activeTreatmentPlan.TreatmentPlanHeader.Note" ng-blur="saveNote($event)" ng-disabled="!enableNote || activeTreatmentPlan.TreatmentPlanHeader.Status == 'Completed' || disableEditFunctions"></textarea>
+    </div>
+    <div class="txPlanCrud__totals totals">
+        <table>
+            <tr class="tx-total-row" uib-tooltip-template="'txPlanTooltipByPlanTemplate.html'" tooltip-append-to-body="true" tooltip-placement="top">
+                <td class="highlight">{{ ::('Total Charges' | i18n) }}: <i class="fa fa-info-circle no-print icon-color" style="color: #2DABCB;"></i></td>
+                <td class="text-align-right no-wrap-column highlight money-column">{{serviceAmountTotal(activeTreatmentPlan.TreatmentPlanServices) | currency}}</td>
+            </tr>
+            <tr class="tx-total-row">
+                <td>{{ ::('Estimated Insurance' | i18n) }}:</td>
+                <td class="text-align-right no-wrap-column money-column">{{ insuranceEstimateTotal | currency}}</td>
+            </tr>
+            <tr class="tx-total-row">
+                <td>{{ ::('Estimated Insurance Adjustments' | i18n) }}:</td>
+                <td class="text-align-right no-wrap-column money-column">{{ adjustedEstimateTotal | currency}}</td>
+            </tr>
+            <tr class="tx-total-row">
+                <td class="highlight">{{ ::('Estimated Patient Balance' | i18n) }}:</td>
+                <td class="text-align-right no-wrap-column highlight money-column">{{ patientPortionTotal | currency}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!--tooltip template - stage-->
+    <script type="text/ng-template" id="txPlanTooltipByPlanTemplate.html">
+        <div class="txPlanTooltip">
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Fee'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{totalFeesPerPlan| currency}}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Discount'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{totalDiscountsPerPlan| currency}}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Tax'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{totalTaxPerPlan | currency}}</div>
+            </div>
+            <div class="txPlanTooltip__row">
+                <div class="txPlanTooltip__title">{{::('Charges'|i18n)}}:</div>
+                <div class="txPlanTooltip__content">{{totalAmountPerPlan| currency}}</div>
+            </div>
+        </div>
+    </script>
+</div>
+
+<div kendo-window="docCtrls"
+     k-title="'Blank'"
+     k-visible="false"
+     k-on-open="docCtrlsOpen = true"
+     k-on-close="docCtrlsOpen = false"
+     id="docCtrlsWindow">
+</div>

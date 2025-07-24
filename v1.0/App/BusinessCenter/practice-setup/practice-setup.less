@@ -1,0 +1,205 @@
+﻿// Practice Overview Navigation
+.businessNav {
+    .containerStandard;
+    position: relative;
+    padding: 0;
+
+    &__list {
+        .unsetList;
+        display: table;
+        width: 100%;
+        text-align: right; 
+    }
+    &__list-item {
+        display: table-cell;
+        padding-right: 2px;
+        box-sizing: border-box;
+
+        text-align: center;
+        
+        &:last-child {
+            padding-right: none;
+        }
+    }
+    &__link {
+        display: inline-block;
+        width: 100%;
+        min-width: 115px;
+        padding: 10px 20px;
+        background-color: @brand-color_secondary;
+        color: @brand-color_white;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+        outline: none;
+
+        &:before {
+            display: block;
+            font-family: 'FontAwesome';
+            font-size: 2.2em;
+            content: '\f05a';
+        }
+
+        &:hover {
+            cursor: pointer;
+            color: @brand-color_white;
+            background-color: lighten(@brand-color_secondary, 5);
+        }
+
+        &.active {
+            margin-bottom: -5px;
+
+            color: @brand-color_font-regular;
+            background-color: @brand-color_white;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+
+        &.inactive {
+            color: @brand-color_darker-gray;
+            background-color: @brand-color_dark-gray;
+
+            &:hover {
+                cursor: default;
+                opacity: 1.0;
+            }
+        }
+
+        &.glance {
+            &:before {
+                content:'\f009';
+            }
+        }
+        &.goals {
+             &:before {
+                content:'\f201';
+            }
+        }
+        &.reports {
+            &:before {
+                content:'\f016';
+            }
+        }
+        &.insights {
+            &:before {
+                content:'\f0eb';
+            }
+        }
+        &.insurance {
+            &:before {
+                content:'\f1ad';
+            }
+        }
+        &.receivables {
+            &:before {
+                content:'\f090';
+                transform: rotate(90deg);
+            }
+        }
+        &.setup {
+            &:before {
+                content:'\f013';
+            }
+        }
+        &.marketplace {
+            background-color: @brand-color_darker-gray;
+
+            &:hover {
+                background-color: darken(@brand-color_darker-gray, 5);
+            }
+            &:before {
+                content:'\f07a';
+            }
+            
+        }    
+    }
+}
+
+.practiceSetup {
+    &__container {
+        .containerStandard;
+        padding:0;
+
+        h1{
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_horizontal;
+            padding-bottom: @brand-padding_horizontal;
+        }
+
+        h3{
+            font-size: @brand-font_h3;
+            font-weight: @brand-font_light;
+        }
+
+        .section-divider{
+            margin:0;
+            padding-bottom: @brand-padding_horizontal;
+        }
+    }
+
+    &__item {
+        .clearfix;
+        margin-top: 20px;
+        margin-bottom: 40px;
+    }
+    &__icon {
+        width: 34px;
+        .fa {
+            font-size: 2em;
+            color: @brand-color_darker-gray;
+        }
+    }
+    &__content {
+        .make-xs-column(12);
+        padding-left: 25px;
+    }
+    &__header {
+        margin: 2px 0 0 0;
+        /*font-size: 1.6em;*/
+    }
+    &__desc {
+        font-size: 1.1em;
+    }
+    &__list {
+        .unsetList;
+        padding-left: 42px;
+    }
+    &__list-item {
+
+       
+    }
+    &__link {
+        font-size: 1.2em;
+         /*&:before {
+            display: inline-block;
+            padding-right: 10px;
+            content: '\f10c';
+            font-family: 'FontAwesome';
+            font-size: 1.4em;
+            color: @brand-color_font-regular;
+        }
+
+        &.complete {
+            &:before {
+                content: '\f05d';
+                color: @brand-color_secondary;
+            }
+        }*/
+
+        &.inactive {
+            color: @brand-color_dark-gray;
+
+            &:hover {
+                cursor: default;
+            }
+        }
+
+        &.bold {
+            font-weight: bold;
+        }
+    }
+}
+
+

@@ -1,0 +1,11 @@
+﻿<div class="confirmModal">
+    <div class="modal-header"><h4 id="lblWarningModalHeader">{{ item.Title | i18n }}</h4></div>
+    <div class="modal-body">
+        <label id="lblNote" class="confirmModal__Message">{{ item.Note }}</label>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right">            
+            <button id="btnClose" ng-click="close();" class="btn btn-primary">{{ item.Button1Text | i18n }}</button>
+        </div>
+    </div>
+</div>

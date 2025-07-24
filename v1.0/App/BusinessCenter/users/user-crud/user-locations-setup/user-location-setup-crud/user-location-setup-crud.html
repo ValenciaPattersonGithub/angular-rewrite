@@ -1,0 +1,274 @@
+﻿<div ng-form="frmUserLocationsSetupCrud" id="userLocationsCrudSetup">
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>{{pageTitle}}                   
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12">
+                    <label>{{'Location' | i18n}} *</label>
+                </div>
+            </div>
+            <!-- location -->
+            <div class="row">
+                <div class="col-xs-12" ng-if="editMode===true">
+                    <span class="padding-10">{{userLocationSetup.$$Location.NameLine1}}</span>
+                </div>                 
+                <div class="col-xs-12" ng-if="editMode===false">
+                    <div ng-class="{error: hasErrors && !userLocationSetup.LocationId}" >
+                        <soar-select-list id="inpLocation" 
+                            placeholder="{{'Select a {0}' | i18n:['Location']}}"
+                            name="inpLocation" 
+                            class-name="fill-width" 
+                            text-field="NameLine1" 
+                            value-field="LocationId" required
+                            option-list="filteredLocations" 
+                            ng-model="userLocationSetup.LocationId">
+                        </soar-select-list>
+                                            
+                        <span id="lblLocationRequired" class="help-text" ng-show="hasErrors && !userLocationSetup.LocationId">
+                                {{ 'This field is required.' | i18n }}
+                            </span>
+                    </div>
+                </div> 
+            </div>
+            <div class="row" ng-if="user.IsActive === true">      
+                <div class="col-xs-12">
+                    <label>{{'Security Roles' | i18n}} *</label>
+                </div>
+            </div> 
+           
+            <div class="row" ng-if="user.$$isPracticeAdmin === false && user.IsActive === true">                
+                <div class="col-xs-12">
+                    <ui-select id="selectLocationRoles"                               
+                               on-select="addLocationRole($item)"
+                               ng-style="{'padding':'5px 10px 5px 10px'}"
+                               multiple
+                               ng-model="userLocationRoles.item"
+                               theme="bootstrap"
+                               close-on-select="false"
+                               input-id="inpLocationRole{{location.Location.LocationId}}">
+                        <ui-select-match placeholder="Select roles">{{$item}}</ui-select-match>
+                        <ui-select-choices 
+                                           repeat="role in (availableRoles | filter:$select.search | orderBy:'RoleName'  | limitTo: 500) track by role.RoleId">
+                            {{role.RoleName}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="col-xs-12 row" ng-class="{error: hasRoleErrors}">
+                <div ng-if="user.$$isPracticeAdmin === true && user.IsActive === true">
+                    <div ng-repeat="practiceRole in user.$$UserPracticeRoles | filter:rxRoleFilter ">
+                        <tag title="{{ practiceRole.RoleName }}" 
+                            is-primary="true" 
+                            uib-tooltip="{{ practiceRole.RoleName  }}"
+                            hide-remove = "true"
+                            tooltip-append-to-body="true" 
+                            tooltip-placement="top-left">
+                        </tag>
+                    </div>
+                </div>
+                <!-- or location Roles -->
+                <div ng-if="user.$$isPracticeAdmin === false && user.IsActive === true">                   
+                        <div ng-repeat="locationRole in userLocationRoles.item track by locationRole.RoleId">
+                            <tag title="{{ locationRole.RoleName }}"
+                                 is-primary="true"
+                                 uib-tooltip="{{ locationRole.RoleName }}"
+                                 remove-function="removeRole(locationRole)"
+                                 tooltip-append-to-body="true"
+                                 tooltip-placement="top-left">
+                            </tag>
+                        </div>
+                    </div>
+                <span id="lblRolesRequired" class="help-text" ng-show="hasRoleErrors">
+                    {{ 'Your team member must have at least one role assigned per location.' | i18n }}
+                </span>
+            </div>
+                       
+            <div class="row">
+                <div class="col-xs-12">
+                    <label>{{'Provider Type' | i18n}} *</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div ng-class="{error: hasErrors && !userLocationSetup.ProviderTypeId}" 
+                        ng-mouseover="setProviderLoaded()">
+                        <soar-select-list id="inpProviderType" 
+                            placeholder="{{'Select a {0}' | i18n:['Provider Type']}}"
+                            name="inpProviderType" 
+                            class-name="fill-width" 
+                            text-field="Name" 
+                            value-field="Id"
+                            required
+                            option-list="providerTypes"                             
+                            ng-model="userLocationSetup.ProviderTypeId">
+                        </soar-select-list>
+            
+                        <span id="lblProviderTypeInvalid" class="help-text"
+                            ng-show="hasErrors && !userLocationSetup.ProviderTypeId">
+                            {{ 'This field is required.' | i18n }}
+                        </span>
+                    </div> 
+                </div>           
+            
+            </div>
+            <div class="row" ng-if="isProviderActive">                          
+                <checkbox class="col-xs-6" ng-if="userLocationSetup.ProviderTypeId !== 4"
+                    checkbox-disabled="false"
+                    checkbox-label="'Active'" 
+                    checkbox-id="inpUserLocationSetupIsActive" 
+                    checkbox-value="userLocationSetup.IsActive">
+                </checkbox>                
+            </div>
+            <div class="row" ng-if="isProviderActive">
+                <div class="col-xs-12">
+                    <label>{{'Provider Color' | i18n}} *</label>
+                </div>
+            </div>
+            <div class="row" ng-if="isProviderActive">
+                <div class="col-xs-6">
+                    <div id="inpProviderColorSimple" kendo-color-palette ng-model="userLocationSetup.Color"
+                        class="userLocationsCrudSetup__providerColorSimple"></div>
+                </div>
+                <div class="col-xs-6">
+                    <span id="lblProviderColorPreview" class="userLocationsCrudSetup__appointmentprovider"
+                        ng-style="{'background-color': userLocationSetup.Color }">
+                        <span>
+                            {{ 'Provider {0}' | i18n:['Time'] }}
+                        </span>
+                    </span>
+                </div>
+            </div>            
+            <div class="row" ng-if="isProviderActive">
+                <div class="col-xs-12">
+                    <a id="btnEditProviderColor" class="soar-link"  ng-click="showMore()">{{ showMoreColors ? 'Less': 'More' | i18n }}</a>
+                </div>
+            </div>
+            <div class="row" ng-show="showMoreColors===true">
+                <div class="col-xs-12">
+                    <div id="inpProviderColorAdvanced" kendo-flat-color-picker ng-model="userLocationSetup.Color" k-buttons="false" k-preview="false" k-input="false"></div>
+                </div>
+            </div>
+            <div class="row" ng-if="isProviderActive">
+                <div class="col-xs-12">
+                    <label>{{'Employment Status' | i18n}} *</label>
+                </div>
+            </div>
+            <div class="row" ng-if="isProviderActive">
+                <div class="col-xs-12">
+                    <div ng-class="{error: hasErrors && !userLocationSetup.ProviderQualifierType}" >
+                        <soar-select-list id="selEmployeeStatus"
+                            name="selEmployeeStatus"
+                            class-name="fill-width" 
+                            option-list="employeeStatusOptions" 
+                            placeholder="Select Status"
+                            text-field="Name" 
+                            value-field="Value"
+                            ng-required="isProviderActive"                                         
+                            ng-model="userLocationSetup.ProviderQualifierType">
+                        </soar-select-list>
+                        <span id="lblEmployeeStatusRequired" class="help-text" ng-show="hasErrors && !userLocationSetup.ProviderQualifierType">
+                            {{ 'This field is required.' | i18n }}
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="isProviderActive">
+                <div class="col-xs-12">
+                    <label id="lblProviderOnClaims">{{'Provider on Claims' | i18n }} *</label>
+                </div>                
+            </div>
+            <div class="row" ng-if="isProviderActive">
+                <div class="col-xs-12">
+                    <span class="padding-10"><input id="rbtProviderOnClaimsSelf" type="radio" name="rbtProviderOnClaimsSelf" 
+                        ng-change="providerChange()"
+                        ng-model="userLocationSetup.ProviderOnClaimsRelationship" ng-value="1">
+                    {{ 'Self' | i18n }}</span>
+                    
+                    <span class="padding-10"></span><input id="rbtProviderOnClaimsOther" type="radio" name="rbtProviderOnClaimsOther" 
+                        ng-change="providerChange()"
+                        ng-model="userLocationSetup.ProviderOnClaimsRelationship" ng-value="2">
+                    {{ 'Other' | i18n }}</span>                
+                </div>
+            </div>
+            <div class="row" ng-show="userLocationSetup.ProviderOnClaimsRelationship==2">
+                <!-- Provider on Claims -->
+                <div class="col-xs-12 ">
+                   <div ng-class="{error:providerOnClaimsError}">
+                        <typeahead class="typeahead soar-typeahead typeaheadResults" id="userTypeAhead"
+                            cancel="cancelSearch()" 
+                            clear-content="clearProviderClaimUser()"
+                            disable-input="disableProviderOnClaims" 
+                            show-clear-button="!disableProviderClaim"
+                            scroll-view="true" 
+                            appearance="form-input" 
+                            select="selectProviderResult(item)" 
+                            items="filteredActiveProviders"
+                            term="providerOnClaimsSearchTerm" 
+                            search="providerOnClaimsSearch(term)" 
+                            loading="false"
+                            placeholder="{{ ' Search by First or Last Name'|i18n }}" 
+                            click-function="displayResults()"
+                            tab-index="0" 
+                            ng-required="userLocationSetup.ProviderOnClaimsRelationship==2">
+                            <ul id="lstProviders" soar-infinite-scroll="search(providerOnClaimsSearchTerm, true)">
+                                <li ng-repeat="provider in filteredActiveProviders | orderBy:'provider.LastName'"
+                                    typeahead-item="provider" ng-animate="'animate'" ng-hide="false">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-md-4" ng-show="true">
+                                            <span id="lblFirstName{{ $index }}" ng-bind-html="provider.FirstName | boldTextSearchCriteria:providerOnClaimsSearchTerm "></span> 
+                                            <span id="lblMiddleName{{ $index }}" ng-bind-html="provider.MiddleName | boldTextSearchCriteria:providerOnClaimsSearchTerm"></span>
+                                            <span id="lblLastName{{ $index }}" ng-bind-html="provider.LastName | boldTextSearchCriteria:providerOnClaimsSearchTerm"></span> 
+                                            <span id="lblSuffix{{ $index }}" ng-bind-html="provider.Suffix | boldTextSearchCriteria:providerOnClaimsSearchTerm"></span>                                           
+                                        </div>                                        
+                                    </div>
+                                </li>
+                                <li ng-show="noSearchResults && searchResults.length==0">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <span class="text-muted" id="lblResultMessage">
+                                                {{ 'No Provider Available.'|i18n }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </typeahead>
+                        <span id="lblProviderOnClaimsRequired" class="help-text"
+                            ng-show="providerOnClaimsError">
+                            {{ 'This field is required.' | i18n }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="userLocationsCrudSetup__footer">
+                    <div class="userLocationsCrudSetup__actions">
+                        <button id="btnSaveUserLocationSetup" 
+                            ng-show="true" 
+                            class="btn btn-primary pull-right"
+                            ng-click="saveUserLocationSetup(userLocationSetup)" 
+                            ng-disabled="dataHasChanged===false">
+                            {{ 'Done' |i18n }}
+                        </button>
+                        <button id="btnCancelUserLocationSetup" 
+                            ng-hide="false" 
+                            class="btn btn-default pull-right"
+                            ng-click="cancelChanges()" >
+                            {{ ::'Cancel' |i18n }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,159 @@
+﻿<div  class="form-body" ng-form="patientAlertsFrm">
+    <div class="row">
+        <div ng-show="retrievingAlertList" class="media">
+            <i class="pull-left fa fa-spinner fa-spin duplicate-results-icon"></i>
+            <div class="media-body">
+                <span> {{ 'Loading patient alerts...' | i18n | uppercase }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-11" collapse="patientAlerts.length <= 0">
+            <div class="alerts-container">
+                <div class="row">
+                    <carousel interval="myInterval" disable-animation="true">
+                        <slide ng-repeat="collection in alertCarousel" active="slide.active">
+                            <div class="carousel-container">
+                                <div class="alerts-item" ng-repeat="alert in collection.alerts">
+                                    <div class="alerts-item-top">
+                                        <i id="alertCarouselSymbol{{$index}}" class="alerts-item-symbol fa {{ getClass(alert.SymbolId) }} pull-left"></i>
+                                        <i id="removeAlert{{index}}" class="alerts-item-remove fa fa-times icon-click pull-right" ng-click="delete(alert)"></i>
+                                    </div>
+                                    <div class="alerts-item-mid">
+                                        <p id="alertType{{index}}">{{ alert.MasterAlertId ? 'Master Alert' : 'Custom Alert' | i18n | uppercase }}</p>
+                                        <p id="alertExpDate{{index}}" ng-show="alert.ExpirationDate">{{ 'Expires' | i18n | uppercase }}: {{ alert.ExpirationDate | toShortDisplayDate }}</p>
+                                    </div>
+                                    <div class="alerts-item-bottom">
+                                        <div class="alerts-item-desc">
+                                            <p id="alert{{index}}">{{ alert.Description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </slide>
+                    </carousel>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-body-old">
+        <div class="row">
+            <!-- Master alert error -->
+            <div ng-class="{error:hasMasterAlertError}">
+                <label id="lblMasterAlertError" class="help-text" ng-show="hasMasterAlertError">
+                    {{ 'Master alert is already attached to the patient.' | i18n }}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Maximum number of alerts message -->
+            <div ng-class="{error:maxNumberOfAlertsReached}">
+                <label id="lblCustomAlertError" class="help-text" ng-show="maxNumberOfAlertsReached">
+                    {{ 'Maximum number of alerts has been reached.' | i18n }}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label class="alerts-header-subject">
+                    {{ 'Select to attach a master alert or create a custom alert' | i18n | uppercase }}
+                    <i class="fa fa-info-circle pull-right"></i>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+
+            <!-- Select Master Alert -->
+            <div class="col-xs-12 col-md-4">
+                <div class="alerts-master-container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label> {{ 'Select {0}' | i18n:['a Master Alert'] | uppercase }} </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"> &nbsp; </div>
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <soar-select-list id="selectAlert"
+                                              name="selectAlert"
+                                              placeholder="{{ 'Select {0}' | i18n:['Alert'] }}"
+                                              text-field="Description"
+                                              value-field="MasterAlertId"
+                                              option-list="masterAlerts"
+                                              ng-model="selectedId"></soar-select-list>
+                            <!--<select kendo-combo-box
+                                    k-placeholder="'- {{ 'Select {0}' | i18n:['Alert'] }} -'"
+                                    k-data-text-field="'Description'"
+                                    k-data-value-field="'MasterAlertId'"
+                                    k-template="dropdownTemplate"
+                                    k-data-source="masterAlerts"
+                                    k-suggest="true"
+                                    ng-model="selectedId"></select>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Select Custom Alert -->
+            <div class="col-xs-12 col-md-4">
+                <div class="alerts-master-container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label> {{ 'Create {0}' | i18n:['a custom alert'] | uppercase }} </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"> &nbsp; </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {{ 'Description' | i18n | uppercase }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div ng-class="{error: (valid == false) && !alert.Description}">
+                                <textarea id="customAlertDescription" ng-model="alert.Description" class="alerts-textarea" maxlength="264"></textarea>
+                                <!--<label id="lblCustomeAlertDescriptionRequired" class="help-text" ng-show="!formIsValid">
+                                    {{ 'This field is required.' | i18n }}
+                                </label>-->
+                                <label id="lblCustomeAlertDescriptionRequired" class="help-text " ng-show="!formIsValid &&
+                                    !patientAlertsFrm.customAlertDescription.$valid && patientAlertsFrm.$error.required">
+                                    {{ 'This field is required.' | i18n }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p>
+                                {{ 'Start Date' | i18n | uppercase }}: {{ 'Today' | i18n | uppercase }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-6 col-md-3 alerts-date-label">
+                                    <span>{{ 'End Date' | i18n | uppercase }}?</span>
+                                </div>
+                                <div class="col-xs-12 col-md-9">
+                                    <date-selector id="inpExpDate" input-id="inpExpDate" date-var="alert.ExpirationDate" valid="validExpDate" format="MM/dd/yyyy" min-date="minDate" max-date="maxDate" mode="day" placeholder="00/00/0000"></date-selector>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <button id="applyCustomAlert" check-auth-z="soar-per-peralt-add" class="alerts-btn alerts-btn-save" ng-disabled="alertSaving == true || formIsValid == false" ng-click="save(alert)">{{ 'Apply Alert' | i18n | uppercase }}</button>
+                        </div>
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-5">
+                            <button id="cancelCustomAlert" class="alerts-btn alerts-btn-cancel" ng-disabled="alertSaving == true" ng-click="cancel()">{{ 'Discard' | i18n }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

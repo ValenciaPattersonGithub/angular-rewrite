@@ -1,0 +1,96 @@
+<div [ngClass]="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="masterAlerts">
+        <form name="frmMasterAlertsCrud" role="form" novalidate>
+            <div class="rowFull white">
+                <div class="masterAlerts__header">
+                    <!--Breadcrumbs-->
+                    <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                    <!--header-->
+                    <div class="masterAlerts__title">
+                        <h1>{{ 'Flags' | translate }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="masterAlerts__body">
+                <div class="masterAlerts__list">
+                    <kendo-grid  [kendoGridBinding]="masterAlertTypes" [filterable]="true" [height]="455"
+                        [sortable]="true" [pageable]="false" [sort]="state?.sort"
+                        (add)="createMasterAlert($event)" (save)="saveMasterAlert($event)"
+                        (edit)="editMasterAlert($event)" (cancel)="cancelMasterAlert($event)"
+                        (remove)="removeMasterAlert($event)" [loading]="loading"
+                        [navigable]="true">
+                        <div class="locIdentifier__actions">
+                            <ng-template kendoGridToolbarTemplate>
+                                <button kendoGridAddCommand checkRoleAccess="{{!hasCreateAccess}}" id="createButton"
+                                    class="btn btn-primary" [iconClass]="'k-icon k-i-plus'">
+                                    {{'Add Flag' | translate }}</button>
+                            </ng-template>
+                        </div>
+                        <kendo-grid-column field="Description" title="Flag" width="40%">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{ dataItem.Description }}
+                            </ng-template>
+
+                            <ng-template kendoGridEditTemplate let-column="column" let-formGroup="formGroup"
+                                let-isNew="isNew">
+                                <input #input class="k-textbox" [formControl]="formGroup?.get(column.field)"
+                                    maxlength="264">
+                                <div class="k-tooltip-validation"
+                                    *ngIf="formGroup?.get(column.field).invalid && (isNew && formGroup?.get(column.field).touched || formGroup?.get(column.field).dirty)">
+                                    <span class="k-icon k-i-warning"></span>
+                                    {{ 'Flag is required.' | translate }}
+                                </div>
+                            </ng-template>
+                            
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="SymbolId" title="" [filterable]="false" width="40%">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <i class="{{ getClass(dataItem.SymbolId) }} fa-2x"></i>
+                            </ng-template>
+
+                            <ng-template kendoGridEditTemplate let-dataItem let-column="column"
+                                let-formGroup="formGroup">
+                                <kendo-dropdownlist [data]="symbolList?.Value" textField="Name" valueField="AlertIconId"
+                                    [valuePrimitive]="true" [defaultItem]="defaultItem"
+                                    [formControl]="formGroup.get('SymbolId')">
+                                    <ng-template kendoDropDownListItemTemplate let-dataItem>
+                                        <div *ngIf="dataItem?.Name!='(none)'">
+                                            <span class="fa-2x #: {{dataItem.Name}} #"></span>
+                                        </div>
+                                        <div *ngIf="dataItem?.Name=='(none)'">
+                                            <span class="">(none)</span>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template kendoDropDownListValueTemplate let-dataItem>
+                                        <div *ngIf="dataItem?.Name!='(none)'">
+                                            <span class="fa-2x #: {{dataItem.Name}} #"></span>
+                                        </div>
+                                        <div *ngIf="dataItem?.Name=='(none)'">
+                                            <span>(none)</span>
+                                        </div>
+                                    </ng-template>
+                                </kendo-dropdownlist>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-command-column title="" width="10%">
+                            <ng-template kendoGridCellTemplate let-isNew="isNew">
+                                <button *ngIf="hasEditAccess" kendoGridEditCommand [iconClass]="'fas fa-pencil-alt'"></button>
+                                <button checkRoleAccess="{{ !hasDeleteAccess }}" kendoGridRemoveCommand
+                                    [iconClass]="'fas fa-trash-alt'"></button>
+                                <a kendoGridCancelCommand [iconClass]="'k-icon k-i-cancel'"></a>
+                                <a kendoGridSaveCommand [disabled]="formGroup?.invalid"
+                                    [iconClass]="'k-icon k-i-check'"></a>
+                            </ng-template>
+                        </kendo-grid-command-column>
+                        <kendo-grid-messages [noRecords]="loading==true?'':noRecordsMessage"></kendo-grid-messages>
+                    </kendo-grid>
+                   
+                    <no-results *ngIf="loading" [loading]="loading"></no-results>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

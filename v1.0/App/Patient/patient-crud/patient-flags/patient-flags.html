@@ -1,0 +1,73 @@
+﻿<div id="patientFlagsSection" class="form-body" ng-form="frmPatientFlags" ng-show="!alertsLoading">
+
+                <div class="form-row">
+                    <div class="form-group form-col-4" ng-class="{'has-error':hasMasterAlertError}">
+                        <label class="control-label"> {{ 'Master Flag' | i18n }} </label>
+                        <soar-select-list name="inpMasterAlert"
+                                          id="inpMasterAlert"
+                                          placeholder="{{ 'Select {0}' | i18n:['Flag'] }}"
+                                          text-field="Description"
+                                          value-field="MasterAlertId"
+                                          option-list="masterAlerts"
+                                          ng-model="selectedId"
+                                          sb-tab="1"></soar-select-list>
+                        <span id="lblMasterAlertError" class="help-block" ng-show="hasMasterAlertError">
+                            {{ 'Master flag is already attached to the patient.' | i18n }}
+                        </span>
+                        </div>
+                    <div class="form-group form-col-8">
+                    </div>
+                        </div>
+                    
+                <!-- CUSTOM FLAG -->
+                <div class="form-row">
+                    <div class="form-group form-col-4" ng-class="{error: !customFormIsValid && !customAlert.Description}">
+                        <label class="control-label"> {{ 'Custom Flag' | i18n }} </label>
+                        <input type="text" id="customAlertDescription" ng-model="customAlert.Description" class="form-control" maxlength="264"></input>
+                        <span id="lblCustomeAlertDescriptionRequired" class="error help-block" ng-show="!customFormIsValid && !customAlert.Description">
+                                        {{ 'This field is required.' | i18n }}
+                        </span>
+                                </div>
+                    <div class="form-group form-col-4">
+                        <label class="control-label">{{ 'End Date' | i18n }}</label>
+                        <date-selector input-id="inpExpDate" 
+                                        date-var="customAlert.ExpirationDate" 
+                                        valid="validExpDate" 
+                                        format="MM/dd/yyyy" 
+                                        min-date="minDate" 
+                                        max-date="maxDate" 
+                                        mode="day" 
+                                        placeholder="00/00/0000"></date-selector>
+                            </div>
+                            
+        <div class="form-group form-col-4">
+            <label class="control-label">&nbsp;</label>
+            <button id="applyCustomAlert"check-auth-z="soar-biz-bmalrt-add" class="btn btn-link" icon="fa-plus" ng-disabled="alertSaving == true" ng-click="addCustomAlert(customAlert)">{{ 'Add Custom Flag' | i18n }}</button>
+                        </div>
+                    </div>
+                
+                    
+                    <!--display alerts-->
+                <div class="form-row" ng-show="!editing">
+                    <div class="form-group form-col-12">
+                        <tag ng-repeat="flag in person.Flags" title="{{ flag.Description }}" remove-function="removeAlert($index)"></tag>
+                        </div>
+                    </div>
+                    
+                <div class="form-row" ng-show="editing">
+                        <!-- account's current alerts -->
+                    <div class="form-group form-col-6">
+                            <div class="alerts-item-small" ng-repeat="flag in person.Flags">
+                            <div class="fa {{ getClass(flag.SymbolId) }}">&nbsp;</div>
+                                <strong>{{ flag.Description }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+    </div>
+<div ng-show="alertsLoading">
+        <no-results loading="alertsLoading==true"></no-results>
+    </div>
+
+    
+    

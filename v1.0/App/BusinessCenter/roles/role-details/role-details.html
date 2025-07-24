@@ -1,0 +1,10 @@
+﻿<div class="roleDtl">
+    <div ng-show="moduleFunctionActionList.length == undefined || moduleFunctionActionList.length == 0">
+        <no-results loading-message="'Loading'" filtering="false"
+                    loading="isLoading==true"
+                    filtering-message=''></no-results>
+    </div>
+
+    <kendo-grid id="rolesGrid" options="rolesGridOptions" class="roleDtl__grid" k-rebind="rolesGridOptions" ng-hide="isLoading">
+    </kendo-grid>
+</div>

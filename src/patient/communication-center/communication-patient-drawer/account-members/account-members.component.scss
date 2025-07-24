@@ -1,0 +1,46 @@
+@import "variables";
+@import '/src/patient/communication-center/communication-center-variables';
+
+.accountMembersHeader {
+    display: grid;
+    grid-template-columns: 100%;
+    margin: 15px 15px 0px 15px;
+    border-bottom: 1px solid $communication-center-preview-border-color;
+
+    &-title {
+        grid-column: 1/2;
+        grid-row: 1;
+        margin: 0px 0px 10px 0px;
+    }
+    &-main-title {
+        font-family: $communication-card-font-family;
+        font-size: 16px;
+        color: $communication-center-heading-color;
+        text-decoration: none solid rgb(51, 51, 51);
+    }
+}
+
+.accountMembersdetail {
+    display: grid;
+    grid-template-columns: 100%;
+    font-family: $global-font-family;
+    font-size: 12px;
+    color: $communication-card-label-color;
+    margin-bottom: 15px;
+    &-members {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    &-submembers {
+        margin-bottom: 20px;
+        color: $communication-card-primary-color;
+    }
+    &-submembers:last-child {
+        margin-bottom: 0px;
+    }
+    &-disabled-link {
+        color: $communication-center-no-record-color;
+        position: relative;
+        cursor: not-allowed;
+    }
+}

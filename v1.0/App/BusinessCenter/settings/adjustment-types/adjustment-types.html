@@ -1,0 +1,52 @@
+﻿<!-- <business-nav></business-nav> -->
+<div class="adjTypes">
+    <div ng-controller="AdjustmentTypesController" ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+        <form name="frmAdjustmentTypes" role="form" novalidate>
+            <div class="rowFull white">
+                <div class="adjTypes__header">
+                    <!--Breadcrumbs-->
+                    <ul class="adjTypes__breadcrumb">
+                        <li ng-repeat="breadcrumb in dataForCrudOperation.BreadCrumbs">
+                            <ng-switch on="$last">
+                                <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+                                <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePageState(breadcrumb)"><a>{{breadcrumb.name | i18n }}</a></span>
+                            </ng-switch>
+                        </li>
+                    </ul>
+                    <!--header-->
+                    <div class="adjTypes__title">
+                        <h1>{{ 'Adjustment Types' | i18n }}</h1>
+                    </div>
+                    <!--header-->
+                    <div class="adjTypes__actions">
+                        <button id="btnCreate" check-auth-z="soar-biz-badjtp-add" ng-click="createType();" class="btn btn-primary" icon="fa-plus">
+                            {{ 'Add {0}' | i18n:['Adjustment Type'] }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="adjTypes__body">
+                <!--show the master list if not in edit mode-->
+                <div ng-class="{'slide-animation': forward, 'slide-backward-animation list-option-container': !forward}">
+
+                    <!--the list-->
+                    <div class="adjTypes__list">
+                        <!--Kendo Grid Adjustment Types List-->
+                        <kendo-grid options="adjustmentTypesList" k-data-source="adjustmentTypesKendo">
+                        </kendo-grid> 
+                        <!--loading spinner-->
+                        <no-results id="lstAdjustmentTypesLoading" loading="loadingAdjustmentTypes==true" loading-messag="' '" ng-hide="loadingAdjustmentTypes==false"></no-results>
+                    </div>
+
+                </div>
+
+                <!--show the crud template if in edit mode-->
+                <div ng-show="editMode == true" ng-class="{'slide-animation list-option-container': forward, 'slide-backward-animation list-option-container': !forward}">
+                    <adjustment-type-crud type-id="adjustmentTypeId" types="adjustmentTypes" edit-mode="editMode" associated-adjustment="associatedAdjustment"></adjustment-type-crud>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

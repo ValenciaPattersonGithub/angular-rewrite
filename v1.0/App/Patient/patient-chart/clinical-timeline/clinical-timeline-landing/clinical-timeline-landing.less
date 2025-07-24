@@ -1,0 +1,332 @@
+﻿.drawer-container .clnclTmLn {
+    display: flex;
+    flex-flow: column nowrap;
+    min-width:480px;
+}
+
+#timeline-filters {
+    #timeline-multi-select {
+        width: 300px;
+        height: 35px;
+        padding: 5px 5px 5px 15px;
+
+        #btnTimelineFilterToggle {
+            width: 200px;
+            height: 25px;
+            padding: 0px 0px 0px 5px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            background-color: #ffffff;
+            background-size: cover;
+            font-family: @global-font-family;
+            font-size: 12px;
+            color: #333333;
+            text-decoration: none solid rgb(51, 51, 51);
+            text-align: start;
+            display: flex;
+            justify-content: space-between;
+            outline: none;
+
+            .multi-select-icon {
+                padding: 5px;
+            }
+        }
+
+        .dropdown-menu {
+            min-width: 200px;
+            height: 200px;
+            overflow-y: scroll;
+            margin: 0px;
+            padding: 0px;
+            padding-inline-start: 0px;
+        }
+
+        #multi-select-select-all {
+            width: 199px;
+            height: 33px;
+            border-top-width: 0px;
+            border-right-width: 1px;
+            border-left-width: 0px;
+            border-bottom-width: 0px;
+            border-style: solid;
+            border-color: #dddddd;
+            background-color: #ffffff;
+            background-size: cover;
+            font-family: @global-font-family;
+            font-size: 12px;
+            color: #555555;
+            text-decoration: none solid rgb(85, 85, 85);
+
+            #btnTimelineFilterToggleAll {
+                padding: 8px 0px 7px 9px;
+            }
+        }
+
+        .filter-options {
+            width: 199px;
+            height: 33px;
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-left-width: 0px;
+            border-bottom-width: 0px;
+            border-style: solid;
+            border-color: #dddddd;
+            background-color: #ffffff;
+            background-size: cover;
+            font-family: @global-font-family;
+            font-size: 12px;
+            color: #555555;
+            text-decoration: none solid rgb(85, 85, 85);
+
+            a {
+                padding: 8px 0px 7px 9px
+            }
+        }
+    }
+}
+
+
+
+
+.clnclTmLn {
+    height: 100%;
+
+    &__fltr {
+        position: relative;
+        padding: 12px 0 0;
+        border-bottom: 1px solid @brand-color_dark-gray;
+        height: auto;
+        min-height: 160px;
+        overflow-y: auto;
+    }
+
+    &__lst {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        background-color: @brand-color_gray;
+        flex-grow:1;
+
+        .noResults {
+            height: 72%;
+            padding-top: 200px;
+            text-align: center;
+            background-color: @brand-color_gray;
+            opacity: 0.7;
+            position: absolute;
+            z-index: 100;
+            width: 500px;
+
+            i.loading {
+                font-size: 50px;
+            }
+        }
+    }
+
+    &__lstItm {
+        padding: 0;
+        margin: 0;
+    }
+
+    &__msgBox {
+        width: 100%;
+    }
+
+    &__msg {
+        .alert;
+        .text-align-center;
+    }
+
+    &__lstItmYr {
+        padding: 10px 0 5px 15px;
+    }
+
+    &__fileUpload {
+        .btn;
+        .btn-link;
+        float: right;
+        padding: 4px 12px;
+        color: @brand-color_link-light;
+
+        &:hover {
+            color: @brand-color_link-light-hover;
+        }
+
+        cursor: pointer;
+    }
+
+    &__nolstItm {
+        width: 83%;
+        float: left;
+        padding: 4px;
+        margin-left: 10%;
+        border: 1px solid @brand-color_dark-gray;
+        min-height: 65px;
+    }
+
+    &__NofilesLbl {
+        margin-left: 15%;
+    }
+
+    &__Upload {
+        .btn;
+        .btn-link;
+        margin-left: 25%;
+    }
+}
+
+.clinTimeline {
+    .clearfix;
+    width: 100%;
+    max-width: 463px;
+    vertical-align: middle;    
+    background-color: @brand-color_white;
+    text-align: center;
+
+    &__groupTitle {
+        color: #333333;
+        font-family: @brand-font;
+        font-weight: bold;
+        background-color: #fafafa;
+        padding: 5px;
+        margin-bottom: 15px;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2)
+    }
+}
+
+.timelineTile {
+    display: table;
+    width: 100%;
+    padding: 12px;
+    margin: 0px 15px 10px 15px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: @brand-color_gray;
+    }
+
+    &.active {
+        background-color: @brand-color_gray;
+    }
+
+    &.timelineTileBorder {        
+        border: 1px solid #DADCDC;
+        box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    &.clinicalNoteItem{
+        margin: 0px;
+    }
+
+
+    &__row {
+        display: table-row;
+    }
+
+    &__iconContainer {
+        display: table-cell;
+        height: 100%;
+        vertical-align: middle;
+        padding: 4px 16px 4px 4px;
+        width: 48px;
+        height: 36px;
+    }
+
+    &__icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    &__content {
+        .clearfix;
+        width: 100%;
+        display: table-cell;
+        text-align: left;
+        float: left;
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    &__leftContent {
+        width: 70%;
+        float: left;
+    }
+
+    &__rightContent {
+        width: 30%;
+        float: right;
+    }
+}
+
+.tmLnFltr {
+
+    &__btnRow {
+        display: flex;
+        margin-bottom: @brand-margin_sm;
+    }
+
+    &__btnContainer {
+        flex: 1;
+        text-align: center;
+
+        &.showDeleted {
+            background-color: @white;
+            border: 1px solid #DADCDC;
+        }
+    }
+
+    &__btn {
+        .btn;
+        .btn-default;
+        border-color: #2DABCB;
+        border-radius: 5px;
+        border-width: 3px;
+        height: 48px;
+        margin: auto;
+        padding: 2px;
+        width: 48px;
+
+        &.active {
+            .btn;
+            .btn-default;
+            border-color: #2DABCB;
+            border-radius: 5px;
+            border-width: 3px;
+            height: 48px;
+            margin: auto;
+            padding: 2px;
+            width: 48px;
+            .btn-primary;
+        }
+    }
+
+    &__btnIcon {
+        height: 34px;
+    }
+
+    &__btnTitle {
+        font-family: @brand-font;
+        font-size: 12px;
+    }
+
+    &__toggleLnk {
+        margin: @brand-margin_sm;
+        float: right !important;
+    }
+}
+
+.open .clnclTmLn__fltr {
+    position: relative;
+    padding: 12px 8px 4px 8px;
+    border-bottom: 1px solid @brand-color_dark-gray;
+    height: auto;
+    min-height: 140px;
+    overflow-y: auto;
+}
+
+.open .tmLnFltr__btnRow {
+    margin-bottom: 4px;
+}
+
+.open .tmLnFltr__toggleLnk {
+    margin: 5px;
+}

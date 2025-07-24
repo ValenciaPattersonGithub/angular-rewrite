@@ -1,0 +1,45 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="claim grid header">
+        <div class="col-sm-2-migration">{{ 'Referral Type' | translate }}</div>
+        <div class="col-sm-3-migration">{{ 'Referral Source' | translate }}</div>
+        <div class="col-sm-3-migration">{{ 'Referred Patient Name' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Referred Patient Code' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Referred Patient Location' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="26" tabindex="0"
+            id="referredPatients">
+            <div *cdkVirtualFor="let type of reportData; index as i" class="{{type.Class}}">
+                <div class="claim grid item" *ngIf="type.IsReferralTypeHeader">
+                    <div>{{ type.ReferralType }}</div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="claim grid item" *ngIf="type.IsReferralSourceHeader">
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-3-migration">{{ type.ReferralSource }}</div>
+                    <div class="col-sm-3-migration">{{type.ReferredPatientName}}</div>
+                    <div class="col-sm-2-migration">{{type.ReferredPatientCode}}</div>
+                    <div class="col-sm-2-migration">{{type.ReferredPatientLocation}}</div>
+                </div>
+                <div class="claim grid item" *ngIf="!type.IsReferralSourceHeader">
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration">{{ type.ReferredPatientName }}</div>
+                    <div class="col-sm-2-migration">{{ type.ReferredPatientCode }}</div>
+                    <div class="col-sm-2-migration">{{ type.ReferredPatientLocation }}</div>
+                </div>
+                <div class="claim grid item" *ngIf="type.IsFooter">
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration">{{'Total referrals' | translate}}:
+                        {{type.TotalReferral}}</div>
+                    <div class="col-sm-2-migration"></div>
+                    <div class="col-sm-2-migration"></div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

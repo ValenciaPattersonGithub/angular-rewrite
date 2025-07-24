@@ -1,0 +1,37 @@
+﻿<div ng-class="{error: !serviceCode.Valid && serviceCode.Data.SwiftPickServiceCodes.length<=0}">
+    <typeahead class="typeahead soar-typeahead typeaheadResults" id="serviceCodeTypeAhead" cancel="cancelSearch()" b-focus="bFocus" appearance="form-input" search="search(term)" select="selectResult(item)" items="searchResults" term="searchTerm" loading="searchIsQueryingServer" placeholder="{{ 'Search by service code, CDT Code, description, fee...'|i18n }}" click-function="displayFilterServiceCodes()" select-auto-focus="selectAutoFocus" tab-index="0">
+        <ul id="lstServiceCodes" soar-infinite-scroll="search(searchString, true)" class="serviceCodesSearch">
+            <li ng-show="showFilterServiceCodes==true && noSearchResults" class="soar-typeahead">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <no-results loading-message="'No filtered search results.'" loading="searchIsQueryingServer"></no-results>
+                    </div>
+                </div>
+            </li>
+            <li ng-repeat="serviceCode in searchResults" typeahead-item="serviceCode" ng-animate="'animate'" ng-hide="false" class="serviceCodesSearch__item">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <span id="lblServiceCode{{ $index }}">{{ serviceCode.Code }}</span>
+                    </div>
+                    <div class="col-xs-6">
+                        <span id="lblDescription{{ $index }}">
+                            {{ serviceCode.Description | truncate:25 }}
+                        </span>
+                    </div>
+                    <div class="col-xs-3">
+                        <span id="lblFeen{{ $index }}">
+                            {{ serviceCode.$$locationFee | currency }}
+                        </span>
+                    </div>
+                </div>
+            </li>
+            <li ng-show="noSearchResults">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <no-results loading-message="'No service codes match the search criteria.'" loading="searchIsQueryingServer"></no-results>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </typeahead>
+</div>

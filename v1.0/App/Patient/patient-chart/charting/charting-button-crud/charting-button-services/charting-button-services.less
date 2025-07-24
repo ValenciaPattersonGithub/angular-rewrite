@@ -1,0 +1,116 @@
+﻿.chartBtnLayoutServices {
+    display: block;
+
+    &__btnContainer {
+        display: inline-block;
+        text-align: center;
+        width: 16.666667%;
+        padding-bottom: 15px;
+    }
+
+    &__btn {
+        .btn;
+        .btn-default;
+        border: 2px solid;
+        border-radius: 5px;
+        height: 48px;
+        margin: @brand-margin_sm 0 0 0;
+        padding: 0px;
+        width: 64px;
+        cursor: move;
+
+        
+        &.conditionColor {
+            border-color: #6FAEEE;
+        }
+        &.svcBtnColor {
+            border-color: #FD9290;
+        }
+
+        &.swiftCodeBtnColor {
+            border-color: #67C1BD;
+        }
+    }
+
+    &__btnIcon {
+        width: 48px;
+        height: 48px;
+        vertical-align: middle;
+        margin-top: @brand-padding_sm;
+
+        .img {
+            border: none;
+        }
+    }
+
+    &__btnText {
+        display: block;
+        font-family: @brand-font;
+        font-size: @brand-font_sm;
+        font-weight: 100;
+        text-align: center;
+        margin-top: 8px;
+        padding-bottom: 15px;
+        color: #6A7575;
+    }
+
+    &__layoutContainer {
+        height: 90%;
+        background-color: @brand-color_white;
+
+        padding: @brand-padding_md;
+    }
+
+    &__tabFilters {
+        display: inline-block;
+        padding: 0;
+
+        .drag-label {
+            padding: 8px 0;
+        }
+
+        .soarSelectList {
+            float: left;
+            padding-right: @brand-padding_sm;
+        }
+
+        .show-inactive {
+            padding: 6px 0;
+            text-align: center;
+        }
+    }
+
+    &__loading {
+        text-align: center;
+    }
+
+    &__search {
+        float: left;
+    }
+
+    &__buttons {
+        margin-top: @brand-margin_md;
+        height: 430px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        display: block;
+    }
+
+    &__selected {
+        border-top: 5px solid @brand-color_gray;
+        min-height: 120px;
+        padding-top: @brand-padding_md;
+    }
+
+    &__dropTarget {
+        border: 3px dashed @brand-color_darker-gray;
+        margin: 10px auto 0 auto;
+        padding: 20px;
+        text-align: center;
+        width: 25%;
+    }
+
+    .k-listview {
+        border: none;
+    }
+}

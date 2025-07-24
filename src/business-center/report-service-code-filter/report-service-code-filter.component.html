@@ -1,0 +1,83 @@
+<div>
+    <div class="panel-heading collapseExpand">
+        <a data-toggle="collapse" attr.data-target="#{{filterId}}" class="soar-link font-weight-bold padding-2">
+            <i class="indicator fa fa-chevron-up"></i>
+            {{searchFilterModel?.Name}}
+        </a>
+    </div>
+
+    <div class="filter-option panel-collapse collapse reports-slideout" attr.id="{{filterId}}">
+        <ul attr.id="{{data[0]?.Field}}">
+            <li *ngIf="includeAll">
+                <input type="radio" attr.id="{{data[0]?.Value}}" class="rprtsFilters servicecoderadio"
+                    attr.name="{{data[0]?.Field}}" attr.data-field="{{data[0]?.Field}}" attr.data-key="{{data[0].Key}}"
+                    [checked]="data[0].Checked" (click)="toggleRadio(data[0].Value)" />{{data[0].Value}}
+                </li>
+            <li>
+                <input type="radio" *ngIf="includeAll" attr.id="{{data[1].Value}}" class="rprtsFilters searchBox servicecoderadio"
+                    attr.name="{{data[1]?.Field}}" attr.data-field="{{data[1]?.Field}}" attr.data-key="{{data[1].Key}}"
+                    [checked]="data[1].Checked" (click)="toggleRadio(data[1].Value)" />
+                    {{ "Service Code" | translate }}
+            </li>
+            <li>
+                
+                 <div class="row">
+                    <div class="col-xs-12 col-sm-8 form-search-input">
+                        <i class="fa fa-search"></i>
+                        <div [ngClass]="">
+                            <input class="form-control border-solid-black" id="SearchBox"
+                            attr.placeholder="{{searchFilterModel?.Placeholder}}" type="text" [(ngModel)]="searchKeywords"
+                            (keyup)="searchKeyCode();"
+                            name="searchKeywords" 
+                            ngDefaultControl
+                            [disabled]="data[0].Checked && includeAll" />
+                        
+                        </div>
+                    </div>
+
+                </div>
+
+                <div>
+                    <!-- search results -->
+                    <div class="col-sm-12">
+                        <div class="form-search-container background-white" *ngIf="matchingItems?.length > 0">
+                            <div class="row"
+                                *ngFor="let item of matchingItems; let i = index;let isOdd=odd; let isEven=even"
+                                [class.item-zebra-dark]="isOdd" [class.item-zebra-light]="isEven"
+                                (click)="selectItem(item)">
+                                <div class="col-sm-11">
+                                    <div class="media referred-media">
+                                        <i class="pull-left far fa-image fa-3x referred-media-icon"></i>
+                                        <div class="media-body referred-media-body">
+                                            <div *ngFor="let column of searchFilterModel.DisplayColumns">
+                                                <p><span attr.id="column{{i}}" [innerHtml]="item[column]"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="row" *ngIf="data[1].Checked">
+                    <div class="alerts-item-class selectedservicecode" *ngFor="let servicecode of selectedItems; let i = index">
+                      <div class="tag-container tag-container__secondary" style="max-width: 100%; height: 100%">
+                        <div class="flex">
+                          <div class="flex flex-center flex-shrink-1 flex-grow-0">
+                            <div>
+                              <div id="lbl" class="flex-shrink-1 padding-right-16">
+                                <label class="margin-bottom-class" attr.title="{{ servicecode.Code}}">{{ servicecode.Code}}</label>
+                              </div>
+                            </div>
+                            <i id="btnRemove" class="fa fa-times-circle tag-container__iconSecondary" (click)="removeSelectedCode(i, servicecode)"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

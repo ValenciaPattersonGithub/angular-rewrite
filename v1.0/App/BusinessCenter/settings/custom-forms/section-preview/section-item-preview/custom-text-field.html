@@ -1,0 +1,16 @@
+﻿<div ng-form="frmTextFieldSectionItem{{sectionIndex}}" ng-class="{'form-group' : !sectionItem.$$isMHF}">
+    <div>
+        <div class="row">
+            <div ng-class="{'col-md-11' : !sectionItem.$$isMHF, 'col-md-6' : sectionItem.$$isMHF}">
+                <span id="lblSectionItemText{{sectionIndex}}_{{sectionItemPreviewIndex}}"
+                       class="control-label">
+                    {{ sectionItem.FormItemTextField.NoteText }}
+                    <span id="sectionItemIsRequired{{sectionIndex}}_{{sectionItemPreviewIndex}}" 
+                          ng-show="sectionItem.IsRequired" 
+                          class="padding5 size-h4">*</span>
+                    <skip-prompt></skip-prompt>
+                </span>
+            </div>
+        </div>        
+    </div>
+</div>

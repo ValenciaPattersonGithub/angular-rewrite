@@ -1,0 +1,84 @@
+@import "variables";
+
+.referral {
+    &-container {
+        padding: 15px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 5px;
+        hr {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-top: 1px solid #2b144e;
+        }
+    }
+    &-title {
+        font-family: $global-font-family;
+        font-size: 16px;
+        color: $patient-registration-title-color;
+        line-height: 16px;
+        font-weight: bold;
+    }
+    &-content {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        grid-gap: 10px;
+        position: relative;
+    }
+    &-type {
+        grid-row: 1;
+        grid-column: 1;
+    }
+    &-source {
+        grid-row: 1;
+        grid-column: 2;
+    }
+    &-person-search {
+        grid-row: 1;
+        grid-column: 2;
+    }
+    &-selectlist {
+        height: 30px;
+        width: 98%;
+        padding: 0px 5px;
+        text-align: left;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        border: 1px solid $patient-registration-border-color;
+        outline: none;
+    }
+    &-selectlist:focus {
+        box-shadow: 0 0 0 1px $box-shadow-color;
+    }
+}
+
+.mb-5 {
+    margin-bottom: 5px;
+}
+.error-control {
+    width: 96%;
+    float: left;
+    border: 1px solid $error-color;
+    box-shadow: 0 0 0 1px $error-color;
+}
+.error-icon {
+    float: left;
+    margin-left: 10px;
+    margin-top: 8px;
+    color: $error-color;
+}
+
+::ng-deep {
+    .k-textbox > input,
+    .k-autocomplete .k-input {
+        border-radius: 5px;
+    }
+    .k-autocomplete {
+        border-radius: 5px;
+        height: 30px;
+    }
+}
+.adjustWidth {
+    min-width: 69.5% !important;
+}

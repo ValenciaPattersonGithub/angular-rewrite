@@ -1,0 +1,112 @@
+<div [class]="mainDivClassName" *ngIf="!isMultiSelect">
+    <kendo-dropdownlist #providersGroupingDropDown [id]="inputId"
+                        [data]="providers"
+                        [textField]="'Name'"
+                        [valueField]="'ProviderId'"
+                        [valuePrimitive]="true"
+                        [(ngModel)]="selectedProvider" name="selectedProvider"
+                        (valueChange)="onProviderChanged($event)"
+                        [popupSettings]="{ animate:false,width:'275px' }"
+                        [disabled]="isDisabled"
+                        [ngClass]="{'disabledCursor':isDisabled}"
+                        [class]="className"
+                        (open)="open()"
+                        (opened)="opened()">
+                        ngDefaultControl>
+                        <!-- [defaultItem]="defaultItem" -->
+        <ng-template kendoDropDownListHeaderTemplate let-dataItem>
+            <div class="pdheaderdiv" *ngIf="activeProvidersOnly==false">
+                <label class="pdheaderlabel">Show Inactive Providers</label>
+                <div class="onoffswitch pull-right pdonoffdiv">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="inactivateSwitch" [checked]="showInactiveProviders" (click)="resetInactiveProviders()">
+                    <label class="onoffswitch-label pdonoff" for="inactivateSwitch"></label>
+                </div>
+            </div>
+            <div class="itemnoprovider" (click)="setNoProvider()" *ngIf="addNoProvider && providers && providers.length>0">
+                <span id="lblListItems" class="innerItem" [ngStyle]="styleInfo(null)">
+                    <span>No Provider</span>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template kendoDropDownListGroupTemplate let-groupName>
+            <div class="groupHeader"  *ngIf="groupName!='NA'"><div class="groupHeaderInner"><strong>{{ groupName }}</strong></div></div>
+        </ng-template>
+        <ng-template kendoDropDownListFixedGroupTemplate let-groupName>
+            <div class="groupHeader" *ngIf="activeProvidersOnly==false && groupName!='NA'"><div class="groupHeaderInner"><strong>{{ groupName }}</strong></div></div>
+        </ng-template>
+        <ng-template kendoDropDownListItemTemplate let-dataItem>
+            <div class="item" *ngIf="dataItem.ProviderId != emptyGuId">
+                <span id="lblListItems" class="innerItem" *ngIf="dataItem" [ngStyle]="styleInfo(dataItem)">
+                    <span *ngIf="dataItem.IsActive == false">({{dataItem?.Name}})</span>
+                    <span *ngIf="dataItem.IsActive == true">{{dataItem?.Name}}</span>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template kendoDropDownListValueTemplate let-dataItem>
+                <span id="lblListItems" *ngIf="dataItem" [ngStyle]="styleInfo(dataItem)">
+                    <span *ngIf="dataItem.IsActive == false">({{dataItem?.Name}})</span>
+                     <span *ngIf="dataItem.IsActive == true">{{dataItem?.Name}}</span>
+                </span> 
+        </ng-template>
+    </kendo-dropdownlist>
+</div>
+
+<div class="providerSelector" *ngIf="isMultiSelect">
+    <kendo-multiselect #providersGroupingDropDown [kendoMultiSelectSummaryTag]="0" [id]="inputId" [autoClose]="false"
+                        [data]="providers"
+                        [textField]="'Name'"
+                        [valueField]="'ProviderId'"
+                        [valuePrimitive]="false"
+                        [(ngModel)]="selectedProviderList"
+                        name="selectedProvider"
+                        style="caret-color: transparent;"
+                        (valueChange)="onProviderChanged($event)"
+                        [popupSettings]="{ animate:false,width:'auto' }"
+                        [disabled]="isDisabled"
+                        [ngClass]="{'disabledCursor':isDisabled}"
+                        [class]="className"  
+                        (removeTag)="removeTag($event)" [clearButton]="false"
+                        ngDefaultControl>
+
+            <ng-template kendoMultiSelectGroupTagTemplate>
+              {{ selectedProvidersText() }}
+            </ng-template>
+            <ng-template kendoMultiSelectGroupTemplate let-groupName>
+                <div class="multiselect-wrap"style="border-bottom: 1px solid #ECECEC;
+                height: 43px;
+                padding-left: 6px;cursor: pointer;
+            " (click)="onSelectAll(groupName)">
+                    <span>
+                        <input type="checkbox" *ngIf="groupName=='Active Providers' && showSelectAll" [checked]="isActiveChecked"   />  
+                        <input type="checkbox" *ngIf="groupName=='Inactive Providers' && showSelectAll" [checked]="isInActiveChecked"   /> 
+                        <span for="chk" style="float: right;margin-left: 3px;"><strong>{{ groupName }}</strong></span>
+                   </span>
+                </div> 
+             </ng-template>
+
+            <ng-template kendoMultiSelectFixedGroupTemplate let-groupName>
+                <div class="multiselect-wrap" style="border-bottom: 1px solid #ECECEC;cursor: pointer;
+                height: 43px;
+                padding-left: 6px;
+            " (click)="onSelectAll(groupName)">
+                    <span>
+                        <input type="checkbox" *ngIf="groupName=='Active Providers' && showSelectAll" [checked]="isActiveChecked"   />  
+                        <input type="checkbox" *ngIf="groupName=='Inactive Providers' && showSelectAll" [checked]="isInActiveChecked"   /> 
+                        <div   style="float: right;margin-left: 3px;"><strong>{{ groupName }}</strong></div>
+                    </span>
+                </div> 
+         </ng-template>
+ 
+            <ng-template kendoMultiSelectItemTemplate let-dataItem>
+                <div (click)=itemClick(dataItem) style="cursor: pointer;"> 
+                    <span class="multiselect-popup">
+                        <input type="checkbox" id="chk" [checked]="isItemSelected(dataItem)" />  
+                        <div style="font-size: 14px;" [ngStyle]="styleInfoMultiSelect(dataItem)">  
+                            <span *ngIf="dataItem.IsActive == false">(</span>{{dataItem?.Name }}
+                            <span *ngIf="dataItem.IsActive == false">)</span>
+                        </div>
+                    </span>
+                </div>
+            </ng-template>
+    </kendo-multiselect>
+</div>

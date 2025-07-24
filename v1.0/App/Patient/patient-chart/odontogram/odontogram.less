@@ -1,0 +1,217 @@
+﻿// #region Chart/Odontogram
+
+.odontogram {
+    min-width: 650px;
+    margin: 0 auto;
+    text-align: center;
+    .make-xs-column(12);
+
+    &__arch {
+        display: inline-block;
+    }
+
+    &__quad {
+        display: inline;
+    }
+
+    &__tooth {
+        display: inline-block;
+        margin-bottom: @brand-margin_xs;
+        min-height: 196px;
+        position: relative;
+    }
+
+    &__toothPlaceHolder {
+        display: inline-block;
+        margin-bottom: @brand-margin_xs;
+        min-height: 400px;
+        width:100%;
+        position: relative;
+        line-height:400px;
+    }
+
+    &__toothMenu {
+        border-left: solid 2px @chart-selection-bg;
+        border-right: solid 2px @chart-selection-bg;
+        color: @brand-color_darkest-gray;
+        cursor: pointer;
+        font-size: @brand-font_xl;
+        font-weight: @brand-font_heavy;
+        line-height: 16px;
+        padding-bottom: 12px; // var wouldn't work here, need to avoid covering tooth #
+        position: absolute;
+        width: 100%;
+    }
+
+    &__toothMenuTop {
+        border-top: solid 2px @chart-selection-bg;
+        top: 0;
+    }
+
+    &__toothMenuBottom {
+        border-bottom: solid 2px @chart-selection-bg;
+        bottom: 0;
+    }
+
+    &__toothMenuPopover {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        margin-left: 9px;
+        max-width: none;
+        width: 500px;
+
+        .popover-content {
+            margin-left: -57px;
+            padding: 0;
+
+            .btn-default {
+                border: 2px solid @chart-selection-bg;
+                -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .fuseGrid {
+                border: 3px solid @chart-selection-bg;
+                border-radius: 4px;
+                -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+                margin-left: -@brand-margin_xs;
+                width: 75%;
+
+                > div {
+                    cursor: pointer;
+                    display: block;
+                    padding: @brand-padding_xs;
+                    margin: 0px;
+                }
+
+                > div:hover {
+                    background-color: @brand-color_gray;
+                }
+            }
+        }
+    }
+}
+
+.odoContainer {
+    display: inline;
+    //font-size: 0;
+}
+
+.odoTooth {
+    border: 1px solid transparent;
+    height: 166px;
+    width: 48px;
+
+    @media (max-width: 1366px) {
+        width: 39px;
+    }
+
+    @media (max-width: 1024px) {
+        width: 32px;
+    }
+
+    &:hover {
+        border: 1px solid @chart-tooth-hover-border;
+        cursor: pointer;
+    }
+}
+
+.odoToothMedium {
+    width: 36px;
+}
+
+.odoToothSmall {
+    width: 24px;
+}
+//this will place an eye icon on a watched tooth
+.odoWatch {
+    cursor: pointer;
+    position: absolute;
+    margin-left: -30px;
+    margin-top: 125px;
+
+    &:before {
+        font-family: 'Font Awesome 5 Pro';
+        content: '\f06e';
+    }
+}
+//this will make the border on a watched tooth
+.odoTooth.odoToothWatch {
+    border: 1px solid red;
+}
+
+.odoTooth.odoSelected {
+    background-color: @chart-selection-bg;
+    border: 1px solid @chart-selection-bg;
+
+    &:hover {
+        border: 1px solid @chart-tooth-hover-border;
+    }
+
+    .draw-type-background {
+        fill: @chart-selection-bg;
+    }
+}
+
+.odoControls {
+    border: 1px solid gray;
+    padding: 10px;
+    margin: 5px;
+}
+
+.odoFlex {
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-tooth {
+    display: block;
+    margin: 0 5px 5px 0;
+    padding: 5px;
+    text-align: center;
+    width: 30px;
+}
+
+.btn-tooth-multi-select {
+    display: block;
+    margin: 0 5px 5px 0;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+}
+
+.deleted-note {
+    text-decoration: line-through;
+}
+
+.draw-type-background {
+    fill: @brand-color_white;
+}
+
+.patientOdontogram {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+
+    &__snapshot {
+        width: 100%;
+
+        &.dirty {
+            opacity: .5;
+        }
+    }
+
+    &__snapshotmessage {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 100%;
+        transform: translate(-50%, -50%);
+        font-weight: 700;
+    }
+}
+
+// #endregion

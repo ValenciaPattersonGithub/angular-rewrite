@@ -1,0 +1,127 @@
+﻿<div id="grp{{id}}" class="panel panel-default" ng-class="{'panel-info': flags.editing }" >
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h4>{{ title | i18n }}</h4>
+        </div>
+        <span class="panel-btn editPanel__save" ng-show="flags.editing == true && flags.cancelling == false">
+            <button id="btn{{id}}Save" ng-click="savePanelEdit();" ng-show="functions.save" ng-disabled="flags.valid == false" class="btn btn-link padding-none"><b>{{ 'Save' | i18n }} | </b></button>
+            <button id="btn{{id}}Cancel" ng-click="cancelPanelEdit();" class="btn btn-default pull-right">{{ (flags.autoSave ? 'Done' : 'Cancel') | i18n }}</button>
+        </span>
+        <span class="panel-btn" style="margin-right: -5px;">
+            <button id="btn{{id}}MoveDocuments" class="btn btn-default pull-right"
+             ng-disabled="documents.length == 0" ng-click="openMoveDocsModal(documents)">
+                {{ 'Move' | i18n }}
+            </button>
+        </span>
+        <span class="panel-btn editPanel__add padding-right-2" ng-hide="flags.editing == true">
+            <button tabindex="2" id="btn{{id}}EditPanel" class="btn btn-default pull-right" ng-click="addDocument()">{{'Add' | i18n }}</button>
+        </span>
+        <span class="panel-btn editPanel__save-alert" ng-show="flags.cancelling == true">
+            <span class="editPanel__save-message">{{ 'Discard changes?' | i18n }}</span>
+            <button id="btn{{id}}CancelYes" ng-click="confirmCancel();" class="btn btn-default pull-right"><b>{{ 'Yes' | i18n }} </b></button>
+            <button id="btn{{id}}CancelNo" ng-click="declineCancel();" class="btn btn-default pull-right">{{ 'No' | i18n }}</button>
+        </span>
+        <span class="panel-btn padding-right-2">
+            <button id="btn{{id}}Print" class="btn btn-default pull-right" ng-click="printPatientRegistrationForm()">
+                <i class="fa fa-print fa-lg"></i> {{ 'New Patient Forms' | i18n }}
+            </button>
+        </span>
+
+    </div>
+    <div class="panel-body scrollable-div documents_top">
+        <sub-section section-title="Key Patient Documents" ng-hide="true" ng-if="documents.length > 0">
+            <div class="col-lg-12 sub-section-content">
+                <div class="col-lg-5 sub-section-content">
+                    <label>Name</label>
+                </div>
+                <div class="col-lg-6">
+                    <label>Date of Most Recent</label>
+                </div>
+                <div class="col-lg-1">
+                </div>
+            </div>
+            <div class="col-sm-12 sub-section-content">
+                <div class="col-sm-5 sub-section-content">
+                    <span ng-if="MostRecentHIPAA === 'N/A'">HIPAA Authorization</span>
+                    <a ng-if="MostRecentHIPAA !== 'N/A'" ng-click="viewwHIPAA()">HIPAA Authorization</a>
+                </div>
+                <div class="col-sm-5">
+                    <span>{{MostRecentHIPAA}}</span>
+                </div>
+                <div class="col-sm-2">
+                    <a style="white-space: nowrap" ng-click="createNewHIPAA()">+ new</a>
+                </div>
+            </div>
+            <div style="padding-left:0px" class="col-sm-12">
+                <div style="padding-left:0px" class="col-sm-5">
+                    <span>Medical History</span>
+                </div>
+                <div class="col-sm-5">
+                    <span>N/A</span>
+                </div>
+                <div class="col-sm-2">
+                    <a style="white-space: nowrap; cursor:not-allowed; color:rgb(180, 180, 180)" ng-disabled="true">+ new</a>
+                </div>
+            </div>
+        </sub-section>
+
+        <sub-section section-title="All Documents" ng-hide="false" ng-if="documents.length > 0">
+            <div class="fuseGrid">
+                <span class="cell gridBody__header" ng-click="sortDocuments('Name');">
+                    {{'Name' | i18n }}
+                    <span ng-show="orderBy.field == 'Name' && orderBy.asc == true" class="fa fa-caret-down"></span>
+                    <span ng-show="orderBy.field == 'Name' && orderBy.asc == false" class="fa fa-caret-up"></span>
+                </span>
+                <span class="cell gridBody__header" ng-click="sortDocuments('$$DocumentGroup');">
+                    {{'Group' | i18n }}
+                    <span ng-show="orderBy.field == '$$DocumentGroup' && orderBy.asc == true" class="fa fa-caret-down"></span>
+                    <span ng-show="orderBy.field == '$$DocumentGroup' && orderBy.asc == false" class="fa fa-caret-up"></span>
+                </span>
+                <span class="cell gridBody__header" ng-click="sortDocuments('MimeType');">
+                    {{'Type' | i18n }}
+                    <span ng-show="orderBy.field == 'MimeType' && orderBy.asc == true" class="fa fa-caret-down"></span>
+                    <span ng-show="orderBy.field == 'MimeType' && orderBy.asc == false" class="fa fa-caret-up"></span>
+                </span>
+                <span class="cell gridBody__header" ng-click="sortDocuments('DateUploaded');">
+                    {{'Date' | i18n }}
+                    <span ng-show="orderBy.field == 'DateUploaded' && orderBy.asc == true" class="fa fa-caret-down"></span>
+                    <span ng-show="orderBy.field == 'DateUploaded' && orderBy.asc == false" class="fa fa-caret-up"></span>
+                </span>
+                <span class="cell"></span>
+
+                <div id="lst{{ baseId }}" ng-repeat="document in documents | orderBy:orderBy.field:!orderBy.asc track by $index" class="body gridBody">
+                    <a id="btn{{$index}}" class="cell gridBody__cell splitCell" ng-click="viewDocument(document)" title="{{ document.Name }}">
+                        {{ document.Name | limitTo: 20 }}<span ng-if="document.Name.length > 20">&hellip;</span>
+                    </a>
+                    <span id="lbl{{$index}}" class="cell gridBody__cell splitCell" title="{{ document.$$DocumentGroup }}">
+                        {{ document.$$DocumentGroup | limitTo: 20 }}<span ng-if="document.$$DocumentGroup.length > 20">&hellip;</span>
+                    </span>
+                    <span id="lbl{{$index}}" class="cell gridBody__cell splitCell" title="{{ document.MimeType === 'Digital' ? document.MimeType : null }}">
+                        <div ng-if="document.MimeType === 'Digital'">
+                            {{ document.MimeType | limitTo: 20 }}<span ng-if="document.MimeType.length > 20">&hellip;</span>
+                        </div>
+                    </span>
+                    <span id="lbl{{$index}}DocumentDate" class="cell gridBody__cell splitCell" title="{{ document.DateUploaded | toShortDisplayDateLocal  }}">
+                        {{ document.DateUploaded | toShortDisplayDateLocal  }}
+                    </span>
+                    <span class="cell">
+                        <a id="lnkEditNoteTemplate" class="far fa-edit cell gridBody__cell"
+                            ng-click="openDocumentProperties(document.DocumentId, formattedPatientName)"
+                            ng-if="document.$$DocumentGroup !== 'Medical History' && document.MimeType !== 'Digital' && !document.Description"
+                            uib-tooltip="{{'Edit' | i18n}}" tooltip-append-to-body="true" check-auth-z="soar-doc-docimp-edit"></a>
+                    </span>
+                </div>
+            </div>
+        </sub-section>
+
+    </div>
+    <div id="docCtrlsWindow" 
+         kendo-window="docCtrls" 
+         k-visible="false" 
+         k-on-open="docCtrlsOpen = true"
+        k-on-close="docCtrlsOpen = false">
+    </div>
+    <div ng-show="loading">
+        <no-results loading="loading"></no-results>
+    </div>
+</div>

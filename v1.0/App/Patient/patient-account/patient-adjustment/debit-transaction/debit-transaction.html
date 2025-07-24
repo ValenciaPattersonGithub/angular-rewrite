@@ -1,0 +1,172 @@
+﻿<div class="debitTransaction">
+    <form id="positiveAdjustmentForm">
+        <div id="positiveAdjustmentControl"
+            class="debitTransaction__form">
+            <div class="debitTransaction__actions">
+                <!--Date-->
+                <div class="col-md-2 debitTransaction__datepicker">
+                    <div class="form-group">
+                        <label id="lblAdjustmentDate">{{'Date' | i18n}}</label>*
+                        <ng-form name="dateForm">
+                            <date-selector id="inpPositiveAdjustmentDate"
+                                input-id="inpPositiveAdjustmentDate"
+                                name="inpPositiveAdjustmentDate"
+                                ng-class="{'error': (dateForm.inpPositiveAdjustmentDate.$error.required && errorFlags.hasError && !( debitTransactionDto.DateEntered !=undefined && debitTransactionDto.DateEntered !=null))}"
+                                class="debitTransaction__datepicker vertical-align-top"
+                                date-var="debitTransactionDto.$$DateEntered"
+                                valid="debitTransactionDto.ValidDate"
+                                ng-model="debitTransactionDto.$$DateEntered"
+                                format="MM/dd/yyyy"
+                                mode="day"
+                                min-date="transactionMinDate"
+                                max-date="transactionMaxDate"
+                                placeholder="00/00/0000"
+                                required>
+                            </date-selector>
+                            <div class="error"
+                                ng-if="(dateForm.inpPositiveAdjustmentDate.$error.required && errorFlags.hasError && !( debitTransactionDto.DateEntered !=undefined && debitTransactionDto.DateEntered !=null))">
+                                <span class="help-text"
+                                    id="lblRequiredPositiveAdjustmentDate">{{ 'Date {0}' | i18n:['Required'] }}</span>
+                            </div>
+                        </ng-form>
+                    </div>
+                </div>
+                <!--Type-->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label id="lblAdjustmentType">{{ 'Type'| i18n}}</label>*
+                        <div>
+                            <ng-form name="adjustmentTypeForm">
+                                <div class="form-group vertical-align-top">
+                                    <div
+                                        ng-class="{'error': (adjustmentTypeForm.lstPositiveAdjustmentTypeSelector.$error.required && errorFlags.hasError)}">
+                                        <!-- ARWEN: #509747 Behavior changed here. Shows invalid on first load. This seems correct as it is required and the default
+                                        value is null. The apply button isn't affected by this state. -->
+                                        <soar-select-list id="lstPositiveAdjustmentTypeSelector"
+                                            name="lstPositiveAdjustmentTypeSelector"
+                                            sb-set-focus-if="true"
+                                            placeholder="{{ 'Positive Adjustment' | i18n }}"
+                                            text-field="Description"
+                                            value-field="AdjustmentTypeId"
+                                            option-list="positiveAdjustmentTypes"
+                                            ng-model="debitTransactionDto.AdjustmentTypeId"
+                                            sb-required="required">
+                                        </soar-select-list>
+                                    </div>
+                                    <div class="error debitTransaction__margin-top-minus4-percent"
+                                        ng-if="(adjustmentTypeForm.lstPositiveAdjustmentTypeSelector.$error.required && errorFlags.hasError)">
+                                        <span class="help-text"
+                                            id="lblRequiredPositiveAdjustmentType">{{ 'Type {0}' | i18n:['Required']
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                </div>
+                <!--Provider-->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label id="lblPositiveAdjustmentProvider">{{'Provider' | i18n}}</label>
+                        <div>
+                            <ng-form name="providerForm">
+                                <div class="form-group vertical-align-top">
+                                    <!-- ARWEN: #509747 Behavior changed here. Shows invalid on first load. This seems incorrect as this is not set a 
+                                    required field. However, in Test if you deselect and reselect this value it shows invalid. The apply button is not
+                                    affected by this state. -->
+                                    <provider-selector place-holder="defaultPlaceHolder"
+                                        provider-type-ids="[1,2,3,5]"
+                                        input-id="lstProvider"
+                                        class-name="fill-width"
+                                        patient-info="data.PatientInfo"
+                                        selected-provider="debitTransactionDto.ProviderUserId">
+                                    </provider-selector>
+                                    <!--<div class="error" ng-cloak>
+                                        <div class='ng-cloak' ng-hide="debitTransactionDto.ProviderUserId != undefined">{{'This field is required' | i18n}}</div>
+                                    </div>-->
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                </div>
+                <!--Note-->
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label id="lblAdjustmentNote">{{'Note' | i18n}}</label>
+                        <div>
+                            <ng-form name="positiveAdjustmentNoteForm">
+                                <div>
+                                    <textarea id="inpAdjustmentNotes"
+                                        class="form-input form-textarea"
+                                        name="inpAdjustmentNotes"
+                                        maxlength="500"
+                                        rows="2"
+                                        cols="50"
+                                        ng-disabled="disableInput"
+                                        ng-model="debitTransactionDto.Note"
+                                        placeholder="{{'Enter note...' | i18n }}"></textarea>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="debitTransaction__tableBox">
+                <div class="col-md-12  form-inline">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <div class="form-group">
+                                <label id="lblAddMessage">{{'Add' | i18n}}</label>
+                            </div>
+                            <div class="form-group debitTransaction__addAmount-field">
+                                <input type="text"
+                                    ng-class="{'debitTransaction__amount-error': ((debitTransactionDto.Amount <= 0 || debitTransactionDto.Amount > 999999.99) && errorFlags.hasError)}"
+                                    class="form-input text-align-right debitTransaction__amount-input"
+                                    name="inpAmount"
+                                    id="inpAmount"
+                                    ng-model="debitTransactionDto.Amount"
+                                    maxlength="12"
+                                    placeholder="{{'0'|currency}}"
+                                    model-format="currency" />
+                            </div>
+                            <div class="form-group">
+                                <label id="lblRequiredMark">* {{' to' | i18n}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label id="lblPatientName">
+                                    {{' {0}\'s balance' | i18n:[nameForPositiveAdjustmentWindow]}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group debitTransaction__payment-gateway">
+                            <div class="form-group"
+                                ng-show="paymentProviderSupportsIndependentRefunds && debitTransactionDto.location && debitTransactionDto.location.IsPaymentGatewayEnabled">
+                                <input id="inpIsPaymentGateway"
+                                    type="checkbox"
+                                    ng-model="debitTransactionDto.IsPaymentGateway"
+                                    ng-change="debitTransactionDto.CurrencyType = '1';" />
+                                <label id="inpIsPaymentGatewaylbl"
+                                    for="inpIsPaymentGateway">Return amount to credit card (charges may apply)</label>
+                            </div>
+                            <div class="form-group"
+                                ng-show="paymentProviderSupportsIndependentRefunds && debitTransactionDto.IsPaymentGateway">
+                                <soar-select-list id="lstCurrencyTypeSelector"
+                                    name="lstCurrencyTypeSelector"
+                                    text-field="Description"
+                                    value-field="CurrencyTypeId"
+                                    option-list="currencyTypes"
+                                    ng-model="debitTransactionDto.CurrencyType">
+                                </soar-select-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 error"
+                    ng-if="((debitTransactionDto.Amount <= 0 || debitTransactionDto.Amount > 999999.99) && errorFlags.hasError)">
+                    <span class="help-text"
+                        id="lblRequiredAmount">{{ 'Amount must be greater than $0.00' | i18n }}</span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

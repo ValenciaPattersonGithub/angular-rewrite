@@ -1,0 +1,55 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.FeeSchedules.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.FeeSchedules.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-3 cell">{{'Fee Schedule' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Service Code' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'CDT Code' | i18n}}</th>
+                    <th class="col-sm-4 cell">{{'Description' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Location Fee' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Allowed Amount' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'% of Location Fee' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="feeSchedule in data.FeeSchedules" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'">
+                <tr>
+                    <td class="col-sm-3 cell">{{feeSchedule.FeeScheduleName}}</td>
+                    <td class="col-sm-1 cell">{{feeSchedule.ServiceCodes[0].ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{feeSchedule.ServiceCodes[0].CdtCode}}</td>
+                    <td class="col-sm-4 cell">{{feeSchedule.ServiceCodes[0].Description}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].LocationFee | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].LocationFeePercentage}}{{'%' | i18n}}</td>
+                </tr>
+                <tr ng-repeat="code in feeSchedule.ServiceCodes | startFrom: 1">
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-1 cell">{{code.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{code.CdtCode}}</td>
+                    <td class="col-sm-4 cell">{{code.Description}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.LocationFee | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.LocationFeePercentage}}{{'%' | i18n}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.FeeSchedules.length > 0 && !showFilterMessage">
+                <tr class="reportGrid__row reportGrid__footer">
+                    <td class="col-sm-12 cell" colspan="9"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="9">
+                        {{'Total' | i18n}} {{'Fee Schedules' | i18n}}{{':' | i18n}} {{ data.FeeSchedules.length }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="9">
+                        {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

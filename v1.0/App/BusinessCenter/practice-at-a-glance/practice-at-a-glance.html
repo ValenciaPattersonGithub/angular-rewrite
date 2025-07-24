@@ -1,0 +1,39 @@
+﻿<!-- <business-nav></business-nav> -->
+<top-navigation [menu-type]="'Business'"></top-navigation>
+<div class="practiceAtAGlance">
+    <div class="rowFull practiceAtAGlance__padding-left-10">
+        <div class="practiceAtAGlance__header margin-top-8">
+            <div>
+                <div ng-if="!locationsLoading">
+                    <div class="row">
+                        <div class="col-xs-1 col-sm-1 col-md-1">
+                            <multi-selector id="ddLocation" open="locationMultiSelectOpen" list="locations"
+                                            selected-list="selectedLocations" display-field="NameLine1" id-field="LocationId"
+                                            auth-z="'soar-dsh-dsh-view'" type="Locations" on-blur-fn="updateContents()"
+                                            select-all="true"
+                                            is-grouped-by-location-status="true" on-change="locationChange()">
+                            </multi-selector>
+                        </div>
+                        <div class="col-xs-11 col-sm-11 col-md-11">
+                            <div class="row margin-left-30 padding-8">
+                                <span ng-if="selectedLocations.length === 0">
+                                    Please select a location
+                                </span>
+                                <span ng-repeat="location in selectedLocations">
+                                    <tag title="{{ location.NameLine1 }}" remove-function="removeLocation(location)"></tag>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="authorizeFailed==true">
+        <i id="iErrorMessage" class="fa fa-exclamation-circle fa-2x">{{'You do not have permission to view this page.' | i18n}}</i>
+    </div>
+    <div class="practiceAtAGlance__body" ng-show="authorizeFailed==false">
+        <!--&& selectedLocations.length > 0">-->
+        <dashboard-container data="dashboardDefinition"></dashboard-container>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="soarWidget NetGrossProductionGaugeWidgetComponent">
+    <div class="panel-heading soarWidget__header">
+        <div class="widget-handle w_row">
+            <label>{{data?.Title | translate}}</label>
+        </div>
+        <div>
+            <soar-select-list *ngIf="dateFilterOptions?.length>0" [(ngModel)]="dateFilter" [textField]="'Value'"
+                [valueField]="'Value'" [optionList]="dateFilterOptions" [disableInput]="false"
+                [selectedItemValue]="'dateFilter'" [sbTab]="10" (selectedItemValueChange)="dateFilterChanged($event)">
+            </soar-select-list>
+        </div>
+    </div>
+    <div class="gaugeWidget__body">
+        <gauge *ngIf="type==NetGrossProductionGauge?.Gross" [gaugeChartData]="gaugeData" [gaugeChartType]="GaugeChartType?.GrossProduction"
+            [gaugeFiltersTypes]="dateFilter" (drilldown)="drilldown($event)">
+        </gauge>
+        <gauge *ngIf="type==NetGrossProductionGauge?.Net" [gaugeChartData]="gaugeData" [gaugeChartType]="GaugeChartType?.NetProduction"
+            [gaugeFiltersTypes]="dateFilter" (drilldown)="drilldown($event)">
+        </gauge>
+    </div>
+</div>

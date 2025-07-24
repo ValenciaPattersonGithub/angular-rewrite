@@ -1,0 +1,225 @@
+﻿<div ng-if="isAppointmentViewVisible" class="appointment-view-full-screen">
+    <appointment-view time-increment="TimeIncrement"></appointment-view>
+</div>
+<!-- need a second window to handle clicking on unscheduled appointments in view opening a new view while closing the existing one -->
+<div ng-if="isSecondaryAppointmentViewVisible" class="appointment-view-full-screen">
+    <appointment-view time-increment="TimeIncrement"></appointment-view>
+</div>
+<div ng-class="'fade-in'" ng-hide="isAppointmentViewVisible || isSecondaryAppointmentViewVisible">
+    <div class="peopleMgmt">
+        <div class="rowFull">
+            <div class="peopleMgmt__header">
+                <div class="peopleMgmt__title">
+                    <h1>{{ ::('Patient Management' | i18n) }}</h1>
+                </div>
+                <!--Dropdown filter for Location-->
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <soar-select-list ng-hide="false"
+                                          id="inpLocationPatientLanding"
+                                          name="inpLocation"
+                                          placeholder="{{::('Select Location' | i18n)}}"
+                                          text-field="NameLine1"
+                                          value-field="LocationId"
+                                          option-list="locationsDDL"
+                                          ng-model="selectedLocationId"
+                                          sb-tab="1"></soar-select-list>
+                        <select style="width: 300px" ng-if="false" ng-change="sbChange(selectedLocationId, objTrans)" ng-model="selectedLocationId" kendo-drop-down-list id="dropdownlist"></select>
+                        <span ng-if="selectedLocationId == '' && !locationsLoading" class="peopleMgmt__notification"> {{ ::(' Please select one location' | i18n) }} </span>
+                    </div>
+                </div>
+
+                <hr />
+
+                <!--Button to Add a person-->
+                <div class="peopleMgmt__actions padding-top-0">
+                    <div class="peopleMgmt__actions-link padding-top-0 width-10">
+                        <a tabindex="2" ng-click="addAPerson()" class="btn btn-primary" icon="fa-user-plus" id="btnAddPerson" check-auth-z="soar-per-perdem-add">{{ 'Add {0}' | i18n:['a Person'] }}</a>
+                    </div>
+                    <div class="peopleMgmt__actions-link padding-top-0 width-10" ng-if="PatientWorkFlowEnabled">
+                        <a tabindex="2" ng-click="addAFamily()" class="btn btn-primary" icon="fa-user-plus" id="btnAddFamilyPerson" check-auth-z="soar-per-perdem-add">{{ 'Add {0}' | i18n:['a Family'] }}</a>
+                    </div>
+                    <div class="peopleMgmt__actions-link padding-top-0 width-10" ng-if="PatientWorkFlowEnabled">
+                        <a tabindex="2" ng-click="addAPersonOld()" class="btn btn-primary" icon="fa-user-plus" id="btnAddPersonOld" check-auth-z="soar-per-perdem-add">{{ 'Add {0}' | i18n:['a Person Old'] }}</a>
+                    </div>
+                </div>
+
+                <!-- Secondary Filtering Navigation -->
+                <div class="secondaryFilterNavigation__tiles">
+                    <div id="tiles">
+                        <div class="tab">
+                            <div class="header">
+                                <no-results loading="patientCount.loading" ng-hide="!patientCount.loading"></no-results>
+                                <span id="idAllPatientsCount" ng-hide="patientCount.loading">{{ patientCount.allPatients }}</span>
+                            </div>
+                            <div class="body">
+                                <button id="btnAllPatients" class="collections selected" id="allAccounts" ng-class="{ selected: isActiveFltrTab('2') }" ng-click="activateFltrTab('2')" ng-disabled="!isPermissable('2')">
+                                    <span class="icon fa fa-2x fa-users"></span>
+                                    <h6>{{ ::('All Patients' | i18n) }}</h6>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tab">
+                            <div class="header">
+                                <no-results loading="patientCount.loading" ng-hide="!patientCount.loading"></no-results>
+                                <span id="idPreventiveCareCount" ng-hide="patientCount.loading">{{ patientCount.preventiveCare }}</span>
+                            </div>
+                            <div class="body">
+                                <button id="btnPreventiveCareAccounts" ng-class="{ selected: isActiveFltrTab('7') }" ng-click="activateFltrTab('7')" ng-disabled="!isPermissable('3')">
+                                    <span class="icon fa fa-2x fa-user-md"></span>
+                                    <h6>{{ ::('Preventive Care' | i18n) }}</h6>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tab">
+                            <div class="header">
+                                <no-results loading="patientCount.loading" ng-hide="!patientCount.loading"></no-results>
+                                <span id="idTreatmentPlansCount" ng-hide="patientCount.loading">{{ patientCount.treatmentPlans }}</span>
+                            </div>
+                            <div class="body">
+                                <button id="btnTreatmentPlanAccounts" ng-class="{ selected: isActiveFltrTab('6') }" ng-click="activateFltrTab('6')" ng-disabled="!isPermissable('4')">
+                                    <img class="peopleMgmt__icon" ng-src="{{treatmentPlanIcon}}" />
+                                    <h6>{{ ::('Treatment Plans' | i18n) }}</h6>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tab">
+                            <div class="header">
+                                <no-results loading="patientCount.loading" ng-hide="!patientCount.loading"></no-results>
+                                <span id="idAppointmentsCount" ng-hide="patientCount.loading">{{ patientCount.appointments }}</span>
+                            </div>
+                            <div class="body">
+                                <button id="btnAppointmentAccounts" ng-class="{ selected: isActiveFltrTab('1') }" ng-click="activateFltrTab('1')" ng-disabled="!isPermissable('1')">
+                                    <span class="icon far fa-2x fa-calendar-alt"></span>
+                                    <h6>{{ ::('Appointments' | i18n) }}</h6>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tab">
+                            <div class="header">
+                                <no-results loading="patientCount.loading" ng-hide="!patientCount.loading"></no-results>
+                                <span id="idOtherToDoCount" ng-hide="patientCount.loading">{{ patientCount.otherToDo }}</span>
+                            </div>
+                            <div class="body">
+                                <button id="btnOtherToDoAccounts" ng-class="{ selected: isActiveFltrTab('5') }" ng-click="activateFltrTab('5')" ng-disabled="!isPermissable('5')">
+                                    <span class="icon far fa-2x fa-calendar-check"></span>
+                                    <h6>{{ ::('Other To Do' | i18n) }}</h6>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tab">
+                            <!-- Added empty tab to have correctly sized info boxes-->
+                        </div>
+                        <div class="tab">
+                            <!-- Added empty tab to have correctly sized info boxes-->
+                        </div>
+                        <div class="tab">
+                            <!-- Added empty tab to have correctly sized info boxes-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="peopleMgmt__actions-link">
+                    <button class="btn soar-link icon-button font-14" icon="fa-filter" ng-click="hideDiv()">{{ slideOutText | i18n }}</button>
+                    <a tabindex="4" class="btn btn-primary" ng-disabled="disableMailing || disablePrint" ng-class="{notActive: (disablePrint)}" ng-click="printMailinglabels()" id="btnSendmailing">{{'Send Mailing' | i18n }}</a>
+
+                    <button class="peopleMgmt__actions-link__transparent pull-right" ng-class="{notActive: (disablePrint)}" ng-disabled="disablePrint" ng-click="exportCSV()">
+                        <i class="far fa-share-square fa-2x"></i>
+                    </button>
+                    <button class="peopleMgmt__actions-link__transparent pull-right" ng-class="{notActive: (disablePrint)}" ng-disabled="disablePrint" ng-click="printGrid()">
+                        <i class="fa fa-print fa-2x"></i>
+                    </button>
+                    <span class="peopleMgmt__toggleCommunication pull-right" ng-if="activeFltrTab != '5'">
+                        <label>{{ 'View unread communications only' | i18n }}</label>
+                        <button ng-click="filterUnreadCommunication()" ng-disabled="disableFilter">
+                            <i class="fa fa-2x fa-toggle-on active" ng-if="filteredUnreadCommunication"></i>
+                            <i class="fa fa-2x fa-toggle-on fa-rotate-180 inactive" ng-if="!filteredUnreadCommunication"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tx-plans-hover" ng-style="{ 'top' : mouseY, 'left' : mouseX }" ng-if="isMouseUp && txPlansHover.length > 0" ng-mouseover="keepHoverTipVisible()" ng-mouseleave="hideTxPlans()">
+        <table>
+            <tr class="tx-plans-header">
+                <th class="tx-plans-item-name">{{ ::('Tx Plan Name' | i18n) }}</th>
+                <th class="tx-plans-item-date">{{ ::('Create Date' | i18n) }}</th>
+                <th class="tx-plans-item-total">{{ ::('Total' | i18n) }}</th>
+                <th class="tx-plans-item-status">{{ ::('Status' | i18n) }}</th>
+            </tr>
+            <tr class="tx-plans-item-cursor" ng-repeat="tx in txPlansHover | orderBy: '-TreatmentPlanCreatedDate'" ng-click="navToPatientTxPlan(tx.PatientId, tx.TreatmentPlanId)">
+                <td class="tx-plans-item-name">{{tx.TreatmentPlanName }}</td>
+                <td class="tx-plans-item-date">{{tx.TreatmentPlanCreatedDate | date: 'MM/dd/yyyy' }}</td>
+                <td class="tx-plans-item-total">{{tx.TreatmentPlanTotalBalance | currency }}</td>
+                <td class="tx-plans-item-status">{{tx.TreatmentPlanStatus }}&nbsp;<i class="fa {{getClass(tx.TreatmentPlanStatus)}} fa-1x tx-plans-item-icon"></i></td>
+            </tr>
+        </table>
+    </div>
+    <div id="communicationbox">
+        <div>
+            <patient-communication-modal ng-hide="true" selected-location="selectedLocation"></patient-communication-modal>
+        </div>
+    </div>
+    <div class="peopleMgmt__header">
+        <div class="row" id="divSlideoutRow">
+            <div class="col-md-3" id="divSlideoutmenu" ng-hide="hideMenu">
+                <patient-slideout active-fltr-tab="activeFltrTab" active-grid-data="activeGridData" selected-location="selectedLocation"> </patient-slideout>
+            </div>
+
+            <!-- All Patients Grid -->
+            <div class="col-md-9 padding-left-0" ng-style="{ 'width' : grdWidth, 'overflow-x' : overflow }" lazy-show="activeFltrTab == '2'">
+                <grid id="patientGrid" options="allPatientsGridOptions" />
+            </div>
+
+            <!-- Appointments Grid -->
+            <div class="col-md-9 padding-left-0" ng-style="{ 'width' : grdWidth, 'overflow-x' : overflow }" lazy-show="hasScheduledAppointmentViewAccess && activeFltrTab == '1'">
+                <grid id="appointmentGrid" options="appointmentsGridOptions" />
+            </div>
+
+            <!-- Other To Do Grid access = soar-per-pman-mtab -->
+            <div class="col-md-9 padding-left-0" ng-style="{ 'width' : grdWidth, 'overflow-x' : overflow }" lazy-show="activeFltrTab == '5'">
+                <grid id="otherToDoGrid" options="otherToDoGridOptions" />
+            </div>
+
+            <!-- Treatment Plans Grid Bootstrap -->
+            <div class="col-md-9 padding-left-0" ng-style="{ 'width' : grdWidth, 'overflow-x' : overflow }" lazy-show="activeFltrTab == '6'">
+                <grid id="treatmentGrid" options="treatmentPlansGridOptions" />
+            </div>
+
+            <!-- Preventive Care Grid Bootstrap -->
+            <div class="col-md-9 padding-left-0" ng-style="{ 'width' : grdWidth, 'overflow-x' : overflow }" lazy-show="activeFltrTab == '7'">
+                <grid id="preventiveCareGrid" options="preventiveCareGridOptions" />
+            </div>
+
+            <div class="col-md-9" id="divKendoGridRow" ng-style="{ 'width' : grdWidth, 'overflow-x' : overflow }">
+                <div id="divKendoGrid" ng-show="(hasPreventiveCareViewAccess && activeFltrTab =='3') || (hasUnscheduledTreatmentViewAccess && activeFltrTab =='4')">
+                    <kendo-grid options="patGridOptions"
+                                id="patGrid"
+                                name="patGrid"
+                                k-rebind="patGridOptions"
+                                class="fuseGrid"
+                                ng-hide="(appointmentsLoading && activeFltrTab =='1') || (personsLoading && activeFltrTab =='2') || (preventiveCareLoading && activeFltrTab =='3') || (treatmentsLoading && activeFltrTab =='4')"
+                                k-on-filter-menu-init="filterInit(kendoEvent)">
+                    </kendo-grid>
+                    <no-results loading="(appointmentsLoading &&  activeFltrTab =='1') || (personsLoading &&  activeFltrTab =='2') || (preventiveCareLoading && activeFltrTab =='3') ||
+                                    (treatmentsLoading &&  activeFltrTab =='4')"
+                                ng-hide="(!appointmentsLoading && activeFltrTab =='1') || (!personsLoading && activeFltrTab =='2') ||
+                                    (!preventiveCareLoading && activeFltrTab =='3') || (!treatmentsLoading && activeFltrTab =='4')">
+                    </no-results>
+                </div>
+
+                <div class="peopleMgmt__body"
+                     ng-if="(!hasScheduledAppointmentViewAccess && activeFltrTab =='1') || (!hasPatientViewAccess && activeFltrTab =='2') || (!hasPreventiveCareViewAccess && activeFltrTab =='3') || (!hasUnscheduledTreatmentViewAccess && activeFltrTab =='4')">
+                    <span id="lblNoViewAccessForScheduledAppointments" ng-if="!hasScheduledAppointmentViewAccess && activeFltrTab =='1'">{{ 'You do not have required permissions to view scheduled appointments.' | i18n }}</span>
+                    <span id="lblNoViewAccessForPatients" ng-if="!hasPatientViewAccess && activeFltrTab =='2'">{{ 'You do not have required permissions to view patients.' | i18n }}</span>
+                    <span id="lblNoViewAccessForPreventiveCares" ng-if="!hasPreventiveCareViewAccess && activeFltrTab =='3'">{{ 'You do not have required permissions to view preventive cares.' | i18n }}</span>
+                    <span id="lblNoViewAccessForUnScheduledTreatments" ng-if="!hasUnscheduledTreatmentViewAccess && activeFltrTab =='4'">{{ 'You do not have required permissions to view unscheduled treatments.' | i18n }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="peopleMgmt__actions-link">
+    <a tabindex="2" ng-href="" id="btnPatientPageScrollTop" class="btn btn-primary" icon="fa-arrow-circle-up" ng-click="scrollToTop()">Top</a>
+</div>

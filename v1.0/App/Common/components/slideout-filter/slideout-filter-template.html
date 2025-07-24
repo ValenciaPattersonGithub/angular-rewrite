@@ -1,0 +1,38 @@
+﻿<div class="slideOutFilter">
+    <div class="margin-left-5 padding-top-10 padding-bottom-12">
+        <label>({{appliedFiltersCount}}) Filters Selected</label>
+        <button class="btn soar-link icon-button font-14 pull-right" ng-click="hideFiltersFn()">X</button>
+    </div>
+    <div ng-show= '!hideExpandCollapseBtn' >
+        <button id="btnExpandCollapse" class="btn soar-link icon-button font-14" ng-click="expandCollapseFn()"></button>
+    </div>
+    <div class="slideOutFilter__filterGroup" id="accordion">
+            <div class="slideOutFilter__filterOption" ng-repeat="filter in filters" ng-hide="filter.visible">
+                <div class="panel-heading" ng-if="filter.header">
+                    <a data-toggle="collapse" data-target="#{{filter.id}}" class="soar-link font-weight-bold padding-2 text-left">
+                        <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                        {{filter.header}}
+                    </a>
+                </div>
+                <div class="slideOutFilter__filterOption collapse in"  id="{{filter.id}}">
+                    <ul>
+                        <li ng-repeat="option in filter.options">
+                            <input type="{{option.Type}}" class="option" id="{{option.Id}}" name="{{option.Field}}" ng-checked="{{option.Checked}}" ng-click="toggleSelect(option.Id, option.Checked)" />
+                            <span class="margin-left-5">{{option.Name}}</span>
+                            <div ng-switch="option.ValueControl">
+                                <div class="zero-zindex" ng-switch-when="multiselect">
+                                    <multi-select ng-if="option.ValueControlOptions.IsLoaded" id="receivables{{option.Id}}" open="option.ValueControlOptions.Open" list="option.ValueControlOptions.List" auth-z="option.ValueControlOptions.Authz" type="{{option.ValueControlOptions.Type}}" selected-list="option.ValueControlOptions.SelectedList" display-field="{{option.ValueControlOptions.FieldName}}" id-field="{{option.ValueControlOptions.FieldId}}" select-all-label ="{{option.ValueControlOptions.SelectAllLabel}}"></multi-select>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="text-align-right padding-right-10 padding-bottom-10">
+        <a tabindex="1" class="btn btn-primary" ng-disabled="false" ng-click="reset()" id="btnReset">{{'Reset' | i18n }}</a>
+        <a tabindex="2" class="btn btn-primary" ng-disabled="false" ng-click="apply()" id="btnApplyFilters">{{'Apply Filters' | i18n }}</a>
+    </div>
+</div>
+

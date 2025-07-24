@@ -1,0 +1,393 @@
+﻿
+.proposedSelectorEncounter {
+    position: fixed;
+    max-width: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    opacity: 0;
+    background-color: @brand-color_white;
+    z-index: 999;
+    padding: 16px;
+    top: auto;
+    bottom: auto;
+    width:100%;
+    left: auto;
+    box-shadow: initial;
+
+    .scrollHeight {
+        height: 320px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    &.open {
+        max-width: 100%;
+        opacity: 1;
+    }
+
+    .propClose {
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+
+    .addCheckBox {
+        margin: 0;
+    }
+
+    .proposedTable {
+        margin-bottom: 5px;
+    }
+
+    .searchIcon {
+        padding-top: 9px;
+    }
+
+    .proposedHeader {
+        padding-right: 33px;
+    }
+
+    .selectBtn {
+        width: 11% !important;
+        min-width: 182px;
+        overflow: hidden;
+        vertical-align: middle !important;
+
+        i.inactive-service-warning {
+            color: #f7b82d;
+        }
+
+        i.inactive-service-warning + div.popover {
+            background: #106c90;
+            color: #fff;
+            font-size: 12px;
+        }
+    }
+
+    .scheduledicon {
+        margin-top: -1px;
+        padding: 0px;
+    }
+
+    .added-to-tx-icon {
+        margin-top: -1px;
+    }
+
+    .servCode {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .cdtCode {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .description {
+        width: 27% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .tooth {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .area {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .provider {
+        width: 14% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .fee {
+        width: 8% !important;
+        text-align: right;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .insEst {
+        width: 8% !important;
+        text-align: right;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }   
+}
+.proposedSelectorAppointment {
+    position: absolute;
+    top: 0%;
+    height: 570px;
+    max-width: 0;
+    opacity: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: @brand-color_white;
+    z-index: 999;
+    width: 98%;
+    box-shadow: initial;
+
+    .scrollHeight {
+        height: 320px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    &.open {
+        max-width: 100%;
+        opacity: 1;
+        padding: 16px;
+    }
+
+    .propClose {
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+
+    .addCheckBox {
+        margin: 0;
+    }
+
+    .proposedTable {
+        margin-bottom: 5px;
+    }
+
+    .searchIcon {
+        padding-top: 9px;
+    }
+
+    .proposedHeader {
+        padding-right: 33px;
+    }
+
+    .selectBtn {
+        width: 27% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .scheduledicon {
+        margin-top: -1px;
+        padding: 0;
+        margin-left: 17px;
+    }
+
+    .servCode {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .cdtCode {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .description {
+        width: 22% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .tooth {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .area {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .provider {
+        width: 13% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .fee {
+        width: 8% !important;
+        text-align: right;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .insEst {
+        width: 8% !important;
+        text-align: right;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    i.inactive-service-warning {
+        color: #f7b82d;
+    }
+
+    i.inactive-service-warning + div.popover {
+        background: #106c90;
+        color: #fff;
+        font-size: 12px;
+    }
+
+    i.inactive-service-warning ~ .scheduledicon {
+        margin-left: 0px;
+    }    
+}
+.proposedSelectorRunning {
+    background-color: @brand-color_white;
+    height: 380px;
+
+    .addCheckBox {
+        margin-top: 12px !important;
+    }
+
+    .compactView {
+        margin: 0px !important;
+    }
+
+    .compactTable {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        padding: 0px;
+        height: 256px;
+    }
+
+    .proposedTable {
+        margin-bottom: 5px;
+    }
+
+    .searchIcon {
+        padding-top: 9px;
+    }
+
+    .proposedHeader {
+        padding-right: 33px;
+    }
+
+    .selectBtn {
+        width: 14% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .scheduledicon {
+        margin-top: 12px;
+        padding: 0px;
+    }
+
+    .servCode {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .cdtCode {
+        width: 8% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .description {
+        width: 23% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .tooth {
+        width: 7% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .area {
+        width: 7% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .provider {
+        width: 13% !important;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .fee {
+        width: 8% !important;
+        text-align: right;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }
+
+    .insEst {
+        width: 8% !important;
+        text-align: right;
+        overflow: hidden;
+        vertical-align: middle !important;
+    }    
+}
+
+#tableServiceCodes {
+    .selectBtn {
+        .btn-link[disabled] {
+            color: @brand-color_disabled;
+        }
+    }
+
+    .disabled {
+        color: @brand-color_darker-gray;
+        background-color: @brand-color_dark-gray;
+        opacity: 1.0;
+        cursor: not-allowed;
+
+        button {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        &:hover {
+            opacity: 1.0;
+        }
+    }
+
+    .sortProvider {
+        width: 74px !important;
+    }
+
+    .sortArea {
+        width: 53px !important;
+    }
+
+    .sortTooth {
+        width: 58px !important;
+    }
+
+    .sortDesc {
+        width: 95px !important;
+    }
+
+    .sortCdt {
+        width: 66px !important;
+    }
+
+    .sortFee {
+        width: 55px !important;
+    }
+}
+
+.quick-add-container {
+    display: flex;
+    align-items: center;
+}

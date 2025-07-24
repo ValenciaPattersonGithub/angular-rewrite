@@ -1,0 +1,71 @@
+﻿<div ng-controller="ClaimsController">
+    <div class="insClaims">
+        <div class="insClaims__container">   
+            <amfa-based-location-selector ms-disabled="false" id="claimsLocations" open="false" list="masterLocations"
+                                          selected-list="selectedLocations" auth-z="'soar-ins-iclaim-view'" 
+                                           class="locMenu" on-blur-fn="locationChange()" amfa="soar-ins-iclaim-view" on-load-complete-fn="locationsLoaded()">
+            </amfa-based-location-selector>
+            <div class="secondaryFilterNavigation__tiles">
+                <div id="tiles">
+                    <div class="tab">
+                        <div class="header">
+                            <span ng-show="displayCount">{{ unsubmittedCount | i18n }}</span>
+                        </div>
+                        <div class="body">                                                                        
+                            <button class="collections" ng-class="{selected: activeTab == 'unsubmitted'}" ng-click="claimsApplyFilter('unsubmitted')">
+                                <span class="insClaimsFilter__total">{{ unsubmittedFee | currency }}</span>
+                                <span class="insClaimsFilter__label">{{ 'Unsubmitted' | i18n }}</span>
+                            </button>                                                      
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <div class="header">
+                            <span ng-show="displayCount">{{ submittedCount | i18n }}</span>
+                        </div>
+                        <div class="body">
+                            <button class="collections" ng-class="{selected: activeTab == 'submitted' }" ng-click="claimsApplyFilter('submitted')">
+                                <span class="insClaimsFilter__label">{{ submittedFee | currency }}</span>
+                                <span class="insClaimsFilter__label">{{ 'Submitted' | i18n }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <div class="header">
+                            <span ng-show="displayCount">{{ alertCount | i18n }}</span>
+                        </div>
+                        <div class="body">
+                            <button ng-class="{selected: activeTab == 'alerts' }" ng-click="claimsApplyFilter('alerts')">
+                                <span class="insClaimsFilter__total">{{ alertFee | currency }}</span>
+                                <span class="insClaimsFilter__label">{{ 'Alerts' | i18n }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <div class="header">
+                            <span ng-show="displayCount">{{ allCount | i18n }}</span>
+                        </div>
+                        <div class="body">
+                            <button ng-class="{selected: activeTab == 'all' }" ng-click="claimsApplyFilter('all')">
+                                <span class="insClaimsFilter__label">{{ 'All Claims' | i18n }} &amp;</span>
+                                <span class="insClaimsFilter__label">{{ 'Predeterminations' | i18n }}</span>                     
+                            </button>
+                        </div>
+                    </div>      
+                    <div class="tab"></div>
+                    <div class="tab"></div>
+                    <div class="tab"></div>
+                    <div class="tab"></div>             
+                </div>
+            </div>
+            <div class="insClaims__body">
+                <claims-management
+                    active-tab="activeTab"
+                    claim-mgmts-lists="claimsSummary"
+                    account-member-option="selectedaccountMemberOption"
+                    get-tab-count="getTabCount(tab, filters)"
+                    selected-locations ="selectedLocations">
+                </claims-management>
+            </div>      
+        </div>
+    </div>
+</div>

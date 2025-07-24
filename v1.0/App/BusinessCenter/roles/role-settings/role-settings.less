@@ -1,0 +1,124 @@
+﻿.roleSettings {
+    background-color: #fff;
+    padding-bottom: 20px;
+    overflow-x: scroll;
+    z-index: -1;
+
+    .closeButton {
+        cursor: pointer;
+        margin-top: @brand-padding_sm;
+        position: fixed;
+        right: 0%;
+        margin-right: 20px;
+        z-index: 1;
+    }
+
+    &__container {
+        min-width: 1300px;
+    }
+
+    &__accordion {
+        height: 450px;
+
+        &.overflow {
+            overflow-y: scroll;
+        }
+        .gridRow:nth-child(even) {
+            background-color: #fff;
+        }
+
+        .gridRow:nth-child(odd) {
+            background-color: #eee;
+        }
+
+        .tag-container {
+            margin-top: 3px;
+        }
+
+        .roleMatrix {
+            padding-left: @brand-padding_sm;
+            width: 33%;
+        }
+
+        .noRoleSelected {
+            color: red;
+        }
+
+        .check {
+            float: left;
+            width: 7.2%;
+            color: @brand-color_green;
+        }
+
+        .noCheck {
+            float: left;
+            width: 7.2%;
+            color: @brand-color_error;
+        }
+
+        .heading {
+            background-color: @brand-color_primary;
+            color: @brand-color_white;
+        }
+    }
+
+    &__filters {
+        .filterRow {
+            padding-bottom: @brand-padding_sm;
+
+            label {
+                padding-top: 3px;
+            }
+        }
+    }
+
+    &__roleHeader {
+        padding: 30px;
+
+        .roleName {
+            padding: 10px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &__cell {
+        &:last-child {
+            span {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &__divider {
+        margin-left: -16px;
+    }
+}
+
+.d-flex{
+    display: flex;
+}
+
+.p-0{
+    padding: 0%;
+}
+
+.roleSettings__divider_width{
+    width: 116%;
+}
+
+.roleSettings__accordion_width{
+    width: 118%;
+}
+
+.roleSettings__roleHeader_pl0_pr0{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.roleName_pl0_pr0{
+    padding-left:14px;
+    padding-right: 14px;
+}

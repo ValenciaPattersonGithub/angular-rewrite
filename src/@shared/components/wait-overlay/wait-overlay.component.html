@@ -1,0 +1,20 @@
+<div class="wait-overlay">
+    <div id="wait-overlay-spinner" class="wait-overlay-spinner">
+        <i id="resolveLoadingSpinner" class="fa fa-spinner fa-4x fa-spin"></i><br />
+    </div>
+    <div id="wait-overlay-header" class="wait-overlay-header">
+        <p>{{data.header | translate  }}</p>
+    </div>
+
+    <div id="wait-overlay-messages" class="wait-overlay-body">
+        <p class="wait-overlay-text">
+            {{data.message| translate }}
+        </p>
+
+        <p class="wait-overlay-text">
+            {{data.message2| translate }}
+        </p>        
+    </div>
+</div>
+
+<!-- TODO make message dynamic -->

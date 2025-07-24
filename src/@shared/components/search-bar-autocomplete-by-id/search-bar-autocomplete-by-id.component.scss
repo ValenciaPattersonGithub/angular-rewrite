@@ -1,0 +1,107 @@
+﻿@import "variables";
+
+.search-bar-autocomplete-by-id {
+    ::ng-deep .k-autocomplete {
+        height: 100%;
+        width: 100%;
+        border: 1px solid $border-grey;
+        border-radius: 4px;
+    }
+}
+
+.search-bar-autocomplete-by-id-wrapper {
+    display: grid;
+    height: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    position: relative;
+    min-width: 100%;
+    gap: 10px;
+
+    &-plan {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    &-carrier {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    &-group {
+        grid-column: 1;
+        grid-row: 3;
+    }
+
+    &-address1 {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    &-address2 {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    &-address3 {
+        grid-column: 2;
+        grid-row: 3;
+    }
+}
+
+.text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.text-indent {
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-indent: 14.5ch;
+}
+
+::ng-deep .search-bar-popup-wrapper.k-popup .k-list .k-item {
+    border-bottom: 1px solid $border-grey;
+    height: 100% !important;
+    position: relative !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    margin-top: -33px;
+}
+
+::ng-deep .search-bar-popup-wrapper.k-popup .k-list .k-state-focused, .search-bar-popup-wrapper.k-popup .k-list .k-state-selected, .search-bar-popup-wrapper.k-popup .k-list .k-state-hover {
+    background-color: #27BFE6 !important;
+}
+
+::ng-deep .search-bar-popup-wrapper .k-list .k-item.k-state-focused {
+    color: #ffffff !important;
+}
+
+::ng-deep .search-bar-popup-wrapper .k-list .k-item:hover {
+    background-color: #27BFE6 !important;
+}
+
+::ng-deep .search-bar-popup-wrapper .k-list {
+    margin-top: 33px;
+}
+
+::ng-deep .search-bar-popup-wrapper .k-autocomplete > .k-i-close {
+    color: #333333 !important;
+}
+
+::ng-deep #kendoSearchId .k-searchbar:before {
+    font-family: 'Font Awesome 5 Pro';
+    content: "\f002";
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 6px;
+}
+
+div .description-text {
+    overflow-x: hidden;
+    width: auto;
+}
+
+.text-center {
+    text-align: center;
+}

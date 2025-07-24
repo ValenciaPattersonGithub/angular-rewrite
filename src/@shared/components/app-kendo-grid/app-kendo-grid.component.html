@@ -1,0 +1,89 @@
+﻿<div class="commonKendo">
+<kendo-grid [data]="gridData"
+            [height]="gridHeight"
+            [sortable]="isSortable"
+            [sort]="state?.sort"
+            [filter]="state?.filter"
+            [filterable]="isFilterable"
+            [loading]="loading"
+            (edit)="editHandler($event)"
+            (cancel)="cancelHandler($event)"
+            (save)="saveHandler($event)"
+            (remove)="removeHandler($event)"
+            (add)="addHandler($event)"
+            (dataStateChange)="dataStateChange($event)"
+            [navigable]="true">
+
+  <ng-template kendoGridToolbarTemplate *ngIf="hasCreateButton">
+    <div [ngClass]="createButton?.class">
+      <button kendoGridAddCommand
+              checkRoleAccess="{{ !hasCreateAccess }}"
+              [id]="createButton?.id"
+              class="btn btn-primary"
+              [iconClass]="'k-icon k-i-plus'">
+        {{ createButton?.text | translate }}
+      </button>
+    </div>
+  </ng-template>
+
+  <kendo-grid-column *ngFor="let gridColumn of columns"
+                     [field]="gridColumn.field"
+                     [title]="gridColumn.title"
+                     [width]="gridColumn.width">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ dataItem[gridColumn.field] }}
+    </ng-template>
+    <ng-template kendoGridEditTemplate *ngIf="hasKendoAddEdit" let-column="column" let-formGroup="formGroup"
+                 let-isNew="isNew">
+
+      <input #input class="k-textbox"
+             [formControl]="formGroup?.get(column.field)"
+             [maxlength]="gridColumn.validation?.maxLength" />
+
+      <ng-container *ngIf="gridColumn.hasValidations">
+        <div class="k-tooltip-validation"
+             *ngIf="formGroup?.get(column.field).invalid && !(isNew && formGroup?.get(column.field).untouched)">
+          <span class="k-icon k-i-warning"></span>
+          {{ gridColumn.validation.message | translate }}
+        </div>
+      </ng-container>
+
+    </ng-template>
+
+    <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+      <kendo-grid-string-filter-cell [column]="column"
+                                     [filter]="state?.filter"
+                                     [filterDelay]="filterDelay"
+                                     [showOperators]="showOperators">
+      </kendo-grid-string-filter-cell>
+    </ng-template>
+  </kendo-grid-column>
+
+  <ng-container *ngIf="editSection?.showActionIcons">
+    <kendo-grid-command-column title="" [width]="editSection?.width">
+      <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+        <span kendoTooltip
+              position="top"
+              tooltipClass="app-tooltip"
+              title="{{dataItem.editTooltipMessage || ''}}">
+          <button kendoGridEditCommand [disabled]="dataItem.disableEdit" [iconClass]="'fas fa-pencil-alt'"></button>
+        </span>
+        <span kendoTooltip
+              position="top"
+              tooltipClass="app-tooltip"
+              title="{{dataItem.deleteTooltipMessage || ''}}">
+          <button kendoGridRemoveCommand [iconClass]="'fas fa-trash-alt'" [disabled]="dataItem.disableDelete"></button>
+        </span>
+        <a kendoGridCancelCommand [iconClass]="'k-icon k-i-cancel'" *ngIf="hasKendoAddEdit"></a>
+        <a kendoGridSaveCommand *ngIf="hasKendoAddEdit"
+           [disabled]="formGroup?.invalid"
+           [iconClass]="'k-icon k-i-check'"></a>
+      </ng-template>
+    </kendo-grid-command-column>
+  </ng-container>
+
+  <kendo-grid-messages [noRecords]="noRecordsMessageVal"></kendo-grid-messages>
+</kendo-grid>
+
+<ng-container #container></ng-container>
+</div>

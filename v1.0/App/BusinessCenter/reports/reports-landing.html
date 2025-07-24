@@ -1,0 +1,110 @@
+﻿<top-navigation [menu-type]="'Business'"></top-navigation>
+<div class="reportsLanding landing">
+        <div class="rowFull">
+            <div class="reportsLanding__header">
+                <a class="btn btn-primary createbtn"  check-auth-z="soar-report-custom-create"  ng-click="navigate('#/BusinessCenter/Reports/Custom/Create')" >{{::('Create Custom Report' | i18n)}}</a>
+                <hr class="createbtnLine">
+            </div>
+        </div>
+        <div class="reportsLanding__body flex-container containerList">
+            <div class="reportTypes" ng-class="{'noCustomReports': customReportsExists === false }">
+                <div class="main">
+                    <div class="form-group has-feedback has-search">
+                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        <input id="reportSerch" type="text" class="form-control" placeholder="Search" ng-model="userSearch" ng-change="onSearch(userSearch)">
+                    </div>
+                </div>
+                <div class="reportCategories">
+                    <span>{{ ::('Report Categories' | i18n) }}</span>
+                </div>
+                <div ng-repeat="cat in reportTypes" class="reportTypeCheckbox" ng-hide="cat.ReportCategoryValue === customReports && !customReportsExists">
+                    <label class="container">
+                        <input type="checkbox" ng-checked="cat.Selected"  ng-model="cat.Selected" ng-change="toggleSelect(cat)">
+                        <span class="checkmark"></span>
+                        <span class="onCheckBoxSelect">{{cat.ReportCategory}}</span>
+                    </label>
+                </div>
+            </div>
+            <div  class="flex-container nestedContainer">
+                <div ng-if="userSearch === ''" style="margin-bottom: 38px;">
+                    <div style="width: 100%; background-color: #FAFAFA !important; margin-top: 12px;">
+                        <div id="filters" class="filtersIcon" ng-click="showMore()" ng-if="!displayMoreInfo">
+                            <i class="fa fa-caret-up collpseFilter"></i>
+                            <b class="filters">{{::('Filter(s)' | i18n) }}</b>
+                        </div>
+                        <div class="filtersIcon" ng-click="showMore()" ng-if="displayMoreInfo">
+                            <i class="fa fa-caret-up expandFilter"></i>
+                            <b class="filters">{{::('Filter(s)' | i18n) }}</b>
+                        </div>
+                        <div class="appliedFilters">
+                            <span><b>({{filtersAppiled}})</b> {{' Filters applied'| i18n}}</span>
+                            <span class="resetFilters" ng-click="resetFilters()" ng-if="filtersAppiled > 0">{{::('Reset'| i18n)}}</span>
+                        </div>
+                    </div>
+                    <hr class="filtersBorder">
+                    <div ng-if="userSearch === ''" ng-show="displayMoreInfo" class="filtersSection">
+                            <div id="favorite_reports" class="favoriteReports">
+                                <b class="filtersLabel">{{::('Favorite Reports' | i18n) }}</b>
+                                <div>
+                                    <label class="container filterSectionLabel">
+                                        <input type="checkbox" ng-checked="favoriteReportFilter.Selected"  ng-model="favoriteReportFilter.Selected" ng-change="filterReports(favoriteReportFilter)">
+                                        <span class="checkmark"></span>
+                                        <span class="onCheckBoxSelect filtersCategory">{{favoriteReportFilter.ReportCategory}}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="custom_reports" class="customReports">
+                                <b class="filtersLabel">{{::('Custom Reports' | i18n) }}</b>
+                                <div>
+                                    <label class="container filterSectionLabel">
+                                        <input type="checkbox" ng-checked="customReportFilter.Selected"  ng-model="customReportFilter.Selected" ng-change="filterReports(customReportFilter)">
+                                        <span class="checkmark"></span>
+                                        <span class="onCheckBoxSelect filtersCategory">{{customReportFilter.ReportCategory}}</span>
+                                    </label>
+                                </div>
+                            </div>
+                    </div>
+                </div>                
+                <div class="reportsLanding__slimScroll forChrome" ng-class="{'onSearch': userSearch !== ''}">
+                        <ul class="list">
+                            <li class="noStyle" ng-if="customReportFilter.Selected === false && favoriteReportFilter.Selected === false && reports.length === 0 && userSearch === ''">
+                                <div class="noReports">{{::('Please select a category to view reports') | i18n}}</div>
+                            </li>
+                            <li class="noStyle" ng-if="(customReportFilter.Selected === true || favoriteReportFilter.Selected === true) && reports.length === 0 && userSearch === ''">
+                                <div class="noReports">{{::('No Results') | i18n}}</div>
+                                <div style="text-align: center; font-family: 'Open Sans', sans-serif;">{{::('There are no results for your filtered criteria. Please change your filters or check your category selections.') | i18n}}</div>
+                            </li>
+                            <li class="searchResults" ng-if="userSearch !== ''">
+                                <div>{{ searchReasults}}</div>
+                            </li>
+                            <li ng-repeat="(key, value) in reports | groupBy: 'CategoryName'" class="category">
+                                <p class="categoryName">{{key}}</p>
+                                <hr class="categoryLine" style="margin-right: 12px;">
+                                <br />
+                                <ul class="noStyle noStylePadding">
+                                    <li ng-repeat="rep in value | orderBy : 'Name'  track by rep.Route" class="noStyle noMargin" id="{{rep.IsCustomReport ? 'custom_Report' : 'report'}}" style="position: relative;">
+                                        <a ng-class="{'searchKey': userSearch !== '',  'reportName': userSearch === ''}" ng-click="generateReport(rep)" ng-bind-html="rep.Name | highlight:userSearch" check-auth-z="{{checkAccess(rep.$$AmfaAbbrev)}}">{{rep.Name}}</a>
+                                       
+                                        <button id="btnActionMenuA5fb21ee974c14042af1bda74bf29138a" data-toggle="dropdown" class="btn btn-link dropdown-toggle" aria-expanded="false" style="float: right">
+                                            <i class="fa fa-ellipsis-v fa-lg"></i>
+                                        </button>
+                                        <ul class="pull-right dropdown-menu options">
+                                            <li class="menuItemOnHover"><a ng-click="toggleFavorite(rep)">{{rep.IsFavoriteReport ? 'Unfavorite' : 'Favorite'}}</a></li>
+                                            <li class="menuItemOnHover"><a ng-click="deleteCustomReportConfirm(rep)" ng-if="rep.IsCustomReport" check-auth-z="soar-report-custom-create">Delete</a></li>
+                                        </ul>
+                                        <button id="favorite_button" class="btn btn-link" style="position: absolute; right: 33px;" ng-click="toggleFavorite(rep)">
+                                            <i class="far fa-star fa-lg" ng-if="!rep.IsFavoriteReport"></i>
+                                            <i class="fas fa-star fa-lg" ng-if="rep.IsFavoriteReport"></i>
+                                        </button>
+                                        <br />
+                                        <p class="word-wrap description">{{rep.Description}}</p>
+                                        <hr class="descriptionLine" style="margin-right: 12px;">
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                </div>
+    
+            </div>
+        </div>
+    </div>

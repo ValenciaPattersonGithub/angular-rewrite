@@ -1,0 +1,16 @@
+<div class="contactheader" id="contact-header">
+    <div class="contactheader-title" id="contact-header-title">
+        <span class="contactheader-main-title" id="contact-header-main-title">{{ 'Contact' | translate }}</span>
+    </div>
+    <div class="contactdetail" id="contact-detail">
+        <span class="contactdetail-phonelabel" id="contact-detail-phone-label">{{ 'Phone: ' | translate }}</span>
+        <span class="contactdetail-phone" id="contact-detail-phone">{{primaryPhone | phoneNumber}} {{primaryPhoneType}}</span>
+        <span class="contactdetail-emaillabel" id="contact-detail-email-label">{{ 'Email: ' | translate }}</span>
+        <span class="contactdetail-email" id="contact-detail-email"><a href="mailto:{{primaryEmail}}">{{primaryEmail}}</a></span>
+        <span class="contactdetail-responsiblepartylabel" id="contact-detail-responsible-party-label">{{ 'Responsible Party: ' | translate }}</span>
+        <span class="contactdetail-responsibleparty" id="contact-detail-responsible-party">{{responsibleParty}}</span>
+        <span class="contactdetail-addresslabel" id="contact-detail-address-label">{{ 'Address: ' | translate }}</span>
+        <span class="contactdetail-address" id="contact-detail-address">{{address}}<br>{{displayCityStateZipCode}}</span>
+    </div>
+
+</div>

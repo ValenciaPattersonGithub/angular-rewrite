@@ -1,0 +1,34 @@
+﻿<div class="modal-header">
+    <div class="container">
+        <div class="row">
+            <h1>
+                <span class="glyphicon glyphicon-exclamation-sign large-size" aria-hidden="true"><span id="discardHeader" class="modal-title">&nbsp;{{ 'Discard' | i18n }}</span></span>
+            </h1>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <h2 id="formDiscardMessage">
+                {{ 'Selecting OK will delete your current changes to this template.' | i18n }}
+            </h2><br />
+        </div>
+        <div class="row"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <button id="btnOk" check-auth-z="soar-biz-bcform-delete" type="button" class="btn btn-default col-md-12 left" ng-click="discardForm()">
+                        <h4 id="okButtonCaption"> {{ 'Ok' | i18n | uppercase }}</h4>
+                    </button>
+                </div>
+
+                <div class="col-md-6">
+                    <button id="btnCancel" type="button" class="btn btn-default col-md-12 right" ng-click="cancelDiscard()">
+                        <h4 id="cancelButtonCaption"> {{ 'Cancel' | i18n }}</h4>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

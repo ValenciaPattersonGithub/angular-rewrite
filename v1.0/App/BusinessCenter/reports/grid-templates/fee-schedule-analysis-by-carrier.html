@@ -1,0 +1,102 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-12 cell" colspan="9">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="stripOdd">
+                    <th class="col-sm-3 cell">{{ 'Carrier' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Fee Schedule' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Service Code' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Location Fee' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Allowed Amount' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Count of Service' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total' | i18n }} {{ 'Amount Charged' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total' | i18n }} {{ 'Amount of Fee Schedule Adjustments' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Total' | i18n }} {{ 'Net Production' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="carrier in location.Carriers" class="stripOdd">
+                <tr>
+                    <td class="col-sm-3 cell">
+                        <div>{{ carrier.Carrier }}</div>
+                        <div ng-if="carrier.Address">{{ carrier.Address }}</div>
+                        <div ng-if="carrier.Address2">{{ carrier.Address2 }}</div>
+                        <div>{{ carrier.City }}<span ng-if="carrier.City">,</span> {{ carrier.State }} {{ carrier.ZipCode }}</div>
+                        <div>{{ carrier.PhoneNumber | tel}}</div>
+                    </td>
+                    <td class="col-sm-9 cell" colspan="8"></td>
+                </tr>
+                <tr ng-repeat-start="feeSchedule in carrier.FeeSchedules">
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-2 cell">{{feeSchedule.FeeSchedule}}</td>
+                    <td class="col-sm-1 cell">{{feeSchedule.ServiceCodes[0].ServiceCode}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].LocationFee | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].CountOfService}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].AmountCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.ServiceCodes[0].NetProduction | currency}}</td>
+                </tr>
+                <tr ng-repeat="code in feeSchedule.ServiceCodes | startFrom: 1">
+                    <td class="col-sm-5 cell" colspan="2"></td>
+                    <td class="col-sm-1 cell">{{code.ServiceCode}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.LocationFee | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.CountOfService}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.AmountCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{code.NetProduction | currency}}</td>
+                </tr>
+                <tr ng-repeat-end>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="5">{{'Totals for' | i18n}} {{feeSchedule.FeeSchedule}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.CountOfService}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.AmountCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{feeSchedule.NetProduction | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="5">{{'Totals for' | i18n}} {{carrier.Carrier}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.CountOfService}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.AmountCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{carrier.NetProduction | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripOdd">
+                <tr>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="5">{{'Totals for' | i18n}} {{location.Location}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.CountOfService}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.AmountCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{location.NetProduction | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.Locations.length > 0 && !showFilterMessage && data.Locations.length === $index+1">
+                <tr class="reportGrid__footer">
+                    <td class="col-sm-12 cell" colspan="9"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="5">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.CountOfService}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.AmountCharged | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.FeeScheduleAdjustmentAmount | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.NetProduction | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="9">
+                        {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

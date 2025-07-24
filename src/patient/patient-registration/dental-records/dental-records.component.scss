@@ -1,0 +1,149 @@
+@import "variables";
+.dentalRecords {
+    font-family: $global-font-family;
+    &-container {
+        padding: 15px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 5px;
+        hr {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-top: 1px solid #2b144e;
+        }
+    }
+    &-header {
+        display: grid;
+        grid-template-columns: 80% 3% 17%;
+    }
+    &-title {
+        width: 156px;
+        height: 16px;
+        font-size: 16px;
+        color: $text-black;
+        text-decoration: none solid $text-black;
+        line-height: 16px;
+        font-weight: bold;
+        grid-column: 1;
+    }
+    &-label {
+        font-size: 14px;
+        color: $label-color;
+        font-weight: 600;
+    }
+    &-input {
+        height: 30px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 4px;
+        width: 100%;
+        padding: 0px 8px;
+        outline: none;
+        -webkit-box-sizing: border-box; 
+        -moz-box-sizing: border-box; 
+        box-sizing: border-box; 
+    }
+    &-textarea {
+        height: 194px;
+        border: 1px solid $patient-registration-border-color;
+        border-radius: 4px;
+        width: 100%;
+        padding: 0px 8px;
+        outline: none;
+        -webkit-box-sizing: border-box; 
+        -moz-box-sizing: border-box; 
+        box-sizing: border-box; 
+    }
+    &-errorIcon {
+        float: left;
+        margin-left: 10px;
+        margin-top: 8px;
+        color: $error-color;
+    }
+    &-errorControl {
+        width: 95%;
+        border: 1px solid $error-color;
+        box-shadow: 0 0 0 1px $error-color;
+        float: left;
+    }
+    &-selectlist {
+        height: 30px;
+        width: 92%;
+        padding: 0px 5px;
+        text-align: left;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        border: 1px solid $patient-registration-border-color;
+        background-color: $page-search-input-background;
+        color: $text-black;
+        outline: none;
+    }
+    &-selectlist:focus {
+        box-shadow: 0 0 0 1px $dropdown-hover-color;
+    }
+    &-content {
+        display: grid;
+        grid-template-columns: 60% 25% 15%;
+        & > div {
+            margin: 0px 15px 20px 0px;
+        }
+
+        &-previousdentist {
+            grid-row: 1;
+            grid-column-start: 1;
+            grid-column-end: span col3-end;
+        }
+        &-previousdentist {
+            grid-row: 1;
+            grid-column-start: 1;
+            grid-column-end: span col3-end;
+        }
+        &-phoneNumber {
+            grid-row: 2;
+            grid-column-start: 1;
+            grid-column-end: span col3-end;
+        }
+        &-email {
+            grid-row: 3;
+            grid-column-start: 1;
+            grid-column-end: span col3-end;
+        }
+        &-Address1 {
+            grid-row: 4;
+            grid-column-start: 1;
+            grid-column-end: span col3-end;
+        }
+        &-Address2 {
+            grid-row: 5;
+            grid-column-start: 1;
+            grid-column-end: span col3-end;
+        }
+        &-City {
+            grid-row: 6;
+            grid-column: 1;
+        }
+        &-State {
+            grid-row: 6;
+            grid-column: 2;
+        }
+        &-ZipCode {
+            grid-row: 6;
+            grid-column: 3;
+        }
+        &-Notes {
+            grid-row: 7;
+            grid-column-start: 1;
+            grid-column-end: span col3-end;
+        }
+    }
+}
+.zipcode-error {
+    width: 75%;
+    float: left;
+    border: 1px solid $error-color;
+    box-shadow: 0 0 0 1px $error-color;
+}
+.mb-5 {
+    margin-bottom: 5px;
+}
+

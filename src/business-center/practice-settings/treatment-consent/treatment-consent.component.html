@@ -1,0 +1,12 @@
+<consent-message [styles]="styles"
+                 [title]="'Treatment Consent Letter'"
+                 [checkAuthZ]="dynamicAmfa"
+                 [dataHasChanged]="hasChanges"
+                 [consentMessage]="treatmentConsentTextDto?.Text"
+                 (save)="saveChanges()"
+                 (cancel)="cancel()"
+                 (consentMessageChange)="treatmentConsentMessageChange($event)">
+</consent-message>
+
+								
+								 

@@ -1,0 +1,35 @@
+<div *ngIf="!isDisabled" class="teethSelector fui-select-container" id="{{customid}}">    
+    <div id="dropdown" #toothDropdown tabindex="0" class="fui-select"
+         [ngClass]="{'redBorder' : !toothAreaService.toothAreaData.toothSelection || toothAreaService.toothAreaData.toothSelection === '0'}"         
+         (keydown)="toggleDropdownKeypress($event)"
+         (click)="toggleDropdown(null)">        
+        <div class="teethSelector__displayedTeeth">{{toothAreaService.toothAreaData.toothSelection && toothAreaService.toothAreaData.toothSelection !== '0' ? toothAreaService.toothAreaData.toothSelection : '---' }}</div>
+
+
+    </div>
+        <div id="dropdownArea" class="teethSelector__toothDropdown" *ngIf="showDropdown">
+            <div class="teethSelector__toothInput">
+                <form (keydown.enter)="enter($event)" autocomplete="off">
+                    <input (keydown)="inputKeydown($event)" id="toothInput" type="text" placeholder="Search" [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" (ngModelChange)="inputChanged($event, inputValue)"
+                           #toothInput isAlphaNumericWithDashAndComma maxlength="2"/>
+                    <i class="fa fa-search"></i>
+                </form>
+            </div>
+            <div class="teethSelector__teethList">                
+                <div tabindex="0" #toothDropdownOption id="toothDropdownOption0" (mousedown)="select('0')"
+                     (keydown.enter)="select('0')"
+                     (keydown.arrowup)="navigateToNextOption($event, -1)" (keydown.arrowdown)="navigateToNextOption($event, 1)">---</div>
+                <div tabindex="0" #toothDropdownOption id="toothDropdownOption{{i+1}}"
+                     *ngFor="let tooth of toothAreaService.toothAreaData.availableTeeth | teethSelectorDisplay:inputValue; let i = index"
+                     [ngClass]="{'teethSelector__highlight' : (!inputValue || inputValue === null || inputValue === '') ?  false : i === 0 && !isUsingArrowKeys}"
+                     (mousedown)="select(tooth.USNumber)" (keydown.arrowup)="navigateToNextOption($event, i)" (keydown.arrowdown)="navigateToNextOption($event, i+1+1)"
+                     (keydown.enter)="select(tooth.USNumber)"
+                     (keydown.tab)="tabbedOnOption($event, i)">{{tooth.USNumber}}</div>
+            </div>
+
+        </div>    
+</div>
+
+<div class="fui-select" *ngIf="isDisabled" [attr.disabled]="isDisabled ? 'disabled' : null">
+    <!--Placeholder space for when this field doesn't apply-->
+</div>

@@ -1,0 +1,421 @@
+<table class="patient-transaction-grid">
+
+<div class="claims">
+  <thead  id="gridHeader" >
+    <tr>
+      <th>
+    <div class=" grid header" [ngClass]="{'claim': !showCreateClaimView && !isCreateCustomInvoice, 'claimView': !( !showCreateClaimView && !isCreateCustomInvoice) }" >
+      <div
+        *ngFor="let column of header; index as i"
+        class="{{ column.class }}"
+        id="{{column.id}}"
+        [ngClass]="{ sortable: !showCreateClaimView && !isCreateCustomInvoice }"
+        (click)="sortColumn(column.click ? column.click : '')"
+      >
+        {{ column.label }}
+        <span
+          *ngIf="column.span && !showCreateClaimView && !isCreateCustomInvoice"
+          class="fa fas"
+          [ngClass]="sortcss(column.click ? column.click : '')"
+        ></span>
+      </div>
+    </div>
+  </th>
+</tr>
+</thead>
+<tbody>
+  <tr>
+    <td> 
+       <div *ngIf="!(!rows || rows.length === 0)">
+      <div
+        *ngFor="let row of rows; trackBy: $index; index as i"
+        [ngClass]="{
+          'master-list-item-even': $even,
+          'payments-display-color':
+            row.TransactionTypeId == 2 || row.TransactionTypeId == 3,
+          'negative-adjustments-display-color': row.TransactionTypeId == 4,
+          'positive-adjustments-display-color':
+            row.TransactionTypeId == 5 || row.TransactionTypeId == 6,
+          'deleted-transaction-display-color': row.IsDeleted == true,
+          'open-claims-display-color':
+            row.hasOpenClaim && row.TransactionTypeId == 1 && !row.IsDeleted,
+						'account-note-display-color': row.Type === 'AcctNote' && !row.IsDeleted,
+						'document-display-color': row.Type === 'Doc' && !row.IsDeleted
+        }"
+        data-qa="transaction-history-row-container"
+      >
+        <div class=" grid item" [ngClass]="{'claim': !showCreateClaimView && !isCreateCustomInvoice, 'claimView': !( !showCreateClaimView && !isCreateCustomInvoice) }">
+          <div class="dateColumn txhDate" id="trxhDate">
+              <app-check-box
+              *ngIf="showCreateClaimView && selectedPlanId"
+              id="createClaim{{ i }}"
+              auth-z="soar-ins-iclaim-add"
+              [isDisabled]="!row.IsSubmittableOnClaim"
+              [checked]="row.ServiceManuallySelected"
+              (checkChanged)="selectedCountChangeEvent(row)"
+            >
+            </app-check-box>
+            <app-check-box
+              *ngIf="isCreateCustomInvoice"
+              id="selected{{ i }}"
+              auth-z="soar-ins-iclaim-add"
+              [checked]="row.selected"
+              (checkChanged)="selectedCountChangeEvent(row)"
+            >
+            </app-check-box>
+           <span> {{ row.displayDate }}</span>
+          </div>
+          <div class="txhPatientName"  id="trxhPatient"
+            kendoTooltip
+            position="top"
+            tooltipClass="app-tooltip"
+            title="{{ row.PatientName?.length > 36 ? row.PatientName  : row.PatientName | translate }}">
+            {{ row.PatientName?.length > 36 ? (row.PatientName | truncateText: 36) : row.PatientName }}
+          </div>
+
+          <div  class="txhProvider"  id="trxhProvider">
+            <span>  {{ row.ProviderUserName }}</span>
+          </div>
+
+          <div class="txhLocation"  id="trxhLocation">
+            <span
+              kendoTooltip
+              position="top"
+              tooltipClass="app-tooltip"
+              title="{{
+                row.LocationName && row.LocationName.length > 20
+                  ? row.LocationName
+                  : ''
+              }}"
+            >
+              {{
+                row.LocationName && row.LocationName.length > 24
+                  ? (row.LocationName | truncateText: 24) + "..."
+                  : row.LocationName
+              }}
+            </span>
+          </div>
+          <div class="txhType" id="trxhType"><span>{{ row.Type }}</span></div>
+
+          <div class="txhDescription" id="trxhDescription">
+            <span>    <div
+              *ngIf="row.Type != 'Doc'"
+              kendoTooltip
+              position="top"
+              tooltipClass="app-tooltip-truncate"
+              title="{{
+                row.Description && row.Description.length > 30
+                  ? row.Description
+                  : ''
+              }}"
+              data-qa="transaction-history-row-description-tooltip"
+            >
+              <i
+                *ngIf="row.Type === 'InCollNote'"
+                class="font-red fa fa-exclamation-circle"
+                aria-hidden="true"
+              ></i>
+              {{
+                row.Description && row.Description.length > 150
+                  ? (row.Description | truncateText: 150) + "..."
+                  : row.Description
+              }}
+            </div></span>
+            <span *ngIf="row.Type === 'Doc'">  <div
+              *ngIf="row.Description && row.Description.length > 20"
+              kendoTooltip
+              position="top"
+              tooltipClass="app-tooltip"
+              title="{{
+                row.Description && row.Description.length > 20
+                  ? row.Description
+                  : ''
+              }} "
+            >
+            <span>
+              <a (click)="displayDocument(row)">
+                {{
+                  row.Description && row.Description.length > 150
+                    ? (row.Description | truncateText: 150) + "..."
+                    : row.Description
+                }}
+              </a>   
+            </span> 
+            </div>
+          <div *ngIf="row.Description && row.Description.length <= 20">  
+              <a (click)="displayDocument(row)">
+              {{
+                row.Description && row.Description.length > 150
+                  ? (row.Description | truncateText: 150) + "..."
+                  : row.Description
+              }}
+             </a> 
+          </div>
+        </span>
+          </div>
+          <div class="txhTooth" id="trxhTooth">
+            <span>{{
+                row.Tooth && row.Tooth.length > 10
+                  ? (row.Tooth | truncateText: 10) + "..."
+                  : row.Tooth
+              }}
+            </span>
+          </div>
+          <div class="word-break txhArea" id="trxhArea">
+            <span>{{
+                row.Area && row.Area.length > 10
+                  ? (row.Area | truncateText: 10) + "..."
+                  : row.Area
+              }}
+            </span>
+          </div>
+
+          <div class="text-right amountCenter txhAmount" id="trxhAmount"> 
+            <div class="row">
+
+              <div>
+                <mat-icon *ngIf="row.IsFeeScheduleWriteOff" kendoTooltip  tooltipClass="app-tooltip" title="Automatically Applied" svgIcon="assignment" class="assignment-icon">assignment</mat-icon>
+                {{ row.Amount | formatCurrencyIfNeg }}</div>
+              <div class="row txhAmountIcons">
+                <span
+                id="CreditCardIconForTransaction"
+                class="fa fa-credit-card txhAmountCCIcon"
+                *ngIf="
+                  (row.TransactionTypeId == 5 ||
+                    row.TransactionTypeId == 6 ||
+                    row.TransactionTypeId == 1) &&
+                  row.RemainingBalance > 0 &&
+                  !row.IsDeleted
+                "
+                kendoTooltip
+                position="top"
+                tooltipClass="app-tooltip"
+                title="This Transaction is unpaid"
+              ></span>
+                <span
+                class="fas fa-university deposited"
+                *ngIf="row.IsDeposited"
+                kendoTooltip
+                position="top"
+                tooltipClass="app-tooltip"
+                title="This payment has been deposited."
+              ></span>
+              <span
+                class="split-payment"
+                id="splitPaymentIcon{{ i }}"
+                *ngIf="row.IsSplitPayment"
+                kendoTooltip
+                position="top"
+                tooltipClass="app-tooltip"
+                title="Payment/Adjustment split across multiple accounts."
+                >{{ "$/$" | translate }}</span
+              >
+            
+              <span
+                 
+                id="unappliedAmountIconValueId{{ i }}"
+                *ngIf="
+                  (row.TransactionTypeId == 4 ||
+                    row.TransactionTypeId == 2 ||
+                    row.TransactionTypeId == 3) &&
+                  row.UnassignedAmount &&
+                  row.UnassignedAmount < 0 &&
+                  !row.IsDeleted
+                "
+              >
+                <unapplied-menu-dialog
+                  id="unappliedMenu{{ i }}"
+                  [unappliedTransactions]="[row]"
+                  [dataForBalanceDetailRow]="patientDet"
+                  [currentPatientId]="currentPatientId"
+                  (refreshData)="refreshData($event)"
+                  class="unappliedMenu"
+                >
+                </unapplied-menu-dialog>
+          
+              </span>   
+            </div>
+            
+          </div>
+          </div>
+          <div class="text-right txhAllowedAmount" id="trxhAllowedAmount">
+            <span
+              *ngIf="
+                row.ObjectType == 'ServiceTransaction' && row.AllowedAmount >= 0
+              "
+            >{{ row.AllowedAmount | formatCurrencyIfNeg }}</span>
+            <span
+              *ngIf="
+                row.ObjectType == 'ServiceTransaction' &&
+                row.AllowedAmount == null
+              "
+            >
+              -
+            </span>
+          </div>
+          <div class="text-right txhInsAdjAmount" id="trxhInsAdjAmount">
+            <div>
+              <span *ngIf="row.AdjustedAmountString == '-'"> - </span>
+              <span
+                *ngIf="row.AdjustedAmountString != '-'"
+                [ngStyle]="
+                  row.ObjectType == 'ServiceTransaction' &&
+                  row.ApplyAdjustmentType == 2 &&
+                  row.InsuranceEstimates.length > 0 &&
+                  row.InsuranceEstimates[0].AdjEst > 0 &&
+                  row.AdjustedAmount > 0 &&
+                  row.AdjustedAmountString != '-' && { 'font-style': 'italic' }
+                "
+              >{{ row.AdjustedAmount | formatCurrencyIfNeg }}
+              </span>
+              
+            <div *ngIf="
+                  row.ObjectType == 'ServiceTransaction' &&
+                  row.ApplyAdjustmentType == 2 &&
+                  row.InsuranceEstimates.length > 0 &&
+                  row.InsuranceEstimates[0].AdjEst > 0 &&
+                  row.AdjustedAmount > 0
+                ">
+              <span
+                id="InsAdjColumnHeaderIcon{{ i }}"
+                class="fa fa-exclamation-triangle InsAdjColumnHeaderIcon pull-right padding-top-4 txhInsAdjAmountIcon"
+                kendoTooltip
+                position="top"
+                tooltipClass="app-tooltip"
+                title="Estimated Amount"
+              ></span>
+            </div>  
+            </div>
+          </div>
+
+          <div class="text-right txhEstIns" id="trxhEstIns">{{ row.TotalEstInsurance | formatCurrencyIfNeg }}
+          </div>
+          <div class="text-right padding-horizontal-2 balanceColumnRow txhBalance" id="trxhBalance"
+            
+            [ngClass]="
+              row.IsDeleted
+                ? 'deleted-transaction-display-color'
+                : row.Balance < 0
+                ? 'payments-display-color'
+                : 'black-display-color'
+            "
+          >
+            <span class="txhEstInsSpn"
+              *ngIf="
+                !isCreateCustomInvoice &&
+                !showCreateClaimView &&
+                !hideRunningBalance &&
+                !sortingApplied
+              "
+            >{{ row.Balance | formatCurrencyIfNeg }}
+            </span
+            >
+          </div>
+
+          <div class="ellipsis ellipsisMenuColumnRow" id="ellipsisMenuColumnRow">
+            <patient-encounter-menu
+              *ngIf="
+                (!isCreateCustomInvoice &&
+                  !row.IsDeleted &&
+                    (row.TransactionTypeId == 1 ||
+                      row.TransactionTypeId == 2 ||
+                      row.TransactionTypeId == 3 ||
+                      row.TransactionTypeId == 4 ||
+                      row.TransactionTypeId == 5 ||
+                      row.TransactionTypeId == 6)) ||
+                (row.ObjectType !== 'PersonAccountNote' &&
+                  row.TransactionTypeId === null &&
+                  !showCreateClaimView)
+              "
+              [isPendingEncounterGrid]="false"
+              [encounterIndex]="$index"
+              [encounter]="row"
+              [refreshPageDataForGrid]="refreshTransactionHistoryPageData"
+              (viewDetailsActionFunction)="viewRowItem($event)"
+              (deleteActionFunction)="deleteRowItem($event)"
+              (editActionFunction)="editRowItem($event)"
+              [showViewDetailButton]="
+                row.TransactionTypeId == 1 ||
+                row.TransactionTypeId == 2 ||
+                row.TransactionTypeId == 3 ||
+                row.TransactionTypeId == 4 ||
+                row.TransactionTypeId == 5 ||
+                row.TransactionTypeId == 6
+              "
+              [showDeleteButton]="showEditAndDeleteCondition(row)"
+              [disableDeleteButton]="
+                row.IsDeposited ||
+                row.InProcess ||
+                (row.TransactionTypeId === 5 && (!row.IsServiceLocationMatch || row.IsAuthorized)) ||
+                (row.TransactionTypeId === 1 && !row.IsServiceLocationMatch)
+              "
+              [showViewClaimButton]="
+                row.TransactionTypeId == 1 ||
+                row.TransactionTypeId == 3 ||
+                (row.Type == 'AcctNote' &&
+                  row.ObjectType !== 'AccountStatement')
+              "
+              [showViewEditClaimNoteButton]="(row.Type == 'AcctNote' && row.ObjectType != 'AccountStatement')"
+              [showEditButton]="
+                showEditAndDeleteCondition(row) && row.TransactionTypeId !== 6
+              "
+              [disableEditButton]="disableEditForMenu(row)"
+              [showViewCompleteEncounterButton]="
+                row.TransactionTypeId == 1 ||
+                row.TransactionTypeId == 2 ||
+                row.TransactionTypeId == 4 ||
+                row.TransactionTypeId == 5 ||
+                row.TransactionTypeId == 6
+              "
+              (viewCompleteEncounterActionFunction)="
+                viewCompleteEncounter($event)
+              "
+              (changePaymentOrAdjustmentActionFunction)="
+                changePaymentOrAdjustment($event)
+              "
+              [showChangePaymentOrAdjustmentOption]="true"
+              (viewCarrierResponseFunction)="viewCarrierResponse($event)"
+              (viewInvoiceFunction)="viewInvoice($event)"
+              [encounterClaimsObj]="row.Claims"
+              (printReceiptFunction)="printReceipt($event)"
+              [showViewEobButton]="
+                row.TransactionTypeId == 3 &&
+                row.EraTransactionSetHeaderId != null
+              "
+              (viewEobActionFunction)="viewEra($event)"
+              [depositCreditTransactionId]="
+                row.IsDeposited ? row.ObjectId : null
+              "
+            >
+            </patient-encounter-menu>
+            <patient-account-note-menu *ngIf="row.ObjectType === 'PersonAccountNote'"
+                [accountNotesRow]="row"
+                [refreshSummaryPageDataForGrid]="refreshTransactionHistoryPageData"
+                [showViewEobButton]="(row.NoteType == 3 && row.EraTransactionSetHeaderId != null)"
+                [showViewEligibilityButton]="row.NoteType == 5"
+                [gridIndex]="$index"> yes
+            </patient-account-note-menu>
+
+          </div>
+        </div>
+      </div>
+      <div id="showMoreSection" class="showMoreSection">
+        <button
+          id="showMoreButton"
+          class="btn btn-primary"
+          *ngIf="!removeShowMoreButton"
+          (click)="showMoreResults()"
+        >
+          Show More
+        </button>
+      </div>
+
+      <div *ngIf="!resetPaging" class="loading">
+        <span class="fa fa-spinner fa-spin loading"> </span>
+      </div>
+    </div>
+  </td>
+</tr>
+</tbody>
+</div>
+</table>

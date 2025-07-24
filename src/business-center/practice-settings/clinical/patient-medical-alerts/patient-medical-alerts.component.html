@@ -1,0 +1,65 @@
+<div [ngClass]="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="medicalHistoryAlerts">
+        <!-- Add the pinned reminder banner -->
+        <div class="medicalHistoryAlerts__reminder" *ngIf="isRemiderEnabled">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <div>{{ 'Reminder! If you have disabled a question on the Medical History form the associated alert will also be disabled regardless on the toggle status on this page. Please navigate to the ' | translate}}
+                        <a href="#/BusinessCenter/Clinical/v2/MedicalHistoryEdit/" id="customizeMedicalHistoryLink">{{ 'Customize Medical History' | translate }}</a>
+                        {{ ' tool and enable a question to ensure the corresponding alert is displayed.' | translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="rowFull white">
+            <div class="medicalHistoryAlerts__header">
+                <app-page-navigation [navigationData]="breadCrumbs" (currentPath)="changePath($event)">
+                </app-page-navigation>
+                <div class="medicalHistoryAlerts__title">
+                    <a href="{{breadCrumbs[0].path}}" id="btnBackToSettings" class="medicalHistoryAlerts__btnCancel" title="{{'Cancel'|translate}}"
+                        (click)="closeForm();">
+                        {{ "Back to Practice Settings" | translate }}
+                    </a>
+                    <h1>{{ pageTitle }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="medicalHistoryAlerts__body">
+            <div class="patientMedicalAlerts__grid" *ngIf="gridData">
+                <kendo-grid [data]="gridData" [groupable]="false" [group]="groups">
+                    <kendo-grid-column field="Description" title="" [style] = "{'position': 'relative', 'right' : '26px'}">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem?.Description}}
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column field="MedicalHistoryAlertTypeId" width="0%" title="">
+                        <ng-template kendoGridGroupHeaderTemplate let-group="group">
+                            <span>
+                                {{ group.value == '1' ? allergies : group.value == '2'? medical : other }}
+                            </span>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <kendo-grid-column title="" [style] = "{'position': 'relative', 'right' : '30px'}">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <div class="medicalHistoryAlerts__slider">
+                                <i class="fa fa-2x fa-toggle-on inactive"
+                                    title="Premedication alerts cannot be disabled" disabled
+                                    *ngIf="dataItem.MedicalHistoryAlertTypeId === 3"
+                                    checkRoleAccess="soar-biz-medalt-update"></i>
+                                <i class="fa fa-2x fa-toggle-on active"
+                                    *ngIf="dataItem.GenerateAlert === true && dataItem.MedicalHistoryAlertTypeId !== 3"
+                                    (click)="setGenerateAlert(dataItem);" checkRoleAccess="soar-biz-medalt-update"></i>
+                                <i class="fa fa-2x fa-toggle-on fa-rotate-180 inactive"
+                                    *ngIf="dataItem.GenerateAlert === false && dataItem.MedicalHistoryAlertTypeId !== 3"
+                                    (click)="setGenerateAlert(dataItem);" checkRoleAccess="soar-biz-medalt-update"></i>
+                            </div>
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿<div class="perioChart">
+    <div ng-if="arch === 'Upper'" class="perioChart__upper">
+        <div id="{{'buccal' + arch}}" class="perioChart__chart perioChart__buccal perioChart__top"></div>
+        <div id="{{'lingual' + arch}}" class="perioChart__chart perioChart__lingual perioChart__bottom"></div>
+    </div>
+    <div ng-if="arch === 'Lower'">
+        <div id="{{'lingual' + arch}}" class="perioChart__chart perioChart__lingual perioChart__top"></div>
+        <div id="{{'buccal' + arch}}" class="perioChart__chart perioChart__buccal perioChart__bottom"></div>
+        <div class="perioChart__legend">
+            <div ng-style="{'background-color': pocketDepthColor}"><span>{{'Pocket Depth' | i18n}}</span></div>
+            <div ng-style="{'background-color': gingivalMarginColor}"><span>{{'Gingival Margin' | i18n}}</span></div>
+            <div ng-style="{'background-color': mgjLevelColor}"><span>{{'M-G Junction' | i18n}}</span></div>
+            <div ng-style="{'background-color': attachmentLevelColor}"><span>{{'CAL' | i18n}}</span></div>
+        </div>
+    </div>
+</div>

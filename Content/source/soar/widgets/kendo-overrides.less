@@ -1,0 +1,276 @@
+﻿// #region Overwrite kendo
+
+
+
+.k-textbox > input, .k-autocomplete .k-input, .k-picker-wrap .k-input, .k-numeric-wrap .k-input, .k-selectbox .k-input {
+  height: 1.5em;
+  line-height: 1.5em;
+  vertical-align: top;
+  box-sizing: content-box;
+}
+
+.k-list-container.k-state-border-up {
+    border-radius: 0;
+}
+
+.k-popup.k-list-container {
+    padding: 0;
+    .k-list-scroller {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+.k-popup .k-list {
+    border-radius: 0;
+    border: transparent;
+    background: #fff;
+}
+
+.k-popup .k-list .k-state-focused, 
+.k-popup .k-list .k-state-selected, 
+.k-popup .k-list .k-state-hover {
+    border-radius: 0;
+    border: transparent;
+    background: @add-color;
+    color: #fff;    
+}
+
+.k-popup .k-list .k-state-hover, 
+.k-popup .k-list .k-state-focused, .k-popup .k-list .k-state-selected {
+    padding: 1px 5px !important; // This is intentionally set incorrectly.
+}
+
+.k-scheduler-toolbar {
+    display: none;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    
+    .k-link {
+        color: @link-text-color;
+    }
+}
+
+#scheduler .k-scheduler-content {
+    overflow: visible;
+}
+
+.k-marquee-color,
+.k-event-drag-hint {
+    background: green;
+}
+
+.k-date-header {
+    display: none;
+}
+
+.k-list-optionlabel {
+    background: white;
+}
+
+.k-state-focused.k-state-selected, 
+.k-list > .k-state-focused.k-state-selected,
+.k-listview > .k-state-focused.k-state-selected,
+.k-popup > .k-state-hover,
+td.k-state-focused.k-state-selected {
+    box-shadow: none;
+    background: @add-color;
+    color: #fff;
+}
+
+.error .k-list-container {
+  border: 1px solid red;
+}
+
+// Since had to style dropdown k-input as a placeholder
+// this will be needed for any value templates to rever to normal
+.value-template-input {
+    color: #444;
+    font-style: normal;
+}
+
+
+// #region customize kendo text editor
+
+.k-button-group {
+    > .k-tool {
+        > .k-bold {
+            width: 13px;
+        }
+
+        > .k-italic {
+            width: 10px;
+        }
+
+        > .k-underline {
+            width: 14px;
+        }
+
+        > .k-justifyLeft, 
+        .k-justifyCenter, 
+        .k-justifyRight,
+        .k-insertUnorderedList,
+        .k-insertOrderedList,
+        .k-indent {
+            width: 16px;
+        }
+    }
+}
+
+
+// k-bold override
+.k-bold:before {
+        // fa-bold
+        position: relative;
+        font-family: 'Font Awesome 5 Pro';
+    content: "\f032";
+    } 
+// k-italic override
+.k-italic:before {
+     // fa-italic
+     position: relative;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f033";
+ }
+//k-underline override
+.k-underline:before {
+     // fa-underline
+     position: relative;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f0cd";
+ }
+
+.k-backColor:before {  
+    position: relative;
+    right: -20px;
+    z-index: 100;      
+    // fa-font
+    font-family: 'Font Awesome 5 Pro';
+    content: "\f044";
+}
+
+
+ //align-text-left override
+.k-justifyLeft:before {
+     // fa-align-left
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f036";
+ }
+ //center-text override
+.k-justifyCenter:before {
+     // fa-align-center
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f037";
+ }
+ //align-text-right override
+.k-justifyRight:before {
+     // fa-align-right
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f038";
+ }
+ //insert-unordered-list override
+.k-insertUnorderedList:before {
+     // fa-list-ul
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f0ca";
+ }
+ //insert-ordered-list override
+.k-insertOrderedList:before {
+     // fa-list-ol
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f0cb";
+ }
+ //indent override
+.k-indent:before {
+     // fa-indent
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f03c";
+ }
+ //insert-hyperlink override
+.k-createLink:before {
+     // fa-link
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f0c1";
+ }
+ //insert-image
+.k-insertImage:before {
+     // fa-file-image
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f1c5";
+ }
+ //insert-table override
+.k-createTable:before {
+     // fa-table
+     position: relative;
+     top: 4px;
+     font-family: 'Font Awesome 5 Pro';
+    content: "\f0ce";
+ }
+ //k-tool-text override
+.k-tool-text {
+    display: none;
+}
+
+.k-dropdown-wrap {
+    padding-right: 30px;
+}
+
+.k-combobox {
+    > .k-dropdown-wrap {
+        > .k-i-close {
+            display: none;
+        }
+    }
+}
+
+.k-combobox .k-dropdown-wrap:before,
+.k-picker-wrap:before,
+.k-numeric-wrap:before
+{
+    content: "\a0";
+    display: inline-block;
+    width: 0;
+    height: @input-height;
+    padding-bottom: 0.3em;
+}
+
+.k-edit-label {
+    padding: .4em 0 1em;
+}
+
+.k-i-arrow-60-up:before,
+.k-i-arrow-60-right:before,
+.k-i-arrow-60-down:before,
+.k-i-arrow-60-left:before { 
+    color: @panel-btn-color;
+}
+
+.k-window-titlebar .k-window-actions {
+    padding-top: .3em;
+}
+
+.k-button.k-flat {}
+
+ // used to override kendo dropdown style for sub-tab dropdown navigation 
+ //   these styles will only be applied when kendo-sub-tab-dropdown is added to the dropdown
+ 
+
+
+// #endregion

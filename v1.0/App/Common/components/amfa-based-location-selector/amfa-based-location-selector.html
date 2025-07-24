@@ -1,0 +1,19 @@
+﻿<div class="row form-group amfaBasedLocationSelector">
+    <div class="{{ dropDownClass ? dropDownClass : 'col-sm-2 bring-to-front' }}">
+        <multi-selector ms-disabled="msDisabled" id="{{id}}" open="open" list="list"
+                        selected-list="selectedList" display-field="NameLine1"
+                        auth-z="authZ" type="Location" on-blur-fn="onBlurFn()" is-grouped-by-location-status="true">
+        </multi-selector>
+    </div>
+    <div class="{{ tagsClass ? tagsClass : 'col-sm-10' }}">
+        <div class="row padding-8" ng-disabled="msDisabled" ng-class="{'disabled': msDisabled}">
+            <span ng-if="selectedList.length === 0 && !loading" class="error">
+                {{'Please select a location' | i18n }}
+            </span>
+            <span ng-repeat="location in selectedList">
+                <tag title="{{ location.NameLine1 }}" remove-function="removeLocation(location)" hide-Remove="msDisabled"></tag>
+            </span>
+        </div>
+    </div>
+</div>
+

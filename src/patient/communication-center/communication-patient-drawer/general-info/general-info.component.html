@@ -1,0 +1,23 @@
+<div class="generalInfo" id="general-info">
+    <div class="generalInfo-title" id="general-info-title">
+        <span class="generalInfo-main-title" id="general-info-main-title">{{ 'General Info' | translate }}</span>
+    </div>
+    <div class="generalInfoHeader" id="general-info-header">
+        <div class="generalInfoHeader-descriptionlabel" id="general-info-header-description-label">{{ 'Description: ' | translate }}</div>
+        <div class="generalInfoHeader-description" id="general-info-header-description">
+            <span *ngIf="patientProfile.Sex && patientProfile.Sex != ''" id="general-info-header-sex">
+                {{(patientProfile.Sex ? patientProfile.Sex : '') | enumAsString:Gender}}
+                {{patientProfile.DateOfBirth ? ',' : ''}}
+            </span>
+            <span *ngIf="patientProfile.DateOfBirth" id="general-info-header-dateofbirth">
+                {{patientProfile.DateOfBirth | date:'MM/dd/yyyy'}}
+                ({{'Age: '}}{{patientProfile.DateOfBirth | age:patientProfile.DateOfBirth }})
+            </span>
+        </div>
+        <span class="generalInfoHeader-statuslabel" id="general-info-header-status-label">{{ 'Status: ' | translate }}</span>
+        <span class="generalInfoHeader-status" id="general-info-header-status">
+            {{(patientProfile.IsActive ? 'Active' : 'Inactive') | translate}}
+            {{(patientProfile.IsPatient ? 'Patient' : 'Non-Patient') | translate}}
+        </span>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+	<div class="adjTypesCrud">
+		<div ng-form="frmAdjustmentTypeCrud">
+			<!--header-->
+
+			<div id="lblNewAdjustmentType" ng-show="editing==false" class="pull-left master-list-title">{{ 'New' | i18n  }} {{ 'Adjustment Type' | i18n  }}</div>
+			<div id="lblEditAdjustmentType" ng-hide="editing==false" class="pull-left master-list-title">{{ 'Edit' | i18n  }} {{ 'Adjustment Type' | i18n  }}</div>
+
+			<!--form-->
+			<div class="row ">
+				<div class="col-xs-12">
+					<!-- Description -->
+					<div class="form-group" ng-class="{error: (valid == false) && !adjustmentType.Description}">
+						<label id="lblDescription" class="control-label" for="inpDescription">{{ 'Description' | i18n }} <span class="required-label">*</span></label>
+						<div ng-class="{error:(hasErrors || duplicateDescrption) && !frmAdjustmentTypeCrud.inpDescription.$valid}">
+							<input id="inpDescription" name="inpDescription" class="required valid master-list-input"
+								   set-focus ng-model="adjustmentType.Description" maxlength="64" required />
+							<!--message required-->
+							<label id="lblDescriptionRequired" class="help-text " ng-show="hasErrors &&
+                                        !frmAdjustmentTypeCrud.inpDescription.$valid && frmAdjustmentTypeCrud.inpDescription.$error.required">
+								{{ 'This field is required.' | i18n }}
+							</label>
+							<!--message if duplicate-->
+							<label id="lblUniqueDescription" class="help-text " ng-show="duplicateDescrption && frmAdjustmentTypeCrud.inpDescription.$error.uniqueDescription && !frmAdjustmentTypeCrud.inpDescription.$error.required">
+								{{ '{0} with this description already exists.' | i18n:['Adjustment Type'] }}
+							</label>
+						</div>
+					</div>
+					<!-- Category -->
+					<div class="form-group" tooltip-enable="associatedAdjustment.IsDefaultTypeOnBenefitPlan" tooltip-placement="top-left" uib-tooltip="This value cannot be changed because the adjustment type is set as the default for one or more benefit plans.">
+						<label id="lblCategory" class="control-label" for="inpCategoryPositive">{{ 'Category' | i18n }}<span class="required-label">*</span></label>
+						<div>
+							<input id="inpCategoryPositive" type="radio" ng-model="adjustmentType.IsPositive" name="IsPositive" ng-value="true" ng-required="true" ng-disabled="associatedAdjustment.IsDefaultTypeOnBenefitPlan">
+							<label id="lblCategoryPositive"> {{ 'Positive (+)' | i18n }}</label>
+							<input id="inpCategoryNegative" type="radio" ng-model="adjustmentType.IsPositive" name="IsPositive" ng-value="false" ng-required="true">
+							<label id="lblCategoryNegative"> {{ 'Negative (-)' | i18n }} </label><br />
+							<div ng-class="{error: (hasErrors) && !frmAdjustmentTypeCrud.IsPositive.$valid && frmAdjustmentTypeCrud.IsPositive.$error.required}">
+								<label id="lblCategoryRequired" class="help-text " ng-show="hasErrors && !frmAdjustmentTypeCrud.IsPositive.$valid && frmAdjustmentTypeCrud.IsPositive.$error.required">
+									{{ 'This field is required.' | i18n }}
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label id="lblImpact" class="control-label" for="adjustmentImpactTypeSelectList">{{ 'Impacts' | i18n }}<span class="required-label">*</span></label>
+						<div>
+							<soar-select-list id="adjustmentImpactTypeSelectList"
+											  name="adjustmentImpactTypeSelectList"
+											  option-list="impacts"
+											  text-field="Name"
+											  value-field="Value"
+											  ng-model="adjustmentType.ImpactType"
+											  sb-required="required">
+							</soar-select-list>
+						</div>
+					</div>
+					<!-- Is Active -->
+					<div class="form-group">
+						<span class="isActiveSpan" tooltip-enable="associatedAdjustment.IsDefaultTypeOnBenefitPlan" tooltip-placement="auto" uib-tooltip="This value cannot be changed because the adjustment type is set as the default for one or more benefit plans.">
+							<checkbox checkbox-id="chkIsActive" checkbox-value="adjustmentType.IsActive" checkbox-label="'Active'" change-function="adjustmentTypeIsActiveOnChange()" checkbox-disabled="displayActiveStatusConfirmation || associatedAdjustment.IsDefaultTypeOnBenefitPlan"></checkbox>
+							<div ng-show="displayActiveStatusConfirmation">
+								<are-you-sure message="{{'Are you sure you want to inactivate the adjustment type?' | i18n }}" if-yes="okStatusConfirmation()" if-no="cancelStatusConfirmation()" append-id="1" is-focus-set="focusIsActiveConfirm"></are-you-sure>
+							</div>
+						</span>
+					</div>
+				</div>
+			</div>
+			<!-- Save or discard -->
+			<div class="adjTypesCrud__actions">
+				<button id="btnDiscard" ng-click="confirmDiscard();" ng-disabled="confirmingDiscard==true" class="btn btn-link">{{ 'Discard' | i18n }}</button>
+                <a id="btnSave" ng-click="saveType();" ng-disabled="confirmingDiscard==true || displayActiveStatusConfirmation == true" class="btn btn-primary">{{ 'Save' | i18n }}</a>
+			</div>
+			<div class="clearfix">&nbsp;</div>
+		</div>
+	</div>
+</div>
+
+

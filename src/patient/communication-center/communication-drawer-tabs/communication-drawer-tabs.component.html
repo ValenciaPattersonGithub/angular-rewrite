@@ -1,0 +1,65 @@
+<div id="communication_drawer_area" class="communication-drawer"
+    [ngClass]="{'open': isDrawerOpened, 'closed': !isDrawerOpened}">
+    <div class="drawer-container">
+        <div class="drawer-title">
+            <div class="patient-drawer-initial" *ngIf="showPatientCommunicationDrawer">
+                <div class="initialBadge" *ngIf="patientCommunicationCenterService.patientDetail && getDisplayName()">{{patientInitial }}
+                </div>
+            </div>
+            <div kendoTooltip position="top" tooltipClass="app-tooltip" title="{{drawerType === 2 ? drawerTitle : ''}}">
+                {{drawerTitle | truncateText: 20  }}</div>
+            <span class="drawer-close" (click)="closeDrawer()">
+                <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="visible" preserveAspectRatio="none" viewBox="0 0 24 24" width="22" height="22">
+                    <g id="close-drawer-icon">
+                        <path xmlns:default="http://www.w3.org/2000/svg" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" style="fill: rgb(34, 169, 203);" vector-effect="non-scaling-stroke"/>
+                    </g>
+                </svg>
+            </span>
+        </div>
+        <div class="communicationTabs" *ngIf="!showPatientCommunicationDrawer" id="communication-tabs" class="ml_5">
+            <div class="tab_wrap">
+                <kendo-tabstrip #communicationCenterTab (tabSelect)="onTabSelect($event)">
+                    <kendo-tabstrip-tab>
+                        <ng-template kendoTabTitle>
+                            {{'Add Record'| translate}}
+                        </ng-template>
+                        <ng-template kendoTabContent>
+                            <p>
+
+                                <communication-center-addrecord *ngIf="isDrawerOpened && selectedTab === CommunicationTab.Communication"></communication-center-addrecord>
+                            </p>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+                    <kendo-tabstrip-tab>
+                        <ng-template kendoTabTitle>
+                            {{'Generate Letter' | translate}}
+                        </ng-template>
+                        <ng-template kendoTabContent>
+                            <p>
+                                <communication-generate-letter *ngIf="isDrawerOpened && selectedTab === CommunicationTab.GenerateLetter"></communication-generate-letter>
+                            </p>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+                    <kendo-tabstrip-tab>
+                        <ng-template kendoTabTitle>
+                            {{'To-Do' | translate}}
+                        </ng-template>
+                        <ng-template kendoTabContent>
+                            <p class="todo_tab">
+                                <communication-to-do *ngIf="isDrawerOpened && selectedTab === CommunicationTab.ToDo"></communication-to-do>
+                            </p>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+                </kendo-tabstrip>
+            </div>
+        </div>
+        <div *ngIf="showPatientCommunicationDrawer" id="patient-Communication-Drawer"
+            class="patientCommunicationDrawer">
+            <div *ngIf="!patientCommunicationCenterService.patientDetail"> <i class="fa fa-spinner fa-spin"></i>
+                <span> {{ 'Loading Patient Info...' | translate }}</span>
+            </div>
+            <communication-patient-drawer *ngIf="patientCommunicationCenterService.patientDetail">
+            </communication-patient-drawer>
+        </div>
+    </div>
+</div>

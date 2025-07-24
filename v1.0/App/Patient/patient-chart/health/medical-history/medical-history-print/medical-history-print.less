@@ -1,0 +1,226 @@
+@media print, screen {
+
+    body.medHistPrint {
+        padding: 0;
+    }
+
+    .medHistPrint {
+
+        .top-header,
+        .feedback-container,
+        .walkme-player {
+            display: none !important;
+        }
+
+        &__button {
+            border: none;
+        }
+
+        .view-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 @brand-margin_sm;
+            background-color: @white;
+        }
+
+        .sectionPreview__headerRow {
+            display: none;
+        }
+
+        .section-items {
+            -webkit-columns: 2;
+            -moz-columns: 2;
+            columns: 2;
+
+            label {
+                margin: 0;
+                font-weight: initial;
+                overflow-wrap: break-word;
+            }
+
+            div {
+                overflow: visible;
+                padding-top: 1px;
+
+                .row {
+                    page-break-inside: avoid;
+                }
+            }
+
+            &.threeColumn {
+                -webkit-columns: 3;
+                -moz-columns: 3;
+                columns: 3;
+            }
+
+            &.oneColumn {
+                -webkit-columns: 1;
+                -moz-columns: 1;
+                columns: 1;
+
+                .printCommentContainer {
+                    margin-right: 17.25%;
+                }
+
+                .printYesNoColumn {
+                    margin-right: -2.5%;
+                }
+
+                .printYesNoColumnRadio {
+                    padding: 1px 15px 0 15px;
+                }
+            }
+
+            .printYesNoColumn {
+                margin-right: -3%;
+            }            
+
+            .printYesNoLabel {
+                float: left;
+                height: 100%;
+                padding-right: 10px;
+            }
+
+            .printYesNoLeader {
+                overflow: auto;
+                height: 15px;
+                border-bottom: 2px dotted gray;
+            }
+
+            .printCommentContainer {
+                margin-bottom: -10px;
+                padding-top: 0px;
+                margin-right: 36%;
+            }
+
+            .printCommentLabel {
+                float: left;
+                height: 100%;
+                padding-right: 10px;
+                margin-left: 10px;
+            }
+
+            .printCommentLabelLong {
+                float: none;
+                padding-bottom: 5px;
+            }
+
+            .printCommentDiv {
+                overflow: hidden;
+                height: 17px;
+                border-bottom: 1px solid black;
+            }
+
+            .printComment {
+                width: 100%;
+                height: 17px;
+                border: none;
+                border-bottom: 1px solid black;
+                border-radius: 0;
+                text-align: center;
+            }
+
+            .printCommentDivLong {
+                border-bottom: 1px solid black;
+            }
+
+            .printCommentLong {
+                width: 100%;
+                height: 17px;
+                border: none;
+                border-radius: 0;
+                text-align: center;
+            }
+
+        }
+
+        &__top {
+            padding: @brand-margin_sm @brand-margin_md;
+            color: #000 !important;
+
+            .PatientInfoRow {
+                padding: 4px 0px;
+            }
+
+            &PatientMeta {
+                margin: 0;
+                color: #000 !important;
+
+                .PatientInfo {
+                    font-weight: bold;
+                }
+            }
+
+            .EmergencyInfo {
+                border: none;
+                border-bottom: 1px solid #000;
+                height: 17px;
+                text-align: center;
+                background-color: #FFF;
+                overflow: hidden;
+            }
+        }
+
+        &__formContainer * {
+            background: transparent !important;
+            color: #000 !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+        }
+
+        &__loading {
+            margin: 0 auto;
+            padding: 25%;
+            text-align: center;
+        }
+
+        &__signature {
+            width: 50%;
+            float: right;
+            border-top: 1pt solid black;
+            margin-top: 24pt;
+        }
+    }
+}
+
+@page {
+    margin: 8mm 2mm;
+    color: white !important;
+}
+@media print {
+
+    .medHistPrint {
+
+        font-size: 8pt;
+
+        &__top {
+            padding: 1mm;
+        }
+        &__button {
+            display: none;
+        }
+        h4 {
+            margin-bottom: 1mm;
+        }
+        .sectionPreview {
+            margin-bottom: @brand-margin_sm;
+        }
+        .sectionPreview__title {
+            font-size: 10pt;
+            padding: 0;
+        }
+        .col-xs-2 {
+            padding: 0;
+        }
+        .form-group {
+            page-break-inside: avoid;
+        }
+        .form-control {
+            height: initial;
+            padding: 0;
+            font-size: 8pt;
+            height: 16pt;
+            padding: 2pt;
+        }
+    }
+}

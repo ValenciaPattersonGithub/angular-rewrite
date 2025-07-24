@@ -1,0 +1,39 @@
+﻿<div class="panel patientLocationError">
+    <div class="panel-heading">
+        <span class="panel-title" ng-if="!locationData">{{'Patient Account Access Restricted' | i18n}}</span>
+        <span class="panel-title" ng-if="locationData">{{'Location Header Restricted' | i18n}}</span>
+    </div>
+    <div class="panel-body patientLocationError__body">
+        <p ng-if="!locationData">{{'You are unable to view or schedule this patient as they are not authorized for your location.' | i18n}}
+        {{'Please contact the administrator from their primary location to add your location as an alternative location.' | i18n}}</p>
+        <p ng-if="locationData">
+            You are unable to switch the appointment location to {{locationData.NameLine1}} as this patient is not authorized for the selected location.
+            Please contact the administrator from patient's Primary Location to enable their access to this location.
+        </p>
+        <div class="form">
+            <div class="patientLocationError__patientName col-md-12">
+                <label for="patientName" class="">{{'Patient Name' | i18n}}:</label>
+                <span class="patientName">{{patientName}}</span>
+            </div>
+
+            <div class="patientLocationError__patientCode col-md-12">
+                <label for="patientCode" class="">{{'Patient Code' | i18n}}:</label>
+                <span class="patientCode">{{patientData.profile.PatientCode}}</span>
+            </div>
+
+            <div class="patientLocationError__patientprimaryLocation col-md-12">
+                <label for="primaryLocation" class="">{{'{0} {1}' | i18n:['Primary', 'Location']}}:</label>
+                <span class="primaryLocation">{{patientData.authorization.PatientPrimaryLocationName}}</span>
+            </div>
+
+            <div class="patientLocationError__patientPhone col-md-12">
+                <label for="patientPhone" class="">{{'Phone' | i18n}}:</label>
+                <span class="patientPhone">{{patientData.authorization.PatientPrimaryLocationPhone ? patientData.authorization.PatientPrimaryLocationPhone : 'NA' | tel}}</span>
+            </div>
+
+            <div class="patientLocationError__panelButtons pull-right">
+                <button class="btn btn-default cancel" ng-click="close()">{{'Close' | i18n}}</button>
+            </div>
+        </div>
+    </div>
+</div>

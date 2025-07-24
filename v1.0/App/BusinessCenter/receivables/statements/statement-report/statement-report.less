@@ -1,0 +1,36 @@
+﻿.statement-report {
+    .header {
+        font-size: @brand-font_lg;
+        color: @brand-color_font-dark;
+        font-weight: bold;
+    }
+}
+
+.statementReport {
+    font-size: @brand-font_md;
+    margin: @brand-margin_lg auto;
+    width: 80%;
+
+    .top-header,
+    .feedback-container,
+    .walkme-player {
+        display: none !important;
+    }
+
+    &__empty {
+        padding-top: 25%;
+        text-align: center;
+    }
+
+    .view-container {
+        max-width: 90%;
+        margin: 0 auto;
+        padding: 0 @brand-margin_sm;
+        background-color: @white;
+    }
+
+    &__footer {
+        text-align: center;
+        width: 100%;
+    }
+}

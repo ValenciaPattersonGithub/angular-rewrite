@@ -1,0 +1,59 @@
+<form *ngIf="!isPatient" [formGroup]="frmContactInfo">
+    <div *ngIf="phone" class="phoneInfoItem">
+        <!-- Phone Number -->
+        <div class="phoneInfoItem__num">
+            <input id="inpPhoneNumber{{phoneId}}" class="form-input" formControlName="phoneNumber"
+                [tabindex]="phoneTabindex" type="text" mask="(000) 000-0000" [showMaskTyped]="true"
+                [clearIfNotMatch]="true" placeholder="{{ 'Phone number' | translate }}" [disabled]="disableInput" />
+
+            <label id="lblPhoneNumberRequired{{phoneId}}" class="has-error help-block"
+                *ngIf="getPhoneNumberValidation()">
+                {{ 'Phone number must be 10 characters.' | translate }}
+            </label>
+            <label id="lblDuplicatePhoneNumber{{phoneId}}" class="has-error help-block" *ngIf="phone.duplicateNumber">
+                {{ 'Phone number must be unique.' | translate }}
+            </label>
+        </div>
+        <!-- Phone Type -->
+        <div class="phoneInfoItem__type" *ngIf="!hidePhoneTypes">
+            <soar-select-list [placeHolder]="'Select Phone Type'" id="inpPhoneType{{phoneId}}" name="inpPhoneType"
+                formControlName="inpPhoneType" [textField]="'Value'" [valueField]="'Name'"
+                [optionList]="phoneTypes" [disableInput]="disableInput" [tabindex]="phoneTabindex"></soar-select-list>
+
+            <label id="lblTypeRequired{{phoneId}}" class="has-error help-block custom-top-margin"
+                *ngIf="frmContactInfo?.get('phoneNumber')?.dirty && frmContactInfo?.get('phoneNumber')?.valid && phone.PhoneNumber!='' && frmContactInfo?.get('inpPhoneType')?.hasError('required')">
+                {{ 'This field is required.' | translate }}
+            </label>
+        </div>
+        <!-- Notes/Text -->
+        <div class="phoneInfoItem__notes" *ngIf="hasNotes || hasTexts">
+            <!-- Primary Phone number notes -->
+            <div *ngIf="hasNotes">
+                <div *ngIf="!disableInput">
+                    <a id="btnPhoneNotes{{phoneId}}" class="btn btn-link" icon="fa-plus" (click)="noteCollapsed = false"
+                        *ngIf="(!phone.Notes && noteCollapsed)">{{'Add a Note' | translate }}</a>
+                </div>
+                <div collapse="noteCollapsed && !phone.Notes">
+                    <textarea id="inpPhoneNotes{{phoneId}}" class="form-control form-textarea" name="inpPhoneNotes"
+                        maxlength="500" rows="2" cols="50" [disabled]="disableInput" ([ngModel])="phone.Notes"
+                        placeholder="{{'Enter note...' | translate }}"></textarea>
+                </div>
+            </div>
+            <!-- Text Option -->
+            <div *ngIf="hasTexts">
+                <app-check-box id="inpPhoneText{{phoneId}}" [value]="phone?.TextOk" [label]="'Texts OK'"
+                    [isDisabled]="disableInput || !((phone?.Type && phone?.Type?.length > 0) && (phone?.PhoneNumber && phone?.PhoneNumber?.length == 10))">
+                </app-check-box>
+            </div>
+        </div>
+        <!-- Remove -->
+        <div class="phoneInfoItem__remove" *ngIf="showRemoveOption && !showRemoveMsg">
+            <button class="form-btn-remove" icon="fa-times-circle" (click)="removePrompt()"></button>
+        </div>
+        <div class="phoneInfoItem__prompt" *ngIf="showRemoveOption && showRemoveMsg">
+            <are-you-sure [appendId]="0" [isFocusSet]="false" [message]="'Are you sure?' | translate"
+                (ifYes)="confirmRemove()" (ifNo)="cancelRemove()">
+            </are-you-sure>
+        </div>
+    </div>
+</form>

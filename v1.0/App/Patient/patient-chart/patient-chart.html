@@ -1,0 +1,475 @@
+﻿<div id="patChart" class="patChart" ng-class="'fade-in'" ng-controller="PatientChartController">
+  <form name="frmLocationLanding" role="form" action="javascript:;" novalidate class="patChart__grid" ng-class="{'perio': showPerioNav ,'old-style': !enableNewClinicalNavigation}">
+    <div class="patChart__primary" ng-class="{'perio': activeTab === 3}">
+      <div class="patChart__row1" ng-class="{'patChart__nav': enableNewClinicalNavigation, 'hidden': viewSettings.expandView===true || showServiceCodeSearchPanel || showConditionSearchPanel}">
+        <div ng-class="enableNewClinicalNavigation? 'patChart__navPrimaryNew' : 'patChart__navPrimary'">
+          <div ng-if="!chartActive && activeTab != 3" ng-class="enableNewClinicalNavigation? 'navbar-newNav' : ''">
+            <ul ng-repeat="tab in tabs" ng-class="enableNewClinicalNavigation? '': 'nav navbar-nav'">
+              <li class="active dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" id="{{ 'divPatChart' + tab.Name}}" ng-class="{'active':getIsActive(tab.Index), 'disabled':!checkAccess(tab)}" ng-disabled="!checkAccess(tab)" title="{{setTabTitle(tab)}}" ng-click="checkAccessAndActivateTab(tab)">
+                  {{::tab.Name}}
+                  <i ng-if="tab.Name === 'Rx' && !validRxPatientData" class="padding-left-5 error fa fa-exclamation-triangle"></i>
+                  <i ng-if="tab.Index===4 && showImagingDropdown===true" id="dropdownImageTab" class="fa fa-caret-down" class="padding-left-5"></i>
+                </a>
+                <ul class="dropdown-menu" ng-if="tab.Index===4 && showImagingDropdown===true">
+                  <li>
+                    <a class="dropdown-item" ng-class="{'disabled': imagingProvider.error === true}" ng-repeat="imagingProvider in imagingProviders" ng-click="selectImagingOption(imagingProvider)" uib-tooltip="{{ imagingProvider.message }}"> {{imagingProvider.name}} </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div ng-if="!chartActive && activeTab === 3" ng-class="enableNewClinicalNavigation? 'navbar-newNav' : ''">
+            <div class="patChart__navSecondary perioLandingNav" ng-if="activeTab === 3">
+              <div class="perioTopNav">
+                <div class="examTypes">
+                  <div ng-repeat="tab in perioTabs" class="examType">
+                    <a ng-click="selectPerioExamType(tab.ExamType)" ng-class="{perioSelected: perioTabSelected.Type == tab.ExamType}">{{::tab.Name}}</a>
+                  </div>
+                </div>
+
+                <div class="perioExamList" ng-show="showExamList === true && hasPerioExams">
+                  <app-select placeholder="Select Exam" [list-items]="perioExamHeaderListOptions" [(value)]="selectedExam.ExamId" (selection-change)="selectedExamChanged($event.target.value)"> </app-select>
+                </div>
+
+                <perio-landing perio-exam-headers="perioExamHeaders" show-perio-nav="showPerioNav" has-perio-exams="hasPerioExams" perio-graph-active="perioGraphActive"></perio-landing>
+
+                <div ng-show="showExamList === true && hasPerioExams">
+                  <div class="perioOptions__actions">
+                    <a class="perioOptions__toggle" ng-click="togglePerioOptions()">
+                      <i class="fa fa-ellipsis-v"></i>
+                    </a>
+                    <div class="perioOptions__actionsPanel" click-off="closePerioOptionMenu()" click-off-if="!perioOptActive" ng-class="{active: perioOptActive }" ng-disabled="!hasPerioExams">
+                      <a id="btnExamCompare" class="" ng-click="compareExams()" ng-disabled="perioExamHeaders.length < 2">{{::'Compare'|i18n}}</a>
+                      <a id="btnExamPrint" class="" ng-click="printExam()">{{::'Print Exam'|i18n}}</a>
+                      <a id="btnViewGraph" class="" ng-click="viewGraph(true)" ng-if="!perioGraphActive.flag">{{::'View Graph'|i18n}}</a>
+                      <a id="btnViewExam" class="" ng-click="viewGraph(false)" ng-if="perioGraphActive.flag">{{::'View Exam'|i18n}}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div ng-if="chartActive" class="perioNavButtons">
+            <div class="examTypes">
+              <div ng-repeat="tab in perioTabs" class="examType">
+                <a ng-click="selectPerioExamType(tab.ExamType)" ng-class="{perioSelected: perioTabSelected.Type == tab.ExamType}">{{::tab.Name}}</a>
+              </div>
+            </div>
+
+            <div class="perio" ng-if="activeTab === 3">
+              <div ng-if="chartActive" class="pull-right">
+                <app-check-box id="chart-bleedall" class="perio-checkbox" label=" {{'Bleed All'|i18n}}" [checked]="getIsBleedAllChecked()" (check-changed)="toggleBleedAll($event)"> </app-check-box>
+                <app-check-box id="chart-suppurationall" class="perio-checkbox" label=" {{'Suppuration All'|i18n}}" [checked]="getIsSuppurationAllChecked()" (check-changed)="toggleSuppurationAll($event)"> </app-check-box>
+                <app-select placeholder="Select Exam" class="" [list-items]="perioPathsOptionList" [(value)]="selectedPerioPathName" (selection-change)="perioPathUpdated($event)"> </app-select>
+                <app-button id="btnExamCancel" class="" variation="secondary" (on-click)="cancelExam()" button-label="{{::'Cancel'|i18n}}" [is-disabled]="initializingExam"> </app-button>
+                <app-button check-auth-z="soar-clin-cperio-add" id="btnExamSave" class="" variation="secondary" (on-click)="saveExam(false)" button-label="{{::'Save'|i18n}}" [is-disabled]="saving || !examHasChanges || initializingExam || !hasSavePermissions"> </app-button>
+                <app-button check-auth-z="soar-clin-cperio-add" id="btnExamComplete" class="" variation="primary" (on-click)="saveExam(true)" button-label="{{::'Finish'|i18n}}" [is-disabled]="saving || !enableFinish || initializingExam || !hasSavePermissions"> </app-button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="patChart__navSecondary" ng-show="activeTab === 1" ng-if="!enableNewClinicalNavigation">
+          <div class="odoNav">
+            <div class="odoNav__actions">
+              <a id="clinicalChartOptions" class="odoNav__toggle" ng-click="toggleQuadrantSelectorPanel()" ng-blur="odoOptActive = false">{{::'Options' | i18n}} <i class="fa fa-caret-down"></i></a>
+              <div class="odoNav__actionsPanel" ng-if="activatedHiddenAreas.actionsPanel">
+                <quadrant-selector selected-quadrant="" supernumerary-tooth-chart-active="supernumeraryToothChartActive" show-quandrant-selection-menu="activatedHiddenAreas.actionsPanel"></quadrant-selector>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="patChart__primaryViewPort" ng-class="{hidden:viewSettings.expandView===true}">
+        <div class="patChart__healthPrimary" ng-if="activeTab === 0">
+          <div>
+            <medical-history patient-info="patientInfo" view-settings="viewSettings" title="Medical History"></medical-history>
+          </div>
+          <div>
+            <height-weight patient-info="patientInfo" additional-data="patient.Data"></height-weight>
+          </div>
+          <div>
+            <!-- <panel id="heightWeightPanelHealth" additional-data="patient.Data" title="{{::heightWeightTitle}}" template="App/Patient/patient-chart/health/panels/height-weight-panel.html"></panel> -->
+          </div>
+          <div>
+            <profile-section [base-id]="'PatAlerts'" [section-title]="'Alerts & Flags'" [actions]="viewFlags">
+              <ng-container layout1>
+                <patient-alert-flags patient="personalInfo"></patient-alert-flags>
+              </ng-container>
+            </profile-section>
+          </div>
+        </div>
+        <div class="patChart__healthSecondary" ng-if="activeTab === 0">
+          <div>
+            <panel id="preventiveCarePanelHealth" access="modifyPreventiveCareEditAccess" additional-data="patient.Data" title="{{::preventiveCareTitle}}" template="App/Patient/patient-chart/health/panels/preventive-care-panel.html"></panel>
+          </div>
+        </div>
+        <div class="patChart__chart" ng-show="activeTab === 1" ng-if="activeTab !== 2">
+          <div class="chartingButtons" ng-class="{'hidden':showServiceCodeSearchPanel || showConditionSearchPanel}">
+            <div class="patLedger__duplicatePatients" ng-if="duplicatePatients.length > 1" ng-class="{'hidden':showServiceCodeSearchPanel || showConditionSearchPanel}">
+              <patient-filter-multi-select disable-input="false" options="duplicatePatients" text-field="FullName" value-field="Selected" drop-down-label="Duplicate Patients" change-event="selectedPatientsChanged()"> </patient-filter-multi-select>
+            </div>
+            <div ng-if="enableNewnClinicalNavigation" class="chartingTitle">Clinical Summary</div>
+
+            <app-toggle id="toggleModeSelect" class="toggleModeClass" label=" {{'Chart Existing Mode'|i18n}}" label-direction="right" [is-checked]="chartExistingModeOn" (toggled)="toggleChartMode($event)"> </app-toggle>
+
+            <button type="button" class="btn btn-primary" id="btnActivateServiceSearch" ng-click="activateServiceSearch()" title="{{::buttonTooltip}}" ng-disabled="disableWhenPatientInactive===true||showConditionSearchPanel===true">{{::'All Services' | i18n}}</button>
+            <button type="button" class="btn btn-primary" id="btnActivateConditionSearch" ng-click="activateConditionSearch()" title="{{::buttonTooltip}}" ng-disabled="disableWhenPatientInactive===true||showServiceCodeSearchPanel===true">{{::'All Conditions' | i18n}}</button>
+
+            <div class="patChart__navSecondary" ng-show="activeTab === 1" ng-if="enableNewClinicalNavigation">
+              <div class="odoNav2">
+                <div class="odoNav2__actions">
+                  <a id="clinicalChartOptions" class="odoNav2__toggle" ng-click="toggleQuadrantSelectorPanel()" ng-blur="odoOptActive = false"><span class="fa fa-ellipsis-v"></span></a>
+                  <div class="odoNav2__actionsPanel" ng-if="activatedHiddenAreas.actionsPanel">
+                    <quadrant-selector-new selected-quadrant="" supernumerary-tooth-chart-active="supernumeraryToothChartActive" show-quandrant-selection-menu="activatedHiddenAreas.actionsPanel"></quadrant-selector-new>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="patChart__odontogramPlaceholder" ng-class="{'hidden':showServiceCodeSearchPanel || showConditionSearchPanel}">
+            <odontogram
+              ng-if="loadOdontogram && isChartColorsLoaded"
+              ng-show="!loadingPatientOdontogram"
+              ng-hide="showServiceCodeSearchPanel || showConditionSearchPanel"
+              selection="selection"
+              person-id="patientId"
+              patient-odontogram="patOdontogram"
+              chart-ledger-services="chartLedgerServices"
+              patient-directory-id="patientInfo.DirectoryAllocationId"
+              conditions="conditions"
+            >
+            </odontogram>
+          </div>
+          <div class="gridServices" ng-class="{'active':showServiceCodeSearchPanel}">
+            <div ng-if="showServiceCodeSearchPanel">
+              <a class="btn btn-default ng-binding" ng-click="hideServiceCodeSearch()" >Return to Chart</a>
+                <input id="showInactiveServicesForAppointments" style="margin-left: 58%;" type="checkbox" ng-model="showInactive.value"
+                        ng-change="toggleInactive()"> Show Inactive
+              <div class="fuseGrid container container pull-left padding-top-10">
+                <input class="form-control border-solid-black" id="searchBoxServiceCodes" autofocus placeholder="{{'Search service codes, CDT codes, description, service types, fee...'|i18n}}" maxlength="500" type="text" ng-model="serviceCodesKeyword.search" />
+                <div class="row header gridHeader padding-top-12 padding-bottom-10">
+                  <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('Code');">
+                    {{'Service' | i18n }}
+                    <span ng-show="orderBy.field == 'Code' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+                    <span ng-show="orderBy.field == 'Code' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+                  </span>
+                  <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('CdtCodeName');">
+                    {{'CDT Code' | i18n }}
+                    <span ng-show="orderBy.field == 'CdtCodeName' && orderBy.asc == true " class="fa fa-caret-down"></span>
+                    <span ng-show="orderBy.field == 'CdtCodeName' && orderBy.asc == false " class="fa fa-caret-up"></span>
+                  </span>
+                  <span class="col-sm-6 cell gridBody__header" ng-click="changeSortingForGrid('Description');">
+                    {{'Description' | i18n }}
+                    <span ng-show="orderBy.field == 'Description' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+                    <span ng-show="orderBy.field == 'Description' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+                  </span>
+                  <span class="col-sm-3 cell gridBody__header" ng-click="changeSortingForGrid('ServiceTypeDescription');">
+                    {{'Service Type' | i18n }}
+                    <span ng-show="orderBy.field == 'ServiceTypeDescription' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+                    <span ng-show="orderBy.field == 'ServiceTypeDescription' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+                  </span>
+                  <!--Sort by $$locationFee rather than $$FeeString since it is numerical-->
+                  <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('$$locationFee');">
+                    {{'Fee' | i18n }}
+                    <span ng-show="orderBy.field == '$$locationFee' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+                    <span ng-show="orderBy.field == '$$locationFee' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+                  </span>
+                </div>
+                <div class="gridScroll">
+                  <div class="fuseGrid">
+                    <div id="lst{{ baseId }}" ng-repeat="serviceCode in filteredServiceCodes | orderBy:orderBy.field:!orderBy.asc track by $index" class="row body gridContentRow" ng-class-even="'even'" ng-class-odd="'odd'" ng-click="openCrudWindow('Service', serviceCode)">
+                      <div class="col-sm-1 cell gridBody__cell">
+                        <span id="lbl{{$index}}" class="btn btn-link" ng-bind-html="serviceCode.Code  | highlightTextIfContains: serviceCodesKeyword.search:100"> </span>
+                        <span id="lbl{{$index}}warning">
+                          <i ng-if="!serviceCode.IsActive" class="fa fa-exclamation-triangle inactive-service-warning" tooltip-append-to-body="true" tooltip-placement="top-left" uib-tooltip="Inactive as of {{serviceCode.InactivationDate | date:'MM/dd/yyyy'}}"></i>
+                        </span>
+                      </div>
+                      <span id="lbl{{$index}}CdtCodeName" class="col-sm-1 cell gridBody__cell" ng-bind-html="serviceCode.CdtCodeName  | highlightTextIfContains: serviceCodesKeyword.search:100"></span>
+                      <span id="lbl{{$index}}Description" class="col-sm-6 cell gridBody__cell" ng-bind-html="serviceCode.Description  | highlightTextIfContains: serviceCodesKeyword.search:100"></span>
+                      <span id="lbl{{$index}}ServiceTypeDescription" class="col-sm-3 cell gridBody__cell" ng-bind-html="serviceCode.ServiceTypeDescription  | highlightTextIfContains: serviceCodesKeyword.search:300"></span>
+                      <span id="lbl{{$index}}FeeString" class="col-sm-1 cell gridBody__cell align-right padding-right-15" ng-bind-html="serviceCode.$$FeeString  | highlightTextIfContains: serviceCodesKeyword.search"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="gridConditions" ng-class="{'active':showConditionSearchPanel}">
+            <div ng-if="showConditionSearchPanel || activatedHiddenAreas.conditionsCodeSearch" ng-show="showConditionSearchPanel">
+              <a class="btn btn-default ng-binding" ng-click="hideConditionSearch()" >Return to Chart</a>
+              <div class="fuseGrid container container pull-left padding-top-10">
+                <input class="form-control border-solid-black" id="searchBoxConditions" autofocus placeholder="{{'Search conditions...'|i18n}}" maxlength="500" type="text" ng-model="conditionsKeyword.search" />
+                <div class="row header gridHeader padding-top-12 padding-bottom-10">
+                  <span class="col-sm-12 cell gridBody__header" ng-click="changeSortingForCondition('Description');">
+                    {{'Condition' | i18n }}
+                    <span ng-show="orderByCondition.field == 'Description' && orderByCondition.asc == true " class="fa fa-caret-down padding-left-10"></span>
+                    <span ng-show="orderByCondition.field == 'Description' && orderByCondition.asc == false " class="fa fa-caret-up padding-left-10"></span>
+                  </span>
+                </div>
+                <div class="gridScroll">
+                  <div class="fuseGrid">
+                    <div
+                      id="lst{{ baseId }}"
+                      ng-repeat="condition in filteredConditions | orderBy:orderByCondition.field:!orderByCondition.asc track by $index"
+                      class="row body gridContentRow"
+                      ng-click="openCrudWindow('Condition', condition)"
+                      ng-class-even="'even'"
+                      ng-class-odd="'odd'"
+                    >
+                      <span id="lbl{{$index}}" class="col-sm-12 cell gridBody__cell" ng-bind-html="condition.Description  | highlightTextIfContains: conditionsKeyword.search:300"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>          
+        </div>
+        <div class="patChart__ledger" ng-if="activeTab === 2 && isChartColorsLoaded">
+          <patient-chart-ledger selection="selection" chart-ledger-services="chartLedgerServices" person-id="patientId" patient-info="patientInfo" watch-to-view="watchId" duplicate-patients="duplicatePatients"></patient-chart-ledger>
+        </div>
+        <div id="divPatChartPerio" class="patChart__perio" ng-if="activeTab === 3">
+          <patient-perio
+            person-id="patientId"
+            patient="patientInfo"
+            has-perio-exams="hasPerioExams"
+            teeth-state="mouthStatus"
+            perio-graph-active="perioGraphActive"
+            active-data-points="activeDataPoints"
+            get-users-perio-exam-settings="getUsersPerioExamSettings"
+            perio-exam-headers="perioExamHeaders"
+          ></patient-perio>
+        </div>
+        <div class="patChart__images" ng-if="activeTab === 4 && showImagingTab===true">
+          <patient-imaging person-id="patientId" patient="patientInfo" imaging-provider="selectedImagingProvider"></patient-imaging>
+        </div>
+        <div class="patChart__rx" ng-if="activeTab === 5">
+          <patient-rx patient="patientInfo" valid-patient-data="validRxPatientData"></patient-rx>
+        </div>
+        <div class="patChart__education" ng-if="activeTab === 6">
+          <!-- placeholder -->
+        </div>
+        <div class="patChart__activeAppt" ng-if="(activeTab === 0 || activeTab === 1 || activeTab === 2) && activeAppointmentId !== null && patientInfo">
+          <active-appointment patient-info="patientInfo" active-appointment-id="activeAppointmentId" service-window="toothCtrls"></active-appointment>
+        </div>
+      </div>
+      <div class="patChart__expndView" ng-class="{active:viewSettings.expandView===true}">
+        <div id="notesPrimary" class="patChart__notesCrud" ng-if="viewSettings.activeExpand === 1">
+          <patient-notes-crud patient-info="patientInfo" person-id="patientId" on-save="noteSaved()" on-cancel="noteCancelled()"></patient-notes-crud>
+        </div>
+        <div id="txPlanPrimary" class="patChart__txPlanCrud" ng-if="viewSettings.activeExpand === 2">
+          <treatment-plans-crud person-id="patientId" patient-info="patientInfo" view-settings="viewSettings"></treatment-plans-crud>
+        </div>
+        <div id="txPlanPrimaryReorder" class="patChart__txPlanCrud" ng-if="viewSettings.activeExpand === 6">
+          <treatment-plans-reorder person-id="patientId" view-settings="viewSettings"></treatment-plans-reorder>
+        </div>
+        <div id="patChartPrimary" class="patChart__propSrvc" ng-if="viewSettings.activeExpand === 3">
+          <proposed-service-selector person-id="patientId" patient-info="patientInfo" view-settings="viewSettings"></proposed-service-selector>
+        </div>
+        <div id="patCharting" class="patChart__chartingCrud" ng-if="viewSettings.activeExpand === 4">
+          <charting-button-crud view-settings="viewSettings"></charting-button-crud>
+        </div>
+        <div id="medicalHistoryPrimary" class="patChart____medicalHistoryCrud" ng-if="viewSettings.activeExpand === 5">
+          <medical-history-crud patient-info="patientInfo" view-settings="viewSettings"></medical-history-crud>
+        </div>
+      </div>
+    </div>
+    <div class="patChart__secondary" ng-class="{perio: activeSecondary == 'perio'}" ng-if="activeSecondary == 'perio'">
+      <!-- todo: how to get this content to be passed through? -->
+      <div class="patChart__secTabs" ng-if="activeSecondary == 'timeline'">
+        <uib-tabset active="activeSubTab" class="spanHeight">
+          <uib-tab index="0" ng-click="setActiveTab(0)" deselect="deselected($event,0)" select="activated(0);activatedHiddenAreas.timelineTab = true;">
+            <uib-tab-heading> <i class="far fa-clock"></i> {{::'Timeline' | i18n}} </uib-tab-heading>
+            <div id="timeLineTabId">
+              <clinical-timeline chart-ledger-services="chartLedgerServices" data="clinicalOverview" person-id="patientId" view-settings="viewSettings" subtabs="subTabs" activate-tab="activateTabFromTimelineTile" ng-if="activatedHiddenAreas.timelineTab && loadTimeline">
+              </clinical-timeline>
+            </div>
+          </uib-tab>
+          <uib-tab index="1" ng-click="setActiveTab(1)" deselect="deselected($event,1)" select="activated(1)">
+            <uib-tab-heading> <i class="far fa-star"></i> {{::'Charting' | i18n}} </uib-tab-heading>
+            <div class="patChart__chartingControls" ng-if="subTabs.favoritesActive">
+              <charting-controls view-settings="viewSettings" patient-info="patientInfo"></charting-controls>
+            </div>
+          </uib-tab>
+          <uib-tab index="2" ng-click="setActiveTab(2)" deselect="deselected($event,2)" select="activated(2);activatedHiddenAreas.txplanTab = true;">
+            <uib-tab-heading> <i class="fa fa-clipboard"></i> {{::'Tx Plans' | i18n}} </uib-tab-heading>
+
+            <treatment-plans-landing person-id="patientId" patient-info="patientInfo" view-settings="viewSettings" ng-if="activeSubTab===2 || activatedHiddenAreas.txplanTab || viewSettings.activeExpand === 2" ng-show="activeSubTab===2"> </treatment-plans-landing>
+          </uib-tab>
+          <uib-tab index="3" ng-click="setActiveTab(3)" deselect="deselected($event,3)" select="activated(3);activatedHiddenAreas.notesTab = true;">
+            <uib-tab-heading> <i class="fas fa-pen-square"></i> {{::'Notes' | i18n}} </uib-tab-heading>
+            <patient-notes person-id="patientId" data="clinicalOverview" view-settings="viewSettings" ng-if="activeSubTab===3 || activatedHiddenAreas.notesTab" ng-show="activeSubTab===3"> </patient-notes>
+          </uib-tab>
+          <!--<uib-tab active="subTabs.checklistActive" deselect="deselected('checklist')" select="activated('checklist')" disabled="true">
+                    <uib-tab-heading>
+                        <i class="far fa-check-circle fa-2x"></i> {{::'Checklist' | i18n}}
+                    </uib-tab-heading>
+                    <h1 class="text-center">Checklist</h1>
+                </uib-tab>-->
+        </uib-tabset>
+      </div>
+    </div>
+    <!-- hidden area behind the scrolling drawer area -->
+    <div id="hidden-drawer" class="patChart__drawer hidden-drawer" ng-class="{ 'open': drawerIsOpen, 'closed': !drawerIsOpen }" ng-if="activeSecondary !== 'perio'">
+      <div ng-if="subTabs.patientInfo" class="drawer-container">
+        <!--This is a very important bogus area that will display under the draw content so that the page content 
+            does not flow under the drawer, do not remove.-->
+      </div>
+    </div>
+    <!-- the id was added so we could tell the drawer area to stay visible when the page is scrolling -->
+    <div id="complete_drawer_area" class="patChart__drawer" ng-class="{ 'open': drawerIsOpen, 'closed': !drawerIsOpen, 'timeline': subTabs.timelineActive, 'favorites': subTabs.favoritesActive }" ng-if="activeSecondary !== 'perio'">
+      <div ng-if="subTabs.patientInfo" class="drawer-container">
+        <div class="drawer-title">
+          Patient Details
+          <span class="far fa-arrow-right drawer-close" ng-click="closeDrawer()"></span>
+        </div>
+        <div class="patChart__scrollableDrawer">
+          <h4>{{::'General Info' | i18n}}</h4>
+          <dl class="patChart__wrapper">
+            <dt>{{::'Description' | i18n}}:</dt>
+            <dd>
+              <span ng-if="patientDetail.Profile.Sex === 'M'">{{::'Male' | i18n}}</span><span ng-if="patientDetail.Profile.Sex === 'F'">{{::'Female' | i18n}}</span><span ng-if="patientDetail.Profile.DateOfBirth">,</span> {{patientDetail.Profile.DateOfBirth | date:'MM/dd/yyyy'}}
+              <span ng-hide="patientDetail.Profile.DateOfBirth == null">({{::'age' | i18n}} {{patientDetail.Profile.DateOfBirth | age}})</span>
+            </dd>
+            <dt>{{::'Status' | i18n}}:</dt>
+            <dd><span ng-show="patientDetail.Profile.IsActive && patientDetail.Profile.IsPatient">{{::'Active Patient' | i18n}}</span><span ng-show="!patientDetail.Profile.IsActive && patientDetail.Profile.IsPatient">{{::'Inactive Patient' | i18n}}</span></dd>
+            <dt>{{::'Patient ID' | i18n}}:</dt>
+            <dd><span ng-show="patientDetail.Profile.PatientCode">{{patientDetail.Profile.PatientCode}}</span></dd>
+          </dl>
+          <!--<hr>
+                <h4>{{::'Flags' | i18n}}</h4>
+                <ul ng-repeat="flag in patientDetail.Flags | orderBy:'Description'" ng-show="patientDetail.Flags" class="patChart__flagWrapper">
+                    <li> <i class="fa {{getClass(flag.SymbolId) }}"></i> {{flag.Description}}</li>
+                </ul>-->
+          <hr />
+          <h4>{{::'Contact' | i18n}}</h4>
+          <dl class="patChart__wrapper">
+            }}
+            <dt>{{::'Phone' | i18n}}:</dt>
+
+            <dd>{{displayPhone| tel }} <span ng-if="displayPhone">(</span>{{displayPhoneType}}<span ng-if="displayPhone">)</span><span ng-if="displayPhone">{{::' Preferred' | i18n}}</span></dd>
+            <dt>{{::'Email' | i18n}}:</dt>
+            <dd><a href="mailto:{{displayEmail}}">{{displayEmail}}</a></dd>
+            <dt>{{::'Res Party' | i18n}}:</dt>
+            <dd>{{patientDetail.Profile.ResponsiblePersonName}}</dd>
+            <dt>{{::'Address' | i18n}}:</dt>
+            <dd>
+              {{patientDetail.Profile.AddressLine1}} {{patientDetail.Profile.AddressLine2}} <br />
+              {{patientDetail.Profile.City}}<span ng-if="patientDetail.Profile.City">,</span> {{patientDetail.Profile.State}} {{patientDetail.Profile.ZipCode}}
+            </dd>
+          </dl>
+          <hr />
+          <h4>{{::'Providers & Locations' | i18n}}</h4>
+          <dl class="patChart__wrapper">
+            <dt>{{::'Preferred Dentist' | i18n}}:</dt>
+            <dd>{{patientDetail.Profile.preferredDentist}}</dd>
+            <dt>{{::'Preferred Hygenist' | i18n}}:</dt>
+            <dd>{{patientDetail.Profile.preferredHygienist}}</dd>
+            <dt>{{::'Preferred Location' | i18n}}:</dt>
+            <dd>{{patientDetail.Profile.PreferredLocationName}}</dd>
+          </dl>
+          <hr />
+          <h4>{{::'Financial' | i18n}}</h4>
+          <dl class="patChart__wrapper">
+            <dt>{{::'Account receives statements' | i18n}}?</dt>
+            <dd ng-if="patientDetail.Profile.PersonAccount.ReceivesStatements">{{::'Yes' | i18n}}</dd>
+            <dd ng-if="!patientDetail.Profile.PersonAccount.ReceivesStatements">{{::'No' | i18n}}</dd>
+            <dt>{{::'Account receives finance charges' | i18n}}?</dt>
+            <dd ng-if="patientDetail.Profile.PersonAccount.ReceivesFinanceCharges">{{::'Yes' | i18n}}</dd>
+            <dd ng-if="!patientDetail.Profile.PersonAccount.ReceivesFinanceCharges">{{::'No' | i18n}}</dd>
+          </dl>
+          <hr />
+          <h4>{{::'Insurance' | i18n}}</h4>
+          <dl class="patChart__wrapper">
+            <dt>{{::'Primary' | i18n}}:</dt>
+            <dd>{{primaryInsurance}}</dd>
+            <dt>{{::'Secondary' | i18n}}:</dt>
+            <dd>{{secondaryInsurance}}</dd>
+          </dl>
+          <hr />
+          <h4>{{::'Account Members' | i18n}}</h4>
+          <ul ng-show="patientDetail.AccountMemberOverview.AccountMembersProfileInfo" class="patChart__memberWrapper">
+            <li ng-repeat="person in patientDetail.AccountMemberOverview.AccountMembersProfileInfo">
+              <div class="patChart__displayName" ng-click="validateAccountMember(person)">{{person.displayName}} <span ng-if="patientDetail.Profile.ResponsiblePersonId == person.PatientId">(RP)</span></div>
+              <div class="patChart__transferLink"><a id="lblTransfer{{$index}}" ng-click="transfer(person.PatientId)">Transfer</a></div>
+              <div class="patChart__birthDate">{{person.DateOfBirth | date:'MM/dd/yyyy'}}</div>
+            </li>
+          </ul>
+          <hr />
+          <h4>{{::'Additional Info' | i18n}}</h4>
+          <dl class="patChart__wrapper">
+            <dt>{{::'Next Appt' | i18n}}:</dt>
+            <dd>
+              <div>{{::displayDateNextAppt}}</div>
+              <div>{{ ::displayProviderNextAppt }}</div>
+            </dd>
+            <dt>{{::'Groups' | i18n}}:</dt>
+            <dd>
+              <div ng-if="patientDetail.PatientGroups" ng-repeat="group in patientDetail.PatientGroups">{{group.Description}}</div>
+              <div ng-if="patientDetail.PatientGroups.length === 0">{{::'N/A' | i18n}}</div>
+            </dd>
+            <dt>{{::'Statement ID' | i18n}}:</dt>
+            <dd ng-if="patientDetail.Profile.PersonAccount.DisplayStatementAccountId">{{patientDetail.Profile.PersonAccount.DisplayStatementAccountId}}</dd>
+          </dl>
+        </div>
+      </div>
+      <div ng-if="subTabs.timelineActive" ng-class="{'timeline': subTabs.timelineActive}" ng-show="viewSettings.showTreatmentPlanServices !== true" class="drawer-container">
+        <div class="drawer-title">
+          Timeline
+          <span class="far fa-arrow-right drawer-close" ng-click="closeDrawer()"></span>
+        </div>
+        <div class="timeline-drawer">
+          <clinical-timeline chart-ledger-services="chartLedgerServices" data="clinicalOverview" person-id="patientId" view-settings="viewSettings" subtabs="subTabs" activate-tab="activateTabFromTimelineTile" ng-if="loadTimeline"> </clinical-timeline>
+        </div>
+      </div>
+      <div ng-if="subTabs.referralActive" ng-class="{'timeline': subTabs.referralActive}" ng-show="viewSettings.showTreatmentPlanServices !== true" class="drawer-container">
+        <div class="drawer-title">
+          Referrals
+          <span class="far fa-arrow-right drawer-close" ng-click="closeDrawer()"></span>
+        </div>
+        <resizable-drawer>
+          <referrals-drawer-view></referrals-drawer-view>
+        </resizable-drawer>
+      </div>
+      <div ng-if="(subTabs.txPlansActive && viewSettings.showTreatmentPlanServices !== true)" class="drawer-container">
+        <div class="drawer-title">
+          Treatment Plans
+          <span class="far fa-arrow-right drawer-close" ng-click="closeDrawer()"></span>
+        </div>
+        <treatment-plans-landing person-id="patientId" patient-info="patientInfo" view-settings="viewSettings"> </treatment-plans-landing>
+      </div>
+      <div ng-if="viewSettings.showTreatmentPlanServices === true" class="drawer-container">
+        <div class="drawer-title">
+          Add Services
+          <span id="txPlan_servicesDrawer_closeButton" class="far fa-arrow-right drawer-close" ng-click="closeDrawer()"></span>
+        </div>
+        <resizable-drawer>
+          <new-treatment-plan-services-drawer-view></new-treatment-plan-services-drawer-view>
+        </resizable-drawer>
+      </div>
+      <div ng-if="subTabs.favoritesActive" ng-show="viewSettings.showTreatmentPlanServices !== true" class="drawer-container">
+        <div class="drawer-title">
+          Charting
+          <span class="far fa-arrow-right drawer-close" ng-click="closeDrawer()"></span>
+        </div>
+        <div class="patChart__chartingControls">
+          <charting-controls view-settings="viewSettings" patient-info="patientInfo"></charting-controls>
+        </div>
+      </div>
+      <div ng-if="subTabs.notesActive" ng-show="viewSettings.showTreatmentPlanServices !== true" class="drawer-container">
+        <div class="drawer-title">
+          Notes
+          <span class="far fa-arrow-right drawer-close" ng-click="closeDrawer()"></span>
+        </div>
+        <patient-notes person-id="patientId" data="clinicalOverview" view-settings="viewSettings"> </patient-notes>
+      </div>
+    </div>
+  </form>
+  <!--Layout for kendo window charting controls-->
+  <div class="chartingControls__activeLayout">
+    <div kendo-window="toothCtrls" k-title="'Tooth Controls'" k-visible="false" k-on-open="toothCtrlsOpen = true" k-on-close="toothCtrlsOpen = false" id="toothCtrlsWindowPatChart"></div>
+    <div kendo-window="patientConditionCreateUpdate" k-title="'Patient Condition'" k-visible="false" k-on-open="toothCtrlsOpen = true" k-on-close="toothCtrlsOpen = false" id="patientConditionCreateUpdateWindow3"></div>
+  </div>
+</div>

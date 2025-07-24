@@ -1,0 +1,69 @@
+﻿// #region Multi-Select
+
+.multi-select {
+    left: 0;
+    position: relative;
+    top: 0;
+    /*margin-left: 10px;*/
+    margin-right: 10px;
+
+    &__button {
+        height: 39px;
+        border: @brand-form_border;
+        border-radius: 2px;
+        color: @link-color;
+        background: white;
+        padding: 8px;
+
+        &__text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .dropdown-menu {
+        min-width: 300px;
+
+        a {
+            white-space: nowrap;
+            
+            .inactive {
+                color: lightgrey;
+                font-style: italic;
+            }
+        }
+
+        &__icon {
+            margin-top: 6px;
+            margin-right: 5px;
+        }
+    }    
+    
+    &__repeater {
+        margin-top: 42px;
+        max-height: 300px;
+        overflow-y: auto; 
+               
+        .bold {
+            font-weight: bold;
+        }        
+    }
+}
+
+.grouped {
+    color: black;
+}
+
+.grouped-anchor:hover {
+    color: #FFFFFF;
+    background-color: #0096FF;
+}
+
+.grouped-anchor:focus{
+    color: black;
+}
+
+.grouped-hr{
+    margin: 0px;
+}

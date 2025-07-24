@@ -1,0 +1,180 @@
+﻿
+.patientAccount {
+
+    &__newNavContainer {
+        border-bottom: 1px solid #DDDDDD;
+        padding-bottom: 8px;
+        margin-right: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }
+
+    &__newNav {
+        a {
+            font-family: @global-font-family;
+            font-size: 14px;
+            color: #333333;
+            text-decoration: solid;
+            margin-bottom: 5px;
+
+
+            &:not(:last-of-type) {
+                margin-right: 20px;
+            }
+
+            &.active {
+                background-color: transparent;
+                color: @brand-color_font-dark;
+                border-bottom: 1px solid #2DABCB;
+                padding-bottom: 7px;
+                
+            }
+        }
+    }
+
+    &__nav {
+        .containerStandard;
+        /* Commented to prevent the pill bar navigation from intruding into the seconday navigation.
+           It is inheriting brand-padding_md from containerStandard. The previous select box navigation
+           pushed the page down to far previously without the padding top set to 0.
+        */
+        //padding-top: 0 !important;
+        /* Commented to prevent the pill bar navigation from intruding into the seconday navigation.
+           It is inheriting brand-padding_md from containerStandard. The previous select box navigation
+           pushed the page down to far previously without the padding top set to 0.
+        */
+        //padding-top: 0 !important;
+        /* Applying Padding to align the Tertiary Navigation(Pill Bar) with the Patient Header*/
+        padding-left: @brand-padding_md;
+        padding-right: @brand-padding_md;
+
+        .dropdown-menu {
+            -ms-word-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .select-box {
+            width: auto;
+            float: left;
+        }
+
+        .k-combobox {
+            color: @brand-color_link;
+            width: auto;
+            background-color: transparent;
+            // Fix for select jump
+            &.k-state-border-down {
+                margin-bottom: -2px;
+            }
+
+            .clearfix;
+
+            .k-dropdown-wrap {
+                display: inline-block;
+                float: left;
+                border: none;
+                background-color: transparent;
+                font-size: 2em;
+
+                input {
+                    background-color: transparent;
+                }
+
+                .k-select {
+                    .k-icon {
+                        width: 26px;
+                        height: 26px;
+                        font-size: 1.6em;
+
+                        &:before {
+                            font-size: 1.2em;
+                            content: @fa-var-caret-down;
+                            color: @panel-btn-color;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        #lnkTransactionHistory {
+            display: inline-block;
+            float: right;
+            margin-top: 15px;
+        }
+
+        #lnkAccountSummary {
+            display: inline-block;
+            float: right;
+            margin-top: 15px;
+        }
+    }
+
+    &__panels {
+        .containerStandard;
+        padding-top: 0 !important;
+    }
+    &__profilepanel{
+        .containerStandard;
+        min-width: 1280px;
+    }
+}
+.for-label {
+    display: inline-block;
+    float: left;
+    font-size: 1.5em;
+    line-height: 1.8;
+    padding-left: 5px;
+    padding-top: 0;
+}
+.dropdownNav {
+    display: inline-block;
+    width: auto;
+    float: left;
+    outline: none;
+
+    &__toggle {
+        .btn;
+        .btn-link;
+        .btn-lg;
+        font-size: 1.5em;
+        &:focus {
+            outline: none;
+        }
+        &:after {
+            display: inline-block;
+            font-family: 'Font Awesome 5 Pro';
+            content: @fa-var-caret-down;
+            color: @panel-btn-color;
+            margin-left: 6px;
+        }
+    }
+
+    &__filtered {
+        .btn;
+        .btn-link;
+        .btn-lg;
+        font-size: 2em;
+        &:focus {
+            outline: none;
+        }
+    }
+    &__accountMember{
+        float: left;
+        max-width: 550px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+}
+
+.dropdown-menu-accounttab {
+  overflow: visible !important;
+  left: -520% !important;
+  width: 625% !important;
+}

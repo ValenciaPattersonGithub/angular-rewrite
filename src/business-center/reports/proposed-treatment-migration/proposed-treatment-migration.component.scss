@@ -1,0 +1,44 @@
+.proposedtreatmentreport {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr 1fr
+}
+.proposedtreatmentreportgroupHeader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+.proposedtreatmentreportfooter {
+    grid-template-columns: 8fr 3fr 1fr 0.05fr
+}
+.proposedtreatmentreportsubfooter {
+    grid-template-columns: 8fr 3fr 1fr
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+
+        &.proposedtreatmentreport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+        }
+      }
+}
+.pl-0{
+    padding-left: 0px !important;
+}
+.pl-5{
+    padding-left: 5px !important;
+}

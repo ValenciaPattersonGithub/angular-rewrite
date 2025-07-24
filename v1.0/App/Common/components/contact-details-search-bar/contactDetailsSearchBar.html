@@ -1,0 +1,53 @@
+﻿<div ng-show="true" ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+
+    <typeahead auth-z="{{amfa}}" class="typeahead soar-typeahead " id="{{baseId}}Typeahead" cancel="cancelSearch()" search="search(term)"
+               select="doNothing(item)" items="searchResults" term="searchTerm" click-function="displayResults()"
+               placeholder="{{ addPlaceholder | i18n }}" tab-index="tabIndex" appearance="{{ header ? 'form-control' : 'form-input' }}" read-only="true">
+
+        <!--NOTES results section-->
+        <ul id="list{{baseId}}Results" soar-infinite-scroll="search(searchString, true)">
+
+            <li class="soar-typeahead" style="border-bottom:0px">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <a id="{{baseId}}addPersonLink" class="text-muted center-block" ng-click="addContactDetail()">
+                            <span>{{patientInfo.Profile.FirstName}} {{patientInfo.Profile.LastName}}</span><span>&nbsp;</span><span>{{addLabel}}</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li ng-repeat="result in searchResults" ng-animate="'animate'" typeahead-item="result" style="border-bottom:0px">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="flex flex-center">
+                            <div class="flex-grow-1 flex flex-stretch" ng-click="addAccountMemberContactDetail(result)">
+                                <!--Result by type-->
+                                <div class="flex-grow-1 padding-left-5 padding-right-10 truncate" ng-show="true" ng-class="{searchBar__inactiveItem: result.IsActive===false}">
+                                    <span id="{{baseId}}firstName{{ $index }}"><b>{{result.FirstName}}</b></span>
+                                    <span id="{{baseId}}MiddleName{{ $index }}"><b>{{result.MiddleName}}</b></span>
+                                    <span id="lastName{{ $index }}"><b>{{result.LastName}}</b></span>
+                                    <span id="{{baseId}}Suffix{{ $index }}"><b>{{result.Suffix}}</b></span>
+                                    <span ng-show="result.PreferredName" id="{{baseId}}preferredName{{ $index }}"><b>({{result.PreferredName}})</b></span>
+                                    <span ng-if="baseId == 'Email'">
+                                        <span id="{{baseId}}Suffix{{ $index }}" ng-bind-html="result.Email">{{result.Email}}</span>
+                                    </span>
+                                    <span ng-if="baseId != 'Email'">
+                                        <span id="{{baseId}}Suffix{{ $index }}" ng-bind-html="result.PhoneNumber | tel ">{{result.PhoneNumber}}</span>
+                                        <span id="{{baseId}}Suffix{{ $index }}">{{result.Type}}</span>
+                                    </span>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li ng-show="noSearchResults">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span class="text-muted" id="{{baseId}}noResultsMessage">{{ 'No results.' | i18n }}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </typeahead>
+</div>

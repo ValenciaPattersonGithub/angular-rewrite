@@ -1,0 +1,53 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr class="reportGrid__row ">
+                    <th class="cell" colspan="9">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="reportGrid__row stripOdd">
+                    <th class="col-sm-2 cell"> {{ 'Room' | i18n }}</th>
+                    <th class="col-sm-1 cell ">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-2 cell ">{{ 'Appt Date' | i18n }}</th>
+                    <th class="col-sm-1 cell ">{{ 'Appt Time' | i18n }}</th>
+                    <th class="col-sm-1 cell ">{{ 'Appt Type' | i18n }}</th>
+                    <th class="col-sm-2 cell ">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-1 cell ">{{ 'Start Time' | i18n }}</th>
+                    <th class="col-sm-1 cell ">{{ 'Finish Time' | i18n }}</th>
+                    <th class="col-sm-1 cell ">{{ 'Elapsed Time' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripOdd'" ng-class-Even="'stripEven'" ng-repeat="room in location.Rooms">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-2 cell">{{ room.Room }}</td>
+                    <td class="col-sm-1 cell ">{{ room.Appointments[0].Patient}}</td>
+                    <td class="col-sm-2 cell ">{{ room.Appointments[0].Date | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-1 cell ">{{ room.Appointments[0].AppointmentTime }}</td>
+                    <td class="col-sm-1 cell ">{{ room.Appointments[0].AppointmentType }}</td>
+                    <td class="col-sm-2 cell ">{{ room.Appointments[0].Provider }}</td>
+                    <td class="col-sm-1 cell ">{{ room.Appointments[0].StartTime }}</td>
+                    <td class="col-sm-1 cell ">{{ room.Appointments[0].FinishTime }}</td>
+                    <td class="col-sm-1 cell ">{{ room.Appointments[0].ElapsedTime}}</td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat="appt in room.Appointments |  startFrom : 1">
+                    <td class="col-sm-2 cell "></td>
+                    <td class="col-sm-1 cell ">{{ appt.Patient}}</td>
+                    <td class="col-sm-2 cell ">{{ appt.Date | date: 'MM/dd/yyyy' }}</td>
+                    <td class="col-sm-1 cell ">{{ appt.AppointmentTime }}</td>
+                    <td class="col-sm-1 cell ">{{ appt.AppointmentType }}</td>
+                    <td class="col-sm-2 cell ">{{ appt.Provider }}</td>
+                    <td class="col-sm-1 cell ">{{ appt.StartTime }}</td>
+                    <td class="col-sm-1 cell ">{{ appt.FinishTime }}</td>
+                    <td class="col-sm-1 cell ">{{ appt.ElapsedTime }}</td>
+                </tr>
+            </tbody>
+            <tbody ng-show="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

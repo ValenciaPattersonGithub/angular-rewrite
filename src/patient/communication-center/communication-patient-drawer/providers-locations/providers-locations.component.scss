@@ -1,0 +1,67 @@
+@import "variables";
+@import '/src/patient/communication-center/communication-center-variables';
+
+.providerlocationheader {
+    display: grid;
+    grid-template-columns: 100%;
+    margin: 15px 15px 0px 15px;
+    border-bottom: 1px solid $communication-center-preview-border-color;
+
+    &-title {
+        grid-column: 1/2;
+        grid-row: 1;
+        margin: 0px 0px 10px 0px;
+    }
+    &-main-title {
+       font-family: $communication-card-font-family;
+        font-size: 16px;
+        color: $communication-center-heading-color;
+        text-decoration: none solid rgb(51, 51, 51);  
+    }
+}
+
+.providerlocationdetail {
+    display: grid;
+    grid-template-columns: 43% 57%;
+    font-family: $global-font-family;
+    font-size: 12px;
+    color: $communication-card-label-color;
+    margin-bottom: 15px;
+    &-dentistlabel {
+        grid-column: 1;
+        grid-row: 1;
+        font-weight: $communication-center-subheading-font-weight;
+    }
+    &-dentist {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    &-hygenistlabel {
+        grid-column: 1;
+        grid-row: 2;
+        font-weight: $communication-center-subheading-font-weight;
+    }
+    &-hygenist {
+        grid-column: 2;
+        grid-row: 2;
+    }
+    &-preferedLocationlabel {
+        grid-column: 1;
+        grid-row: 3;
+        font-weight: $communication-center-subheading-font-weight;
+    }
+    &-preferedLocation {
+        grid-column: 2;
+        grid-row: 3;
+    }
+    &-alternateLocationslabel {
+        grid-column: 1;
+        grid-row: 4;
+        font-weight: $communication-center-subheading-font-weight;
+    }
+    &-alternateLocations {
+        grid-column: 2;
+        grid-row: 4;
+        word-break: break-word;
+    }
+}

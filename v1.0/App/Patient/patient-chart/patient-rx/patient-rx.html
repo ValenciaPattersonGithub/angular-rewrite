@@ -1,0 +1,64 @@
+﻿<div class="row">
+    <div class="rx">
+        <div class="panel panel-info">        
+            <div class="panel-body">                
+                <div>{{ 'Reminder! Known allergies and current medications for this patient must be entered into DoseSpot in order to receive contraindicative alerts.' | i18n}}</div>
+            </div>
+        </div>            
+        <div class="panel panel-default rx__required" ng-show="invalidPatientData">
+            <div class="panel-body">
+                <label class="panel-title">{{'Rx requires the following patient data:'|i18n}}</label>
+                <div ng-repeat="requirement in requirementsList">
+                    {{requirement.info | i18n}}
+                </div>
+            </div>
+        </div> 
+        
+        <div class="panel panel-default rx__required" ng-show="rxSaveFailed">
+            <div class="panel-body">
+                <label class="panel-title">{{'Unable to access {0}. '|i18n:['Electronic Prescriptions']}}</label>
+                <label class="panel-title">{{'Please verify the following info for this patient:'|i18n}}</label>
+                <!-- <div>{{'Must have a valid {0}.' |i18n: ['phone number']}}</div>
+                <div>{{'Must have a valid {0}.' |i18n: ['zip code']}}</div>
+                <div>{{'Must have a valid {0}.' |i18n: ['matching zip code / city']}}</div> -->
+            </div>
+        </div>
+        
+        <div class="panel panel-default rx__required" ng-show="rxSaveFailedLocation">
+            <div class="panel-body">
+                <label class="panel-title">{{'Unable to access {0}. '|i18n:['Electronic Prescriptions']}}</label>
+                <label class="panel-title">{{'Please verify the following for the current location:'|i18n}}</label>
+                <div>{{'Must be activated for electronic prescriptions.' | i18n}}</div>
+                <div>{{'Must be an assigned Rx location for the current user.' | i18n}}</div>
+            </div>
+        </div>
+
+        <div class="panel panel-default rx__required" ng-show="heightWeightRequired">
+             <div class="panel-body">
+                <div>{{'Patients under the age of 18 must include weight and height.' | i18n}}</div>
+                <div>&nbsp;</div>
+                <div class="text-center">
+                    <button id="enterHeightWeightButton"   ng-click="showEnterHeightWeight()"  class="btn btn-primary" >{{ 'Next' | i18n }}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default rx__required" ng-show="enterHeightWeight">
+            <div class="panel-body">
+                <height-weight  patient-info="patient"></height-weight>
+            </div>
+        </div>
+
+        <iframe ng-src="{{rxFrameSource}}" id="rxFrame" class="rx__frame"
+                ng-show="!invalidPatientData && rxPatientFound"></iframe>
+        <div ng-if="loading && rxPatientNotFound" class="rx__empty">
+            <div>{{ notFoundMessage | i18n}}</div>
+        </div>
+        <div class="rx__loader"
+             ng-show="loading && !rxPatientFound"
+             title="{{loadingMessage}}">
+            <span class="fa fa-spinner fa-spin fa-4x"></span>
+        </div>
+    </div>
+</div>
+

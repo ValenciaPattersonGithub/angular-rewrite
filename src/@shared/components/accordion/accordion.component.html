@@ -1,0 +1,6 @@
+<div id="Collapse{{$index}}" *ngFor="let section of customForm?.FormSections; index as $index; first as $first; last as $last"
+    class="highlight-section">
+    <!--Are you sure message for section delete-->
+    <section-crud [showFooterPage]="showFooterPage" [formType]="formType" [section]="section" [sectionIndex]="$index" [first]="$first" [last]="$last" 
+                  [canEditForm]="canEditForm" [inputIsDisabled]="inputIsDisabled"  [parentForm]="parentForm"></section-crud>
+</div>

@@ -1,0 +1,53 @@
+<div class="toc-container">
+    <ng-container *ngFor="let item of tableofContent; let i = index">
+        <div class="toc-item" *ngIf="item.id !== 6 || enableNewReferral" 
+             (click)="setSelectedItem(item)">
+            <svg xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none"
+                 style="overflow: visible;width: 4px;height: 44px;opacity: 1;mix-blend-mode: normal;float: left;"
+                 version="1.2" xmlns="http://www.w3.org/2000/svg" *ngIf="item.id === selectedItem.id && item.id === 1">
+                <defs>
+                    <path d="M0 4 C0 1.7908610008 1.7908610008 0 4 0 C4 0 4 0 4 0 C4 0 4 44.000000000000014 4 44.000000000000014 C4 44.000000000000014 0 44.000000000000014 0 44.000000000000014 C0 44.000000000000014 0 4 0 4 Z"
+                          id="path-16194323116521868"></path>
+                </defs>
+                <g transform="translate(0, 0)">
+                    <path d="M0 4 C0 1.7908610008 1.7908610008 0 4 0 C4 0 4 0 4 0 C4 0 4 44.000000000000014 4 44.000000000000014 C4 44.000000000000014 0 44.000000000000014 0 44.000000000000014 C0 44.000000000000014 0 4 0 4 Z"
+                          style="stroke: rgb(140, 140, 140); stroke-width: 0; stroke-linecap: butt; stroke-linejoin: miter; fill: rgb(45, 171, 203);">
+                    </path>
+                </g>
+            </svg>
+            <svg version="1.2" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink" class="ng-element" data-id="56d93a34162843edbdaaffe63dc54e94"
+                 style="overflow: visible; width: 4px; height: 44px; opacity: 1; mix-blend-mode: normal; float:left;"
+                 *ngIf="item.id === selectedItem.id && item.id !== 1 &&  item.id !== 8 ">
+                <defs>
+                    <path id="path-16195192770981880"
+                          d="M0 0 C0 0 4 0 4 0 C4 0 4 44.00000000000001 4 44.00000000000001 C4 44.00000000000001 0 44.00000000000001 0 44.00000000000001 C0 44.00000000000001 0 0 0 0 Z">
+                    </path>
+                </defs>
+                <g transform="translate(0, 0)">
+                    <path d="M0 0 C0 0 4 0 4 0 C4 0 4 44.00000000000001 4 44.00000000000001 C4 44.00000000000001 0 44.00000000000001 0 44.00000000000001 C0 44.00000000000001 0 0 0 0 Z"
+                          style="stroke: rgb(140, 140, 140); stroke-width: 0; stroke-linecap: butt; stroke-linejoin: miter; fill: rgb(45, 171, 203);">
+                    </path>
+                </g>
+            </svg>
+            <svg version="1.2" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink" *ngIf="item.id === selectedItem.id && item.id == 8"
+                 style="overflow: visible; width: 4px; height: 44px; opacity: 1; float: left;">
+                <defs>
+                    <path id="path-16195192771051892"
+                          d="M0 0 C0 0 4 0 4 0 C4 0 4 44.00000000000001 4 44.00000000000001 C4 44.00000000000001 4 44.00000000000001 4 44.00000000000001 C1.7908610008 44.00000000000001 0 42.20913899920001 0 40.00000000000001 C0 40.00000000000001 0 0 0 0 Z">
+                    </path>
+                </defs>
+                <g transform="translate(0, 0)">
+                    <path d="M0 0 C0 0 4 0 4 0 C4 0 4 44.00000000000001 4 44.00000000000001 C4 44.00000000000001 4 44.00000000000001 4 44.00000000000001 C1.7908610008 44.00000000000001 0 42.20913899920001 0 40.00000000000001 C0 40.00000000000001 0 0 0 0 Z"
+                          style="stroke: rgb(140, 140, 140); stroke-width: 0; stroke-linecap: butt; stroke-linejoin: miter; fill: rgb(45, 171, 203);">
+                    </path>
+                </g>
+            </svg>
+            <div id="{{'table-of-contents-' + i}}" class="toc-text">
+                {{item.text}}
+            </div>
+
+        </div>
+    </ng-container>
+</div>

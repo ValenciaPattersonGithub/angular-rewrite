@@ -1,0 +1,341 @@
+<div class="registration-header-container">
+    <div *ngIf="getChartExistingModeOn && useConverted" class="chartModeHeader">{{'Chart Existing Mode On' | translate}}</div>
+
+    <div class="registration-header-container-initial" id="patientProfileIcon" *ngIf="patientInitials">
+        <div class="registration-header-container-patientPhoto" *ngIf="hasImage">
+            <div class="registration-header-container-patientPhoto-photoCover">
+                <img class="registration-header-container-patientPhoto-photo" [src]="imageUrl">
+            </div>
+        </div>
+        <div class="registration-header-container-initial-badge" *ngIf="!hasImage">{{patientInitials}}</div>
+    </div>
+    <div class="registration-header-container-title" id="patientProfileName" [ngClass]="{ 'headerTitle' : isPatientHeader}">
+        <span kendoTooltip position="bottom" [title]="isPatientHeader ? pageTitle : ''" (click)="isPatientHeader ? navigateNewProfile(ProfileLink) : ''">{{pageTitle | translate}}</span>
+        <span *ngIf="patientProfile?.ResponsiblePersonType == 1 && isPatientHeader" class="ResponsiblePersonType">{{'(RP)' | translate}}</span>
+    </div>
+
+    <div class="registration-header-container-message" id="messageRow" *ngIf="!patientInitials">
+        <span class="row-label">{{todaysDate | date:'fullDate'}}</span>
+        <span class="mx-2">|</span>
+        <span class="row-label">{{'Welcome' | translate}} </span>
+        <span>{{userInformation | translate}}</span>
+    </div>
+
+    <div class="registration-header-container-message" id="titleRow" *ngIf="patientInitials">
+        <div class="messageRow-edit-personInfo">
+            <div [ngClass]="{'patientDescriptionDetails': isPatientHeader}">
+                <label><b>{{'Description: ' | translate}}</b></label>
+                <span [id]="isPatientHeader ? 'lblPatientSex' : ''" class="spacing">{{description | translate}}<span *ngIf="isPatientHeader && dateOfBirth">,</span></span>
+                <span [id]="isPatientHeader ? 'lblPatientDateOfBirth' : ''" class="spacing" *ngIf="dateOfBirth">{{ dateOfBirth | date:'MM/dd/yyyy'}} ( age {{ dateOfBirth |
+                    age:dateOfBirth}})</span>
+            </div>
+            <span *ngIf="!isPatientHeader" class="mx-2">|</span>
+            <div [ngClass]="{'patientDescriptionDetails': isPatientHeader}">
+                <label><b>{{'Status: ' | translate}}</b></label>
+                <span *ngIf="!isPatientHeader" id="patientStatus__id" class="spacing">{{status | translate}}</span>
+                <span *ngIf="isPatientHeader" id="patientStatus__id" class="spacing" [ngClass]="patientProfile?.PersonAccount?.InCollection ? 'patientHeader__in-collection' : ''">{{displayStatus | translate}}</span>
+            </div>
+            <span *ngIf="!isPatientHeader" class="mx-2">|</span>
+            <div>
+                <label><b>{{'Patient ID: ' | translate}}</b></label>
+                <span [id]="isPatientHeader ? 'patientHeader__id' : ''" class="spacing">{{patientId | translate}}</span>
+            </div>
+
+            <div *ngIf="isPatientHeader" class="patientHeader__more patientDescriptionDetails">
+                <span [id]="displayMoreInfo ? 'patientHeader_showLess' : 'patientHeader_showMore'" class="patientHeader__showMore" (click)="toggleMoreInfo()">
+                    {{ displayMoreInfo ? 'Less' : 'More' | translate }}
+                    <i [class]="displayMoreInfo ? 'fa fa-caret-up' : 'fa fa-caret-down'"></i>
+                </span>
+            </div>
+
+            <div *ngIf="isPatientHeader" id="patientHeader__alertsContainer" class="alertFlagContainer">
+                <div class="alertsFlagsLabel"><b>{{ 'Alerts and Flags : ' | translate }}</b></div>
+                <div class="medicalAlertIcon_leftPadding">
+                    <div *ngIf="patientMedicalAlerts?.length" kendoTooltip position="bottom" tooltipClass="medicalAllergy-alert-tooltip" [tooltipTemplate]="tooltipTemplate" title>
+                        <i class="medicalAlertIcon__medicalHistoryIconColor fa fa-heart">
+                            <span class="medicalAlertIcon__notificationBadge">{{patientMedicalAlerts?.length}}</span>
+                        </i>
+                        <ng-template #tooltipTemplate>
+                            <div [innerHTML]="getAlertDescription(patientMedicalAlerts | orderBy: {sortColumnName: 'MedicalHistoryAlertDescription', sortDirection: 1})"></div>
+                        </ng-template>
+                    </div>
+                    <div *ngIf="patientAllergyAlerts?.length" class="medicalAlertIconContainer" kendoTooltip position="bottom" tooltipClass="medicalAllergy-alert-tooltip" 
+                        [tooltipTemplate]="tooltipTemplate" title>
+                        <i class="fa fi-allergies">
+                            <span class="medicalAlertIcon__svgNotificationBadge">{{patientAllergyAlerts?.length}}</span>
+                        </i>
+                        <ng-template #tooltipTemplate>
+                            <div [innerHTML]="getAlertDescription(patientAllergyAlerts | orderBy: {sortColumnName: 'MedicalHistoryAlertDescription', sortDirection: 1})"></div>
+                        </ng-template>
+                    </div>
+                    <div *ngIf="patientPremedAlerts?.length" kendoTooltip position="bottom" tooltipClass="medicalAllergy-alert-tooltip" 
+                    [tooltipTemplate]="tooltipTemplate" title>
+                        <i class="fi-premed"></i>
+
+                        <ng-template #tooltipTemplate>
+                            <div [innerHTML]="getAlertDescription(patientPremedAlerts | orderBy: {sortColumnName: 'MedicalHistoryAlertDescription', sortDirection: 1})"></div>
+                        </ng-template>
+                    </div>
+                    <div class="alertsShowingInHeader">
+                        <!--Legnth of Alerts is none, this fills in other two spaces w flags-->
+                        <div class="medicalAlertIcon"
+                            *ngIf="!patientPremedAlerts?.length && !patientAllergyAlerts?.length && !patientMedicalAlerts?.length">
+                            <div class="cutsomPadding"
+                                *ngFor="let flag of allFlags | orderBy: {sortColumnName: 'Description', sortDirection: 1} | slice: 0:3">
+                                <div kendoTooltip position="bottom" [title]="flag?.Description">
+                                    <i class="fa {{ getClass(flag?.SymbolId) }}"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Legnth of Alerts is one, this fills in other two spaces w flags-->
+                        <div class="medicalAlertIcon"
+                            *ngIf="!patientPremedAlerts?.length && !patientAllergyAlerts?.length && patientMedicalAlerts?.length || !patientPremedAlerts?.length && !patientMedicalAlerts?.length && patientAllergyAlerts?.length || !patientAllergyAlerts?.length && !patientMedicalAlerts?.length && patientPremedAlerts?.length">
+                            <div class="cutsomPadding"
+                                *ngFor="let flag of allFlags | orderBy: {sortColumnName: 'Description', sortDirection: 1} | slice: 0:2">
+                                <div kendoTooltip position="bottom" [title]="flag?.Description">
+                                    <i class="fa {{ getClass(flag?.SymbolId) }}"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Legnth of Alerts is two, this fills in other space w flags-->
+                        <div class="medicalAlertIcon"
+                            *ngIf="patientPremedAlerts?.length && patientAllergyAlerts?.length && !patientMedicalAlerts?.length || patientPremedAlerts?.length && patientMedicalAlerts?.length && !patientAllergyAlerts?.length || patientAllergyAlerts?.length && patientMedicalAlerts?.length && !patientPremedAlerts?.length">
+                            <div class="cutsomPadding"
+                                *ngFor="let flag of allFlags | orderBy: {sortColumnName: 'Description', sortDirection: 1} | slice: 0:1">
+                                <div kendoTooltip position="bottom" [title]="flag?.Description">
+                                    <i class="fa {{ getClass(flag?.SymbolId) }}"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="alertsAndFlags?.length >= 3 && isPatientHeader" class="additionalAlerts">
+                <div class="customStylingDynamicLinks" *ngIf="allFlags?.length">
+                    <a *ngIf="patientPremedAlerts?.length && patientAllergyAlerts?.length && patientMedicalAlerts?.length"
+                        class="customPopover" (click)="alertsFlagPopover()">+{{allFlags?.length}}
+                        {{'More' | translate}}</a>
+                    <a *ngIf="patientPremedAlerts?.length && patientAllergyAlerts?.length && !patientMedicalAlerts?.length  && allFlags?.length > 1 || patientPremedAlerts?.length && patientMedicalAlerts?.length && !patientAllergyAlerts?.length && allFlags?.length > 1|| patientAllergyAlerts?.length && patientMedicalAlerts?.length && !patientPremedAlerts?.length && allFlags?.length > 1"
+                        class="customPopover" (click)="alertsFlagPopover()">+{{allFlags?.length -1}}
+                        {{'More' | translate}}</a>
+                    <a *ngIf="!patientPremedAlerts?.length && !patientAllergyAlerts?.length && patientMedicalAlerts?.length   && allFlags?.length > 2 || !patientPremedAlerts?.length && !patientMedicalAlerts?.length && patientAllergyAlerts?.length && allFlags?.length > 2|| !patientAllergyAlerts?.length && !patientMedicalAlerts?.length && patientPremedAlerts?.length && allFlags?.length > 2"
+                        class="customPopover" (click)="alertsFlagPopover()">+{{allFlags?.length -2}}
+                        {{'More' | translate}}</a>
+                    <a *ngIf="!patientPremedAlerts?.length && !patientAllergyAlerts?.length && !patientMedicalAlerts?.length && allFlags?.length > 3 "
+                        class="customPopover" (click)="alertsFlagPopover()">+{{allFlags?.length -3}}
+                        {{'More' | translate}}</a>
+
+                    <div class="popoverFlag" *ngIf="togglePopover">
+                        <div class="alertsFlagPopover">
+                            <div class="popoverNorch"></div>
+                            <ng-container *ngTemplateOutlet="alertsAndFlages"></ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts and Flag popover -->
+                <ng-template #alertsAndFlages>
+                    <div>
+                        <div
+                            *ngIf="patientPremedAlerts?.length && patientAllergyAlerts?.length && patientMedicalAlerts?.length ">
+                            <ul class="listContainer"
+                                *ngFor="let flag of allFlags | orderBy: {sortColumnName: 'Description', sortDirection: 1} | slice: 0: 50">
+                                <li>
+                                    <p class="d-flex"> <i class="fa {{ getClass(flag?.SymbolId) }} customIcon"> </i>
+                                        {{flag?.Description}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            *ngIf="patientPremedAlerts?.length && patientAllergyAlerts?.length && !patientMedicalAlerts?.length || patientPremedAlerts?.length && patientMedicalAlerts?.length && !patientAllergyAlerts?.length || patientAllergyAlerts?.length && patientMedicalAlerts?.length && !patientPremedAlerts?.length">
+                            <ul class="listContainer"
+                                *ngFor="let flag of allFlags | orderBy: {sortColumnName: 'Description', sortDirection: 1} | slice: 1:50">
+                                <li>
+                                    <p class="d-flex"> <i class="fa {{ getClass(flag?.SymbolId) }} customIcon"> </i>
+                                        {{flag?.Description}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            *ngIf="!patientPremedAlerts?.length && !patientAllergyAlerts?.length && patientMedicalAlerts?.length || !patientPremedAlerts?.length && !patientMedicalAlerts?.length && patientAllergyAlerts?.length || !patientAllergyAlerts?.length && !patientMedicalAlerts?.length && patientPremedAlerts?.length">
+                            <ul class="listContainer"
+                                *ngFor="let flag of allFlags | orderBy: {sortColumnName: 'Description', sortDirection: 1} | slice: 2:50">
+                                <li>
+                                    <p class="d-flex"> <i class="fa {{ getClass(flag?.SymbolId) }} customIcon"> </i>
+                                        {{flag?.Description}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            *ngIf="!patientPremedAlerts?.length && !patientAllergyAlerts?.length && !patientMedicalAlerts?.length && allFlags?.length > 3 ">
+                            <ul class="listContainer"
+                                *ngFor="let flag of allFlags | orderBy: {sortColumnName: 'Description', sortDirection: 1} | slice: 3:50">
+                                <li>
+                                    <p class="d-flex"> <i class="fa {{ getClass(flag?.SymbolId) }} customIcon"> </i>
+                                        {{flag?.Description}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+
+    <div class="registration-header-container-actionButtons" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+        <div *ngIf="isPatientHeader" id="patientheader-hover-menu" class="patient-header-communication">
+            <communication-hover-menu></communication-hover-menu>
+        </div>
+        <div *ngIf="isPatientHeader" class="patient-header-eligibility">
+            <real-time-eligibility [patientId]="patientProfile?.PatientId"></real-time-eligibility>
+        </div>
+        <div *ngIf="isPatientHeader" class="patient-header-edit-beta">
+            <app-button [id]="'editPatientProfileHeaderButton'" buttonLabel="{{'Edit Profile' | translate }}"
+                variation="secondary" (onClick)="navigateNewProfile(editProfileTabLink)"></app-button>
+        </div>
+
+        <!-- Save Cancel Button on Edit Profile Page -->
+        <app-button *ngIf="!isPatientHeader" id="btnCancel" buttonLabel="{{'Cancel' | translate }}"
+            variation="secondary" (onClick)="savePatient(trigger,true)" [ngClass]="{'disabled' : (!hasCreateAccess)}"
+            title="{{!hasCreateAccess? 'You do not have permission to add patient.' : ''}}"></app-button>
+        <app-button *ngIf="!isPatientHeader" class="ml-10" id="btnSave" buttonLabel="{{'Save' | translate }}"
+            [ngClass]="{'disabled' : (!hasCreateAccess)}"
+            title="{{!hasCreateAccess? 'You do not have permission to view this information.' : ''}}"
+            variation="primary" (onClick)="savePatient(trigger,false)"></app-button>
+    </div>
+</div>
+
+<!-- Patient Additional Information -->
+<div class="patient-details-box" *ngIf="displayMoreInfo && isPatientHeader">
+    <table>
+        <tr>
+            <td class="details-box-columns left-boxes">
+                <h4 class="section-header">{{'Contact' | translate}}</h4>
+                <dl class="patChartWrapper contact-grid">
+                    <dt class="text-right">{{'Phone' | translate}}:</dt>
+                    <dd>{{displayPhone | phoneNumber }} <span *ngIf="displayPhone">(</span>{{displayPhoneType}}<span
+                            *ngIf="displayPhone">)</span><span *ngIf="displayPhone">{{' Preferred' | translate}}</span>
+                    </dd>
+                    <dt class="text-right">{{'Email' | translate}}:</dt>
+                    <dd><a href="mailto:{{displayEmail}}">{{displayEmail}}</a></dd>
+                    <dt class="text-right">{{'Res Party' | translate}}:</dt>
+                    <dd>{{patientDetail?.Profile?.ResponsiblePersonName}}</dd>
+                    <dt class="text-right">{{'Address' | translate}}:</dt>
+                    <dd>{{displayAddressLine1 | translate}}{{displayAddressLine2 | translate}} <br /> {{displayCity |
+                        translate}}<span *ngIf="displayCity">,</span> {{displayState | translate}} {{displayZipCode |
+                        translate}}</dd>
+                </dl>
+            </td>
+            <td class="details-box-columns left-boxes">
+                <h4 class="section-header">{{'Providers & Locations' | translate}}</h4>
+                <dl class="patChartWrapper providers-locations-grid">
+                    <dt class="text-right">{{'Preferred Dentist' | translate}}:</dt>
+                    <dd>{{patientDetail?.Profile?.preferredDentist | translate}}</dd>
+                    <dt class="text-right">{{'Preferred Hygienist' | translate}}:</dt>
+                    <dd>{{patientDetail?.Profile?.preferredHygienist | translate}}</dd>
+                    <dt class="text-right">{{'Preferred Location' | translate}}:</dt>
+                    <dd>{{patientDetail?.Profile?.PreferredLocationName | translate}}</dd>
+                </dl>
+            </td>
+            <td class="details-box-columns left-boxes">
+                <h4 class="section-header">{{'Insurance' | translate}}</h4>
+                <dl class="patChartWrapper insurance-grid">
+                    <dt class="text-right">{{'Primary' | translate}}:</dt>
+                    <dd>{{ primaryInsurance | translate}}</dd>
+                    <dt class="text-right">{{'Secondary' | translate}}:</dt>
+                    <dd>{{ secondaryInsurance | translate}}</dd>
+                </dl>
+            </td>
+            <td class="details-box-columns">
+                <h4 class="section-header">{{'Additional Info' | translate}}</h4>
+                <dl class="patChartWrapper additional-info-grid">
+                    <dt class="text-right">{{'Next Appt' | translate}}:</dt>
+                    <dd>
+                        <div>
+                            {{displayDateNextAppt | translate}}
+                        </div>
+                        <div>
+                            {{displayProviderNextAppt | translate}}
+                        </div>
+                    </dd>
+                    <dt class="text-right">{{'Next Preventative Due' | translate}}:</dt>
+                    <dd>
+                        <span *ngIf="prevCareDue">
+                            {{ prevCareDue | date: 'MM/dd/yyyy' }} at {{ prevCareDue | date: 'hh:mm a' }}
+                        </span>
+                    </dd>
+                    <dt class="text-right">{{'Groups' | translate}}:</dt>
+                    <dd>
+                        <div *ngIf="patientDetail?.PatientGroups">
+                            <div *ngFor="let group of patientDetail?.PatientGroups">{{group?.Description | translate}}
+                            </div>
+                        </div>
+                        <div *ngIf="patientDetail?.PatientGroups?.length == 0">{{'N/A' | translate}}</div>
+                    </dd>
+                    <dt class="text-right">{{'Account Number' | translate}}:</dt>
+                    <dd *ngIf="patientDetail?.Profile?.PersonAccount?.DisplayStatementAccountId">
+                        {{patientDetail?.Profile?.PersonAccount?.DisplayStatementAccountId | translate}}</dd>
+                </dl>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- Secoundary Navigation -->
+<div *ngIf="isPatientHeader && useConverted" class="navigation-box">
+    <patient-secondary-navigation [patientDetail]="patientProfile"></patient-secondary-navigation>
+    <div class="drawer-nav-container" role="navigation" *ngIf="showDrawerNav" aria-labelledby="Drawer navigation">
+        <communication-center-header
+            *ngIf="(showCommunicationDrawerNav) && showTreatmentPlanServicesDrawerNav == false">
+        </communication-center-header>
+        <a id="timelineDrawer" *ngIf="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav == false"
+            class="patientHeaderDrawerNav p-l" (click)="openDrawer(drawer?.TimelineDrawer)" [ngClass]="{'active' : drawerChange == drawer?.TimelineDrawer}"
+            kendoTooltip position="bottom" [title]="'Timeline' | translate">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                <path
+                    d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+            </svg>
+        </a>
+        <a id="referralDrawer" *ngIf="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav == false && !hideReferral"
+            class="patientHeaderDrawerNav p-l" (click)="openDrawer(drawer?.ReferralDrawer)" [ngClass]="{'active' : drawerChange == drawer?.ReferralDrawer}"
+            kendoTooltip position="bottom" [title]="'Referrals' | translate">
+            <img src="{{ drawerChange == drawer?.ReferralDrawer ? 'Images/referrals-menu-active.png' : 'Images/referrals-menu.png' }}" class="referral-menu-img" />
+        </a>
+        <a id="chartingDrawer" *ngIf="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav == false"
+            class="patientHeaderDrawerNav" (click)="openDrawer(drawer?.ChartingDrawer)" [ngClass]="{'active' : drawerChange == drawer?.ChartingDrawer}"
+            kendoTooltip position="bottom" [title]="'Chart' | translate">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170.13 178" height="20" width="20">
+                <path
+                    d="M170.25,27.3c-5.56-11.6-13.67-20.92-26.2-25.43a31.35,31.35,0,0,0-18.49-.63c-5.77,1.43-11.47,3.19-17.16,4.91-7.05,2.14-14.08,4.26-21.57,3.92-6-.28-11.6-2-17.27-3.63C62.7,4.41,55.79,2.51,48.89.58c-1-.27-2-.39-3-.58H39.94C37.62.49,35.26.81,33,1.51c-6.25,2-11.27,5.78-15.6,10.6-5.4,6-9.75,12.64-11.84,20.55A50.35,50.35,0,0,0,6.1,59.94c2.9,10,6.4,19.8,9.59,29.7a40.88,40.88,0,0,1,2.11,12.08A204.66,204.66,0,0,0,22.19,144c1.61,7.25,3.59,14.4,7.28,20.89a37.47,37.47,0,0,0,6.1,8.36C43,180.44,54,179.31,60.51,171c3.7-4.74,5.82-10.24,7.57-15.89,2.75-8.89,5.19-17.87,8-26.72a38.44,38.44,0,0,1,4.28-8.49A9.93,9.93,0,0,1,92,115.43c3.25,1.07,5,3.69,6.34,6.54,3,6.2,4.34,12.91,5.91,19.55,1.67,7,3.23,14.1,6.21,20.74,2.21,4.93,5.07,9.44,9.85,12.26,8.63,5.11,20,4.92,27.43-7,4.52-7.22,6.89-15.25,8.65-23.48a185.39,185.39,0,0,0,3.86-37.94,68.58,68.58,0,0,1,4-21.9c2.85-8.42,5.72-16.88,7.93-25.48C174.86,48.16,175.09,37.4,170.25,27.3Z"
+                    transform="translate(-3.94 0)" />
+            </svg>
+        </a>
+        <a id="treatmentPlanDrawer"
+            *ngIf="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav == false"
+            class="patientHeaderDrawerNav" (click)="openDrawer(drawer?.TreatmentPlanDrawer)" [ngClass]="{'active' : drawerChange == drawer?.TreatmentPlanDrawer}"
+            kendoTooltip position="bottom" [title]="'Treatment Plans' | translate">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 178 178" preserveAspectRatio="none" width="20"
+                height="20">
+                <path
+                    d="M90,1a89,89,0,1,0,89,89A89,89,0,0,0,90,1ZM83,57.43v82.28H62.26l0-82.27H33.46l0-18.18h78.75V57.43ZM131.36,150l-11.1-16-11.1,16H90.09l20.8-29.59L91.78,92.82h18.43l10.05,14.3,10-14.3h18.43l-19.11,27.63L150.43,150Z"
+                    transform="translate(-1 -1)" />
+            </svg>
+        </a>
+        <a id="notesDrawer" *ngIf="!showCommunicationDrawerNav && showTreatmentPlanServicesDrawerNav == false"
+            class="patientHeaderDrawerNav" (click)="openDrawer(drawer?.NotesDrawer)" [ngClass]="{'active' : drawerChange == drawer?.NotesDrawer}"
+            kendoTooltip position="bottom" [title]="'Notes' | translate">
+            <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                overflow="visible" preserveAspectRatio="none" viewBox="0 0 22 22" width="20" height="20">
+                <g>
+                    <rect display="none" fill="#FFA400" width="22" height="22" vector-effect="non-scaling-stroke" />
+                    <rect id="_x3C_Slice_x3E__109_" display="none" fill="none" width="22" height="22"
+                        vector-effect="non-scaling-stroke" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16,22l6-6h-6V22z M0,0v22h15v-7h7V0H0z"
+                        vector-effect="non-scaling-stroke" />
+                </g>
+            </svg>
+        </a>
+    </div>
+</div>

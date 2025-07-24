@@ -1,0 +1,84 @@
+@import "variables";
+@import '/src/patient/communication-center/communication-center-variables';
+
+.control-label {
+  font-style: normal;
+  font-size: 12px;
+  line-height: 2em;
+  color: $header-date-color;
+}
+
+.btn-todo {
+  background-size: cover;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: $page-content-select-border-color;
+  border-style: solid;
+  padding: 0px;
+  width: 100px;
+  height: 25px;
+}
+.todo-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 5px;
+}
+.todo-duedate-wrapper {
+  grid-column: 1;
+  grid-row: 1;
+}
+.todo-notes-wrapper {
+  grid-column: 1/3;
+  grid-row: 2;
+  margin-right: 15px;
+}
+.todo-btn-wrapper {
+  grid-column: 1;
+  grid-row: 3;
+  padding-top: 15px;
+}
+.edit-todo-btn-wrapper {
+  grid-column: 1/3;
+  grid-row: 3;
+  padding-top: 15px;
+}
+button:disabled,
+button:disabled:hover,
+button:disabled:active,
+button:disabled:focus {
+  background-color: $page-search-input-color;
+  color: $white;
+}
+.todo-sub-wrapper {
+  display: grid;
+  grid-template-columns: 47% 56%;
+  grid-gap: 5px;
+}
+.collapsible-todo-wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 5px;
+  padding-top: 20px;
+}
+#comm-todo-notes {
+  padding-right: 0px !important;
+}
+textarea#comm-todo-notes {
+  outline-color: $communication-todo-notes-outline-color !important;
+  border-color: $communication-center-preview-border-color;
+  border-radius: 5px;
+  outline: none;
+  word-break: break-word;
+}
+.error {
+  font-weight: $communication-center-semi-bold-font-size;
+  font-family: $global-font-family;
+  color: $communication-center-error-color;
+  font-size: 10px;
+}
+.mr-8 {
+  margin-right: 8px;
+}
+.required {
+  color: $communication-center-error-color;
+}

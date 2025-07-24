@@ -1,0 +1,40 @@
+<div class="appColorPicker" [ngClass]="{'disabled' : isDisabled}">
+    <div class="toggleColorPreview" [ngClass]="{'disabled' : isDisabled}" (click)="togglePicker()" 
+         [style.backgroundColor]="currentColorSelection"></div>
+
+
+    <div class="appColorPickerPanel" *ngIf="this.isPickerOpen">
+
+
+        <div class="tabBar">
+            <div class="tabBarOption" [ngClass]="{'active' : recommendedTabActive}" (click)="changeActiveTab(1)">Recommended</div>
+            <div class="tabBarOption" [ngClass]="{'active' : customTabActive}" (click)="changeActiveTab(2)">Custom</div>
+
+            <!--Experimental, see the previous color vs new color-->
+            <!--<div class="colorPreviewOriginal" [style.backgroundColor]="setColor"></div>
+            <svg-icon class="colorPreviewArrow" name="arrowRightIcon" iconHeight="20px" role="button" (click)="remove($event)"
+                      iconWidth="20px" id="rp-clear-icon"></svg-icon>
+            <div class="colorPreviewCurrent" [style.backgroundColor]="currentColorSelection" ></div>-->
+        </div>
+
+        <div class="recommended" *ngIf="recommendedTabActive">            
+            <div class="recommendedColorContainer">
+                <div class="recommendedColorSwatch" (click)="selectRecommendedColor(color)"
+                     *ngFor="let color of this.recommendedColors" [style.backgroundColor]="color"
+                     [ngClass]="{'selected': color == this.currentColorSelection}">
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="custom" *ngIf="customTabActive">
+            <div class="customColorText">Choose your own color by using the color wheel below.</div>
+            <div class=color-wrapper>
+                <app-color-palette (color)="paletteChanged($event)"></app-color-palette>
+                <app-color-slider [hue]="currentHue" (color)="sliderChanged($event)"></app-color-slider>
+            </div>
+        </div>
+
+    </div>
+</div>

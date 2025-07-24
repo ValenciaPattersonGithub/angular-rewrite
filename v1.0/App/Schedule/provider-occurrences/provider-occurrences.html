@@ -1,0 +1,95 @@
+﻿<!--TODO get correct amfas-->
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="providerOccurrences">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <h4>
+                                {{::'Provider Occurrences at'|i18n}} {{currentLocation.name}}
+                            </h4>
+                        </div>
+                        <div class="close-button pull-right">
+                            <button class="btn btn-link" ng-click="closeModal();"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+                <div class="providerOccurrences__content panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <provider-selector input-id="inpProvider"
+                                                   class-name="fill-width"
+                                                   place-holder="providerPlaceholder"
+                                                   set-preferred="false"
+                                                   provider-type-ids="[1,2,3,5]"
+                                                   selected-provider="selectedProviderId"                                                   
+                                                   filter-show-on-schedule="true">
+                                </provider-selector>
+                                <div class="fuseGrid container container pull-left">
+                                    <br/>
+                                    <div id="startsOn" class=" row header ">
+                                        <span class="col-sm-1 cell gridBody__header" ng-click="changeSortingForGrid('startsOn');">
+                                            {{'Starts On' | i18n }}
+                                            <span ng-show="orderBy.field == 'startsOn' && orderBy.asc == true " class="fa fa-caret-down padding-left-10"></span>
+                                            <span ng-show="orderBy.field == 'startsOn' && orderBy.asc == false " class="fa fa-caret-up padding-left-10"></span>
+                                        </span>
+                                        <span class="col-sm-2 cell gridBody__header">
+                                            {{'Ends On' | i18n }}
+                                        </span>
+                                        <span class="col-sm-2 cell gridBody__header">
+                                            {{'Provider' | i18n }}
+                                        </span>
+                                        <span class="col-sm-2 cell gridBody__header">
+                                            {{'Room' | i18n }}
+                                        </span>
+                                        <span class="col-sm-1 cell gridBody__header">
+                                            {{'Start Time' | i18n }}
+                                        </span>
+                                        <span class="col-sm-1 cell gridBody__header">
+                                            {{'End Time' | i18n }}
+                                        </span>
+                                        <span class="col-sm-3 cell gridBody__header">
+                                            {{'Repeat on' | i18n }}
+                                        </span>
+                                    </div>
+                                    <div id="lst{{ baseId }}" ng-repeat="providerOccurrence in providerOccurrences | filter:{providerId:selectedProviderId?selectedProviderId:''} | orderBy:orderBy.field:!orderBy.asc track by $index" class="row body gridBody">
+                                        <span id="lbl{{$index}}" class="col-sm-1 cell gridBody__cell" title="{{ providerOccurrence.startsOn }}">
+                                            {{ providerOccurrence.startsOn}}
+                                        </span>
+                                        <span id="lbl{{$index}}" class="col-sm-2 cell gridBody__cell" title="{{ providerOccurrence.endsOn }}">
+                                            {{ providerOccurrence.endsOn }}
+                                        </span>
+                                        <span id="lbl{{$index}}DocumentDate" class="col-sm-2 cell gridBody__cell" title="{{ providerOccurrence.provider }}">
+                                            {{ providerOccurrence.provider | limitTo: 100 }}<span ng-if="providerOccurrence.provider.length > 100">&hellip;</span>
+                                        </span>
+                                        <span id="lbl{{$index}}" class="col-sm-2 cell gridBody__cell" title="{{ providerOccurrence.room }}">
+                                            {{ providerOccurrence.room | limitTo: 80 }}<span ng-if="providerOccurrence.room.length > 80">&hellip;</span>
+                                        </span>
+                                        <span id="lbl{{$index}}" class="col-sm-1 cell gridBody__cell" title="{{ providerOccurrence.startTime }}">
+                                            {{ providerOccurrence.startTime }}
+                                        </span>
+                                        <span id="lbl{{$index}}" class="col-sm-1 cell gridBody__cell" title="{{ providerOccurrence.endTime }}">
+                                            {{ providerOccurrence.endTime }}
+                                        </span>
+                                        <span id="lbl{{$index}}" class="col-sm-3 cell gridBody__cell" title="{{ providerOccurrence.repeatOn }}">
+                                            {{ providerOccurrence.repeatOn}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="providerOccurrences_footer">
+                    <div class="providerOccurrences__actions">
+                        <button id="btnCloseManageIdealDays" class="btn btn-default pull-right" type="button" ng-click="closeModal()">{{ ::'Ok' | i18n }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+

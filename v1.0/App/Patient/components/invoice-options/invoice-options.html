@@ -1,0 +1,106 @@
+﻿<div id="invoicemodal">
+    <div class="modal-header">
+
+        <div class="header-close-button">
+            <button class="btn soar-link icon-button font-size-20" ng-click="cancelAction()"><b>x</b></button>
+        </div>
+        <div class="row">
+            <div ng-if="!data.InvoiceOptions.IsCustomInvoice" class="col-md-12">
+                <div class="col-md-12">
+                    <span id="lblCheckoutSuccess" class="modal-title font-header">{{ 'View Invoice for: ' | i18n }}</span>
+                </div>
+                <div class="col-md-12">
+                    <span>
+                        <button class="btn btn-success btn-md patient-name-invoice-option margin-right-5" disabled style="opacity: 1; cursor: default; pointer-events: none;"><span class="invoice-option-word-wrap">{{ data.PatientDetails.Name | i18n }}</span> <i class="far fa-check-circle"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div ng-if="data.InvoiceOptions.IsCustomInvoice && !data.IsAccountSummaryInvoice" class="col-md-12">
+                <div class="col-md-12">
+                    <span id="lblCheckoutSuccess" class="modal-title font-header">{{ 'Custom Invoice for: ' | i18n }}</span>
+                </div>
+                <div class="col-md-12">
+                    <span ng-repeat="patient in data.PatientDetails">
+                        <button class="btn btn-success btn-md patient-name-invoice-option margin-right-5" disabled style="opacity: 1; cursor: default; pointer-events: none;"><span class="invoice-option-word-wrap">{{ patient.Name | i18n }}</span> <i class="far fa-check-circle"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div ng-if="data.IsAccountSummaryInvoice" class="col-md-12">
+                <div class="col-md-12">
+                    <span id="lblCheckoutSuccess" class="modal-title font-header">{{ 'View Invoice for: ' | i18n }}</span>
+                </div>
+                <div class="col-md-12">
+                    <span ng-repeat="patient in data.PatientDetails">
+                        <button class="btn btn-success btn-md patient-name-invoice-option margin-right-5" disabled style="opacity: 1; cursor: default; pointer-events: none;"><span class="invoice-option-word-wrap">{{ patient.Name | i18n }}</span> <i class="far fa-check-circle"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+
+        <!--<div class="row" ng-if="isNegatveAdjustmentApplied">
+            <div class="col-md-12">
+                <span id="lblNegativeAdjustmentAmount" class="modal-title font-28 font-weight-bold">{{ 'Negative adjustment of ' | i18n }}{{negativeAdjustmentAmount | currency}}{{' has been applied' | i18n }}</span>
+            </div>
+        </div>
+        <div class="row" ng-if="isNegatveAdjustmentApplied">
+            <div class="col-md-12">
+                <span id="lblNegativeAdjustmentDescription" class="modal-title font-24 word-wrap">{{ negativeAdjustmentDescription }}</span>
+            </div>
+        </div>
+        <div class="row" ng-if="isPaymentApplied">
+            <div class="col-md-12">
+                <span id="lblPaymentAmount" class="modal-title font-28 font-weight-bold">{{ 'Payment of ' | i18n }}{{paymentAmount | currency}}{{' has been applied' | i18n }}</span>
+            </div>
+        </div>
+        <div class="row" ng-if="isPaymentApplied">
+            <div class="col-md-12">
+                <span id="lblPaymentCheckDescription" class="modal-title font-24 word-wrap">{{ paymentDescription }}</span>
+            </div>
+        </div>-->
+
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row printOptions col-md-12">
+                <div class="col-md-4">
+                    <input id="lblPrevBal" type="checkbox" ng-model="data.InvoiceOptions.IncludePreviousBalance" />
+                    <span class="modal-title">{{ 'Include Other Balance' | i18n }}</span>
+                </div>
+                <div class="col-md-4">
+                    <input id="lblFurtureAppts" type="checkbox" ng-model="data.InvoiceOptions.IncludeFutureAppointments" />
+                    <span class="modal-title">{{ 'Include future appointments' | i18n }}</span> <span ng-if="data.$$ShowApptDisclaimer">({{ 'Appointments that existed at the time of the original invoice' | i18n }})</span>
+                </div>
+                <div ng-if="data.InvoiceOptions.IsCustomInvoice" class="col-md-4">
+                    <input id="lblFurtureAppts" type="checkbox" ng-model="data.InvoiceOptions.IncludeEstimatedInsurance" />
+                    <span class="modal-title">{{ 'Include estimated insurance' | i18n }}</span>
+                </div>
+            </div>
+            <!--<div class="row printOptions col-md-12" ng-if="data.InvoiceOptions.IsCustomInvoice">
+                <div class="col-md-6">
+                    <input id="lblFurtureAppts" type="checkbox" ng-model="data.InvoiceOptions.IncludeEstimatedInsurance" />
+                    <span class="modal-title">{{ 'Include estimated insurance' | i18n }}</span>
+                </div>
+            </div>-->
+            <div class="row printOptions">
+                <div class="row notes-top-margin margin-left-5 notes col-md-12">
+                    <span class="modal-title">{{ 'Include a note' | i18n }}</span>
+                    <textarea class="form-control invoice-text-area" id="printNotes" maxlength="500" ng-model="data.InvoiceOptions.Note" rows="3" cols="3"></textarea>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--<button id="btnCancel" ng-click="cancelAction();" class="btn btn-default pull-left">{{ 'Cancel' | i18n }}</button>-->
+                    <button id="btnContinue" ng-click="printOrViewInvoice();" class="btn btn-primary pull-right">{{ 'Continue' | i18n }}</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

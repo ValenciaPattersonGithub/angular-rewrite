@@ -1,0 +1,13 @@
+<div class="media-body master-list-warning-msg">
+    <span id="discardWarningMessage">
+        {{ message | translate | uppercase}}
+    </span>
+    <div class="pull-right">
+        <button id="btnConfirmDiscard{{appendId}}" class="btn master-list-warning-button yesBtn" set-focus (click)="confirmAction()">
+            {{ 'Yes' | translate }}
+        </button>
+        <button id="btnCancelDiscard{{appendId}}" class=" btn padding-left-5 master-list-warning-button" (click)="cancelAction()">
+            {{ 'No' | translate }}
+        </button>
+    </div>
+</div>

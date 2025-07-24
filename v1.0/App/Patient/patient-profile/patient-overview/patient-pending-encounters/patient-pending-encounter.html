@@ -1,0 +1,127 @@
+﻿<profile-section id="pendingEncounterSection" [base-id]="'PendingEncounter'" ng-show="PendingEncounters.length > 0" [section-title]="sectionTitle" [actions]="pendingEncounterActions" ng-init="" class="patient-pending-encounter">
+    <ng-container layout1>
+        <div class="patient-summary">
+            <div class="row text-right" tooltip-enable="!checkoutAllIsAllowed" uib-tooltip="{{disableAllPendingEncountersTooltip}}"  tooltip-placement="top-right">
+                <a ng-if="PendingEncounters.length > 1"
+                    check-auth-z="{{::soarAuthEnctrChkOutKey}}"
+                    ng-class="{'disabled': !checkoutAllIsAllowed}"
+                    ng-click="checkoutAllPendingEncounters();"
+                    id="btnCheckoutAllEncounters">
+                    {{:: 'Check out All Pending Encounters' | i18n }}
+                </a>
+            </div>
+            <div ng-repeat="pendingEncounter in PendingEncounters" ng-init="rowIndex = $index" class="grid-row pending-encounters overview">
+                <div class="row header-data">
+                    <div class="col-xs-10 no-side-padding">
+                        <div id="pendingRow_1_{{rowIndex}}" class="row" ng-dblclick="getRowDetails(pendingEncounter)">
+                            <div class="col-xs-2 row-header-field">{{pendingEncounter.displayDate}}{{pendingEncounter.ServicesHaveDifferentDates ? '...' : ''}}</div>
+                            <div class="col-xs-2 row-header-field wordbreak"
+                                tooltip-enable="pendingEncounter.PatientName.length > 10"
+                                tooltip-class="summarytooltip wordbreak"
+                                uib-tooltip="{{ pendingEncounter.PatientName }}">{{ pendingEncounter.PatientName.length > 10 ? (pendingEncounter.PatientName | truncate: 10) + '...' : pendingEncounter.PatientName }}
+                            </div>
+                            <div class="col-xs-4 row-header-field wordbreak" 
+                                tooltip-enable="pendingEncounter.Description.length > 25" 
+                                tooltip-class="summarytooltip wordbreak"
+                                uib-tooltip="{{ pendingEncounter.Description }}"> {{pendingEncounter.Description.length > 25 ? (pendingEncounter.Description | truncate:25) + '...' : pendingEncounter.Description}}</div>
+                            <div class="col-xs-1 row-header-field wordbreak"
+                                tooltip-enable="pendingEncounter.Tooth.length > 6"
+                                tooltip-class="summarytooltip wordbreak"
+                                uib-tooltip="{{ pendingEncounter.Tooth | convertToothRangeToQuadrantOrArchCode }}">{{pendingEncounter.Tooth.length > 6 ? (pendingEncounter.Tooth | convertToothRangeToQuadrantOrArchCode | truncate:6) + '...' : pendingEncounter.Tooth | convertToothRangeToQuadrantOrArchCode}}</div>
+                            <div class="col-xs-1 row-header-field wordbreak"
+                                tooltip-enable="pendingEncounter.Surface.length > 10"
+                                tooltip-class="summarytooltip wordbreak"
+                                uib-tooltip="{{ pendingEncounter.Surface }}"> {{ pendingEncounter.Surface.length > 10 ? (pendingEncounter.Surface | truncate: 10) + '...' : pendingEncounter.Surface }} </div>
+                            <div class="col-xs-2 row-header-field amount">
+                                {{pendingEncounter.Amount | currency}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2 no-side-padding">
+                        <div id="pendingRow_2_{{rowIndex}}" class="row" ng-dblclick="getRowDetails(pendingEncounter)">
+                            <div class="row-header-field text-right" 
+                                tooltip-enable="pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation" 
+                                uib-tooltip="{{pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage ? pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage : multiLocationEncounterTooltip}}" 
+                                tooltip-placement="top">
+                                <a id="checkout{{rowIndex}}" 
+                                ng-class="{'disabled':pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation}" 
+                                class="btn btn-link no-right-padding" 
+                                ng-click="checkoutPendingEncounter(pendingEncounter)">{{ ::('Check out' | i18n)}}</a>
+                                <span id="pendingCaret{{rowIndex}}" class="btn fa" ng-class="{ 'fa-caret-down': !pendingEncounter.showDetail, 'fa-caret-up': pendingEncounter.showDetail }" ng-click="getRowDetails(pendingEncounter)"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="pendingEncounter.showDetail" class="row detail-grid">
+                    <div class="col-xs-10 no-side-padding">
+                        <div class="row detail-grid-row" ng-repeat="item in pendingEncounter.Items">
+                            <div class="col-xs-2 row-body-field"> {{item.displayDate}} </div>
+                            <div class="col-xs-2 row-body-field wordbreak"
+                                tooltip-enable="item.PatientName.length > 10"
+                                tooltip-class="summarytooltip wordbreak"
+                                uib-tooltip="{{ item.PatientName }}">{{ item.PatientName.length > 10 ? (item.PatientName | truncate: 10) + '...' : item.PatientName }}
+                            </div>
+                            <div class="col-xs-4 row-body-field wordbreak"
+                                tooltip-enable="item.Description.length > 30"
+                                tooltip-class="summarytooltip wordbreak"
+                                uib-tooltip="{{ item.Description }}">{{item.Description.length > 30 ? (item.Description | truncate:30) + '...' : item.Description}}</div>
+                            <div class="col-xs-1 row-body-field wordbreak"
+                                tooltip-enable="item.Tooth.length > 6"
+                                tooltip-class="summarytooltip wordbreak"
+                                uib-tooltip="{{ item.Tooth | convertToothRangeToQuadrantOrArchCode }}">{{item.Tooth.length > 6 ? (item.Tooth | convertToothRangeToQuadrantOrArchCode | truncate:6) + '...' : item.Tooth | convertToothRangeToQuadrantOrArchCode}}</div>
+                            <div class="col-xs-1 row-body-field"
+                                tooltip-enable="item.Surface.length > 10"
+                                tooltip-class="summarytooltip wordbreak"
+                                uib-tooltip="{{ item.Surface }}">{{ item.Surface.length > 10 ? (item.Surface | truncate: 10) + '...' : item.Surface }}</div>
+                            <div class="col-xs-2 row-body-field amount">{{item.Amount | currency}}</div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2 action-bar">
+                        <div class="row">
+                            <span> <h4>{{ 'Estimated Insurance' | i18n }}</h4> </span>
+                        </div>
+                        <div class="row">
+                            <span class="balance">{{ pendingEncounter.InsuranceBalance | currency}}</span>
+                        </div>
+                        <div class="row">
+                            <span><h4>{{ 'Patient Portion' | i18n }}</h4></span>
+                        </div>
+                        <div class="row margin-bottom-15">
+                            <span class="balance">{{ pendingEncounter.PatientBalance | currency}}</span>
+                        </div>
+                        <div class="row" 
+                            tooltip-enable="pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation" 
+                            uib-tooltip="{{pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage ? pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage : multiLocationEncounterTooltip}}" 
+                            tooltip-placement="top">
+                            <a id="editPendingEncounter_{{rowIndex}}"
+                                    class="btn btn-link action-link"
+                                    ng-class="{'disabled':pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation }"
+                                    check-auth-z="{{::soarAuthEnctrEditKey}}"
+                                    ng-click="editEncounter(pendingEncounter)"><h4>{{ 'Edit Encounter' | i18n }}</h4></a>
+                        </div>
+                        <div class="row margin-bottom-15"
+                             tooltip-enable="!pendingEncounter.$$authorizedForDeleteAtLocation" 
+                             uib-tooltip="{{noDeleteAccessTooltipMessage}}" 
+                             tooltip-placement="top">
+                            <a id="deletePendingEncounter_{{rowIndex}}"
+                                    class="btn btn-link action-link"
+                                    ng-class="{'disabled':!pendingEncounter.$$authorizedForDeleteAtLocation }"
+                                    check-auth-z="{{::soarAuthEnctrDeleteKey}}"
+                                    ng-click="deleteEncounter(pendingEncounter)"><h4>{{ 'Delete Encounter' | i18n }}</h4></a>
+                        </div>
+                        <div class="row margin-bottom-15" 
+                            tooltip-enable="pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation" 
+                            uib-tooltip="{{pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage ? pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage : multiLocationEncounterTooltip}}" 
+                            tooltip-placement="top">
+                            <a id="btnCheckout_{{rowIndex}}"
+                            class="btn btn-primary width-100-percent large-text"
+                            ng-class="{'disabled':pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation }"
+                            check-auth-z="{{::soarAuthEnctrChkOutKey}}"
+                            ng-click="checkoutPendingEncounter(pendingEncounter)">{{ 'Check out' | i18n }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</profile-section>

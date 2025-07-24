@@ -1,0 +1,18 @@
+<div class="secondaryFilterNavigation__tiles">
+    <div id="tiles">
+        <div class="tab" *ngFor="let tab of tabList">
+            <div class="header">
+                <no-results *ngIf="countWithLoading.loading" [loading]="countWithLoading.loading"></no-results>
+                <span id="{{tab?.header?.headerId}}" *ngIf="!countWithLoading.loading">{{countWithLoading[tab.countKey]}}</span>
+            </div>
+            <div class="body">
+                <button id="{{tab?.body?.button?.buttonId}}" (click)="activateFltrTab(tab.isActiveFltrTab)"
+                    [ngClass]="{ selected: tab.isActiveFltrTab == activeFltrTab }" >
+                    <span *ngIf="tab?.body?.button?.span" [ngClass]="tab?.body?.button?.span?.iconClass"></span>
+                    <img *ngIf="tab?.body?.button?.img" [ngClass]="tab?.body?.button?.img?.class" [src]="tab?.body?.button?.img?.src" />
+                    <h6 *ngIf="tab?.body?.button?.h6">{{ tab?.body?.button?.h6?.label | translate }}</h6>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

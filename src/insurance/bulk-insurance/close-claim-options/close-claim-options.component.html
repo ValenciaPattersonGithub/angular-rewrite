@@ -1,0 +1,35 @@
+<div class="app-modal">
+    <div id="app-modal-header" class="app-modal-header">
+        {{'Estimate Insurance Based on Current Benefits' | translate  }}
+    </div>
+    <div id="app-modal-message" class="app-modal-body">
+        <p>
+           {{'You are creating a claim for services that were completed prior to the plans renewal date.'| translate }}
+        </p>
+
+        <p class="app-modal-text">
+            <span class="app-modal-bold-text">{{data.firstName}} </span>
+            <span class="app-modal-bold-text">{{data.lastName}}</span>
+            <span class="app-modal-text">{{' benefit plan renewed in '| translate }}</span>
+            <span class="app-modal-bold-text">{{data.renewalMonth | translate}}</span>
+        </p>
+        <p>
+            <span class="app-modal-bold-text">{{'Would you like to:'| translate }} </span>
+        </p>
+        <p>
+            <input type="radio" id="estimateInsuranceOption1" value="true" class="" [(ngModel)]="data.estimateInsuranceOption" /> {{ 'Estimate Insurance Based on Current Benefits' | translate }}
+        </p>
+        <p>
+            <input type="radio" id="estimateInsuranceOption2" value="false" class="" [(ngModel)]="data.estimateInsuranceOption"  /> {{ 'Do Not Estimate Insurance' | translate }}
+        </p>
+    </div>
+   
+    <div class="app-modal-footer pull-right">
+        <app-button id="btn_secondary" buttonLabel="Cancel" 
+                    variation="secondary"
+                    (onClick)="closeModal($event)" style="padding-right: 10px;"></app-button>
+        <app-button id="btn_primary" buttonLabel="Save"
+                    variation="primary"
+                    (onClick)="confirmModal($event)"></app-button>
+    </div>
+</div>

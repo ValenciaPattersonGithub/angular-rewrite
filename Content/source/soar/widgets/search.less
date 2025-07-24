@@ -1,0 +1,241 @@
+﻿// #region Search 
+
+.bold-search-text {
+    font-weight: 800;
+    color: #000;
+}
+
+// fixing an issue that in some instanced was causing bolded filter search results to render below the baseline
+// this only affects these spans if they are a descendant of a td, adding the css for this specific situation
+td span.bold-search-text {
+    line-height: 0;
+}
+
+.search-input {
+    margin-left: 15px;
+}
+
+.search-item-container {
+    height: auto;
+}
+
+.search-item-index {
+    text-align: center; 
+    position: relative; 
+    top: 30px;
+    font-size: 12px;
+    
+    @media only screen and (min-width: 320px) and (max-width: 768px) {
+        width: 50px;
+    }
+
+    @media only screen and (min-width: 768px) {
+        width: 75px;
+    }
+}
+
+.search-item-filter {
+    border: 1px solid @input-border-color;
+    border-radius: 0;
+    padding: 10px;
+    min-width: 200px;
+    min-height: 100px;
+}
+    
+.search-item-filter-container {
+    float: right;
+}
+
+.search-item-img {
+    height: 45px; 
+}
+
+.search-item-body {
+    padding-left: 15px; 
+
+    > p {
+        margin-bottom: 5px;
+    }
+}
+
+.search-item-info {
+    white-space: nowrap;
+}
+
+.search-item-separator {
+    color: #bbb;
+    margin: 0 2px 0 2px;
+}
+
+//---------------------------------
+// OLD wireframe classes
+//---------------------------------
+.search-result-header {
+    border: 1px solid @search-result-header-border-color;
+    background: #fff;
+}
+
+.search-result-display {
+    padding: 4px 0 2px 30px;
+
+    > i {
+        margin-right: 5px;
+    }
+}
+
+.search-result-summary {
+    position: relative;
+    top: 8px;
+}
+
+.search-result-criteria {
+    margin-right: 30px;
+}
+
+.search-result-body {
+    padding: 0 0 0 5px;
+    background-color: white;
+}
+
+.search-result-filter-container {
+    width: 150px;
+    margin-right: 10px;
+}
+
+.search-result-filter {
+    border: 1px solid @search-result-filter-border-color;
+    background: @search-result-filter-bg;
+    width: 150px;
+
+    > ul {        
+        margin-bottom: 0;
+        padding-left: 0;
+        list-style: none;
+
+        > li {
+            position: relative;
+            display: block;
+
+            > ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }  
+
+            > a {
+                border-top: 1px solid @search-result-filter-border-color;
+                border-bottom: 1px solid @search-result-filter-border-color;
+                background: @search-result-filter-li-bg;
+                position: relative;
+                display: block;
+                padding: 10px 10px;
+                text-align: center;
+
+                &:hover {
+                    background: @search-result-filter-li-bg;
+                    text-decoration: none;
+                }
+            }      
+        }
+    }
+}
+
+.search-result-filter-label {
+    position: relative;
+    top: 4px;
+    left: 6px;
+    font-size: 16px;
+}
+
+.search-result-filter-checkbox {
+    position: relative;
+    left: 6px;
+}
+
+.search-result-body-list {
+    border: 1px solid @search-result-body-border-color;
+    list-style-type: none;
+
+    > li {
+        > div {
+            width: 33%;
+            margin: 0;
+        }
+    }
+}
+
+.search-result-item {
+    background: @zebra-light;
+}
+
+.search-result-item-odd {
+    background: @zebra-dark;
+}
+
+.search-result-item-separator {
+    padding: 0 10px 0 10px;
+    color: @search-result-item-border-color;
+}
+
+
+.search-result-msg {
+    margin: 10px 0 5px 0;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid @search-result-item-btn-border-color;
+    //height: 80px;
+}
+
+.search-result-icon {
+    position: relative;
+    top: 6px;
+}
+
+.search-result-media-text {
+    position: relative;
+    top: 6px;
+    font-size: 16px;
+    width: 50px;
+}
+
+.search-result-item-body {
+    //margin-top: 2px;
+    font-size: 12px;
+    background-color: white;
+    border: 1px solid @search-result-item-btn-border-color;
+
+    p {
+        margin: 0;
+    }
+
+    label {
+        margin: 0;
+    }
+}
+
+.search-result-item-btn-group {
+    padding: 10px 10px 0 10px;
+    width: 100%;
+    
+    button {
+        width: 100%;
+    border: 1px solid @search-result-item-btn-border-color;
+    background: @search-result-item-btn-bg;
+    border-radius: 0;
+    color: @search-result-item-btn-color;
+    //margin-bottom: 4px;
+        &:hover {
+            color: @search-result-item-btn-hover-color;
+            background: @search-result-item-btn-hover-bg;
+        }
+
+        &:focus {
+            color: @search-result-item-btn-color;
+        }
+    }
+}
+
+.search-result-body-tiles {
+    border: 1px solid @search-result-header-border-color;
+}
+
+// #endregion

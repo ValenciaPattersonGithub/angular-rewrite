@@ -1,0 +1,25 @@
+﻿<div ng-class="{error : providerInactive}">
+    <soar-select-list id="{{::inputId}}"                     
+                      class-name="{{className}}"
+                      name="{{::inputId}}"
+                      sb-tab="{{tabIndex}}"
+                      placeholder="{{placeHolder | i18n}}"
+                      text-field="Name"
+                      value-field="ProviderId"
+                      value-template="providerDropdownTemplate"
+                      list-template="providerDropdownTemplate"
+                      option-list="providers"
+                      ng-model="selectedProvider"                      
+                      sb-change="sbChange"
+                      sb-required="required"
+                      disable-input="disableInput || providers.length == 0"
+                      delay-select="true"
+                      obj-trans="objTrans">
+    </soar-select-list>
+    <label id="lblNoProviders" class="alert alert-info " ng-if="_.isEmpty(providers)">
+        {{ noProviderInfo }}
+    </label>    
+    <label id="lblSelectedProviderInactive" class="help-text" ng-if="providerInactive">
+        {{ selectedProviderInactiveInfo }}
+    </label>
+</div>

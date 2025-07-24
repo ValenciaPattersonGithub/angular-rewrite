@@ -1,0 +1,73 @@
+@import "variables";
+@import "toolTip.scss";
+
+.insurance-card {
+    &-box {
+        border-radius: 5px;
+        background-color: $polar-white;
+        background-size: cover;
+        margin: 15px 15px 0px 0px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 4px 0px;
+        cursor: pointer;
+    }
+    &-content {
+        padding: 15px;
+        display: grid;
+        row-gap: 15px;
+        grid-template: 1fr / 35% 30% 30%;
+        grid-template-areas:
+            "Priority"
+            "RowBreak"
+            "PolicyHolderGroup"
+            "Carrier"
+            "Date";
+        & * {
+            box-sizing: border-box;
+        }
+
+        &-priority {
+            grid-area: Priority / span 3;
+        }
+        &-row-break {
+            grid-area: RowBreak / span 3;
+
+            hr {
+                margin-top: 0px !important;
+                margin-bottom: 0px !important;
+            }
+        }
+        &-policy-holder {
+            grid-area: PolicyHolderGroup / 1;
+        }
+        &-policy-holder-ID {
+            grid-area: PolicyHolderGroup / 2;
+        }
+        &-group {
+            grid-area: PolicyHolderGroup / 3;
+        }
+        &-carrier-name {
+            grid-area: Carrier / 1;
+        }
+        &-carrier-phone {
+            grid-area: Carrier / 2;
+        }
+        &-carrier-website {
+            grid-area: Carrier / 3;
+        }
+        &-effective-date {
+            grid-area: Date / 1;
+        }
+    }
+    &-title {
+        color: $action-blue;
+        word-break: break-word;
+    }
+    &-priority-label {
+        font-size: 16px;
+    }
+}
+.insurance-card-main {
+    display: grid;
+    column-gap: 10px;
+    grid-template: 1fr / 50% 50%;
+}

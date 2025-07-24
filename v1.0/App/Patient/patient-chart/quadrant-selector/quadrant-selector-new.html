@@ -1,0 +1,42 @@
+﻿<div class="quadOptn2">
+     <div id="selectionToolsHeader"class="quadOptn2__fheader">
+          <span ng-bind="::(viewText2.selectionTools)"></span>
+        
+         <span class="quadOptn2__clearLink">
+            <a ng-click="clearSelection()" ng-bind="::(viewText.clear)"></a>
+        </span>
+    </div>
+  
+    <div id="selectionOptions">
+            <a id="UpLink" class="quadOptn2__fcell quadOptn2__linkColor" ng-click="selectToothGroup('arch','u')" ng-bind="::(viewText2.upper)"><div id="UP"></div></a>
+            <a id="LoLink" class="quadOptn2__fcell quadOptn2__linkColor" ng-click="selectToothGroup('arch','l')" ng-bind="::(viewText2.lower)"><div id="LO"></div></a>
+            <a id="AlLink" class="quadOptn2__fcell quadOptn2__linkColor" ng-click="selectToothGroup('mouth','')" ng-bind="::(viewText2.all)"><div id="AL"></div></a>
+    </div>
+
+    <div class="quadOptn2__fheader">
+       <span ng-bind="::(viewText.actions)"></span>
+    </div>
+    <div class="quadOptn2__body">
+        <a class="quadOptn2__fcell quadOptn2__linkColor"
+           ng-click="openSupernumeraryModal()"
+           check-auth-z="{{ogmEditAuthAbbrev}}"
+           ng-bind="::(viewText2.supernumerary)">
+            <div id="SPR">
+            </div>
+        </a>
+        <a class="quadOptn2__fcell quadOptn2__linkColor"
+           ng-click="onExportToPdfClicked()"
+           ng-bind="::(viewText2.exportToPdf)">
+            <div id="SPR">
+            </div>
+        </a>
+    </div>
+</div>
+
+<div kendo-window="docCtrls"
+     k-title="'Blank'"
+     k-visible="false"
+     k-on-open="docCtrlsOpen = true"
+     k-on-close="docCtrlsOpen = false"
+     id="docCtrlsWindowPatientChart">
+</div>

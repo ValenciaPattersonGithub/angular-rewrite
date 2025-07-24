@@ -1,0 +1,47 @@
+<!-- <div class="btn-group"  *ngIf=" unappliedTransactions && unappliedTransactions.length>0">
+    <button  class="btn btn-link dropdown-toggle">
+        <i class="fa fa-question-circle"></i>
+        <span id="labelTotalUnappliedAmount">{{getTotalUnappliedAmount() | formatCurrencyIfNeg }}{{' Unapplied' |translate:[] }}</span>
+    </button>
+    <a  class="btn-link dropdown-toggle" >
+        <i class="fa fa-question-circle"></i>
+    </a>
+    <ul class="pull-right dropdown-menu unappliedMenu__list" *ngIf="showUnappliedDetail == false">
+        <li *ngFor="let creditTransactionDto of unappliedTransactions"  class="unappliedMenu__list-item">
+            <span *ngIf="creditTransactionDto.TransactionTypeId==2">{{ creditTransactionDto.UnassignedAmount | formatCurrencyIfNeg }} {{'Unapplied {0}' |translate:['Account Payment']}}</span>
+            <span *ngIf="creditTransactionDto.TransactionTypeId==3">{{ creditTransactionDto.UnassignedAmount | formatCurrencyIfNeg }} {{'Unapplied {0}' |translate:['Insurance Payment']}}</span>
+            <span *ngIf="creditTransactionDto.TransactionTypeId==4">{{ creditTransactionDto.UnassignedAmount | formatCurrencyIfNeg }} {{'Unapplied {0}' |translate:['Negative Adjustment']}}</span>
+        </li>
+        <li><a id="applyNow" check-auth-z="soar-acct-aapmt-add,soar-acct-cdtadj-add" (click)="openAdjustmentModal(creditTransactionDto)" class="unappliedMenu__ctrl btn-link">{{ 'Apply Now' | translate }}</a></li>
+    </ul>
+</div> -->
+
+<div class="btn-group btnUnApplied" *ngIf="unappliedTransactions && unappliedTransactions.length > 0">
+    <button class="circle btn-link dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-question-circle"></i>
+    </button>
+    <ul class="pull-right dropdown-menu menu-item unappliedMenu__list">
+      
+        <li *ngFor="let creditTransactionDto of unappliedTransactions" class="unappliedMenu__list-item">
+            <a *ngIf="creditTransactionDto.TransactionTypeId == 2" >{{
+                creditTransactionDto.UnassignedAmount | formatCurrencyIfNeg
+                }}
+                Unapplied Account Payment
+            </a>
+            <a *ngIf="creditTransactionDto.TransactionTypeId == 3" >{{
+                creditTransactionDto.UnassignedAmount | formatCurrencyIfNeg
+                }}
+                Unapplied Insurance Payment
+            </a>
+            <a *ngIf="creditTransactionDto.TransactionTypeId == 4" >{{
+                creditTransactionDto.UnassignedAmount | formatCurrencyIfNeg
+                }}
+                Unapplied Negative Adjustment</a>
+        </li>
+        <li class="btn-link">
+            <a id="applyNow" check-auth-z="soar-acct-aapmt-add,soar-acct-cdtadj-add" class="unappliedMenu__ctrl"
+                (click)="openAdjustmentModal(creditTransactionDto)">{{ "Apply Now" | translate }}</a>
+        </li>
+        
+    </ul>
+</div>

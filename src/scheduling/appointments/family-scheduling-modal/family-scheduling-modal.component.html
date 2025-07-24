@@ -1,0 +1,150 @@
+
+<button id="btnOpenFamilyBottom" (click)="openOrCloseFamilyScheduling(isOpen)" check-auth-z="soar-sch-sptapt-add"
+        class="btn btn-default btn-cal hidden-print"
+        cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+        [tooltip]="'Schedule New Family Appointment'"
+        placement="top"
+        delay="500">
+    <svg-icon name="familyScheduleIcon"></svg-icon>
+</button>
+
+<ng-template  cdkConnectedOverlay 
+             [cdkConnectedOverlayHasBackdrop]="true"
+             [cdkConnectedOverlayOrigin]="trigger"
+             cdkConnectedOverlayBackdropClass="appointment-backdrop"
+             [cdkConnectedOverlayOpen]="isOpen" id="modalPositionDisplay">
+
+    <div class="fam-modal">
+        <div class="btnFlexContainer">
+            <p id="modal-header" class="fam-modal-header">
+                + {{'Family Appointment' | translate}}
+            </p>
+            <div id="closeButton" class="closeModal" (click)="cancel($event)">
+                <svg-icon [name]="'closeIcon'" [iconHeight]="'24px'" [iconWidth]="'24px'"></svg-icon>
+            </div>
+        </div>
+        <div class="fam-modal-body">
+            <div class="searchPadding">
+                <family-scheduling-search (selectionChanged)="getPeople($event)" (selectionCleared)="clearDisplay($event)"></family-scheduling-search>
+            </div>
+            <!-- crud view -->
+            <div class="containerPadding">
+                <table class="fuseGrid fuseTable" *ngIf="showPatientData">
+                    <thead>
+                        <tr>
+                            <th>
+                                <app-check-box id="headerCheckbox" (checkChanged)="checkChanged($event)" [checked]="isMasterChecked"></app-check-box>
+                            </th>
+                            <th>
+                                {{'Name' | translate}}
+                            </th>
+                            <th>
+                                {{'Age' | translate }}
+                            </th>
+                            <th>
+                                {{'RP' | translate}}
+                            </th>
+                            <th>
+                                {{'Next Preventive' | translate}} <br /> {{'Due' | translate}}
+                            </th>
+                            <th>
+                                {{'Next Preventive'  | translate}} <br /> {{'Scheduled'  | translate}}
+                            </th>
+                            <th>
+                                {{'Location' | translate}}
+                            </th>
+                            <th>
+                                {{'Provider' | translate}}
+                            </th>
+                            <th>
+                                {{'Appointment Type' | translate}}
+                            </th>
+                            <th>
+                                {{'Duration' | translate}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="familyMemberRow{{i}}" *ngFor="let patientFamilyMember of patientFamilyMembers; index as i" >
+                            <td id="checkBox{{i}}" class="gridColumnCheckbox">
+                                <app-check-box id="appCheckBox{{i}}" [checked]="patientFamilyMember.IsChecked" (checkChanged)="singleCheckChanged($event, i)"></app-check-box>
+                            </td>
+                            <td id="patientName{{i}}" class="patientName">
+                                {{patientFamilyMember.FirstName}} {{patientFamilyMember.LastName}}
+                            </td>
+                            <td id="patientAge{{i}}">
+                                {{patientFamilyMember.DateOfBirth | age }}
+                            </td>
+                            <td id="responsibleParty{{i}}">
+                                <span *ngIf="patientFamilyMember.IsResponsiblePerson">{{'RP'}}</span>
+                            </td>
+                            <td id="nextPreventiveDue{{i}}">
+                                {{patientFamilyMember.NextPreventiveDue}}
+                            </td>
+                            <td id="nextPreventiveScheduled{{i}}">
+                                <span *ngIf="patientFamilyMember.NextPreventiveScheduled">{{patientFamilyMember.NextPreventiveScheduled}}</span>
+                                <span *ngIf="!patientFamilyMember.NextPreventiveScheduled">{{ 'Not Scheduled' | translate }}</span>
+                            </td>
+                            <td id="location{{i}}">
+                                <div class="fui-select-container">
+                                    <select id="locationSelection_appointment{{i}}"
+                                            [(ngModel)]="patientFamilyMember.SelectedLocation"
+                                            (ngModelChange)="locationChange($event, i)"
+                                            class="fui-select"
+                                            [tooltip]="patientFamilyMember.ShowLocationError? patientFamilyMember.LocationError: ''"
+                                            placement="right-error"
+                                            delay="500"
+                                            [ngModelOptions]="{standalone: true}">
+                                        <ng-container *ngFor="let location of patientFamilyMember.Locations">
+                                            <option *ngIf="location.DeactivationTimeUtc === null || location.LocationId === patientFamilyMember.SelectedLocation" [value]="location.LocationId" [disabled]="location.DeactivationTimeUtc != null">
+                                                {{location.NameAbbreviation }}
+                                            </option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                               
+                            </td>
+                            <td id="provider{{i}}">
+                                <div class="fui-select-container">
+                                    <select id="providerSelection_appointment{{i}}"
+                                            [(ngModel)]="patientFamilyMember.SelectedProvider"
+                                            class="fui-select"
+                                            [ngModelOptions]="{standalone: true}">
+                                        <option value="null">
+                                            {{"-- No Provider Selected --"}}
+                                        </option>
+                                        <ng-container *ngFor="let provider of patientFamilyMember.Providers">
+                                            <option [value]="provider.UserId">
+                                                {{provider.FirstName}} {{provider.LastName}}
+                                            </option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                            </td>
+                            <td id="appointmentType{{i}}">
+                                <appointment-types-dropdown [inputId]="i" [appointmentTypes]="appointmentTypes" [appointmentType]="patientFamilyMember.SelectedAppointmentTypeId"
+                                                            (appointmentTypeChanged)="appointmentTypeChanged($event, i)"></appointment-types-dropdown>
+                            </td>
+                            <td id="duration{{i}}">
+                                <appointment-duration-dropdown [inputId]="i"
+                                                               [tooltip]="patientFamilyMember.ShowDurationError? patientFamilyMember.DurationError: ''"
+                                                               placement="left-error"
+                                                               delay="500"
+                                                               [appointmentDurations]="appointmentDurations"
+                                                               [appointmentDuration]="patientFamilyMember.SelectedDuration"
+                                                               (appointmentDurationChanged)="appointmentDurationChanged($event, i)">
+                                    
+                                </appointment-duration-dropdown>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+            <div class="fam-modal-footer containerPadding">
+                <app-button id="cancelButton" variation="secondary" class="fam-btn" (onClick)="cancel($event)" buttonLabel="Cancel"></app-button>
+                <app-button id="saveAsUncheduledButton" variation="secondary" class="fam-btn" [isDisabled]="patientFamilyMembers === [] || patientFamilyMembers === null || isAtLeastOneCheckboxChecked()" (onClick)="saveAppointments(false)" buttonLabel="Save As Unscheduled"></app-button>
+                <app-button id="addToClipboardButton" variation="primary" class="fam-btn" [isDisabled]="patientFamilyMembers === [] || patientFamilyMembers === null || isAtLeastOneCheckboxChecked()" (onClick)="saveAppointments(true)" buttonLabel="Save and Add to Clipboard"></app-button>
+            </div>
+        </div>
+</ng-template>

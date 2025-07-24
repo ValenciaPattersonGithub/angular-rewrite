@@ -1,0 +1,28 @@
+﻿<div class="docsTile">
+    <div class="docsTile__detailsBox {{patientDocument.record.$$GroupingClass}}" ng-click="openDocument(patientDocument.record)">
+        <div class="timelineTile" ng-class="{timelineTileBorder : true}">
+            <div class="timelineTile__row">
+                <div class="timelineTile__iconContainer">
+                    <img class="timelineTile__icon" ng-src="{{ patientDocument.$$iconUrl }}" />
+                </div>
+                <div class="timelineTile__content">
+                    <div class="timelineTile__leftContent">
+                        <span id="lblRecordDescription{{tileIndex}}" class="docsTile__description"
+                              title="{{ title }}">{{ truncatedTitle }}</span>
+
+                        <span id="lblDocumentDescription{{tileIndex}}" class="docsTile__description btn-link"
+                              title="{{ patientDocument.record.Name }}">{{ truncatedName }}</span>
+                    </div>
+                    <div class="timelineTile__rightContent">
+                        <div class="docsTile__icon">
+                            <a class="fas fa-pencil-alt"
+                               ng-class="{'disabled' : patientDocument.record.$$EditingDisabled}"
+                               ng-click="edit(patientDocument.record, $event)" ng-disabled="patientDocument.record.$$EditingDisabled"
+                               ng-hide="patientDocument.recordType === 'Medical History'"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

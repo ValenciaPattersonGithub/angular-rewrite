@@ -1,0 +1,27 @@
+﻿<!-- <business-nav></business-nav> -->
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="userRoles">
+        <div class="rowFull white">
+            <div class="userRoles__header">
+                <ul class="userRoles__breadcrumb">
+                    <li>
+                        <span><a href="#/BusinessCenter/PracticeSettings/">{{ 'Practice Settings' | i18n }}</a></span>
+                    </li>
+                    <li>
+                        <span>{{ 'Assign Roles' | i18n }}</span>
+                    </li>
+                </ul>
+                <div class="patientAcctInsPmt__title">
+                    <h1>{{ 'Assign Roles' | i18n }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="userRoles__body">
+            <div class="userRoles__list">
+                <kendo-grid options="rolesGridOptions" class="userRoles__grid" ng-hide="personsLoading">
+                    
+                 </kendo-grid>
+            </div>
+        </div>
+    </div>
+</div>

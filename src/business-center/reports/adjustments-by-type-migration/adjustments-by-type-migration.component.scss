@@ -1,0 +1,49 @@
+.adjustmentstypereport {
+    grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr 2fr 1fr 1fr
+}
+.adjustmentstypereportgroupHeader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+.groupheader{
+    padding-right: 0.5%;
+    position: sticky;
+    top: 130px;
+    background: white;
+    z-index: 1;
+}
+.adjustmentstypereportfooter {
+    grid-template-columns: 10fr 1fr 1fr
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.adjustmentstypereport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 5px;
+            align-items: center;
+            margin-left: -5px;
+        }
+      }
+}
+
+
+.flex-box {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+.orange {
+    color: #FF9516;
+}

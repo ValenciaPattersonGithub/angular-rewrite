@@ -1,0 +1,36 @@
+﻿<div class="well well-sm text-center">
+    <!--Show default image if no current image-->
+    <img ng-show="showDefaultImage()" id="imgDefaultView" src="Images/{{ defaultImage }}" class="img-responsive img-rounded center-block" alt="">
+    
+    <!--Otherwise, show the current image-->
+    <img ng-show="showCurrentImage()" id="imgCurrent" ng-src="{{ currentImage.src }}" class="img-responsive img-rounded center-block" alt="">
+    
+    <!--If Editing-->
+    <div ng-show="editMode == true">
+        
+        <!--Canvas-->
+        <canvas ng-show="newImage.src" class="img-rounded img-responsive center-block" id="previewContainer"></canvas>
+        
+        <!--Confirm or cancel Image change-->
+        <div ng-show="!confirmedChange">
+            <span ng-show="newImage.src">{{ 'Are you sure you want to {0}' | i18n:['change the image?'] }}</span>
+            <span ng-show="!newImage.src">{{ 'Are you sure you want to {0}' | i18n:['remove the image?'] }}</span>
+            <br />
+            <button id="btnConfirmImageChange" class="btn btn-success" ng-click="confirmChanges()">{{ 'Yes' | i18n }}</button>
+            <button id="btnCancelImageChange" class="btn btn-danger" ng-click="cancelChanges()">{{ 'No' | i18n }}</button>
+        </div>
+
+        <!--Confirm or cancel changes after image change-->
+        <div class="image-upload-buttons" ng-show="confirmedChange">
+            <image-upload file="newImage" preview-container="previewContainer" button-text="Change"></image-upload>
+            <button id="btnRemoveImage"class="btn btn-primary" ng-show="showRemoveButton()" ng-click="removeImage()">{{ 'Remove' | i18n }}</button>
+        </div>
+    </div>
+</div>
+
+
+   
+
+
+
+

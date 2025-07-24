@@ -1,0 +1,82 @@
+﻿<div class="row">
+  <div class="col-md-4">
+    <label class="control-label font-24">{{ 'CDT Codes' | i18n }}</label>
+  </div>
+  <div class="col-md-8">
+    <div class="form-group">
+      <div class="inner-addon right-addon">
+        <input class="form-control border-solid color-dodgerblue" id="searchBoxCdtCodes" placeholder="{{'Search code, description' | i18n}}" type="text" ng-model="searchCdtCodesKeyword" />
+        <span class="glyphicon glyphicon-search"></span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row scroll-y-400">
+  <div class="col-md-12">
+    <table ng-hide="cdtCodes.length==undefined" id="tableCdtCodes" class="table table-striped border-solid-black table-hover">
+      <thead>
+        <tr class="">
+          <td id="tdCdtCode" class="width-12-percent">
+            <div id="columnCdtCodeId" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Code')">
+              <div class="col-md-9">{{'CDT Code' | i18n}}</div>
+              <div ng-show="orderBy.field == 'Code'">
+                <div class="float-right" ng-class="{'non-display': orderBy.asc}">
+                  <div>
+                    <span class="caret-desc up"> </span>
+                  </div>
+                  <div>
+                    <span class="margin-top-minus5 caret-desc down"></span>
+                  </div>
+                </div>
+                <div class="float-right" ng-class="{'non-display': !orderBy.asc}">
+                  <div>
+                    <span class="caret-asc up"></span>
+                  </div>
+                  <div>
+                    <span class="margin-top-minus5 caret-asc down"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td id="tdDescription" class="width-35-percent">
+            <div id="columnDescription" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Description')">
+              <div class="col-md-3">{{'Description' | i18n}}</div>
+              <div ng-show="orderBy.field == 'Description'" class="col-md-1">
+                <div class="float-right" ng-class="{'non-display': orderBy.asc}">
+                  <div>
+                    <span class="caret-desc up"> </span>
+                  </div>
+                  <div>
+                    <span class="margin-top-minus5 caret-desc down"></span>
+                  </div>
+                </div>
+                <div class="float-right" ng-class="{'non-display': !orderBy.asc}">
+                  <div>
+                    <span class="caret-asc up"></span>
+                  </div>
+                  <div>
+                    <span class="margin-top-minus5 caret-asc down"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-show="cdtCodes.length!=undefined" ng-repeat="cdtCode in filteredCdtCodes=(cdtCodes | orderBy:orderBy.field:!orderBy.asc | searchOnParticularColumn:searchCdtCodesKeyword:['Code','Description'])">
+          <td id="tdCode{{$index}}" ng-click="onSelectCode(cdtCode)" class="preserve-white-space overflow-hidden cursor-pointer soar-link" title="{{cdtCode.Code}}" ng-bind-html="cdtCode.Code  | highlightTextIfContains:searchCdtCodesKeyword"></td>
+          <td id="tdDescription{{$index}}" class="preserve-white-space overflow-hidden" title="{{cdtCode.Description}}" ng-bind-html="cdtCode.Description  | highlightTextIfContains:searchCdtCodesKeyword:65 "></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div ng-show="cdtCodes.length==0 || filteredCdtCodes.length==0">
+      <no-results loading-message="loadingMessageNoResults" loading="loadingCodes==true" filtering="filteringCodes" filtering-message="filteringMessageNoResults"></no-results>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+:host gridster {
+    width: 92vw;
+    height: 95vh;
+    background: none;
+    position: inherit;
+    margin:auto;
+    max-width: 100%;
+}
+   
+.userDashboard {
+    gridster-item{
+        border: 1px solid #A9A9A9; 
+        border-radius: 4px; 
+        background: #FFFFFF;  
+        overflow: hidden;
+        box-shadow: none;
+    }
+
+    #btn-close {
+        position: relative;
+    }
+
+    #btnDashboard {
+        margin-right: 1rem;
+        float: right;
+    }
+
+    .widget-handle {
+        width: 100%; 
+        background: #ddd; 
+        padding: 10px 0px;
+    }
+
+    #dashboardSelectList {
+        margin-left: 0.8rem;
+        font-weight: bold;
+    }
+
+}
+
+::ng-deep .userDashboard__body{
+    .gridster-preview {
+        background: none;
+    }
+}
+
+::ng-deep .items-template{
+    font-weight: bold;
+}
+
+::ng-deep .items-hiddenTemplate{
+    padding: 20px;
+}
+
+::ng-deep .gridster{
+    .gridster-row{
+        border-top: 2px solid #fafafa;
+        border-bottom: 2px solid #fafafa;
+    }
+    .gridster-column{
+        border-left: 2px solid #fafafa;
+        border-right: 2px solid #fafafa;
+    }
+
+    .text-muted {
+        z-index: 2;
+        position: absolute; 
+        left: 0px; 
+        top: 0px; 
+        right: 0px; 
+        bottom:0px; 
+        text-align: center;
+    }
+}

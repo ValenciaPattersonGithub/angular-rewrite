@@ -1,0 +1,33 @@
+﻿.imagingTile { 
+    .clearfix;       
+    background-color: @brand-color_white;
+    transition: all 0.5s ease 0s;
+    width: 100%;
+    
+    &.active {
+        background-color: @brand-color_gray;
+    }
+    &__detailsBox {
+        background-color: @brand-color_white;
+        &:hover {
+            cursor: pointer;
+            background-color: @brand-color_gray;
+        }
+
+        &.active {
+            background-color: @brand-color_gray;
+        }
+    }   
+
+    &__desc {
+        width: 100%;
+        float: left;
+        font-weight: 500;
+    }
+
+    &__count {
+        width: 100%;
+        float: left;
+        font-weight: 300;
+    }
+}

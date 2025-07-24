@@ -1,0 +1,83 @@
+﻿<div class="prevCarePanel">
+    <div class="prevCarePanel__primary">
+
+        <div class="prevCarePanel__due">
+            <span ng-show="trumpService">
+                {{trumpService.$$DateLabel + ': '| i18n}}
+                <span ng-if="trumpService">{{trumpService.DateServiceDue ? (trumpService.DateServiceDue | toDisplayDateMMDDYY): 'N/A'}}</span>
+            </span>
+            <div ng-hide="trumpService">
+                <no-results loading="servicesDueLoading"></no-results>
+            </div>
+            <span class="prevCarePanel__dueDays"
+                  ng-if="trumpService">{{ trumpService.DaysUntilDue=='00' ? 'N/A' : trumpService.DaysUntilDue}}&nbsp;{{ trumpService.DaysUntilDue=='00' ? '' :  'days' | i18n}}</span>
+        </div>
+
+        <div class="prevCarePanel__nextAppt">
+            <span ng-show="trumpService">{{ ::('Next Scheduled Preventive' | i18n) }}</span>
+            <div ng-switch on="trumpService.AppointmentId">
+                <div ng-switch-when="">
+                    <span class="prevCarePanel__nextApptDate">
+                        {{::('N/A' | i18n)}}
+                    </span>
+                </div>
+                <div ng-switch-default>
+                    <span id="linkViewNextScheduledPrevCareAppt" check-auth-z="soar-sch-sptapt-view" class="prevCarePanel__nextApptDate" ng-click="showAppointmentModal(trumpService)" ng-if="trumpService.$$copyOfAppointmentStartTime">
+                        {{trumpService.$$copyOfAppointmentStartTime | toDisplayDateMMDDYY}}
+                    </span>
+                    <span class="prevCarePanel__nextApptDate" ng-if="!trumpService.$$copyOfAppointmentStartTime">
+                        {{::('N/A' | i18n)}}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="prevCarePanel__secondary">
+        <div class="prevCarePanel__actions">
+            <a id="prevCarePanelDetailTgl" class="prevCarePanel__detailTgl" ng-click="showDetails = !showDetails" ng-disabled="!servicesDue || editing">
+                <span ng-show="showDetails">{{ ::('Hide Details' | i18n)}}</span>
+                <span ng-show="!showDetails">{{ ::('View Details' | i18n)}}</span>
+            </a>
+
+            <span class="prevCarePanel__separator">|</span>
+            <a id="prevCarePanelSchedule" class="btn btn-link" ng-click="createNewAppointment()">{{::('Schedule' | i18n)}}</a>
+
+        </div>
+        <div ng-hide="servicesDue.length > 0 || editing">
+            <no-results loading="servicesDueLoading"></no-results>
+        </div>
+        <div class="prevCareProgress" ng-show="showDetails && !editing" ng-repeat="exam in servicesDue | orderBy: '$$Index'">
+            <div class="prevCareProgress__header">{{exam.PreventiveServiceTypeDescription}}: {{exam.PatientFrequency}}</div>
+            <div class="prevCareProgress__details">
+                <span class="prevCareProgress__date">{{exam.DateServiceLastPerformed ? (exam.DateServiceLastPerformed | toDisplayDateMMDDYY): 'N/A'}}</span>
+                <span class="prevCareProgress__due">{{exam.DateServiceDue ? (exam.$$DateLabel + ': ' + (exam.DateServiceDue | toDisplayDateMMDDYY)): 'N/A' | i18n}}</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" ng-class="exam.$$Class"
+                     ng-style="{width: ((100 - exam.PercentTimeRemaining) + '%' )}"></div>
+            </div>
+        </div>
+        <div ng-show="editing">
+            <div class="prevCarePanel__info" ng-if="patientInfo">
+                <div class="prevCarePanel__header">{{::('Preventive Care Schedule for' | i18n)}}</div>
+                <div class="prevCarePanel__name"><h4>{{patientInfo.FirstName}} {{patientInfo.LastName}}</h4></div>
+            </div>
+            <div ng-hide="!gridDataSourceLoading">
+                <no-results loading="gridDataSourceLoading"></no-results>
+            </div>
+            <div class="prevCarePanel__grid" ng-if="gridDataSource">
+                <div kendo-grid
+                     k-data-source="gridDataSource"
+                     k-columns="gridColumns"
+                     k-editable="false">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,6 @@
+﻿<ng-container ng-if="migrationFeatureFlagsLoaded && useConverted">
+    <team-member-identifiers-ng></team-member-identifiers-ng>
+</ng-container>
+<ng-container ng-if="migrationFeatureFlagsLoaded && (! useConverted)">
+    <team-member-identifiers-template-original></team-member-identifiers-template-original>
+</ng-container>

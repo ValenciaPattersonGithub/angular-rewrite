@@ -1,0 +1,170 @@
+﻿.userRoles {
+    .standardHeader;
+
+    &__body {
+        .containerStandard;
+
+    }
+    &__form {
+        padding: @brand-padding_md;
+        background-color: @brand-color_white;
+    }
+    &__fieldset {
+        .clearfix;
+        max-width: @brand-form_fieldset-md;
+    }
+    &__grid {
+        .k-i-collapse {
+            display: none;
+        }
+
+        .k-grid-header {
+            display:none;
+        }
+    }
+
+    &__detail {
+        border: @brand-border_light;
+        background-color: @brand-color_white;
+
+        > div {
+            border-bottom: @brand-border_light;
+
+            &:nth-child(odd) {
+                background-color: @brand-tbl_zebra-dark
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        .btn {
+            display: inherit;
+            clear: both;
+        }
+    }
+
+    &__searchResult {
+        width: 100%;
+        border: 1px solid @brand-color_dark-gray;
+    }
+
+    &__tableSection {
+        width: 50%;
+        height: 500px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        border: 1px solid @brand-color_dark-gray;
+        float: left;
+    }
+
+    &__RoleSection {
+        width: 50%;
+        float: left;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 500px;
+        border: 1px solid @brand-color_dark-gray;
+    }
+
+    &__rolePermission {
+        float: left;
+        height: 100px;
+        width: 300px;
+        margin-top: 20px;
+        margin-left: 20px;
+        background-color: @brand-role-background-color;
+        padding-top: 10px;
+        padding-left: 5px;
+    }
+
+    &__rolePermissionLoading {
+        width: 40px;
+        float: right;
+        padding-top: 20px;
+    }
+
+    &__rolePermissionLeft {
+        width: 65%;
+        float: left;
+
+        > span {
+            color: @brand-color_white;
+        }
+    }
+
+    &__rolePermissionRight {
+        width: 35%;
+        float: right;
+
+        > span, a {
+            color: @brand-color_white;
+            cursor:pointer;
+        }
+    }
+
+    &__rolePermissionCount {
+        margin-top: 50px;
+
+        > span, a {
+            color: @brand-color_white;
+            cursor:pointer;
+        }
+    }
+
+    &__table {
+        .table;
+        .table-striped;
+
+        tr td {
+            line-height: 30px;
+            padding-left: 10px;
+        }
+
+        tr td span {
+            padding-left: 10px;
+        }
+    }
+
+    &__tableDrag {
+        .table;
+        .table-striped;
+        line-height: 30px;
+        width: 300px;
+        padding: 1px 0px 0px 6px;
+        border: solid 2px @brand-color_dark-gray;
+        background-color: @brand-color_white;
+
+        > tr td {
+            padding: 1px 0px 1px 5px;
+        }
+    }
+
+    &__locationDescriptionDetails {
+        .font-weight-normal;
+    }
+
+    &__descriptionEntry {
+        .overflow-hidden;
+        white-space: pre;
+    }
+
+    &__actions {
+        text-align: right;
+
+        > a {
+            margin-right: 10px;
+        }
+
+        > .editIcon {
+            .glyphicon;
+            .glyphicon-pencil;
+        }
+
+        > .deleteIcon {
+            .glyphicon;
+            .glyphicon-trash;
+        }
+    }
+}

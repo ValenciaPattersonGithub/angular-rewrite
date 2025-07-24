@@ -1,0 +1,71 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Dates.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Dates.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{ 'Date' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Patient' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Provider' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Location' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{ 'Service Code' | i18n }}</th>
+                    <th class="col-sm-2 cell">{{ 'Description' | i18n }}</th>
+                    <th class="col-sm-1 cell text-center">{{ 'Tooth' | i18n }}</th>
+                    <th class="col-sm-1 cell text-center">{{ 'Area' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Location Fee' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Charged Fee' | i18n }}</th>
+                    <th class="col-sm-1 cell text-right">{{ 'Difference' | i18n }}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="detail in data.Dates" ng-class-even="'stripOdd'" ng-class-odd="'stripEven'" ng-if="!data.isSummaryView">
+                <tr>
+                    <td class="col-sm-1 cell">{{ detail.Date |  date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell">{{ detail.Transactions[0].Patient }}</td>
+                    <td class="col-sm-1 cell">{{ detail.Transactions[0].Provider }}</td>
+                    <td class="col-sm-1 cell">{{ detail.Transactions[0].Location }}</td>
+                    <td class="col-sm-1 cell">{{ detail.Transactions[0].ServiceCode }}</td>
+                    <td class="col-sm-2 cell">{{ detail.Transactions[0].Description }}</td>
+                    <td class="col-sm-1 cell text-center">{{ detail.Transactions[0].Tooth }}</td>
+                    <td class="col-sm-1 cell text-center">{{ detail.Transactions[0].Area }}</td>
+                    <td class="col-sm-1 cell text-right">{{ detail.Transactions[0].LocationFee | currency }}</td>
+                    <td class="col-sm-1 cell text-right">{{ detail.Transactions[0].ChargedFee | currency }}</td>
+                    <td class="col-sm-1 cell text-right" ng-if="detail.Transactions[0].Difference >= 0">{{ detail.Transactions[0].Difference  | currency }}</td>
+                    <td class="col-sm-1 cell text-right" ng-if="detail.Transactions[0].Difference < 0">({{ detail.Transactions[0].Difference * -1 | currency }})</td>
+                </tr>
+                <tr ng-repeat="transaction in detail.Transactions |  startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{ transaction.Patient }}</td>
+                    <td class="col-sm-1 cell">{{ transaction.Provider }}</td>
+                    <td class="col-sm-1 cell">{{ transaction.Location }}</td>
+                    <td class="col-sm-1 cell">{{ transaction.ServiceCode }}</td>
+                    <td class="col-sm-2 cell">{{ transaction.Description }}</td>
+                    <td class="col-sm-1 cell text-center">{{ transaction.Tooth }}</td>
+                    <td class="col-sm-1 cell text-center">{{ transaction.Area }}</td>
+                    <td class="col-sm-1 cell text-right">{{ transaction.LocationFee | currency }}</td>
+                    <td class="col-sm-1 cell text-right">{{ transaction.ChargedFee | currency }}</td>
+                    <td class="col-sm-1 cell text-right" ng-if="transaction.Difference >= 0">{{ transaction.Difference  | currency }}</td>
+                    <td class="col-sm-1 cell text-right" ng-if="transaction.Difference < 0">({{ transaction.Difference * -1 | currency }})</td>
+                </tr>
+            </tbody>
+            <tbody class="reportGrid__footer stripEven" ng-if="data.Dates.length > 0 && !showFilterMessage">
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label" colspan="2">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-3 cell" colspan="3"></td>
+                    <td class="col-sm-2 cell text-right">{{ data.TotalCount }} {{'Transactions' | i18n}}</td>
+                    <td class="col-sm-2 cell" colspan="2"></td>
+                    <td class="col-sm-1 cell text-right">{{data.LocationFee | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{data.ChargedFee | currency}}</td>
+                    <td class="col-sm-1 cell text-right" ng-if="data.Difference >= 0">{{data.Difference  | currency}}</td>
+                    <td class="col-sm-1 cell text-right" ng-if="data.Difference < 0">({{data.Difference * -1 | currency}})</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="11">
+                        {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

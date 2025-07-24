@@ -1,0 +1,74 @@
+
+export class TransactionHistoryPrintDto {
+    AccountMemberId: string = null;
+    AdjustedAmount: number = null;
+    AdjustedAmountString: string = null;
+    AllowedAmount: number = null;
+    Amount: number = null;
+    ApplyAdjustmentType: boolean = null;
+    Area: string = null;
+    AssociatedServiceTransactionIds: [] = null
+    Balance: number = null;
+    Claims: TransactionHistoryClaimDto[] = null;
+    Date = undefined;
+    Description: string = null;
+    Discount: number = null;
+    EncounterId: string = undefined;
+    EraTransactionSetHeaderId: string = null;
+    Fee: number = null;
+    FileAllocationId: number = null;
+    InsuranceEstimates: [] = null
+    IsAssociatedEncounters: boolean = false;
+    IsAuthorized: boolean = null;
+    IsBeta: boolean = null;
+    IsDeleted: boolean = null;
+    IsDeposited: boolean = null;
+    IsFeeScheduleWriteOff: boolean = null;
+    IsPredeterminationResponseNote: boolean = null;
+    IsServiceLocationMatch: boolean = null;
+    IsSplitPayment: boolean = null;
+    IsSubmittableOnClaim: boolean = null;
+    LocationId: number = null;
+    LocationName: string = null;
+    MimeType: string = null;
+    NoteType: number = null;
+    ObjectId: string = null;
+    ObjectIdLong: number = null;
+    ObjectState: string = null;
+    ObjectType: string = null;
+    PatientName: string = null;
+    PaymentTypeId: string = null
+    PersonId: string = null;
+    ProviderOnClaimsId: string = null;
+    ProviderUserId: string = null;
+    ProviderUserName: string = null;
+    RemainingBalance: number = null;
+    ServiceCodeId: string = null;
+    Tax: number = null;
+    Tooth: number = null;
+    TotalAdjEstimate: number = 0;
+    TotalAdjPaidAmount: number = 0;
+    TotalEstInsurance: number = null;
+    TotalInsurancePaidAmount: number = 0;
+    TransactionTypeId: string = null;
+    Type: string = null;
+    UnassignedAmount: number = null;
+    displayDate: string = undefined;
+    hasOpenClaim?: boolean = null;
+}
+
+export class TransactionHistoryClaimDto {
+    BenefitPlanId: string = undefined;
+    ClaimId: string = undefined;
+    DataTag: string = undefined;
+    PatientBenefitPlanId: string = undefined;
+    PatientBenefitPlanPriority: number = 0;
+    PatientId: string = undefined;
+    PatientName: string = null;
+    PlanName: string = null;
+    Status: number = null;
+    TotalFee: number = 0;
+    TransactionType: string = null;
+    Type: number = null;
+}
+

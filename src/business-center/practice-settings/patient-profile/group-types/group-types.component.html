@@ -1,0 +1,39 @@
+<div class="grpTypes">
+    <form name="frmGroupTypes" role="form" novalidate>
+        <div class="rowFull white">
+            <div class="grpTypes__header">
+                <!--Breadcrumbs-->
+                <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                <!--header-->
+                <div class="grpTypes__title">
+                    <h1>{{ 'Group Types' | translate }}</h1>
+                </div>               
+            </div>
+        </div>
+        <div class="grpTypes__body">
+            <!--show the master list if not in edit mode-->
+            <div [ngClass]="{'slide-animation': 'forward', 'slide-backward-animation': '!forward'}">
+                <div  class="grpTypes__list">
+                    <app-kendo-grid  [data]="groupTypes"
+                                    [gridHeight]="'455'"
+                                    [state]="state"
+                                    [isFilterable]="true"
+                                    [isSortable]="true"
+                                    [loading]="loading"
+                                    [hasCreateAccess]="hasCreateAccess"
+                                    [hasCreateButton]="true"
+                                    [createButton]="{class: 'grpTypes__actions', id: 'createButton', text: 'Add Group Type'}"
+                                    [columns]="columns"
+                                    [formGroup]="formGroup"
+                                    (deleteItem)="deleteGroupType($event)"
+                                    (editItem)="editGroupType($event)"
+                                    (saveItem)="saveGroupType($event)"
+                                    (addNewItem)="createGroupType()">
+                    </app-kendo-grid>
+                    <!--loading spinner-->
+                    <no-results *ngIf="loading" [loading]="loading"></no-results>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

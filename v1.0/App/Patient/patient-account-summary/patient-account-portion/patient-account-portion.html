@@ -1,0 +1,14 @@
+﻿<div class="patAcctSmry__content">
+    <div>
+        <span id="lblPatientPortionHeader" class="font-weight-bold">{{'Due Now' | i18n }}</span>
+    </div>
+    <div ng-show="patientPortionLoading == true">
+        <no-results loading="patientPortionLoading == true"></no-results>
+    </div>
+    <div ng-show="patientPortionLoading == false">
+        <span id="lblAccountBalance" class="font-weight-bold">{{ patientPortion | formatCurrencyWithParensIfNeg }}</span>
+    </div>
+    <div >
+        <button check-auth-z='soar-acct-aapmt-add' id="paymentLink" class="btn btn-link patAcctSmry__btn-link" ng-click="makePayment()" ng-disabled="disablePayments">{{ 'apply a payment' | i18n }}</button>
+    </div>
+</div>

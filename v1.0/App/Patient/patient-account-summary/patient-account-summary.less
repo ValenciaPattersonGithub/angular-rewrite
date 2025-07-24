@@ -1,0 +1,265 @@
+﻿/*#region Patient Account Summary Styles */
+.patAcctSmry {
+    overflow: visible;
+
+    &__section {
+        border-right: 2px solid @brand-color_dark-gray;
+        float: left;
+        min-height: 100px;
+        padding: 5px;
+        margin-bottom: 10px;
+
+        @media (max-width: @screen-xs-min) {
+            width: 100%;
+            border-right: hidden;
+            border-bottom: 2px solid @brand-color_dark-gray;
+
+            &:last-child {
+                border-bottom: hidden;
+            }
+        }
+
+        @media (min-width: @screen-xs-min) and (max-width: @screen-md-min) {
+            width: 50%;
+
+            &:nth-of-type(2) {
+                border-right: hidden;
+            }
+
+            &:nth-of-type(4) {
+                border-right: hidden;
+            }
+
+            &:nth-of-type(5) {
+                border-right: hidden;
+            }
+        }
+
+        @media (min-width: @screen-sm-min) and (max-width: @screen-md-min) {
+            width: 50%;
+
+            &:nth-of-type(2) {
+                border-right: hidden;
+            }
+
+            &:nth-of-type(4) {
+                border-right: hidden;
+            }
+
+            &:nth-of-type(5) {
+                border-right: hidden;
+            }
+        }
+
+        @media (min-width: @screen-md-min) and (max-width: @screen-lg-min) {
+            width: 19.5%;
+
+            &:first-child {
+                padding-left: 0;
+                width: 22%;
+            }
+
+            &:last-child {
+                border-right: hidden;
+            }
+        }
+
+        @media (min-width: @screen-lg-min) {
+            width: 100%/6;
+
+            &:first-child {
+                padding-left: 0;
+                width: 100%/6;
+            }
+            &:nth-of-type(2) {
+                width: 100%/6;
+            }
+
+            &:last-child {
+                border-right: hidden;
+            }
+        }
+    }
+
+    &__balance-bar {
+        float: left;
+        height: 75px;
+        margin-right: 5px;
+        width: 25px;
+
+        & .balance-current {
+            background-color: @current-color;
+        }
+
+        & .balance-overdue {
+            background-color: @overdue-color;
+        }
+
+        & .balance-delinquent {
+            background-color: @delinquent-color;
+        }
+        
+    }
+
+    &__content {
+        font-size: 14px;
+
+        & .dropdown-menu {
+            left: 120px;
+            top: 10px;
+            width: 265px;
+            padding:5px;
+            height:110px;
+            overflow:hidden;
+        }
+                
+        & .balance-type{
+            float:left;          
+        }
+
+        & .balance-name{
+             font-weight:bold;
+             float:right;
+        }
+
+        & .balance-current {
+            color: @current-color;
+        }
+
+        & .balance-overdue {
+            color: @overdue-color;
+        }
+
+        & .balance-delinquent {
+            color: @delinquent-color;
+        }
+       
+        &.ditribution-detials {
+            width:100%;
+            td
+                {
+                font-size: 12px;
+            }
+        }
+
+        & .ditribution-detials  a {
+            font-size:11px;
+        }
+
+        & .graph{
+             width:25%;
+             float:left;       
+        }
+
+        & .balance-content{
+             width:75%;
+             float:left; 
+             padding:5px;    
+             font-size: 12px; 
+        }
+
+		& .carrierName {
+			overflow-x: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		& .moreInsurance {
+			overflow-x: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+    }
+
+    &__btn-link {
+        padding: 4px 0 0 0;
+        text-align:left;
+
+    }
+        .disabled {
+            cursor: not-allowed;
+        }
+}
+
+
+.patAcctBal {
+    &__chart {
+        float: left;
+        height: 75px;
+        margin-right: @brand-margin_sm;
+        width: 25px;
+    }
+    &__content {
+        .clearfix;
+    }
+    &__title {
+        display: block;
+        font-weight: @brand-font_heavy;
+    }
+    &__total {
+        display: block;
+        font-weight: @brand-font_heavy;
+    }
+   
+}
+.patAcctBalDtl {
+    position: relative;
+    display: inline-block;
+
+     &__ctrl {
+        display: block;
+    }
+    &__popover {
+        .clearfix;
+        position: absolute;
+        top: 50%;
+        left: 101%;
+        transform: translate(0, -50%);
+        z-index: 999;
+        min-width: 275px;
+        display: none;
+        padding: @brand-padding_sm;
+        
+        border: @brand-border;
+        background-color: @brand-color_white;
+        box-shadow: @brand-shadow_default;
+
+        &.active {
+            display: inline-block;
+        }
+    }
+    
+    &__chart {
+        width: 25%;
+        float: left;
+        padding-right: @brand-padding_md;
+    }
+    &__content {
+        width: 75%;
+        float: left;
+        font-size: 86%;
+    }
+    &__fltr {
+        .clearfix;
+        margin-bottom: @brand-margin_sm;
+    }
+    &__fltrItem {
+        display: inline-block;
+        float: left;
+        padding-right: @brand-padding_sm;
+        margin-right: @brand-margin_sm;
+        border-right: @brand-border;
+
+        &:last-child {
+            padding-right: 0;
+            margin-right: 0;
+            border-right: none;
+        }
+    }
+    &__key {
+        position: relative;
+        display: block;
+        width: 100%;
+        float: left;
+    }
+}

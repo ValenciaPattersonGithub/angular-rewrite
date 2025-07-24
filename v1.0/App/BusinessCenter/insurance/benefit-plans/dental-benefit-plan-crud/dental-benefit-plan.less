@@ -1,0 +1,224 @@
+﻿.benefitPlanCrud {
+    .content__row {
+        padding-top: 0;
+    }
+
+    .standardHeader;
+
+    &__container {
+        .panel;
+        .panel-default;
+        margin-bottom: 0;
+    }
+
+    &__body {
+        .containerStandard;
+
+        .form-group {
+            margin-bottom: 0;
+        }
+    }
+
+    &__duplicates {
+        .bg-warning;
+        align-items: center;
+        display: flex;
+        padding: 0 15px 0 15px;
+        margin-bottom: 10px;
+    }
+
+    &__duplicatesMessage {
+        flex-shrink: 1;
+    }
+
+    &__duplicatesLoadingIcon {
+        flex-shrink: 1;
+        padding: 6px 6px 6px 6px;
+    }
+
+    &__duplicatesShowToggle {
+        .btn;
+        .btn-link;
+        flex-shrink: 1;
+    }
+
+    &__carrierLink {
+        color: @label-color;
+    }
+
+    &__section {
+        display: block;
+        width: 100%;
+        background-color: #f5f5f5;
+        border-radius: 2px;
+        padding: 4px 10px 4px 10px;
+        margin: 10px 0 10px 0;
+    }
+
+    &__phones {
+        &Label {
+            padding-top: 15px !important;
+        }
+
+        .phone-delete {
+            padding: 8px 0 4px 0;
+        }
+
+        .phone-left {
+            .make-xs-column(12);
+            .make-sm-column(12);
+            .make-md-column(12);
+            .make-lg-column(12);
+            margin-bottom: 8px;
+        }
+
+        .phone-right {
+            .make-xs-column(12);
+            .make-sm-column(12);
+            .make-md-column(12);
+            .make-lg-column(12);
+        }
+    }
+
+    &__zip {
+        max-width: 175px;
+    }
+
+    &__groupNumber {
+        max-width: 230px;
+    }
+
+    &__renewalMonth {
+        max-width: 140px;
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &Header {
+            &Sort {
+                margin-left: 10px;
+            }
+
+            > tr > td {
+                > a {
+                    .btn;
+                }
+
+                > a, > span {
+                    .btn-link;
+                    text-align: left;
+                    width: 100%;
+                    padding-left: 20px;
+                    padding-right: 20px;
+                }
+
+
+                .active, a:focus, a:active {
+                    color: black;
+                }
+            }
+
+            th {
+                font-weight: bold;
+                text-align: left;
+                width: 100%;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            &-deductible {
+                width: 200px;
+            }
+
+            &-coverage {
+                width: 180px;
+            }
+
+            &-copay {
+                width: 180px;
+            }
+        }
+
+        &Body {
+            .list-group;
+
+            tr {
+                .list-group-item;
+                padding: 0;
+                display: table-row;
+            }
+
+            td {
+                .truncate;
+                display: table-cell;
+                padding: 13px 20px 12px 20px;
+            }
+
+            .help-text {
+                white-space: normal;
+                text-align: left;
+            }
+        }
+    }
+
+    &__planSettings {
+        .utilRadio {
+            display: block;
+
+            &__ctrl {
+                display: block;
+                padding: 0 0 10px 0;
+            }
+        }
+
+        .radioGroup__ctrl {
+            display: block;
+            padding: 0 0 10px 0;
+        }
+
+        .radioGroup__ctrl:disabled {
+            .radioGroup__label {
+                color: gray;
+            }
+        }
+
+        .radioGroup__label:before {
+            display: inline-block;
+            font-size: 1em;
+            transform: none;
+        }
+    }
+
+    .section-divider {
+        margin: 0px 0% 8px 0%;
+    }
+
+    .benefitPlanCrud__title > h1{
+        font-size: 22px !important;
+    }
+
+    #inpFeeSchedule {
+        .k-dropdown {
+            width: 100% !important;
+        }
+    }
+
+    #feeScheduleLink {
+        padding: 9px 0px 0px 0px;
+    }
+
+    #inpSetAll {
+        padding-top: 9px;
+    }
+
+    .k-dropdown {
+        width: 100% !important;
+    }
+
+    #inpRenewalMonth {
+        .k-dropdown {
+            max-width:230px;
+        }
+    }
+}

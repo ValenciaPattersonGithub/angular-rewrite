@@ -1,0 +1,44 @@
+﻿<div class="documentGroupCrud__content">
+        <form name="frmDocumentGroupCrud" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4>{{ pageTitle | i18n }}</h4>
+                    </div>
+                </div>
+            </div>
+    
+    
+            <div class="col-sm-12">
+                <div class="documentGroupCrud__sticky">                    
+                    <div class="col-xs-12" ng-class="{error: !formIsValid && (!frmDocumentGroupCrud.inpDocumentGroupDescription.$valid || duplicateNameError === true)}">
+                        <input id="inpDocumentGroupDescription" class="form-input required valid" placeholder="{{  actionText | i18n }}"
+                               ng-model="documentGroupDto.Description" name="inpDocumentGroupDescription" maxlength="300" type="text"
+                               set-focus ng-disabled="false" ng-blur="" required />
+                        <span id="lblDocumentGroupDescriptionRequired" class="help-text " ng-show="!formIsValid && !frmDocumentGroupCrud.inpDocumentGroupDescription.$valid">
+                            {{ ::'This field is required.' | i18n }}
+                        </span>
+                        <span id="lblDocumentGroupDuplicateNameError" class="help-text " ng-show="!formIsValid && duplicateNameError">
+                            {{ 'A {0} with this {1} already exists.'|i18n:['document group', 'description' ] }}
+                        </span>
+                    </div>
+
+                </div>
+
+                <!--create agreement-->
+                <div class="documentGroupCrud__footer">
+                    <div class="documentGroupCrud__actions">
+                        <!--TODO new amfa -->
+                        <button id="btnSaveDocumentGroup" ng-show="true" class="btn btn-primary pull-right" ng-click="saveDocumentGroup(documentGroupDto)"
+                                check-auth-z="soar-doc-docorg-agroup" ng-disabled="saving|| dataHasChanged===false">
+                            {{ 'Save' |i18n }}
+                        </button>
+                        <button id="btnCancelDocumentGroup" ng-hide="false" class="btn btn-default pull-right" ng-click="cancelListChanges()"
+                                ng-disabled="saving">
+                            {{ ::'Cancel' |i18n }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>

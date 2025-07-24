@@ -1,0 +1,649 @@
+<div id="accountSummaryGrid">
+    <div id="accountSummaryHeader" class="row patient-account-summary-grid-header">
+        <div class="col-xs-10 no-side-padding">
+            <div class="row">
+                <div class="col-xs-1 width-9-percent"> {{ ('Date'  | translate) }}</div>
+                <div class="col-xs-1 width-9-percent"> {{ ('Patient'  | translate) }}</div>
+                <div class="col-xs-1 width-8-percent no-side-padding">{{ ('Type' | translate) }} </div>
+                <div class="col-xs-1 width-20-percent">{{ ('Description' | translate) }} </div>
+                <div class="col-xs-1 width-10-percent">{{ ('Tooth' | translate) }} </div>
+                <div class="col-xs-1 width-10-percent">{{ ('Surface' | translate) }} </div>
+                <div class="col-xs-1 width-6-percent amount">{{ ('Amount' | translate) }}</div>
+                <div class="col-xs-1 width-4-percent"><!-- Unapplied menu column --></div>
+                <div class="col-xs-1 width-7-percent amount">{{ ('Allowed Amt' | translate) }}</div>
+                <div class="col-xs-1 width-6-percent amount">{{ ('Ins Adj' | translate) }}</div>
+                <div class="col-xs-1 width-6-percent amount">{{ ('Balance' | translate) }}</div>
+                <div class="col-xs-1 width-4-percent"><!-- detail action icon column --></div>
+            </div>
+        </div>
+        <div class="col-xs-2"></div>
+    </div>
+    <div *ngIf="pendingEncounters">  
+    <!-- Beginning of pending encounter portion  -->
+        <div *ngFor="let pendingEncounter of pendingEncounters; index as rowIndex" class="patient-account-summary-grid-row pending-encounters ">
+            <div class="row header-data" id="pendingEncounter{{pendingEncounter.ObjectId}}">
+                <div class="col-xs-10 no-side-padding">
+                    <div id="pendingRow_1_{{rowIndex}}" class="row" (dblclick)="getRowDetails(pendingEncounter)">
+                        <div class="col-xs-1 width-9-percent row-header-field wordbreak">{{pendingEncounter.displayDate}}{{pendingEncounter.ServicesHaveDifferentDates ? '...' : ''}}</div>
+                        <div class="col-xs-1 width-9-percent row-header-field wordbreak"
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ pendingEncounter.PatientName?.length > 10 ? pendingEncounter.PatientName  : '' | translate }}">                                
+                            {{ pendingEncounter.PatientName?.length > 10 ? (pendingEncounter.PatientName | truncateText: 10) : pendingEncounter.PatientName }}
+                        </div>
+                        <div class="col-xs-1 width-8-percent row-header-field no-side-padding wordbreak"> {{pendingEncounter.Type}} </div>
+                        <div class="col-xs-1 width-20-percent row-header-field wordbreak"  
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ pendingEncounter.Description?.length > 30 ? pendingEncounter.Description  : '' | translate }}">
+                            {{pendingEncounter.Description?.length > 30 ? (pendingEncounter.Description | truncateText:30) : pendingEncounter.Description}}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ pendingEncounter.Tooth?.length > 10 ? pendingEncounter.Tooth  : '' | translate }}">
+                            {{pendingEncounter.Tooth?.length > 10 ? (pendingEncounter.Tooth | convertToothRangeToQuadrantOrArchCode | truncateText:10) : pendingEncounter.Tooth | convertToothRangeToQuadrantOrArchCode}}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ pendingEncounter.Surface?.length > 15 ? pendingEncounter.Surface  : '' | translate }}">
+                            {{ pendingEncounter.Surface?.length > 15 ? (pendingEncounter.Surface | truncateText: 15) : pendingEncounter.Surface }} </div>
+                            <div class="col-xs-1 width-6-percent amount">{{pendingEncounter.Amount | formatCurrencyIfNeg}}</div>
+                            <div class="col-xs-1 width-4-percent"><!-- Unapplied menu column --></div>
+                            <div class="col-xs-1 width-7-percent amount">  </div>
+                            <div class="col-xs-1 width-6-percent amount">  </div>
+                            <div class="col-xs-1 width-6-percent amount">{{pendingEncounter.Balance | formatCurrencyIfNeg}}</div>
+                            <div class="col-xs-1 width-4-percent"><!-- detail action icon column --></div>
+                    </div>
+                </div>
+                <div class="col-xs-2 no-side-padding">
+                    <div id="pendingRow_2_{{rowIndex}}" class="row" (dblclick)="getRowDetails(pendingEncounter)">
+                        <div class="col-xs-6 row-header-field account-summary-pending-label">
+                            <span>{{ ('Pending' | translate) }}</span>
+                        </div>
+                        <div class="col-xs-6 row-header-field text-right">
+                            <span id="pendingCaret{{rowIndex}}" class="btn fa text-right" [ngClass]="{ 'fa-caret-down': !pendingEncounter.showDetail, 'fa-caret-up': pendingEncounter.showDetail }" (click)="getRowDetails(pendingEncounter)"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="pendingEncounter.showDetail" class="row patient-account-summary-detail-grid">
+                <div class="col-xs-10 no-side-padding">
+                    <!-- column data -->
+                    <div class="row patient-account-summary-detail-grid-row" *ngFor="let item of pendingEncounter.Items">
+                        <div class="col-xs-1 width-9-percent wordbreak"> {{item.displayDate}} </div>
+                        <div class="col-xs-1 width-9-percent wordbreak"   
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ item.PatientName?.length > 10 ? item.PatientName  : '' | translate }}">   
+                            {{ item.PatientName?.length > 10 ? (item.PatientName | truncateText: 10) : item.PatientName }}
+                        </div>
+                        <div class="col-xs-1 width-8-percent no-side-padding wordbreak"> {{item.Type}} </div>
+                        <div class="col-xs-1 width-20-percent wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ item.Description?.length > 30 ? item.Description  : '' | translate }}">
+                            {{item.Description?.length > 30 ? (item.Description | truncateText:30) : item.Description}}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ item.Tooth?.length > 10 ? item.Tooth  : '' | translate }}">
+                            {{item.Tooth?.length > 10 ? (item.Tooth | convertToothRangeToQuadrantOrArchCode | truncateText:10) : item.Tooth | convertToothRangeToQuadrantOrArchCode}}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ item.Surface?.length > 15 ? item.Surface  : '' | translate }}">
+                            {{ item.Surface?.length > 15 ? (item.Surface | truncateText: 15) : item.Surface }}</div>
+                            <div class="col-xs-1 width-6-percent amount">{{item.Amount | formatCurrencyIfNeg}}</div>
+                        <div class="col-xs-1 width-4-percent"><!-- Unapplied menu column --></div>
+                        <div class="col-xs-1 width-7-percent amount">
+                                <span
+                                *ngIf="
+                                item.ObjectType == 'ServiceTransaction' && item.AllowedAmount >= 0
+                                "
+                              >{{ item.AllowedAmount | formatCurrencyIfNeg }}</span>
+                              <span
+                                *ngIf="
+                                item.ObjectType == 'ServiceTransaction' &&
+                                item.AllowedAmount == null
+                                "
+                              > -  </span>  </div>
+                            <div class="col-xs-1 width-6-percent amount"> <div>
+                                <span *ngIf="item.AdjustedAmountString == '-'"> - </span>
+                                <span
+                                  *ngIf="item.AdjustedAmountString != '-'"
+                                  [ngStyle]="
+                                  item.ObjectType == 'ServiceTransaction' &&
+                                  item.ApplyAdjustmentType == 2 &&
+                                  item.InsuranceEstimates.length > 0 &&
+                                  item.InsuranceEstimates[0].AdjEst > 0 &&
+                                  item.AdjustedAmount > 0 &&
+                                  item.AdjustedAmountString != '-' && { 'font-style': 'italic' }
+                                  "
+                                >{{ item.AdjustedAmount | formatCurrencyIfNeg }}
+                                </span>
+                                
+                              <div *ngIf="
+                              item.ObjectType == 'ServiceTransaction' &&
+                              item.ApplyAdjustmentType == 2 &&
+                              item.InsuranceEstimates.length > 0 &&
+                              item.InsuranceEstimates[0].AdjEst > 0 &&
+                              item.AdjustedAmount > 0
+                                  ">
+                                <span
+                                  id="InsAdjColumnHeaderIcon{{ i }}"
+                                  class="fa fa-exclamation-triangle InsAdjColumnHeaderIcon pull-right padding-top-4 txhInsAdjAmountIcon"
+                                  kendoTooltip
+                                  position="top"
+                                  tooltipClass="app-tooltip"
+                                  title="Estimated Amount"
+                                ></span>
+                              </div>  
+                              </div></div>
+                        <div class="col-xs-1 width-6-percent amount">{{item.Balance | formatCurrencyIfNeg}}</div>
+                        <div class="col-xs-1 width-4-percent"><!-- detail action icon column --></div>
+                    </div>
+                </div>
+                <div class="col-xs-2 action-bar">
+                    <!-- action bar for row 1 -->
+                    <div class="row">
+                        <span> <h5 class="patient-account-summary-h5">{{ 'Estimated Insurance' | translate }}</h5> </span>
+                    </div>
+                    <div class="row">
+                        <span class="patient-account-summary-balance">{{ pendingEncounter.InsuranceBalance | formatCurrencyIfNeg}}</span>
+                    </div>
+                    <div class="row">
+                        <span><h5  class="patient-account-summary-h5">{{ 'Patient Portion' | translate }}</h5></span>
+                    </div>
+                    <div class="row margin-bottom-15">
+                        <span class="patient-account-summary-balance">{{ pendingEncounter.PatientBalance | formatCurrencyIfNeg}}</span>
+                    </div>
+                    <div class="row">
+                        <span id="editPendingEncounter_{{rowIndex}}"
+                            class="btn btn-link action-link" 
+                            kendoTooltip
+                            position="left"
+                            tooltipClass="app-tooltip"
+                            title="{{(pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation || !hasSoarAuthEnctrEditKey)?pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage ? pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage : multiLocationEncounterTooltip:'' | translate}}"
+                            [ngClass]="{ 'disableSpan':pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation || !hasSoarAuthEnctrEditKey}"
+                            attr.check-auth-z="soar-acct-enctr-edit"
+                            (click)="pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation || !hasSoarAuthEnctrEditKey ? $event.preventDefault() :editEncounter(pendingEncounter)"><h5 class="patient-account-summary-h5">{{ 'Edit Encounter' | translate }}</h5>
+                        </span>
+                    </div>
+                    
+                    <div class="row margin-bottom-15">
+                        <span id="deletePendingEncounter_{{rowIndex}}"
+                                kendoTooltip
+                                position="left"
+                                tooltipClass="app-tooltip"
+                                title="{{(!pendingEncounter.$$authorizedForDeleteAtLocation || !hasSoarAuthEnctrDeleteKey)?noDeleteAccessTooltipMessage:'' | translate}}"
+                                class="btn btn-link action-link" 
+                                [ngClass]="{ 'disableSpan':!pendingEncounter.$$authorizedForDeleteAtLocation || !hasSoarAuthEnctrDeleteKey}"
+                                attr.check-auth-z="soar-acct-enctr-delete"
+                                (click)="!pendingEncounter.$$authorizedForDeleteAtLocation || !hasSoarAuthEnctrDeleteKey?$event.preventDefault():deleteAccountSummaryRowDetail(pendingEncounter)">
+                                <h5 class="patient-account-summary-h5">{{ 'Delete Encounter' | translate }}</h5>
+                        </span>
+                    </div>
+                    <div class="row margin-bottom-15" >
+                        <span id="btnCheckout_{{rowIndex}}" 
+                            class="btn btn-primary width-100-percent large-text"
+                            kendoTooltip
+                            position="left"
+                            tooltipClass="app-tooltip"
+                            title="{{(pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation || !hasSoarAuthEnctrChkOutKey)?pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage ? pendingEncounter.$$noEditOrCheckoutAccessTooltipMessage : multiLocationEncounterTooltip:'' | translate}}"
+                            [ngClass]="{ 'disableSpan':pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation || !hasSoarAuthEnctrChkOutKey}"
+                            attr.check-auth-z="soar-acct-enctr-chkout"
+                            (click)="pendingEncounter.$$isMultiLocationEncounter || !pendingEncounter.$$authorizedForEditOrCheckoutAtLocation || !hasSoarAuthEnctrChkOutKey?$event.preventDefault():checkoutPendingEncounter(pendingEncounter)">{{ 'Check out' | translate }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Pending Encounters -->
+    <!-- Beginning of Primary Grid -->
+    <div *ngIf="rows">
+        <div *ngFor="let row of rows; let rowIndex=index" class="patient-account-summary-grid-row" data-qa="account-summary-row-container">
+            <div class="row header-data" id="row{{row.ObjectId}}">
+                <div class="col-xs-10 no-side-padding">
+                    <div id="row_1_{{rowIndex}}" class="row" (dblclick)="getRowDetails(row)">
+                        <div class="col-xs-1 width-9-percent row-header-field wordbreak patient-summary-daterowhdr"> {{row.displayDate}}{{row.ServicesHaveDifferentDates ? '...' : ''}}</div>
+                        <div class="col-xs-1 width-9-percent row-header-field wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ row.PatientName?.length > 10 ? row.PatientName  : '' | translate }}">
+                            {{ row.PatientName?.length > 10 ? (row.PatientName | truncateText: 10) : row.PatientName }}
+                        </div>
+                        <div class="col-xs-1 width-8-percent row-header-field no-side-padding wordbreak"><i *ngIf="row.Type === 'In Collections Note'" class="font-red fa fa-exclamation-circle" aria-hidden="true"></i> {{row.Type}} </div>
+                        <div class="col-xs-1 width-20-percent row-header-field wordbreak"  
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip-truncate"
+                            title="{{ row.Description?.length > 30 ? row.Description : '' | translate }}"
+                            data-qa="account-summary-row-description-tooltip">
+                            {{row.Description?.length > 30 ? (row.Description | truncateText:30) : row.Description}}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ row.Tooth?.length > 10 ? row.Tooth  : '' | translate }}">
+                            {{row.Tooth?.length > 10 ? (row.Tooth | convertToothRangeToQuadrantOrArchCode | truncateText:10) : row.Tooth | convertToothRangeToQuadrantOrArchCode}}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak"
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ row.Surface?.length > 15 ? row.Surface  : '' | translate }}">
+                            {{ row.Surface?.length > 15 ? (row.Surface | truncateText: 15) : row.Surface }}</div>
+                        <div class="col-xs-1 width-6-percent amount">{{row.Amount | formatCurrencyIfNeg}}</div>
+                        <div class="col-xs-1 width-4-percent no-side-padding divunaplied">
+                            <span id="unappliedAmountIconValueId{{ i }}"
+                            *ngIf="(row.TransactionTypeId == 4 || row.TransactionTypeId == 2) && row.UnassignedAmount && row.UnassignedAmount != 0"
+                          >
+                            <unapplied-menu-dialog
+                              id="unappliedMenu{{ i }}"
+                              [unappliedTransactions]="[row]"
+                              [currentPatientId]="currentPatientId"
+                              [dataForBalanceDetailRow]="patientDet"
+                              (refreshData)="refreshData($event)"
+                              class="unappliedMenu"
+                            >
+                            </unapplied-menu-dialog>
+                      
+                          </span>  
+
+                        </div>
+                        <div class="col-xs-1 width-7-percent amount">
+                            <span *ngIf="row.AllowedAmountString == '-'"> - </span>
+                            <span *ngIf="row.AllowedAmountString != '-'"> {{row.AllowedAmount| formatCurrencyIfNeg}}</span>
+                        </div>
+                       
+                        <div class="col-xs-1 width-6-percent amount">
+                            <!-- {{row.AdjustedAmount| formatCurrencyIfNeg}} -->
+                            <div class="text-right txhInsAdjAmount" id="trxhInsAdjAmount">
+                                <div>
+                                    <span *ngIf="row.AdjustedAmountString == '-'"> - </span>
+                                    <span *ngIf="row.AdjustedAmountString != '-'" [ngStyle]="
+                                      row.ObjectType == 'EncounterBo' &&
+                                      row.ApplyAdjustmentType == 2 &&
+                                      row.InsuranceEstimates.length > 0 &&
+                                      row.InsuranceEstimates[0].AdjEst > 0 &&
+                                      row.AdjustedAmount > 0 &&
+                                      row.AdjustedAmountString != '-' && { 'font-style': 'italic' }
+                                    ">{{ row.AdjustedAmount | formatCurrencyIfNeg }}
+                                    </span>
+                                    
+                                    <div *ngIf="
+                                      row.ObjectType == 'EncounterBo' &&
+                                      row.ApplyAdjustmentType == 2 &&
+                                      row.InsuranceEstimates.length > 0 &&
+                                      row.InsuranceEstimates[0].AdjEst > 0 &&
+                                      row.AdjustedAmount > 0
+                                    ">
+                                        <span id="InsAdjColumnHeaderIcon{{ i }}"
+                                            class="fa fa-exclamation-triangle InsAdjColumnHeaderIcon pull-right padding-top-4 txhInsAdjAmountIcon"
+                                            kendoTooltip position="top" tooltipClass="app-tooltip"
+                                            title="Estimated Amount"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-xs-1 width-6-percent amount">{{row.Balance | formatCurrencyIfNeg}}</div>
+                        <div class="col-xs-1 width-4-percent"></div>
+                    </div>
+                </div>
+                <div id="row_2_{{rowIndex}}" class="col-xs-2" (dblclick)="getRowDetails(row)">
+                    <div class="align-right">
+                        <span id="caret{{rowIndex}}" class="btn fa" [ngClass]="{ 'fa-caret-down': !row.showDetail, 'fa-caret-up': row.showDetail }" (click)="getRowDetails(row)"></span>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="row.showDetail" class="row patient-account-summary-detail-grid">
+                <div class="col-xs-10 no-side-padding">
+                    <!-- column data -->
+                    <div *ngIf="row.ObjectType === 'PersonAccountNote'" class="row patient-account-summary-detail-grid-row col-xs-12 wordbreak"> {{row.Description}}</div>
+                    <div class="row patient-account-summary-detail-grid-row" *ngFor="let item of row.Items; let indexButton=index;" [ngClass]="{service: ((item.TransactionTypeId === 1)&&(item.hasOpenClaim)), payment: (item.TransactionTypeId === 2 || item.TransactionTypeId === 3), 'negative-adjustment': item.TransactionTypeId === 4, 'positive-adjustment': ((item.TransactionTypeId === 5) || (item.TransactionTypeId === 6))}">
+                        <div class="col-xs-1 width-9-percent wordbreak">  {{item.displayDate}} </div>
+                        <div class="col-xs-1 width-9-percent wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ item.PatientName?.length > 10 ? item.PatientName  : '' | translate }}">
+                            {{ item.PatientName?.length > 10 ? (item.PatientName | truncateText: 10) : item.PatientName }}
+                        </div>
+                        <div class="col-xs-1 width-8-percent no-side-padding wordbreak"> {{item.Type}} </div>
+                        <div class="col-xs-1 width-20-percent wordbreak" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ item.Description?.length > 30 ? item.Description  : '' | translate }}">
+                            {{item.Description?.length > 30 ? (item.Description | truncateText:30) : item.Description}}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" kendoTooltip
+                        position="top"
+                        tooltipClass="app-tooltip"
+                        title="{{ item.Tooth?.length > 10 ? item.Tooth  : '' | translate }}">
+                            {{item.Tooth?.length > 10 ? (item.Tooth | convertToothRangeToQuadrantOrArchCode | truncateText:10) : item.Tooth | convertToothRangeToQuadrantOrArchCode}}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" *ngIf="item.Surface?.length > 0"
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ item.Surface?.length > 15 ? item.Surface  : '' | translate }}">
+                            {{ item.Surface?.length > 15 ? (item.Surface | truncateText: 15) : item.Surface }}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" *ngIf="item.Root?.length > 0" 
+                            kendoTooltip
+                            position="top"
+                            tooltipClass="app-tooltip"
+                            title="{{ item.Root?.length > 15 ? item.Root  : '' | translate }}">
+                            {{ item.Root?.length > 15 ? (item.Root | truncateText: 15) : item.Root }}</div>
+                        <div class="col-xs-1 width-10-percent row-header-field wordbreak" *ngIf="(!item.Root || item.Root?.length === 0) && (!item.Surface || item.Surface?.length === 0)"></div>
+                        <div class="col-xs-1 width-7-percent amount">
+                                <mat-icon *ngIf="item.IsFeeScheduleWriteOff" kendoTooltip  tooltipClass="app-tooltip" title="Automatically Applied" svgIcon="assignment" class="assignment-icon">assignment</mat-icon>
+                               <span> {{item.Amount | formatCurrencyIfNeg}}</span>
+                        </div>
+                        <div class="col-xs-1 width-4-percent amount"><!-- Unapplied menu column --></div>
+                        <div class="col-xs-1 width-7-percent amount">
+                            <span
+                            *ngIf="
+                            item.ObjectType == 'ServiceTransaction' && item.AllowedAmount >= 0
+                            "
+                          >{{ item.AllowedAmount | formatCurrencyIfNeg }}</span>
+                          <span
+                            *ngIf="
+                            item.ObjectType == 'ServiceTransaction' &&
+                            item.AllowedAmount == null
+                            "
+                          > -  </span>  </div>
+                        <div class="col-xs-1 width-6-percent amount"> <div>
+                            <span *ngIf="item.AdjustedAmountString == '-'"> - </span>
+                            <span
+                              *ngIf="item.AdjustedAmountString != '-'"
+                              [ngStyle]="
+                              item.ObjectType == 'ServiceTransaction' &&
+                              item.ApplyAdjustmentType == 2 &&
+                              item.InsuranceEstimates.length > 0 &&
+                              item.InsuranceEstimates[0].AdjEst > 0 &&
+                              item.AdjustedAmount > 0 &&
+                              item.AdjustedAmountString != '-' && { 'font-style': 'italic' }
+                              "
+                            >{{ item.AdjustedAmount | formatCurrencyIfNeg }}
+                            </span>
+                            
+                          <div *ngIf="
+                          item.ObjectType == 'ServiceTransaction' &&
+                          item.ApplyAdjustmentType == 2 &&
+                          item.InsuranceEstimates.length > 0 &&
+                          item.InsuranceEstimates[0].AdjEst > 0 &&
+                          item.AdjustedAmount > 0
+                              ">
+                            <span
+                              id="InsAdjColumnHeaderIcon{{ i }}"
+                              class="fa fa-exclamation-triangle InsAdjColumnHeaderIcon pull-right padding-top-4 txhInsAdjAmountIcon"
+                              kendoTooltip
+                              position="top"
+                              tooltipClass="app-tooltip"
+                              title="Estimated Amount"
+                            ></span>
+                          </div>  
+                          </div></div>
+
+
+                        <div class="col-xs-1 width-6-percent amount">{{item.Balance | formatCurrencyIfNeg}}</div>
+                        <div class="col-xs-1 no-side-padding text-right float-right" [ngClass]="item.EraTransactionSetHeaderId ? 'width-10-percent' : 'width-4-percent'">
+                            <a id="view-eob-button_{{ rowIndex }}_{{ $index }}"
+                            class="btn btn-link eob-link"
+                            
+                            *ngIf="item.EraTransactionSetHeaderId"
+                            (click)="vieweob(item, row)">
+                                {{ ('View EOB' | translate) }}
+                            </a>
+                            <div class="float-right" *ngIf="item.TransactionTypeId == 1">                             
+                                <i id="btnEditServiceTransaction_1_{{ rowIndex }}_{{$index}}"
+                                class="fas fa-pencil-alt icon-click size-h5 cursor-pointer"
+                                kendoTooltip
+                                position="right"
+                                [ngClass]="{ 'disableIcon': item.hasClaimInProcess || item.LocationId !== loggedInLocationId || !hasSoarAuthSvcTrViewKey }"
+                                tooltipClass="app-tooltip"
+                                title="{{(item.hasClaimInProcess || item.LocationId !== loggedInLocationId || !hasSoarAuthSvcTrViewKey)?(item.LocationId !== loggedInLocationId ? 'Your current location does not match this service transaction\'s location.' : 'This service is attached to a claim that is InProcess and it cannot be edited or deleted'):''| translate }}"
+                                (click)="item.hasClaimInProcess || item.LocationId !== loggedInLocationId || !hasSoarAuthSvcTrViewKey?$event.preventDefault():editRowDetail(row, item)"
+                                
+                                attr.check-auth-z="soar-acct-actsrv-view">
+                                </i>
+                                <i id="btnDeleteServiceTransaction_1_{{ rowIndex }}_{{$index}}"
+                                class="far fa-trash-alt icon-click size-h5 cursor-pointer"
+                                attr.check-auth-z="soar-acct-actsrv-delete"
+                                [ngClass]="{ 'disableIcon': item.hasClaimInProcess || item.LocationId !== loggedInLocationId || !hasSoarAuthSrvTrDeleteKey}"
+                                (click)="item.hasClaimInProcess || item.LocationId !== loggedInLocationId || !hasSoarAuthSrvTrDeleteKey?$event.stopPropogation():deleteAccountSummaryRowDetail(row, item)"
+                                kendoTooltip
+                                position="right"
+                                tooltipClass="app-tooltip"
+                                title="{{(item.hasClaimInProcess || item.LocationId !== loggedInLocationId || !hasSoarAuthSrvTrDeleteKey)?(item.LocationId !== loggedInLocationId ? 'Your current location does not match this service transaction\'s location.' : 'This service is attached to a claim that is InProcess and it cannot be edited or deleted'):'' | translate}}">
+                                </i>
+                            </div>
+                            <div class="float-right" *ngIf="item.TransactionTypeId == 5">
+                               
+                                <i id="btnEditDebitTransaction_1_{{ rowIndex }}_{{indexButton}}"
+                                    class="fas fa-pencil-alt icon-click size-h5 cursor-pointer"
+                                    attr.check-auth-z="soar-acct-dbttrx-edit"
+                                    [ngClass]="{ 'disableIcon':item.IsAuthorized || !hasSoarAuthDbtTrxEditKey || item.LocationId !== loggedInLocationId || item.isVendorPaymentRefund }"
+                                    kendoTooltip
+                                    position="right"
+                                    tooltipClass="app-tooltip"
+                                    title="{{ item.LocationId !== loggedInLocationId
+                                       ? 'Your current location does not match this adjustment\'s location.'
+                                       : item.IsAuthorized || !hasSoarAuthDbtTrxEditKey ? 'Credit/Debit card returns cannot be edited or deleted': item.isVendorPaymentRefund ? item.toolTip : '' | translate }}"
+                                    (click)="item.IsAuthorized || item.isVendorPaymentRefund || !hasSoarAuthDbtTrxEditKey || item.LocationId !== loggedInLocationId ? $event.preventDefault() : editRowDetail(row, item)">
+                                </i>
+                              
+                                <i id="btnDeleteDebitTransaction_1_{{ rowIndex }}_{{$index}}"
+                                    class="far fa-trash-alt icon-click size-h5 cursor-pointer"
+                                    attr.check-auth-z="soar-acct-dbttrx-delete"
+                                    [ngClass]="{ 'disableIcon':item.IsAuthorized || !hasSoarAuthDbtTrxDeleteKey || item.LocationId !== loggedInLocationId }"
+                                    kendoTooltip
+                                    position="right"
+                                    tooltipClass="app-tooltip"
+                                    title="{{ item.LocationId !== loggedInLocationId
+                                       ? 'Your current location does not match this adjustment\'s location.'
+                                       : item.IsAuthorized || !hasSoarAuthDbtTrxDeleteKey ? 'Credit/Debit card returns cannot be edited or deleted': '' | translate }}"
+                                    (click)="item.IsAuthorized || !hasSoarAuthDbtTrxDeleteKey || item.LocationId !== loggedInLocationId ? $event.preventDefault() : deleteAccountSummaryRowDetail(row, item)">
+                                </i>
+                            </div>
+
+                            <label id="lblInsurancePayment_{{$index}}" *ngIf="(item.TransactionTypeId == 3)" class="overflow-hidden text-align-right pull-right font-weight-normal">
+                             
+                                <i id="btnDeleteInsurancePayment_{{ rowIndex }}_{{$index}}"
+                                class="far fa-trash-alt icon-click size-h5 cursor-pointer"
+                                [ngClass]="{'color-gray-light':false ,'disableIcon': item.IsDeposited || !hasSoarAuthInsPmtDeleteKey}"
+                                attr.check-auth-z="soar-acct-aipmt-delete"
+                           (click)="item.IsDeposited ||!hasSoarAuthInsPmtDeleteKey  ?$event.stopPropogation(): deleteInsPayment(item, row.PatientName)">
+                                </i>
+
+                            </label>
+                        <div class="row" style="margin-left: 0;" [ngClass]="item.EraTransactionSetHeaderId ? 'display-inline-block' : ''" *ngIf="item.TransactionTypeId === 3 || item.ObjectType == 'ClaimNote'">
+                            <span id="viewMultipleClaimLink"
+                                (click)="toggleClaimsView($event,indexButton,rowIndex)">
+                                <i id="btnShowAccountNoteClaim"
+							    class="fa fa-eye icon-click color-red size-h5 cursor-pointer">
+                                </i>
+                            </span>
+                           
+                                <app-popover [tooltipPosition]="'leftMargin'" [templateReference]="claimsInfo" (close)="closePopOver()"
+                                  *ngIf="showTemplate && parentindex==rowIndex && childindex==indexButton"
+                                   [style]="{'right':item.Type=='InsPay' && !item.EraTransactionSetHeaderId?'100%':item.EraTransactionSetHeaderId?'43%':'70%'}">
+                               </app-popover>
+                        </div>
+                            <ng-template #claimsInfo >
+                                <div class="popover-width" (click)="$event.stopPropagation()" >
+                                    <div class="view-claims-popup-header row" [ngStyle]="{'width':item.Type!='AcctNote'?'584px':''}">
+                                        <div class="col-md-2"><strong>Plan Name</strong></div>
+                                        <div class="col-md-2 center" *ngIf="item.Type === 'AcctNote'"><strong>Notes</strong></div>
+                                        <div class="col-md-2"><strong>Priority</strong></div>
+                                        <div class="col-md-3"><strong>Amount Submitted</strong></div>
+                                        <div class="col-md-3"><strong>Status</strong></div>
+                                    </div>
+                                    <div *ngFor="let claim of item.Claims | orderBy: 'PatientBenefitPlanPriority'; trackBy: $index" 
+                                    class="view-claims-popup-body row" [ngStyle]="{'width':item.Type!='AcctNote'?'584px':''}">
+                                        <div class="col-md-2 bodyrow"  (click)="previewPdf(claim)">
+                                            <a style="padding:0;" >{{claim.BenefitPlanName}}</a>
+                                        </div>
+                                        <div class="col-md-2 center" *ngIf="item.Type === 'AcctNote'"><span (click)="openClaimNotes(claim, row)"><i class="far fa-file-alt icon-click color-blue size-h4 cursor-pointer"></i></span></div>
+                                        <div class="col-md-2">{{priorityLabel(claim.PatientBenefitPlanPriority)}}</div>
+                                        <div class="col-md-3">{{claim.TotalFees | currency}}</div>
+                                        <div class="col-md-3">{{claimStatus(claim.Status)}}</div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        <div class="float-right" *ngIf="item.TransactionTypeId === 2 || item.TransactionTypeId === 4">
+                         
+                                <i id="btnEditCreditTransaction_1_{{rowIndex }}_{{$index}}"
+                                class="fas fa-pencil-alt icon-click size-h5 cursor-pointer"
+                                [ngClass]="{ 'disableIcon': !hasSoarAuthActPmtEditKey || !hasSoarAuthCdtAdjEditKey || item.IsAuthorized || item.IsDeposited || item.isVendorPayment } "
+                                kendoTooltip
+                                position="right"
+                                tooltipClass="app-tooltip"
+                                title="{{(!hasSoarAuthActPmtEditKey || !hasSoarAuthCdtAdjEditKey || item.IsAuthorized || item.IsDeposited)?(item.IsAuthorized ? 'Credit/Debit Card Payments cannot be edited' : 'This payment is already deposited and it cannot be edited or deleted'):(item.isVendorPayment ? item.toolTip : '') | translate}}"
+                                attr.check-auth-z="{{ item.TransactionType === 2 ? 'soar-acct-aapmt-edit' : 'soar-acct-cdtadj-edit'}}"
+                                (click)="item.IsAuthorized || item.IsDeposited || item.isVendorPayment || !hasSoarAuthActPmtEditKey || !hasSoarAuthCdtAdjEditKey  ? $event.stopPropogation() : editacctPayorNegAdj(item)">
+                                </i>
+                                <i id="btnDeleteCreditTransaction_1_{{rowIndex}}_{{$index}}"
+                                class="far fa-trash-alt icon-click size-h5 cursor-pointer"
+                                attr.check-auth-z="{{ item.TransactionType === 2 ? 'soar-acct-aapmt-delete' : 'soar-acct-cdtadj-delete'}}"
+                                [ngClass]="{ 'disableIcon': item.IsDeposited || !hasSoarAuthActPmtDeleteKey || !hasSoarAuthCdtAdjDeleteKey} "
+                                kendoTooltip
+                                position="right"
+                                tooltipClass="app-tooltip"
+                                title="{{(!hasSoarAuthActPmtDeleteKey || !hasSoarAuthCdtAdjDeleteKey || item.IsDeposited)?'This payment is already deposited and it cannot be edited or deleted':'' | translate}}"
+                                (click)="!item.IsDeposited || !hasSoarAuthActPmtDeleteKey || !hasSoarAuthCdtAdjDeleteKey  ? deleteacctPayorNegAdj(item) :$event.stopPropogation()"
+                                >
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="row.ObjectType === 'CreditTransaction'" class="col-xs-2 action-bar">
+                    <!-- action bar for row 1 -->
+                    <!-- Todo Show only if row.TransactionType equals 2 -->
+                </div>
+                <div *ngIf="row.ObjectType === 'DebitTransaction'" class="col-xs-2 action-bar">
+                    <!-- action bar for row 4 -->
+                </div>
+                <div *ngIf="row.ObjectType === 'EncounterBo'" class="col-xs-2 action-bar">
+                    <!-- action bar for row 3 -->
+                    <div class="row">
+                        <span><h5 class="patient-account-summary-h5">{{ 'Insurance Balance' | translate }}</h5></span>
+                    </div>
+                    <div class="row">
+                        <span class="patient-account-summary-balance">{{row.InsuranceBalance | formatCurrencyIfNeg}}</span>
+                    </div>
+                    <div class="row">
+                        <span><h5 class="patient-account-summary-h5">{{ 'Patient Balance' | translate }}</h5></span>
+                    </div>
+                    <div class="row margin-bottom-15">
+                        <span class="patient-account-summary-balance">{{row.PatientBalance | formatCurrencyIfNeg}}</span>
+                    </div>
+                    <div class="row">
+                     
+                        <span id="encounterApplyPayment_{{rowIndex}}"
+                                class="btn btn-link action-link"
+                                atr.check-auth-z="soar-acct-aapmt-add"
+                                kendoTooltip
+                                position="left"
+                                tooltipClass="app-tooltip"
+                                title="{{ !hasSoarAuthActPmtAddKey ? 'You donot have permission to view this information.' : '' | translate }}"
+                                [ngClass]="{ 'disableSpan':!hasSoarAuthActPmtAddKey}"
+                                (click)="!hasSoarAuthActPmtAddKey ? $event.stopPropagation() : applyPaymnt(row)"><h5 class="patient-account-summary-h5">{{ 'Apply a Payment' | translate }}</h5>
+                        </span>
+                    </div>
+                    <div class="row">
+                     
+                        <span id="encounterApplyAdjustment_{{rowIndex}}"
+                                class="btn btn-link action-link"
+                                atr.check-auth-z="soar-acct-cdtadj-add"
+                                kendoTooltip
+                                position="left"
+                                tooltipClass="app-tooltip"
+                                title="{{ !hasSoarAuthCdtAdjAddKey ? 'You donot have permission to view this information.' : '' | translate }}"
+                                [ngClass]="{'disableSpan': !hasSoarAuthCdtAdjAddKey}"
+                                (click)="!hasSoarAuthCdtAdjAddKey ? $event.stopPropagation() : applyAdj(row)"><h5 class="patient-account-summary-h5">{{ 'Apply Adjustment' | translate }}</h5>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <button id="viewInvoice_{{rowIndex}}" class="btn btn-link action-link" (click)="viewInv(row)"><h5 class="patient-account-summary-h5">{{ 'View Original Invoice' | translate }}</h5></button>
+                    </div>
+                    <div class="row">
+                        <button id="createCurrentInvoice_{{rowIndex}}" class="btn btn-link action-link" (click)="createCurrentInv(row)"><h5 class="patient-account-summary-h5">{{ 'View Current Invoice' | translate }}</h5></button>
+                    </div>
+                    <div class="row margin-bottom-15">
+                        <span id="createClaim_{{rowIndex}}" 
+                        kendoTooltip
+                        position="left"
+                        tooltipClass="app-tooltip"
+                        title="{{ row.OpenClaims ? 'A claim exists for service(s) within this encounter. Please create your claim from the Transaction History' : !row.AnyServiceCanSubmit ? 'The services within this encounter are not selected to submit on Insurance' : '' | translate }}" 
+                        *ngIf="row.ObjectType === 'EncounterBo' && row.AccountMemberHasPlan" 
+                        [ngClass]="{'disableSpan': row.OpenClaims || !row.AnyServiceCanSubmit}"
+                        class="btn btn-link action-link" 
+                        (click)="row.OpenClaims || !row.AnyServiceCanSubmit? $event.stopPropagation(): createClm(row)">
+                       <h5 class="patient-account-summary-h5"
+                       >{{ 'Create Claim' | translate }}</h5>
+                        </span>
+                            
+                    </div>
+                </div>
+                <div *ngIf="row.ObjectType === 'PersonAccountNote'" class="col-xs-2 action-bar">
+                    <div class="row">
+                        <!-- check-auth-z="soar-per-acnote-view" -->
+                        <button id="noteView_{{rowIndex}}"
+                                class="btn btn-link action-link"
+                                *ngIf="row.NoteType !== 3 && row.NoteType !== 5"
+                                (click)="viewAcctNote(row)"
+                                [disabled]="!hasSoarPerViewNoteKey"
+                                attr.check-auth-z="soar-per-acnote-view">
+                            <h5 class="patient-account-summary-h5">{{ 'View' | translate }}</h5>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <!-- check-auth-z="soar-per-acnote-edit" -->
+                        <button id="noteEdit_{{rowIndex}}"
+                                class="btn btn-link action-link"
+                                *ngIf="row.NoteType === 1"
+                                [disabled]="row.NoteType === 2 || !hasSoarPerEditNoteKey"
+                                attr.check-auth-z="soar-per-acnote-edit"
+                                (click)="row.Type === 'In Collections Note' || row.TransactionType === 'In Collections Note' ? $event.stopPropagation() : editAcctNote(row)">
+                            <h5 class="patient-account-summary-h5">{{ 'Edit' | translate }}</h5>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <!-- check-auth-z="soar-per-acnote-delete" -->
+                        <button id="noteDelete_{{rowIndex}}"
+                                class="btn btn-link action-link"
+                                *ngIf="row.NoteType === 1"
+                                attr.check-auth-z="soar-per-acnote-delete"
+                                [disabled]="!hasSoarPerDeleteNoteKey"
+                                (click)="row.Type === 'In Collections Note' || row.TransactionType === 'In Collections Note' ? $event.stopPropagation() : deleteAcctNote(row)">
+                            <h5 class="patient-account-summary-h5">{{ 'Delete' | translate }}</h5>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <!-- check-auth-z="soar-acct-aipmt-view" -->
+                        <button id="noteViewEob_{{rowIndex}}"
+                                class="btn btn-link action-link"
+                                *ngIf="row.NoteType === 3"
+                                attr.check-auth-z="soar-acct-aipmt-view"
+                                [disabled]="!hasSoarViewEOBKey"
+                                (click)="vieweob(row)">
+                            <h5 class="patient-account-summary-h5">{{ 'View EOB' | translate }}</h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

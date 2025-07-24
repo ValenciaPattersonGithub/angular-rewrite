@@ -1,0 +1,106 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="stripOdd fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage"
+        ng-repeat="location in data.Locations">
+        <table>
+            <thead>
+                <tr class="reportGrid__row stripEven">
+                    <th class="cell" colspan="12">
+                        <div class="text-center">
+                            <h4>{{location.LocationName}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="reportGrid__row">
+                    <th class="col-sm-1 cell">{{'Service Type' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Service Code' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'CDT Code' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Description' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Location Fee' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'MTD: Units' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Production' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Average' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'YTD: Units' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Production' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'Average' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody  ng-repeat="type in location.ServiceTypes">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-1 cell">{{type.ServiceType}}</td>
+                    <td class="col-sm-11 cell" colspan="10"></td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat="detail in type.Details">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{detail.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{detail.CdtCode}}</td>
+                    <td class="col-sm-2 cell wordBreakAll">{{detail.Description}}</td>
+                    <td class="col-sm-1 cell text-right">{{detail.LocationFee | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{detail.MtdUnits}}</td>
+                    <td class="col-sm-1 cell text-right">{{detail.MtdProduction | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{detail.MtdAverage | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{detail.YtdUnits}}</td>
+                    <td class="col-sm-1 cell text-right">{{detail.YtdProduction | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{detail.YtdAverage | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="lineHeight35">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="11">{{location.LocationName}} {{'MTD Units:'
+                        | i18n}} {{location.MtdUnits}}</td>
+
+                </tr>
+                <tr class="reportGrid__row">
+
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="11">{{location.LocationName}} {{'MTD Production:'
+                        | i18n}} {{location.MtdProduction | currency}}</td>
+
+                </tr>
+                <tr class="reportGrid__row">
+
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="11">{{location.LocationName}} {{'YTD Units:'
+                        | i18n}} {{location.YtdUnits}}</td>
+
+                </tr>
+                <tr class="reportGrid__row">
+
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="11">{{location.LocationName}} {{'YTD Production:'
+                        | i18n}} {{location.YtdProduction | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven lineHeight35" ng-show="data.Locations.length === $index+1">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="11">{{'Total' | i18n}} {{'MTD Units:' | i18n}}
+                        {{ data.MtdUnits}}</td>
+                </tr>
+                <tr class="reportGrid__row">
+
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="11"> {{'Total' | i18n}} {{'MTD Production:'
+                        | i18n}} {{ data.MtdProduction | currency }}</td>
+
+                </tr>
+                <tr class="reportGrid__row">
+
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="11">{{'Total' | i18n}} {{'YTD Units:' | i18n}}
+                        {{ data.YtdUnits }}</td>
+
+                </tr>
+                <tr class="reportGrid__row">
+
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="11">{{'Total' | i18n}} {{'YTD Production:'
+                        | i18n}} {{ data.YtdProduction | currency }}</td>
+
+                </tr>
+                <tr class="reportGrid__row">
+
+                    <td class="col-sm-12 cell text-align-center" colspan="11">{{'The Code on Dental Procedures and Nomenclature
+                        is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.'
+                        | i18n }}</td>
+                </tr>
+
+            </tbody>
+            <tbody ng-show="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

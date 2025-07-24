@@ -1,0 +1,78 @@
+﻿
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="documentGroups">
+        <form name="frmDocumentGroups">
+            <div ng-if="mode==='manageDocumentGroups'">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <h4>
+                                {{::'Document Groups'|i18n}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="documentGroups__content panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="fuseGrid container pull-left">
+                                    <div class="row header">
+                                        <div class="col-sm-9 cell">
+                                            <div>{{ 'Description' | i18n }}</div>
+                                        </div>
+                                        <div class="col-sm-2 cell">
+                                        </div>
+                                    </div>
+                                    <div class="row body" ng-repeat="documentGroup in documentGroups | orderBy:'Description'">
+                                        <div class="col-sm-9 cell" uib-tooltip="{{ documentGroup.Description }}" tooltip-append-to-body="true" tooltip-placement="top-left">
+                                            {{ documentGroup.Description | truncate: 64 :'...' }}
+                                        </div>
+                                        <div class="col-sm-2 cell margin-left-15">
+                                            <button id="btnDocumentGroupDelete{{$index}}"
+                                                    class="btn btn-default btn-link pull-right cursor-pointer"
+                                                    ng-class="{ disabled: documentGroup.IsSystemDocumentGroup }"
+                                                    check-auth-z="soar-doc-docorg-dgroup"
+                                                    ng-click="deleteDocumentGroup(documentGroup)"
+                                                    uib-tooltip="{{(documentGroup.IsSystemDocumentGroup) ? 'System required items cannot be edited or deleted.' : '' | i18n}}"
+                                                    tooltip-append-to-body="true">
+                                                <i class="fa fa-times-circle fa-lg"></i>
+                                            </button>
+                                            &nbsp;
+                                            <button id="btnDocumentGroupEdit{{$index}}"
+                                                    class="btn btn-default btn-link cursor-pointer"
+                                                    ng-class="{ disabled: documentGroup.IsSystemDocumentGroup }"
+                                                    check-auth-z="soar-doc-docorg-egroup"
+                                                    ng-click="editDocumentGroup(documentGroup)"
+                                                    uib-tooltip="{{(documentGroup.IsSystemDocumentGroup) ? 'System required items cannot be edited or deleted.' : '' | i18n}}"
+                                                    tooltip-append-to-body="true">
+                                                <i class="far fa-edit fa-lg"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="documentGroups__footer">
+                    <div class="documentGroups__actions">
+                        <button id="btnCreateDocumentGroup" class="btn btn-primary pull-right" check-auth-z="soar-doc-docorg-agroup"
+                                type="button" ng-disabled="false" ng-click="createDocumentGroup()">
+                            {{ ::'New' | i18n }}
+                        </button>
+                        <button id="btnCloseDocumentGroup" class="btn btn-default pull-right" type="button" ng-click="close()">
+                            {{::'Close' | i18n }}
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+    </div>
+
+    <!--crud operations-->
+    <div ng-if="mode === 'editDocumentGroup'">
+        <document-groups-crud document-groups="documentGroups" document-group="documentGroupForEdit" saved-document-group="documentGroupSaved" cancel="cancel"></document-groups-crud>
+    </div>
+</div>
+    </div>

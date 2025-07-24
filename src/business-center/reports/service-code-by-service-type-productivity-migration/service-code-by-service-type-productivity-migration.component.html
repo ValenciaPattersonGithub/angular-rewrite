@@ -1,0 +1,73 @@
+<div *ngIf="isDataLoaded" class="no-outline" data-qa="service-code-main-container">
+    <ng-container data-qa="service-code-ng-container">
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+                                     id="serviceCodeByServiceTypeProductivity" data-qa="service-code-cdk-scroll-container">
+
+            <div *cdkVirtualFor="let location of reportData.Locations; index as i" data-qa="service-code-location-container">
+                <div class="stripEven col-sm-12-migration text-align-center" data-qa="service-code-location-name-container"><h4>{{ location.LocationName}}</h4></div>
+                <div class="serviceCodeByServiceTypeProductivity grid item stripOdd" data-qa="service-code-container">
+                    <div class="col-sm-1-migration"><b>{{'Service Type' | translate }}</b></div>
+                    <div class="col-sm-1-migration"><b>{{'Service Code' | translate }}</b></div>
+                    <div class="col-sm-1-migration"><b>{{'CDT Code' | translate }}</b></div>
+                    <div class="col-sm-2-migration"><b>{{'Description' | translate }}</b></div>
+                    <div class="col-sm-1-migration text-right"><b>{{'Location Fee' | translate }}</b></div>
+                    <div class="col-sm-1-migration text-right"><b>{{'Units' | translate }}</b></div>
+                    <div class="col-sm-1-migration text-right">
+                        <b>{{'Production' | translate }}</b>
+                        <i class="fa fa-info-circle" (mouseover)="showMessage('Production')" (mouseout)="showMessage('')">
+                            <span class="toolTipText">{{ 'Production not including tax' | translate }}</span>
+                        </i>
+                    </div>
+                    <div class="col-sm-1-migration text-right"><b>{{'Tax' | translate }}</b></div>
+                    <div class="col-sm-1-migration text-right"><b>{{'Tax Type' | translate }}</b></div>
+                    <div class="col-sm-1-migration text-right">
+                        <b>{{'Average' | translate }}</b>
+                        <i class="fa fa-info-circle" (mouseover)="showMessage('Average')" (mouseout)="showMessage('')">
+                            <span class="toolTipText toolTipText-right">{{ 'Average not including tax' | translate }}</span>
+                        </i>
+                    </div>
+
+                </div>
+                <div *ngFor="let serviceType of location.ServiceTypes;" data-qa="service-code-service-types-container">
+                    <div class="serviceCodeByServiceTypeProductivity grid item stripOdd"
+                         *ngFor="let detail of serviceType.Details; index as i" data-qa="service-code-service-type-detail-container">
+                        <div class="col-sm-1-migration" *ngIf="i==0">{{serviceType.ServiceType}}</div>
+                        <div class="col-sm-1-migration" *ngIf="i>0"></div>
+                        <div class="col-sm-1-migration">{{detail.ServiceCode}}</div>
+                        <div class="col-sm-1-migration">{{detail.CdtCode}}</div>
+                        <div class="col-sm-2-migration">{{detail.Description}}</div>
+                        <div class="col-sm-1-migration text-right">{{detail.LocationFee}}</div>
+                        <div class="col-sm-1-migration text-right">{{detail.Units}}</div>
+                        <div class="col-sm-1-migration text-right">{{detail.Production | currency}}</div>
+                        <div class="col-sm-1-migration text-right">{{detail.Tax | currency}}</div>
+                        <div class="col-sm-1-migration text-right" *ngIf="detail.TaxableServiceTypeId==1">NT</div>
+                        <div class="col-sm-1-migration text-right" *ngIf="detail.TaxableServiceTypeId==2">P</div>
+                        <div class="col-sm-1-migration text-right" *ngIf="detail.TaxableServiceTypeId==3">S</div>
+                        <div class="col-sm-1-migration" *ngIf="detail.TaxableServiceTypeId==0"></div>
+                        <div class="col-sm-1-migration text-right">{{detail.Average | currency}}</div>
+                        </div>
+                </div>
+                <div class="col-sm-12-migration text-align-center stripOdd" data-qa="service-code-total-location-units-container">
+                    <b>{{location.LocationName}} {{'Units:' | translate }} {{location.Units}}</b>
+                </div>
+                <div class="col-sm-12-migration text-align-center stripOdd" data-qa="service-code-total-local-production-container">
+                    <b> {{location.LocationName}} {{'Production:' | translate }} {{location.Production | currency}}</b>
+                </div>
+            </div>            
+            <div class="col-sm-12-migration text-align-center stripOdd" data-qa="service-code-total-units-container">
+                <b> {{'Total Units:' | translate }} {{reportData.Units}}</b>
+            </div>
+            <div class="col-sm-12-migration text-align-center stripOdd" data-qa="service-code-total-production-container">
+                <b>{{'Total Production:' | translate }} {{reportData.Production | currency}}</b>
+            </div>
+
+            <div class="col-sm-12-migration text-align-center" data-qa="service-code-footer-container">
+                {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright &#169; American Dental Association (ADA). All rights reserved.' | translate}}
+            </div>
+            <div class="col-sm-12-migration text-align-center" data-qa="service-code-footer-fee-container">{{'Fee does not reflect taxes and/or discounts' | translate }}</div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+
+
+</div>
+

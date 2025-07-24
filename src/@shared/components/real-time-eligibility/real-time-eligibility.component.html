@@ -1,0 +1,23 @@
+<span
+  class="realTimeEligibility"
+  kendoTooltip
+  position="top"
+  tooltipClass="real-time-eligibility-app-tooltip"
+  [title]="tooltipMessage">
+  <kendo-dropdownlist
+    #dropdownlist
+    (open)="loadBenefitPlans()"
+    [loading]="loadingPlans"
+    id="RTEDropdown"
+    [data]="patientBenefitPlanLiteDtos"
+    [textField]="'label'"
+    [valueField]="'PatientBenefitPlanId'"
+    [(ngModel)]="selectedBenefitPlanId"
+    [defaultItem]="defaultItem"
+    (selectionChange)="onSectionSelectedChange($event)"
+    [valuePrimitive]="true"
+    [popupSettings]="popupSettings"
+    [disabled]="isDisabled"
+    ngDefaultControl>
+  </kendo-dropdownlist>
+</span>

@@ -1,0 +1,61 @@
+<kendo-grid class="kendoNewStyle"
+    [data]= "filter()| orderBy: { sortColumnName: sortColumnName, sortDirection: sortDirection }"
+    [sortable]="true">
+    <kendo-grid-column field="DeviceFriendlyName" title="Card Reader Display Name" width="200">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.DeviceFriendlyName}}
+        </ng-template>
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+            <span translate>
+                Card Reader Display Name
+                <div class="icon-right">
+                    <span
+                        *ngIf="(!isDescending && sortColumnName === 'DeviceFriendlyName') || sortColumnName !== 'DeviceFriendlyName'"
+                        class="fa fa-caret-up fa-sm sort-icon"
+                        (click)="sortCardReaderList('DeviceFriendlyName')"></span>
+                    <span
+                        *ngIf="(isDescending && sortColumnName === 'DeviceFriendlyName') || sortColumnName !== 'DeviceFriendlyName'"
+                        class="fa fa-caret-down fa-sm sort-icon"
+                        (click)="sortCardReaderList('DeviceFriendlyName')"></span>
+                </div>
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="PartnerDeviceId" title="Adj Type Status" width="120" [sortable]="true">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div>{{dataItem.PartnerDeviceId}}</div>
+        </ng-template>
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+            <span translate>
+                Card Reader ID
+                <div class="icon-right">
+                    <span
+                        *ngIf="(!isDescending && sortColumnName === 'PartnerDeviceId') || sortColumnName !== 'PartnerDeviceId'"
+                        class="fa fa-caret-up fa-sm sort-icon" (click)="sortCardReaderList('PartnerDeviceId')"></span>
+                    <span
+                        *ngIf="(isDescending && sortColumnName === 'PartnerDeviceId') || sortColumnName !== 'PartnerDeviceId'"
+                        class="fa fa-caret-down fa-sm sort-icon" (click)="sortCardReaderList('PartnerDeviceId')"></span>
+                </div>
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column *ngIf="editMode" title="Actions" width="30" class="action-col">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="overflow-inherit menu-center">
+        <span kendoTooltip
+             position="top"
+             tooltipClass="app-tooltip"
+             title="Edit Card Reader Details">
+         <button aria-label="Edit Card Reader Details" (click)="editCardReader(dataItem)"   id="edit{{rowIndex}}" class="btn-link dropdown-toggle padding-right-10" kendoGridEditCommand [iconClass]="'fas fa-pencil-alt'"></button>
+        </span>
+        <span kendoTooltip
+             position="top"
+             tooltipClass="app-tooltip"
+             title="Delete Card Reader">
+         <button aria-label="Delete Card Reader" (click)="deleteCardReader(rowIndex)"  id="delete{{rowIndex}}" class="btn-link dropdown-toggle padding-right-10" kendoGridRemoveCommand [iconClass]="'fas fa-trash-alt'" ></button>
+        </span>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>

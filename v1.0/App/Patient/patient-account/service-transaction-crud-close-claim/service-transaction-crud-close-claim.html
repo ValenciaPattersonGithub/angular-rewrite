@@ -1,0 +1,71 @@
+<div class="service-transaction-crud-close-claim">
+    <div class="modal-header">
+        <h4 id="lblWarningModalHeader">{{ data.title }}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row red">
+            <div class="col-xs-12">
+                <label>
+                    <span class="far fa-exclamation-triangle"></span>&nbsp;
+                    {{ ::('This transaction is attached to an existing claim, ' + (data.isEdit ? 'editing' : 'deleting') + ' it will close the claim.' | i18n) }}</label>
+            </div>
+        </div>
+        <div class="row red" ng-if="data.willAffectOtherPayment">
+            <div class="col-xs-12">
+                <label>
+                    <span class="far fa-exclamation-triangle"></span>&nbsp;
+                    {{ ::('This transaction has a payment or negative adjustment applied to it, ' + (data.isEdit ? 'editing' : 'deleting') + ' it will result in an unapplied amount.' | i18n) }}
+                </label>
+            </div>
+        </div>
+        <div class="row red" ng-if="!data.isEdit && data.willAffectFeeScheduleWriteOff">
+            <div class="col-xs-12">
+                <label>
+                    <span class="far fa-exclamation-triangle"></span>&nbsp;
+                    {{ ::('Deleting this service transaction will delete the corresponding fee schedule adjustment.' | i18n) }}
+                </label>
+            </div>
+        </div>
+        <div class="row red" ng-if="data.isEdit && data.willAffectFeeScheduleWriteOff">
+            <div class="col-xs-12">
+                <label>
+                    <span class="far fa-exclamation-triangle"></span>&nbsp;
+                    {{ ::('The service you are modifying has a fee schedule adjustment associated with it.&nbsp;&nbsp;The adjustment will be modified to match the changes to the service.' | i18n) }}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label>{{ ::('Claim' | i18n) }}:</label><span> &nbsp; {{ data.priorityText }}</span>
+            </div>
+        </div>
+        <div class="row" ng-if="data.otherClaimServices && data.otherClaimServices.length > 0">
+            <div class="col-xs-12">
+                <label>{{ ::('Additional Claim Services' | i18n) }}:</label>
+            </div>
+        </div>
+        <div class="row" ng-repeat="transaction in data.otherClaimServices">
+            <div class="col-xs-8 col-xs-offset-1">
+                <label>{{ ::('Description:' | i18n) }}</label><span> &nbsp; {{ ::transaction.Description }}</span>
+            </div>
+            <div class="col-xs-3">
+                <label>{{ ::('Fee:' | i18n) }}</label><span> &nbsp; {{ ::(transaction.Fee | currency) }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label for="inpClosingClaims">{{ ::('Notes' | i18n) }}</label>
+                <textarea unique-id="closeClaimNotes" name="reason" rows="4" ng-model="data.note" maxlength="500"></textarea>
+            </div>
+        </div>
+        <div class="row" ng-if="data.isEdit || (data.otherClaimServices && data.otherClaimServices.length > 0)">
+            <div class="col-xs-12">
+                <checkbox checkbox-id="ckbRecreateClaim" checkbox-value="data.recreate" ng-model="data.recreate" checkbox-label="'Recreate Claim'"></checkbox>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-link" ng-click="cancel()">{{ ::('Cancel' | i18n) }}</button>
+        <button class="btn btn-primary" ng-click="confirm()">{{ ::('Continue' | i18n) }}</button>
+    </div>
+</div>

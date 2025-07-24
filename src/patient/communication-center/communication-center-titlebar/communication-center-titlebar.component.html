@@ -1,0 +1,52 @@
+<div class="title_bar_wrapper">
+        <div class="title">
+                <span class="page_sub_title">{{ 'Communication Center' | translate }}</span>
+        </div>
+        <div class="btn_communication" style="display: none;">
+                <app-button id="btn_addRecord" buttonLabel="{{'Add Record' | translate }}"
+                        title="{{!hasCreateAccess? 'You do not have permission to view this information.' : ''}}"
+                        variation="primary" (onClick)="openDrawer(CommunicationTab.Communication)" *ngIf="showAddRecord"
+                        [isDisabled]="!hasCreateAccess">
+                </app-button>
+
+        </div>
+        <div class="btn_generateletter" style="display: none;">
+                <app-button id="btn_generateletter" buttonLabel="{{'Generate Letter' | translate }}"
+                        title="{{!hasCreateAccess? 'You do not have permission to view this information.' : ''}}"
+                        variation="primary" (onClick)="openDrawer(CommunicationTab.GenerateLetter)" *ngIf="showAddRecord"
+                        [isDisabled]="!hasCreateAccess">
+                </app-button>
+
+        </div>
+        <div class="btn_todo" style="display: none;">
+                <app-button id="btn_todo" buttonLabel="{{'To-Do List' | translate }}"
+                        title="{{!hasCreateAccess? 'You do not have permission to view this information.' : ''}}"
+                        variation="primary" (onClick)="openDrawer(CommunicationTab.ToDo)" *ngIf="showAddRecord"
+                        [isDisabled]="!hasCreateAccess">
+                </app-button>
+                <div *ngIf="inCompleteToDoCount && showAddRecord" class="badge">{{inCompleteToDoCount}}</div>
+
+        </div>
+        <div class="titlebar-menu">
+                <div class="btn-group">
+                        <button id="comm-titlebar-menu" class="btn-link dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="pull-right dropdown-menu">
+                                <li>
+                                        <a id="comm-titlebar-exportLink" class="menuLink"
+                                                (click)="exportCommunications('export')">
+                                                {{ 'Export' | translate }}
+                                        </a>
+                                        <a id="comm-titlebar-printLink" class="menuLink"
+                                                (click)="exportCommunications('print')">
+                                                {{ 'Print' | translate }}
+                                        </a>
+                                </li>
+                        </ul>
+
+                </div>
+        </div>
+
+</div>
+<hr>

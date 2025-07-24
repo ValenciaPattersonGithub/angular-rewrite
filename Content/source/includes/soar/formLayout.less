@@ -1,0 +1,222 @@
+﻿.make-form-container() {
+    @media(max-width: @screen-md) {
+            width: 100%;
+    }
+    .clearfix;
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    padding-top: @brand-padding_lg;
+    margin: 0 auto;
+    
+}
+
+.make-form-col(@w) {
+    .make-xs-column(12);
+    .make-md-column(@w, @brand-padding_md);
+    > div {
+        margin-bottom: 0;
+    }
+}
+
+
+
+.make-form-row {
+    .clearfix;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+
+    [class*="form-col"] {
+        // for small breakpoints, remove padding
+        @media(max-width: @screen-md) {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        &:first-child {
+            padding-left: 0;
+        }
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+}
+
+.make-form-icon-btn() {
+    .btn;
+    .btn-link;
+    line-height: 1;
+    font-size: 20px;
+    padding: @brand-padding_sm 0;
+}
+
+.formLayout {
+    &__header {
+        .containerStandard;
+        padding: 0;
+
+        .required {
+            display: inline-block;
+            float: right;
+            margin-top: 10px;
+        }
+    }
+
+    &__title {
+        display: inline-block;
+        width: 50%;
+        float: left;
+
+        h1 {
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_horizontal;
+            padding-bottom: @brand-padding_horizontal;
+        }
+    }
+
+    &__nav {
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 50px;
+        min-height: 50px; //overwriting bootstrap to keep column from being hidden
+        z-index: 99;
+        
+        @media (min-width: @screen-md-min) {
+            width: 90px;
+            left: -82px;
+        }
+    }
+
+    &__navBox {
+        .clearfix;
+        width: 50px;
+        float:right;
+
+        @media (min-width: @screen-md-min) {
+            width: 90px;
+        }
+
+        &.keepTop {
+            position: fixed;
+        }
+    }
+
+    &__actions {
+        display: inline-block;
+        width: 50px;
+        clear: both;
+        padding: @brand-padding_lg 0 0;
+        text-align:right;
+
+        @media (min-width: @screen-md-min) {
+            width: 90px;
+        }
+
+        .nav {
+            clear: both;
+            float:right;
+            text-align: center;
+            
+            > li { 
+                > a {
+                    display: inline-block;
+                    width: 100%;
+                    padding: 0;
+                    font-size: 12px;
+                    transition: @brand-transition;
+
+                    @media (min-width: @screen-md-min) {
+                        font-size: inherit;
+                    }
+                    &:hover {
+                        background: none;
+                        > i {
+                            color: @brand-color_white;
+                            background-color: @brand-color_link-hover;
+                        } 
+                        > span {
+                            color: @brand-color_link-hover;
+                        }
+                    }
+                    &:focus {
+                        background: none;
+                    }
+                    &.active {
+                        background: none;
+                        color: @brand-form_nav-link-active;
+
+                        > i {
+                            color: @brand-color_white;
+                            background-color: darken(@brand-form_nav-link-active, 10);
+                        }
+                        > span {
+                            color: darken(@brand-form_nav-link-active, 10);
+                        }
+                    }
+                    
+                    &[href="btnSave"] {
+                        > i {
+                            background-color: @brand-color_link;
+                        }
+
+                        &:hover {
+                            color: @brand-color_link-hover;
+                            > i {
+                                background-color: @brand-color_link-hover;
+                            }
+                        }
+                    }
+                    > i {
+                        display: inline-block;
+                        width: 50px;
+                        padding:@brand-padding_sm 0;
+                        background-color: @brand-color_darker-gray;
+                        color:@brand-color_white;
+                        transition: @brand-transition;
+                    }
+                    > span {
+                        display: inline-block;
+                        line-height: 1;
+                        margin-top: @brand-margin_xs;
+                        color: @brand-color_darker-gray;
+                        transition: @brand-transition;
+                    }
+                }
+            }
+        }
+    }
+
+    &__alerts {
+        .clearfix;
+        width: 100%;
+        display: inline-block;
+        clear: both;
+
+
+    }
+
+    &__body {
+        .make-form-container();
+        
+    }
+
+    &__formBox {
+        padding-bottom: 70%;
+        .make-md-column(12);
+        @media(max-width: @screen-md) {
+            padding-left: 80px;
+            padding-bottom: 90%;
+        }
+
+    }
+
+    &__form {
+        .clearfix;
+    }
+
+    .form-radio-btn-group {
+        margin-top: 10px;
+    }
+}

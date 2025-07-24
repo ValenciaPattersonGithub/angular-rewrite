@@ -1,0 +1,16 @@
+﻿<div class="quadCmpct" ng-if="upper">
+    <div class="quadCmpct__upper">
+        <button ng-repeat="x in upperQuadrants" id="{{x.selectedQuadrant}}" class="btn btn-default" ng-mousedown="selectToothGroup('quadrant', x)">
+            {{ ::x.QuadrantName | i18n }}
+        </button>
+    </div>
+</div>
+<div class="quadCmpct__lower" ng-if="!upper">
+    <span class="quadCmpct__primary">
+        <button id="PRIM" class="btn btn-default" ng-mousedown="togglePrimary(true)" check-auth-z="{{ogmEditAuthAbbrev}}">{{ ::'Primary' | i18n }}</button>
+        <button id="PERM" class="btn btn-default" ng-mousedown="togglePrimary(false)" check-auth-z="{{ogmEditAuthAbbrev}}">{{ ::'Permanent' | i18n }}</button>
+    </span>
+    <button ng-repeat="x in lowerQuadrants" id="{{x.selectedQuadrant}}" class="btn btn-default" ng-mousedown="selectToothGroup('quadrant', x)">
+        {{ ::x.QuadrantName | i18n }}
+    </button>
+</div>

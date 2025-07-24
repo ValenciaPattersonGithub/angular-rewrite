@@ -1,0 +1,13 @@
+<ng-container *ngIf="isCardReadersExist">
+<label class="control-label" *ngIf="showLabel">{{ 'Card Reader' | translate }}</label>
+<select class="default-select"
+    [ngStyle]="{'height': height}"
+    (change)="change($event.target.value)"
+    data-qa="card-reader-select-control">
+    <option value="0" *ngIf="cardReaders.length > 1">{{ 'Select Options' | translate }}</option>
+    <option *ngFor="let cardReader of cardReaders" 
+        [value]="cardReader.PartnerDeviceId">
+        {{ cardReader.DeviceFriendlyName }}
+    </option>
+</select>
+</ng-container>

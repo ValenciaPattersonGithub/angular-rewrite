@@ -1,0 +1,48 @@
+<div *ngIf="encounterClaimsList" id="viewClaimsContainer">
+    <span *ngIf="encounterClaimsList.length == 0" class="margin-left-5 col-md-12" [ngClass]="{ 'disabled': true }"
+        title="{{'No Claim' | translate}}">{{'View Claim' | translate }}
+    </span>
+    <span *ngIf="encounterClaimsList.length == 0" class="margin-left-5 col-md-12" [ngClass]="{ 'disabled': true }"
+        title="{{'No Claim' | translate}}">{{'Claim Notes' | translate }}
+    </span>
+    <span *ngIf="(encounterClaimsList.length == 1 && encounterClaimsList[0].TransactionType == undefined)"
+        class="margin-left-5 col-md-12" (click)="previewPdf(encounterClaimsList[0])">{{'View Claim ' | translate }} ({{encounterClaimsList[0].PlanName}})
+    </span>
+    <span class="margin-left-5 col-md-12"
+        *ngIf="(encounterClaimsList.length == 1 && encounterClaimsList[0].TransactionType == undefined && encounterClaimsList[0].TransactionTypeId == 1)"
+        (click)="openClaimNotes(encounterClaimsList[0])">{{'Claim Notes' | translate}}
+    </span>
+
+    <span *ngIf="(encounterClaimsList.length == 1 && encounterClaimsList[0].TransactionType == 'AcctNote')"
+        class="margin-left-5 col-md-12"  (click)="previewPdf(encounterClaimsList[0])">{{optionTitle}} {{claimStatus(encounterClaimsList[0].Status)}}
+    </span>
+    <div class="row" style="margin-left: 0;"  >
+        <span *ngIf="encounterClaimsList.length > 1" id="viewMultipleClaimLink" class="margin-left-5 col-md-12" (click)="showTemplate=true"
+            (click)="toggleClaimsView($event)">{{'View Claims ' | translate }} ({{encounterClaimsList.length}})
+        </span>
+        
+        <app-popover [tooltipPosition]="'left'"  [templateReference]="claimsInfo" (close)="closePopOver()"
+        *ngIf="showTemplate">
+        </app-popover>
+    </div>
+    <ng-template #claimsInfo>
+        <div (click)="$event.stopPropagation()" >
+            <div class="view-claims-popup-header row">
+                <div class="col-md-2"><strong>Plan Name</strong></div>
+                <div class="col-md-2 center"><strong>Notes</strong></div>
+                <div class="col-md-2"><strong>Priority</strong></div>
+                <div class="col-md-3"><strong>Amount Submitted</strong></div>
+                <div class="col-md-3"><strong>Status</strong></div>
+            </div>
+            <div *ngFor="let claim of encounterClaimsList | orderBy: 'PatientBenefitPlanPriority'; trackBy: $index" class="view-claims-popup-body row">
+                <div class="col-md-2 bodyrow"  (click)="previewPdf(claim)">
+                    <a style="padding:0;" >{{claim.PlanName}}</a>
+                </div>
+                <div class="col-md-2 center"><span (click)="openClaimNotes(claim)"><i class="far fa-file-alt icon-click color-blue size-h4 cursor-pointer"></i></span></div>
+                <div class="col-md-2">{{priorityLabel(claim.PatientBenefitPlanPriority)}}</div>
+                <div class="col-md-3">{{claim.TotalFee | currency}}</div>
+                <div class="col-md-3">{{claimStatus(claim.Status)}}</div>
+            </div>
+        </div>
+    </ng-template>
+</div>

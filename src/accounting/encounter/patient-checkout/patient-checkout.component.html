@@ -1,0 +1,305 @@
+<div class="patient-checkout">
+    <!-- left side objects -->
+    <div class="main">
+        <!-- unapplied credits, payments and adjustments -->
+        <patient-checkout-payments 
+            [(creditTransactions)]="creditTransactions"
+            [(hasDistributionChanges)]="hasDistributionChanges"
+            [(dataForUnappliedTransactions)]="dataForUnappliedTransactions"
+            [(paymentTypes)]="paymentTypes"
+            [(negativeAdjustmentTypes)]="negativeAdjustmentTypes"
+            (addUnappliedCredit)="addUnappliedCredit($event)"
+            (addPaymentOrAdjustment)="addPaymentOrAdjustment($event)"
+            [(updateSummary)]="updateSummary"
+            (promptUserOnNavigation)="promptToSaveOrRollbackDistribution()"
+            [accountId]="accountId"
+            [accountMembersDetails]="accountMembersDetails">
+        </patient-checkout-payments>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <p class="text-left panel_heading_title">{{'Review Distributions' }}</p>
+            </div>
+            <div class="panel-body">
+                <div (click)="toggleShowTodaysEncounters()" class="col-sm-6">
+                    <span *ngIf="showTodaysEncounters===true">
+                        <i class="fas fa-sort-down collapse-expand"></i>
+                    </span>
+                    <span *ngIf="showTodaysEncounters===false">
+                        <i class="fas fa-sort-down fa-inverse rotate90 collapse-expand"></i>
+
+                    </span>
+                    <span class="text-left panel_sub_title">{{'Today\'s Encounters' }}</span>
+                </div>
+                <div class="align-right">
+                    <app-button id="btnSaveDistribution1" buttonLabel="{{'Save Distribution' | translate }}"
+                                variation="secondary" (onClick)="saveDistribution()" [isDisabled]="allowSaveDistribution===false">
+                    </app-button>
+                </div>
+                <div class="" *ngIf="showTodaysEncounters===true">
+                    <table id="todays-encounters-table" class="table table-bordered table-striped ">
+                        <thead>
+                            <tr>
+                                <th class="claim-col" id="thCreateClaim">
+                                    {{'Claim' | translate }}
+                                </th>
+                                <th class="date-col" id="thServiceDate">
+                                    {{'Date' | translate }}
+                                </th>
+                                <th class="description-col" id="thDescription">
+                                    {{'Description' | translate }}
+                                </th>
+                                <th class="provider-col" id="thProviderServices">
+                                    {{'Provider (Services)'| translate  }}
+                                </th>
+                                <th class="provider-col" id="thProviderClaims">
+                                    {{'Provider (Claims)'| translate  }}
+                                </th>
+                                <th class="text-align-right" id="thPatientCharges">
+                                    {{'Charges'| translate  }}
+                                </th>
+                                <th class="text-align-right" id="thPatientBalance">
+                                    {{'Patient Balance'| translate  }}
+                                </th>
+                                <th class="text-align-right" id="thApplied">
+                                    {{'Applied'| translate  }}
+                                </th>
+                                <th class="text-align-right" id="thBalance Due">
+                                    {{'Due Now'| translate  }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let encounter of allEncounters ; index as i">
+                                <tr>
+                                    <!-- summary row for each encounter  -->
+                                    <td id="tdCreateEncounterClaims{{i}}" class="cbx-column encounter-summary" 
+                                        kendoTooltip position="right" tooltipClass="app-tooltip" title="{{ encounter.disableCreateClaimsTooltip }}">
+                                        <app-check-box [value]="encounter.CreateClaims" 
+                                                       [isDisabled]="encounter.canCreateClaims===false || encounter.disableCreateClaims===true"
+                                                       [checked]="encounter.CreateClaims"
+                                                       (checkChanged)="toggleEncounterCreateClaims(encounter)">
+                                        </app-check-box>
+                                    </td>
+                                    <td id="tdEncounterDate{{i}}" class="encounter-summary">
+                                        {{encounter.displayDate | date: 'MM/dd/yyyy'}}{{encounter.servicesHaveDifferentDates ? '...' : ''}}
+                                    </td>
+                                    <td id="tdEncounterPatientName{{i}}" colspan="5" class="encounter-summary">
+                                        {{encounter.PatientName}}
+                                    </td>
+                                    <td id="tdEncounterBalanceDue{{i}}" class="text-align-right encounter-summary">
+                                        {{encounter.BalanceDue | currency}}
+                                    </td>
+                                </tr>
+
+                                <!-- service transactions for each encounter -->
+                                <ng-container *ngFor="let serviceTransaction of encounter.ServiceTransactionDtos ; index as x;">
+                                    <tr>
+                                        <td id="tdCreateServiceClaim{{x}}" class="cbx-column" kendoTooltip position="right"
+                                            tooltipClass="app-tooltip" title="{{serviceTransaction.claimsTooltip}}">
+                                            <app-check-box [value]="serviceTransaction.CreateClaim"
+                                                           [isDisabled]="serviceTransaction.canCreateClaim===false || encounter.disableCreateClaims===true"
+                                                           [checked]="serviceTransaction.CreateClaim"
+                                                           (checkChanged)="toggleClaimSelected([serviceTransaction],serviceTransaction.CreateClaim, encounter )">
+                                            </app-check-box>
+                                        </td>
+                                        <td class="date-col" id="tdServiceDate{{x}}">
+                                            {{ serviceTransaction.DateEnteredDisplay | date: 'MM/dd/yyyy' }}
+                                        </td>
+                                        <td class="description-col" id="tdDescription{{x}}">
+                                            {{serviceTransaction.ExtendedDescription}}
+                                        </td>
+                                        <td class="provider-col" id="tdProviderServices{{x}}">
+                                            {{serviceTransaction.ProviderName }}
+                                        </td>
+                                        <td class="provider-col" id="tdProviderClaims{{x}}">
+                                            {{serviceTransaction.ProviderNameOnClaim }}
+                                        </td>
+                                        <td colspan="1" id="tdPatientCharges" class="text-align-right">
+                                            {{serviceTransaction.Charges| currency }}
+                                        </td>
+                                        <td colspan="1" id="tdPatientBalance" class="text-align-right">
+                                            {{serviceTransaction.PatientBalance| currency }}
+                                        </td>
+                                        <td colspan="1" id="tdApplied{{x}}" class=" text-align-right currencyInput">
+                                            <div class="show-applied-amount-error-wrapper float-right"
+                                                 *ngIf="serviceTransaction.Detail"
+                                                 [ngClass]="{ 'has-error': serviceTransaction.HasExcessiveAppliedAmount === true || serviceTransaction.HasNegativeBalance === true}">
+                                                <currency-input [(amount)]="serviceTransaction.Detail.Amount"
+                                                                (amountChanging)="setHasDistributionChanges($event)"
+                                                                [isDisabled]="disableCreditDistribution===true"
+                                                                [tooltip]="serviceTransaction.HasExcessiveAppliedAmount === true || serviceTransaction.HasNegativeBalance? serviceTransaction.InvalidInputErrorMessage: ''"
+                                                                placement="right-error"
+                                                                delay="500"
+                                                                (amountChange)="onCreditAmountChange(serviceTransaction, $event)">
+                                                </currency-input>
+                                            </div>
+                                        </td>
+                                        <td id="tdBalanceDue{{x}}" class="text-align-right ">
+                                            {{serviceTransaction.DueNow| currency }}
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div (click)="toggleShowPriorBalance()" [ngClass]="{ 'disable-section': includePriorBalance === false }">
+                    <span *ngIf="showPriorBalance===true">
+                        <i class="fas fa-sort-down collapse-expand"></i>
+                    </span>
+                    <span *ngIf="showPriorBalance===false">
+                        <i class="fas fa-sort-down  fa-inverse rotate90 collapse-expand"></i>
+
+                    </span>
+                    <span class="text-left panel_sub_title">{{'Prior Account Balance Due' }}</span>
+                </div>
+                <div class="" *ngIf="showPriorBalance===true" [ngClass]="{ 'disable-section': includePriorBalance === false }">
+                    <table id="prior-encounters-table" class="table table-bordered table-striped ">
+                        <thead>
+                            <tr>
+                                <th class="claim-col" id="thPBCreateClaim">
+                                    <div> {{'Claim' | translate }}</div>
+                                    <div> {{'(N/A)' | translate }}</div>
+                                </th>
+                                <th class="date-col" id="thPBServiceDate">
+                                    {{'Date' | translate }}
+                                </th>
+                                <th class="description-col" id="thPBDescription">
+                                    {{'Description' | translate }}
+                                </th>
+                                <th class="provider-col" id="thPBProviderServices">
+                                    {{'Provider (Services)'| translate  }}
+                                </th>
+                                <th class="provider-col" id="thPBProviderClaims">
+                                    {{'Provider (Claims)'| translate  }}
+                                </th>
+                                <th class="text-align-right" id="thPBPatientCharges">
+                                    {{'Charges'| translate  }}
+                                </th>
+                                <th class="text-align-right" id="thPBPatientBalance">
+                                    {{'Patient Balance'| translate  }}
+                                </th>
+                                <th class="text-align-right" id="thPBApplied">
+                                    {{'Applied'| translate  }}
+                                </th>
+                                <th class="text-align-right" id="thPBBalance Due">
+                                    {{'Due Now'| translate  }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let patient of priorBalanceTransactionsByPatient ; index as i">
+                                <tr>
+                                    <!-- summary row for each encounter  -->
+                                    <td id="tdNoCreateClaim{{i}}" colspan="2" class="cbx-column encounter-summary">
+                                    </td>
+                                    <td id="tdPatientName{{i}}" colspan="5" class="encounter-summary">
+                                        {{patient.PatientName}}
+                                    </td>
+                                    <td id="tdDebitsBalanceDue{{i}}" class="text-align-right encounter-summary">
+                                        {{patient.BalanceDue | currency}}
+                                    </td>
+                                </tr>
+
+                                <!-- service transactions for each encounter -->
+                                <ng-container *ngFor="let serviceTransaction of patient.ServiceTransactionDtos ; index as x;">
+                                    <tr>
+                                        <td id="tdPBCreateClaim{{x}}" class="cbx-column">
+                                        </td>
+                                        <td class="date-col" id="tdPBServiceDate{{x}}">
+                                            {{ serviceTransaction.DateEnteredDisplay | date: 'MM/dd/yyyy' }}
+                                        </td>
+                                        <td class="description-col" id="tdPBDescription{{x}}">
+                                            {{serviceTransaction.ExtendedDescription}}
+                                        </td>
+                                        <td class="provider-col" id="tdPBProviderServices{{x}}">
+                                            {{serviceTransaction.ProviderName }}
+                                        </td>
+                                        <td class="provider-col" id="tdPBProviderClaims{{x}}">
+                                            {{serviceTransaction.ProviderNameOnClaim }}
+                                        </td>
+                                        <td colspan="1" id="tdPBPatientCharges" class="text-align-right ">
+                                            {{serviceTransaction.Charges| currency }}
+                                        </td>
+                                        <td colspan="1" id="tdPBPatientBalance" class="text-align-right ">
+                                            {{serviceTransaction.Balance| currency }}
+                                        </td>
+                                        <td colspan="1" id="tdPBApplied{{x}}" class=" text-align-right currencyInput">
+                                            <div class="show-applied-amount-error-wrapper float-right" *ngIf="serviceTransaction.Detail"
+                                                 [ngClass]="{ 'has-error': serviceTransaction.HasExcessiveAppliedAmount === true || serviceTransaction.HasNegativeBalance === true}">
+                                                <currency-input [(amount)]="serviceTransaction.Detail.Amount"
+                                                                (amountChanging)="setHasDistributionChanges($event)"
+                                                                [isDisabled]="disableCreditDistribution===true"
+                                                                [tooltip]="serviceTransaction.HasExcessiveAppliedAmount === true || serviceTransaction.HasNegativeBalance? serviceTransaction.InvalidInputErrorMessage: ''"
+                                                                placement="right-error"
+                                                                delay="500"
+                                                                (amountChange)="onCreditAmountChange(serviceTransaction, $event)">
+                                                </currency-input>
+                                            </div>
+                                        </td>
+                                        <td id="tdPBBalanceDue{{x}}" class="text-align-right ">
+                                            {{serviceTransaction.DueNow| currency }}
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="unapplied-row" *ngIf="currentUnappliedAmount > 0">
+                    <div class="unapplied-row-left">
+
+                    </div>
+                    <div class="unapplied-row-right">
+                        <div class="unassigned-amount-currency">
+                            {{currentUnappliedAmount| currency}}
+                            <span class="unassigned-amount-text">{{' Unapplied'}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="align-right  panel-break">
+                    <app-button id="btnSaveDistribution" buttonLabel="{{'Save Distribution' | translate }}"
+                                variation="secondary" (onClick)="saveDistribution()" [isDisabled]="allowSaveDistribution===false">
+                    </app-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="side">
+        <!-- NOTE, as we determine what the summary needs these parameters will change
+        this is actually too many properties, this will need to be refactored-->
+        <patient-checkout-summary [(allEncounters)]="allEncounters"
+            [isDisabled]="disableSummary"
+            [(updateSummary)]="updateSummary"
+            [(includePriorBalance)]="includePriorBalance"
+            (includePriorBalanceChange)="includePriorBalanceChange($event)"
+            (creditTransactionChange)="creditTransactionChange($event)"
+            [(summaryTotals)]="summaryTotals"
+            [creditTransactionDtoList]="creditTransactionDtoList"
+            [(unappliedAmount)]="unappliedAmount"
+            [encounterId]="encounterId" 
+            [(patientInfo)]="patientInfo"
+            (assignProvider)="assignProviderOnUnappliedCredits($event)"
+            (cancel)="cancelCheckout($event)"
+            (finish)="beginCheckout()">
+        </patient-checkout-summary>
+    </div>
+</div>
+
+<card-reader-select-modal *ngIf="showCardReaderSelectModal"
+    (onCardReaderSelectionComplete)="onCardReaderSelectionComplete($event)"
+    (onCancel)="cancelCardReaderSelection()"
+    [preLoadedCardReaders]="cardReaders">
+</card-reader-select-modal>
+
+<paypage-modal *ngIf="showPayPageModal"
+  [isVisible]="showPayPageModal"
+  [iframeSrc]="payPageUrl"
+  (close)="closePaypage()"
+  (paypageRedirectCallBackEvent)="handlePayPageTransactionCallback()"
+></paypage-modal>

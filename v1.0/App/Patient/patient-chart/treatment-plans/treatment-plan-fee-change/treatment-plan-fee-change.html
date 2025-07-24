@@ -1,0 +1,90 @@
+﻿
+<div class="txPlanFeeChg">
+    <span class="fa fa-edit"
+          uib-popover-template="'chargepopup.html'"
+          popover-placement="top"
+          popover-append-to-body="true"
+          popover-is-open="isOpen"
+          popover-trigger="'none'"
+          ng-click="toggle()">
+
+    </span>
+    <script type="text/ng-template" id="chargepopup.html">
+        <div class="txPlanFeeChgPopOver">
+            <div class="body">
+                <div class="row">
+                    <button id="btn-close" class="btn btn-link fa fa-times pull-right" ng-click="toggle()"></button>
+                </div>
+            </div>
+            <div class="body">
+                <div class="row">
+                    <form>
+                        <div class="col-xs-6">
+                            Location Fee
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-icon">
+                                <input id="idEditChargeFeeAmt" type="text" class="form-input text-align-right input-sm form-control" maxlength="12" model-format="currency" placeholder="{{ '0' | currency }}" ng-model="inputData.Fee" ng-blur="verifyMaxAmount()">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="body" style="padding-top: 8px; padding-bottom: 5px; padding-right: 16px;">
+                <div class="row">
+                    <button id="btn-update" class="button primary pull-right" ng-disabled="saveValid()" ng-click="saveChanges()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </script>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

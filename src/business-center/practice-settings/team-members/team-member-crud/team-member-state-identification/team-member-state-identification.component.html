@@ -1,0 +1,121 @@
+<!-- State Identification header -->
+<div class="panel">
+    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 panel-heading">
+        <h4 class="panel-title">{{ 'State Identification' | translate }} </h4>
+    </div>
+</div>
+<div class="clearfix">&nbsp;</div>
+<div>
+    <button (click)="allowLicenseAdd()" class="btn btn-primary">{{'Add License' | translate}}</button> <span
+        class="warning-font-style margin-left-30">{{needLicenseStates}}</span>
+</div>
+<div class="clearfix">&nbsp;</div>
+<!--Prototype-->
+
+<div class="row col-sm-8">
+    <div class="col-sm-12 grid-height border-bottom-gray padding-top-10">
+        <div class="col-sm-3">
+            <label class="grid-header">{{'State'| translate}} * </label>
+        </div>
+        <div class="col-sm-4">
+            <label class="grid-header">{{'State License'| translate}} * </label>
+        </div>
+        <div class="col-sm-3">
+            <label class="grid-header">{{'Anesthesia ID'| translate}} </label>
+        </div>
+        <div class="col-sm-2 ">&nbsp;</div>
+    </div>
+    <form [formGroup]="stateIdentificationFormGroup" name="stateIdentificationFormGroup">
+        <ng-container *ngFor="let UserStateLicense of UserStateLicenses;index as $index ">
+            <div class="col-sm-12 grid-body border-bottom-gray padding-top-4" *ngIf="UserStateLicense?.ObjectState !== saveState.Delete">
+                <div class="col-sm-3 row"
+                     [ngClass]="{'error': validateState && UserStateLicense?.IsEdit }">
+                    <select formControlName="state{{$index}}" class="state-license-dropdown" id="statesId{{$index}}"
+                            *ngIf="UserStateLicense?.IsEdit">
+                        <option value="0">{{'Select State' | translate }}</option>
+                        <option [value]="state.StateId" *ngFor="let state of states" [disabled]="state.Disabled">
+                            {{state.Abbreviation}}
+                        </option>
+                    </select>
+                    <label id="dlStatesRequired" class="help-text small"
+                           *ngIf="validateState && UserStateLicense?.IsEdit">
+                        {{ 'This field is required.' | translate }}
+                    </label>
+                    <span class="grid-text" *ngIf="!UserStateLicense?.IsEdit">
+                        {{UserStateLicense?.StateAbbreviation}}
+                    </span>
+                </div>
+                <div class="col-sm-4"
+                     [ngClass]="{'error': validateForm && stateIdentificationFormGroup?.get('stateLicenseNumber'+ $index)?.errors?.required && UserStateLicense?.IsEdit}">
+                    <input formControlName="stateLicenseNumber{{$index}}" class="form-input" maxlength="20"
+                           id="inpDeaNumber{{$index}}" placeholder="{{ 'Enter License Number' | translate }}"
+                           name="inpDeaNumber{{$index}}" type="text" *ngIf="UserStateLicense?.IsEdit" />
+                    <label id="inpDeaNumberRequired" class="help-text small"
+                           *ngIf="validateForm && stateIdentificationFormGroup?.get('stateLicenseNumber'+ $index)?.errors?.required && UserStateLicense?.IsEdit">
+                        {{ 'This field is required.' | translate }}
+                    </label>
+                    <span title="{{UserStateLicense?.StateLicenseNumber}}" class="grid-text"
+                          *ngIf="!UserStateLicense?.IsEdit">
+                        {{UserStateLicense?.StateLicenseNumber | truncateText: 25 }}
+                    </span>
+                </div>
+                <div class="col-sm-3">
+                    <input formControlName="anesthesiaId{{$index}}" class="form-input" [disabled]="false"
+                           id="inpDeaNumber{{$index}}" name="inpDeaNumber{{$index}}"
+                           placeholder="{{ 'Enter ID Number' | translate }}" type="text" maxlength="20"
+                           *ngIf="UserStateLicense?.IsEdit" />
+                    <span *ngIf="!UserStateLicense?.IsEdit" title="{{UserStateLicense?.AnesthesiaId}}"
+                          class="grid-text">
+                        {{UserStateLicense?.AnesthesiaId | truncateText: 25 }}
+                    </span>
+                </div>
+                <div class="col-sm-2 text-align-right">
+                    <button class="form-btn-remove" *ngIf="UserStateLicense?.IsEdit" icon="fa-plus-circle"
+                            (click)="persistUpdateStateLicense(UserStateLicense)"></button>
+                    <button class="form-btn-remove" *ngIf="!UserStateLicense?.IsEdit" icon="fa-times-square"
+                            (click)="editUserStateLicense(UserStateLicense,$index)"></button>
+                    <button class="form-btn-remove" *ngIf="UserStateLicense?.IsEdit" icon="fa-times-circle"
+                            (click)="discardChangesStateLicense(UserStateLicense)"></button>
+                    <button class="form-btn-remove" *ngIf="!UserStateLicense?.IsEdit" icon="fa-times-circle"
+                            (click)="removeUserStateLicense(UserStateLicense)"></button>
+                </div>
+            </div>
+        </ng-container>
+        <div *ngIf="isAdding" class="col-sm-12 grid-body padding-top-2"
+             [ngClass]="{hasHeight: validateState || stateIdentificationFormGroup?.get('stateLicenseNumber')?.errors?.required}">
+            <div class="col-sm-3"
+                 [ngClass]="{'error': validateState }">
+                <select formControlName="state" class="state-license-dropdown" id="dlStates"
+                        (change)="clearStateDropdownValidation()">
+                    <option value="0">{{'Select State' | translate }}</option>
+                    <option [value]="state.StateId" *ngFor="let state of states" [disabled]="state.Disabled">
+                        {{state.Abbreviation}}
+                    </option>
+                </select>
+                <label id="dlStatesRequired" class="help-text"
+                       *ngIf="validateState">
+                    {{ 'This field is required.' | translate }}
+                </label>
+            </div>
+            <div class="col-sm-4"
+                 [ngClass]="{'error': validateForm && stateIdentificationFormGroup?.get('stateLicenseNumber')?.errors?.required}">
+                <input formControlName="stateLicenseNumber" class="form-input" maxlength="20" id="inpDeaNumber"
+                       placeholder="{{ 'Enter License Number' | translate }}" name="inpDeaNumber" type="text" />
+                <label id="inpDeaNumberRequired" class="help-text"
+                       *ngIf="validateForm && stateIdentificationFormGroup?.get('stateLicenseNumber')?.errors?.required">
+                    {{ 'This field is required.' | translate }}
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <input formControlName="anesthesiaId" class="form-input" [disabled]="false" id="inpDeaNumber"
+                       name="inpDeaNumber" placeholder="{{ 'Enter ID Number' | translate }}" type="text" maxlength="20" />
+            </div>
+            <div class="col-sm-2 phoneInfoItem__remove">
+                <button class="form-btn-remove" icon="fa-plus-circle"
+                        (click)="addUserStateLicense(NewUserStateLicense)"></button>
+                <button class="form-btn-remove" icon="fa-times-circle" (click)="clearUserStateLicense()"></button>
+            </div>
+        </div>
+    </form>
+    <div class="clearfix">&nbsp;</div>
+</div>

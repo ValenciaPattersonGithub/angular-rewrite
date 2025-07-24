@@ -1,0 +1,6 @@
+<ng-container ng-if="migrationFeatureFlagsLoaded && useConverted">
+    <note-templates-ng></note-templates-ng>
+</ng-container>
+<ng-container ng-if="migrationFeatureFlagsLoaded && (! useConverted)">
+    <note-templates-controller-original></note-templates-controller-original>
+</ng-container>

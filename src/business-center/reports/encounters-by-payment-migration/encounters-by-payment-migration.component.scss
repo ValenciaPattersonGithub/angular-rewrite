@@ -1,0 +1,51 @@
+.encounterspaymentreport {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+}
+.encounterspaymentreportgroupHeader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+
+.groupheader{
+    padding-right: 0.5%;
+    position: sticky;
+    //top: 110px;
+    background: white;
+    z-index: 1;
+    &.locationheader{
+       top: 110px;
+    }
+    &.paymentheader{
+        top: 150px;
+     }
+}
+.encounterspaymentreportfooter {
+    grid-template-columns: 7fr 2fr 1fr 1fr 1fr 1fr;
+}
+.leftmargin{
+    margin-left: 2px !important;
+}
+.leftmargindetail{
+    margin-left: 10px !important;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.encounterspaymentreport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 5px;
+            align-items: center;
+            margin-left: -5px;
+        }
+      }
+}

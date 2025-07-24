@@ -1,0 +1,25 @@
+﻿<div id="location{{inputId}}" class="location-dropdown dropdown">
+    <button id="btnDropDown{{inputId}}" ng-click="btnClick()" ng-blur="onBlur()"
+            ng-disabled="controlDisabled"
+            class="">
+        <span id="lblSelectedName{{inputId}}" class="selected-description"
+              ng-style="{'font-weight': selectedItem.LocationId == selectedItem.currentLocation ? 'bold' : 'normal'}">
+            {{ selectedItem.displayText }}
+        </span>
+        <span class="arrow"></span>
+    </button>
+    <div id="dropdownListBox{{inputId}}" class="dropdownListBox" ng-if="isOpen">
+        <div id="dropdownListGroup{{dataItem.GroupName}}{{inputId}}" ng-repeat="dataItem in locations" ng-init="parentIndex = $index">
+            <div id="dropdownListGroupTitle{{inputId}}{{parentIndex}}" class="group"> {{ dataItem.GroupName }} </div>   
+            <div id="dropdownListGroupItems{{inputId}}{{parentIndex}}{$index}}" ng-repeat="data in dataItem.Data track by $index">
+                <span id="lblOptionName{{parentIndex}}{{$index}}" ng-mousedown="selectItem(data)"
+                      class="option" ng-class="{'active': selectedLocation === data.LocationId}"
+                      ng-style="{'font-weight': data.LocationId == data.currentLocation ? 'bold' : 'normal' }">
+                    {{ data.displayText }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+

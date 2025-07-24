@@ -1,0 +1,163 @@
+﻿.locCrud {
+    .make-xs-column(10);
+
+    .form-horizontal {
+        > [class*="col-"] {
+            padding-left: 30px;
+        }
+    }
+
+    &__header-container {
+        background-color: @brand-application_bg;
+
+        &.keepTop {
+            position: fixed;
+            z-index: 99998;
+        }
+    }
+
+    &__header {
+        .clearfix;
+        margin: 0;
+        padding: 0;
+    }
+
+    &__title {
+        display: inline-block;
+        width: 50%;
+        float: left;
+
+        h3 {
+            margin: 0;
+        }
+    }    
+
+	&__section {
+		display: block;
+		width: 100%;
+		background-color: @well-bg;
+		border-radius: 2px;
+		padding: 4px 10px 4px 10px;
+		margin: 10px 0 10px 0;
+	}
+
+    &__actions {
+        display: inline-block;
+        width: 50%;
+        float: left;
+        text-align: right;
+    }
+
+    &__form {
+        margin: 0;
+        padding: 0;
+    }
+
+    &__noImg {
+        padding: 14px;
+        width: 150px;
+        height: 150px;
+        border: @brand-form_border;
+        background: #fff;
+
+        > div {
+            background: @well-bg;
+            height: 100%;
+            width: 100%;
+
+            > span {
+                position: absolute;
+                top: 45%;
+                left: 42px;
+            }          
+        }
+    }
+
+    &__img {
+        width: 150px;
+        height: 150px;
+    }
+
+    &__room {
+        padding-left: 0;
+    }
+
+    &__dropdown {
+        .k-dropdown {
+            width: 100%;
+        }
+    }
+
+    &__type2 {
+        white-space: nowrap;
+    }
+
+    &__taxonomyCode {
+        white-space: nowrap;
+    }
+
+    &__additionalIdentifier {
+        margin-top: 5px;
+    }
+
+    &__control-label{
+        text-align:left;
+        margin-bottom:0;
+        padding-top:9px;
+    }
+    &__state-select-list{
+        > soar-select-list{
+            > span {
+                width: 120px;
+            }
+        }
+    }
+    .estatementLabel{
+        padding-top: 9px;
+    }
+}
+
+.locationFields {
+    word-wrap: break-word;
+}
+
+.m-top-8{
+    margin-top:8px;
+}
+
+.m-bottom-5{
+    margin-bottom: 5px;
+}
+
+.loc-header {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.loc-row{
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+.pad-left-right-0{
+    padding-left: 0px;
+    padding-right:0px;
+}
+
+.text-no-wrap{
+    white-space: nowrap;
+}
+
+.height-25{
+    height: 25px;
+}
+
+.req-msg {
+    color:#ca674c;
+}
+
+.div-locker{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0.1;
+    z-index: 2;
+}

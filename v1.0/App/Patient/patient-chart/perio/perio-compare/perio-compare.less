@@ -1,0 +1,48 @@
+﻿.perioCompare {
+    .containerStandard;
+
+    &__exams {
+        margin-top: @brand-margin_md;
+        margin-bottom: 40px;
+    }
+
+    &__row {
+        display: flex;
+        margin-bottom: @brand-margin_xs;
+        min-height: 20px;
+    }
+
+    &__hdr {
+        margin: @brand-margin_md 0 @brand-margin_md 0;
+    }
+
+    &__subHdr {
+        font-weight: bold;
+        margin: @brand-margin_md 0 @brand-margin_md 0;
+    }
+
+    &__col {
+        flex: 1;
+
+        .perioAlertLevel {
+            color: @perio-alert-level-color;
+        }
+    }
+
+    &__sideLabel {
+        font-size: @brand-font_lg;
+        font-weight: bold;
+        left: -20px;
+        position: absolute;
+        top: -18px;
+
+        &.singleCompare {
+            top: -3px;
+        }
+    }
+
+    &__quadGap {
+        display: block;
+        height: 40px;
+    }
+}

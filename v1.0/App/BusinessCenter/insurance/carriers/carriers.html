@@ -1,0 +1,102 @@
+﻿<div ng-controller="CarriersController">
+  <div class="carrier" ng-init="initialize()">
+    <div class="carrier__container row">
+      <div class="insurance__action row filter_row">
+        <div class="col-xs-1 btn_add_carrier">
+          <a id="addCarrier"  ng-if="viewAddEditCarriersNewUi" class="btn btn-primary" icon="fa-plus" href="#/BusinessCenter/Insurance/v2/Insurance-Carrier/Carrier/Create" check-auth-z="soar-ins-ibcomp-add">{{ 'Add a Carrier' | i18n }}</a>
+          <a id="addCarrier"  ng-if="!viewAddEditCarriersNewUi" class="btn btn-primary" icon="fa-plus" href="#/BusinessCenter/Insurance/Carriers/Create" check-auth-z="soar-ins-ibcomp-add">{{ 'Add a Carrier' | i18n }}</a>
+        </div>   
+        <div class="col-xs-4">
+            <soar-select-list id="selectCarrierReport" name="selectCarrierReport" placeholder="{{'Reports' | i18n }}" text-field="ReportTitle" value-field="ReportValue" option-list="reports" ng-model="selectedReport.ReportId" ng-if="isReportDataLoaded"> </soar-select-list>
+        </div>
+        <div class="col-xs-4">
+          <input class="form-control border-solid-black" id="searchBoxCarriers" placeholder="{{'Search Carrier, Payer ID...'|i18n}}" type="text" ng-model="searchFilter" ng-model-options="{ debounce: 350 }" ng-change="reloadGrid()" />
+        </div>
+        <div class=" carrier__searchIcon">
+          <span class="glyphicon glyphicon-search"></span>
+        </div>
+        <div class="btn_link col-xs-2" ng-if="enablePayerIdCorrection">          
+          <a id="payerIdCorrectionLookup"  class="btn btn-link pull-right" icon="" href="#/BusinessCenter/Insurance/v2/Insurance-Carrier/PayerIdCorrection" check-auth-z="soar-ins-ibcomp-view">{{ 'Payer ID Correction' | i18n }}</a>
+        </div>            
+      </div>
+      <table id="tableCarriers" class="carrier__table table-striped col-xs-10">
+        <thead class="carrier__header">
+          <tr>
+            <td id="tdOrderCol" class="width-5-percent"><span>{{ '#' }}</span></td>
+            <td id="tdCarrierNameCol" class="width-20-percent">
+              <a id="colName" ng-click="changeSorting('colName', 'Name')">{{ 'Carrier' | i18n }}<span class="fa fa-sort carrier__headerSort"></span></a>
+            </td>
+            <td id="tdCarrierAddressCol" class="width-20-percent">
+              <span>{{ 'Address' | i18n }}</span>
+            </td>
+            <td id="tdCarrierEmailCol" class="width-15-percent">
+              <span>{{ 'Email' | i18n }}</span>
+            </td>
+            <td id="tdCarrierPhoneCol" class="width-15-percent">
+              <span>{{ 'Phone Number' | i18n }}</span>
+            </td>
+            <td id="tdCarrierPayerIdCol" class="width-10-percent">
+              <a id="colPayerId" ng-click="changeSorting('colPayerId', 'PayerId')">{{ 'Payer ID' | i18n }}<span class="fa fa-sort carrier__headerSort"></span></a>
+            </td>
+          </tr>
+        </thead>
+
+        <tbody class="carrier__body table table-striped" infinite-scroll="getCarriers()" infinite-scroll-disabled="isUpdating || allDataDisplayed ">
+          <!-- filter is set by insurance controller input -->
+          <tr ng-if="carriers.length && (activeFilter || inactiveFilter)" ng-repeat="carrier in carriers | filter:search | orderBy:orderBy.field:!orderBy.asc track by $index">
+            <td id="tdOrder">{{ $index+1 }}</td>
+            <td id="tdCarrierName" title="{{ carrier.Name }}">
+              <a ng-if="viewAddEditCarriersNewUi" id="tdName" ng-class="{'inactive': !carrier.IsActive}" href="#/BusinessCenter/Insurance/v2/Insurance-Carrier/CarrierView/guid={{ carrier.CarrierId }}" check-auth-z="soar-ins-ibcomp-view">
+                <p ng-bind-html="carrier.Name  | highlightTextIfContains:searchFilter:100"></p>
+              </a> 
+              <a ng-if="!viewAddEditCarriersNewUi" id="tdName" ng-class="{'inactive': !carrier.IsActive}" href="#/BusinessCenter/Insurance/Carriers/Landing?guid={{ carrier.CarrierId }}" check-auth-z="soar-ins-ibcomp-view">
+                <p ng-bind-html="carrier.Name  | highlightTextIfContains:searchFilter:100"></p>
+              </a>
+            </td>
+            <td id="tdCarrierAddress" title="{{ carrier.AddressLine1 }} {{ carrier.AddressLine2 }} {{ carrier.City }} {{ carrier.State }} {{ carrier.Zip }}">
+              {{ carrier.AddressLine1 }} {{ carrier.AddressLine2 }}
+              <br ng-hide="!carrier.AddressLine1 && !carrier.AddressLine2" />
+              {{ carrier.City }}{{carrier.City && carrier.State ? ', ' : ' '}}{{ carrier.State }} {{ carrier.ZipCode | zipCode }}
+            </td>
+            <td id="tdCarrierEmail" title="{{ carrier.Email }}">
+              <span>{{ carrier.Email }}</span>
+            </td>
+            <td id="tdCarrierPhone" title="{{ carrier.phonesTitle }}">
+              <span ng-repeat="phone in carrier.PhoneNumbers track by $index">
+                <span ng-show="$index < 2" ng-bind-html="phone.PhoneNumber | boldTextIfContains:filter | tel"> <span ng-show="phone.Type">({{ phone.Type | lowercase }})</span></span>
+                <span ng-show="$index == 2">...</span>
+                <br ng-show="$index < 1" />
+              </span>
+            </td>
+            <td id="tdCarrierPayerId" title="{{ carrier.PayerId }}">
+              <span ng-bind-html="carrier.PayerId  | highlightTextIfContains:searchFilter:100" ng-hide="carrier.PayerId == '00000'"></span>
+            </td>
+            <td class="carrier__options">
+              <div class="dropdown">
+                <button id="btnCarrierOptions{{$index}}" type="button" data-toggle="dropdown" class="carrier__optionsBtn" aria-haspopup="true" aria-expanded="false">
+                  <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <ul class="dropdown-menu carrier__optionsList pull-right" role="menu" aria-labelledby="btnCarrierOptions{{$index}}">
+                  <li>
+                    <a ng-if="!viewAddEditCarriersNewUi" id="btnCarrierEdit" check-auth-z="soar-ins-ibcomp-edit" href="#/BusinessCenter/Insurance/Carriers/Edit?guid={{ carrier.CarrierId }}">{{ 'Edit Carrier' | i18n }}</a>
+                    <a ng-if="viewAddEditCarriersNewUi" id="btnCarrierEdit" check-auth-z="soar-ins-ibcomp-edit" href="#/BusinessCenter/Insurance/v2/Insurance-Carrier/Carrier/Edit/{{ carrier.CarrierId }}">{{ 'Edit Carrier' | i18n }}</a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="col-xs-2 filter_checkbox">
+        <div class="col-xs-12 search-item-filter userSearch__secondary">
+          <checkbox checkbox-id="chkActiveFilter" checkbox-value="activeFilter" checkbox-label="'Active Carriers' | i18n" change-function="reloadGrid()">&nbsp;</checkbox>
+          <checkbox checkbox-id="chkInActiveFilter" checkbox-value="inactiveFilter" checkbox-label="'Inactive Carriers' | i18n" change-function="reloadGrid()">&nbsp;</checkbox>
+        </div>
+      </div>
+
+      <div ng-show="carriers.length==0">
+        <no-results loading-message="'No carriers were found.'" loading="loading"></no-results>
+      </div>
+    </div>
+  </div>
+</div>

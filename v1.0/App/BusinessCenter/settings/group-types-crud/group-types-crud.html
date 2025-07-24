@@ -1,0 +1,59 @@
+﻿<div class="grpTypeCrud">
+    <div ng-form="frmGroupTypeCrud">
+
+        <!--header-->
+
+            <div ng-show="editing == false" class="pull-left master-list-title">{{ 'New' | i18n  }} {{ 'Patient Group Type' | i18n  }}</div>
+            <div ng-hide="editing == false" class="pull-left master-list-title">{{ 'Edit' | i18n  }} {{ 'Patient Group Type' | i18n  }}</div>
+
+        <!--form-->
+        <div class="row ">
+            <div class="col-xs-12">
+                <!-- Group Type Name -->
+                <div class="form-group" ng-class="{error: (valid == false) && !groupType.GroupTypeName}">
+                    <label class="control-label" for="inpGroupTypeName">{{ 'Group Type Name'|i18n   }} <span class="required-label">*</span></label>
+                    <div ng-class="{error:hasErrors && !frmGroupTypeCrud.inpGroupTypeName.$valid}">
+                        <input id="inpGroupTypeName" name="inpGroupTypeName" class="required valid master-list-input"
+                               set-focus ng-model="groupType.GroupTypeName" maxlength="64" required />
+                        <!--message required-->
+                        <label id="lblDescriptionRequired" class="help-text " ng-show="hasErrors &&
+                                    !frmGroupTypeCrud.inpGroupTypeName.$valid && frmGroupTypeCrud.$error.required">
+                            {{ 'This field is required.' | i18n }}
+                        </label>
+                        <!--message if duplicate-->
+                        <label id="lblUniqueName" class="help-text " ng-show="hasErrors && frmGroupTypeCrud.inpGroupTypeName.$error.uniqueGroupTypeName">
+                            {{ 'A patient group type with this name already exists.' | i18n }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Save or discard -->
+   
+                <div class="grpTypeCrud__actions">
+                    <button id="btnDiscard" ng-click="confirmDiscard();" ng-disabled="savingGroupType||confirmingDiscard==true" class="btn btn-link">{{ 'Discard' | i18n }}</button>
+                    <button id="btnSave" ng-submit ng-click="saveGroupType();" ng-disabled="savingGroupType == true ||confirmingDiscard==true" class="btn btn-primary">{{ 'Save' | i18n  }}</button>
+                </div>
+
+        <!--Are you sure message-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div ng-show="confirmingDiscard">
+                    <div class="media-body master-list-warning-msg">
+                        <span id="discardWarningMessage">
+                            {{ 'Are you sure you want to {0}' | i18n:['discard these changes?'] }}
+                        </span>
+                        <div>
+                            <button id="btnCancelDiscard" class="btn pull-right master-list-warning-button" ng-click="cancelDiscard()">
+                                {{ 'No' | i18n }}
+                            </button>
+                            <button id="btnConfirmDiscard" class="btn pull-right master-list-warning-button" ng-click="discardChanges()">
+                                {{ 'Yes' | i18n }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

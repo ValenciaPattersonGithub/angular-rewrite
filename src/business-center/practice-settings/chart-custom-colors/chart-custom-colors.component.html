@@ -1,0 +1,45 @@
+<div class="chartColorsContainer">
+    <div class="pageTitle">Manage Chart Colors</div>    
+        <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>    
+    
+    <div class="chartColorsGridContainer">
+        <div class="gridTitle">Custom Charting Colors</div>
+        <div class="buttonWrapper">
+            <app-button id="btnChartColorApply" variation="primary" [isDisabled]="!isApplyEnabled || isSaving" (onClick)="saveColorChanges()" buttonLabel="Apply"></app-button>
+        </div>
+        
+
+        <div class="chartColorsGrid">
+            <div class="chartColorItemRow header odd">
+                <div class="chartColorsGridHeaderSort status" (click)="changeSortOrder()">
+                    Status
+                    <div class="chartColorsGridHeaderFilterWrapper">
+                        <svg-icon class="neutral ascending" *ngIf="sortOrder == 0 || sortOrder == 1" name="downArrowIcon" iconHeight="20px" iconWidth="20px"></svg-icon>
+                        <svg-icon class="neutral" *ngIf="sortOrder == 0 || sortOrder == 2" name="downArrowIcon" iconHeight="20px" iconWidth="20px"></svg-icon>                        
+                    </div>
+                    
+                </div>
+                <div class="chartColorsGridHeader colors">
+                    Colors
+                </div>
+                <div class="chartColorsGridHeader actions">Actions</div>
+            </div>
+            
+            <div class="chartColorItemRow" *ngFor="let item of this.chartColorsItems; let odd = even; let even = odd"
+                 [ngClass]="{even: even, odd: odd}">
+                <div class="status">
+                    {{item.StatusName}}
+                </div>
+                <div class="colors">
+                    <div class="colorPickerWrapper">
+                        <app-color-picker [isDisabled]="!hasEditAmfa || isSaving" [setColor]="item.Color" (colorChanged)="colorChanged(item, $event)"></app-color-picker>
+                    </div>
+                    
+                </div>
+                <div class="actions">
+                    <div class="reset" [ngClass]="{disabled: item.isDisabled || !hasEditAmfa || isSaving}" (click)="resetColorToDefault(item)">Reset Color</div>
+                </div>                                
+            </div>
+        </div>        
+    </div>
+</div>

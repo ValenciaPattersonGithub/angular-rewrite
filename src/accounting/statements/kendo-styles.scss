@@ -1,0 +1,59 @@
+:host ::ng-deep {
+    kendo-formfield {
+        position: relative;
+    }
+
+    .k-dropdown > .k-dropdown-wrap > .k-input {
+        height: calc(1.4285714286em + 8px);
+        padding: 0.167em 0;
+
+        &::before {
+            content: none;
+        }
+    }
+
+    .k-dropdown .k-dropdown-wrap {
+        background-color: #f5f5f5;
+    }
+
+    .k-dropdown > .k-dropdown-wrap {
+        box-sizing: border-box;
+        border-radius: 0px;
+        height: unset;
+    }
+
+    .k-dropdown-wrap {
+        padding-right: 2em;
+    }
+
+    .k-dropdown,
+    .k.datepicker {
+        background: #f5f5f5;
+    }
+
+    .k-picker-wrap .k-input {
+        height: calc(1.4285714286em + 8px);
+        line-height: 1.65em;
+        vertical-align: unset;
+        box-sizing: border-box;
+    }
+
+    .k-datepicker.ng-invalid.ng-untouched,
+    .k-dropdown.ng-invalid.ng-untouched {
+        border-color: rgb(213 213 213 / 80%);
+        border-width: 1px;
+    }
+
+    .k-datepicker.ng-invalid.ng-touched,
+    .k-dropdown.ng-invalid.ng-touched {
+        border-color: rgba(243, 23, 0, 0.5);
+        border-width: 1px;
+    }
+
+    .k-form-error {
+        color: red;
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+    }
+}

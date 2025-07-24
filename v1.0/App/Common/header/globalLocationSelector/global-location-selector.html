@@ -1,0 +1,39 @@
+﻿<div class="global-location-selector">
+    <div class="btn-group locSelectorPadding" 
+         id="locSelector" 
+         uib-dropdown
+         keyboard-nav
+         uib-tooltip="{{ ::('You cannot change locations at this time.  Finish or cancel your current activity.' | i18n)}}"
+         tooltip-placement="bottom"
+         tooltip-enable="disabled">
+        <button type="button" class="btn btn-primary" ng-disabled="disabled" uib-dropdown-toggle tabindex="2">
+           {{selectedLocationName}} <span class="top-nav-item">Change Location</span>
+        </button>
+
+        <ul class="dropdown-menu location-selector-dropdown" uib-dropdown-menu role="menu">
+            <li class="list-header" tabindex="-1" ng-show="activeLocationsSorted.length > 0">
+                <b>Active</b>
+            </li>
+            <li role="menuitem" ng-repeat="location in activeLocationsSorted" title="{{location.name}}" ng-class="{'dropdownLine': (pendingLocationsSorted.length > 0 || inactiveLocationsSorted.length > 0) && $last}">
+                <a tabindex="2" ng-click="pickLocation(location)">
+                    {{location.name}}
+                </a>
+            </li>
+            <li class="list-header" tabindex="-1" ng-show="pendingLocationsSorted.length > 0">
+                <b>Pending Inactive</b>
+            </li>
+            
+            <li role="menuitem" ng-repeat="location in pendingLocationsSorted" title="{{location.name}}" ng-class="{'dropdownLine': inactiveLocationsSorted.length > 0 && $last}"> 
+                <a tabindex="2" ng-click="pickLocation(location)">{{location.name}}</a>
+            </li>
+            
+            <li class="list-header" tabindex="-1" ng-show="inactiveLocationsSorted.length > 0">
+                <b>Inactive</b>
+            </li>
+            
+            <li role="menuitem" ng-repeat="location in inactiveLocationsSorted" title="{{location.name}}">
+                <a tabindex="2"  ng-click="pickLocation(location)">{{location.name}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

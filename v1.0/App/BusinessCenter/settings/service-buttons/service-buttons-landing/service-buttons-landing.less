@@ -1,0 +1,116 @@
+﻿.serviceButtons {
+
+    .content__row {
+        padding-top: 0;
+    }
+
+    &__breadcrumb {
+        .breadcrumb;
+        margin-bottom: 0;
+        padding: @brand-padding_sm 0 0;
+ 
+    }
+
+    &__header {
+        .containerStandard;
+        padding-top: 0;
+
+
+    }
+
+    &__title {
+        .containerStandard;
+        padding-top:0px;
+         float: left;
+
+        h1 {
+            font-size: @brand-font_h1;
+            margin: 0;
+            padding-top: @brand-padding_horizontal;
+            padding-bottom: @brand-padding_horizontal;
+        }
+    }
+
+    &__add {
+        float: left;
+        padding-bottom: @brand-padding_horizontal;
+
+        .addButton {
+            .btn;
+            .btn-primary;
+        }
+    }
+
+    &__search {
+        .containerStandard;
+    }
+
+    &__body {
+        .containerStandard;
+    }
+
+    &__table {
+        .table;
+        .table-striped;
+    }
+
+    &__descriptionEntry {
+        .overflow-hidden;
+        white-space: pre;
+    }
+
+    &__actions {
+        text-align: right;
+
+        > a {
+            margin-right: 10px;
+        }
+
+        > .editIcon {
+            .glyphicon;
+            .glyphicon-pencil;
+        }
+
+        > .deleteIcon {
+            .glyphicon;
+            .glyphicon-trash;
+        }
+    }
+
+    &__actionDisabled {
+        cursor: default;
+        color: @gray-light;
+
+        &:active {
+            color: @gray-light;
+        }
+
+        &:hover {
+            color: @gray-light;
+        }
+
+        &:visited {
+            color: @gray-light;
+        }
+    }
+
+    &__noRecordsMessage {
+        .text-align-center;
+    }
+}
+
+.serviceButtonSearch {
+
+    &__control {
+        .has-feedback;
+    }
+
+    &__input {
+        .width-360;
+        border: 1px solid @input-border-color;
+    }
+
+    &__icon {
+        .form-control-feedback;
+    }
+}

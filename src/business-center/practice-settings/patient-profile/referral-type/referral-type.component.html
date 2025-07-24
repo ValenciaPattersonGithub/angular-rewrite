@@ -1,0 +1,40 @@
+<div kendoDialogContainer></div>
+<ng-container #container></ng-container>
+<div class="view-container">
+    <div id="mainLt" class="main-lt">
+        <div id="businessTopBoardHeading" class="topnavbar-heading">{{'Referral Affiliates' | translate }}</div>
+    </div>
+    <div id="mainLt" class="main-lt-market-place">
+        <div id="businessTopBoardPattersnMarket" class="topnavbar-heading-pattersonmarket">
+            <a href="https://www.pattersondental.com/" target="_blank" class="topnavbar-marketplace">
+                <svg-icon name="basketIcon" class="marketPlace" iconHeight="20px" iconWidth="20px"></svg-icon>
+                {{'Patterson Market Place' | translate }}
+            </a>
+        </div>
+
+    </div>
+    <div class="topnavbar-header-quick-info">
+        <span class="subheader-container">{{dayDateDisplay}} | Welcome</span> {{displayName}}
+    </div>
+    <app-page-navigation [navigationData]="breadCrumbs" class="topnavbar-mainmenu-container"></app-page-navigation>
+    <div class="card-container referral-types-container">
+        <div class="grid-header">
+            <p class="text-left page_sub_title">{{'Referral Affiliates' | translate }}</p>
+        </div>
+        <div *ngIf="showDBMigration" class="float-right add_button db-migration-btn">
+            <app-button buttonLabel="DB Migration" variation="primary" id="btnDBMigration" class="add-btn"
+                placement="left" (click)="performDBMigration()"> </app-button>
+        </div>
+        <div class="float-right add_button">
+            <app-button buttonLabel="Add Referral Affiliate" variation="primary" id="btnAddReferral"
+                [isDisabled]="!hasCreateAccess"
+                title="{{!hasCreateAccess? 'You do not have permission to view this information.' : ''}}"
+                placement="left" (click)="showReferralForm()" class="add-btn"> </app-button>
+        </div>
+        <hr class="referraltypes-hr">
+        <referral-type-list [hasEditAccess]="hasEditAccess" [hasCreateAccess]="hasCreateAccess"
+            [referralType]="referralType$ | async" [drawer]="drawer" (refreshReferralTypeGrid)="initializeGrid()"
+            [pageSize]="pageSize" (filterAffiliateData)="filterAffiliateData($event)">
+        </referral-type-list>
+    </div>
+</div>

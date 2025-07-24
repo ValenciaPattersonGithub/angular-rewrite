@@ -1,0 +1,150 @@
+@import 'variables';
+
+.chartColorsContainer {
+    width: 100%;
+    padding: 15px;
+
+    .pageTitle {
+        font-size: $app-modal-header-font-size;
+        font-weight: bold;
+        margin: 0;
+        padding-bottom: 12px;
+        border-bottom: 1px solid $page-content-select-border-color;
+    }
+
+    .chartColorsGridContainer {
+        margin: auto;
+        border-radius: 5px;
+        box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.24);
+        background-color: $page-content-background;
+        padding: 15px;
+        margin-top: 20px;
+
+        .gridTitle {
+            font-size: $grid-title-fontSize;
+            font-weight: bold;
+            border-bottom: 1px solid $border-grey;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .buttonWrapper{            
+            padding: 0px 10px 15px 0px;
+        }
+
+        .chartColorsGrid {
+            width: 100%;
+            margin: auto;
+            /*div {
+                background-color: yellow;
+            }*/
+
+
+
+            .actionBar {
+                display: flex;
+                justify-content: flex-end;
+                padding: 10px 0 10px 10px;
+            }
+
+            .chartColorItemRow {
+                display: flex;
+                height: 40px;
+                justify-content: flex-start;
+                border-right: 1px solid $grid-separator-color;
+                border-left: 1px solid $grid-separator-color;
+                border-bottom: 1px solid $grid-separator-color;
+                line-height: 40px;
+                font-size: $grid-header-fontSize;
+
+                &.header {
+                    border-top: 1px solid $grid-separator-color
+                }
+
+                .chartColorsGridHeaderSort {
+                    color: $action-blue;
+                    font-size: $grid-header-fontSize;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+
+                .chartColorsGridHeader {
+                    color: $page-content-header;
+                    font-size: $grid-header-fontSize;
+                    font-weight: bold;
+                }
+
+                .status, .colors, .actions {
+                    padding: 0px 10px;
+                }
+
+                .status, .colors {
+                    border-right: 1px solid $grid-separator-color
+                }
+
+                .status {
+                    width: 250px;
+
+                    .chartColorsGridHeaderFilterWrapper {
+                        position: relative;
+                        float: right;
+
+                        .neutral {
+                            position: absolute;
+                            top: 14px;
+                            right: 0px;
+                            display: inline-block;
+
+                            &.ascending {
+                                top: 7.5px;
+                                transform: rotate(180deg);
+                            }
+                        }
+                    }
+                }
+
+                .colors {
+                    width: 75px;
+
+                    .colorPickerWrapper {
+                        padding: 7.5px 0px;
+                    }
+                }
+
+                .colors {
+                    .colorPickerPreview {
+                        height: 30px;
+                        width: 30px;
+                        background-color: pink;
+                        margin: 5px;
+                    }
+                }
+
+                .actions {
+                    .reset {
+                        color: $action-blue;
+                        cursor: pointer;
+
+                        &.disabled {
+                            color: $disabled-grey;
+                            cursor: no-drop;
+                        }
+                    }
+                }
+
+                .even {
+                    background-color: $page-content-grid-even-background;
+                }
+
+                .odd {
+                    background-color: $page-content-grid-odd-background;
+                }
+            }
+        }
+
+        .footer {
+            padding-top: 10px;
+            font-size: $global-body-font-size;
+        }
+    }
+}

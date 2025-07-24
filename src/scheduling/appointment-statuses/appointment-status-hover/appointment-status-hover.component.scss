@@ -1,0 +1,164 @@
+@import "variables";
+
+.fa {
+    font-weight: 600;
+}
+
+button {
+    font-family: $global-font-family;
+    font-size: 12px;
+    font-weight: 600;
+    color: $text-black;
+}
+.dropdownListBox {
+    font-family: $global-font-family;
+    font-size: 12px;
+    font-weight: 600;
+    color: $text-black;
+    width: 200px;
+    margin: 20px 0px 0px 0px;
+}
+
+button {
+    border: none;
+    float: right;
+    background: $appointment-status-background-color;
+}
+
+.dropdown {
+    width: 200px;
+}
+
+.dropdownListBox {
+    border: 1px solid $appointment-status-border-color;
+    background: $appointment-status-background-color;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    opacity: 1;
+    z-index: 100;
+    box-shadow: -1px 0.5px 1px $appointment-status-border-color;
+}
+.dropdownListBox div {
+    border-bottom: 1px solid $appointment-status-border-color;
+    height: 33px;
+    color: $appointment-dropdownlist-box-color;
+    font-weight: 400;
+    font-size: 12px;
+}
+.listItemData{
+    display: inline-block;
+    margin: 5px;
+}
+.icon {
+    display: inline-block;
+    min-width:18px;
+    min-height:18px;
+}
+
+.description {
+    margin-left:5px;
+    margin-bottom: 10px;
+}
+.dropdownListBox div:hover {
+    background-color: $light-action-blue;
+    color: $appointment-dropdownlist-color;
+}
+
+.dropdownListBox div:active {
+    background-color: $light-action-blue;
+    color: $appointment-dropdownlist-color;
+}
+
+button:focus {
+    outline: none;
+    border: none;
+}
+
+hr {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 100%;
+}
+
+.selectedDescription {
+    margin-left: 5px;
+    color: $action-blue;
+}
+
+.selectedIcon {
+    color: $action-blue;
+}
+
+.active {
+    background-color: $light-action-blue;
+    color: $appointment-dropdownlist-color;
+}
+
+.noClick {
+  color: $disabled-grey  !important;
+  cursor:not-allowed;
+}
+.iconCircle{
+    background: $light-action-blue;
+    border-radius: 50%;
+    color: $appointment-dropdownlist-color;
+    height: 18px;
+    width: 18px;
+}
+.ml3{
+    margin-left:4px;
+    
+}
+.dropdownListBox{
+    cursor: pointer;
+}
+
+.dropdownListBox div:hover .iconCircle {
+    color: $light-action-blue;
+    background-color: $appointment-dropdownlist-color;
+}
+
+.dropdownListBox div:active .iconCircle{
+    color: $light-action-blue;
+    background-color: $appointment-dropdownlist-color;
+}
+
+.active .iconCircle {
+    color: $light-action-blue;
+    background-color: $appointment-dropdownlist-color;
+
+}
+
+.groupSeperator{
+    height: 1px  !important; 
+    background-color: $appointment-status-groupsector-color;
+    padding-top: 1.5px;
+    border-top: 1px solid $appointment-status-border-color;
+}
+
+.dropdownListBox::-webkit-scrollbar {
+    background-color: $appointment-dropdownlist-background-color;
+    width:16px
+}
+
+.dropdownListBox::-webkit-scrollbar-track {
+    background-color: $appointment-dropdownlist-background-color;
+}
+
+.dropdownListBox::-webkit-scrollbar-track:hover {
+    background-color: $appointment-dropdownlist-background-color;
+}
+
+.dropdownListBox::-webkit-scrollbar-thumb {
+    background-color: $appointment-dropdownlist-box-background-color;
+    border-radius:16px;
+    border:5px solid $appointment-dropdownlist-background-color;
+}
+
+.dropdownListBox::-webkit-scrollbar-thumb:hover {
+    background-color: $appointment-dropdownlist-box-hover-background-color;
+    border:4px solid $appointment-dropdownlist-box-hover-border-color;
+}
+
+.dropdownListBox::-webkit-scrollbar-button {display:none}

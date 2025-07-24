@@ -1,0 +1,7 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Providers.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid avoidPageBreak" ng-if="data.Providers.length > 0 && !showFilterMessage">
+        <netproduction-by-provider-report [data]="data"></netproduction-by-provider-report>
+    </div>
+</div>

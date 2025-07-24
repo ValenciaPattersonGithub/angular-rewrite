@@ -1,0 +1,594 @@
+﻿// ****************************
+// Colors
+// ****************************
+
+// Brand Colors
+@brand-color_primary: #002247;
+@brand-color_secondary: #749E00;
+@brand-color_test: #800080;
+
+// Hues
+@brand-color_lighter-gray: #FAFAFA;
+@brand-color_light-gray: #F0F1F1;
+@brand-color_gray: #E3E5E5;
+@brand-color_dark-gray: #DADCDC;
+@brand-color_darker-gray: #A9A9A9;
+@brand-color_darker_darker-gray: #797979;
+@brand-color_darkest-gray: #424242;
+
+@brand-color_gray_1: #888;
+
+@brand-color_white: #FFFFFF;
+@brand-color_black: #000000;
+@brand-color_red: #E43122;
+@brand-color_orange: #FF9516;
+@brand-color_yellow: #FFFF40;
+@brand-color_green: #168016;
+@brand-color_blue: #4A4AB5;
+@brand-color_violet: #CF38CF;
+@brand-color_teal: #008080;
+
+// balance bar colors
+@brand-color_current: #3C3;
+@brand-color_overdue: @brand-color_orange;
+@brand-color_delinquent: #F00;
+
+// Base Colors
+@gray-darker:            lighten(#000, 13.5%); // #222
+@gray-dark:              lighten(#000, 20%);   // #333
+@gray:                   lighten(#000, 33.5%); // #555
+@gray-light:             lighten(#000, 60%);   // #999
+@gray-lighter:           lighten(#000, 80.0%); // #ccc
+@gray-lightest:          lighten(#000, 93.5%); // #eee
+@white: @brand-color_white;
+@bluegrey-lightest: #ECEFF1;
+
+// background colors
+@bg-dark: @brand-color_darkest-gray;
+@bg: @brand-color_darker_darker-gray;
+@bg-light: @brand-color_gray_1;
+@bg-hover:  #C0C0C0;
+@bg-disabled: #999;
+@zebra-dark: @gray-lightest;
+@zebra-light: @brand-color_white;
+@header-bg: #2B144E;
+@brand-application_bg: #FAFAFA;
+
+// button colors
+@btn-add-bg: @btn-default-color;
+@btn-add-bg-hover:  @brand-color_link-hover;
+@btn-edit-bg: @btn-default-color;
+@btn-edit-bg-hover:  @brand-color_link-hover;
+@btn-color: @brand-color_white;
+@input-type-color: #797979;
+@input-color: #424242;
+@schedule-btn-color: @btn-default-color;
+@schedule-border-color: @btn-default-color;
+
+// dropdown colors
+@dropdown-color: #0096FF;
+@dropdown-color-hover: @brand-color_white;
+@dropdown-bg: @brand-color_white;
+@dropdown-bg-hover: @dropdown-color;
+
+// balance bar colors
+@current-color: #3C3;
+@overdue-color: #FF9516;
+@delinquent-color: @brand-color_delinquent;
+
+// font colors
+@base-color: @brand-color_white;
+@base-color-hover: @brand-color_white;
+@label-color: #333;
+@add-color: #0096FF;
+@remove-color: #ff0000;
+
+// border colors
+@border-color: @bg-dark;
+@input-border-color: @gray-lighter;
+@brand-border_color: @brand-color_darker-gray;
+@brand-border_color-light: @brand-color_dark-gray;
+@border-color-Statements: #EEEEEE;
+
+// table, th, tr and td
+@table-row-even:  #fafafa; 
+@thead-color: #2dabcb;
+
+
+@info-bg: #90CAF9;
+
+// ****************************
+// Fonts
+// ****************************
+@brand-font_sans-serif: 'Open Sans', sans-serif;
+@brand-font_header: 'Open Sans', sans-serif;
+@brand-font: 'Open Sans', sans-serif;
+
+@brand-font_heavy: 700;
+@brand-font_medium: 300;
+@brand-font_light: 100;
+
+@brand-font_xs: 10px;
+@brand-font_sm: 12px;
+@brand-font_md: 14px;
+@brand-font_lg: 18px;
+@brand-font_xl: 22px;
+
+@brand-font_h1: 26px;
+@brand-font_h2: 24px;
+@brand-font_h3: 22px;
+@brand-font_h4: 18px;
+@brand-font_h5: 14px;
+
+@brand-font_navToggle: @brand-font_h2;
+
+@font-size-normal: 14px;
+@font-size-normal-mobile: 12px;
+@font-size-form-label: 12px;
+@font-size-page-title: 28px;
+@font-size-page-title-mobile: 24px;
+@font-size-sub-tab-dropdown: 18px;
+
+@heading-input-size: 32px;
+@section-input-size: 28px;
+@input-min-width: 300px;
+@dropdown-min-width: 200px;
+
+// ****************************
+// Font Colors
+// ****************************
+@brand-color_font-header: #333333;
+@brand-color_font-regular: #434649;
+@brand-color_font-light: #93C4E1;
+@brand-color_font-dark: #2DABCB;
+
+@brand-color_link: @brand-color_font-dark;
+@brand-color_link-hover: darken(@brand-color_link,5);
+//@brand-color_link-visited: ;
+@brand-color_link-light: @brand-color_font-light;
+@brand-color_link-light-hover: darken(@brand-color_link-light,5);
+@brand-color_link-disabled: #999999;
+
+// ****************************
+// Layout
+// ****************************
+
+// Screen Sizes
+@screen-xs: 480px;
+@screen-sm: 768px;
+
+// Borders
+@borderRadius5: 5px 5px 5px 5px;
+@borderRadius3: 3px 3px 3px 3px;
+@brand-scaff_radius-small: 4px;
+@brand-scaff_radius: 6px;
+@brand-scaff_radius-large: 8px;
+@brand-border: 1px solid @brand-border_color;
+@brand-border_light: 1px solid @brand-border_color-light;
+@brand-line_break: 2px solid @brand-color_darker-gray;
+
+// Shadow
+@brand-shadow_default: 2px 2px 2px rgba(0,0,0,0.3);
+
+// Padding
+@brand-padding_xs: 4px;
+@brand-padding_sm: 8px;
+@brand-padding_md: 16px;
+@brand-padding_lg: 24px;
+@brand-padding_xl: 32px;
+@brand-padding_vertical: @brand-padding_sm;
+@brand-padding_horizontal: 12px;
+@brand-heading_padding: 0;
+@padding5: 5px;
+@padding10: 10px;
+
+// Margins
+@brand-margin_xs: 4px;
+@brand-margin_sm: 8px;
+@brand-margin_md: 16px;
+@brand-margin_lg: 24px;
+@brand-margin_xl: 32px;
+
+@brand-header_margin: 0;
+
+
+// ****************************
+// Components
+// ****************************
+
+// Secondary Navigation (Patient Header)
+@brand-sn_bg_color: @brand-color_white;
+@brand-sn_active_bg_color: @brand-navigation_primary_color_gray;
+@brand-sn_padding: @brand-padding_md;
+@brand-sn_border_color: @brand-navigation_secondary_color_gray;
+@brand-sn_active_border_color: @brand-navigation_primary_color_gray;
+@brand-sn_border_hover_color: @brand-navigation_primary_color_gray;
+@brand-sn_text_color: @brand-navigation_primary_color_gray;
+@brand-sn_active_text_color: @brand-color_white;
+@brand-sn_active_hover_text_color: @brand-color_white;
+@brand-sn_border_size: 2px;
+@brand-sn_border_first_radius: 0 0 0 4px;
+@brand-sn_border_last_radius: 0 0 4px 0;
+
+// Patient Header v2
+@patient-profile_header_bg_color: @brand-color_white;
+@patient-profile_header_border_color: #DDDDDD;
+
+
+// Secondary Navigation Fixed
+@brand-snf_nav_margin_top: 10px;
+@brand-snf_nav_tabs_padding: 0px;
+@brand-snf_nav_tabs_margin_bottom: 6px;
+@brand-snf_nav_item_border: @brand-sn_border_size solid @brand-navigation_secondary_color_gray;
+@brand-snf_nav_item_padding: 8px;
+@brand-snf_nav_item_transition: all 0.1s ease;
+@brand-snf_nav_item_margin_right: 3px;
+@brand-snf_nav_actions_border: @brand-snf_nav_item_border;
+@brand-snf_nav_actions_padding: 6px;
+@brand-snf_border_radius: 6px;
+
+// Secondary Filter Navigation
+@brand-navigation_primary_color_gray: #6B7073;
+@brand-navigation_secondary_color_gray: #AEB5BA;
+@brand-navigation_primary-color_red: #D9312B;
+@brand-navigation_secondary-color_red: #FF9487;
+@brand-navigation_button_color_blue: #2DABCD;
+@brand-sfn_header_bg_color: @brand-navigation_secondary_color_gray; 
+@brand-sfn_body_border_color: @brand-navigation_secondary_color_gray;
+@brand-sfn_body_border_hover_color: @brand-navigation_primary_color_gray;
+@brand-sfn_header_text_color: @brand-color_white;
+@brand-sfn_header_text_size: @brand-font_xl;
+@brand-sfn_icon_spacing: @brand-padding_sm;
+@brand-sfn_button_bg_color: @brand-color_white;
+@brand-sfn_button_text_color: @brand-navigation_primary_color_gray;
+@brand-sfn_button_selected_bg_color: @brand-navigation_primary_color_gray;
+@brand-sfn_button_selected_text_color: @brand-color_white;
+@brand-sfn_border_first_radius: @brand-sn_border_first_radius;
+@brand-sfn_border_last_radius: @brand-sn_border_last_radius;
+@brand-sfn_border_size: @brand-sn_border_size;
+
+// Tertiary Navigation
+@brand-navigation_tertiary_bg: @brand-color_white;
+@brand-navigation_tertiary_color: #AEB5BA;
+@brand-navigation_tertiary_border_color: @brand-navigation_tertiary_color;
+@brand-navigation_tertiary_border: 1px solid @brand-navigation_tertiary_border_color;
+@brand-navigation_tertiary_box_shadow:  0px 4px 0px;
+@brand-naviagtion_tertiary_box_shadow_color: @brand-color_gray;
+@brand-navigation_tertiary_active_color: @brand-color_white;
+@brand-navigation_tertiary_active_bg: #6B7073;
+
+// Panels
+@panel-heading-bg: #ADB4B9;
+@panel-title-color: @white;
+@panel-btn-color: #2DABCB;
+@panel-btn-bg: @white;
+@panel-heading-padding: @brand-padding_sm @brand-padding_horizontal;
+@panel-border: none;
+@panel-border-color: @panel-heading-bg;
+@panel-border_radius: @brand-scaff_radius-small;
+@panel-heading-border-top-left-radius: @panel-border_radius;
+@panel-heading-border-top-right-radius: @panel-border_radius;
+@panel-body-bg: @white;
+@panel-body-border: 2px solid #ADB4B9;
+@panel-body-border-bottom-left-radius: @panel-heading-border-top-left-radius;
+@panel-body-border-bottom-right-radius: @panel-heading-border-top-right-radius;
+@panel-btn-border: none;
+@panel-btn-border-radius: @panel-border_radius;
+
+// Info Boxes
+@info-box-top_margin: @brand-padding_md;
+@info-box-bottom_margin: @brand-padding_md;
+@info-box-border: 1px solid @brand-color_darkest-gray;
+@info-box-border-radius: @borderRadius5;
+@info-box-padding: 0;
+@info-box-background-color: @brand-color_white;
+@info-box-section-padding: @brand-padding_sm;
+@info-box-section-grey-background-color: #EBEBEB;
+@info-box-section-grey-color: black;
+@info-box-section-green-background-color: #29C841;
+@info-box-section-green-color: @brand-color_white;
+
+// Tables
+@brand-tbl_hdr-font-size: 1.2em;
+@brand-tbl_padding: 6px 0;
+
+@brand-tbl_border-color: @brand-color_dark-gray;
+@brand-tbl_zebra-light: @brand-color_white;
+@brand-tbl_zebra-dark: @brand-color_lighter-gray;
+@brand-tbl_rowbg-hover: #c3d5eb;
+
+@brand-tbl_rowbg-warning: #fcf8e3;
+
+@brand-tbl_sub-zebra-light: @brand-color_light-gray;
+@brand-tbl_sub-zebra-dark: @brand-color_gray;
+
+@brand-tbl_ledger-serv: @brand-color_violet;
+@brand-tbl_ledger-cond: @brand-color_blue;
+@brand-tbl_ledger-prop: #ea4b35;
+@brand-tbl_ledger-ref: #9c56b9;
+@brand-tbl_ledger-rej: #6c5547;
+@brand-tbl_ledger-comp: #1aaf5d;
+@brand-tbl_ledger-pend: #ea4b35;
+@brand-tbl_ledger-exis: #000000;
+@brand-tbl_ledger-acc: #9d2c1c;
+@brand-tbl_ledger-rcomp: #5a2670;
+@brand-tbl_ledger-cond-pres: #2c97dd;
+@brand-tbl_ledger-cond-rslv: #14527a;
+
+// Form
+@form-section-color: @gray-dark;
+@form-section-header-color: @gray-lighter;
+@form-section-bordor-color: @gray-lighter;
+@form-box-color: @gray;
+@form-dropdown-border-color: @gray-lighter;
+@form-btn-upload-border-color: @gray-darker;
+@form-btn-upload-bg: @brand-color_white;
+@form-collapse-btn-bg: @brand-color_white;
+@toggle-label-color: @brand-color_white;
+@toggle-button-width: 148px;
+@toggle-bg: @gray-lighter;
+@toggle-btn-color: @brand-color_white;
+@toggle-btn-border-color: @brand-color_white;
+@toggle-btn-bg-color: linear-gradient(#2196f3, #2196f6);
+@toggle-btn-font-size: 14px;
+
+@brand-color_form-placeholder: @brand-color_dark-gray;
+
+@brand-form_width: 600px;
+@brand-form_padding: 8px;
+@brand-form_border--color: @brand-color_darker-gray;
+@brand-form_border--width: 1px;
+@brand-form_border--radius: 2px;
+@brand-form_border: @brand-form_border--width solid @brand-form_border--color;
+@brand-form_header--bgcolor: @brand-color_primary;
+@brand-form_header--color: @brand-color_white;
+
+@brand-form_label: 16px;
+@brand-form_label--color: @brand-color_font-regular;
+@brand-form_toggle--color: @brand-color_font-regular; //TP would be anything like an arrow, checkbox, or radio button.
+
+@brand-btn_disabled-bg:                @brand-color_link-disabled;
+@brand-btn_disabled-color:             @brand-color_link-disabled;
+
+@brand-form_disabled-bg: @brand-color_gray;
+
+@brand-form_fieldset-sm: 800px;
+@brand-form_fieldset-md: 1200px;
+
+@brand-color_alert: @brand-color_red;
+@brand-color_warning:@brand-color_orange; 
+@brand-color_error: @brand-color_red;
+@brand-color_success: @brand-color_green;
+@brand-color_disabled: @brand-color_darker-gray;
+@brand-color_active: darken(@brand-color_darker-gray,10);
+
+
+@brand-icon_close: "\f00d";
+@brand-icon_clear: "\f00d";
+
+@brand-form_nav-link: @brand-color_darker-gray;
+@brand-form_nav-link-hover: @brand-color_link;
+@brand-form_nav-link-active: darken(@brand-form_nav-link, 10);
+
+// Initial Badge
+@brand-initial-badge_height: 35px;
+@brand-initial-badge_width: @brand-initial-badge_height;
+@brand-initial-badge_display: table-cell;
+@brand-initial-badge_text-align: center;
+@brand-initial-badge_vertical-align: middle;
+@brand-initial-badge_border-radius: 50%;
+@brand-initial-badge_bg: transparent;
+@brand-initial-badge_color: white;
+@brand-initial-badge_alternative_color: #6B7073;
+@brand-initial-badge_profile2: #2DABCB;
+@brand-initial-badge_border: 2px solid @brand-initial-badge_color;
+@brand-initial-badge_alternaive_border: 2px solid @brand-initial-badge_alternative_color;
+@brand-initial-badge_profile2_border: 1px solid @brand-initial-badge_profile2;
+
+// ****************************
+// Sections
+// ****************************
+
+// Date Selector
+@date-selector-border-color: @gray-lighter;
+
+// Duplicate Patient Results 
+@duplicate-search-bg: #ffffcc;
+
+// Business
+@discount-rate-input-border-color: @gray;
+
+// Search Results
+@search-result-header-border-color: @gray-lighter;
+@search-result-header-bg: @brand-color_white;
+@search-result-body-border-color: @brand-color_black;
+@search-result-item-border-color: @gray-light;
+@search-result-item-even-bg: @gray-lightest;
+@search-result-item-btn-border-color: @gray;
+@search-result-item-btn-bg: @gray-dark;
+@search-result-item-btn-color: @gray-lightest;
+@search-result-item-btn-hover-bg: @gray-lighter;
+@search-result-item-btn-hover-color: @gray;
+@search-result-filter-border-color: @gray;
+@search-result-filter-bg: @gray-lightest;
+@search-result-filter-li-bg: @gray-light;
+
+// Dashboard Header 
+@dashboard-header-height: 255px; //200px;
+@dashboard-header-border-color: @gray-light;
+@dashboard-header-body-ul-height: 172px; //117px;
+
+// Main Navigation
+@brand-main_nav_bg: #2B144E;
+
+// Top Header 
+@header_bg: #2B144E;
+@brand-header_button_color: @header_bg;
+@brand-header_button_hover_color: @header_bg;
+@nav_brand: @gray-dark;
+@nav_dropdown: @gray;
+@nav_dropdown_text: @brand-color_black;
+@nav_dropdown_hover: @gray-darker;
+@nav_filter_bg: @gray;
+@nav_filter_text: @gray-lighter;
+@nav_filter_hover: @brand-color_black;
+@breadcrumbs_bg: @gray-dark;
+@top_nav_side_nav_bg: @gray-dark;
+@top_nav_side_nav_li-border-color: @brand-color_black;
+@top_nav_xs_active-bg: @gray-dark;
+@top_nav_xs_active-color: @gray-lightest;
+@top_nav_xs_hover-bg: @gray-dark;
+@top_nav_xs_hover-color: @gray-lightest;
+@nav-input-color: @brand-color_white;
+@nav_search_tab_bg: @gray-light;
+@nav_search_tab_text: @gray-dark;
+@nav_search_tab_selector: @gray-dark;
+@nav_search_tab_selector_text: @gray-lighter;
+@brand-header_height: 62px;
+
+// List
+@list-height: 500px;
+@list-width: 400px;
+@list-option-bg: @gray-lighter;
+@list-option-bg-hover: @gray-light;
+@list-option-header-bg: @gray-lighter;
+@list-option-item-bg: @gray-lightest;
+@list-option-item-bg-hover: @gray-light;
+
+// Side Nav
+@side_nav_bg: lighten(#000, 85%);
+@side_nav_item_hover: @gray-light;
+@side_nav_item_text: @gray-darker;
+@side_nav_item_text_hover: @gray-darker;
+@side_nav_item_text_disabled: @gray-light;
+
+// MasterList
+@master-list-warning-bg: #ffffcc;
+@master-list-button-bg-color:transparent;
+@master-list-button-bg-hover:@gray-light;
+@master-list-button-bg-active:@gray-lightest;
+@symbol-dd-btn-border-color: @gray;
+@master-list-item-even-bg: @gray-lightest;
+@master-list-btn-border-color: @gray;
+@master-list-item-bg-hover: darken(@gray-lightest, 15%);
+@master-list-search-wrapper-border-color: @gray;
+@master-list-input-border-color: @gray;
+@master-list-warning-msg-border-color: @gray-lightest;
+@master-list-warning-button-bg-color: @white;
+@master-list-warning-button-border-color: @gray;
+
+// Chart
+@chart-selection-bg: lighten(#33ABFF, 10%);
+@chart-tooth-hover-border: @gray-light;
+
+// Perio
+@perio-alert-level-color:#ff0000;
+@perio-chart-mg-junction-color: #fbd0c8;
+@perio-chart-gingival-margin-color: #7fcaff;
+@perio-chart-pocket-depth-color: #7fe77f;
+@perio-chart-pocket-depth-alert-color: #ff927f;
+@perio-chart-gingival-margin-alert-color: #ff927f;
+@perio-chart-active-tooth-color: @brand-color_lighter-gray;
+@perio-chart-bleeding-color:#ff2600;
+@perio-chart-suppuration-color:#ffd479;
+
+// Favorites
+@service-button-color:#FF4C29;
+@condition-button-color:#3E85C5;
+@swiftcode-button-color:#107472;
+
+// Feedback
+@feedback-bar-bg: @gray-lighter;
+
+// AppointmentOvervie
+@appt-alert-bg: #FFD6AE;
+
+// Flags
+@patient-flag-color:#424242;
+@patient-medical-history-flag-color:#ff0000;
+
+// Toggle
+@toggle-switch-color: #4CDA64;
+
+// Payments
+@brand-payments-color: @brand-color_red;
+
+// Negative adjustments
+@brand-negative-adjustments-color: @brand-color_orange;
+
+// Positive adjustments
+@brand-positive-adjustments-color: @brand-color_green;
+
+// Deleted transactions
+@brand-deleted-transactions-color: #D4D3D3;
+
+// Transition
+@brand-transition: all 0.3s ease;
+@brand-transition_link: all 0.3s ease;
+
+// Role
+@brand-role-background-color: #0096FF;
+@brand-module-btn_expand-color: #0096FF;
+@brand-check-color: #84ff2e;
+
+//Grid
+@brand-grid_edit-row-bg-color: @brand-color_darker-gray;
+
+// Filter Slideout
+@brand-filter-outer-border: solid #19a7f8;
+@brand-filter-inner-border: 1px solid gray;
+@brand-filter-showmore-button: #0F7BBB;
+
+//////////////////////////
+//// Fuse Colors 2021 ////
+//////////////////////////
+
+// Brand
+@fuse-purple: #2B144E;
+// Functional Colors
+@fuse-action-blue: #2DABCB;
+@fuse-light-action-blue: #27BFE6;
+@fuse-placeholder-grey: #999999;
+@fuse-text-black: #333333;
+@fuse-disabled-grey: #CCCCCC;
+@fuse-text-selection: #b3d7fe;
+// Feedback Colors
+@fuse-success-green: #28A745;
+@fuse-warning-orange: #F0AB00;
+@fuse-alert-red: #CC0000;
+@fuse-info-blue: #39A5DC;
+
+/// global drop shadow
+@global-drop-shadow:0px 5px 10px rgba(112,144,176,0.3);
+
+////// Typography Palette //////
+// Copied from variables.scss
+@global-font-family: "Open Sans", sans-serif;
+/// h1
+@global-h1-size: 18px;
+@global-h1-family: @global-font-family;
+@global-h1-weight: bold;
+@global-h1: @global-h1-weight @global-h1-size @global-h1-family;
+/// h2
+@global-h2-size: 16px;
+@global-h2-family: @global-font-family;
+@global-h2-weight: bold;
+@global-h2: @global-h2-weight @global-h2-size @global-h2-family;
+/// h3
+@global-h3-size: 16px;
+@global-h3-family: @global-font-family;
+@global-h3-weight: normal;
+@global-h3: @global-h3-weight @global-h3-size @global-h3-family;
+/// h4
+@global-h4-size: 14px;
+@global-h4-family: @global-font-family;
+@global-h4-weight: bold;
+@global-h4: @global-h4-weight @global-h4-size @global-h4-family;
+/// body text
+@global-body-font-size: 14px;
+/// table cell text
+@global-table-font-size: 12px;
+
+:root {
+  --brand-header-height: @brand-header_height;
+}

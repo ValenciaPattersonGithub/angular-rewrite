@@ -1,0 +1,46 @@
+﻿<div class="patientConditionTile">
+    <div class="timelineTile" ng-class="{timelineTileBorder : true}">
+        <div class="timelineTile__row">
+            <div class="timelineTile__iconContainer">
+                <img class="timelineTile__icon" ng-src="{{ ::'Images/TimelineFilterIcons/conditions.svg' }}" />
+            </div>
+            <div class="timelineTile__content">
+                <div class="patientConditionTile__dtlRight">
+                    <span id="lblConditionDescription{{::tileIndex}}" class="patientConditionTile__description">
+                        <span id="lblConditionTooth{{::tileIndex}}" ng-hide="patientCondition.Tooth == 0">
+                            {{ ::"# {0}" | i18n:[{skip:patientCondition.Tooth}] }}
+                        </span>
+                        <span title="{{ ::patientCondition.Description }}">{{ ::patientCondition.truncatedDescription }}</span>
+                    </span>
+                    <div class="patientConditionTile__details">
+                        <span id="lblConditionArea{{::tileIndex}}"> {{ ::patientCondition.Area }} </span>                        
+                    </div>
+                    <div class="patientConditionTile__details">                        
+                        <span id="lblConditionStatus{{::tileIndex}}"> {{ ::conditionStatus }} </span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <button id="{{patientCondition.RecordId}}_btnLedgerRowActionEllipses" class="patientConditionTile__toggle" ng-click="toggleEllipsesMenu($event)" ng-blur="showEllipsesMenu = false;">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </button>
+                    <div class="patientConditionTile__actions" ng-class="{active : showEllipsesMenu, orientTop : orientTop}">
+                        <button id="{{patientCondition.RecordId}}_btnLedgerRowEdit"
+                                title="{{editToolTip}}"
+                                class="btn btn-link" ng-disabled="!canEditCondition"
+                                ng-mousedown="editCondition(patientCondition)" check-auth-z="{{ps.editAMFA}}">
+                            {{ 'Edit' | i18n }}
+                        </button><br />
+                        <button id="{{patientCondition.RecordId}}_btnLedgerRowDelete"
+                                title="{{deleteToolTip}}"
+                                class="btn btn-link"
+                                ng-disabled="!canDeleteCondition"
+                                ng-mousedown="deleteCondition(patientCondition)" check-auth-z="{{ps.deleteAMFA}}">
+                            {{ 'Delete' | i18n }}
+                        </button><br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

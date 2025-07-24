@@ -1,0 +1,36 @@
+﻿<div class="modal-header margin-bottom10">
+    <h4 id="lblRejections">{{ 'Rejections'  | i18n}}</h4>
+    <div class="col-xs-4 ">
+        <label class="error help-text">
+            {{getPatientName(claim.PatientFirstName, claim.PatientMiddleName, claim.PatientLastName, claim.PatientSuffix)}}
+        </label>
+    </div>
+    <div class="col-xs-3 ">
+        <label class="error help-text">
+            {{getDate(claim.MinServiceDate, claim.MaxServiceDate)}}
+        </label>
+    </div>
+    <div class="col-xs-4 ">
+        <label class="error help-text">
+            {{claim.TotalFees | currency}}
+        </label>
+    </div>
+</div>
+
+<div id="" class="row margin-left-15 margin-bottom10">
+    <div class="margin-left-20">
+        <div class="col-xs-12">
+            <div class="row">
+                <label>
+                    {{rejectionMessageDto.Message}}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div>
+        <button id="btnCancel" ng-click="cancel();" class="btn btn-default">{{ 'Close' | i18n }}</button>
+    </div>
+</div>

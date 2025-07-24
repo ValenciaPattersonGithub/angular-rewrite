@@ -1,0 +1,131 @@
+﻿<div class="slidePanel">
+    <div class="slidePanel__filteringMask" ng-if="filtering === true"></div>
+    <div class="slidePanel__box">
+        <div class="slidePanel__header">
+            <div class="slidePanel__title">
+                <h4>{{ 'Filters' || i18n }} <button id="sp-clear" class="btn btn-link" ng-click="clearFilters()">clear</button></h4>
+            </div>
+            <div class="slidePanel__filteringMessage" ng-show="filtering === true">
+                <i class="fa fa-spinner fa-spin loading"></i>
+                {{ 'Applying filters...' || i18n }}
+            </div>
+            <div class="slidePanel__close">
+                <button id="sp-close" class="btn btn-link" ng-click="hideFilters()"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="slidePanel__body">
+            <div class="enctrHist__fltr">
+                <div id="divFilters">
+                    <label>{{ 'Practice Locations' | i18n }}</label>
+                    <div class="row">
+                        <div ng-hide="isDropdownHidden">
+                            <div style="width:22%" class="col-xs-1 col-sm-1 col-md-1">
+                                <multi-selector ng-if="locationsLoaded" id="ddLocation" open="false" list="locations.masterLocations" selected-list="locations.selectedLocations" display-field="NameLine1" id-field="LocationId" auth-z="'soar-biz-bizrcv-view'" type="Location" on-blur-fn="updateContents()"></multi-selector>
+                            </div>
+                            <div style="width:77%" class="col-xs-11 col-sm-11 col-md-11">
+                                <div class="row margin-left-5 padding-8">
+                                    <span ng-if="locations.selectedLocations.length === 0 && locationsLoaded" class="receivablesAllLoc__notification">
+                                        Please select at least one location
+                                    </span>
+                                    <span ng-repeat="location in locations.selectedLocations track by $index" ng-disabled="isDropdownDisabled">
+                                        <tag title="{{ location.NameLine1 }}" remove-function="removeLocation(location)"></tag>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-hide="!isDropdownHidden">
+                            <br />
+                        </div>
+                    </div>
+
+                    <label>{{ 'Account Members' | i18n }}</label>
+                    <div class="row">
+
+                        <div ng-repeat="member in accountMembersOptionsTemp track by $index">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 " ng-class="{'disabled-checkbox':accountMembersOptionsTemp.length===1}">
+                                <checkbox change-function="updateFilterObject('members', member, 'accountMemberId')"
+                                          checkbox-id="cbxMember{{$index}}"
+                                          checkbox-value="member.Selected"
+                                          checkbox-label="member.patientDetailedName"
+                                          is-account-filter="true"
+                                          checkbox-disabled="accountMembersOptionsTemp.length===1" ng-class="utilCheckbox__filter"></checkbox>
+                            </div>
+                            <div ng-if="$index === 0" class="clearfix">&nbsp;</div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <label>{{ 'Date' | i18n }}</label>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-class="{error: dateError}">
+                            <date-selector id="dteStart"
+                                           class="filter-datepicker"
+                                           placeholder="{{'From' | i18n}}"
+                                           date-var="filterObject.dateRange.start"
+                                           format="MM/dd/yyyy"
+                                           valid="true"
+                                           disable-date-input="editableDate"></date-selector>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-class="{error: dateError}">
+                            <date-selector id="dteEnd"
+                                           class="filter-datepicker"
+                                           placeholder="{{'To' | i18n}}"
+                                           date-var="filterObject.dateRange.end"
+                                           format="MM/dd/yyyy"
+                                           valid="true"
+                                           disable-date-input="editableDate"></date-selector>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-class="{error: dateError}">
+                            <label id="dteError" class="help-text" ng-show="dateError">
+                                {{ 'From date must be the same or less than to date.' | i18n }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <label>{{ 'Tooth' | i18n }}</label>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <tooth-picker id="tpkrDirective" selected-teeth="filterObject.teethNumbers" multi-select-enabled="false"></tooth-picker>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <label>{{ 'Transaction Types' | i18n }}</label>
+                    <div class="row">
+                        <div ng-repeat="type in allTransactionTypes track by $index">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <checkbox change-function="updateFilterObject('transactionTypes', type, 'Id')"
+                                          checkbox-id="cbxTransactionType{{$index}}"
+                                          checkbox-value="type.Selected"
+                                          checkbox-label="type.Name"></checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <label>{{ 'Providers' | i18n }}</label>
+                    <div class="row">
+                        <div ng-repeat="prov in providersInDataset track by $index">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <checkbox change-function="updateFilterObject('providers', prov, 'UserId')"
+                                          checkbox-id="cbxProvider{{$index}}"
+                                          checkbox-value="prov.Selected"
+                                          checkbox-label="prov.FirstName + ' ' + prov.LastName + prov.PD"></checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <label>{{ 'Status' | i18n }}</label>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <checkbox checkbox-id="cbxModified" checkbox-label="'Modified'" checkbox-disabled="true"></checkbox>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <checkbox checkbox-id="cbxDeleted" checkbox-label="'Deleted'" checkbox-disabled="true"></checkbox>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <button class="btn btn-primary" ng-if="showFilterApplyButton" ng-click="refreshSummaryPageDataForGrid()">{{ ::('Apply' | i18n) }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

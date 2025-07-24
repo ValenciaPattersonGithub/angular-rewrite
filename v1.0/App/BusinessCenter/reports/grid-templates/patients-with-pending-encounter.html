@@ -1,0 +1,226 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.DateLists.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.DateLists.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-1 cell">{{'Date' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Patient' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Encounter' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Provider' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Service Code' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Description' | i18n}}</th>
+                    <th class="col-sm-1 cell" style="width: 4.16666666%">{{ 'Tooth' | i18n }}</th>
+                    <th class="col-sm-1 cell" style="width: 4.16666666%">{{ 'Area' | i18n }}</th>
+                    <th class="col-sm-1 cell">{{'Charge' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Est Ins' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Est Adj' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Patient Portion' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Location' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'" ng-repeat="dateList in data.DateLists">
+                <tr>
+                    <td class="col-sm-1 cell">{{dateList.Date | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Patient}}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].EncounterDescription}}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].Transactions[0].Provider}}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].Transactions[0].ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].Transactions[0].ServiceDescription}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{dateList.Patients[0].Encounters[0].Transactions[0].Tooth}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{dateList.Patients[0].Encounters[0].Transactions[0].Area}}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].Transactions[0].Amount | currency }}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].Transactions[0].EstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].Transactions[0].EstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].Transactions[0].PatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].Transactions[0].Location}}</td>
+                </tr>
+                <tr ng-repeat="transaction in dateList.Patients[0].Encounters[0].Transactions | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{transaction.Provider}}</td>
+                    <td class="col-sm-1 cell">{{transaction.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{transaction.ServiceDescription}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{transaction.Tooth}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{transaction.Area}}</td>
+                    <td class="col-sm-1 cell">{{transaction.Amount | currency }}</td>
+                    <td class="col-sm-1 cell">{{transaction.EstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{transaction.EstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{transaction.PatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell">{{transaction.Location}}</td>
+                </tr>
+                <tr class="reportGrid__label">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell" colspan="2">{{'Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].TotalAmount | currency }}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].TotalEstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].TotalEstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{dateList.Patients[0].Encounters[0].TotalPatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell"></td>
+                </tr>
+                <tr ng-repeat-start="encounter in dateList.Patients[0].Encounters | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{encounter.EncounterDescription}}</td>
+                    <td class="col-sm-1 cell">{{encounter.Transactions[0].Provider}}</td>
+                    <td class="col-sm-1 cell">{{encounter.Transactions[0].ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{encounter.Transactions[0].ServiceDescription}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{encounter.Transactions[0].Tooth}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{encounter.Transactions[0].Area}}</td>
+                    <td class="col-sm-1 cell">{{encounter.Transactions[0].Amount | currency }}</td>
+                    <td class="col-sm-1 cell">{{encounter.Transactions[0].EstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{encounter.Transactions[0].EstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{encounter.Transactions[0].PatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell">{{encounter.Transactions[0].Location}}</td>
+                </tr>
+                <tr ng-repeat="transact in encounter.Transactions | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{transact.Provider}}</td>
+                    <td class="col-sm-1 cell">{{transact.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{transact.ServiceDescription}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{transact.Tooth}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{transact.Area}}</td>
+                    <td class="col-sm-1 cell">{{transact.Amount | currency }}</td>
+                    <td class="col-sm-1 cell">{{transact.EstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{transact.EstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{transact.PatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell">{{transact.Location}}</td>
+                </tr>
+                <tr ng-repeat-end class="reportGrid__label">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell" colspan="2">{{'Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell">{{encounter.TotalAmount | currency }}</td>
+                    <td class="col-sm-1 cell">{{encounter.TotalEstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{encounter.TotalEstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{encounter.TotalPatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell"></td>
+                </tr>
+                <tr ng-repeat-start="patient in dateList.Patients | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{patient.Patient}}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].EncounterDescription}}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].Transactions[0].Provider}}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].Transactions[0].ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].Transactions[0].ServiceDescription}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{patient.Encounters[0].Transactions[0].Tooth}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{patient.Encounters[0].Transactions[0].Area}}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].Transactions[0].Amount | currency }}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].Transactions[0].EstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].Transactions[0].EstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].Transactions[0].PatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].Transactions[0].Location}}</td>
+                </tr>
+                <tr ng-repeat="trans in patient.Encounters[0].Transactions | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{trans.Provider}}</td>
+                    <td class="col-sm-1 cell">{{trans.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{trans.ServiceDescription}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{trans.Tooth}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{trans.Area}}</td>
+                    <td class="col-sm-1 cell">{{trans.Amount | currency }}</td>
+                    <td class="col-sm-1 cell">{{trans.EstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{trans.EstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{trans.PatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell">{{trans.Location}}</td>
+                </tr>
+                <tr class="reportGrid__label">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell" colspan="2">{{'Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].TotalAmount | currency }}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].TotalEstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].TotalEstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{patient.Encounters[0].TotalPatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell"></td>
+                </tr>
+                <tr ng-repeat-start="enc in patient.Encounters | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{enc.EncounterDescription}}</td>
+                    <td class="col-sm-1 cell">{{enc.Transactions[0].Provider}}</td>
+                    <td class="col-sm-1 cell">{{enc.Transactions[0].ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{enc.Transactions[0].ServiceDescription}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{enc.Transactions[0].Tooth}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{enc.Transactions[0].Area}}</td>
+                    <td class="col-sm-1 cell">{{enc.Transactions[0].Amount | currency }}</td>
+                    <td class="col-sm-1 cell">{{enc.Transactions[0].EstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{enc.Transactions[0].EstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{enc.Transactions[0].PatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell">{{enc.Transactions[0].Location}}</td>
+                </tr>
+                <tr ng-repeat="tran in enc.Transactions | startFrom : 1">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell">{{tran.Provider}}</td>
+                    <td class="col-sm-1 cell">{{tran.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{tran.ServiceDescription}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{tran.Tooth}}</td>
+                    <td class="col-sm-1 cell" style="width: 4.16666666%">{{tran.Area}}</td>
+                    <td class="col-sm-1 cell">{{tran.Amount | currency }}</td>
+                    <td class="col-sm-1 cell">{{tran.EstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{tran.EstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{tran.PatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell">{{tran.Location}}</td>
+                </tr>
+                <tr ng-repeat-end class="reportGrid__label">
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell" colspan="2">{{'Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell">{{enc.TotalAmount | currency }}</td>
+                    <td class="col-sm-1 cell">{{enc.TotalEstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{enc.TotalEstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{enc.TotalPatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell"></td>
+                </tr>
+                <tr ng-repeat-end ng-hide="true"></tr>
+            </tbody>
+            <tbody class="reportGrid__footer reportGrid__label">
+                <tr>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell"></td>
+                    <td class="col-sm-1 cell" colspan="2">{{'Totals' | i18n}}</td>
+                    <td class="col-sm-1 cell">{{data.TotalAmount | currency }}</td>
+                    <td class="col-sm-1 cell">{{data.TotalEstimatedInsurance | currency }}</td>
+                    <td class="col-sm-1 cell">{{data.TotalEstimatedAdjustment | currency }}</td>
+                    <td class="col-sm-1 cell">{{data.TotalPatientPortion | currency }}</td>
+                    <td class="col-sm-1 cell"></td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td class="col-sm-12 cell text-align-center" colspan="13">{{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n}}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

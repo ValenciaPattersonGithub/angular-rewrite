@@ -1,0 +1,7 @@
+﻿<img class="patientOdontogram__snapshot" ng-src="{{imageSrc}}" ng-class="{ dirty: snapshotIsDirty }" />
+<span ng-if="snapshotIsDirty && !showRetryMessage" id="snapshotDirtyMessage" class="patientOdontogram__snapshotmessage">
+    {{ 'Updates are pending for this snapshot and will be available soon.' | i18n }}
+</span>
+<div ng-if="showRetryMessage" id="snapshotRetryMessage" class="patientOdontogram__snapshotmessage">
+    {{ 'Snapshot update failed. Would you like to' | i18n }}&nbsp;<a ng-click="updateSnapshot()" href="">{{ 'try again' | i18n }}?</a>
+</div>

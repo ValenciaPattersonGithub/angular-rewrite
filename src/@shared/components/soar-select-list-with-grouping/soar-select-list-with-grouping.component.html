@@ -1,0 +1,22 @@
+<form [formGroup]="groupLocationForms">
+    <kendo-dropdownlist
+        [id]="id"
+        [textField]="textField"
+        [valueField]="valueField"
+        formControlName="selectedItem"
+        [defaultItem]="placeHolder" 
+        [data]="optionList"
+        [valuePrimitive]="true" 
+        [tabIndex]="sbTab"
+        [popupSettings]="popupSettings"
+        (valueChange)="valueChange($event)"
+        required>
+        <ng-template kendoDropDownListItemTemplate let-dataItem>
+            <span class="items-templateList">{{ dataItem?.NameLine1 }}</span>
+        </ng-template>
+    </kendo-dropdownlist>
+    <span *ngIf="!groupLocationForms?.valid && errorLable" class="peopleMgmt__notification"> {{ ' Please select one location' | translate }} </span>
+</form>
+
+ 
+

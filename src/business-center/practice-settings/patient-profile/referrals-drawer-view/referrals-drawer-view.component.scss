@@ -1,0 +1,144 @@
+@import "variables";
+
+.referralList {
+    height: auto;
+}
+
+.referralList.actions {
+    position: relative;
+    padding: 8px 16px 8px 16px;
+    border-bottom: 1px solid $border-grey;
+}
+
+.referral-drawer-item {
+    // border-radius: 5px;
+    background-size: cover;
+    // box-shadow: 0px 5px 10px rgba(112, 144, 176, 0.3);
+    // border-top: 1px solid #dadcdc;
+    // padding: 10px 0px;
+}
+
+.referral-drawer-table {
+    width: 100%;
+    height: auto;
+
+    tr {
+        border-bottom: 1px solid #dadcdc;
+    }
+
+    td {
+        padding: 10px 4px;
+    }
+
+    .td-referral-icon {
+        width: 8%;
+        padding-left: 10px;
+    }
+
+    .td-referral-details {
+        // padding-left: 10px;
+        // padding-right: 10px;
+
+        .referral-heading {
+            font-weight: bold;
+            font-size: 14px;
+            color: #2dabcb;
+            text-decoration: none solid rgb(45, 171, 203);
+            line-height: 20px;
+            margin-bottom: unset;
+        }
+
+        .referral-text {
+            font-size: 14px;
+            color: #333333;
+            text-decoration: none solid rgb(51, 51, 51);
+            line-height: 20px;
+            margin-bottom: unset;
+        }
+    }
+
+    .td-referral-actions {
+        height: auto;
+    }
+}
+
+::ng-deep {
+    a.menuLink {
+        border-bottom: 1px solid $dropdown-border-color;
+    }
+
+    .dropdown-menu li a:last-child {
+        border-bottom: none !important;
+    }
+
+    .td-referral-actions .dropdown-menu {
+        top: 87px;
+        padding: 0 !important;
+        font-family: $global-font-family;
+        font-size: 12px;
+        position: relative;
+        right: 116px !important;
+        margin-top: -83px !important;
+        margin-right: 5px;
+    }
+
+    .dropdown-menu > li > a:hover {
+        background-color: $action-blue !important;
+        color: $dropdown-text-color !important;
+    }
+
+    .dropdown-menu > li > a:focus {
+        background-color: $action-blue !important;
+        color: $dropdown-text-color !important;
+        position: absolute;
+    }
+
+    .delete-dialog-top {
+        top: 35% !important;
+        width: 25% !important;
+        min-height: auto !important;
+    }
+
+    .referral-list-img {
+        zoom: 80%;
+    }
+
+    .confirmationMessage > p {
+        padding-left: 10px !important;
+        font-size: 14px;
+    }
+
+    .confirmationMessage {
+        .top-hr {
+            margin-top: 0px;
+        }
+
+        .bottom-hr {
+            margin-bottom: 0px;
+        }
+    }
+
+    .popup_heading {
+        padding: 0px 0px 0px 10px !important;
+    }
+
+    .btn-width {
+        width: 100px !important;
+        max-width: 100px !important;
+        height: 25px !important;
+    }
+
+    .k-add-referral-window {
+        left: 20%;
+        min-width: 500px;
+        min-height: 400px;
+        max-width: -moz-fit-content;
+        max-width: fit-content;
+        top: 10%;
+        right: 20%;
+    }
+
+    .btn-right {
+        float: right;
+    }
+}

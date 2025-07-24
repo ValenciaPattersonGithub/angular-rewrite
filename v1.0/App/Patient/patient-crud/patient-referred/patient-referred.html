@@ -1,0 +1,24 @@
+﻿<div class="form-body">
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            <div ng-show="count == 0">
+                <label>{{ '0 patients referred' | i18n }}</label>
+            </div>
+            <div class="referred-patients-container" ng-show="count > 0">
+                <div ng-repeat="referred in patientsReferred" class="referred-patients" ng-class-even=" 'referred-patients-even' ">
+                    <div class="media ">
+                        <i class="pull-left far fa-image fa-3x referred-media-icon"></i>
+                        <div class="media-body referred-media-selected-body">
+                            <p>
+                                <!-- hard coded lengths to avoid line breaks from long names. preferred name will not show if name(s) is a certain length -->
+                                <span id="lblReferredFirstName{{$index}}" ng-bind-html="(referred.FirstName.length
+                                      + referred.LastName.length)>22 ? referred.FirstName[0] + '.' : referred.FirstName |uppercase"></span>
+                                <span id="lblReferredLastName{{$index}}" ng-bind-html="referred.LastName.length > 22 ? referred.LastName.substring(0, 21) : referred.LastName | uppercase"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

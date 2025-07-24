@@ -1,0 +1,33 @@
+<form  *ngIf="editItem" [formGroup]="frmQuestionTextField" name="frmQuestionTextField" role="form">
+    <div class="container-fluid">
+        <div class="row customHeader" id="questionTextFieldText{{sectionIndex}}{{sectionItemIndex}}">
+            {{ 'Note Text' | translate }}:
+            <span class="bold padding5 size-h4" id="QuestionTextRequiredStar{{sectionIndex}}_{{sectionItemIndex}}">*</span>
+        </div>
+        <div class="row customText" [ngClass]="{'red-border': (frmQuestionTextField?.get('questionTextFieldText')?.invalid && customForm?.SectionValidationFlag) || (frmQuestionTextField?.get('questionTextFieldText')?.invalid  && sectionItemIndex == customForm?.SectionCopyValidationFlag ) }">
+            <textarea id="questionTextFieldText{{sectionIndex}}_{{sectionItemIndex}}"
+                      name="questionTextFieldText"
+                      formControlName="questionTextFieldText"
+                      rows="4"
+                      maxlength="1000" required>
+                </textarea>
+        </div>
+        <div class="row error" *ngIf="(frmQuestionTextField?.get('questionTextFieldText')?.invalid && customForm?.SectionValidationFlag) || (frmQuestionTextField?.get('questionTextFieldText')?.invalid  && sectionItemIndex == customForm?.SectionCopyValidationFlag )">
+            <span id="requiredQuestionText{{sectionIndex}}_{{sectionItemIndex}}">{{ 'This field is required.' | translate }}</span>
+        </div><br />
+    </div>
+</form>
+<div *ngIf="sectionItem && !editItem" name="frmQuestionTextField" [ngClass]="{'form-group' : !sectionItem.isMHF}">
+    <div>
+        <div class="row">
+            <div [ngClass]="{'col-md-11' : !sectionItem.isMHF, 'col-md-6' : sectionItem.isMHF}">
+                <span id="lblSectionItemText{{sectionIndex}}_{{sectionItemPreviewIndex}}" class="control-label">
+                    {{ sectionItem.FormItemTextField?.NoteText }}
+                    <span id="sectionItemIsRequired{{sectionIndex}}_{{sectionItemPreviewIndex}}"
+                          *ngIf="sectionItem.IsRequired" class="padding5 size-h4">*</span>
+                    <skip-prompt [sectionItem]="sectionItem" [inputIsDisabled]="inputIsDisabled" (changeSkipMode)="changeSkip($event)"></skip-prompt>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

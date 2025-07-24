@@ -1,0 +1,173 @@
+<div class="row">
+    <div [formGroup]="userIdentificationFrm">
+        <div class="col-xs-12 margin-bottom20 padding-bottom-4">
+            <!-- Federal Identification header -->
+            <div class="panel">
+                <div class="col-xs-12 panel-heading">
+                    <h4 class="panel-title">
+                        {{ 'Federal Identification' | translate }}
+                    </h4>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--FederalTaxId-->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2 panel-heading">
+                    <label class="form-label-newer">{{'Tax ID' | translate }} </label>
+                </div>
+                <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5" [ngClass]="{error:!userIdentificationFrm?.get('TaxId')?.valid}">
+                    <input formControlName="TaxId" name="inpFederalTaxId" class="form-input" [disabled]="!canEditProviderInfo" id="inpFederalTaxId" placeholder="{{ 'Tax ID' | translate }}" type="text" mask="__-_______"
+                           [patterns]="customPatterns" [showMaskTyped]="true"/>                    
+                    <label id="errinpFederalTaxIdInvalid" class="help-text" *ngIf="userIdentificationFrm?.get('TaxId')?.errors?.minlength">{{'Tax ID must be 9 numeric characters'| translate  }}</label>
+                    <label id="errNoTaxId" class="help-text" *ngIf="isPrescribingUser && userIdentificationFrm?.get('TaxId')?.errors?.required"> {{"Prescribing Users Require Tax ID" | translate }}</label>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--FederalLicense-->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label class="form-label-newer">{{'Federal License' | translate }} </label>
+                </div>
+                <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5">
+                    <input formControlName="FederalLicense" name="inpFederalLicense" class="form-input" [disabled]="!canEditProviderInfo" id="inpFederalLicense" placeholder="{{ 'Federal License' | translate }}" minlength="1" maxlength="32" type="text" alphaNumericText allowPunctuation="true" />
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--DeaNumber NOTE required for prescribing user-->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label class="form-label-newer">{{'DEA Number' | translate }} </label>
+                </div>
+                <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5"
+                     [ngClass]="{error: isPrescribingUser && (userIdentificationFrm?.get('DeaNumber')?.errors?.required )}">
+                    <input class="form-input"
+                           formControlName="DeaNumber"
+                           name="inpUserDeaNumber"
+                           [disabled]="!canEditProviderInfo || disableDeaNumber"
+                           id="inpUserDeaNumber"
+                           placeholder="{{ 'DEA Number' | translate }}"
+                           type="text"
+                           mask="xx-_______"
+                           [clearIfNotMatch]="true"
+                           [patterns]="customPatterns"
+                           [showMaskTyped]="true"/>
+                    <!-- show error help -->
+                    <label id="errNoDeaNumber"
+                           class="help-text"
+                           *ngIf="isPrescribingUser && userIdentificationFrm?.get('DeaNumber')?.errors?.required">
+                        {{"Prescribing Users Require DEA Number" | translate  }}
+                    </label>
+                    <label id="errDeaNumberNotAllowed"
+                           class="help-text"
+                           *ngIf="userIdentificationFrm?.get('DeaNumber')?.errors?.deaNumberNotAllowed">
+                        {{"Rx Admin may not be a Provider who has a DEA number" | translate  }}
+                    </label>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--NPIType1 NOTE required for prescribing user-->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label class="form-label-newer">{{'NPI Type 1' | translate }} </label>
+                </div>
+                <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5"
+                     [ngClass]="{error: (isPrescribingUser && userIdentificationFrm?.get('NpiTypeOne')?.errors?.required) || userIdentificationFrm?.get('NpiTypeOne')?.errors?.minlength}">
+                    <input class="form-input"
+                           formControlName="NpiTypeOne"
+                           name="inpNpiType1"
+                           [disabled]="!canEditProviderInfo"
+                           id="inpNpiType1"
+                           placeholder="{{ 'NPI Type 1' | translate }}"
+                           type="text"
+                           minlength="10"
+                           maxlength="10"
+                           numericOnly />
+                    <!-- show error help -->
+                    <label id="errNpiInvalid"
+                           class="help-text"
+                           *ngIf="userIdentificationFrm?.get('NpiTypeOne')?.errors?.minlength">
+                        {{'NPI Type 1 must be 10 numeric characters' | translate  }}
+                    </label>                    
+                    <label id="errNoNpiNumber"
+                           class="help-text"
+                           *ngIf="(isPrescribingUser && userIdentificationFrm?.get('NpiTypeOne')?.errors?.required)">
+                        {{"Prescribing Users Require NPI Type 1" | translate  }}
+                    </label>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--PrimaryTaxonomyId-->
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label class="form-label-newer">{{'Primary Taxonomy Code / Specialty' | translate }} </label>
+                </div>
+                <div class="col-xs-9 col-sm-7 col-md-5 col-lg-2" [ngClass]="{error: !userIdentificationFrm?.get('PrimaryTaxonomyId')?.valid}">
+                    <soar-select-list id="inpPrimaryTaxonomyCode" *ngIf="primaryTaxonomyCodes?.length > 0"
+                                      [placeHolder]="'Select Primary Taxonomy Code / Specialty'"
+                                      [textField]="'$$DisplayText'"
+                                      [valueField]="'TaxonomyCodeId'"
+                                      [optionList]="primaryTaxonomyCodes"
+                                      formControlName="PrimaryTaxonomyId"
+                                      name="inpPrimaryTaxonomyCode"
+                                      [disableInput]="!canEditProviderInfo"
+                                      (selectedItemValueChange)="primaryTaxonomyChanged($event)">
+                    </soar-select-list>
+                    <label id="lblPrimaryTaxonomyInvalid" class="help-text" *ngIf="userIdentificationFrm?.get('PrimaryTaxonomyId')?.errors?.comboBox">
+                        {{ 'This entry is invalid.' | translate }}
+                    </label>
+                    <label id="lblPrimaryTaxonomyDuplicateError" class="help-text" *ngIf="!TaxonomyCodesAreUnique">
+                        {{ 'Duplicate Taxonomy Code / Speciality.' | translate  }}
+                    </label>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <!--SecondaryTaxonomyId-->
+            <div class="row" *ngIf="user?.PrimaryTaxonomyId">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label class="form-label-newer">{{ 'Secondary Taxonomy Code / Specialty' | translate }} </label>
+                </div>
+                <div class="col-xs-9 col-sm-7 col-md-5 col-lg-2" [ngClass]="{error: !userIdentificationFrm?.get('SecondaryTaxonomyId')?.valid}">
+                    <soar-select-list id="inpSecondaryTaxonomyCode" *ngIf="secondaryTaxonomyCodes?.length > 0"
+                                      formControlName="SecondaryTaxonomyId"
+                                      name="inpSecondaryTaxonomyCode"
+                                      [placeHolder]="'Select Secondary Taxonomy Code / Specialty'"
+                                      [textField]="'$$DisplayText'"
+                                      [valueField]="'TaxonomyCodeId'"
+                                      [optionList]="secondaryTaxonomyCodes"
+                                      [disableInput]="!canEditProviderInfo" 
+                                      (selectedItemValueChange)="secondaryTaxonomyChanged($event)">
+                                    </soar-select-list>
+                    <label id="lblSecondaryTaxonomyInvalid" class="help-text" *ngIf="userIdentificationFrm?.get('SecondaryTaxonomyId')?.errors?.comboBox">
+                        {{ 'This entry is invalid.' | translate }}
+                    </label>
+                    <label id="lblSecondaryTaxonomyDuplicateError" class="help-text" *ngIf="!TaxonomyCodesAreUnique">
+                        {{ 'Duplicate Taxonomy Code / Speciality.' | translate  }}
+                    </label>
+                </div>
+
+            </div>
+            <div class="clearfix" *ngIf="user?.PrimaryTaxonomyId">&nbsp;</div>
+
+            <div class="row" *ngIf="isProviderOfService">
+                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                    <label class="form-label-newer">{{ 'Denti-Cal PIN' | translate}}</label>
+                </div>
+                <div class="col-xs-9 col-sm-7 col-md-5 col-lg-5">
+                    <input class="form-input"
+                           formControlName="DentiCalPin"
+                           id="denticalPin"
+                           maxlength="50"
+                           type="text"
+                           alphaNumericText allowPunctuation="true" />
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿<profile-section [base-id]="'TreatmentPlans'" [section-title]="'Treatment Plans'" [count]="listCount">
+    <ng-container layout1>
+        <div class="treatmentPlansSummary">            
+            <div class="treatmentPlansSummary__content">
+                <table class="treatmentPlansSummary__table">
+                    <thead></thead>
+                    <tbody>
+                        <tr ng-repeat="txPlan in txPlansForAllAccountMembers | filter: displayBasedOnPatientSelected(txPlan)">                           
+                            <td >
+                                <div>
+                                    <i class="fa far fa-thumbs-up fa-2x statusIcon  padding-10" ng-if="txPlan.TreatmentPlanHeader.Status=='Accepted'"
+                                        uib-tooltip="{{txPlan.TreatmentPlanHeader.Status}}" popover-trigger="mouseenter" popover-placement="top"
+                                        popover-append-to-body="false"></i>
+                                    <i class="fa far fa-thumbs-down fa-2x statusIcon  padding-10" ng-if="txPlan.TreatmentPlanHeader.Status=='Rejected'"
+                                        uib-tooltip="{{txPlan.TreatmentPlanHeader.Status}}" popover-trigger="mouseenter" popover-placement="top"
+                                        popover-append-to-body="false"></i>
+                                    <i class="fa fa-question-circle fa-2x statusIcon  padding-10" ng-if="txPlan.TreatmentPlanHeader.Status=='Proposed'"
+                                        uib-tooltip="{{txPlan.TreatmentPlanHeader.Status}}" popover-trigger="mouseenter" popover-placement="top"
+                                        popover-append-to-body="false"></i>
+                                    <i class="fa fa-play-circle fa-2x statusIcon  padding-10" ng-if="txPlan.TreatmentPlanHeader.Status=='Presented'"
+                                        uib-tooltip="{{txPlan.TreatmentPlanHeader.Status}}" popover-trigger="mouseenter" popover-placement="top"
+                                        popover-append-to-body="false"></i>
+                                    <i class="fa fa-check fa-2x statusIcon  padding-10" ng-if="txPlan.TreatmentPlanHeader.Status=='Completed'"
+                                        uib-tooltip="{{txPlan.TreatmentPlanHeader.Status}}" popover-trigger="mouseenter" popover-placement="top"
+                                        popover-append-to-body="false"></i>
+                                </div>
+                            </td>
+                            <td >
+                                <a id="lbltxPlan{{$index}}" href="{{ txPlan.$$Route }}">{{ txPlan.TreatmentPlanHeader.TreatmentPlanName }}</a>
+                            </td>
+                            <td >
+                                <span id="lbltxPlan{{$index}}">{{'Created On {0}' | i18n:[(txPlan.TreatmentPlanHeader.CreatedDate | toShortDisplayDate)]}}</span>
+                            </td>
+                            <td >
+                                <span id="lblServCount{{$index}}">{{txPlan.$$ServicesSummary | i18n:[txPlan.ServicesCount]}} {{txPlan.ServicesFees | currency}}</span>
+                            </td>
+                            <td>
+                                <i class="fa fa-certificate fa-2x statusIcon" ng-if="txPlan.TreatmentPlanHeader.IsRecommended" 
+                                    ng-class="{ 'active':txPlan.TreatmentPlanHeader.IsRecommended, 'inactive':!txPlan.TreatmentPlanHeader.IsRecommended }">
+                                </i>
+                            </td>
+                            <td>
+                                <span id="lblAppts{{$index}}">{{'{0} Unscheduled' | i18n:[txPlan.UnscheduledAppointmentsCount]}}</span> <span id="lblAppts{{$index}}">{{'{0} Scheduled' | i18n:[txPlan.ScheduledAppointmentsCount]}}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-container>
+</profile-section>

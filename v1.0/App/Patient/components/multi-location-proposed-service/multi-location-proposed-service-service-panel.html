@@ -1,0 +1,253 @@
+﻿<div class="propServCreateUpdate" ng-if="patientLocationMatch">
+    <!-- Active Teeth -->
+    <div class="form-row toothCtrl__subtitle" ng-if="currentServiceCode.Description">
+        <p>{{currentServiceCode.Description}}</p>
+    </div>
+
+    <div class="form-row" ng-if="!isAreaMatching(1)">
+        <div class="form-col-12">
+            <label class="control-label">
+                {{::'Tooth *' | i18n}}
+            </label>
+            <span ng-if="currentServiceCode.UseCodeForRangeOfTeeth === false">
+                <select kendo-multi-select
+                        class="propServCreateUpdate__toothSelector"
+                        id="teethMultiSelect"
+                        name="teethMultiSelect"
+                        k-data-source="patTeeth"
+                        k-options="teethSelectOptions"
+                        k-ng-model="activeTeeth"
+                        k-change="activeTeethUpdated">
+                </select>
+            </span>
+            <rot-selector selected="activeTeeth" ng-if="currentServiceCode.UseCodeForRangeOfTeeth === true"></rot-selector>
+        </div>
+    </div>
+
+    <!-- Area Selectors -->
+    <!-- Surface -->
+    <div class="form-row" ng-if="!_.isEmpty(surfaces) && isAreaMatching(4)">
+        <div class="form-col-12">
+            <label class="control-label">
+                {{::'Surface' | i18n}}
+            </label>
+            <surfaces disable-input="!allowEditing" data="surfaces" active-surfaces="activeSurfaces"></surfaces>
+            <label class="control-label" ng-class="{error: true}" ng-if="errorMessage">
+                {{::'This field is required' | i18n}}
+            </label>
+        </div>
+    </div>
+
+    <!-- Root -->
+    <div class="form-row" ng-hide="activeTeeth.length > 1" ng-if="!_.isEmpty(roots) && isAreaMatching(3)"> 
+        <div class="form-col-12">
+            <label class="control-label">
+                {{::'Root' | i18n}}
+            </label>
+            <roots disable-selection="!allowEditing" data="roots" active-teeth="detailedActiveTeeth"></roots>
+        </div>
+    </div>
+
+    <!-- Location and Provider -->
+    <div class="form-row" ng-if="patientInfo && providers && serviceTransaction && locationsLoading===false">
+        <div class="form-col-6" ng-if="!isEncounterRefactored && !passinfo">
+            <label class="control-label">
+                {{::'Location' | i18n}}
+                &nbsp;*
+            </label>
+            <soar-select-list id="lstLocations"
+                              class=""
+                              name="lstLocations"
+                              placeholder="{{::'Select location' | i18n}}"
+                              text-field="NameAbbreviation"
+                              value-field="LocationId"
+                              option-list="userLocations"
+                              disable-input="!allowEditing"
+                              ng-model="serviceTransaction.LocationId">
+            </soar-select-list>
+            <!--ng-if="loadKendoWidgets === true"-->
+            <label class="toothCtrl__error"
+                   ng-class="{error: !serviceTransaction.LocationId }"
+                   ng-if="!serviceTransaction.LocationId">
+                {{::'This field is required' | i18n}}
+            </label>
+        </div>
+
+        <div class="form-col-6">
+            <label class="control-label">
+                {{ ::(isFromAccountSummary ? 'Provider (Services)' : 'Provider') | i18n }}
+                &nbsp;*
+            </label>
+            <!--don't pass in providers , allow provider-selector to do the get and determine providers by location, role-->
+            <provider-selector-with-grouping ng-if="loadProviderSelector===true && showProviderSelector ===true"
+                               [input-id]="'lstProvider'"
+                               [patient-info]="patientInfo"
+                               [set-preferred]="true"
+                               [provider-type-ids]="[1,2,3,5]"
+                               [filter-by-location-id]="serviceTransaction.LocationId"
+                               (selected-provider-change)="updateProviderId($event)"
+                               [usually-performed-by]="serviceTransaction.UsuallyPerformedByProviderTypeId"
+                               [selected-provider]="serviceTransaction.ProviderUserId"
+                               [default-item-text]="'Providers'"
+                               [is-disabled]="existingService || !allowProviderEditing">
+            </provider-selector-with-grouping>
+            <!-- will pass in providers ids that are valid -->
+            <provider-selector-with-grouping ng-if="loadProviderSelector===true && showProviderSelectorForAppointmentServices === true"
+                                [input-id]="'lstProvider'"
+                                [patient-info]="patientInfo"
+                                [set-preferred]="true"
+                                [appointment-Providers]="appointmentProviderIds"
+                                (selected-provider-change)="updateProviderId($event)"
+                                [selected-provider]="serviceTransaction.ProviderUserId"
+                                [default-item-text]="'Providers'"
+                                [is-disabled]="existingService || !allowProviderEditing">
+            </provider-selector-with-grouping>
+            <!--ng-if="loadKendoWidgets === true"-->
+            <label class="toothCtrl__error" ng-class="{error: noProvider}" ng-if="noProvider">
+                {{::'This field is required' | i18n}}
+            </label>
+        </div>
+        <div class="form-col-6" ng-if="isFromAccountSummary">
+            <label class="control-label">
+                {{ ::'Provider (Claims)' | i18n}}
+                &nbsp;*
+            </label>
+            <provider-selector ng-show="providersByLocation"
+                               input-id="ClaimsProvider"
+                               patient-info="patientInfo"
+                               selected-provider="serviceTransaction.ProviderOnClaimsId"
+                               filter-inactive-providers="true"
+                               disable-input="existingService || !allowProviderEditing">
+            </provider-selector>
+            <!--ng-if="loadKendoWidgets === true"-->
+            <label class="toothCtrl__error" ng-class="{error: noClaimsProvider}" ng-if="noClaimsProvider">
+                {{::'This field is required' | i18n}}
+            </label>
+        </div>
+    </div>
+    <div class="form-row toothCtrl__provLocLoading" ng-if="!patientInfo || !providers || !serviceTransaction || locationsLoading">
+        <i class="fa fa-spinner fa-spin loading"></i>
+    </div>
+    <div class="form-row">
+        <!-- Fee -->
+        <div class="form-col-4">
+            <label class="control-label">
+                {{ ::'Fee' | i18n }}
+            </label>
+            <input type="text" ng-disabled="!allowEditing || existingService || referredService" class="form-control" ng-model="serviceTransaction.Fee" min-value="0.00" max-value="999999.99" model-format="currency" id="inpFee" placeholder="{{::'0'|currency}}" />
+        </div>
+        <!-- Status -->
+        <div class="form-col-4" ng-if="!isEncounterRefactored && !passinfo && filteredServiceTransactionStatuses.length != 0 && serviceTransaction.ServiceTransactionStatusId">
+            <label class="control-label">
+                {{ ::'Status' | i18n }}
+            </label>
+            <soar-select-list id="inpServiceStatus"
+                              name="inpServiceStatus"
+                              placeholder="{{ ::'Status' | i18n }}"
+                              ng-model="serviceTransaction.ServiceTransactionStatusId"
+                              text-field="Name"
+                              value-field="Id"
+                              option-list="filteredServiceTransactionStatuses"
+                              disable-input="statusDisabled">
+            </soar-select-list>
+            <!--ng-if="loadKendoWidgets === true">-->
+        </div>
+        <!-- Date -->
+        <div class="form-col-4" ng-hide="isFromAppointmentModal" ng-if="serviceTransaction">
+            <label class="control-label">
+                {{ ::'Date' | i18n }}
+            </label>
+            <date-selector disable-date-input="allowEditing" ng-if="!useMin && isLocationChanged" input-id="inpServiceDate" placeholder="MM/dd/yyyy" date-var="serviceTransaction.$$DateEntered" max-date="timeZoneDate" valid="validDate" format="MM/dd/yyyy"></date-selector>
+            <date-selector disable-date-input="allowEditing" ng-if="!useMin && !isLocationChanged" input-id="inpServiceDate" placeholder="MM/dd/yyyy" date-var="serviceTransaction.$$DateEntered" max-date="maxDate" valid="validDate" format="MM/dd/yyyy"></date-selector>
+            <date-selector disable-date-input="allowEditing" ng-if="useMin" input-id="inpServiceDate" placeholder="MM/dd/yyyy" date-var="serviceTransaction.$$DateEntered" max-date="minDate" min-date="minDate" valid="validDate" format="MM/dd/yyyy"></date-selector>
+        </div>
+    </div>
+
+    <!-- TxPlans -->
+    <div class="form-row" ng-if="!isEncounterRefactored && !passinfo" ng-hide="editMode || isNewTreatmentPlan" >
+        <!-- Select TxPlan -->
+        <div class="form-col-8" ng-class="creatingNewTreatmentPlan ? 'form-col-4 newTreatmentPlan' : 'form-col-8'">
+            <label class="control-label">
+                {{::'Tx Plan' | i18n}}
+            </label>
+            <soar-select-list id="inpTXPlan"
+                              name="inpTXPlan"
+                              class-name="fill-width"
+                              placeholder="{{ ::'Select {0}' | i18n:['Treatment Plan'] }}"
+                              text-field="TreatmentPlanDescription"
+                              value-field="TreatmentPlanId"
+                              option-list="treatmentPlanSummaries"
+                              ng-model="serviceTransaction.TreatmentPlanId"
+                              ng-if="serviceTransaction && !isEditTreatmentPlan"
+                              delay-select="true"
+                              disable-input="existingService || !allowEditing">
+            </soar-select-list>
+        </div>
+        <div class="form-col-4" ng-if="creatingNewTreatmentPlan">
+            <label class="control-label" ng-class="creatingNewTreatmentPlan ? 'customLabel' : 'control-label'">
+                {{ ::'Tx Plan Name' | i18n }}
+                </label>
+            <input type="text" 
+                   class="form-control" 
+                   id="inpTxPlanName" 
+                   ng-model="serviceTransaction.userInpTxPlanName"                 
+                   ng-init="serviceTransaction.userInpTxPlanName = 'Treatment Plan'" 
+                   value="Treatment Plan" />
+        </div>
+        <div class="form-col-4" ng-if="planStages">
+            <label class="control-label">
+                {{::'Stage' | i18n}}
+            </label>
+            <soar-select-list id="inpTxPlanPart"
+                              name="inpTxPlanPart"
+                              class-name="fill-width"
+                              text-field="stagedesc"
+                              value-field="stageno"
+                              option-list="planStages"
+                              sb-select="selectStage"                         
+                              ng-model="stageSelected.number"
+                              delay-select="false"
+                              disable-input="existingService || !allowEditing ">
+            </soar-select-list>
+        </div>
+
+    </div>
+        <!-- TxPlan Part -->
+       
+
+    
+    <!-- Footer -->
+    <div class="form-footer">
+        <div class="leftFooter">
+            <button class="btn btn-primary"
+                    check-auth-z="{{isEdit?'soar-clin-cpsvc-edit':'soar-clin-cpsvc-add'}}"
+                    ng-disabled="!formIsValid || saving || !serviceLocationMatch || !canSave"
+                    title="{{::saveTooltip}}"
+                    ng-click="saveServiceTransaction()">
+                {{::btnText}}
+            </button>
+            <button class="btn btn-default" ng-click="close()">
+                {{ ::'Cancel' | i18n }}
+            </button>
+        </div>
+        <div class="leftFooter">
+            <button class="btn btn-primary" ng-if="isSwiftCode && !isLastcode" ng-click="getNextService()">
+                {{ ::'Omit' | i18n }}
+            </button>
+        </div>
+    </div>
+</div>
+<div class="toothCtrl" ng-if="!patientLocationMatch">
+    <div class="locationErrorMessage">
+        <p>
+            {{::'Your current location does not match this patient\'s primary or alternate locations.' | i18n }}
+            <br />
+            {{::'Please update your current location to the patient\'s primary or any alternate locations to complete this action.' | i18n }}
+        </p>
+    </div>
+    <div class="pull-right">
+        <button class="btn btn-default cancel" ng-click="close()">
+            {{::'Close' | i18n}}
+        </button>
+    </div>
+</div>

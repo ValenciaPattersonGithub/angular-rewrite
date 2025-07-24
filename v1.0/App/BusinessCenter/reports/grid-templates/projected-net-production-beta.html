@@ -1,0 +1,143 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage"
+        ng-repeat="location in data.Locations">
+        <table class="fusePrintGrid pull-left">
+            <thead>
+                <tr class="reportGrid__row">
+                    <th colspan="6">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="reportGrid__row reportGrid__rowDefaultBG">
+                    <th class="col-sm-2 cell">
+                        {{ 'Provider' | i18n }}
+                    </th>
+                    <th class="col-sm-2 cell">
+                        {{ 'Patient' | i18n }}
+                    </th>
+                    <th class="col-sm-2 cell">
+                        {{ 'Appointment' | i18n }}
+                    </th>
+                    <th class="col-sm-2 cell">
+                        {{ 'Appointment Type' | i18n }}
+                    </th>
+                    <th class="col-sm-2 cell">
+                        {{ 'Room' | i18n }}
+                    </th>
+                    <th class="col-sm-2 cell text-right">
+                        {{ 'Projected Net Production' | i18n }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripOdd'" ng-class-Even="'stripEven'" ng-repeat="prov in location.Providers">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-2 cell">
+                        {{prov.Provider}}
+                    </td>
+                    <td class="col-sm-10 cell" colspan="5">
+                    </td>
+                </tr>
+                <tr class="reportGrid__row" ng-repeat="appt in prov.Appointments">
+                    <td class="col-sm-2 cell">
+                    </td>
+                    <td class="col-sm-2 cell">
+                        {{appt.Patient}}
+                    </td>
+                    <td class="col-sm-2 cell">
+                        {{appt.Appointment}}
+                    </td>
+                    <td class="col-sm-2 cell">
+                        {{appt.AppointmentType}}
+                    </td>
+                    <td class="col-sm-2 cell">
+                        {{appt.Room}}
+                    </td>
+                    <td class="col-sm-2 cell text-right">
+                        {{appt.ProjectedNetProduction | currency}}
+                    </td>
+                </tr>
+                <tr class="reportGrid__row reportGrid__label">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell" colspan="4">{{'# of appointments scheduled' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right"> {{prov.NumberOfAppointments}}</td>
+                </tr>
+                <tr class="reportGrid__row reportGrid__label">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell" colspan="4">{{'# of appointments scheduled without services, without an appointment
+                        type, or the usual amount equals 0' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right"> {{prov.NumberOfAppointmentsNoProduction}}</td>
+                </tr>
+                <tr class="reportGrid__row reportGrid__label">
+                    <td class="col-sm-12 cell" colspan="6">&nbsp;</td>
+                </tr>
+                <tr class="reportGrid__row reportGrid__label">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell" colspan="4"> {{'Projected Net Production from Scheduled Services' | i18n}}{{':'
+                        | i18n}}
+                    </td>
+                    <td class="col-sm-2 cell text-right">{{prov.ScheduledServicesProjectedProduction | currency}}</td>
+                </tr>
+                <tr class="reportGrid__row reportGrid__label">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell" colspan="4"> {{'Projected Net Production from Appointment Type' | i18n}}{{':'
+                        | i18n}}</td>
+                    <td class="col-sm-2 cell text-right">{{prov.AppointmentTypeProjectedProduction | currency}}</td>
+                </tr>
+                <tr class="reportGrid__row reportGrid__label">
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell" colspan="4">{{'Total Projected Net Production' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right">{{prov.TotalProjectedNetProduction | currency}}</td>
+                </tr>
+            </tbody>
+            <tbody class="stripEven" ng-if="data.Locations.length === $index+1">
+                <tr class="reportGrid__footer">
+                    <td class="col-sm-2 cell">Report Totals</td>
+                    <td class="col-sm-10 cell" colspan="5"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="4">{{'# of appointments scheduled' | i18n}}{{':'
+                        | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{data.NumberOfAppointments}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="4">{{'# of appointments scheduled without services, without an appointment type, or the usual amount equals 0' | i18n}}{{':'
+                            | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{data.NumberOfAppointmentsNoProduction}}</td>
+                </tr>
+
+                <tr>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="6"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="4">{{'Projected Net Production from Scheduled Services' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{data.ScheduledServicesProjectedProduction | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="4">{{'Projected Net Production from Appointment Type' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{data.AppointmentTypeProjectedProduction | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell"></td>
+                    <td class="col-sm-8 cell reportGrid__label" colspan="4">{{'Total Projected Net Production' | i18n}}{{':' | i18n}}</td>
+                    <td class="col-sm-2 cell text-right reportGrid__label">{{data.TotalProjectedNetProduction | currency}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-12 text-align-center" colspan="6">
+                            <i>{{'*Appointments with no services or no appointment type (or the appointment type estimated value
+                                    is $0) will be calculated at $0 for the purpose of this report.' | i18n}}</i>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

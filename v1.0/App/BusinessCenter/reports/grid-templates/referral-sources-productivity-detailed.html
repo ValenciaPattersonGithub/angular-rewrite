@@ -1,0 +1,7 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+      <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Locations.length > 0 && !showFilterMessage">
+        <referral-sources-productivity-detailed-report [data]="data" ></referral-sources-productivity-detailed-report>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+﻿<div class="textarea-wrapper" [ngClass]="{'label-left' : labelDirection=='left'}">
+    <div class="label-wrapper">
+        <app-label class="textarea-label"
+                   [isErrorColor]="!isValid"
+                   [isBold]="isBold"
+                   [fieldId]="fieldId"
+                   [label]="label"></app-label>
+        <svg-icon name="tooltipIcon"
+                  [id]="fieldId + 'Icon'"
+                  class="error-icon"
+                  iconWidth="15px"
+                  iconHeight="15px"
+                  *ngIf="!isValid"
+                  [tooltip]="validationText"
+                  placement="top-error"
+                  delay="500">
+        ></svg-icon>
+    </div>
+
+    <textarea [id]="fieldId"
+              [disabled]=isDisabled
+              [placeholder]="placeholderText"
+              [ngClass]="{'no-resize' : noResize == true, 'error' : !isValid}"
+              [attr.maxlength]="length"
+              [(ngModel)]="defaultValue"
+    ></textarea>
+</div>

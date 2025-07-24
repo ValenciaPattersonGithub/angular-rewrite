@@ -1,0 +1,199 @@
+﻿.formsTemplates {
+    .fdheader{
+        font-size: 22px;
+    }
+    .standardHeader;
+    max-width: 100%;
+    width: 100%;
+    .ellipse {
+        background-color: @brand-color_white;
+        border: hidden;
+
+        &.hover {
+            background-color: @brand-color_white;
+            border: hidden;
+        }
+
+        &.active {
+            background-color: @brand-color_white;
+            border: hidden;
+        }
+    }
+
+    .disabled {
+        cursor: not-allowed;
+    }
+
+    &__search {
+        padding-bottom: 10px;
+    }
+
+    &__btns {
+        text-align: left;
+        padding-left: 0px;
+
+        .btnContainer {
+            .add { 
+                padding: @brand-padding_md 0px @brand-padding_sm 0px;
+            }
+         }
+    }
+
+    &__title {
+        h1 {
+            display: inline-block;
+            float: left;
+        }
+    }
+
+    &__filteredOut {
+        visibility:hidden;
+    }
+
+    &__hideAccordianNode {
+        display: none;
+    }
+    
+    &__toolbar {
+        .make-row();
+        .containerStandard;
+        max-width: 100%;
+        width: 99%;
+        padding: 0 0px 0 5px;
+    }
+        &__tabs {
+            .make-xs-column(8);
+            
+            .nav-pills > li {
+                padding: 0 @brand-padding_sm 0 0;
+            }
+            .tab-content {
+                display: none;
+            }
+        }
+        &__actions {
+            .make-xs-column(4);
+            text-align: right;
+        }
+    &__body {
+        .make-row();
+        .containerStandard;
+        max-width: 100%;
+        width: 99%;
+        padding: 0 5px 0 5px;
+    }
+        &__secondary {
+            .make-xs-column(3);
+        }
+        &__primary {
+            .make-xs-column(9);
+        }
+    &__dataPoints{
+         li{
+        list-style-type: none;
+    }
+    }
+
+    select.disabled {
+        background-color: @brand-color_disabled;
+    }
+}
+
+.dirList {
+    padding: @brand-padding_sm;
+    background-color: @brand-color_white;
+    
+    .panel-group {
+        margin-bottom: 0;
+
+        .panel-default {
+            background-color: transparent;
+            border-color: transparent;
+            box-shadow: none;
+
+            &:last-child {
+                .panel-heading {
+                    margin: 0;
+                }
+            }
+        }
+
+        .panel-heading {
+            padding: 0;
+            margin:  0 0 @brand-padding_sm 0;
+            background-color: transparent;
+            border-color: transparent;
+
+            .panel-title {
+                font-weight: @brand-font_medium;
+            }
+            .rootDir {
+                .iconBefore('\f07b', '\f07c');
+                &:before {
+                    min-width: 20px; // for width jerk
+                }
+                color: #0F7BBB ;
+                word-wrap: break-word;
+                display: block;
+                padding: @brand-padding_xs 0px @brand-padding_xs 0px;
+            }
+            .rootDir-font {
+                    font-family:inherit;
+                      font-weight: 400;
+                }
+        }
+        .panel-body {
+            padding: 0 0 @brand-padding_sm 0;
+            border-color: transparent !important; // Easier than the other option
+
+            a.subDir {
+                .iconBefore('\f07b', '\f07c');
+
+                &:before {
+                    min-width: 20px; // for width jerk
+                }
+
+                display: block;
+                box-sizing: border-box;
+                padding-left: @brand-padding_sm;
+            }
+        }
+    }
+}
+
+.margin-top8{
+    margin-top:8px;
+}
+
+.fa-lower-right {
+    left: 14px !important;
+    top: 16px;
+    position: absolute;
+}
+.fa-upper-left {
+    left: -2px !important;
+    top: 2px !important;
+    float: left;
+    position: absolute;
+}
+
+.fa-stack {
+    display: inline-block;
+    height: 2em;
+    line-height: 2em;
+    position: relative;
+    vertical-align: middle;
+    width: 4em;
+    font-size: large;
+    color: #2DABCB;
+    margin-left: 16px;
+    cursor: pointer;
+}
+
+.fa-size-2px {
+    font-size: 2.5em;
+}
+
+.fa{
+    font-weight: 600;
+}

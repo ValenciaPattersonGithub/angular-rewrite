@@ -1,0 +1,94 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="accountsWithOffsettingProviderBalance grid header">
+        <div class="col-sm-3-migration">{{ 'Responsible Party' | translate }}</div>
+        <div class="col-sm-3-migration">{{ 'Provider' | translate }}</div>
+        <div class="col-sm-2-migration">{{ 'Location' | translate }}</div>
+        <div class="col-sm-2-migration text-right">{{ 'Provider Total' | translate }}</div>
+        <div class="col-sm-2-migration text-right">{{ 'Account Total' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+                                     id="accountsWithOffsettingProviderBalance">
+
+            <div *cdkVirtualFor="let transaction of reportData.ResponsibleParties; index as i"
+                 class="{{transaction.Class}}">
+                <div class="accountsWithOffsettingProviderBalance grid item">
+                    <div class="col-sm-3-migration">{{ transaction.ResponsibleParty}}</div>
+                    <div class="col-sm-3-migration">{{ transaction.ProviderLocationTotal[0].Provider }}</div>
+                    <div class="col-sm-2-migration">{{ transaction.ProviderLocationTotal[0].Location }}</div>
+                    <div class="col-sm-2-migration text-right"
+                         *ngIf="transaction.ProviderLocationTotal[0].ProviderTotal >=0">
+                        {{
+                        transaction.ProviderLocationTotal[0].ProviderTotal | currency
+                        }}
+                    </div>
+                    <div class="col-sm-2-migration text-right"
+                         *ngIf="transaction.ProviderLocationTotal[0].ProviderTotal < 0">
+                        ({{
+                        transaction.ProviderLocationTotal[0].ProviderTotal * -1 | currency
+                        }})
+                    </div>
+                    <div class="col-sm-2-migration text-right" *ngIf="transaction.AccountTotal >=0">
+                        {{
+                        transaction.AccountTotal | currency
+                        }}
+                    </div>
+                    <div class="col-sm-2-migration text-right" *ngIf="transaction.AccountTotal < 0">
+                        ({{
+                        transaction.AccountTotal * -1 | currency
+                        }})
+                    </div>
+                </div>
+                <div class="accountsWithOffsettingProviderBalance grid item"
+                     *ngFor="let pro of transaction.ProviderLocationTotal  | slice:1;">
+                    <div class="col-sm-3-migration"></div>
+                    <div class="col-sm-3-migration">{{ pro.Provider }}</div>
+                    <div class="col-sm-2-migration">{{ pro.Location }}</div>
+                    <div class="col-sm-2-migration text-right" *ngIf="pro.ProviderTotal >=0">
+                        {{
+ pro.ProviderTotal |
+                        currency
+                        }}
+                    </div>
+                    <div class="col-sm-2-migration text-right" *ngIf="pro.ProviderTotal < 0">
+                        ({{
+ pro.ProviderTotal *-1 |
+                        currency
+                        }})
+                    </div>
+                    <div class="col-sm-2-migration"></div>
+                </div>
+                <div class="accountsWithOffsettingProviderBalance grid item reportGrid__footer" *ngIf="i+1 == reportData.ResponsibleParties.length">
+                    <div class="col-sm-6-migration"></div>
+                    <div class="col-sm-6-migration"></div>
+                    <div class="col-sm-2-migration text-left">{{'Report Total' | translate}}</div>
+                    <div class="col-sm-2-migration text-right" *ngIf="reportData.ReportProvidersTotals >=0">
+                        {{
+                            reportData.ReportProvidersTotals | currency
+                        }}
+                    </div>
+                    <div class="col-sm-2-migration text-right" *ngIf="reportData.ReportProvidersTotals < 0">
+                        ({{
+                            reportData.ReportProvidersTotals *-1 | currency
+                        }})
+                    </div>
+                    <div class="col-sm-2-migration text-right" *ngIf="reportData.ReportAccountTotal >=0">
+                        {{
+                            reportData.ReportAccountTotal | currency
+                        }}
+                    </div>
+                    <div class="col-sm-2-migration text-right" *ngIf="reportData.ReportAccountTotal < 0">
+                        ({{
+                            reportData.ReportAccountTotal *-1 | currency
+                        }})
+                    </div>
+                    <div class="col-sm-6-migration"></div>
+                    <div class="col-sm-6-migration"></div>
+                    <div class="col-sm-2-migration text-left">{{'Total Accounts' | translate}}</div>
+                    <div class="col-sm-2-migration text-right">{{ reportData.TotalAccounts }}</div>
+                    <div class="col-sm-2-migration"></div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

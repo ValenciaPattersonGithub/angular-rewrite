@@ -1,0 +1,44 @@
+﻿<div class="form-group">
+    <div class="row">
+        <div class="col-xs-6" id="questionEmergencyContactName{{sectionIdex}}_{{sectionIdexPreviewIndex}}">
+            <label id="lblEmergencyContactName{{sectionIdex}}_{{sectionIdexPreviewIndex}}" for="{{'Name' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}">
+                {{ 'Emergency Contact Name' |i18n }}:<span ng-show="sectionItem.FormBankItemEmergencyContact.IsRequiredContact" class="bold padding5 size-h4">*</span>
+            </label>
+        </div>
+        <div class="col-xs-6">
+            <input class="form-control"
+                     type="text" maxlength="300" ng-maxlength="300" id="{{'Name' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}"
+                     ng-disabled="inputIsDisabled"
+                     ng-model="sectionItem.FormBankItemEmergencyContact.Name"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6" id="questionEmergencyContactPhone{{sectionIdex}}_{{sectionIdexPreviewIndex}}">
+            <label id="lblEmergencyContactPhone{{sectionIdex}}_{{sectionIdexPreviewIndex}}" for="{{'Phone' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}">
+                {{ 'Emergency Contact Phone' |i18n }}:<span ng-show="sectionItem.FormBankItemEmergencyContact.IsRequiredPhone" class="bold padding5 size-h4">*</span>
+            </label>
+        </div>
+        <div class="col-xs-6">
+            <input class="form-control"
+                     type="text" id="{{'Phone' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}"
+                     ng-disabled="inputIsDisabled"
+                     ng-model="sectionItem.FormBankItemEmergencyContact.Phone"
+                     ui-mask="(999) 999-9999" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6" id="questionEmergencyContactRelationship{{sectionIdex}}_{{sectionIdexPreviewIndex}}">
+            <label id="lblEmergencyContactRelationship{{sectionIdex}}_{{sectionIdexPreviewIndex}}" for="{{'Phone' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}">
+                {{ 'Emergency Contact Relationship' |i18n }}:<span ng-show="sectionItem.FormBankItemEmergencyContact.IsRequiredContactRelationship" class="bold padding5 size-h4">*</span>
+            </label>
+        </div>
+        <div class="col-xs-6">
+            <input class="form-control"
+                      type="text" maxlength="100" ng-maxlength="100" id="{{'Relationship' + sectionItem.FormItemTypeHeader + '_SEC_' + sectionIndex + '_ITM_' + sectionItemPreviewIndex }}"
+                      ng-disabled="inputIsDisabled"
+                      ng-model="sectionItem.FormBankItemEmergencyContact.Relationship" />
+        </div>
+    </div>
+</div>

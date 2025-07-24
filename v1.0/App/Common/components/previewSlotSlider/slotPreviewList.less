@@ -1,0 +1,74 @@
+﻿.slot-preview-list {
+    position: fixed;
+    top: 110px;
+    bottom: 310px;
+    max-width: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    opacity: 0;
+    background-color: #F0F1F1;
+    transition: max-width 0.1s ease;
+    z-index: 1011;
+
+    &.open {
+        max-width: 272px;
+        opacity: 1;
+    }
+
+    &__box {
+        padding: 0 10px;
+    }
+
+    &__header {
+        position: relative;
+        width: 600px;
+
+        h4 {
+            margin-top: 0;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+
+    &__body {
+        position: relative;
+        width: 100%;
+    }
+
+    &__title {
+        margin-top: 30px;
+        margin-left: 15px;
+    }
+}
+
+.previewSlot {
+    border: 1px solid black;
+    margin-left: 1px;
+    margin-right: 1px;
+    cursor: pointer;
+}
+
+.previewSlotItem {
+    background: lightblue;
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
+    height: 65px;
+}
+
+.previewSlotLabel {
+    margin-top: 2px;
+}
+
+.previewBtnBack {
+    margin-left: -10px;
+    text-decoration: underline;
+}
+
+.previewSelectedSlot {
+    background: dodgerblue;
+}

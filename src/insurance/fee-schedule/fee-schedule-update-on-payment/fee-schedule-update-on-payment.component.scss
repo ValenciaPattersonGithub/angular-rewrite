@@ -1,0 +1,81 @@
+@import "variables";
+
+.fee-schedule-update-on-payment {
+    display: flex;
+    width: 80vw;
+    height: 582px;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+    margin: 15px 15px 15px 15px;
+    
+    .fee-schedule-update-grid {
+        width: calc(100% - 40px) !important;
+        margin: 20px;
+    }        
+}
+
+.app-modal {
+    display: grid;
+    grid-template: 40px 1fr auto / auto;
+    grid-template-areas:
+        'header' 'content' 'footer';
+    margin: 15px 15px 15px 15px;
+    font-family: $global-font-family;   
+    border-radius: 5px;
+    background-color: #ffffff;
+    background-size: cover;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.app-modal-header {
+    padding: 15px;
+    grid-area: header;
+    font-size: $app-modal-header-font-size;
+    font-weight: $app-modal-header-font-weight;
+    font-family: $global-font-family;
+    border-bottom: $app-modal-header-border;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.app-modal-body {
+    grid-area: content;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .bodyItem {
+        margin-bottom: 10px;
+        width: 240px;
+        position: relative;
+    }
+
+    .fui-select-container {
+        width: 240px;
+    }
+
+    .bodyItem:last-child {
+        margin-bottom: 0px;
+    }
+}
+
+.app-modal-footer {
+    grid-area: footer;
+    padding: 15px;
+    border-top: $app-modal-header-border;
+    display: flex;
+    justify-content: flex-end;
+
+    app-button{
+        margin-left:10px;
+    }
+}
+
+.app-modal-bold-text {
+    font-weight: bold;
+}
+
+.app-modal-text {
+    font-weight: normal;
+}

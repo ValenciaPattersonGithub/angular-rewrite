@@ -1,0 +1,76 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+
+
+	<link href="/Content/toastr.min.css" rel="stylesheet" />
+
+	<!-- build:css dist/shell.min.css -->
+    <!-- bundle:style coreshell -->
+    <!-- /bundle -->
+	<!-- endbuild -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+</head>
+<body>
+
+	<header>
+        <div ng-controller="AuthenticationController"></div>
+    </header>
+
+    <div id="CssFailCheck" class="hidden" style="height:1px;"></div>
+    <script type="text/javascript" src="/scripts/lodash.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        (window.jQuery || document.write('<script src="/scripts/jquery-2.1.4.min.js"><\/script>'));
+    </script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular.min.js"></script>
+    <script>
+        (window.angular || document.write('<script src="/scripts/angular.min.js"><\/script>'));
+    </script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-route.min.js"></script>
+    <script>
+        (window.angular.module('ngRoute') || document.write('<script src="/scripts/angular-route.min.js"><\/script>'));
+    </script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-resource.min.js"></script>
+    <script>
+        (window.angular || document.write('<script src="/scripts/angular-resource.min.js"><\/script>'));
+    </script>
+
+    <script>
+        (($.fn.modal) || document.write('<script src="/scripts/bootstrap.min.js"><\/script>'));
+    </script>
+
+    <script src="/scripts/ldclient.min.js"></script>
+	<script src="/scripts/angular-ui/ui-bootstrap.min.js"></script>
+	<script src="/scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+	<script src="/scripts/toastr.min.js"></script>
+
+    <!--<script src="https://uscsoardevplat.blob.core.windows.net/cdn/patui.js"></script>-->
+	<script src="/enterprisecore/patui.js"></script>
+
+    <script>
+        // use local CSS file as fallback if Bootstrap CDN fails
+        $(function () {
+            if ($('#CssFailCheck').is(':visible') === true) {
+                $('<link rel="stylesheet" type="text/css" href="/content/bootstrap-theme.css">').appendTo('head');
+                $('<link rel="stylesheet" type="text/css" href="/content/bootstrap.min.css">').appendTo('head');
+            }
+        });
+    </script>
+
+    <script type="text/javascript" src="/enterprisecore/stacktrace.min.js"></script>
+    <script type="text/javascript" src="/enterprisecore/core-shell.js"></script>
+    <script type="text/javascript" src="/ConfigSettings"></script>
+
+	<!-- build:js dist/app.min.js -->
+    <!-- bundle:script soarshell -->
+    <!-- /bundle -->
+	<!-- endbuild -->
+</body>
+</html>

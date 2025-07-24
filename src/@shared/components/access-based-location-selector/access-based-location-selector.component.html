@@ -1,0 +1,15 @@
+<div class="access-based-location-selector" *ngIf="locationList.length > 0" >
+    <app-multiselect 
+        [listItems]="locationList" 
+        [id]="id" 
+        [(model)]="selectedLocations" 
+        [showSelectAll]="true"
+        [disabled]="disabled"
+        [groupData]="true"
+        [placeholder]="'Select Location'" 
+        (modelChange)="onLocationChange($event)">
+    </app-multiselect>
+</div>
+
+
+

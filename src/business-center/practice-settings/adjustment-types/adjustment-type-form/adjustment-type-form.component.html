@@ -1,0 +1,65 @@
+<side-drawer anchor="right" height="144" width="430" [isOpen]="drawer?.isOpen" [setHeightUsingVH]="true" *ngIf="drawer?.isOpen">
+    <form [formGroup]="adjustmentTypeFG">
+        <div class="adjustment-container">
+            <div class="adjustment-drawer-header">
+                <div class="adjustment-drawer-title">{{title}}</div>
+                <div class="adjustmenticons">
+                    <app-icon-button iconName="closeIcon" variation="secondary" (onClick)="discardAdjustmentType(false)">
+                    </app-icon-button>
+                    <app-icon-button iconName="checkmarkIcon" variation="primary"
+                        [isDisabled]="!(hasCreateAccess || hasEditAccess)"
+                        title="{{!(hasCreateAccess || hasEditAccess)? 'You do not have permission to save this information.' : ''}}"
+                        (onClick)="saveAdjustmentType()">
+                    </app-icon-button>
+                </div>
+            </div>
+            <hr class="adjustment-hr">
+            <div class="adjustment-drawer-content">
+                <div class="form-group">
+                    <app-textarea fieldId="description" placeholderText="" (keyup)="onKeyUp($event)" alphaNumericWithSpecialCharacters [allowEnter]="false"
+                        [isValid]="isFormValid" label="Description*" length="64" formControlName="Description"
+                        [validationText]="descriptionErrorText" (change)="validateDescription($event)"
+                        [defaultValue]="adjustmentTypeFG.controls.Description.value" ngDefaultControl>
+                    </app-textarea>
+                    <span class="pull-right">{{remainingText}}/64</span>
+                </div>
+                <div class="form-group">
+                    <label for="OptionCategory">Category</label>
+                    <div class="flex radiocontainer">
+                        <app-radio-button label="Positive(+)" (change)="onCategoryChange(true)"
+                            id="optPositiveCategory" [checked]="adjustmentTypeFG.controls.IsPositive.value == true"
+                            name="OptionCategory" formControlName="IsPositive"
+                            [disabled]="(adjustmentTypeEditData?.IsDefaultTypeOnBenefitPlan==false || !adjustmentTypeEditData?.IsDefaultTypeOnBenefitPlan)?null:true"
+                            [title]="(adjustmentTypeEditData?.IsDefaultTypeOnBenefitPlan == true ? defaultAdjustmentTypeMessage : '')"
+                            ngDefaultControl>
+                        </app-radio-button>
+                        <app-radio-button label="Negative(-)" (change)="onCategoryChange(false)"
+                            id="optNegativeCategory" [checked]="adjustmentTypeFG.controls.IsPositive.value == false"
+                            name="OptionCategory" formControlName="IsPositive"
+                            [disabled]="(adjustmentTypeEditData?.IsDefaultTypeOnBenefitPlan==false || !adjustmentTypeEditData?.IsDefaultTypeOnBenefitPlan)?null:true"
+                            [title]="(adjustmentTypeEditData?.IsDefaultTypeOnBenefitPlan == true ? defaultAdjustmentTypeMessage : '')"
+                            ngDefaultControl>
+                        </app-radio-button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Impacts">Impacts*</label>
+                    <app-select id="drpImpacts" [listItems]="listItems" (selectionChange)='onImpactTypeChange($event)'
+                        [value]="adjustmentTypeFG.controls.ImpactType.value">
+                    </app-select>
+                </div>
+                <div class="form-group">
+                    <label for="IsActive">Status</label>
+                    <app-check-box id="chkStatus" label="Active" formControlName="IsActive"
+                        [value]="adjustmentTypeFG.controls.IsActive.value"
+                        [checked]="adjustmentTypeFG.controls.IsActive.value"
+                        (checkChanged)="onChangeImpactStatus($event)"
+                        [isDisabled]="adjustmentTypeEditData?.IsDefaultTypeOnBenefitPlan"
+                        [title]="(adjustmentTypeEditData?.IsDefaultTypeOnBenefitPlan == true ? defaultAdjustmentTypeMessage : '')"
+                        ngDefaultControl>
+                    </app-check-box>
+                </div>
+            </div>
+        </div>
+    </form>
+</side-drawer>  

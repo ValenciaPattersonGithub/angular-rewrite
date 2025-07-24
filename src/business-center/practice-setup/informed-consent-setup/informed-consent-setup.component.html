@@ -1,0 +1,10 @@
+<consent-message [styles]="styles"
+	[title]="'Informed Consent Message'"
+	[checkAuthZ]="'soar-biz-icmsg-edit'"
+	[dataHasChanged]="dataHasChanged"
+	[consentMessage]="informedConsentMessage?.Text"
+	(save)="saveInformedConsentMessage()"
+	(cancel)="cancelChanges()"
+	(consentMessageChange)="informedConsentMessageChange($event)">
+</consent-message>
+

@@ -1,0 +1,85 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="serviceCodeProductivityByProvider grid header">
+        <div class="col-sm-1-migration">{{'Provider' | translate }}</div>
+        <div class="col-sm-1-migration">{{'Service Code' | translate }}</div>
+        <div class="col-sm-1-migration">{{'CDT Code' | translate }}</div>
+        <div class="col-sm-1-migration">{{'Service Type' | translate }}</div>
+        <div class="col-sm-2-migration">{{'Description' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{'Number' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{'Location Fee' | translate }}</div>
+        <div class="col-sm-1-migration text-right">{{'Allowed Amount' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+                                     id="serviceCodeProductivityByProvider">
+
+            <div *cdkVirtualFor="let provider of reportData.ProviderDetails; index as i">
+
+                <ng-container *ngIf="!data.isSummaryView">
+                    <div class="serviceCodeProductivityByProvider grid item">
+                        <div class="col-sm-1-migration">{{ provider.Provider}}</div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!data.isSummaryView">
+                    <div *ngFor="let serviceType of provider.ServiceCodes;">
+                        <div class="serviceCodeProductivityByProvider grid item"
+                             *ngFor="let detail of serviceType.Details; index as i">
+                            <div class="col-sm-1-migration"></div>
+                            <div class="col-sm-1-migration" *ngIf="i == 0">{{serviceType.ServiceCode}}</div>
+                            <div class="col-sm-1-migration" *ngIf="i > 0"></div>
+                            <div class="col-sm-1-migration">{{detail.CdtCode}}</div>
+                            <div class="col-sm-1-migration">{{detail.ServiceType}}</div>
+                            <div class="col-sm-2-migration">{{detail.Description}}</div>
+                            <div class="col-sm-1-migration text-right">{{detail.Number}}</div>
+                            <div class="col-sm-1-migration text-right">{{detail.Fee | currency}}</div>
+                            <div class="col-sm-1-migration text-right">{{detail.AllowedAmount | currency}}</div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!data.isSummaryView">
+                    <div class="serviceCodeProductivityByProvider grid item">
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-2-migration text-right">{{'Total for' | translate  }} {{provider.Provider}}</div>
+                        <div class="col-sm-1-migration text-right">{{provider.Number}}</div>
+                        <div class="col-sm-1-migration text-right">{{provider.Fee | currency}}</div>
+                        <div class="col-sm-1-migration text-right">{{provider.AllowedAmount | currency}}</div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="data.isSummaryView">
+                    <div class="serviceCodeProductivityByProvider grid item">
+                        <div class="col-sm-1-migration">{{ provider.Provider}}</div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-2-migration text-right"></div>
+                        <div class="col-sm-1-migration text-right">{{provider.Number}}</div>
+                        <div class="col-sm-1-migration text-right">{{provider.Fee | currency}}</div>
+                        <div class="col-sm-1-migration text-right">{{provider.AllowedAmount | currency}}</div>
+                    </div>
+                </ng-container>
+                    <div class="serviceCodeProductivityByProvider grid item reportGrid__footer" *ngIf="i+1 == reportData.ProviderDetails.length">
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-2-migration">{{'Report Totals' | translate }}</div>
+                        <div class="col-sm-1-migration text-right"> {{reportData.Number}}</div>
+                        <div class="col-sm-1-migration text-right">{{reportData.Fee | currency}}</div>
+                        <div class="col-sm-1-migration text-right">{{reportData.AllowedAmount | currency}}</div>
+                    </div>
+
+            </div>
+
+            <div class="col-sm-12-migration text-align-center">
+                {{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright &#169; American Dental Association (ADA). All rights reserved.' | translate}}
+            </div>
+            <div class="col-sm-12-migration text-align-center">{{'Fee does not reflect taxes and/or discounts' | translate }}</div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+    
+    
+</div>
+

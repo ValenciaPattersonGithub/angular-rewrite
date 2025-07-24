@@ -1,0 +1,65 @@
+<div class="claims-management-mass-update-dialog"> 
+    <div class="dialog-header">
+        <span class="text-left">{{ title | translate  }}</span>
+    </div>           
+    <div class="dialog-content">
+        <div class="dialog-sub-header">
+            <label>Submission Method</label>
+            <select class="form-control submission-method-select" id="ddSubmissionMethod" [(ngModel)]="selectedSubmissionMethod" (change)="validate()">
+                <option [ngValue]="0">Select method...</option>
+                <option *ngFor="let opt of submissionMethodOptions" [ngValue]="opt.value">{{opt.name}}</option>
+            </select>
+        </div>
+        <label class="grid-title">Selected Claims and Predeterminations</label>
+        <div class="selected-claims-grid">
+            <table class="table table-striped table-bordered ">
+                <thead>
+                <tr>
+                    <th id="thPatientName">
+                        {{'Patient Name' | translate }}
+                    </th>
+                    <th id="thServiceDate">
+                        {{'Date' | translate }}
+                    </th>
+                    <th id="thProvider">
+                        {{'Provider'| translate }}
+                    </th>
+                    <th id="thCarrier">
+                        {{'Carrier'| translate }}
+                    </th>
+                    <th id="thSubmissionMethod">
+                        {{'Submission Method'| translate }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let claim of claims; let i = index;" [style.color]="getColor(claim)" id="trGridRow{{i}}" title="{{claim.MassUpdateFailureMessage}}">
+                    <td id="tdPatientName{{i}}">{{claim.patientName}}</td>
+                    <td id="tdServiceDate{{i}}">{{claim.startDatetoEndDate }}</td>
+                    <td id="tdProvider{{i}}">{{claim.TreatingDentistSignature}}</td>
+                    <td id="tdCarrier{{i}}">{{claim.CarrierName}}</td>
+                    <td id="tdSubmissionMethod{{i}}">{{submissionMethodNames[claim.SubmittalMethod]}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div> 
+        <div class="form-row">
+            <div class="message">
+                <span class="error" [style.color]="updateFailed ? 'red' : 'black'">{{validationMessage}}</span>
+            </div>
+        </div> 
+    </div>    
+    <div class="dialog-footer"> 
+        <div class="btn_toolbar">
+            <button id="btnCancel" class="btn default_button" (click)="cancelDialog()" type="button" [disabled]="inProcess" *ngIf="!updateFailed">{{'Cancel' | translate}}</button>
+            <button id="btnSavePrimaryDuplicate" class="btn primary_button" type="button"
+                    (click)="performMassUpdate()"
+                    [disabled]="!isValid || inProcess"
+                    *ngIf="!updateFailed">
+                {{'Update'| translate}}
+            </button>
+            <button id="btnClose" class="btn default_button" (click)="closeDialog()" type="button" *ngIf="updateFailed">{{'Close' | translate}}</button>
+        </div>
+    </div>
+</div> 
+ 

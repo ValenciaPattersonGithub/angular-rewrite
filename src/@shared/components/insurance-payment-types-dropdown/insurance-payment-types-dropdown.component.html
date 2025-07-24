@@ -1,0 +1,16 @@
+<div class="insurance-payment-types-dropdown">
+    <kendo-dropdownlist id="insurancePaymentTypes"
+                        [data]="this.insurancePaymentTypes"
+                        [textField]="'Description'"
+                        (valueChange)="paymentTypesChanged($event)"
+                        [valueField]="'PaymentTypeId'"
+                        [itemDisabled]="itemDisabled"
+                        [defaultItem]="{ Description: 'Payment Type', PaymentTypeId: null }"
+                        [valuePrimitive]="true"
+                        [value]="this.selectedPaymentTypeId"
+                        [popupSettings]="{ animate:false }"
+                        [disabled]="disabled"
+                        [ngClass]="{'disabledCursor':disabled}"
+                        required>
+    </kendo-dropdownlist>
+</div>

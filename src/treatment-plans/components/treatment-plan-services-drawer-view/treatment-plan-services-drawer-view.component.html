@@ -1,0 +1,188 @@
+﻿<!-- below will be used when we get to phase 2 on treatment plan work -->
+<div style="border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: #DADCDC;" class="txPlan-service-drawer-title">
+    <a id="txPlanProposedServicesDrawer_proposed"
+       class="drawer-service-link" [class.active]="content === 'proposed'" (click)="content = 'proposed'">{{'Proposed'| translate}} </a>
+    <!--<a class="drawer-service-link" [class.active]="content === 'new'" (click)="content = 'new'" style="margin-left: 20px;">{{ 'New' | translate }}</a>-->
+</div>
+<div *ngIf="content == 'proposed'">
+    <div class="filters-container">
+        <!--todo: replace with library component-->
+        <div class="fui-select-container">
+            <select id="txPlanProposedServicesDrawer_proposed_proposedOrderSelection"
+                    class="select-list fui-select" [(ngModel)]="proposedOrder"
+                    (ngModelChange)="proposedOrderChange(proposedOrder)">
+                <option *ngFor="let item of proposedServicesOrderingList" value="{{ item.Value }}">{{ item.Text }}</option>
+            </select>
+        </div>
+        <!--todo: replace with library component-->
+        <div class="fui-select-container">
+            <select id="txPlanProposedServicesDrawer_proposed_proposedFitlerSelection"
+                    class="select-list fui-select" [(ngModel)]="proposedFilter"
+                    (ngModelChange)="proposedFilterChange(proposedFilter)">
+                <option *ngFor="let item of serviceTypeFilterList" value="{{ item.Value }}">{{ item.Text }}</option>
+            </select>
+        </div>
+
+    </div>
+    <hr class="customHr" />
+</div>
+
+<div *ngIf="content == 'proposed'">
+    <div class="select-all-container">
+        <input type="checkbox" id="txPlanProposedServicesDrawer_proposed_allCheckedItems" class="proposed-service-checkbox-all" [(ngModel)]="isMasterSelect" (change)="onCheckboxSelectAllChange($event)" />
+        <label id="txPlanProposedServicesDrawer_proposed_uncheckedDisplay" for="txPlanProposedServicesDrawer_proposed_allCheckedItems" class="uncheckedBox" *ngIf="!isMasterSelect">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0V0z" fill="none" /><path class="checkbox-drawer" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" /></svg>
+            {{ 'Check/Uncheck All' | translate }}
+        </label>
+
+        <label id="txPlanProposedServicesDrawer_proposed_checkedDisplay" for="txPlanProposedServicesDrawer_proposed_allCheckedItems" class="checkedBox" *ngIf="isMasterSelect">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none" /><path class="checkbox-drawer" d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
+            {{ 'Check/Uncheck All' | translate }}
+        </label>
+    </div>
+</div>
+<hr class="customHr" />
+<div class="treatment-plan-service-draw-content-container">
+    <div class="txPlan-services-drawer" *ngIf="content == 'proposed'">
+        <div cdkDropList
+             id="treatmentPlanProposedServicesDrawer"
+             [cdkDropListData]="proposed"
+             [cdkDropListConnectedTo]="dragAreas">
+            <div *ngFor="let item of proposed; index as i;"
+                 class="item-box" 
+                 cdkDrag 
+                 [cdkDragDisabled]="item.isDisabled"
+                 (cdkDragStarted)="dragStarted($event)"
+                 (cdkDragEnded)="dragEnded($event)"
+            >                
+                    <div *cdkDragPreview>
+                        <table class="multiple-selected" *ngIf="showMultipleSelectedDragPreview(item)">
+                            <tr>
+                                <td class="description-textArea" style="text-align: center;">
+                                    <span class="details-area-label">Adding </span>{{ checkedItems.length }}<span class="details-area-label"> Services</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="drawer-preview" *ngIf="!showMultipleSelectedDragPreview(item)">
+                            <tr>
+                                <td class="drag-handle">
+                                    <div class="drag-svg drag-area">
+                                        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+                                            <g>
+                                                <rect fill="none" height="24" width="24" />
+                                            </g>
+                                            <g>
+                                                <g>
+                                                    <g>
+                                                        <path d="M20,9H4v2h16V9z M4,15h16v-2H4V15z" />
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </td>
+                                <td class="description-textArea">
+                                    <span class="details-area-label">{{item.ServiceTransaction.ServiceCode}}: </span>{{ item.ServiceTransaction.ShortDescription }}
+                                </td>
+                                <td class="preview-textArea">
+                                    <div class="details-area-label">Tooth</div>
+                                    <div class="preview-highlight">{{item.ServiceTransaction.Tooth ? item.ServiceTransaction.Tooth : '...'}}</div>
+                                </td>
+                                <td class="preview-textArea noselect">
+                                    <div class="details-area-label">Surface</div>
+                                    <div *ngIf="item.drawerState.area === 4" class="preview-highlight">{{item.ServiceTransaction.Surface ? item.ServiceTransaction.Surface : '...'}}</div>
+                                    <div *ngIf="item.drawerState.area === 3" class="preview-highlight">{{item.ServiceTransaction.Roots ? item.ServiceTransaction.Roots : '...'}}</div>
+                                    <div *ngIf="item.drawerState.area !== 3 && item.drawerState.area !== 4" class="preview-highlight">...</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div *cdkDragPlaceholder>
+                        <div class="drawer-custom-placeholder-spacer">
+                        </div>
+                        <div class="drawer-custom-placeholder">
+                        </div>
+                    </div>
+                    <div class="item-box-space" *ngIf="item.displayProposed">
+                        <div class="service-drawer-item" [ngClass]="{disableDrag: item.isDisabled}">
+                            <table class="service-drawer-table" [ngClass]="{disableDrag: item.isDisabled}">
+
+                                <tr [ngClass]="{disableDrag: item.isDisabled}" title="{{ item.toolTip | translate }}">
+                                    <td *ngIf="!item.isDisabled" id="txPlanProposedServicesDrawer_proposed_dragHandle_stage{{i}}"
+                                        class="drag-handle" cdkDragHandle>
+                                        <div class="drag-svg drag-area">
+                                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+                                                <g>
+                                                    <rect fill="none" height="24" width="24" />
+                                                </g>
+                                                <g>
+                                                    <g>
+                                                        <g>
+                                                            <path d="M20,9H4v2h16V9z M4,15h16v-2H4V15z" />
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                    </td>
+                                    <td class="dragHandlePlaceholder" *ngIf="item.isDisabled">
+                                    </td>
+                                    <td *ngIf="!item.isDisabled" class="reorder-services-checkbox">
+                                        <input id="service-item-{{i}}" class="proposed-service-checkbox" type="checkbox" [disabled]="item.isDisabled" [(ngModel)]="item.isSelected" (change)="onCheckboxChange($event, item)" />
+                                        <label id="txPlanProposedServicesDrawer_proposed_unchecked_service{{i}}" for="service-item-{{i}}" class="uncheckedBox" *ngIf="!item.isSelected">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0V0z" fill="none" /><path class="checkbox-drawer" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" /></svg>
+                                        </label>
+
+                                        <label id="txPlanProposedServicesDrawer_proposed_checked_service{{i}}" for="service-item-{{i}}" class="checkedBox" *ngIf="item.isSelected">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none" /><path class="checkbox-drawer" d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
+                                        </label>
+                                    </td>
+
+                                    <td *ngIf="item.isDisabled" class="checkboxPlaceholder">
+                                    </td>
+                                    <td class="description-textArea noselect">
+                                        <div class="description-textArea-content" id="txPlanProposedServicesDrawer_proposed_serviceDisplay_service{{i}}">
+                                            <span class="details-area-label"
+                                                  [tooltip]="item.ServiceTransaction.showTooltip === true? item.ServiceTransaction.ServiceCode + ' : ' + item.ServiceTransaction.Description : ''"
+                                                  placement="top"
+                                                  delay="500">
+                                                <b>{{item.ServiceTransaction.ServiceCode}}:</b>
+                                            </span>&nbsp;{{ item.ServiceTransaction.ShortDescription }}
+                                        </div>
+                                        <div class="details-area noselect">
+                                            <div class="location-area"><span class="details-area-label">{{'Location'}}: </span><span id="txPlanProposedServicesDrawer_proposed_locationDisplay_service{{i}}">{{ item.ServiceTransaction.DisplayName }}</span></div>
+                                            <div><span class="details-area-label">{{'Provider'}}: </span><span id="txPlanProposedServicesDrawer_proposed_providerDisplay_service{{i}}">{{ item.ServiceTransaction.ShortProviderFullName }}</span></div>
+                                        </div>
+                                    </td>
+                                    <td class="preview-textArea noselect">
+                                        <div class="details-area-label">Tooth</div>
+                                        <div id="txPlanProposedServicesDrawer_proposed_toothDisplay_service{{i}}"
+                                             class="preview-highlight">{{item.ServiceTransaction.Tooth ? item.ServiceTransaction.Tooth : '---'}}</div>
+                                    </td>
+                                    <td class="preview-textArea noselect">
+                                        <div class="details-area-label">Surface</div>
+                                        <div id="txPlanProposedServicesDrawer_proposed_surfaceDisplay_service{{i}}"
+                                             *ngIf="item.drawerState.area === 4" class="preview-highlight">{{item.ServiceTransaction.Surface ? item.ServiceTransaction.SurfaceSummary : '---'}}</div>
+                                        <div id="txPlanProposedServicesDrawer_proposed_rootsDisplay_service{{i}}"
+                                             *ngIf="item.drawerState.area === 3" class="preview-highlight">{{item.ServiceTransaction.Roots ? item.ServiceTransaction.RootsSummary : '---'}}</div>
+                                        <div id="txPlanProposedServicesDrawer_proposed_emptyDisplay_service{{i}}"
+                                             *ngIf="item.drawerState.area !== 3 && item.drawerState.area !== 4" class="preview-highlight">---</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>                
+
+
+
+
+
+
+
+                
+
+            </div>
+            
+        </div>
+    </div>    
+</div>

@@ -1,0 +1,56 @@
+﻿.documentGroupCrud {
+    width: 100%;
+    .panel-body {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding-top: 0px;
+        border-bottom: none;
+    }
+    .panel-default > .panel-heading {
+        background-color: @brand-color_white;
+        color: @brand-color_black;
+
+        .panel-title {
+            color: @brand-color_black;
+        }
+    }
+    .cell {
+        .concatString;
+    }
+    &__sticky {
+        top: 10px;
+        position: sticky;
+    }
+
+    &__actions {
+        .containerStandard;
+        float: right;
+        padding-bottom: @brand-padding_horizontal;
+        margin-top: 16px;
+
+        .btn {
+            transform: translateY(-50%);
+            margin-left: 5px;
+            float: right;
+            position: relative;
+            padding-bottom: @brand-padding_sm;
+        }
+    }
+
+    &__content {
+        max-height: 550px;
+        overflow: auto;
+        
+        .hoursLabel {
+            padding: 3px;
+            margin: 0px;
+        }
+    }
+
+    &__footer {
+        .containerStandard;
+        .clearfix;
+        padding-right: @brand-padding_sm;
+    }
+}

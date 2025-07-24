@@ -1,0 +1,66 @@
+﻿<div class="reportGrid">
+    <div ng-if="data.Carriers.length === 0">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Carriers.length > 0">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-3 cell">{{'Carrier' | i18n}}</th>
+                    <th class="col-sm-3 cell">{{'Address' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Phone Number' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Benefit Plan' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Plan/Group Number' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'" ng-repeat="carrier in data.Carriers">
+                <tr>
+                    <td class="col-sm-3 cell">{{carrier.CarrierName}}</td>
+                    <td class="col-sm-3 cell">
+                        <div ng-if="carrier.Address">{{carrier.Address}}</div>
+                        <div ng-if="!carrier.Address && carrier.Address2">{{carrier.Address2}}</div>
+                        <div ng-if="!carrier.Address && !carrier.Address2 && (carrier.City || carrier.State || carrier.ZipCode)">{{ carrier.City }}<span ng-if="carrier.City">,</span> {{ carrier.State }} {{ carrier.ZipCode }}</div>
+                    </td>
+                    <td class="col-sm-2 cell">{{carrier.PhoneNumbers[0] | tel}}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[0].BenefitPlanName}}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[0].PlanGroupNumber}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-3 cell">
+                        <div ng-if="carrier.Address && carrier.Address2">{{carrier.Address2}}</div>
+                        <div ng-if="carrier.Address && !carrier.Address2 && (carrier.City || carrier.State || carrier.ZipCode)">{{ carrier.City }}<span ng-if="carrier.City">,</span> {{ carrier.State }} {{ carrier.ZipCode }}</div>
+                        <div ng-if="!carrier.Address && carrier.Address2 && (carrier.City || carrier.State || carrier.ZipCode)">{{ carrier.City }}<span ng-if="carrier.City">,</span> {{ carrier.State }} {{ carrier.ZipCode }}</div>
+                    </td>
+                    <td class="col-sm-2 cell">{{carrier.PhoneNumbers[1] | tel }}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[1].BenefitPlanName}}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[1].PlanGroupNumber}}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-3 cell"></td>
+                    <td class="col-sm-3 cell">
+                        <div ng-if="carrier.Address && carrier.Address2 && (carrier.City || carrier.State || carrier.ZipCode)">{{ carrier.City }}<span ng-if="carrier.City">,</span> {{ carrier.State }} {{ carrier.ZipCode }}</div>
+                    </td>
+                    <td class="col-sm-2 cell">{{carrier.PhoneNumbers[2] | tel}}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[2].BenefitPlanName}}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[2].PlanGroupNumber}}</td>
+                </tr>
+                <tr ng-if="carrier.PhoneNumbers.length > 3 || carrier.BenefitPlans.length > 3">
+                    <td class="col-sm-6 cell" colspan="2"></td>
+                    <td class="col-sm-2 cell">{{carrier.PhoneNumbers[3] | tel }}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[3].BenefitPlanName}}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[3].PlanGroupNumber}}</td>
+                </tr>
+                <tr ng-if="carrier.PhoneNumbers.length > 4 || carrier.BenefitPlans.length > 4">
+                    <td class="col-sm-6 cell" colspan="2"></td>
+                    <td class="col-sm-2 cell">{{carrier.PhoneNumbers[4] | tel }}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[4].BenefitPlanName}}</td>
+                    <td class="col-sm-2 cell">{{carrier.BenefitPlans[4].PlanGroupNumber}}</td>
+                </tr>
+                <tr ng-if="carrier.BenefitPlans.length > 5" ng-repeat="benefitPlan in carrier.BenefitPlans | startFrom : 5">
+                    <td class="col-sm-8 cell" colspan="3"></td>
+                    <td class="col-sm-2 cell">{{benefitPlan.BenefitPlanName}}</td>
+                    <td class="col-sm-2 cell">{{benefitPlan.PlanGroupNumber}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

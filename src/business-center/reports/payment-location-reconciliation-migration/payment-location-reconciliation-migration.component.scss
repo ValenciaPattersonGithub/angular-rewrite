@@ -1,0 +1,44 @@
+.paymentlocreconreport {
+    grid-template-columns: 1fr 1fr 1fr 2fr 2fr 2fr 1fr 1fr 1fr 0.05fr
+}
+.paymentlocreconreportgroupHeader {
+    grid-template-columns: 12fr 0.05fr;
+    background: transparent;
+}
+.paymentlocreconreportfooter {
+    grid-template-columns: 7fr 4fr 1fr 0.05fr
+}
+.paymentlocreconreportsummaryfooter {
+    grid-template-columns: 7fr 4fr 1fr 0.05fr
+}
+
+.paymentlocreconreportsubfooter {
+    grid-template-columns: 9fr 1fr 1fr 1fr 0.05fr
+}
+.groupheader{
+    position: sticky;
+    top: 105px;
+    background: white;
+    z-index: 1;
+}
+.grid {
+    display:grid;  
+    &.header
+    {
+        font-weight: bold;
+        margin-right: 7px;
+
+        &.paymentlocreconreport {
+            position: sticky;
+            top: 62px;
+            background: white;
+            z-index: 1;
+        }
+        > div {
+        
+            padding: 4px;
+            align-items: center;
+            margin-left: 3px;
+        }
+      }
+}

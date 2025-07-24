@@ -1,0 +1,6 @@
+﻿<div class="patEncCart">
+    <div class="rowFull white">
+        <patient-header ng-if="patientHeaderObj" patient-data="patientHeaderObj" phones="phones" active-url="activeTemplate" hide-tabs="false" disable-tabs="false"></patient-header>
+    </div>
+    <encounter-cart [account-id]="accountId" [encounter-id]="encounterId" [appointment-id]="appointmentId" (can-save-change)="registerControllerHasChanges($event)" (cancel)="cancelClicked($event)"></encounter-cart>
+</div>

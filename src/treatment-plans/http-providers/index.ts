@@ -1,0 +1,1 @@
+﻿export { TreatmentPlanHttpService } from './treatment-plan-http.service';

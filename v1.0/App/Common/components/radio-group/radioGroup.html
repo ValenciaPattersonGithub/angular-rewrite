@@ -1,0 +1,11 @@
+﻿<div id="radioGroup-{{uniqueId}}" class="radioGroup">
+    <button class="radioGroup__ctrl" 
+            ng-repeat="option in options"
+            ng-focus="focused = true" 
+            ng-blur="focused = false" 
+            ng-click="changeValue(option)" 
+            ng-disabled="disabled" 
+            tabindex="{{(tabIndex=='0'||tabIndex)?tabIndex:0}}">
+        <span class="radioGroup__label" ng-class="{ 'active': value == option.value, 'inactive': value != option.value }">{{ option.text | i18n }}</span>
+    </button>
+</div>

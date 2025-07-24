@@ -1,0 +1,18 @@
+﻿<div class="timelineTile" ng-click="activateTab('perio', perioStatsMouth.ExamId)" ng-class="{timelineTileBorder : true}">
+    <div class="timelineTile__row">
+        <div class="timelineTile__iconContainer">
+            <img class="timelineTile__icon" ng-src="{{ 'Images/TimelineFilterIcons/perio.svg' }}" />
+        </div>
+        <div class="timelineTile__content">
+            <div id="lblPockets{{tileIndex}}" class="proStatsMthTile__pckts">
+                {{ perioStatsMouth.NumberOfPocketAlerts  }}{{ ' Pockets >= Alert Depth' | i18n}}
+            </div>
+            <div id="lblAlertDepth{{tileIndex}}" class="proStatsMthTile__desc">
+                {{ 'Alert Depth is set to '|i18n }} {{perioStatsMouth.AlertDepth}}
+            </div>
+            <div id="lblBleedPoints{{tileIndex}}" class="proStatsMthTile__desc">
+                {{ perioStatsMouth.NumberOfBleedPoints }}{{' Bleed Points' | i18n }}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+@import "variables";
+
+.solid {
+    cursor: pointer;
+}
+
+.greendot {
+    height: 10px;
+    width: 10px;
+    background-color: #80c217;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.yellowdot {
+    height: 10px;
+    width: 10px;
+    background-color: #ffc831;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.orangedot {
+    height: 10px;
+    width: 10px;
+    background-color: #f09400;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.browndot {
+    height: 10px;
+    width: 10px;
+    background-color: #c35250;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.bar-solid-area-padding {
+    padding-left: 50px;
+    margin-top: -38px;
+}
+
+.bar-solid-area-paddingPre {
+    padding-left: 40px;
+    margin-top: -38px;
+}
+
+.bar-solid-area-paddingStatements {
+    margin-top: -15px;
+    padding-left: 1px;
+    display: flex;
+}
+
+.bar-solid-area-padding-referrals {
+    padding-left: 31px;
+    margin-top: 0px;
+}
+
+.bar-solid-area {
+    &:after {
+        clear: both;
+        content: "";
+        display: table;
+    }
+
+    font-family: $global-font-family;
+    font-size: 12px;
+    color: $text-black;
+    text-decoration: none solid $text-black;
+}
+
+.bar-solid-area .left-solids,
+.bar-solid-area .right-solids {
+    float: left;
+    min-width: 40%;
+}
+
+.bar-solid-area .statement-solidA {
+    margin-left: -10px;
+}
+
+.bar-solid-area .statement-solidB {
+    padding-left: 10px;
+}
+
+.bar-solid-area .solidsArea {
+    float: left;
+    min-width: 90px;
+}
+
+.bar-solid-area .statementArea {
+    min-width: 90px;
+}
+
+.solidsAreaWidth {
+    float: left;
+    min-width: 95px;
+}
+
+.bar-solid-area .left-solids > div:nth-child(1),
+.bar-solid-area .right-solids > div:nth-child(1) {
+    margin-bottom: 10px;
+}
+
+.right-solids, .right-solidss, .solidsAreaRight {
+    margin-top: 10px;
+}
+
+.solidsAreaMargin {
+    margin-top: 4px;
+}
+
+.left-solids, .right-solids, .solidsArea, .solidsAreaWidth {
+    font-family: $global-font-family;
+    font-size: 12px;
+    color: $text-black;
+    text-decoration: none solid $text-black;
+}

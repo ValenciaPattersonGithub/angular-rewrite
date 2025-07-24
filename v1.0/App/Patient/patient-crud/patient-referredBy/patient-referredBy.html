@@ -1,0 +1,90 @@
+﻿<div id="ReferredBySection" class="form-body" ng-show="!loading" ng-form="frmReferredBy">
+    <div class="form-row">
+        <!-- Select Referral Type-->
+        <div class="form-group form-col-4">
+            <label class="control-label">{{'Referral Type' | i18n }}</label>
+            <soar-select-list id="inpReferralType"
+                                name="inpReferralType"
+                                placeholder="{{ 'Select Referral Type' | i18n }}"
+                                text-field="name"
+                                value-field="value"
+                                option-list="patientReferralTypeOptions"
+                                ng-model="referralType"
+                                sb-change="referralTypeChanged"></soar-select-list>
+        </div>
+        <!-- Selected Referral if person-->
+        <div class="form-group form-col-4" ng-class="{'has-error':!valid && hasErrors}" ng-show="referralType == patientReferralTypes.Person">
+            <!-- search results -->
+            <label class="control-label">{{searchLabel | i18n }}</label>
+            <typeahead class="typeahead soar-typeahead typeaheadResults" id="personTypeAhead" cancel="cancelSearch()"
+                        name="personTypeAhead"
+                        disable-input="disablePerson"
+                        clear-content="clearPerson()" show-clear-button="true" scroll-view="true"
+                        appearance="form-input" search="search(term)" select="selectReferralSource(item)"
+                        items="searchResults" term="searchTerm" loading="searchIsQueryingServer"
+                        placeholder="{{ 'Search...'|i18n }}">
+                <ul id="lstPerson" soar-infinite-scroll="search(searchString, true)">
+                    <li ng-hide="true"></li>
+                    <li ng-repeat="person in searchResults" typeahead-item="person" ng-animate="'animate'" ng-hide="false">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4" ng-show="true">
+                                <span id="lblFirstName{{ $index }}" ng-bind-html="person.FirstName | boldTextSearchCriteria:searchString "></span> <span id="lblMiddleName{{ $index }}" ng-bind-html="person.MiddleName | boldTextSearchCriteria:searchString "></span> <span id="lblLastName{{ $index }}" ng-bind-html="person.LastName | boldTextSearchCriteria:searchString "></span> <span id="lblSuffix{{ $index }}" ng-bind-html="person.Suffix | boldTextSearchCriteria:searchString "></span>
+                                <span ng-show="person.PreferredName" id="lblPreferredName{{ $index }}" ng-bind-html="'('+person.PreferredName+')' | boldTextSearchCriteria:searchString "></span>
+
+                            </div>
+                            <div class="col-sm-3 col-md-3" ng-show="true">
+                                <span ng-show="person.DateOfBirth" id="lblDateOfBirth{{ $index }}" ng-bind-html="person.DateOfBirth | toShortDisplayDate| boldTextSearchCriteriaDate:searchString  "></span>
+                            </div>
+
+                            <div class="col-sm-5 col-md-5" ng-show="true">
+                                <div class="row" ng-repeat="phoneInfo in person.PatientPhoneInformationDtos | limitTo:1">
+                                    <div>
+                                        <span id="lblPhoneNumber{{ $index }}" ng-bind-html="phoneInfo.PhoneNumber | boldTextSearchCriteriaPhone:searchString | tel "></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li ng-show="noSearchResults && searchResults.length==0">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span class="text-muted" id="lblResultMessage">
+                                    {{ 'No matching persons found.'|i18n }}
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </typeahead>
+            <span id="lblReferralSourceRequired" class="help-block" ng-show="!valid && hasErrors">
+                {{ 'This field is required.' | i18n }}
+            </span>
+            <div class="clearfix">&nbsp;</div>
+        </div>
+
+        <!-- External Sources -->
+        <div class="form-row" ng-show="referralType == patientReferralTypes.Other">
+            <div class="form-group form-col-4" ng-class="{'has-error':!valid && hasErrors}">
+                <label class="control-label">{{'Referral Source' | i18n }}</label>
+                <soar-select-list id="inpReferralSource"
+                                    name="inpReferralSource"
+                                    placeholder="{{ 'Select {0}' | i18n:['Referral Source'] }}"
+                                    text-field="SourceName"
+                                    value-field="PatientReferralSourceId"
+                                    option-list="referralSources"
+                                    ng-model="selectedId"></soar-select-list>
+                <span id="lblReferralSourceRequired" class="help-block" ng-show="!valid && hasErrors">
+                    {{ 'This field is required.' | i18n }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <!--Section Save buttons-->
+    <!--<div class="form-footer">
+        <button id="btnSaveReferralDetails" class="btn btn-primary">{{ 'Save Referral Details' | i18n }}</button>
+        <button id="btnClear" class="btn btn-default">{{ 'Clear' | i18n }}</button>
+    </div>-->
+    <div ng-show="loading">
+        <no-results loading="loading==true"></no-results>
+    </div>
+</div>

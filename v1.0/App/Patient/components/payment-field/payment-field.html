@@ -1,0 +1,105 @@
+﻿<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <form id="paymentForm">
+                        <!--Date-->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>{{'Date' | i18n}}</label>*
+                                <div class="padding-2 payment-date-col">
+                                    <ng-form name="dateForm">
+                                        <date-selector id="inpPaymentDate" input-id="inpPaymentDate" name="inpPaymentDate" ng-class="{'error': (dateForm.inpPaymentDate.$error.required && hasError)}"
+                                                       date-var="payment.CreditTransactionDetails[0].DateEntered" valid="payment.CreditTransactionDetails[0].ValidDate" ng-model="payment.CreditTransactionDetails[0].DateEntered"
+                                                       format="MM/dd/yyyy" mode="day"
+                                                       placeholder="00/00/0000" required class="payment-datepicker vertical-align-top"></date-selector>
+                                        <div class="error" ng-if="(dateForm.inpPaymentDate.$error.required && hasError)">
+                                            <span class="help-text" id="lblRequiredPaymentDate">{{ 'Date {0}' | i18n:['Required'] }}</span>
+                                        </div>
+                                    </ng-form>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Amount-->
+                        <div class="col-md-3 padding-left-35">
+                            <div class="form-group">
+                                <label>{{ 'Amount'| i18n}}</label>*
+                                <ng-form name="paymentAmountForm">
+                                    <div class="padding-2">
+                                        <div class="form-group vertical-align-top" ng-class="{'charges': ((payment.CreditTransactionDetails[0].Amount < 0 || payment.CreditTransactionDetails[0].Amount > 999999.99) && hasError)}">
+                                            <div>
+                                                <input set-focus-if="true" type="text" class="form-input text-align-right payment-input" name="inpAmount" id="inpAmount" ng-model="payment.CreditTransactionDetails[0].Amount" maxlength="12" placeholder="{{'0'|currency}}" model-format="currency" />
+                                            </div>
+                                        </div>
+                                        <div class="error margin-top-minus6-percent" ng-if="((payment.CreditTransactionDetails[0].Amount <= 0 || payment.CreditTransactionDetails[0].Amount > 999999.99) && hasError)">
+                                            <span class="help-text preserve-white-space-with-wrapping" id="lblAmountRange">{{ 'Amount must be greater than 0.00 and less than 1,000,000.00' | i18n }}</span>
+                                        </div>
+                                        <div class="error margin-top-minus6-percent" ng-if="((payment.CreditTransactionDetails[0].Amount === undefined || payment.CreditTransactionDetails[0].Amount === null) && hasError)">
+                                            <span class="help-text" id="lblRequiredAmount">{{ 'Amount {0}' | i18n:['Required'] }}</span>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                        <!--PaymentType-->
+                        <div class="col-md-3 padding-right-0">
+                            <div class="form-group">
+                                <label id="lblPaymentType">{{'Payment Type' | i18n}}</label>*
+                                <ng-form name="paymentTypeForm">
+                                    <div class="padding-2">
+                                        <div class="form-group vertical-align-top">
+                                            <div ng-class="{'error': (paymentTypeForm.lstPaymentType.$error.required && hasError)}">
+                                                <!--<soar-select-list id="lstPaymentType"
+                                                                  name="lstPaymentType"
+                                                                  placeholder="{{'Select {0}' | i18n:['Payment Type'] }}"
+                                                                  text-field="Description"
+                                                                  value-field="PaymentTypeId"
+                                                                  option-list="paymentTypes"
+                                                                  ng-model="payment.PaymentTypeId"
+                                                                  sb-change="paymentTypeOnChange()"
+                                                                  sb-required="required"></soar-select-list>-->
+                                                <select ele="input" kendo-combo-box="kendoComboBox"
+                                                        name="lstPaymentType"
+                                                        id="lstPaymentType"
+                                                        class="payment-cmb"
+                                                        k-item-class="preserve-white-space"
+                                                        k-placeholder="'{{'Select {0}' | i18n:['Payment Type'] }}'"
+                                                        k-data-text-field="'Description'"
+                                                        k-data-value-field="'PaymentTypeId'"
+                                                        k-filter="'startsWith'"
+                                                        k-data-source="paymentTypes"
+                                                        ng-model="payment.PaymentTypeId"
+                                                        ng-blur="paymentTypeOnBlur()"
+                                                        ng-change="paymentTypeOnChange()"
+                                                        required></select>
+                                            </div>
+                                            <div class="error margin-top-minus6-percent" ng-if="(paymentTypeForm.lstPaymentType.$error.required && hasError)">
+                                                <span class="help-text" id="lblRequiredPaymentType">{{ 'Payment Type {0}' | i18n:['Required'] }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                        <!--Prompt-->
+                        <div class="col-md-3" ng-if="!hidePrompt">
+                            <div class="form-group">
+                                <label>{{payment.PromptTitle}}</label>
+                                <ng-form name="paymentCheckNumberForm">
+                                    <div class="padding-2">
+                                        <div class="form-group vertical-align-top">
+                                            <div>
+                                                <input type="text" class="form-input payment-input" id="inpCheckNumber" ng-model="payment.PaymentTypePromptValue" maxlength="25" placeholder="{{'Enter {0}' |i18n:[{skip:payment.PromptTitle}]}}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

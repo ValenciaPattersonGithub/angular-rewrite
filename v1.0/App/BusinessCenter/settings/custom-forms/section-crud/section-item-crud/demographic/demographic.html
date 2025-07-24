@@ -1,0 +1,224 @@
+﻿<ng-form name="questionDemographic">
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+
+            <div class="col-md-4">
+                <div class="row">
+                    {{ 'First Name' |i18n}}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input ng-disabled="inputIsDisabled" id="questionDemographicFirstNameCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredFirstName" ng-checked="true">
+                        <label id="lblQuestionDemographicFirstName{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicFirstNameCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class=" row">
+                    {{ 'Last Name' |i18n}}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input ng-disabled="inputIsDisabled" id="questionDemographicLastNameCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredLastName" ng-checked="true">
+                        <label id="lblQuestionDemographicLastName{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicLastNameCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+    <h6>&nbsp;</h6>
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+
+                <div class="row">
+                    {{ 'Preferred {0}' | i18n:['Name']}}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicPreferredNameCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredPreferredName">
+                        <label id="lblQuestionDemographicPreferredName{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicPreferredNameCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <h6>&nbsp;</h6>
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <div class="row">
+
+                    {{ 'Address Line 1' |i18n}}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicAddressLine1CKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredAddressLine1">
+                        <label id="lblQuestionDemographicAddressLine1{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicAddressLine1CKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <h6>&nbsp;</h6>
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <div class="row">
+                    {{ 'Address Line 2' |i18n}}:
+                </div>
+
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicAddressLine2CKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredAddressLine2">
+                        <label id="lblQuestionDemographicAddressLine2{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicAddressLine2CKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <h6>&nbsp;</h6>
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <div class="row">
+                    {{ 'City' |i18n}}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicCityCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredCity">
+                        <label id="lblQuestionDemographicCity{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicCityCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <h6>&nbsp;</h6>
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <div class="row">
+                    {{ 'State' |i18n}}:
+                </div>
+
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicStateCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredState">
+                        <label id="lblQuestionDemographicState{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicStateCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <h6>&nbsp;</h6>
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <div class="row">
+                    {{ 'ZIP Code' |i18n}}:
+                </div>
+
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicZipCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredZip">
+                        <label id="lblQuestionDemographicZip{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicZipCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <h6>&nbsp;</h6>
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <div class="row">
+                    {{ 'Email Address' |i18n}}:
+                </div>
+
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicEmailCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredEmailAddress">
+                        <label id="lblQuestionDemographicEmail{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicEmailCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <h6>&nbsp;</h6>
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <div class="row">
+                    {{ 'Primary Number' |i18n}}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicPrimaryNumberCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredPrimaryNumber">
+                        <label id="lblQuestionDemographicPrimaryNumber{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicPrimaryNumberCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <h6>&nbsp;</h6>
+
+
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <div class="row">
+                    {{ 'Secondary Number' |i18n}}:
+                </div>
+                <div class="row">
+                    <div class="margin-left-minus16 form-checkbox">
+                        <input id="questionDemographicSecondaryNumberCKB{{sectionIndex}}_{{sectionItemIndex}}" type="checkbox" ng-value="true" ng-model="sectionItem.FormBankItemDemographic.IsRequiredSecondaryNumber">
+                        <label id="lblQuestionDemographicSecondaryNumberCKB{{sectionIndex}}_{{sectionItemIndex}}" class="font-weight-normal ng-binding" for="questionDemographicSecondaryNumberCKB{{sectionIndex}}_{{sectionItemIndex}}"> {{ 'This field is required.' | i18n }}</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <h6>&nbsp;</h6>
+
+</ng-form>

@@ -1,0 +1,30 @@
+﻿.roleDtl {  
+   
+    &__grid {
+        
+        .k-grid-header{
+            display:none;
+        }  
+        
+        float: left;              
+    }
+
+    &__detail {
+        border: @brand-border_light;
+        background-color: @brand-color_white;
+        > div {
+            border-bottom: @brand-border_light;
+            &:nth-child(odd) {
+                background-color: @brand-tbl_zebra-dark
+            }
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+        .btn {
+            display: inherit;
+            clear: both;
+        }
+    }
+
+}

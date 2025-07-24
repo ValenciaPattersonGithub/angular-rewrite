@@ -1,0 +1,81 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Providers.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid container avoidPageBreak" ng-if="data.Providers.length > 0 && !showFilterMessage">
+        <table>
+            <thead>
+                <tr class="stripOdd">
+                    <th class="col-sm-2 cell">{{'Provider' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Date' | i18n}}</th>
+                    <th class="col-sm-2 cell">{{'Patient' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Service Code' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Description' | i18n}}</th>
+                    <th class="col-sm-1 cell text-center">{{'Tooth' | i18n}}</th>
+                    <th class="col-sm-1 cell text-center">{{'Area' | i18n}}</th>
+                    <th class="col-sm-1 padding-right-10 amountcell text-right">{{'Fee' | i18n}}</th>
+                    <th class="col-sm-1 padding-right-20 amountcell text-right">{{'Allowed Amount' | i18n}}</th>
+                    <th class="col-sm-1 cell">{{'Location' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody ng-class-odd="'stripEven'" ng-class-Even="'stripOdd'" ng-repeat="provider in data.Providers">
+                <tr>
+                    <td class="col-sm-2 cell">{{provider.Provider}}</td>
+                    <td class="col-sm-10 cell" colspan="8"></td>
+                </tr>
+                <tr ng-repeat-start="patient in provider.Dates">
+                    <td class="col-sm-2 cell"></td>
+
+                    <td class="col-sm-1 cell">{{patient.Date | date: 'MM/dd/yyyy'}}</td>
+                    <td class="col-sm-2 cell">{{patient.Transactions[0].Patient}}</td>
+                    <td class="col-sm-1 cell">{{patient.Transactions[0].ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{patient.Transactions[0].Description}}</td>
+                    <td class="col-sm-1 cell text-center">{{patient.Transactions[0].Tooth | convertToothRangeToQuadrantOrArchCode}}</td>
+                    <td class="col-sm-1 cell text-center">{{patient.Transactions[0].Area}}</td>
+                    <td class="col-sm-1 amountcell text-right padding-right-10">{{patient.Transactions[0].Fee | currency}}</td>
+                    <td class="col-sm-1 amountcell text-right padding-right-20">{{patient.Transactions[0].AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell">{{patient.Transactions[0].Location}}</td>
+                </tr>
+                <tr ng-repeat="tran in patient.Transactions | startFrom: 1">
+                    <td class="col-sm-4 cell" colspan="2"></td>
+                    <td class="col-sm-1 cell">{{tran.Patient}}</td>
+                    <td class="col-sm-1 cell">{{tran.ServiceCode}}</td>
+                    <td class="col-sm-1 cell">{{tran.Description}}</td>
+                    <td class="col-sm-1 cell text-center">{{tran.Tooth | convertToothRangeToQuadrantOrArchCode}}</td>
+                    <td class="col-sm-1 cell text-center">{{tran.Area}}</td>
+                    <td class="col-sm-1 amountcell text-right padding-right-10">{{tran.Fee | currency}}</td>
+                    <td class="col-sm-1 amountcell text-right padding-right-20">{{tran.AllowedAmount | currency}}</td>
+                    <td class="col-sm-1 cell">{{tran.Location}}</td>
+                </tr>
+                <tr ng-repeat-end>
+                    <td class="col-sm-8 cell" colspan="6"></td>
+                    <td class="col-sm-1 cell text-right reportGrid__label">{{'Total' | i18n}}</td>
+                    <td class="col-sm-1 amountcell text-right reportGrid__label padding-right-10">{{patient.Total | currency}}</td>
+                    <td class="col-sm-1 amountcell text-right reportGrid__label padding-right-20">{{patient.AllowedAmountTotal | currency}}</td>
+                    <td class="col-sm-2 cell" colspan="1"></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-6 cell" colspan="4"></td>
+                    <td class="col-sm-3 cell text-right reportGrid__label" colspan="3">{{provider.Provider}} {{'Totals'| i18n }}</td>
+                    <td class="col-sm-1 amountcell text-right reportGrid__label padding-right-10">{{provider.Total | currency}}</td>
+                    <td class="col-sm-1 amountcell text-right reportGrid__label padding-right-20">{{provider.AllowedAmountTotal | currency}}</td>
+                    <td class="col-sm-2 cell" colspan="1"></td>
+                </tr>
+            </tbody>
+            <tbody class="reportGrid__footer">
+                <tr class="stripEven">
+                    <td class="col-sm-6 cell reportGrid__label" colspan="5">{{'Report Totals' | i18n}}</td>
+                    <td class="col-sm-3 cell" colspan="2"></td>
+                    <td class="col-sm-1 amountcell padding-right-10 text-right reportGrid__label">{{data.Total | currency}}</td>
+                    <td class="col-sm-1 amountcell padding-right-20 text-right reportGrid__label">{{data.AllowedAmountTotal | currency}}</td>
+                    <td class="col-sm-2 cell" colspan="1"></td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr class="stripEven">
+                    <td class="col-sm-12 text-align-center" colspan="9">{{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright © American Dental Association (ADA). All rights reserved.' | i18n }}</td>
+                </tr>
+            </tbody>
+            <tbody class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

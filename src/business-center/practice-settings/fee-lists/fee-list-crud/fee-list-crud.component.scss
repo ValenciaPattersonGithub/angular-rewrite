@@ -1,0 +1,240 @@
+@import "variables";
+
+.feeLists {
+    .align_right {
+        display: flex;
+    }
+
+    .rows {
+        grid-template-columns: .4fr .4fr 1.1fr .7fr .7fr .6fr 150px 30px;
+    }
+
+    .virtual-viewport {
+        height: 400px;
+    }
+
+    .location-fee-list {
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: white;
+        background-size: cover;
+        font-family: $global-font-family;
+        font-size: 14px;
+
+        .text-right {
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        .grid {
+            display: grid;
+            overflow: hidden;
+
+            &.header {
+                font-weight: bold;
+
+                >div:last-child {
+                    margin-right: 20px !important;
+                }
+            }
+
+            &.codes {
+                margin-left: 16px;
+
+                >div {
+                    padding: 4px;
+                }
+            }
+        }
+
+        .odd {
+            background: $bg-grey;
+        }
+
+        .even {
+            background: $polar-white;
+        }
+    }
+
+    .lastupdate {
+        word-break: break-all;
+        white-space: nowrap;
+    }
+
+    #roundresult {
+        margin-top: 3%;
+    }
+
+    #importLists {
+        width: 180px;
+    }
+
+    .currency {
+        display: inline;
+        position: relative;
+
+        >.icon {
+            position: absolute;
+            top: 11px;
+            left: 10px;
+            z-index: 1;
+            text-align: center;
+            float: left;
+            font-size: 16px;
+        }
+    }
+
+    #lblFeeListNameRequired {
+        color: #ff0500;
+    }
+
+    #showInactiveServiceSelector {
+        cursor: pointer;
+    }
+
+    .feeLists__header {
+        width: 96%;
+        margin: 0 auto;
+    }
+
+    //Added for Create and drop down 
+    .feeLists__title>h1 {
+        font-size: 26px;
+        margin-top: 8px;
+    }
+
+    .feeLists__list {
+        width: 96%;
+        margin: 0 auto;
+        padding-top: 1%;
+
+        .searchIcon {
+            padding-top: 10px;
+            margin-left: -60px;
+        }
+
+        .noResults {
+            position: absolute;
+            height: 100px;
+            width: 100px;
+            top: 50%;
+            left: 50%;
+            background-size: 100%;
+            text-align: center;
+
+            i.loading {
+                font-size: 50px;
+            }
+        }
+
+        .sortCursor {
+            cursor: pointer !important;
+        }
+    }
+
+    .feeListCrud__actions {
+        .containerStandard {
+            // Use me for the main container for views.            
+            width: 96%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding-top: 16px;
+        }
+
+        float: right;
+        padding-bottom: 12px;
+
+        .btn {
+            transform: translateY(-50%);
+            margin-left: 5px;
+            float: right;
+            position: relative;
+        }
+    }
+
+    .feeListCrud__footer {
+        padding: 16px;
+        margin-top: 16px;
+    }
+
+    .feeListCrud__gridContainer {
+        display: flex;
+        padding: 0;
+        float: left;
+        border: 1px solid #E3E5E5;
+        border-radius: 4px;
+    }
+
+    .feeListCrud__gridItem {
+        flex-grow: 1;
+        flex-shrink: 0;
+        box-sizing: border-box;
+        white-space: nowrap;
+        padding: 5px;
+    }
+
+    .feeListCrud__percentageCol {
+        width: 70px;
+        padding: 5px 10px 5px 0;
+        -moz-border-radius: 5px;
+        /* Firefox */
+        -webkit-border-radius: 5px;
+        /* Safari, Chrome */
+        -khtml-border-radius: 5px;
+        /* KHTML */
+        border-radius: 5px;
+        /* CSS3 */
+    }
+
+    .feeListCrud__viewMode {
+        padding: 8px !important;
+    }
+
+
+    .panel {
+        margin-bottom: 0;
+    }
+
+    .panel-body {
+        padding: 5px 5px 5px 10px;
+    }
+
+
+    .feeLists__grid {
+        select {
+            cursor: pointer;
+            padding: 8px;
+        }
+    }
+
+    .feeLists {
+        .feeLists__list {
+            .importLists {
+                width: 50%;
+            }
+        }
+    }
+
+    i.inactive-service-warning {
+        color: #f7b82d !important;
+    }
+
+    @media screen and (max-width: 1375px) {
+        select[id^="taxableServiceTypes"] {
+            max-width: 145px;
+            min-width: 145px;
+            font-size: 75%;
+            font-weight: bold;
+        }
+
+        .filters-row {
+            display: grid;
+        }
+
+        .search-field {
+            width: 460px;
+            padding: 4px 0px;
+        }
+    }
+}

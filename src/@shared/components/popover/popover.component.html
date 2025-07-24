@@ -1,0 +1,5 @@
+<div class="popover-container-{{tooltipPosition}}" [ngStyle]="style" (mouseleave)="closePopOver()">
+    <div class="popover-content">
+        <ng-container *ngTemplateOutlet="templateReference"></ng-container>
+    </div>
+</div>

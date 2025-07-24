@@ -1,0 +1,112 @@
+﻿.txSrvTile {
+    position: relative;
+    padding: 12px;
+    background-color: @brand-color_white;
+
+    &__toggle {
+        .btn;
+        .btn-link;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.4em;
+    }
+
+    &__title,
+    &__code {
+        display: block;
+    }
+
+    &__actions {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 10px;
+        z-index: 999;
+        padding: 10px;
+        min-width: 100px;
+        background-color: @brand-color_white;
+        border: 1px solid @brand-color_darker-gray;
+        box-shadow: @brand-shadow_default;
+
+        &.active {
+            display: inline-block;
+        }
+
+        &.orientTop {
+            top: auto;
+            bottom: 40px;
+        }
+
+        .btn {
+            font-size: 1em;
+            display: block;
+
+            &[disabled] {
+                color: @brand-color_link-disabled;
+            }
+        }
+    }
+
+    &__details {
+        .clearfix;
+
+        .desc {
+            width: 70%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .tooth,
+        .area {
+            display: inline-block;
+            padding-right: 6px;
+        }
+
+        .provider {
+            display: inline-block;
+        }
+
+        .fee {
+            position: absolute;
+            text-align: right;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        &.expand {
+            .desc,
+            .tooth,
+            .area,
+            .provider,
+            .fee {
+                display: inline-block;
+                position: static;
+                box-sizing: border-box;
+                padding-right: 6px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                transform: translateY(4px);
+            }
+
+            .desc {
+                width: 50%;
+                text-align: left;
+            }
+
+            .tooth,
+            .area {
+                width: 10%;
+            }
+
+            .provider {
+                width: 15%;
+            }
+        }
+    }
+}

@@ -1,0 +1,65 @@
+﻿<div class="carrier" ng-controller="BenefitPlansController">
+  <div class="carrier__container row">
+    <div class="insurance__action row">
+      <div class="col-xs-3">
+        <a id="addCarrier" class="btn btn-primary" icon="fa-plus" href="#/BusinessCenter/Insurance/Plans/Create" check-auth-z="soar-ins-ibplan-add">{{ 'Add a Plan' | i18n }}</a>
+        <soar-select-list id="selectCarrierReport" name="selectCarrierReport" placeholder="{{'Reports' | i18n }}" text-field="ReportTitle" value-field="ReportValue" option-list="planReport" ng-model="selectedReport.ReportId" ng-if="isReportDataLoaded"> </soar-select-list>
+      </div>
+      <div class="col-xs-4">
+        <input class="form-control border-solid-black" id="searchBoxServiceCodes" placeholder="{{'Search Plan, Carrier, Plan/Group Number...'|i18n}}" type="text" ng-model="searchFilter" ng-model-options="{ debounce: 350 }" ng-change="reloadGrid()" />
+      </div>
+      <div class="col-xs-1 carrier__searchIcon">
+        <span class="glyphicon glyphicon-search"></span>
+      </div>
+    </div>
+    <table id="tableCarriers" class="carrier__table table-striped col-xs-10">
+      <thead class="carrier__header">
+        <tr>
+          <td id="tdOrderCol" class="width-5-percent"><span>{{ '#' }}</span></td>
+          <td id="tdCarrierNameCol" class="width-20-percent">
+            <a id="colName" ng-click="changeSorting('colName', 'Name')">{{ 'Plan' | i18n }}<span class="fa fa-sort carrier__headerSort"></span></a>
+          </td>
+          <td id="tdCarrierNameCol" class="width-20-percent">
+            <a id="colCarrierName" ng-click="changeSorting('colCarrierName', 'CarrierName')">{{ 'Carrier' | i18n }}<span class="fa fa-sort carrier__headerSort"></span></a>
+          </td>
+          <td id="tdCarrierPlanGroupNumberCol" class="width-20-percent">
+            <a id="colPlanGroupNumber" ng-click="changeSorting('colPlanGroupNumber', 'PlanGroupNumber')">{{ 'Plan/Group Number' | i18n }}<span class="fa fa-sort carrier__headerSort"></span></a>
+          </td>
+          <td id="tdFeeScheduleCol" class="width-20-percent">
+            <a id="colFeeSchedule" ng-click="changeSorting('colFeeSchedule', 'FeeScheduleName')">{{ 'Fee Schedule' | i18n }}<span class="fa fa-sort carrier__headerSort"></span></a>
+          </td>
+        </tr>
+      </thead>
+      <tbody class="carrier__body" infinite-scroll="getBenefitPlans()" infinite-scroll-disabled="isUpdating || allDataDisplayed ">
+        <!-- filter is set by insurance controller input -->
+        <tr ng-if="benefitPlans.length && (activeFilter || inactiveFilter)" ng-repeat="benefitPlan in benefitPlans | filter:search | orderBy:orderBy.field:!orderBy.asc track by $index ">
+          <td id="tdOrder">{{ $index+1 }}</td>
+          <td id="tdBenefitPlanName" title="{{ benefitPlan.Name }}">
+            <a id="tdName" ng-class="{'inactive': !benefitPlan.IsActive}" href="#/BusinessCenter/Insurance/Plans/Edit?guid={{ benefitPlan.BenefitId }}" check-auth-z="soar-ins-ibplan-edit">
+              <p ng-bind-html="benefitPlan.Name  | highlightTextIfContains:searchFilter:100"></p>
+            </a>
+          </td>
+          <td id="tdCarrierName" title="{{ benefitPlan.CarrierName }}">
+            <span ng-bind-html="benefitPlan.CarrierName  | highlightTextIfContains:searchFilter:100"></span>
+          </td>
+          <td id="tdCarrierPlanGroupNumber" title="{{ benefitPlan.PlanGroupNumber }}">
+            <span ng-bind-html="benefitPlan.PlanGroupNumber  | highlightTextIfContains:searchFilter:100"></span>
+          </td>
+          <td id="tdFeeSchedule" title="{{ benefitPlan.FeeScheduleName }}">
+            <span ng-bind="benefitPlan.FeeScheduleName" ng-hide="benefitPlan.FeeScheduleName == '0'"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="col-xs-2">
+      <div class="col-xs-12 search-item-filter userSearch__secondary">
+        <checkbox checkbox-id="chkActiveFilter" checkbox-value="activeFilter" checkbox-label="'Active Plans' | i18n" change-function="reloadGrid()">&nbsp;</checkbox>
+        <checkbox checkbox-id="chkInActiveFilter" checkbox-value="inactiveFilter" checkbox-label="'Inactive Plans' | i18n" change-function="reloadGrid()">&nbsp;</checkbox>
+      </div>
+    </div>
+
+    <div ng-show="benefitPlans.length==0">
+      <no-results loading-message="'No plans were found.'" loading="loading"></no-results>
+    </div>
+  </div>
+</div>

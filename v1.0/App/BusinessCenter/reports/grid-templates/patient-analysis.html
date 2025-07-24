@@ -1,0 +1,388 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{ setFiltersMessage }}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{ noResultsMessage }}</div>
+    <div class="fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }" ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations" ng-class-even="'stripEven'" ng-class-odd="'stripOdd'">
+        <table class="pull-left">
+            <thead>
+                <tr>
+                    <th class="col-sm-12 cell" colspan="12">
+                        <div class="text-center">
+                            <h4>{{ location.Name }}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th class="col-sm-2 cell text-right" colspan="2">
+                        {{ 'Category' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell text-right">
+                        {{ '# of Active' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell text-right">
+                        {{ '% of Active' | i18n }}
+                    </th>
+                    <th class="col-sm-6 cell text-right" colspan="6">
+                        {{ 'Category' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell text-right">
+                        {{ '# of Active' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell text-right">
+                        {{ '% of Active' | i18n }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Genders[0].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Genders[0].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Genders[0].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.LastServiceDates[0].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[0].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[0].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Genders[1].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Genders[1].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Genders[1].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.LastServiceDates[1].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[1].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[1].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Genders[2].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Genders[2].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Genders[2].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.LastServiceDates[2].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[2].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[2].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ 'Ages' | i18n }}
+                    </td>
+                    <td class="col-sm-2 cell text-right" colspan="2"></td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.LastServiceDates[3].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[3].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[3].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[0].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[0].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[0].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.LastServiceDates[4].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[4].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[4].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[1].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[1].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[1].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.LastServiceDates[5].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[5].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.LastServiceDates[5].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[2].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[2].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[2].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.NewPatients[0].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.NewPatients[0].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.NewPatients[0].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[3].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[3].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[3].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.NewPatients[1].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.NewPatients[1].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.NewPatients[1].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[4].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[4].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[4].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.PreventiveCare[0].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.PreventiveCare[0].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.PreventiveCare[0].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[5].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[5].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[5].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.PreventiveCare[1].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.PreventiveCare[1].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.PreventiveCare[1].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[6].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[6].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[6].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.PreventiveCare[2].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.PreventiveCare[2].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.PreventiveCare[2].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[7].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[7].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[7].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.FutureAppointments[0].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.FutureAppointments[0].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.FutureAppointments[0].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Ages[8].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[8].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Ages[8].PercentOfActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.FutureAppointments[1].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.FutureAppointments[1].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.FutureAppointments[1].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Statuses[0].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Statuses[0].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Statuses[0].NumberActive / location.Statuses[2].NumberActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.Insurance[0].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Insurance[0].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Insurance[0].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Statuses[1].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Statuses[1].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Statuses[1].NumberActive / location.Statuses[2].NumberActive | percentage }}
+                    </td>
+                    <td class="col-sm-6 cell reportGrid__label text-right" colspan="6">
+                        {{ location.Insurance[1].Name | i18n }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Insurance[1].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Insurance[1].PercentOfActive | percentage }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-sm-2 cell reportGrid__label text-right" colspan="2">
+                        {{ location.Statuses[2].Name }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Statuses[2].NumberActive }}
+                    </td>
+                    <td class="col-sm-1 cell text-right">
+                        {{ location.Statuses[2].NumberActive/ location.Statuses[2].NumberActive | percentage }}
+                    </td>
+                    <td class="col-sm-8 cell" colspan="8"></td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <th class="col-sm-12 cell" colspan="12">
+                        <div class="text-center">
+                            {{ 'Active Patients by Top Ten Zip Codes' | i18n }}
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th class="col-sm-3 cell" colspan="3"></th>
+                    <th class="col-sm-1 cell">
+                        {{ 'Zip Code' | i18n }}
+                    </th>
+                    <th class="col-sm-3 cell" colspan="3">
+                        {{ 'City, St' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell">
+                        {{ '#' | i18n }}
+                    </th>
+                    <th class="col-sm-1 cell">
+                        {{ '%' | i18n }}
+                    </th>
+                    <th class="col-sm-3 cell" colspan="3"></th>
+                </tr>
+                <tr ng-repeat="zipCode in location.ZipCodes">
+                    <td class="col-sm-3 cell" colspan="3"></td>
+                    <td class="col-sm-1 cell">
+                        {{ zipCode.ZipCode }}
+                    </td>
+                    <td class="col-sm-3 cell" colspan="3">
+                        {{ zipCode.City }}
+                    </td>
+                    <td class="col-sm-1 cell">
+                        {{ zipCode.Number }}
+                    </td>
+                    <td class="col-sm-1 cell">
+                        {{ zipCode.Percent | percentage }}
+                    </td>
+                    <td class="col-sm-3 cell" colspan="3"></td>
+                </tr>
+            </tbody>
+            <tbody ng-if="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+    </div>
+</div>

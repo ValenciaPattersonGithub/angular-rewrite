@@ -1,0 +1,18 @@
+﻿<div ng-controller="HygieneVsDoctorNetProductionHalfDonutWidgetController" class="soarWidget">
+    <div class="panel-heading landingContainer__heading soarWidget__header">
+        <div class="widget-handle w_row">
+            <label>{{data.Title}}</label>
+        </div>
+        <div>
+            <soar-select-list option-list="hygieneVsDoctorNetProductionFilters"
+                              text-field="name"
+                              value-field="value"
+                              ng-model="hygieneVsDoctorNetProductionCurrentFilter"
+                              sb-change="hygieneVsDoctorNetProductionChangeFilter">
+            </soar-select-list>
+        </div>
+    </div>
+    <div class="soarWidget__body">
+        <simple-half-donut data="hygieneVsDoctorNetProductionSeriesData" drilldown="drilldown"></simple-half-donut>
+    </div>
+</div>

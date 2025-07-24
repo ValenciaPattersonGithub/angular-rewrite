@@ -1,0 +1,78 @@
+﻿<div class="reportGrid">
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.Locations.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div  class="stripOdd fusePrintGrid container" ng-class="{'avoidPageBreak': data.Locations.length === $index+1 }"
+        ng-if="data.Locations.length > 0 && !showFilterMessage" ng-repeat="location in data.Locations">
+        <table class="fuseGrid pull-left">
+            <thead>
+                <tr class="reportGrid__row stripEven">
+                    <th class="cell" colspan="12">
+                        <div class="text-center">
+                            <h4>{{location.Location}}</h4>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="reportGrid__row">
+                    <th class="col-sm-4 cell">{{'Service Type' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'MTD: Units' | i18n}}</th>
+                    <th class="col-sm-2 cell text-right">{{'MTD: Production' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'MTD % of Total' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'YTD: Units' | i18n}}</th>
+                    <th class="col-sm-2 cell text-right">{{'YTD: Production' | i18n}}</th>
+                    <th class="col-sm-1 cell text-right">{{'YTD % of Total' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody  ng-repeat="type in location.Types">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-4 cell">{{type.ServiceType}}</td>
+                    <td class="col-sm-1 cell text-right">{{type.MtdUnits}}</td>
+                    <td class="col-sm-2 cell text-right">{{type.MtdProduction | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{type.MtdTotalPercentage | number}}{{'%' | i18n}}</td>
+                    <td class="col-sm-1 cell text-right">{{type.YtdUnits}}</td>
+                    <td class="col-sm-2 cell text-right">{{type.YtdProduction | currency}}</td>
+                    <td class="col-sm-1 cell text-right">{{type.YtdTotalPercentage | number}}{{'%' | i18n}}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="7">{{location.Location}} {{'MTD Units:' |
+                        i18n}} {{location.MtdUnits}}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="7">{{location.Location}} {{'MTD Production:'
+                        | i18n}} {{location.MtdProduction | currency}}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="7">{{location.Location}} {{'YTD Units:' |
+                        i18n}} {{location.YtdUnits}}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="7">{{location.Location}} {{'YTD Production:'
+                        | i18n}} {{location.YtdProduction | currency}}</td>
+                </tr>
+
+            </tbody>
+            <tbody class="stripEven" ng-show="data.Locations.length === $index+1">
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="7">{{'Total' | i18n}} {{'MTD Units:' | i18n}}
+                        {{ data.MtdUnits }}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="7">{{'Total' | i18n}} {{'MTD Production:'
+                        | i18n}} {{ data.MtdProduction | currency }}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="7">{{'Total' | i18n}} {{'YTD Units:' | i18n}}
+                        {{ data.YtdUnits }}</td>
+                </tr>
+                <tr class="reportGrid__row">
+                    <td class="col-sm-12 cell reportGrid__countLabel" colspan="7">{{'Total' | i18n}} {{'YTD Production:'
+                        | i18n}} {{ data.YtdProduction | currency }}</td>
+                </tr>
+            </tbody>
+            <tbody ng-show="data.Locations.length === $index+1" class="appendFooter"></tbody>
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,6 @@
+﻿<div class="reportGrid">
+    <div ng-if="data.feeSchedulesBenefitPlans.length === 0">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid avoidPageBreak">
+        <benefit-plans-by-fee-schedule-report [data]="data"></benefit-plans-by-fee-schedule-report>
+    </div>
+</div>

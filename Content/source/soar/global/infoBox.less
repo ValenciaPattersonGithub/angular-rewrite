@@ -1,0 +1,42 @@
+﻿.infoBox {
+    margin-top: @info-box-top_margin;
+    margin-bottom: @info-box-bottom_margin;
+
+    .infoBoxGroup {
+        display: flex;
+        border: @info-box-border;
+        border-radius: @info-box-border-radius;
+        padding: @info-box-padding;        
+        background-color: @info-box-background-color;
+        overflow: hidden;
+
+        .infoBoxSection {
+            flex: 1;
+            padding: @info-box-section-padding;
+        }
+
+        .infoBoxSectionBorder {
+            .infoBoxSection;
+            border-right: @info-box-border;
+        }
+
+        .infoBoxSectionGrey {
+            .infoBoxSection;
+            background-color: @info-box-section-grey-background-color;
+            color: @info-box-section-grey-color;
+        }
+
+        .infoBoxSectionGreen {
+            .infoBoxSection;
+            background-color: @info-box-section-green-background-color;
+            color: @info-box-section-green-color;
+        }
+        *:last-child {
+            border: none;
+        }
+    }
+}
+
+.infoBoxCheckout {
+    .infoBox;
+ }

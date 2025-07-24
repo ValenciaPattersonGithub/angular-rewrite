@@ -1,0 +1,25 @@
+<form [formGroup]="dateForm">
+    <div class="fui-datepicker-wrapper" [ngClass]="{'label-left' : labelDirection=='left'}">
+        <app-label class="fui-datepicker-label" [label]="label" [fieldId]="id"></app-label>
+        <div [ngClass]="{'fui-datepicker-control' : fixwidth,'full-width' : !fixwidth}">
+            <kendo-datepicker class="kendoCustomStyle" 
+                              format="MM/dd/yyyy" 
+                              formControlName="datePicker"
+                              [formatPlaceholder]="placeholder" 
+                              [disabled]="disabled" 
+                              [min]="minDate" 
+                              [id]="id" 
+                              [max]="maxDate"
+                              [(value)]="selectedDate" 
+                              (valueChange)="onDateChange($event)" 
+                              calendarType="classic"
+                              [incompleteDateValidation]="enableIncompleteDateValidation" 
+                              ngDefaultControl [ngClass]="{'k-error': !isValidDate}"
+                              #datePicker>
+            </kendo-datepicker>
+        </div>
+    </div> 
+    <div *ngIf="((!dateForm?.get('datePicker')?.valid && !disabled) || (invalidMaxDateOfBirth))" class="error">
+        <span class="help-text">{{'Invalid Date' | translate }}</span>
+    </div>
+</form>

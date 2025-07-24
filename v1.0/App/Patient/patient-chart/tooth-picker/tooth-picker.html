@@ -1,0 +1,55 @@
+﻿<div>
+    <div ng-show="permanentActive && multiSelectEnabled">
+        <div class="pull-left"><a id="btnULPermanent" ng-class="{active: ulActivePermanent}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('UL', false)">UL</a></div>
+        <div class="pull-left"><a id="btnURPermanent" ng-class="{active: urActivePermanent}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('UR', false)">UR</a></div>
+        <div class="pull-left"><a id="btnUPermanent" ng-class="{active: uActivePermanent}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('U', false)">Upper</a></div>
+        <div class="pull-left"><a id="btnLPermanent" ng-class="{active: lActivePermanent}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('L', false)">Lower</a></div>
+        <div class="pull-left"><a id="btnLLPermanent" ng-class="{active: llActivePermanent}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('LL', false)">LL</a></div>
+        <div class="pull-left"><a id="btnLRPermanent" ng-class="{active: lrActivePermanent}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('LR', false)">LR</a></div>
+        <div class="pull-left"><a id="btnAllPermanent" ng-disabled="allActivePermanent" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('ALL', false)">All</a></div>
+        <div class="pull-left"><a id="btnNonePermanent" ng-disabled="noneActivePermanent" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('NONE', false)">None</a></div>
+        <div class="clearfix">&nbsp;</div>
+    </div>
+    <div ng-show="primaryActive && multiSelectEnabled">
+        <div class="pull-left"><a id="btnULPrimary" ng-class="{active: ulActivePrimary}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('UL', true)">UL</a></div>
+        <div class="pull-left"><a id="btnURPrimary" ng-class="{active: urActivePrimary}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('UR', true)">UR</a></div>
+        <div class="pull-left"><a id="btnUPrimary" ng-class="{active: uActivePrimary}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('U', true)">Upper</a></div>
+        <div class="pull-left"><a id="btnLPrimary" ng-class="{active: lActivePrimary}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('L', true)">Lower</a></div>
+        <div class="pull-left"><a id="btnLLPrimary" ng-class="{active: llActivePrimary}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('LL', true)">LL</a></div>
+        <div class="pull-left"><a id="btnLRPrimary" ng-class="{active: lrActivePrimary}" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('LR', true)">LR</a></div>
+        <div class="pull-left"><a id="btnAllPrimary" ng-disabled="allActivePrimary" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('ALL', true)">All</a></div>
+        <div class="pull-left"><a id="btnNonePrimary" ng-disabled="noneActivePrimary" class="btn btn-sm btn-default btn-tooth-multi-select" ng-click="toggle('NONE', true)">None</a></div>
+        <div class="clearfix">&nbsp;</div>
+    </div>
+    <div ng-show="permanentActive">
+        <div class="pull-left" ng-repeat="tooth in filteredTeeth = (teeth | filter:{ Half: 'U', IsPrimary: false})">
+            <button id="btnTooth{{tooth.Position}}" ng-class="{active: tooth.Selected, disabled: !tooth.Enabled}" class="btn btn-default btn-tooth" ng-click="individualToothClicked(tooth)">{{ tooth.Position }}</button>
+        </div>
+    </div>
+    <div ng-show="permanentActive">
+        <div class="clearfix">&nbsp;</div>
+        <div class="pull-left" ng-repeat="tooth in filteredTeeth = (teeth | filter:{ Half: 'L', IsPrimary: false})">
+            <button id="btnTooth{{tooth.Position}}" ng-class="{active: tooth.Selected, disabled: !tooth.Enabled}" class="btn btn-default btn-tooth" ng-click="individualToothClicked(tooth)">{{ tooth.Position }}</button>
+        </div>
+    </div>
+    <div ng-show="primaryActive">
+        <div class="pull-left" ng-repeat="tooth in filteredTeeth = (teeth | filter:{ Half: 'U', IsPrimary: true})">
+            <button id="btnTooth{{tooth.Position}}" ng-class="{active: tooth.Selected, disabled: !tooth.Enabled}" class="btn btn-default btn-tooth" ng-click="individualToothClicked(tooth)">{{ tooth.Position }}</button>
+        </div>
+    </div>
+    <div ng-show="primaryActive">
+        <div class="clearfix">&nbsp;</div>
+        <div class="pull-left" ng-repeat="tooth in filteredTeeth = (teeth | filter:{ Half: 'L', IsPrimary: true})">
+            <button id="btnTooth{{tooth.Position}}" ng-class="{active: tooth.Selected, disabled: !tooth.Enabled}" class="btn btn-default btn-tooth" ng-click="individualToothClicked(tooth)">{{ tooth.Position }}</button>
+        </div>
+    </div>
+    <div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="pull-left">
+            <button id="btnPrimary" ng-disabled="primaryActive" class="btn btn-default btn-tooth-multi-select" ng-click="primaryActive = true; permanentActive = false">Primary</button>
+        </div>
+        <div class="pull-left">
+            <button id="btnPermanent" ng-disabled="permanentActive" class="btn btn-default btn-tooth-multi-select" ng-click="permanentActive = true; primaryActive = false">Permanent</button>
+        </div>
+    </div>
+</div>

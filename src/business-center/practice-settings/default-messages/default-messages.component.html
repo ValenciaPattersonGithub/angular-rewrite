@@ -1,0 +1,23 @@
+
+<div [ngClass]="'fade-in'">
+    <div class="defaultMessages">
+        <div class="rowFull white">
+            <div class="defaultMessages__header">
+                <!--Breadcrumbs-->
+                <app-page-navigation [navigationData]="breadCrumbs"></app-page-navigation>
+                <div class="defaultMessages__title">
+                    <h1>{{'Default Billing Messages' | translate }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="defaultMessages__body">
+            <label>{{'This message will appear on invoices:' | translate }}</label>
+            <textarea class="defaultMessages__text" id="defaultMessages" maxlength="500" [(ngModel)]="defaultMessagesDto.InvoiceMessage" (ngModelChange)="onValueChanged($event)"></textarea>
+            <div class="defaultMessages__buttons">
+                <button id="btnCancelDefaultMessages" class="btn" (click)="cancel(dataForCrudOperation?.BreadCrumbs[0].path)">{{ 'Cancel' | translate }}</button>
+                <button id="btnSaveDefaultMessages" class="btn btn-primary" (click)="save()" [disabled]="!hasChanges" checkRoleAccess="{{dynamicAmfa}}">{{ 'Save' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<account-statement-billing-message></account-statement-billing-message>

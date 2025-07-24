@@ -1,0 +1,45 @@
+﻿.customForms {
+    .has-error input[type="radio"] {
+        outline: 1px solid @state-danger-text;
+    }
+    /*suppress red shadow on invalid checkbox, radio*/
+    .input:invalid {        
+        box-shadow: none;
+    }
+
+    .input:-moz-submit-invalid {
+        box-shadow: none;
+    }
+
+    input:-moz-ui-invalid {
+        box-shadow: none;
+    }
+    &__customOption {
+        min-width:100%;
+        > input {
+            min-width:100%;
+        }  
+    }    
+    .form-checkbox {
+        > label {            
+            display: inline-block;
+            cursor: pointer;  
+            position: relative;  
+            padding-left: 30px;  
+            margin-right: 15px;  
+            font-size: 14px;
+            font-weight:normal;
+            font-family: @global-font-family;
+            line-height: 1.42857143;            
+        }        
+    }                         
+}
+
+.formContainer {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+

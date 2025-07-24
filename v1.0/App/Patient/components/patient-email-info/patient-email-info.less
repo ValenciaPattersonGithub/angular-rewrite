@@ -1,0 +1,160 @@
+﻿// #region PhoneInfo Directive
+.email-container {
+    @media only screen and (min-width:320px) and (max-width:768px) {
+        margin-left: -10px;
+        margin-right: -10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+.email-delete {
+    position: relative;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+}
+
+.email-item {
+    margin-bottom: 3px;
+}
+
+.emailInfoItem {
+    .clearfix;
+    position: relative;
+
+    &.ng-enter {
+        -webkit-animation: 1s fade-in;
+        -moz-animation: 1s fade-in;
+        -o-animation: 1s fade-in;
+        animation: 1s fade-in;
+    }
+
+    &.ng-leave {
+        -webkit-animation: 0.5s fade-out;
+        -moz-animation: 0.5s fade-out;
+        -o-animation: 0.5s fade-out;
+        animation: 0.5s fade-out;
+    }
+
+    &__primary {
+        .make-form-col(2);
+        padding-left: 0;
+    }
+
+    .switch_emailitem {
+        padding-right: 4px;
+        float: left;
+    }
+
+    &__num,
+    &__type {
+        .make-form-col(4);
+    }
+
+    &__remove {
+        .make-form-col(2);
+
+        .btn {
+            font-size: 20px;
+            padding: @brand-padding_xs;
+        }
+    }
+
+    &__prompt {
+        clear: both;
+        padding-bottom: @brand-padding_sm;
+        text-align: center;
+    }
+
+    &__wrap{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .form-btn-remove {
+        padding-top: 0px;
+    }
+
+    .has-error span{
+        color: red;
+    }
+
+    &__provider-desc {
+        display: inline-block;
+        float: left;
+        text-align: left;
+        padding-bottom: 4.5px;
+        white-space: nowrap;
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        font-weight: 200;
+        overflow: hidden;
+        font-weight: lighter;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+
+}
+
+.emailInfoLabel {
+    margin-top: 7px;
+}
+
+.email-edit-icon {
+    color: #000;
+    background: transparent;
+    border: transparent;
+    height: 34px;
+    width: 34px;
+    right: -4px;
+    position: relative;
+
+    &:hover {
+        background: @btn-edit-bg-hover;
+        color: #fff;
+    }
+}
+
+@media only screen and (min-width: @screen-sm) {
+
+    .email-container-narrow {
+
+        .email-container {
+            padding: 0 5px 5px 5px;
+        }
+
+        .email-delete {
+            padding-top: 10px;
+        }
+
+        .form-label-newer {
+            float: none;
+        }
+
+        .email-label {
+            float: none;
+            margin-bottom: 20px;
+            width: 75%;
+        }
+
+        .email-divider {
+            float: none;
+            width: 75%;
+        }
+
+        .email-left {
+            padding-right: 2%;
+            width: 48%;
+        }
+
+        .email-right {
+            padding-left: 2%;
+            width: 48%;
+        }
+    }
+}
+
+// #endregion

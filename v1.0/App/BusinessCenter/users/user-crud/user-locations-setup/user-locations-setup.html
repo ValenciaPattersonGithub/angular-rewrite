@@ -1,0 +1,244 @@
+﻿<div ng-form="frmUserLocationsSetup" id="userLocationsSetup" class="userLocationsSetup panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            {{ 'Locations, Providers, and Roles' | i18n }}
+        </h4>
+        <span class="panel-btn pull-right">
+            <button id="btnViewRoles" ng-click="viewRoles();"
+                class="btn btn-default">{{ 'View Roles' | i18n }}</button>
+            <button id="btnCompareRoles" ng-click="compareRoles();" class="btn btn-default"
+                target="_blank">{{ 'Compare Roles' | i18n }}</button>
+        </span>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 ">
+                <label>{{'Team Member Type'| i18n}}</label>
+                <div>
+                    <span>{{'Select \"Assign Roles by Location\" if you wish to only assign locations and security roles for this team member.  Selecting \"Practice Admin\Executive Dentist\" will give this team member access to ALL locations and they can perform any action.'}}</span>
+                </div>
+            </div>
+        </div>
+        <!-- TODO get correct amfas -->
+        <div class="row">
+            <div class="col-xs-12 padding-10">
+                <span class=" padding-10">
+                    <input id="radioAssignRolesByLocation" 
+                        name="radioAssignRolesByLocation" 
+                        type="radio" data-ng-value="false" check-auth-z="plapi-user-usrrol-create"
+                        ng-disabled="loggedInUserHasPracticeAccess===false || loading === true" ng-change="changeRoleAssignment(false)"
+                        ng-model="user.$$isPracticeAdmin" value="false" ng-disabled="disableTeamMemberType">
+                    {{ 'Assign Role(s) by Location' | i18n }}
+                </span>
+                <span class="padding-10">
+                    <input id="radioAssignRolesByPractice" 
+                        type="radio" data-ng-value="true"
+                        name="radioAssignRolesByPractice" check-auth-z="plapi-user-usrrol-create"
+                        ng-disabled="loggedInUserHasPracticeAccess===false || loading === true" ng-change="changeRoleAssignment(true)"
+                        ng-model="user.$$isPracticeAdmin" value="true" ng-disabled="disableTeamMemberType">
+                    {{ 'Practice Admin/Exec. Dentist' | i18n }}
+                </span>
+                
+                
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 padding-10">
+                <div class="col-xs-6">
+                        <button id="btnAddUserLocationSetup" class="btn btn-default" ng-click="addUserLocationSetup();"
+                        ng-disabled="loading === true ||availableLocations.length === 0 " check-auth-z="plapi-user-usrrol-create">
+                        {{ 'Add {0}' | i18n :['Location'] }}</button>
+                </div>
+
+                <div class="col-xs-3">
+                    <div class="col-xs-8 text-right">
+                        <label>{{'User Access'|i18n}}</label>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="onoffswitch pull-right">
+                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="inactivateSwitch"
+                                ng-disabled="loading===true" ng-model="user.IsActive">
+                            <label class="onoffswitch-label" for="inactivateSwitch" style="margin-bottom:0px;"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-3">
+                    <div class="col-xs-3" ng-if="currentStatus!=user.IsActive">
+                        <label class="control-label float-right">{{ 'Reason*' | i18n }} </label>
+                    </div>
+                    <div class="col-xs-9" ng-if="currentStatus!=user.IsActive" ng-class="{error: user.StatusChangeNote == null || user.StatusChangeNote.length == 0}">
+                        <input class="form-input" name="statusChangeNote" id="statusChangeNote"
+                            placeholder="{{ reasonPlaceHolder | i18n }}" required ng-model="user.StatusChangeNote" type="text" />
+                        <span id="errStatusNote" class="text-danger" ng-show="!user.StatusChangeNote">
+                            {{ 'Reason for status change required.' | i18n  }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- grid for current locations setup -->
+        <hr>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="fuseGrid container pull-left">
+                    <div class="row header">
+                        <div class="col-sm-2 cell">
+                            <div>{{ 'Location' | i18n }}</div>
+                        </div>
+                        <div class="col-sm-1 cell">
+                            <div>{{ 'Provider Type' | i18n }}</div>
+                        </div>
+                        <div class="col-sm-2 cell">
+                            <div>{{ 'Security Roles' | i18n }}</div>
+                        </div>
+                        <div class="col-sm-2 cell">
+                            <div>{{ 'Employment Status' | i18n }}</div>
+                        </div>
+                        <div class="col-sm-1 cell">
+                            <div>{{ 'Provider (Claims)' | i18n }}</div>
+                        </div>
+                        <div class="col-sm-1 cell center ">
+                            <div>{{ 'Active' | i18n }}</div>
+                        </div>
+                        <div class="col-sm-1 cell">{{'Provider Color'| i18n}}
+                        </div>
+                        <div class="col-sm-1 cell">
+                        </div>
+                    </div>
+                    <div class="row body"
+                        ng-repeat="userLocationSetup in userLocationSetups | filter: {ObjectState:'!Delete'}  | orderBy:'userLocationSetup.$$Location.NameLine1'">
+
+                        <div class="col-sm-2 cell" id="userLocationSetupLocationName{{$index}}" uib-tooltip="{{ userLocationSetup.$$Location.NameLine1 }}"
+                            tooltip-append-to-body="true" tooltip-placement="top-left">
+                            {{ userLocationSetup.$$Location.NameLine1 | truncate: 64 :'...' }}
+                        </div>
+                        <div class="col-sm-1 cell" id="userLocationSetupProviderTypeName{{$index}}" uib-tooltip="{{ userLocationSetup.$$ProviderTypeName }}"
+                            tooltip-append-to-body="true" tooltip-placement="top-left">
+                            {{ userLocationSetup.$$ProviderTypeName }}
+                        </div>                       
+                        <!-- practice roles -->                        
+                        <div class="col-sm-2 cell" ng-if="user.$$isPracticeAdmin === true">
+                            <div ng-repeat="practiceRole in user.$$UserPracticeRoles | filter:rxRoleFilter " ng-if="user.IsActive === true">
+                                <tag title="{{ practiceRole.RoleName }}" 
+                                    id="userLocationSetupPracticeRoleName{{$index}}" 
+                                    is-primary="true"
+                                    uib-tooltip="{{ practiceRole.RoleName  }}" 
+                                    tooltip-append-to-body="true" 
+                                    tooltip-placement="top-left">
+                                </tag>
+                            </div>
+                        </div>                      
+                        <!-- or location Roles -->                                            
+                        <div class="col-sm-2 cell" ng-if="user.$$isPracticeAdmin === false">
+                            <div ng-repeat="locationRole in userLocationSetup.$$UserLocationRoles | filter:deletedRolesFilter" ng-if="user.IsActive === true">
+                                <tag title="{{ locationRole.RoleName }}" 
+                                    id="userLocationSetupLocationRoleName{{$index}}" 
+                                    is-primary="true"
+                                    uib-tooltip="{{ locationRole.RoleName }}" 
+                                    remove-function="removeRole" 
+                                    tooltip-append-to-body="true"                                   
+                                    tooltip-placement="top-left">
+                                </tag>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 cell">
+                            <span id="userLocationSetupProviderTypeId{{$index}}"
+                                ng-if="userLocationSetup.ProviderTypeId !== 4"
+                                uib-tooltip="{{ userLocationSetup.$$ProviderQualifierTypeName }}"
+                                tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{ userLocationSetup.$$ProviderQualifierTypeName }}</span> 
+                        </div>
+                        <div class="col-sm-1 cell" >
+                            <span id="userLocationSetupProviderOnClaims{{$index}}"
+                                ng-if="userLocationSetup.ProviderTypeId !== 4"
+                                uib-tooltip="{{userLocationSetup.$$ProviderOnClaims }}"
+                                tooltip-append-to-body="true" tooltip-placement="top-left">
+                                {{ userLocationSetup.$$ProviderOnClaims  | truncate: 64 :'...' }}</span>
+                        </div>
+                        <div class="col-sm-1 cell center">
+                            <input type="checkbox" id="" ng-if="userLocationSetup.ProviderTypeId !== 4"
+                                ng-model="userLocationSetup.IsActive"
+                                ng-disabled="true">                            
+                        </div>                                
+                        <div class="col-sm-1">                            
+                            <span id="lblProviderColorPreview{{$index}}"  ng-if="userLocationSetup.ProviderTypeId !== 4"
+                                class="userLocationsSetup__providerColor"                            
+                                ng-style="{'background-color': userLocationSetup.Color   }">                              
+                            </span>
+                        </div>
+                        
+                        <!-- todo handle the disabled property ? , auth, delete, edit, tooltip -->
+                        <div class="col-sm-1 cell margin-left-15">
+                            <!--delete button-->
+                            <!--should be disabled if this user doesn't have plapi-user-usrrol-delete for this location determined by permittedLocations-->
+                            <!-- the current user can only delete this location if they have permission to do so for this location 
+                            and the provider does not have provider hours or appointments for this location-->
+                            <button id="btnDeleteUserLocationSetup{{$index}}" 
+                                ng-disabled="userLocationSetup.$$CanEditLocation===false "
+                                class="btn btn-default btn-link pull-right cursor-pointer"
+                                check-auth-z="soar-biz-bizusr-delete"
+                                ng-class="{ disabled: false }"
+                                ng-click="removeUserLocationSetup(userLocationSetup)"
+                                uib-tooltip="{{'Remove {0}'| i18n :['User Location Setup']}}" 
+                                tooltip-append-to-body="true">
+                                <i class="far fa-trash-alt fa-lg"></i>
+                            </button>
+                            &nbsp;
+                            <!--edit button-->
+                            <!--should be disabled if this user doesn't have plapi-user-usrrol-create for this location-->
+                            <!-- the current user can only edit this location if they have permission to do so for this location determined by permittedLocations-->
+                            <button id="btnEditUserLocationSetup{{$index}}" 
+                                ng-disabled="userLocationSetup.$$CanEditLocation===false"
+                                class="btn btn-default btn-link pull-left cursor-pointer" 
+                                ng-class="{ disabled: false }"
+                                check-auth-z="plapi-user-usrrol-create"
+                                ng-click="editUserLocationSetup(userLocationSetup)"
+                                uib-tooltip="{{'Edit {0}' | i18n:['User Location Setup']}}" 
+                                tooltip-append-to-body="true">
+                                <i class="far fa-edit fa-lg"></i>
+                            </button>
+                        </div>
+                        <div class="col-md-12 error"  ng-if="userLocationSetup.$$CanRemoveLocation===false">
+                            <div id="" >{{'This {0} cannot be changed because he/she has scheduled hours and/or scheduled appointments.' | i18n:['provider'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="userRoles__validationErrors"> 
+                <div id="divNoUserLocationMessage" 
+                class="col-md-12 error padding-top-10" 
+                ng-if="userLocationsErrors.NoUserLocationsError===true">
+                {{'Your team member must have at least one location and one role before saving.' | i18n}}
+            </div>
+
+            <div id="divPracticeRolesChangedMessage" 
+                class="col-md-12 padding-top-10 warning" 
+                ng-if="displayPracticeRolesChangedMessage===true">
+                {{'This team member will need to sign out of Fuse and log back in for any added or removed roles to take effect.' | i18n}}
+            </div>
+
+            <div id="divEachLocationMustHaveRoles" 
+                class="col-md-12 error padding-top-10" 
+                ng-if="showMissingRolesMessage===true">
+                {{ 'Your team member must have at least one role assigned per location.' | i18n }}
+            </div>
+
+            <div id="divNeedLicenseForStates" 
+                class="col-md-12 padding-top-10 warning" 
+                ng-if="needLicenseStates.length > 0">
+                {{'Please add a State License for' | i18n}} {{needLicenseStates}}
+            </div>
+
+            <div id="divMustHaveOneAdmin" 
+                class="col-md-12 error padding-top-10" 
+                    ng-if="practiceOnlyHasOneAdmin===true">
+                {{'Your Practice must have at least one team member assigned as Practice Admin/Exec. Dentist. Please assign this role to another active user before removing this role from your profile.' | i18n}}
+            </div>             
+        </div>         
+    </div>
+</div>

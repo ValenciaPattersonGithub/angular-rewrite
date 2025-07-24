@@ -1,0 +1,9 @@
+<button 
+    id="btnMassUpdate" 
+    class="btn btn-primary"
+    [disabled]="!massUpdateAllowed()"
+    title="{{massUpdateTooltip}}"
+    *ngIf="hasClaimEditAccess"
+    (click)="openMassUpdateDialog()"
+    kendoDialogContainer
+>{{ 'Mass Update' | translate }}</button>

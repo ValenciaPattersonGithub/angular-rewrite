@@ -1,0 +1,1685 @@
+<div [ngClass]="'fade-in'">
+    <form [formGroup]="frmLocationCrud" name="frmLocationCrud" role="form" action="javascript:;" (ngSubmit)="saveFunc()"
+        data-qa="frmlocationcrud-form" novalidate>
+        <div class="locCrud">
+            <div class="col-xs-12 locCrud__header-container">
+                <div class="locCrud__header">
+                    <div class="locCrud__title">
+                        <h3>
+                            <span *ngIf="editMode && selectedLocation?.LocationId == null">
+                                {{'Add a Location' | translate}}
+                            </span>
+                            <span id="idLocationHeader"
+                                *ngIf="selectedLocation?.LocationId">{{originalLocation?.NameLine1}}</span>
+                            <span class="text-muted" *ngIf="selectedLocation?.NameLine2"> | </span>
+                            <span>{{originalLocation?.NameLine2}}</span>
+                        </h3>
+                    </div>
+                    <div class="locCrud__actions">
+                        <span *ngIf="selectedLocation?.LocationId">
+                            <a class="text-muted">{{ 'View Schedule' | translate }}</a>
+                            <span> |</span>
+                            <a *ngIf="selectedLocation?.LocationId" checkRoleAccess="soar-biz-bizusr-view"
+                                href="{{viewTeamMemberUrl}}?locationId={{ selectedLocation?.LocationId }}">
+                                {{'View Team Members' | translate}}{{ userCount > 0 ? '(' + userCount + ')' : '' }}
+                            </a>
+                            <span>|</span>
+                            <a *ngIf="selectedLocation?.LocationId" checkRoleAccess="soar-biz-bizusr-add"
+                                href="{{addTeamMemberUrl}}?locationId={{ selectedLocation?.LocationId }}">
+                                {{'Add a Team Member' | translate}}
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!--view mode-->
+            <div *ngIf="!editMode">
+                <div id="workArea" class="container-fluid">
+                    <div *ngIf="selectedLocation?.LocationId" class="m-bottom-5 m-top-8 col-xs-12 pad-left-right-0">
+                        <div class="col-xs-12 col-md-5 col-lg-8 error help-text" *ngIf="invalidDataForRx">
+                            {{ 'Your practice location has been saved, however, it appears that we were unable to
+                            activate this location for electronic prescriptions. Please verify your location has a valid
+                            primary phone, fax, and zip code and save again.' | translate }}
+                        </div>
+                        <div class="col-xs-6 col-md-3 col-lg-2 text-center"
+                            [ngClass]="{ 'col-md-offset-5 col-lg-offset-8': !invalidDataForRx }">
+                            {{(!selectedLocation?.DeactivationTimeUtc) ? '' : ('Date' | translate) + ': ' +
+                            (selectedLocation?.DeactivationTimeUtc | date : 'MM/dd/yyyy')}}
+                        </div>
+                        <div class="col-xs-3 col-md-2 col-lg-1 text-right">
+                            {{ (!selectedLocation?.DeactivationTimeUtc) ? ('Active' | translate) : ('Inactive' |
+                            translate) }}:
+                        </div>
+                        <div class="col-xs-3 col-md-2 col-lg-1">
+                            <div class="onoffswitch pull-right" disabled>
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                    id="inactivateSwitch" disabled [checked]="!selectedLocation?.DeactivationTimeUtc">
+                                <label class="onoffswitch-label" for="inactivateSwitch"
+                                    style="margin-bottom: 0; cursor: not-allowed;"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- View selected Location -->
+                    <view-location [selectedLocation]="selectedLocation" [locations]="locations"
+                        [hasTreatmentRoomsViewAccess]="hasTreatmentRoomsViewAccess"
+                        [hasAdditionalIdentifierViewAccess]="hasAdditionalIdentifierViewAccess"
+                        [isEstatementsEnabled]="isEstatementsEnabled" [additionalIdentifiers]="additionalIdentifiers"
+                        [taxonomyCodesSpecialties]="taxonomyCodesSpecialties">
+                    </view-location>
+                 </div>
+            </div>
+
+            <!-- Edit Area-->
+            <div *ngIf="editMode">
+                <div id="workArea">
+                    <!--update inactive location-->
+                    <div *ngIf="selectedLocation?.LocationId" class="m-bottom-5 m-top-8 col-xs-12 pad-left-right-0">
+                        <div class="col-xs-2" *ngIf="isActiveLoc"></div>
+                        <div class="text-right col-xs-2 pad-left-right-0 col-xs-offset-7">
+                            <label class="height-25">
+                                {{ isActiveLoc ? ('Active' | translate) : ('Inactive Date' | translate) }}
+                            </label>
+                        </div>
+                        <div class="col-xs-2" *ngIf="!isActiveLoc && canUpdateInactivation">
+                            <app-date-selector [minDate]="nowDate"
+                                [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }" [value]="defaultDate"
+                                (dateChanged)="OnDefaultDateChanged($event)">
+                            </app-date-selector>
+                            <label class="req-msg" *ngIf="!defaultDate">
+                                {{'This field is required.' | translate}}
+                            </label>
+                        </div>
+                        <div class="col-xs-2" *ngIf="!isActiveLoc && !canUpdateInactivation">
+                            <app-date-selector [minDate]="nowDate"
+                                [placeholder]="{ year: 'YYYY', month: 'MM', day: 'DD' }"
+                                [value]="selectedLocation?.DeactivationTimeUtc" [disabled]="true">
+                            </app-date-selector>
+                        </div>
+
+                        <div class="col-xs-1 pad-left-right-0">
+                            <div class="onoffswitch pull-right">
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                    id="inactivateSwitchUpdate" formControlName="isActiveLoc" [checked]="isActiveLoc"
+                                    (change)="toggleLocationStatus($event)">
+                                <label class="onoffswitch-label" for="inactivateSwitchUpdate"
+                                    style="margin-bottom:0;"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- location information header -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Location & Contact Info' | translate }}
+                            </label>
+                        </div>
+
+                        <!-- location information section -->
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <!-- location name 1 -->
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label id="lblLocationName1" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpLocationName1">{{'Name Line 1' | translate }} *</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div
+                                                    [ngClass]="{error: (!formIsValid && frmLocationCrud.get('NameLine1').errors?.required) || !locationNameIsUnique }">
+                                                    <input id="inpLocationName1" class="form-control required valid"
+                                                        placeholder="{{ 'Name Line 1' | translate }}"
+                                                        formControlName="NameLine1" name="inpLocationName1"
+                                                        maxlength="60" [tabindex]="10" type="text"
+                                                        (blur)="checkForUniqueLocationName()" CapitalizeFirst setFocus
+                                                        required />
+                                                    <label id="lblLocationName1Required" class="help-text"
+                                                        *ngIf="!formIsValid && frmLocationCrud.get('NameLine1').errors?.required">
+                                                        {{ 'This field is required.' | translate }}
+                                                    </label>
+                                                    <label id="lblLocationName1IsUnique" class="help-text"
+                                                        *ngIf="!locationNameIsUnique">
+                                                        {{ uniqueLocationServerMessage }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- location name 2 -->
+                                            <label id="lblLocationName2" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpLocationName2">{{'Name Line 2' | translate }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpLocationName2" class="form-control"
+                                                        placeholder="{{ 'Name Line 2' | translate }}"
+                                                        formControlName="NameLine2" name="inpLocationName2"
+                                                        maxlength="60" [tabindex]="10" type="text" CapitalizeFirst />
+                                                </div>
+                                            </div>
+
+                                            <!-- display name abbreviated as -->
+                                            <label id="lblDisplayNameAbbreviatedAs"
+                                                class="col-xs-12 col-sm-4 control-label"
+                                                for="inpDisplayNameAbbreviatedAs">
+                                                {{'Display As' | translate }}*
+                                            </label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div
+                                                    [ngClass]="{error: (!formIsValid && frmLocationCrud.get('NameAbbreviation').errors?.required) || !displayNameIsUnique}">
+                                                    <input id="inpDisplayNameAbbreviatedAs"
+                                                        class="form-control required valid"
+                                                        placeholder="{{ 'Display As' | translate }}"
+                                                        formControlName="NameAbbreviation"
+                                                        name="inpDisplayNameAbbreviatedAs" maxlength="20"
+                                                        [tabindex]="10" type="text" CapitalizeFirst
+                                                        (blur)="checkForUniqueDisplayName()" required />
+                                                    <label id="lblDisplayNameAbbreviatedAsRequired" class="help-text "
+                                                        *ngIf="!formIsValid && frmLocationCrud.get('NameAbbreviation').errors?.required">
+                                                        {{ 'This field is required.' | translate }}
+                                                    </label>
+                                                    <label id="lblDisplayNameAbbreviatedIsUnique" class="help-text"
+                                                        *ngIf="!displayNameIsUnique">
+                                                        {{ uniqueDisplayNameServerMessage }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- primary email -->
+                                            <label id="lblPrimaryEmail" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpPrimaryEmail">{{ 'Primary Email' | translate }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && !frmLocationCrud.get('Email').errors?.required &&	!frmLocationCrud.get('Email').valid}">
+                                                    <input id="inpPrimaryEmail" class="form-control required valid"
+                                                        placeholder="{{ 'Primary Email' | translate }}"
+                                                        formControlName="Email" name="inpPrimaryEmail" maxlength="256"
+                                                        [tabindex]="10" type="text" validEmail />
+                                                    <label id="lblPrimaryEmailInvalid" class="help-text "
+                                                        *ngIf="!formIsValid && !frmLocationCrud.get('Email').errors?.required && !frmLocationCrud.get('Email').valid">
+                                                        {{ 'This field requires a valid email address.' | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- website -->
+                                            <label id="lblWebsite" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpWebsite">{{'Website' | translate }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpWebsite" class="form-control valid"
+                                                        placeholder="{{ 'Website' | translate }}"
+                                                        formControlName="Website" name="inpWebsite" maxlength="500"
+                                                        [tabindex]="10" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">&nbsp;</div>
+
+                                            <!-- primary phone -->
+                                            <label id="lblPrimaryPhone" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpPrimaryPhone">{{ 'Primary Phone' | translate }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpPrimaryPhone" class="form-control"
+                                                        placeholder="{{ 'Primary Phone' | translate }}"
+                                                        formControlName="PrimaryPhone" name="inpPrimaryPhone"
+                                                        [tabindex]="10" type="text" mask="(000) 000-0000"
+                                                        [showMaskTyped]="true" [clearIfNotMatch]="true" />
+                                                </div>
+                                            </div>
+
+                                            <!-- secondary phone -->
+                                            <label id="lblSecondaryPhone" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpSecondaryPhone">{{'Secondary Phone' | translate }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpSecondaryPhone" class="form-control"
+                                                        placeholder="{{ 'Secondary Phone' | translate }}"
+                                                        formControlName="SecondaryPhone" name="inpSecondaryPhone"
+                                                        [tabindex]="10" type="text" mask="(000) 000-0000"
+                                                        [showMaskTyped]="true" [clearIfNotMatch]="true" />
+                                                </div>
+                                            </div>
+
+                                            <!-- fax -->
+                                            <label id="lblFax" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpFax">{{'Fax' | translate }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpFax" class="form-input"
+                                                        placeholder="{{ 'Fax' | translate }}" formControlName="Fax"
+                                                        name="inpFax" [tabindex]="10" type="text" mask="(000) 000-0000"
+                                                        [showMaskTyped]="true" [clearIfNotMatch]="true" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <!-- address -->
+                                            <label class="col-sm-4 control-label" for="inpAddressLine1">
+                                                {{ 'Address' | translate}} *
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && frmLocationCrud.get('AddressLine1').errors?.required}">
+                                                    <input id="inpAddressLine1" class="form-control required valid"
+                                                        placeholder="{{ 'Street address' | translate }}"
+                                                        formControlName="AddressLine1" name="inpAddressLine1"
+                                                        maxlength="128" [tabindex]="10" type="text" required
+                                                        alphaNumericText />
+                                                    <label id="lblAddressLineRequired" class="help-text "
+                                                        *ngIf="!formIsValid && frmLocationCrud.get('AddressLine1').errors?.required">
+                                                        {{ 'This field is required.' | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-offset-4 col-sm-8">
+                                                <input id="inpAddressLine2" class="form-control"
+                                                    placeholder="{{ 'Address 2' | translate }}"
+                                                    formControlName="AddressLine2" name="inpAddressLine2"
+                                                    maxlength="128" [tabindex]="10" type="text" alphaNumericText />
+                                            </div>
+
+                                            <!-- City -->
+                                            <label class="col-sm-4 control-label" for="inpCity">
+                                                {{ 'City' | translate }}
+                                                *
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && frmLocationCrud.get('City').errors?.required}">
+                                                    <input id="inpCity" class="form-control"
+                                                        placeholder="{{ 'Enter city' | translate }}"
+                                                        formControlName="City" name="inpCity" maxlength="64"
+                                                        [tabindex]="10" type="text" CapitalizeFirst alphaOnly required
+                                                        (paste)="validatePaste()" />
+                                                    <label id="lblCityRequired" class="help-text "
+                                                        *ngIf="!formIsValid && frmLocationCrud.get('City').errors?.required">
+                                                        {{ 'This field is required.' | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- State -->
+                                            <label class="col-sm-4 control-label" for="inpState">
+                                                {{'State' | translate}}*
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && frmLocationCrud.get('State').errors?.required}">
+                                                    <state-list ngDefaultControl formControlName="State"
+                                                        [stateListId]="'inpState'" [source]="selectedState"
+                                                        class="required valid" [tabindex]="10"
+                                                        (sourceChange)="onstatechange($event)">
+                                                    </state-list>
+                                                    <label id="lblStateRequired" class="help-text "
+                                                        *ngIf="!formIsValid && frmLocationCrud.get('State').errors?.required">
+                                                        {{ 'This field is required.' | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <!-- Zip -->
+                                            <label class="col-sm-4 control-label" for="inpZip">
+                                                {{'ZIP Code' | translate}}*
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && (frmLocationCrud.get('ZipCode').errors?.required || !frmLocationCrud.get('ZipCode').valid)}">
+                                                    <input id="inpZip" class="form-control required valid"
+                                                        placeholder="{{ 'Enter ZIP code' | translate }}"
+                                                        formControlName="ZipCode" name="inpZip" maxlength="10"
+                                                        minlength="5" tabindex="10" type="text"
+                                                        zipField="selectedLocation?.ZipCode" required
+                                                        [validation]="false" mask="00000-0000" />
+                                                    <label id="lblZipRequired" class="help-text "
+                                                        *ngIf="!formIsValid && frmLocationCrud.get('ZipCode').errors?.required">
+                                                        {{ 'This field is required.' | translate }}
+                                                    </label>
+                                                    <label id="lblZipInvalid" class="help-text "
+                                                        *ngIf="!formIsValid && !frmLocationCrud.get('ZipCode').errors?.required && !frmLocationCrud.get('ZipCode').valid">
+                                                        {{ 'ZIP code must be 5 to 9 numeric characters.' | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Timezone -->
+                                            <label class="col-sm-4 control-label">
+                                                {{ 'Time Zone' | translate }}
+                                                *
+                                            </label>
+                                            <div class="col-sm-8 locCrud__control-label">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && frmLocationCrud.get('Timezone').errors?.required}">
+                                                    <soar-select-list id="inpTimezone"
+                                                        [placeHolder]="'Select Time Zone'" [textField]="'text'"
+                                                        [valueField]="'value'" [optionList]="timeZones"
+                                                        formControlName="Timezone" [disableInput]="false"
+                                                        [selectedItemValue]="selectedLocation?.Timezone" [sbTab]="10"
+                                                        class="locCrud__dropdown required valid" required>
+                                                    </soar-select-list>
+                                                    <label id="lblTimezoneInvalid" class="help-text"
+                                                        *ngIf="!formIsValid && frmLocationCrud.get('Timezone').errors?.required">
+                                                        {{ 'This field is required' | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="panel">
+                        <!-- images -->
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Images' | translate }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12 col-sm-offset-2 col-sm-10">
+                                            {{
+                                            'Location Image' |
+                                            translate
+                                            }}
+                                        </label>
+
+                                        <div class="col-xs-12 col-sm-offset-2 col-sm-10">
+                                            <div class="locCrud__noImg">
+                                                <div>
+                                                    <span class="text-muted">{{ 'No file selected' | translate }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a id="btnLocationImage" class="col-xs-12 col-sm-offset-2 col-sm-10"
+                                            [tabindex]="10">{{ 'Upload' | translate }}</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12 col-sm-offset-2 col-sm-10">
+                                            {{
+                                            'Location Logo' |
+                                            translate
+                                            }}
+                                        </label>
+
+                                        <div class="col-xs-12 col-sm-offset-2 col-sm-10">
+                                            <div class="locCrud__noImg">
+                                                <div>
+                                                    <span class="text-muted">{{ 'No file selected' | translate }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a id="btnLocationImage" class="col-xs-12 col-sm-offset-2 col-sm-10"
+                                            [tabindex]="10">{{ 'Upload' | translate }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schedule & Rooms -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Schedule' | translate }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div *ngIf="!editMode; else elseblockroom">
+                                <div class="col-xs-12 col-xs-6">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <h5><label class="col-xs-12">{{ 'Schedules' | translate }} </label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- A little different display handling for rooms -->
+                                <div class="col-xs-12 col-xs-6" *ngIf="hasTreatmentRoomsViewAccess">
+                                    <div class="row">
+                                        <div class="col-xs-12" *ngIf="selectedRooms?.length <= 6">
+                                            <h5>
+                                                <label class="col-xs-12">
+                                                    {{ 'Treatment Rooms' | translate }} ({{selectedRooms?.length}})
+                                                </label>
+                                            </h5>
+                                            <div class="col-xs-6">
+                                                <span id="lblRoom" class="col-xs-12 locCrud__room"
+                                                    *ngFor="let room of selectedRooms | orderBy:'Name':asc; let i=index;">
+                                                    {{room.Name}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12" *ngIf="selectedRooms?.length > 6">
+                                            <h5>
+                                                <label class="col-xs-12">
+                                                    {{ 'Treatment Rooms' | translate }} ({{
+                                                    selectedRooms?.length
+                                                    }})
+                                                </label>
+                                            </h5>
+                                            <div class="col-xs-6"
+                                                *ngIf="selectedRooms?.length < 6 || (selectedRooms?.length > 6 && index <= selectedRooms?.length / 2)">
+                                                <span id="lblRoom" class="col-xs-12 locCrud__room"
+                                                    *ngFor="let room of selectedRooms | orderBy:'Name':asc; let i=index;">
+                                                    {{room.Name}}
+                                                </span>
+                                            </div>
+                                            <div class="col-xs-6"
+                                                *ngIf="(selectedRooms?.length > 6 && index > selectedRooms?.length / 2)">
+                                                <span id="lblRoom" class="col-xs-12 locCrud__room"
+                                                    *ngFor="let room of selectedRooms | orderBy:'Name':asc; let i=index;">
+                                                    {{ room.Name}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #elseblockroom>
+                                <div class="col-xs-12 col-xs-6">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <h5><label class="col-xs-12">{{ 'Schedules' | translate }} </label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-xs-6" *ngIf="hasTreatmentRoomsViewAccess">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <h5>
+                                                    <label class="col-xs-12">{{ 'Treatment Rooms' | translate }}</label>
+                                                </h5>
+
+                                                <div class="col-xs-12"
+                                                    *ngFor="let room of selectedRooms; let i= index;trackBy:trackByMethod ">
+                                                    <label id="lblRoom{{i}}" class="col-xs-12 col-sm-4 control-label"
+                                                        for="inpRoom{{i}}">{{'Room' | translate }}</label>
+                                                    <div class="col-xs-11 col-sm-7"
+                                                        [ngClass]="{'error': room?.$duplicate == true || (selectedLocation?.Rooms?.valid == false && (room?.Name == null || room?.Name == '')) }"
+                                                        [tooltip]="room?.hasAppointments == true && isRoomsLoadingCompleted == true ? 'This room cannot be removed because it has provider scheduled open time and/or scheduled appointments.' : '' | translate"
+                                                        placement="top" delay="500">
+                                                        <div>
+                                                            <input #inpRoom id="inpRoom{{i}}" name="inpRoom{{i}}"
+                                                                placeholder="{{ 'Name' | translate}}"
+                                                                class="form-control" [value]="room.Name" maxlength="50"
+                                                                [tabindex]="10"
+                                                                (blur)="roomOnChange(room, i, inpRoom?.value)" />
+
+                                                            <label id="errRoomDupe" class="help-text"
+                                                                *ngIf="room?.$duplicate == true">
+                                                                {{'A room with this name already exists.' | translate}}
+                                                            </label>
+                                                            <label id="errRoomRequired" class="help-text"
+                                                                *ngIf="(selectedLocation?.Rooms?.valid == false && (room?.Name == null || room?.Name == ''))">
+                                                                {{
+                                                                'This field is required.' | translate
+                                                                }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" id="btnDeleteRoom"
+                                                            [disabled]="room?.hasAppointments == true"
+                                                            class="btn btn-link pull-left help-text"
+                                                            (click)="deleteRoom(room, i)">
+                                                            <span class="fa fa-times"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <button type="button" id="btnAddRoom" class="btn btn-link"
+                                                    [disabled]="isRoomsLoadingCompleted == false" (click)="addRoom()"
+                                                    [tabindex]="10">
+                                                    + {{
+                                                    selectedRooms?.length > 0 ? 'Add another room' :'Add a room'
+                                                    |translate
+                                                    }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <!-- Identification Numbers -->
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Identification Numbers' | translate }}
+                            </label>
+                        </div>
+
+
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <h5>
+                                                <label class="col-xs-12">
+                                                    {{'Federal Identification' | translate}}
+                                                </label>
+                                            </h5>
+                                            <label id="lblTaxID" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpTaxID">{{'Tax ID' | translate }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpTaxID" class="form-control"
+                                                        placeholder="{{ 'Tax ID' | translate }}" formControlName="TaxId"
+                                                        name="inpTaxID" [tabindex]="10" type="text" mask="00-0000000"
+                                                        [showMaskTyped]="true" [clearIfNotMatch]="true" />
+                                                </div>
+                                            </div>
+
+                                            <label id="lblBillingEntityNPI"
+                                                class="col-xs-12 col-sm-4 control-label locCrud__type2"
+                                                for="inpBillingEntityNPI">
+                                                {{'Billing Entity NPI (Type 2)' |translate}}
+                                            </label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && frmLocationCrud.get('TypeTwoNpi').errors?.minlength}">
+                                                    <input id="inpBillingEntityNPI" class="form-control"
+                                                        placeholder="{{ 'Billing Entity NPI (Type 2)' | translate }}"
+                                                        formControlName="TypeTwoNpi" name="inpBillingEntityNPI"
+                                                        maxlength="10" [tabindex]="10" type="text" numericOnly
+                                                        minlength="10" />
+                                                    <label id="lblBillingEntityNPIMinLength" class="help-text "
+                                                        *ngIf="!formIsValid && frmLocationCrud.get('TypeTwoNpi').errors?.minlength">
+                                                        {{ 'This field requires a minimum of 10 characters.' | translate
+                                                        }}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <label id="lblTaxonomyCodeSpeciality"
+                                                class="col-xs-12 col-sm-4 control-label locCrud__taxonomyCode"
+                                                for="inpTaxonomyCodeSpeciality">
+                                                {{'Taxonomy Code/Specialty' | translate}}
+                                            </label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <taxonomy-selector id="inpTaxonomyCodeSpeciality" [sbTab]="10"
+                                                        [placeHolder]="'Taxonomy code/specialty'"
+                                                        [optionList]="taxonomyCodesSpecialties" [disableInput]="false"
+                                                        [selectedItemValue]="selectedLocation?.TaxonomyId"
+                                                        formControlName="TaxonomyId" class="locCrud__dropdown">
+                                                    </taxonomy-selector>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <h5>
+                                                <label class="col-xs-12">
+                                                    {{'State Identification' | translate}}
+                                                </label>
+                                            </h5>
+
+                                            <label id="lblBillingEntityLicense" class="col-xs-12 col-sm-4 control-label"
+                                                for="inpBillingEntityLicense">
+                                                {{'Billing Entity License' | translate}}
+                                            </label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <input id="inpBillingEntityLicense" class="form-control"
+                                                        placeholder="{{ 'Billing Entity License' | translate }}"
+                                                        formControlName="LicenseNumber" name="inpBillingEntityLicense"
+                                                        maxlength="32" [tabindex]="10" type="text" alphaNumericText />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Identifiers -->
+                    <div class="panel"
+                        *ngIf="hasAdditionalIdentifierViewAccess && selectedLocation?.AdditionalIdentifiers?.length > 0">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Additional Identifiers' | translate }}
+                            </label>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12">
+                                        <div *ngIf="isIdentifierAdded">
+                                            <div class="form-group" [formGroup]="addIdentifierGroup">
+                                                <div *ngFor="let identifier of additionalIdentifiers; let i=index"
+                                                    class="locationFields">
+                                                    <div class="row">
+                                                        <label
+                                                            class="col-xs-12 col-sm-4 control-label locCrud__additionalIdentifier">
+                                                            {{additionalIdentifiers[i]?.Description}}
+                                                        </label>
+                                                        <div class="col-xs-12 col-sm-8 locCrud__additionalIdentifier">
+                                                            <input type="text" class="form-control" name="val"
+                                                                formControlName="AdditionalIdentifier_{{i}}"
+                                                                placeholder="{{ additionalIdentifiers[i]?.Description }}"
+                                                                maxlength="100" [tabindex]="10">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tax Rate -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <label class="panel-title">
+                                {{ 'Financial Settings' | translate }}
+                            </label>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <fee-list-location formControlName="FeeListId"
+                                                    (locationFeeListChange)="onfeeChange($event)" [editMode]="editMode"
+                                                    [location]="selectedLocation"
+                                                    [locationFeeList]="selectedLocation?.FeeListId" [sbTab]="10">
+                                                </fee-list-location>
+                                                <div class="clearfix">&nbsp;</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+
+                                                <label id="lblProviderTaxRate" class="col-xs-12 col-sm-4 control-label"
+                                                    for="inpProviderTaxRate">
+                                                    {{'Provider Tax Rate' | translate}}
+                                                </label>
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <div
+                                                        *ngIf="{error: !formIsValid && !frmLocationCrud.get('ProviderTaxRate').valid}">
+                                                        <div class="input-group">
+                                                            <input id="inpProviderTaxRate" class="form-control"
+                                                                placeholder="{{ 'Provider Tax Rate' | translate }}"
+                                                                formControlName="ProviderTaxRate"
+                                                                name="inpProviderTaxRate" maxlength="6" [tabindex]="10"
+                                                                type="text" taxrate />
+                                                            <!-- taxrate -- this directive needs to check -->
+                                                            <span class="input-group-addon">%</span>
+                                                        </div>
+                                                        <label id="lblProviderTaxRateInvalid" class="help-text "
+                                                            *ngIf="!formIsValid && !frmLocationCrud.get('ProviderTaxRate').valid">
+                                                            {{ 'Must be between 0 to 99.999.' | translate }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <div class="col-xs-12 col-sm-8 float-right">
+                                                    <div
+                                                        [ngClass]="{error: !formIsValid && !frmLocationCrud.get('EnableCreditDebitCard').valid}">
+                                                        <div class="input-group"
+                                                            [ngClass]="{error: !formIsValid && !frmLocationCrud.get('EnableCreditDebitCard').valid}">
+                                                            <input type="checkbox"
+                                                                formControlName="EnableCreditDebitCard"
+                                                                #enableCreditCard
+                                                                (change)="paymentGatewayChanged($event)" [tabindex]="10"
+                                                                value="{{selectedLocation?.IsPaymentGatewayEnabled}}">
+                                                            <label>{{'Enable Credit Card/Debit Card Processing' |
+                                                                translate}}</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label id="lblSalesAndUseTaxRate"
+                                                    class="col-xs-12 col-sm-4 control-label"
+                                                    for="inpSalesAndUseTaxRate">
+                                                    {{'Sales & Use Tax Rate' | translate}}
+                                                </label>
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <div class="error"
+                                                        [ngClass]="{error: !formIsValid && !frmLocationCrud.get('SalesAndUseTaxRate').valid}">
+                                                        <div class="input-group">
+                                                            <input id="inpSalesAndUseTaxRate" class="form-control"
+                                                                placeholder="{{ 'Sales and use tax rate' | translate }}"
+                                                                formControlName="SalesAndUseTaxRate"
+                                                                name="inpSalesAndUseTaxRate" maxlength="6"
+                                                                [tabindex]="10" type="text" taxrate />
+                                                            <!-- taxrate -- this directive needs to check -->
+                                                            <span class="input-group-addon">%</span>
+                                                        </div>
+                                                        <label id="lblSalesAndUseTaxRateInvalid" class="help-text"
+                                                            *ngIf="!formIsValid && !frmLocationCrud.get('SalesAndUseTaxRate').valid">
+                                                            {{ 'Must be between 0 to 99.999.' | translate }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6" *ngIf="showPaymentProvider">
+                                            <div class="form-group">
+                                                <label id="lblPaymentProvider" class="col-xs-12 col-sm-4 control-label"
+                                                    for="inpPaymentProvider">{{ 'Payment Provider' | translate
+                                                    }}</label>
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <div>
+                                                        <div>
+                                                            <soar-select-list id="inpPaymentProvider"
+                                                                data-qa="location-crud-finance-payment-provider"
+                                                                [textField]="'Text'" [valueField]="'Value'"
+                                                                [optionList]="paymentProviders"
+                                                                formControlName="PaymentProvider" [sbTab]="10"
+                                                                [selectedItemValue]="selectedLocation?.PaymentProvider"
+                                                                class="locCrud__dropdown required valid"
+                                                                (selectedItemValueChange)="changePaymentProvider($event)">
+                                                            </soar-select-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="row form-horizontal">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <!-- Nothing goes here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-horizontal">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label id="lblDefaultFinanceCharge" class="col-xs-12 col-sm-4 control-label"
+                                            for="inpDefaultFinanceCharge">
+                                            {{'Default Finance Charge' | translate}}
+                                        </label>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div class="error"
+                                                [ngClass]="{error: !formIsValid && !frmLocationCrud.get('DefaultFinanceCharge').valid}">
+                                                <div class="input-group"
+                                                    [ngClass]="{error: !formIsValid && !frmLocationCrud.get('DefaultFinanceCharge').valid}">
+                                                    <input id="inpDefaultFinanceCharge" class="form-control"
+                                                        placeholder="{{ 'Default Finance Charge' | translate }}"
+                                                        formControlName="DefaultFinanceCharge"
+                                                        (keyup)="setAccountsOverDue(selectedLocation)"
+                                                        name="inpDefaultFinanceCharge" maxlength="5" [tabindex]="10"
+                                                        type="text" DecimalNumber taxrate
+                                                        [taxRatePattern]="defaultFinanceChargePattern" decimals="2" />
+                                                    <!-- taxrate taxRatePattern="defaultFinanceChargePattern" -- this needs to check -->
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
+                                                <label id="lblDefaultFinanceChargeInvalid" class="help-text"
+                                                    *ngIf="((selectedLocation?.DefaultFinanceCharge !== null) && (selectedLocation?.DefaultFinanceCharge !== '') && (selectedLocation.DefaultFinanceCharge <= 0 || selectedLocation?.DefaultFinanceCharge > 99.99))">
+                                                    {{ 'Default Finance Charge should be greater than 0.' | translate }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label id="lblMerchantId" class="col-xs-12 col-sm-4 control-label"
+                                            for="inpMerchantId">{{'Account Credential' | translate }}</label>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div class="error"
+                                                [ngClass]="{error: !formIsValid && frmLocationCrud.get('MerchantId').errors?.required}"
+                                                [hidden]="accountTokenInputHidden.OpenEdgeEnabled">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && frmLocationCrud.get('MerchantId').errors?.required}">
+                                                    <input id="inpMerchantId" class="form-control"
+                                                        placeholder="{{ 'Account Credential' | translate }}"
+                                                        formControlName="MerchantId"
+                                                        (change)="setAccountsOverDue(selectedLocation)"
+                                                        [disabled]="!selectedLocation?.IsPaymentGatewayEnabled"
+                                                        name="inpMerchantId" maxlength="256" [tabindex]="10" type="text"
+                                                        alphaNumericText
+                                                        data-qa="frmlocationcrud-form-input-MerchantId" />
+                                                </div>
+                                                <label id="lblMerchantIdRequired" class="help-text"
+                                                    *ngIf="!formIsValid && frmLocationCrud.get('MerchantId').errors?.required">
+                                                    {{ 'This field is required' | translate }}
+                                                </label>
+                                            </div>
+                                            <div class="error"
+                                            [ngClass]="{error: !formIsValid && frmLocationCrud.get('PaymentProviderAccountCredential').errors?.required}"
+                                            [hidden]="accountTokenInputHidden.PaymentIntegrationEnabled">
+
+                                            <div [ngClass]="selectedLocation?.LocationId? 'input-group':''"
+                                                [ngClass]="{error: !formIsValid && frmLocationCrud.get('PaymentProviderAccountCredential').errors?.required}">
+                                                <input id="inpPaymentProviderAccountCredential" class="form-control"
+                                                    placeholder="{{ 'Account Credential' | translate }}"
+                                                    formControlName="PaymentProviderAccountCredential"
+                                                    [type]="!revealMaskAccountCredentials?'password':'text'"
+                                                    (change)="setAccountsOverDue(selectedLocation)"
+                                                    name="inpPaymentProviderAccountCredential" maxlength="256"
+                                                    [tabindex]="10"
+                                                    data-qa="frmlocationcrud-form-input-paymentprovideraccountcredential" />
+                                                    <span   *ngIf="selectedLocation?.LocationId" class="input-group-addon input-group-btn" [ngClass]="frmLocationCrud.get('EnableCreditDebitCard').value ?'password-btn':'disable-btn' ">
+                                                        <button id="btnRevealMask" (click)="revealMask()" kendoButton type="button" class="number-selector-btn icon-button" [disabled]="!frmLocationCrud.get('EnableCreditDebitCard').value">
+                                                            <i *ngIf="revealMaskAccountCredentials" class="fa fa-eye font-icon"></i>
+                                                            <i *ngIf="!revealMaskAccountCredentials" class="fa fa-eye-slash font-icon"></i>
+                                                        </button>
+                                                    </span>
+                                            </div>
+                                            <label id="lblPaymentProviderAccountCredentialRequired"
+                                                class="help-text"
+                                                *ngIf="!formIsValid && frmLocationCrud.get('PaymentProviderAccountCredential').errors?.required">
+                                                {{ 'This field is required' | translate }}
+                                            </label>
+                                        </div>
+                                        </div>
+
+                                        <div *ngIf="isEstatementsEnabled">
+                                            <label class="col-xs-12 col-sm-4 control-label">
+                                                {{'Billing eStatement Credit Card Options' | translate}}
+                                            </label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <span class="col-xs-12 estatementLabel locationFields">
+                                                    {{'Options will be reflected on eStatements ONLY' | translate}}
+                                                </span>
+                                                <div class="clearfix">&nbsp;</div>
+                                                <span class="col-xs-12 locationFields">
+                                                    <input type="radio" id="creditCardOptionsSelectShowEdit"
+                                                        formControlName="DisplayCardsOnEstatement"
+                                                        (change)="displayCardsOnEstatementChange(true)" value="true"
+                                                        [checked]="selectedLocation?.DisplayCardsOnEstatement == true"
+                                                        [tabindex]="10" />
+                                                    {{'Display what cards you accept' | translate}}
+                                                </span>
+
+                                                <div *ngIf="selectedLocation?.DisplayCardsOnEstatement">
+                                                    <span class="col-xs-12 error" *ngIf="selectedLocation?.DisplayCardsOnEstatement &&
+                                                              !selectedLocation?.AcceptMasterCardOnEstatement &&
+                                                              !selectedLocation?.AcceptDiscoverOnEstatement &&
+                                                              !selectedLocation?.AcceptVisaOnEstatement &&
+                                                              !selectedLocation?.AcceptAmericanExpressOnEstatement">
+                                                        <span class="help-text">
+                                                            {{'Select a card type to continue' | translate}}
+                                                        </span>
+                                                    </span>
+                                                    <div class="clearfix">&nbsp;</div>
+
+                                                    <app-check-box class="col-xs-6" id="inpAcceptMasterCardOnEstatement"
+                                                        formControlName="AcceptMasterCardOnEstatement"
+                                                        (checkChanged)="changeMasterCard($event)"
+                                                        [checked]="selectedLocation?.AcceptMasterCardOnEstatement"
+                                                        [label]="'Mastercard'"
+                                                        [value]="selectedLocation?.AcceptMasterCardOnEstatement"
+                                                        [isDisabled]="!selectedLocation?.DisplayCardsOnEstatement">
+                                                    </app-check-box>
+
+                                                    <app-check-box class="col-xs-6" id="inpAcceptDiscoverOnEstatement"
+                                                        formControlName="AcceptDiscoverOnEstatement"
+                                                        (checkChanged)="changeDiscoverCard($event)"
+                                                        [checked]="selectedLocation?.AcceptDiscoverOnEstatement"
+                                                        [label]="'Discover'"
+                                                        [value]="selectedLocation?.AcceptDiscoverOnEstatement"
+                                                        [isDisabled]="!selectedLocation?.DisplayCardsOnEstatement">
+                                                    </app-check-box>
+                                                    <div class="clearfix">&nbsp;</div>
+
+                                                    <app-check-box class="col-xs-6" id="inpAcceptVisaOnEstatement"
+                                                        formControlName="AcceptVisaOnEstatement"
+                                                        (checkChanged)="changeVisaCard($event)"
+                                                        [checked]="selectedLocation?.AcceptVisaOnEstatement"
+                                                        [label]="'Visa'"
+                                                        [value]="selectedLocation?.AcceptVisaOnEstatement"
+                                                        [isDisabled]="!selectedLocation?.DisplayCardsOnEstatement">
+                                                    </app-check-box>
+
+                                                    <app-check-box class="col-xs-6"
+                                                        formControlName="AcceptAmericanExpressOnEstatement"
+                                                        (checkChanged)="changeAmericanCard($event)"
+                                                        [checked]="selectedLocation?.AcceptAmericanExpressOnEstatement"
+                                                        id="inpAcceptAmericanExpressOnEstatement"
+                                                        [label]="'American Express'"
+                                                        [value]="selectedLocation?.AcceptAmericanExpressOnEstatement"
+                                                        [isDisabled]="!selectedLocation?.DisplayCardsOnEstatement">
+                                                    </app-check-box>
+
+                                                    <div class="clearfix">&nbsp;</div>
+
+                                                    <span *ngIf="selectedLocation || anyCardTypeSelected">
+                                                        <app-check-box class="col-xs-12"
+                                                            formControlName="IncludeCvvCodeOnEstatement"
+                                                            (checkChanged)="changeCvvCode($event)"
+                                                            [checked]="selectedLocation?.IncludeCvvCodeOnEstatement"
+                                                            id="inpIncludeCvvCodeOnEstatement"
+                                                            [label]="'Include a CVV CODE'"
+                                                            [value]="selectedLocation?.IncludeCvvCodeOnEstatement"
+                                                            [isDisabled]="!selectedLocation?.DisplayCardsOnEstatement">
+                                                        </app-check-box>
+                                                    </span>
+                                                    <div class="clearfix">&nbsp;</div>
+                                                </div>
+                                                <span class="col-xs-12 locationFields">
+                                                    <input type="radio" id="creditCardOptionsSelectHideEdit"
+                                                        formControlName="DisplayCardsOnEstatement"
+                                                        (change)="displayCardsOnEstatementChange(false)" value="false"
+                                                        [checked]="selectedLocation?.DisplayCardsOnEstatement == false"
+                                                        [tabindex]="10" />
+                                                    {{'Remove credit card options and instruct recipient to call office
+                                                    for credit card payment' | translate}}
+                                                </span>
+                                                <div class="clearfix">&nbsp;</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-horizontal">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label id="lblMinimumFinanceCharge"
+                                            class="col-xs-12 col-sm-4 control-label locCrud__type2"
+                                            for="inpMinimumFinanceCharge">
+                                            {{'Minimum Finance Charge' | translate}}
+                                        </label>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div class="error"
+                                                [ngClass]="{error: formIsValid && frmLocationCrud.get('MinimumFinanceCharge').value > 999999.99}">
+                                                <div class="cls_MinimumFinChg"
+                                                    [ngClass]="{error: formIsValid && frmLocationCrud.get('MinimumFinanceCharge').value > 999999.99}">
+                                                    <input id="inpMinimumFinanceCharge" class="form-control"
+                                                        placeholder="{{ '0.00' }}"
+                                                        formControlName="MinimumFinanceCharge"
+                                                        name="inpMinimumFinanceCharge" maxlength="12" [tabindex]="10"
+                                                        type="text" mask="separator.2" thousandSeparator=","
+                                                        [clearIfNotMatch]="false" [showMaskTyped]="false" />
+                                                </div>
+                                                <label id="lblMinimumFinanceChargeInvalid" class="help-text"
+                                                    *ngIf="frmLocationCrud.get('MinimumFinanceCharge').value && (frmLocationCrud.get('MinimumFinanceCharge').value <= 0 || frmLocationCrud.get('MinimumFinanceCharge').value > 999999.99)">
+                                                    {{ 'Minimum Finance Charge should be greater than 0.' | translate }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6" *ngIf="enableAccountsOverDueList">
+                                    <div class="form-group">
+                                        <label id="lblAccountsOverDue" class="col-xs-12 col-sm-4 control-label"
+                                            for="inpAccountsOverdueBy">{{'Accounts overdue by' | translate }}</label>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div
+                                                [ngClass]="{error: !formIsValid && frmLocationCrud.get('AccountsOverDue').errors?.required}">
+                                                <div
+                                                    [ngClass]="{error: !formIsValid && frmLocationCrud.get('AccountsOverDue').errors?.required}">
+                                                    <soar-select-list id="inpAccountsOverdueBy"
+                                                        [placeHolder]="'Accounts overdue by'" [textField]="'Id'"
+                                                        [valueField]="'Value'" [optionList]="accountsOverdueValues"
+                                                        formControlName="AccountsOverDue" [sbTab]="10"
+                                                        [disableInput]="!enableAccountsOverDue"
+                                                        [selectedItemValue]="selectedLocation?.AccountsOverDue"
+                                                        class="locCrud__dropdown required valid">
+                                                    </soar-select-list>
+                                                </div>
+                                                <div class="error">
+                                                    <label id="lblAccountsOverDueInvalid" class="help-text"
+                                                        *ngIf="selectedLocation?.DefaultFinanceCharge && frmLocationCrud.get('AccountsOverDue').errors?.required">
+                                                        {{ 'This field is required' | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-horizontal">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <h5>
+                                                <label class="col-xs-12">
+                                                    {{ 'Billing Remittance Site' | translate}}
+                                                </label>
+                                            </h5>
+                                            <span class="col-xs-12">
+                                                {{'This determines what address to use on the "Remit Payment To" address
+                                                on your billing statements and Invoices' | translate}}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" id="billingRemittanceSiteOptionThisLocation"
+                                                       formControlName="RemitAddressSource" value="0" [tabindex]="10"
+                                                       (change)="remitAddressSourceChanged($event)" />
+                                                {{'Use this location as its own billing remittance site' | translate}}
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" id="billingRemittanceSiteOptionDifferentLocation"
+                                                    formControlName="RemitAddressSource" value="1"
+                                                    (change)="remitAddressSourceChanged($event)" [tabindex]="10" />
+                                                {{'Use a different location as the billing remittance site' |
+                                                translate}}
+                                            </span>
+                                            <span class="col-xs-12 locationFields"
+                                                  *ngIf="selectedLocation?.RemitAddressSource == 1">
+                                                <soar-select-list id="billingRemittanceSiteLocations"
+                                                                  [placeHolder]="'Locations'" [textField]="'NameLine1'"
+                                                                  [valueField]="'LocationId'" [optionList]="locations"
+                                                                  formControlName="RemitOtherLocationId" [disableInput]="false"
+                                                                  [selectedItemValue]="selectedLocation?.RemitOtherLocationId"
+                                                                  class="locCrud__dropdown required valid" required [sbTab]="10">
+                                                </soar-select-list>
+                                                <label id="lblBillingRemittanceSiteLocationsRequired" class="help-text "
+                                                       *ngIf="!formIsValid && frmLocationCrud.get('RemitOtherLocationId').errors?.required && selectedLocation?.RemitAddressSource == 1">
+                                                    {{ 'This field is required.' | translate }}
+                                                </label>
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio" id="billingRemittanceSiteOptionDifferentAddress"
+                                                       formControlName="RemitAddressSource" value="2"
+                                                       (change)="remitAddressSourceChanged($event)" [tabindex]="10" />
+                                                {{'Use a different address as the billing remittance site' | translate}}
+                                            </span>
+                                            <div *ngIf="selectedLocation?.RemitAddressSource == 2"
+                                                 class="col-xs-12  panel panel-default">
+                                                <div class="panel-body">
+                                                    <!-- Name -->
+                                                    <div class="col-xs-12 col-sm-8">
+                                                        <label id="lblRemitToNameLine1" class="col-xs-12 "
+                                                               for="inpRemitToNameLine1">
+                                                            {{'Name Line 1' | translate }}
+                                                            *
+                                                        </label>
+                                                        <div
+                                                            [ngClass]="{error: !formIsValid && frmLocationCrud.get('RemitToNameLine1').errors?.required}">
+                                                            <input id="inpRemitToNameLine1"
+                                                                   class="form-control required valid col-xs-12"
+                                                                   placeholder="{{ 'Name Line 1' | translate }}"
+                                                                   formControlName="RemitToNameLine1" CapitalizeFirst
+                                                                   name="inpRemitToNameLine1" maxlength="100"
+                                                                   [tabindex]="10" type="text" setFocus required />
+
+
+                                                            <label id="lblRemitToNameLine1Required" class="help-text "
+                                                                   *ngIf="!formIsValid && frmLocationCrud.get('RemitToNameLine1').errors?.required">
+                                                                {{ 'This field is required.' | translate }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-8">
+                                                        <label id="lblRemitToNameLine2" class="col-xs-12 "
+                                                               for="inpRemitToNameLine2">
+                                                            {{'Name Line 2' | translate}}
+                                                        </label>
+                                                        <input id="inpRemitToNameLine2"
+                                                               class="form-control valid col-xs-12"
+                                                               placeholder="{{ 'Name Line 2' | translate }}"
+                                                               formControlName="RemitToNameLine2" CapitalizeFirst
+                                                               name="inpRemitToNameLine2" maxlength="100" [tabindex]="10"
+                                                               type="text" setFocus />
+                                                    </div>
+                                                    <!-- Address -->
+                                                    <div class="col-xs-12">
+                                                        <label class="col-xs-12 " for="inpRemitToAddressLine1">
+                                                            {{ 'Address Line 1' | translate}} *
+                                                        </label>
+                                                        <div
+                                                            [ngClass]="{error: !formIsValid && frmLocationCrud.get('RemitToAddressLine1').errors?.required}">
+                                                            <input id="inpRemitToAddressLine1"
+                                                                   class="form-control required valid col-xs-12"
+                                                                   placeholder="{{ 'Address Line 2' | translate }}"
+                                                                   formControlName="RemitToAddressLine1"
+                                                                   name="inpRemitToAddressLine1" maxlength="128"
+                                                                   [tabindex]="10" type="text" required alphaNumericText />
+                                                            <label id="lblRemitToAddressLine1Required" class="help-text"
+                                                                   *ngIf="!formIsValid && frmLocationCrud.get('RemitToAddressLine1').errors?.required">
+                                                                {{ 'This field is required.' | translate }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <label class="col-xs-12 " for="inpRemitToAddressLine2">
+                                                            {{'Address Line 2' | translate}}
+                                                        </label>
+                                                        <input id="inpRemitToAddressLine2" class="form-control"
+                                                               placeholder="{{ 'Address Line 2' | translate }}"
+                                                               formControlName="RemitToAddressLine2"
+                                                               name="inpRemitToAddressLine2" maxlength="128"
+                                                               [tabindex]="10" type="text" alphaNumericText />
+                                                    </div>
+
+                                                    <div class="col-xs-12">
+                                                        <!-- City -->
+                                                        <div class="col-xs-4 no-padding">
+                                                            <label class="col-xs-12 " for="inpRemitToCity">
+                                                                {{ 'City' | translate}} *
+                                                            </label>
+                                                            <div class="col-xs-12 no-padding"
+                                                                 [ngClass]="{error: !formIsValid && frmLocationCrud.get('RemitToCity').errors?.required}">
+                                                                <input id="inpRemitToCity" class="form-control"
+                                                                       placeholder="{{ 'City' | translate }}"
+                                                                       formControlName="RemitToCity" CapitalizeFirst
+                                                                       name="inpRemitToCity" maxlength="64" [tabindex]="10"
+                                                                       type="text" required alphaOnly
+                                                                       (paste)="validatePaste()" />
+                                                                <label id="lblRemitToCityRequired" class="help-text "
+                                                                       *ngIf="!formIsValid && frmLocationCrud.get('RemitToCity').errors?.required">
+                                                                    {{ 'This field is required.' | translate }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <!-- State -->
+                                                        <div class="col-xs-4">
+                                                            <label class="col-xs-12 text-nowrap" for="inpRemitToState">
+                                                                {{ 'State' | translate }}*
+                                                            </label>
+                                                            <div class="col-xs-3 no-padding locCrud__state-select-list"
+                                                                 [ngClass]="{error: !formIsValid && frmLocationCrud.get('RemitToState').errors?.required}">
+                                                                <state-list ngDefaultControl
+                                                                            formControlName="RemitToState"
+                                                                            [stateListId]="'inpRemitToState'"
+                                                                            [source]="selectedLocation?.RemitToState"
+                                                                            class="required valid" [tabindex]="10"
+                                                                            (sourceChange)="onstatechange($event)">
+                                                                </state-list>
+                                                                <label id="lblRemitToStateRequired" class="help-text "
+                                                                       *ngIf="!formIsValid && frmLocationCrud.get('RemitToState').errors?.required">
+                                                                    {{ 'This field is required.' | translate }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Zip -->
+                                                        <div class="col-xs-4">
+                                                            <label class="col-xs-12 text-nowrap"
+                                                                   for="inpRemitToZipCode">
+                                                                {{ 'ZIP Code' | translate }}
+                                                                *
+                                                            </label>
+                                                            <div
+                                                                [ngClass]="{error: !formIsValid && !frmLocationCrud.get('RemitToZipCode').valid}">
+                                                                <input id="inpRemitToZipCode"
+                                                                       class="form-control required valid"
+                                                                       placeholder="{{ 'ZIP code' | translate }}"
+                                                                       formControlName="RemitToZipCode"
+                                                                       name="inpRemitToZipCode" maxlength="10"
+                                                                       minlength="5" tabindex="10" type="text" required
+                                                                       zipField="selectedLocation?.RemitToZipCode"
+                                                                       mask="00000-0000" [validation]="false" />
+                                                                <label id="lblRemitToZipCodeRequired" class="help-text "
+                                                                       *ngIf="!formIsValid && frmLocationCrud.get('RemitToZipCode').errors?.required">
+                                                                    {{ 'This field is required.' | translate }}
+                                                                </label>
+                                                                <label id="lblRemitToZipCodeInvalid" class="help-text "
+                                                                    *ngIf="!formIsValid &&
+                                !frmLocationCrud.get('RemitToZipCode').errors?.required &&
+                                !frmLocationCrud.get('RemitToZipCode').valid">
+                                                                    {{ 'ZIP code must be 5 to 9 numeric characters.' |
+                                                                    translate }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Phone Number -->
+                                                    <div class="col-xs-12">
+                                                        <label id="lblRemitToPrimaryPhone" class="col-xs-12"
+                                                               for="inpRemitToPrimaryPhone">{{ 'Phone Number' }}</label>
+                                                        <div class="col-xs-4 no-padding">
+                                                            <div>
+                                                                <input id="inpRemitToPrimaryPhone" class="form-control"
+                                                                       placeholder="{{ 'Phone Number' | translate }}"
+                                                                       formControlName="RemitToPrimaryPhone"
+                                                                       name="inpRemitToPrimaryPhone" [tabindex]="10"
+                                                                       type="text" mask="(000) 000-0000"
+                                                                       [showMaskTyped]="true" [clearIfNotMatch]="true" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <div>
+                                            <label id="lblPlaceOfTreatmentBox38" class="col-xs-12 col-sm-4 control-label lbNewLine">{{ 'Place of Treatment \n(Box 38)'}}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <div>
+                                                    <div>
+                                                        <soar-select-list id="placeOfTreatmentList"                                                                          
+                                                                          [textField]="'description'"
+                                                                          [valueField]="'code'" [optionList]="placeOfTreatmentList"
+                                                                          (selectedItemValueChange)="selectPlaceOfTreatment($event)"
+                                                                          formControlName="PlaceOfTreatment"
+                                                                          [sbTab]="10" class="locCrud__dropdown">
+                                                        </soar-select-list>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div [hidden]="!frmLocationCrud.get('OtherPlaceOfTreatment').enabled">
+                                            <label id="lblPlaceOfTreatment" class="col-xs-12 col-sm-4 control-label">{{ 'Place of Treatment' | translate }}</label>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <input id="placeOfTreatment"
+                                                       class="form-control"
+                                                       placeholder="{{ 'Place Of Treatment Code' | translate }}"
+                                                       formControlName="OtherPlaceOfTreatment"
+                                                       name="placeOfTreatment"
+                                                       maxlength="2" />
+                                                <label id="lblOtherLocationCodeRequired" class="help-text"
+                                                       *ngIf="!frmLocationCrud.get('OtherPlaceOfTreatment').valid">
+                                                    {{ 'Enter a valid 2 digit number for Place Of Treatment.' | translate }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- content to be added here -->
+
+                            <div class="row form-horizontal">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <h5>
+                                                <label class="col-xs-12">
+                                                    {{'Insurance Remittance Site' | translate}}
+                                                </label>
+                                            </h5>
+                                            <span class="col-xs-12">
+                                                {{'This determines what address to use as the "Billing Dentist/Entity
+                                                Info" on your insurance claims' | translate}}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio"
+                                                    id="billingInsuranceRemittanceSiteOptionThisLocation"
+                                                    formControlName="InsuranceRemittanceAddressSource" value="0"
+                                                    (change)="remittanceInsuranceSourceChanged($event)" />
+                                                {{'Use this location as its own insurance remittance site' | translate}}
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio"
+                                                    id="billingInsuranceRemittanceSiteOptionDifferentLocation"
+                                                    formControlName="InsuranceRemittanceAddressSource" value="1"
+                                                    (change)="remittanceInsuranceSourceChanged($event)" />
+                                                {{'Use a different location as the insurance remittance site' |
+                                                translate}}
+                                            </span>
+                                            <span class="col-xs-12 locationFields"
+                                                *ngIf="selectedLocation?.InsuranceRemittanceAddressSource  == 1">
+                                                <soar-select-list id="billingInsuranceRemittanceSiteLocations"
+                                                    [placeHolder]="'Locations'" [textField]="'NameLine1'"
+                                                    [valueField]="'LocationId'" [optionList]="locations"
+                                                    formControlName="InsuranceRemittanceOtherLocationId"
+                                                    [disableInput]="false"
+                                                    [selectedItemValue]="selectedLocation?.InsuranceRemittanceOtherLocationId"
+                                                    [sbTab]="10" class="locCrud__dropdown required valid" required>
+                                                </soar-select-list>
+                                                <label id="lblBillingInsuranceRemittanceSiteLocationsRequired"
+                                                    class="help-text "
+                                                    *ngIf="!formIsValid && frmLocationCrud.get('InsuranceRemittanceOtherLocationId').errors?.required && selectedLocation?.InsuranceRemittanceAddressSource  == 1">
+                                                    {{ 'This field is required.' | translate }}
+                                                </label>
+                                            </span>
+                                            <span class="col-xs-12 locationFields">
+                                                <input type="radio"
+                                                    id="billingInsuranceRemittanceSiteOptionDifferentAddress"
+                                                    formControlName="InsuranceRemittanceAddressSource" value="2"
+                                                    (change)="remittanceInsuranceSourceChanged($event)" />
+                                                {{'Use a different address as the insurance remittance site' |
+                                                translate}}
+                                            </span>
+                                            <div *ngIf="selectedLocation?.InsuranceRemittanceAddressSource == 2"
+                                                class="col-xs-12  panel panel-default">
+                                                <div class="panel-body">
+                                                    <!-- Name -->
+                                                    <div class="col-xs-12 col-sm-8">
+                                                        <label id="lblRemitInsToNameLine1" class="col-xs-12 "
+                                                            for="inpRemitInsToNameLine1">
+                                                            {{'Name Line 1' | translate }}
+                                                            *
+                                                        </label>
+                                                        <div
+                                                            [ngClass]="{error: !formIsValid && frmLocationCrud.get('InsuranceRemittanceNameLine1').errors?.required}">
+                                                            <input id="inpRemitInsToNameLine1"
+                                                                class="form-control required valid col-xs-12"
+                                                                placeholder="{{ 'Name Line 1' | translate }}"
+                                                                formControlName="InsuranceRemittanceNameLine1"
+                                                                CapitalizeFirst name="inpRemitInsToNameLine1"
+                                                                maxlength="100" [tabindex]="10" type="text" setFocus
+                                                                required />
+                                                            <label id="lblRemitInsToNameLine1Required"
+                                                                class="help-text "
+                                                                *ngIf="!formIsValid && frmLocationCrud.get('InsuranceRemittanceNameLine1').errors?.required">
+                                                                {{ 'This field is required.' | translate }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-8">
+                                                        <label id="lblRemitInsToNameLine2" class="col-xs-12 "
+                                                            for="inpRemitInsToNameLine2">
+                                                            {{'Name Line 2' | translate}}
+                                                        </label>
+                                                        <input id="inpRemitInsToNameLine2"
+                                                            class="form-control valid col-xs-12"
+                                                            placeholder="{{ 'Name Line 2' | translate }}"
+                                                            formControlName="InsuranceRemittanceNameLine2"
+                                                            CapitalizeFirst name="inpRemitInsToNameLine2"
+                                                            maxlength="100" [tabindex]="10" type="text" setFocus />
+                                                    </div>
+                                                    <!-- Address -->
+                                                    <div class="col-xs-12">
+                                                        <label class="col-xs-12 " for="inpRemitInsToAddressLine1">
+                                                            {{'Address Line 1' | translate}} *
+                                                        </label>
+                                                        <div
+                                                            [ngClass]="{error: !formIsValid && frmLocationCrud.get('InsuranceRemittanceAddressLine1').errors?.required}">
+                                                            <input id="inpRemitInsToAddressLine1"
+                                                                class="form-control required valid col-xs-12"
+                                                                placeholder="{{ 'Address Line 2' | translate }}"
+                                                                formControlName="InsuranceRemittanceAddressLine1"
+                                                                name="inpRemitInsToAddressLine1" maxlength="128"
+                                                                [tabindex]="10" type="text" required alphaNumericText />
+                                                            <label id="lblRemitInsToAddressLine1Required"
+                                                                class="help-text"
+                                                                *ngIf="!formIsValid && frmLocationCrud.get('InsuranceRemittanceAddressLine1').errors?.required">
+                                                                {{ 'This field is required.' | translate }}
+                                                            </label>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <label class="col-xs-12 " for="inpRemitInsToAddressLine2">
+                                                            {{'Address Line 2' | translate}}
+                                                        </label>
+                                                        <input id="inpRemitInsToAddressLine2" class="form-control"
+                                                            placeholder="{{ 'Address Line 2' | translate }}"
+                                                            formControlName="InsuranceRemittanceAddressLine2"
+                                                            name="inpRemitInsToAddressLine2" maxlength="128"
+                                                            [tabindex]="10" type="text" alphaNumericText />
+                                                    </div>
+
+                                                    <div class="col-xs-12">
+                                                        <!-- City -->
+                                                        <div class="col-xs-4 no-padding">
+                                                            <label class="col-xs-12 " for="inpRemitInsToCity">
+                                                                {{'City' | translate}} *
+                                                            </label>
+                                                            <div class="col-xs-12 no-padding"
+                                                                [ngClass]="{error: !formIsValid && frmLocationCrud.get('InsuranceRemittanceCity').errors?.required}">
+                                                                <input id="inpRemitInsToCity" class="form-control"
+                                                                    placeholder="{{ 'City' | translate }}"
+                                                                    formControlName="InsuranceRemittanceCity"
+                                                                    CapitalizeFirst name="inpRemitInsToCity"
+                                                                    maxlength="64" [tabindex]="10" type="text" required
+                                                                    alphaOnly (paste)="validatePaste()" />
+                                                                <label id="lblRemitinsToCityRequired" class="help-text "
+                                                                    *ngIf="!formIsValid && frmLocationCrud.get('InsuranceRemittanceCity').errors?.required">
+                                                                    {{ 'This field is required.' | translate }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- State -->
+                                                        <div class="col-xs-4">
+                                                            <label class="col-xs-12 text-nowrap"
+                                                                for="inpRemitInsToState">
+                                                                {{ 'State' | translate }}
+                                                                *
+                                                            </label>
+                                                            <div class="col-xs-3 no-padding locCrud__state-select-list"
+                                                                [ngClass]="{error: !formIsValid && frmLocationCrud.get('InsuranceRemittanceState').errors?.required}">
+                                                                <state-list ngDefaultControl
+                                                                    formControlName="InsuranceRemittanceState"
+                                                                    [stateListId]="'inpRemitInsToState'"
+                                                                    [source]="selectedLocation?.InsuranceRemittanceState"
+                                                                    class="required valid" [tabindex]="10"
+                                                                    (sourceChange)="onstatechange($event)">
+                                                                </state-list>
+                                                                <label id="lblRemitInsToStateRequired" class="help-text"
+                                                                    *ngIf="!formIsValid && frmLocationCrud.get('InsuranceRemittanceState').errors?.required">
+                                                                    {{ 'This field is required.' | translate }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Zip -->
+                                                        <div class="col-xs-4">
+                                                            <label class="col-xs-12 text-nowrap"
+                                                                for="inpRemitInsToZipCode">
+                                                                {{ 'ZIP Code' | translate }}*
+                                                            </label>
+                                                            <div
+                                                                [ngClass]="{error: !formIsValid && !frmLocationCrud.get('InsuranceRemittanceZipCode').valid}">
+                                                                <input id="inpRemitInsToZipCode"
+                                                                    class="form-control required valid"
+                                                                    placeholder="{{ 'ZIP code' | translate }}"
+                                                                    formControlName="InsuranceRemittanceZipCode"
+                                                                    name="inpRemitInsToZipCode" maxlength="10"
+                                                                    minlength="5" [tabindex]="10" type="text" required
+                                                                    mask="00000-0000" [validation]="false"
+                                                                    zipField="selectedLocation?.InsuranceRemittanceZipCode" />
+                                                                <label id="lblRemitInsToZipCodeRequired"
+                                                                    class="help-text "
+                                                                    *ngIf="!formIsValid && frmLocationCrud.get('InsuranceRemittanceZipCode').errors?.required">
+                                                                    {{ 'This field is required.' | translate }}
+                                                                </label>
+                                                                <label id="lblRemitInsToZipCodeInvalid"
+                                                                    class="help-text "
+                                                                    *ngIf="!formIsValid && !frmLocationCrud.get('InsuranceRemittanceZipCode').errors?.required && !frmLocationCrud.get('InsuranceRemittanceZipCode').valid">
+                                                                    {{ 'ZIP code must be 5 to 9 numeric characters.' |
+                                                                    translate }}
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Phone Number -->
+                                                    <div class="col-xs-12">
+                                                        <div class="col-xs-6 no-padding">
+                                                            <label id="lblRemitInsToPrimaryPhone" class="col-xs-12"
+                                                                for="inpRemitInsToPrimaryPhone">
+                                                                {{'Phone Number'}}
+                                                            </label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div
+                                                                    [ngClass]="{error: !formIsValid && !frmLocationCrud.get('InsuranceRemittancePrimaryPhone').valid}">
+                                                                    <input id="inpRemitInsToPrimaryPhone"
+                                                                        class="form-control"
+                                                                        placeholder="{{ 'Phone Number' }}"
+                                                                        formControlName="InsuranceRemittancePrimaryPhone"
+                                                                        name="inpRemitInsToPrimaryPhone" [tabindex]="10"
+                                                                        type="text" mask="(000) 000-0000"
+                                                                        [showMaskTyped]="true"
+                                                                        [clearIfNotMatch]="true" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <label id="lblRemitInsTaxId" class="col-xs-12"
+                                                                for="inpEditRemitInsTaxId">{{ 'Tax ID' }} *</label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div
+                                                                    [ngClass]="{error: !formIsValid && !frmLocationCrud.get('InsuranceRemittanceTaxId').valid}">
+                                                                    <input id="inpEditRemitInsTaxId"
+                                                                        class="form-control required"
+                                                                        placeholder="{{ 'Tax ID' }}"
+                                                                        formControlName="InsuranceRemittanceTaxId"
+                                                                        name="inpEditRemitInsTaxId" required
+                                                                        numeric-only [tabindex]="10" type="text"
+                                                                        mask="00-0000000" [showMaskTyped]="true"
+                                                                        [clearIfNotMatch]="true" />
+                                                                    <label id="lblRemitInsToZipCodeRequired"
+                                                                        class="help-text "
+                                                                        *ngIf="!formIsValid && frmLocationCrud.get('InsuranceRemittanceTaxId').errors?.required">
+                                                                        {{ 'This field is required.' | translate }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <div class="col-xs-6 no-padding">
+                                                            <label id="lblRemitInsBillingEntityNPI" class="col-xs-12"
+                                                                for="inpEditRemitInsBillingEntityNPI">
+                                                                {{'Billing Entity NPI (Type 2)'}} *
+                                                            </label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div
+                                                                    [ngClass]="{error: !formIsValid && !frmLocationCrud.get('InsuranceRemittanceTypeTwoNpi').valid}">
+                                                                    <input id="inpEditRemitInsBillingEntityNPI"
+                                                                        class="form-control required "
+                                                                        placeholder="{{ 'Billing Entity NPI (Type 2)' }}"
+                                                                        formControlName="InsuranceRemittanceTypeTwoNpi"
+                                                                        name="inpEditRemitInsBillingEntityNPI" required
+                                                                        maxlength="10" numericOnly minlength="10"
+                                                                        [tabindex]="10" type="text" />
+                                                                    <label id="lblRemitInsToZipCodeRequired"
+                                                                        class="help-text"
+                                                                        *ngIf="!formIsValid && frmLocationCrud.get('InsuranceRemittanceTypeTwoNpi')?.value?.length !== 10">
+                                                                        {{ 'This field requires 10 characters.' |
+                                                                        translate }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <label id="lblRemitInsLicenseNumber" class="col-xs-12"
+                                                                for="inpEditRemitInsLicenseNumber">
+                                                                {{'Billing Entity License'}}
+                                                            </label>
+                                                            <div class="col-xs-12 no-padding">
+                                                                <div [ngClass]="{error: !formIsValid &&
+                                !frmLocationCrud.get('InsuranceRemittanceLicenseNumber').valid}">
+                                                                    <input id="inpEditRemitInsLicenseNumber"
+                                                                        class="form-control"
+                                                                        placeholder="{{ 'Billing Entity License' }}"
+                                                                        formControlName="InsuranceRemittanceLicenseNumber"
+                                                                        name="inpEditRemitInsLicenseNumber"
+                                                                        alphaNumericText maxlength="32" [tabindex]="10"
+                                                                        type="text" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end content -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="workArea" [ngClass]="!editMode ?'container-fluid':''">
+             <div class="card-reader-section" *ngIf="showCardReaders()">
+                <div #container kendoDialogContainer class="open-dialog"></div>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <label class="panel-title">
+                            {{ 'Credit Cards' | translate }}
+                        </label>
+                    </div>
+            
+                    <div class="panel-body">
+                        <div class="card-reader-container">
+                            <div class="row panel-header">
+                                <div class="col-xs-10 col-sm-10 grid-header">
+                                    <span> Card Reader Setup</span>
+                                </div>
+                                <div class="col-xs-2 col-sm-2">
+                                    <app-button buttonLabel="Add Reader" *ngIf="editMode" variation="primary" id="btnAddReader"
+                                        [isDisabled]="false" type="button" title="" (onClick)="addCardReader()" placement="left">
+                                    </app-button>
+                                </div>
+                            </div>
+                            <hr class="card-reader-hr">
+                            <card-reader-list  (cardReadersFuncChange)="cardReaderChange($event)" [containerRef]="containerRef" [cardReaderList]="editMode? cardReaderList : this.selectedLocation?.CardReaders"
+                                [editMode]="editMode"></card-reader-list>
+            
+                        </div>
+                    </div>
+                </div>
+            </div> 
+             </div>
+        </div>
+    </form>
+</div>
+
+

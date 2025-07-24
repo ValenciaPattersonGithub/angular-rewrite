@@ -1,0 +1,155 @@
+<div [ngClass]="{'roleSettingsCompare': isCompareRole === true, 'roleSettingsview' : isCompareRole === false }">
+    <ng-template #viewRoleModalTemplate>
+        <div *ngIf="!isCompareRole" class=" col-md-12">
+            <div class="pull-right close-btn" id="closeModal" (click)="close()"><i class="fa fa-times fa-2x"></i></div>
+            <div class="view-role-container">
+                <div *ngIf="!isLoading" class="view-role-sub-container">
+                    <div class="roles-heading-row">
+                        <div class="roles-heading-col-1">
+                            <h2 class="mt-0">{{ 'Fuse' | translate }}</h2>
+                            <h4>{{ 'User Security Roles' | translate}}</h4>
+                        </div>
+                        <div class="roles-heading-col-2">
+                            <div class="d-flex">
+                                <div class="role-heading-div" *ngFor="let role of fuseRoles">
+                                    {{role}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modules-container">
+                        <ul id="accordion" class="accordion">
+                            <li class="width-98" *ngFor="let module of roleMatrix; let i = index"
+                                [class.active]="module?.active">
+                                <div class="module-name-label" (click)="toggle(i)">
+                                    <i class="fa fa-chevron-right"></i>
+                                    {{ module?.Name }}
+                                </div>
+                                <ul class="modules-div" *ngIf="module?.active" #submenu
+                                    [style.height]="module?.active ? auto : 0">
+                                    <li *ngFor="let function of module?.Functions">
+                                        <div class="function-heading">{{ function.Name }}</div>
+                                        <ul class="pl-15px">
+                                            <li *ngFor="let action of function?.Actions">
+                                                <div class="d-flex">
+                                                    <div class="funcions-columns-1">{{ action.Name }}</div>
+                                                    <div class="funcions-columns-2" *ngFor="let role of fuseRoles">
+                                                        <span class="check"
+                                                              *ngIf="checkSelectedRolePermissions(action.Roles, role)">
+                                                            <i class="fa fa-check role-permitted"></i>
+                                                        </span>
+                                                        <span class="noCheck"
+                                                              *ngIf="!checkSelectedRolePermissions(action.Roles, role)">
+                                                            <i class="fas fa-times role-not-permitted"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <no-results loading="isLoading" *ngIf="isLoading"></no-results>
+            </div>
+        </div>
+        <div *ngIf="isCompareRole" class=" col-md-12">
+            <div class="pull-right close-btn" id="closeModal" (click)="close()"><i class="fa fa-times fa-2x"></i></div>
+            <h2 class="mt-0">{{ 'Compare Roles' | translate }}</h2>
+            <div class="col-md-12 roleSettings__filters">
+                <div class="col-md-12">
+                    <div class="col-md-12 filterRow">
+                        <div class="col-md-2">
+                            <label class="">
+                                {{ 'Display Roles' | translate }}
+                            </label>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <kendo-dropdownlist id="roleSelect"
+                                                    name="sectionSelect"
+                                                    [data]="filterRoles"
+                                                    [textField]="'RoleName'"
+                                                    [valueField]="'RoleName'"
+                                                    [(value)]="selectedValue"
+                                                    [filterable]="true"
+                                                    [defaultItem]="{ RoleName: 'Select Roles'}"
+                                                    [itemDisabled]="itemDisabled"
+                                                    [disabled]="selectedRoles?.length === 3"
+                                                    (filterChange)="handleRoleFilter($event)"
+                                                    (valueChange)="onRoleSelectedChange($event)">
+                                </kendo-dropdownlist>
+                                <span *ngIf="selectedRoles?.length === 3" class="error"> {{ 'Only three roles can be displayed at once.' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <app-chips class="pull-left" variation="primary" [chipsText]="item.RoleName"
+                                       placement="top-error" delay="500"
+                                       (removeChips)="removeRoles(item?.RoleName)"
+                                       showIcon="true"
+                                       *ngFor="let item of selectedRoles"></app-chips>
+                        </div>
+                    </div>
+                    <div class="col-md-12 filterRow">
+                        <div class="col-md-2">
+                            <label class=""> {{ 'Display Section' | translate }}</label>
+                        </div>
+                        <div class="col-md-4">
+                            <kendo-dropdownlist id="sectionSelect"
+                                                name="sectionSelect"
+                                                [data]="filterDisplaySections"
+                                                [textField]="'text'"
+                                                [valueField]="'value'"
+                                                [filterable]="true"
+                                                [(ngModel)]="selectedSectionItem"
+                                                (filterChange)="handleSectionFilter($event)"
+                                                (valueChange)="onSectionSelectedChange($event)">
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+                </div>
+                <hr class="clearfix col-md-12" />
+                <div *ngIf="selectedSectionItem?.text == ''" class="col-md-12 ">
+                    <h4> {{ 'Please select a section to get started' | translate }}</h4>
+                </div>
+                <div class="col-md-12 roleSettings__accordion" *ngIf="subSections?.length > 0" [ngClass]="{ 'overflow': subSections?.length > 6 }">
+                    <div class="noRoleSelected" *ngIf="selectedRoles.length == 0">{{ 'You must select a role to view the permissions' | translate }}</div>
+                    <div class="modules-container">
+                        <ul id="accordion" class="accordion">
+                            <li *ngFor="let subSection of subSections; let i = index">
+                                <div class="module-name-label" (click)="subSection.isCustomHeaderOpen = !subSection.isCustomHeaderOpen">
+                                    <i class="fa fa-chevron-right"></i>
+                                    {{ subSection?.Name }}
+                                </div>
+                                <ul class="modules-div-close" #submenu [ngClass]="{ 'modules-div':subSection?.isCustomHeaderOpen == true, 'modules-div-close':subSection?.isCustomHeaderOpen == false }"
+                                    [style.height]="subSection?.isCustomHeaderOpen ? auto : 0">
+                                    <div class="cell noRoleSelected" *ngIf="selectedRoles?.length == 0 && subSection?.isCustomHeaderOpen">{{'No Role Selected' | translate}}</div>
+                                    <ul *ngIf="subSection?.isCustomHeaderOpen" class="pl-15px">
+                                        <li *ngFor="let selectedRole of selectedRoles">
+                                            <div class="d-flex">
+                                                <div class="funcions-columns-1" *ngIf="selectedRoles?.length > 0">
+                                                    {{selectedRole?.RoleName}}
+                                                </div>
+                                                <div class="funcions-columns-2" *ngFor="let action of subSection?.Actions">
+                                                    {{action?.Name}}
+                                                    <span class="check pull-right"
+                                                          *ngIf="checkSelectedRolePermissions(action?.Roles, selectedRole?.RoleName)">
+                                                        <i class="fa fa-check role-permitted"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <div kendoDialogContainer></div>
+</div>

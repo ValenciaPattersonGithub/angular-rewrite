@@ -1,0 +1,138 @@
+﻿<form name="frmAppointmentOverview">
+    <div class="appointment-overview-container">
+        <button class="icon-button fa fa-times overview-close pull-right" ng-click="cancelChanges()"></button>
+
+		<div class="flex flex-stretch padding-top-12">
+            <div class="flex-grow-1 truncate">
+                <a id="btnViewPatient" class="soar-link font-20" ng-click="goToPatient()"
+                   title="{{ appointment.Patient.FirstName }}{{ appointment.Patient.PreferredName ? ' (' + appointment.Patient.PreferredName + ')' : '' }}{{ appointment.Patient.MiddleName ?  ' ' + appointment.Patient.MiddleName + '.' : '' }} {{ appointment.Patient.LastName }}  {{ appointment.Patient.Suffix }}">
+                    <b>{{ appointment.Patient.FirstName }} <span ng-show="appointment.Patient.PreferredName">({{ appointment.Patient.PreferredName }})</span><span ng-show="appointment.Patient.MiddleName">{{ appointment.Patient.MiddleName }}.</span>{{ appointment.Patient.LastName }} {{ appointment.Patient.Suffix }}</b>
+                </a>
+                <span ng-if="appointment.Patient.DateOfBirth">
+                    <br />
+                    <span id="lblPatientDateOfBirth" class=" text-muted" ng-show="appointment.Patient.DateOfBirth">{{ appointment.Patient.DateOfBirth | toShortDisplayDate }} ({{ 'age' | i18n }} {{ appointment.Patient.DateOfBirth | age }})</span>
+                </span>
+                <span ng-if="appointment.Patient.PatientCode > ''">
+                    <br />
+                    <span id="lblPatientCode" class="text-muted">{{ appointment.Patient.PatientCode }}</span>
+                </span>
+                <span ng-if="appointment.ContactInfo.length > 0">
+                    <br />
+                    <span ng-repeat="contact in appointment.ContactInfo" ng-if="$index < 2" id="lblPatientPhone" class="text-muted">
+                        {{ contact.PhoneNumber | tel }}{{ $index == 1 ? '' : ',' }}
+                    </span>
+                </span>
+                <span ng-if="appointment.Patient.EmailAddress > ''">
+                    <br />
+                    <span id="lblPatientEmail" class="soar-link">{{ appointment.Patient.EmailAddress }}</span>
+                </span>
+                <br />
+                <span ng-if="appointment.ServiceCodes.length > 0">
+                    <br />
+                    <span ng-repeat="service in appointment.ServiceCodes">
+                        <span id="lblServiceCode{{$index}}">
+                            {{ service.DisplayAs ? service.DisplayAs : service.Code }}{{ $last ? '' : ',' }}
+                        </span>
+                    </span>
+                    <br />
+                </span>
+                <span ng-if="display.Providers.length > 0">
+                    <br />
+                    <span ng-repeat="provider in display.Providers track by $index" id="lblProvider">
+                        {{ provider }}{{ $last ? '' : ';' }}
+                    </span>
+                </span>
+                <span ng-if="display.TreatmentRoom > '' || display.Location > ''">
+                    <br />
+                    <span id="lblRoom"> {{ display.TreatmentRoom }},</span>
+                    <span id="lblLocation"> {{ display.Location }} </span>
+                </span>
+            </div>
+
+			<div class="flex-shrink-1">
+				<appointment-status id="inpAppointmentStatus" appointment="appointment">
+
+				</appointment-status>
+				
+				<br />
+
+				<div ng-if="appointment.Classification != '1'" ng-init="addNote = false;" class="padding-top-12">
+					<button class="icon-button soar-link" ng-click="addNote = true;" ng-hide="appointment.StatusNote > '' || addNote">+ {{ 'Add {0}' | i18n:['Status Note']}}</button>
+					<textarea id="inpStatusNote" name="inpStatusNote" class="status-note-md" ng-model="appointment.StatusNote" ng-show="appointment.StatusNote > '' || addNote"></textarea>
+                </div>
+
+
+			    <checkbox name="lblSoonerIfPossible" class="form-label-newer pull-left" checkbox-id="lblSoonerIfPossible" checkbox-label="'Sooner if Possible'" checkbox-disabled="true">
+			    </checkbox>
+                
+                <br/>
+
+			    <checkbox name="lblReminder" class="form-label-newer pull-left" checkbox-id="lblReminder" checkbox-label="'Reminder'" checkbox-disabled="true">
+                </checkbox>
+            </div>
+        </div>
+
+		<div class="row">
+			<div class="col-xs-12">
+                <div class="clearfix">&nbsp;</div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span class="margin-right-5"><b> {{ appointmentDate | date: 'EEE, MMM d' }}</b></span>
+						<span ng-class="{'error': !appointment.Valid && !appointmentTime.start }">
+							<time-picker ng-show="!saveClicked" id="inpStartTime" selected-time="appointmentTime.start" increment="PracticeSettings.DefaultTimeIncrement" tabindex="1"></time-picker>
+							<label ng-show="saveClicked" id="lblScheduleTimeStart">{{ appointmentTime.start | date : 'h:mm a'}}</label>
+						</span>
+                        <span>{{ 'to' | i18n }}</span>
+                        <span>
+							<span ng-class="{'error': (!appointment.Valid && !appointmentTime.end) || appointmentTime.start > appointmentTime.end }">
+								<time-picker ng-show="!saveClicked" id="inpEndTime" selected-time="appointmentTime.end" begin="appointmentTime.start" end="display.HoursOfOperation.EndTime" valid="appointmentTime.valid" increment="PracticeSettings.DefaultTimeIncrement" show-duration="true"></time-picker>
+								<label ng-show="saveClicked" id="lblScheduleTimeEnd"> {{ appointmentTime.end | date : 'h:mm a'}}</label>
+							</span>
+							<span ng-show="!saveClicked && appointmentTime.Duration > 0" id="lblAppointmentDuration" class="text-muted">
+								{{ appointmentTime.Duration }} {{ 'minutes' | i18n }}
+							</span>
+                        </span>
+                        <div class="error appointment-start-time-error" ng-show="!isValid">
+                            <label id="errAppointmentTimeRequired" class="help-text" ng-show="!appointmentTime.start">{{ 'This field is required.' | i18n }}</label>
+                            <label id="errStartGreaterThanEnd" class="help-text" ng-show="appointmentTime.start > appointmentTime.end">{{ 'The end time must be greater then start time.' | i18n }}</label>
+                            <label id="errBlockExists" class="help-text" ng-show="blockExists">{{ blockExistsMsg }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+
+                <!-- Patient Flags -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="appointment-overview-alerts">
+                            <div ng-repeat="alert in appointment.Alerts" class="appointment-alerts-info">
+                                <span id="alertSymbol" class="fa {{ getClass(alert.SymbolId) }}"></span>
+                                <span id="lblPatientAlerts{{$index}}">{{alert.Description}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+
+                <!-- Appointment Note -->
+                <div class="row">
+                    <div class="col-xs-12 truncate">
+                        <div class="appointment-overview-notes">
+                            <span id="lblAppointmentNote">{{ appointment.Note }}</span>
+                        </div>                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="appointment-overview-btn-group">
+            <button id="btnEdit" ng-click="editFullAppointment();" ng-show="!hasChanges" class="btn form-btn-cancel-new pull-left" tabindex="1">{{ 'Edit Appointment' | i18n }}</button>
+			<button id="btnSave" ng-click="saveChanges();" ng-show="hasChanges" class="btn btn-default pull-left" tabindex="1">{{ 'Save' | i18n }}</button>
+			<button id="btnCancel" ng-click="cancelChanges();" ng-show="hasChanges" class="btn form-btn-cancel-new pull-left" tabindex="1">{{ 'Revert' | i18n }}</button>
+            <button id="btnRemove" ng-click="showRemoveModal();" class="btn form-btn-delete-new pull-right" tabindex="1"><span><i class="fa far fa-trash-alt fa-lg margin-right-5"></i></span>{{ 'Remove' | i18n }}</button>
+        </div>
+    </div>
+</form>

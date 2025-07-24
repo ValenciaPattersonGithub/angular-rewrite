@@ -1,0 +1,41 @@
+﻿.pmtTypes {
+    .standardHeader;
+
+    &__body {
+    }
+
+    &__list {
+        .containerStandard;
+    }
+
+    &__editableRow {
+        background-color: @brand-color_darker-gray;
+        display: table-row;
+
+        .icon-button {
+            color: @brand-color_white;
+        }
+    }
+
+    &__isActiveEdit {
+        .utilCheckbox {
+            background-color: @brand-color_white;
+            margin-top: 1px;
+
+            .utilCheckbox__ctrl {
+                padding: @brand-padding_xs;
+                margin: @brand-margin_xs;
+            }
+        }
+    }
+
+    &__actionColumn {
+        margin-top: 9px;
+    }
+
+    &__gridConfirm {
+        position: absolute;
+        width: 200px;
+        z-index: 50;
+    }
+}

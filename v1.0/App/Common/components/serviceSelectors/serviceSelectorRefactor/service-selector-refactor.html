@@ -1,0 +1,227 @@
+﻿<div ng-class="containerClass" ng-if="flyout">
+  <!--Title-->
+  <div>
+    <div class="col-xs-12 row">
+      <div class="row">
+        <div class="row">
+          <div class="col-md-11">
+            <label class="control-label font-24">{{'Add Services from New to ' + displayMessage | i18n }}</label>
+          </div>
+        </div>
+        <div class="propClose row">
+          <button id="sp-close" class="btn btn-link" ng-click="hideFilters()"><i class="fa fa-times"></i></button>
+        </div>
+      </div>
+    </div>
+    <!--Input Box-->
+    <div class="row">
+      <div class="form-group">
+        <div class="inner-addon right-addon">
+          <div class="col-xs-4">
+            <input class="form-control border-solid-black" id="searchBoxServiceCodes" placeholder="{{'Search service code, CDT code, description, fee...'|i18n}}" type="text" ng-model="serviceCodesFilters.searchServiceCodesKeyword" ng-model-options="{ debounce: 600 }" />
+          </div>
+          <div class="col-xs-1 searchIcon">
+            <span class="glyphicon glyphicon-search"></span>
+          </div>
+          <div class="col-xs-3" ng-if="!loadingServiceTypes">
+            <soar-select-list id="filterList" name="filterList" placeholder="All Service Types" text-field="Description" value-field="Description" ng-model="filterServiceList" sb-change="changeFilter" option-list="serviceTypes"></soar-select-list>
+          </div>
+          <div class="col-xs-4 divShowInactive">
+            <input id="showInactiveServiceSelector" type="checkbox" ng-model="allowInactive" ng-change="setStatus()" />
+            <span>Show Inactive</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Table Header-->
+    <div class="row">
+      <div class="col-md-12 newServiceHeader">
+        <table ng-if="!serviceCodesEmpty()" id="tableServiceCodes" class="table table-striped border-solid-black table-hover newServiceTable">
+          <thead>
+            <tr class="blue">
+              <td id="tdSelect" class="selectBtn">
+                <div class="pull-left">
+                  <button id="lblAddServiceCodes" class="btn btn-primary" ng-disabled="!quickAddStatus()" ng-click="onSelectedCodes()">{{ '+ Add {0}' | i18n:['Services'] }}</button>
+                </div>
+              </td>
+
+              <td id="tdServiceCode" class="servCode">
+                <div id="columnServiceCode" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Code')">
+                  <div class="col-md-11">{{'Service Code' | i18n}}</div>
+                  <column-sort sort-field="orderBy.Code" col="Code" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdServiceCdtCode" class="cdtCode">
+                <div id="columnCdtCode" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('CdtCodeName')">
+                  <div class="col-md-11">{{'CDT Code' | i18n}}</div>
+                  <column-sort sort-field="orderBy.field" col="CdtCodeName" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdDescription" class="description">
+                <div id="columnDescription" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Description')">
+                  <div class="col-md-11">{{'Description' | i18n}}</div>
+                  <column-sort sort-field="orderBy.Description" col="Description" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdType" class="type">
+                <div id="columnType" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('serviceType')">
+                  <div class="col-md-11">{{'Type' | i18n}}</div>
+                  <column-sort sort-field="orderBy.serviceType" col="Type" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdMasterFee" class="fee">
+                <div id="columnMasterFee" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Fee')">
+                  <div class="col-md-11 col-md-offset-1">{{'Fee' | i18n}}</div>
+                  <column-sort sort-field="orderBy.Fee" col="Fee" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <!--Table Body-->
+    <div class="row" soar-infinite-scroll="loadMore()">
+      <div class="col-md-12 scrollHeight" soar-infinite-scroll="loadMore()">
+        <table ng-if="!serviceCodesEmpty()" id="tableServiceCodes" class="table table-striped border-solid-black table-hover">
+          <tbody>
+            <tr ng-repeat="serviceCode in filteredServiceCodes | limitTo: limit">
+              <!--,'Tooth','Area','Name', -->
+              <td id="tdActionButtons{{::$index}}" class="selectBtn">
+                <div class="quick-add-container">
+                  <button id="quickAdd{{::$index}}" ng-disabled="quickAddStatus()" ng-click="quickAddService(serviceCode)" class="btn btn-link ng-binding width-70-percent">+ quick add</button>
+                  <input
+                    class="addCheckBox"
+                    ng-class="{'width-20-percent':containerClass!='newServiceSelectorTxPlan','width-15-percent':containerClass=='newServiceSelectorTxPlan'}"
+                    id="chkServiceCode{{::$index}}"
+                    type="checkbox"
+                    ng-model="serviceCode.$$isSelected"
+                    ng-change="selectedService(serviceCode,{{::$index}})"
+                  />
+                  <i ng-if="!serviceCode.IsActive" class="fa fa-exclamation-triangle inactive-service-warning" style="margin-left: 0" uib-tooltip="Inactive as of {{serviceCode.InactivationDate|date:'MM/dd/yyyy'}}" tooltip-placement="{{($index == 0)?'bottom':'top'}}"></i>
+                </div>
+              </td>
+              <td id="tdCode{{::$index}}" class="servCode" title="{{::serviceCode.Code}}" ng-bind-html="serviceCode.Code  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+              <td id="cdtCode{{::$index}}" class="cdtCode" title="{{::serviceCode.CdtCodeName}}" ng-bind-html="serviceCode.CdtCodeName  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+              <td id="tdDescription{{::$index}}" class="description" title="{{::serviceCode.Description}}" ng-bind-html="serviceCode.Description  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword:wordCount"></td>
+              <td id="tdType{{::$index}}" class="type" title="{{::serviceCode.ServiceTypeDescription}}" ng-bind-html="serviceCode.ServiceTypeDescription  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+              <td id="tdFee{{::$index}}" class="fee" title="{{::serviceCode.$$locationFee | currency}}" ng-bind-html="serviceCode.$$locationFee | currency | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!--Error Message-->
+    <div class="row">
+      <div class="col-xs-12">
+        <div ng-if="serviceCodesEmpty() || _.isEmpty(filteredServiceCodes)">
+          <no-results loading-message="loadingMessageNoResults" loading="loadingServices==true" filtering="filteringServices" filtering-message="filteringMessageNoResults"></no-results>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="newServiceSelectorRunning" ng-if="!flyout">
+    <!--Title-->
+    <div>
+      <div class="col-xs-12 row">
+        <div class="row">
+          <div class="col-md-12">
+            <label class="control-label font-24">{{'Add Services from New to ' + displayMessage | i18n }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Input Box-->
+    <div class="row">
+      <div class="col-md-12 row">
+        <div class="form-group compactView">
+          <div class="inner-addon right-addon compactView">
+            <div class="col-xs-4">
+              <input id="searchBoxServiceCodes" ng-model="serviceCodesFilters.searchServiceCodesKeyword" ng-model-options="{ debounce: 600 }" class="form-control border-solid-black" placeholder="{{'Search service code, CDT code, description, fee...'|i18n}}" type="text" />
+            </div>
+            <div class="col-xs-1 searchIcon">
+              <span class="glyphicon glyphicon-search"></span>
+            </div>
+            <div class="col-xs-3" ng-if="!loadingServiceTypes">
+              <soar-select-list id="filterList" name="filterList" placeholder="All Service Types" text-field="Description" value-field="Description" sb-change="changeFilter" option-list="serviceTypes" ng-model="filterServiceList"></soar-select-list>
+            </div>
+            <div class="col-xs-4 divShowInactive"><input id="showInactiveServiceSelector" type="checkbox" ng-model="allowInactive" ng-change="setStatus()" /> Show Inactive</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Table Header-->
+    <div class="row">
+      <div class="col-md-12 newServiceHeader">
+        <table ng-if="!serviceCodesEmpty()" id="tableServiceCodes" class="table table-striped border-solid-black table-hover newServiceTable compactView">
+          <thead>
+            <tr class="blue">
+              <td id="tdSelect" class="selectBtn">
+                <div class="pull-left">
+                  <button id="lblAddServiceCodes" class="btn btn-primary" ng-disabled="!quickAddStatus()" ng-click="onSelectedCodes()">{{ '+ Add {0}' | i18n:['Services'] }}</button>
+                </div>
+              </td>
+
+              <td id="tdServiceCode" class="servCode">
+                <div id="columnServiceCode" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Code')">
+                  <div class="col-md-11">{{'Service Code' | i18n}}</div>
+                  <column-sort sort-field="orderBy.Code" col="Code" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdDescription" class="description">
+                <div id="columnDescription" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Description')">
+                  <div class="col-md-11">{{'Description' | i18n}}</div>
+                  <column-sort sort-field="orderBy.Description" col="Description" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdType" class="type">
+                <div id="columnType" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('serviceType')">
+                  <div class="col-md-11">{{'Type' | i18n}}</div>
+                  <column-sort sort-field="orderBy.serviceType" col="Type" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+              <td id="tdMasterFee" class="fee">
+                <div id="columnMasterFee" class="color-dodgerblue cursor-pointer row" ng-click="changeSortingForGrid('Fee')">
+                  <div class="col-md-11 col-md-offset-1">{{'Fee' | i18n}}</div>
+                  <column-sort sort-field="orderBy.Fee" col="Fee" asc="orderBy.asc"></column-sort>
+                </div>
+              </td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <!--Table Body for compactView-->
+    <div class="row compactView" soar-infinite-scroll="loadMore()">
+      <div class="col-md-12 compactTable" soar-infinite-scroll="loadMore()">
+        <table ng-if="!serviceCodesEmpty()" id="tableServiceCodes" class="table table-striped border-solid-black table-hover">
+          <tbody>
+            <tr ng-repeat="serviceCode in filteredServiceCodes | limitTo: limit">
+              <!--,'Tooth','Area','Name', -->
+              <td id="tdActionButtons{{::$index}}" class="selectBtn">
+                <div>
+                  <button id="quickAdd{{::$index}}" ng-disabled="quickAddStatus()" ng-click="quickAddService(serviceCode)" class="btn btn-link ng-binding width-70-percent">+ quick add</button>
+                  <input class="width-20-percent addCheckBox" id="chkServiceCode{{::$index}}" type="checkbox" ng-model="serviceCode.$$isSelected" ng-change="selectedService(serviceCode,{{::$index}})" />
+                  <i ng-if="!serviceCode.IsActive" class="fa fa-exclamation-triangle inactive-service-warning" title="Inactive as of {{serviceCode.InactivationDate|date:'MM/dd/yyyy'}}"></i>
+                </div>
+              </td>
+              <td id="tdCode{{::$index}}" class="servCode" title="{{::serviceCode.Code}}" ng-bind-html="serviceCode.Code  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+              <td id="tdDescription{{::$index}}" class="description" title="{{::serviceCode.Description}}" ng-bind-html="serviceCode.Description  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword:wordCount "></td>
+              <td id="tdType{{::$index}}" class="type" title="{{::serviceCode.ServiceTypeDescription}}" ng-bind-html="serviceCode.ServiceTypeDescription  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+              <td id="tdFee{{::$index}}" class="fee" title="{{::serviceCode.$$locationFee | currency}}" ng-bind-html="serviceCode.$$locationFee | currency  | highlightTextIfContains:serviceCodesFilters.searchServiceCodesKeyword"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!--Error Message-->
+    <div class="row">
+      <div class="col-xs-12">
+        <div ng-if="serviceCodesEmpty() || _.isEmpty(filteredServiceCodes)">
+          <no-results loading-message="loadingMessageNoResults" loading="loadingServices==true" filtering="filteringServices" filtering-message="filteringMessageNoResults"></no-results>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

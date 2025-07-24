@@ -1,0 +1,106 @@
+<div class="search-bar-autocomplete">
+    <app-label [label]="inputFieldLabel" [fieldId]="kendoSearchId" *ngIf="inputFieldLabel !== ''"></app-label>
+    <kendo-autocomplete #autocomplete id="kendoSearchId" [data]="groupData" [valueField]="valueF"
+        [value]="inputValueBind" (valueChange)="handleSelection($event)" [filterable]="true"
+        (filterChange)="handleFilter($event)" [placeholder]="placeholder" [suggest]="true"
+        [popupSettings]="{ animate:false, width: 'auto' }" [virtual]="virtual" class="kendo-width" [disabled]="isDisabled"
+        (onLinkButtonClick)="handleItemClick($event)">
+        <div *ngIf="template === 'kendoAutoCompleteBenefitPlanTemplate'">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-wrapper">
+                    <div class="search-bar-autocomplete-plan">
+                        <b>Benefit Plan: </b>
+                        <span [innerHTML]="dataItem.Name | highlightTextIfContains:searchString">
+                        </span>
+                    </div>
+                    <div class="search-bar-autocomplete-carrier">
+                        <b>Carrier: </b>
+                        <span [innerHTML]="dataItem.CarrierName | highlightTextIfContains:searchString"
+                            *ngIf="dataItem.CarrierName">
+                        </span>
+                    </div>
+                    <div class="search-bar-autocomplete-group">
+                        <b>Group #: </b>
+                        <span [innerHTML]="dataItem.PlanGroupNumber | highlightTextIfContains:searchString"
+                            *ngIf="dataItem.PlanGroupNumber">
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="template === 'familySchedulingTemplate'">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="patient-search-bar-autocomplete-wrapper">
+                    <div> {{dataItem.FirstName}} {{dataItem.MiddleName}} {{dataItem.LastName}} </div>
+                    <div> {{'|'}} </div>
+                    <div> ({{dataItem.PatientCode}}) {{dataItem.DOB}} ACCT. # {{dataItem.DisplayStatementAccountId}}
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="template === 'kendoAutoCompleteSmartCodeTemplate'">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-wrapper">
+                    <div> {{dataItem.Name}} </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="template === 'kendoAutoCompleteServiceCodeTemplate'">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-wrapper">
+                    <div> {{dataItem.Code}} </div>
+                    <div> {{dataItem.CdtCodeName}} </div>
+                    <div class="description-text"> {{dataItem.Description}} </div>
+                    <div class="text-center"> {{dataItem.$$locationFee | currency}} </div>
+
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="template === 'kendoAutoCompleteCDTTemplate'">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-wrapper">
+                    <div> {{dataItem.Code}} </div>
+                    <div> {{'|'}} </div>
+                    <div> {{dataItem.Description}} </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="template === 'kendoAutoCompleteCarrierTemplate'">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-wrapper">
+                    <div *ngIf="dataItem.IsActive">{{dataItem.LongLabel}} </div>
+                    <div class="inactive" *ngIf="!dataItem.IsActive">{{dataItem.LongLabel}} </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="template === 'kendoAutoCompleteSearchUserInAddEdit'">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-wrapper">
+                    <div> {{dataItem?.FirstName}} </div>
+                    <div> {{dataItem?.MiddleName}} </div>
+                    <div> {{dataItem?.LastName}} </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="template === 'kendoAutoCompleteAddPatient'">
+            <ng-template kendoAutoCompleteHeaderTemplate>
+                <a class="autocomplete-header-text" (click)="handleItemClick('addNewPatient'); this.autocomplete.toggle(false);">+ Add a New Patient</a>
+            </ng-template>
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-wrapper" (click)="handleItemClick(dataItem)">
+                    <div>{{dataItem?.fullName}} </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="template === 'kendoAutoCompleteProviders'">
+            <ng-template kendoAutoCompleteHeaderTemplate>
+                <span class="autocomplete-header-text">Recent Selections</span>
+            </ng-template>
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-bar-autocomplete-wrapper">
+                    <div (click)="handleItemClick(dataItem)"> {{dataItem.text}} </div>
+                </div>
+            </ng-template>
+        </div>
+    </kendo-autocomplete>
+</div>

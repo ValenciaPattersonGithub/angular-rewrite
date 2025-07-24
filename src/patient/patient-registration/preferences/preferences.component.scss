@@ -1,0 +1,235 @@
+@import "variables";
+.preferences {
+  font-family: $global-font-family;
+  &-container {
+    padding: 15px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 5px;
+    hr {
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border-top: 1px solid #2b144e;
+    }
+  }
+  &-header {
+    display: grid;
+    grid-template-columns: 100%;
+  }
+  &-title {
+    font-size: 16px;
+    color: $patient-registration-title-color;
+    line-height: 16px;
+    font-weight: bold;
+    grid-column: 1;
+  }
+  &-tooltipIcon {
+    color: $badge-color;
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 2px;
+  }
+  &-label {
+    font-size: 14px;
+    color: $label-color;
+    font-weight: 600;
+  }
+  &-selectlist {
+    height: 30px;
+    width: 100%;
+    padding: 0px 8px;
+    text-align: left;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    border: 1px solid $patient-registration-border-color;
+    outline: none;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+  }
+  &-custom-flag-input {
+    width: 95%;
+    height: 30px;
+    padding: 0px 8px;
+    border: 1px solid $patient-registration-border-color;
+    border-radius: 4px;
+    background-color: $background-color;
+    background-size: cover;
+    font-family: $global-font-family;
+    font-size: 14px;
+    color: $input-text-color;
+    outline: none;
+    margin-left: 10px;
+  }
+}
+.pereferences-content {
+  display: grid;
+  grid-template-columns: 100%;
+
+  & > div {
+    margin-bottom: 20px;
+  }
+
+  &-required {
+    font-family: $global-font-family;
+    font-size: 14px;
+    color: $required-input-color;
+  }
+  &-primary-location {
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+  }
+  &-alternate-location {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+  }
+  &-preferred-dentist {
+    grid-row: 4;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+  }
+  &-preferred-hygienist {
+    grid-row: 5;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+  }
+  &-discount {
+    grid-row: 7;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+  }
+  &-groups {
+    grid-row: 8;
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+  }
+  &-statements {
+    grid-row: 9;
+    grid-column-start: 1;
+  }
+  &-finance-charges {
+    grid-row: 10;
+    grid-column-start: 1;
+  }
+}
+.flags {
+  grid-row: 6;
+  grid-column: 1;
+
+  &-wrapper {
+    display: grid;
+    grid-template-columns: 50% 35% 11% 30px;
+    padding-right: 15px;
+  }
+  &-master-flag {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  &-custom-flag {
+    grid-column: 2;
+    grid-row: 1;
+    &-label {
+      margin-left: 10px;
+      float: left;
+      width: 9rem;
+    }
+  }
+
+  &-end-date {
+    grid-column: 3;
+    grid-row: 1;
+    margin-left: 10px;
+  }
+  &-add-custom-flag {
+    grid-column: 5;
+    grid-row: 1;
+    margin-top: 25px;
+  }
+  &-oval {
+    color: $dropdown-hover-color;
+  }
+  &-add {
+    color: $polar-white;
+  }
+  &-add-icon {
+    border-radius: 5px;
+    border: 1px solid $patient-registration-border-color;
+    cursor: pointer;
+    padding: 4px;
+    background-color: $action-blue;
+  }
+}
+.mb-5 {
+  margin-bottom: 5px;
+}
+.masterflagtlist:focus,
+.preferences-selectlist:focus {
+  box-shadow: 0 0 0 1px $box-shadow-color;
+}
+
+.alternateLocationStyle {
+  width: 95%;
+}
+.chips {
+  &-wrapper {
+    grid-column-start: 1;
+    grid-column-end: span col3-end;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  &-right {
+    margin-right: 15px;
+    margin-top: 5px;
+  }
+}
+.customFlag-error {
+  width: 90%;
+  float: left;
+  border: 1px solid $required-input-color;
+  box-shadow: 0 0 0 1px $required-input-color;
+}
+.customFlag-errorIcon {
+  float: left;
+  margin-left: 10px;
+  margin-top: 8px;
+  color: $required-input-color;
+}
+.error-control {
+  width: 96%;
+  float: left;
+  border: 1px solid $error-color;
+  box-shadow: 0 0 0 1px $error-color;
+}
+.error-icon {
+  float: left;
+  margin-left: 10px;
+  margin-top: 8px;
+  color: $error-color;
+}
+
+::ng-deep .preferences-container {
+    .fui-select-container {
+        width: 98% !important;
+    }
+    .fui-select {        
+        height: 30px !important;
+        outline: none;
+    }
+    .select-list-wrapper {
+        grid-gap: 0px !important;
+    }
+    .k-multiselect {
+        width: 100% !important;
+        height: 30px !important;
+    }
+    .multiselect-wrapper {
+        grid-gap: 0px !important;
+    }
+    .fui-check-box {        
+        display: inherit !important;
+    }
+}

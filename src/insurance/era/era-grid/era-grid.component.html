@@ -1,0 +1,216 @@
+<label>Each row of ERA grid is split by Carrier</label>
+<div class="era-new grid header"
+     [class.locationInactive]="loggedInLocation.status === 'Inactive'">
+    <div class="pay-date"
+         (click)="orderEra(eraHeaderSortColumn.PayDate)">
+        Pay Date
+        <span class="sort fas"
+              [class.fa-sort]="eraOrder.sortColumn !== eraHeaderSortColumn.PayDate"
+              [class.fa-caret-up]="eraOrder.sortColumn === eraHeaderSortColumn.PayDate && eraOrder.ascending"
+              [class.fa-caret-down]="eraOrder.sortColumn === eraHeaderSortColumn.PayDate && !eraOrder.ascending"></span>
+    </div>
+    <div class="carrier"
+         (click)="orderEra(eraHeaderSortColumn.Carrier)">
+        Fuse Carrier
+        <span 
+                kendoTooltip
+                position="top"
+                tooltipClass="app-tooltip"
+                [tooltipWidth]="180"
+                title="{{ 'Carrier name as listed in Fuse' }}">
+            <i class="fa fa-question-circle"></i>
+        </span>
+        <span class="sort fas"
+              [class.fa-sort]="eraOrder.sortColumn !== eraHeaderSortColumn.Carrier"
+              [class.fa-caret-up]="eraOrder.sortColumn === eraHeaderSortColumn.Carrier && eraOrder.ascending"
+              [class.fa-caret-down]="eraOrder.sortColumn === eraHeaderSortColumn.Carrier && !eraOrder.ascending"></span>
+    </div>
+    <!--new column ERA Payer -->
+    <div class="era-payer"
+         (click)="orderEra(eraHeaderSortColumn.EraPayer)">
+        ERA Payer
+        <span class="sort fas"
+              [class.fa-sort]="eraOrder.sortColumn !== eraHeaderSortColumn.EraPayer"
+              [class.fa-caret-up]="eraOrder.sortColumn === eraHeaderSortColumn.EraPayer && eraOrder.ascending"
+              [class.fa-caret-down]="eraOrder.sortColumn === eraHeaderSortColumn.EraPayer && !eraOrder.ascending"></span>
+        <span kendoTooltip
+              position="top"
+              tooltipClass="app-tooltip"
+              [tooltipWidth]="180"
+              title="{{ 'Payer Name from ERA' }}">
+            <i class="fa fa-question-circle"></i>
+        </span>
+    </div>
+    <div class="payment-method"
+         (click)="orderEra(eraHeaderSortColumn.PaymentNumber)">
+        Payment Method/Number
+        <span class="sort fas"
+              [class.fa-sort]="eraOrder.sortColumn !== eraHeaderSortColumn.PaymentNumber"
+              [class.fa-caret-up]="eraOrder.sortColumn === eraHeaderSortColumn.PaymentNumber && eraOrder.ascending"
+              [class.fa-caret-down]="eraOrder.sortColumn === eraHeaderSortColumn.PaymentNumber && !eraOrder.ascending"></span>
+    </div>
+    <div class="paid">
+        Paid
+        <span kendoTooltip
+              position="top"
+              tooltipClass="app-tooltip"
+              [tooltipWidth]="180"
+              title="{{ 'Paid for the claims under this group' }}">
+            <i class="fa fa-question-circle"></i>
+        </span>
+    </div>
+    <div class="amount"
+         (click)="orderEra(eraHeaderSortColumn.Amount)">
+            Total ERA Payment
+        <span class="sort fas"
+              [class.fa-sort]="eraOrder.sortColumn !== eraHeaderSortColumn.Amount"
+              [class.fa-caret-up]="eraOrder.sortColumn === eraHeaderSortColumn.Amount && eraOrder.ascending"
+              [class.fa-caret-down]="eraOrder.sortColumn === eraHeaderSortColumn.Amount && !eraOrder.ascending"></span>
+        <span kendoTooltip
+              position="top"
+              tooltipClass="app-tooltip"
+              [tooltipWidth]="180"
+              title="{{ 'Total amount paid for this ERA' }}">
+            <i class="fa fa-question-circle"></i>
+        </span>
+    </div>
+    <div class="unmatched"
+         (click)="orderEra(eraHeaderSortColumn.IsAutoMatched)">
+        Unmatched
+        <span class="sort fas"
+              [class.fa-sort]="eraOrder.sortColumn !== eraHeaderSortColumn.IsAutoMatched"
+              [class.fa-caret-up]="eraOrder.sortColumn === eraHeaderSortColumn.IsAutoMatched && eraOrder.ascending"
+              [class.fa-caret-down]="eraOrder.sortColumn === eraHeaderSortColumn.IsAutoMatched && !eraOrder.ascending"></span>
+    </div>
+    <div class="status"
+         (click)="orderEra(eraHeaderSortColumn.Status)">
+        Status
+        <span class="sort fas"
+              [class.fa-sort]="eraOrder.sortColumn !== eraHeaderSortColumn.Status"
+              [class.fa-caret-up]="eraOrder.sortColumn === eraHeaderSortColumn.Status && eraOrder.ascending"
+              [class.fa-caret-down]="eraOrder.sortColumn === eraHeaderSortColumn.Status && !eraOrder.ascending"></span>
+    </div>
+    <div>
+    </div>
+</div>
+<ng-container *ngIf="!firstPageLoading">
+    <ng-container *ngFor="let era of eras; trackBy: eraTrackById">
+        <div class="era-new grid item"
+             [class.disabled]="!era.canView">
+            <div class="pay-date click"
+                 (click)="expandEra(era)">
+                <span class="fas"
+                      [class.disabled]="!era.canView"
+                      [class.fa-caret-right]="!era.expanded"
+                      [class.fa-caret-down]="era.expanded"></span>
+                {{ era.Date | toShortDisplayDateUtc }}
+                <span *ngIf="!era.canView"
+                      kendoTooltip
+                      position="top"
+                      tooltipClass="app-tooltip"
+                      [tooltipWidth]="180"
+                      title="{{ era.tooltip }}">
+                    <i class="fa fa-question-circle"></i>
+                </span>
+            </div>
+            <div class="carrier">{{ era.CarrierName || '-'  }}</div>
+            <div class="era-payer">{{ era.EraPayerName }}</div>
+            <div class="payment-method">{{ era.PaymentString }}</div>
+            <div class="paid">{{ era.Paid | currency }}</div>
+            <div class="amount text-right">{{ era.Amount | currency }}</div>
+            <div class="unmatched">{{ era.IsAutoMatched ? '' : 'Unmatched' }}</div>
+            <div class="status">{{ era.IsProcessed ? 'Completed' : 'Not Completed' }}</div>
+            <div class="ellipsis"
+                 [class.disabled]="!era.canView"
+                 kendoTooltip
+                 position="left"
+                 tooltipClass="app-tooltip"
+                 [tooltipWidth]="180"
+                 title="{{ era.tooltip }}">
+                <app-ellipsis-select (functionCall)="call($event)"
+                                     [refObject]="era"
+                                     [options]="era.items"
+                                     [tooltipWidth]="180"></app-ellipsis-select>
+            </div>
+        </div>
+        <div class="expand"
+             *ngIf="era.expanded">
+            <div class="claim grid header">
+                <div class="location"
+                     (click)="orderEraClaims('location', era)">
+                    Location
+                    <span class="sort fas"
+                          [class.fa-sort]="era.claimOrder.sortColumnName !== 'location'"
+                          [class.fa-caret-up]="era.claimOrder.sortColumnName === 'location' && era.claimOrder.sortDirection === 1"
+                          [class.fa-caret-down]="era.claimOrder.sortColumnName === 'location' && era.claimOrder.sortDirection === -1"></span>
+                </div>
+                <div class="patient"
+                     (click)="orderEraClaims('patientName', era)">
+                    Patient
+                    <span class="sort fas"
+                          [class.fa-sort]="era.claimOrder.sortColumnName !== 'patientName'"
+                          [class.fa-caret-up]="era.claimOrder.sortColumnName === 'patientName' && era.claimOrder.sortDirection === 1"
+                          [class.fa-caret-down]="era.claimOrder.sortColumnName === 'patientName' && era.claimOrder.sortDirection === -1"></span>
+                </div>
+                <div class="amount"
+                     (click)="orderEraClaims('Amount', era)">
+                    Paid
+                    <span class="sort fas"
+                          [class.fa-sort]="era.claimOrder.sortColumnName !== 'Amount'"
+                          [class.fa-caret-up]="era.claimOrder.sortColumnName === 'Amount' && era.claimOrder.sortDirection === 1"
+                          [class.fa-caret-down]="era.claimOrder.sortColumnName === 'Amount' && era.claimOrder.sortDirection === -1"></span>
+                </div>
+                <div class="submitted"
+                     (click)="orderEraClaims('ClaimsTotalFeeSubmitted', era)">
+                    Submitted
+                    <span class="sort fas"
+                          [class.fa-sort]="era.claimOrder.sortColumnName !== 'ClaimsTotalFeeSubmitted'"
+                          [class.fa-caret-up]="era.claimOrder.sortColumnName === 'ClaimsTotalFeeSubmitted' && era.claimOrder.sortDirection === 1"
+                          [class.fa-caret-down]="era.claimOrder.sortColumnName === 'ClaimsTotalFeeSubmitted' && era.claimOrder.sortDirection === -1"></span>
+                </div>
+                <div class="status"
+                     (click)="orderEraClaims('ClaimStatusText', era)">
+                    Status
+                    <span class="sort fas"
+                          [class.fa-sort]="era.claimOrder.sortColumnName !== 'ClaimStatusText'"
+                          [class.fa-caret-up]="era.claimOrder.sortColumnName === 'ClaimStatusText' && era.claimOrder.sortDirection === 1"
+                          [class.fa-caret-down]="era.claimOrder.sortColumnName === 'ClaimStatusText' && era.claimOrder.sortDirection === -1"></span>
+                </div>
+                <div></div>
+            </div>
+            <div class="claim grid item"
+                 *ngFor="let claim of era.EraClaimPayments; let i = index">
+                <ng-container >
+                    <div id="divClaimLocation_{{era.EraHeaderId}}_{{i}}"
+                         class="location">{{ claim.Matched ? claim.location : '-'}}</div>
+                    <div id="divClaimPatientName_{{era.EraHeaderId}}_{{i}}"
+                         class="patient">{{ claim.patientName }}</div>
+                    <div id="divClaimAmount_{{era.EraHeaderId}}_{{i}}"
+                         class="amount text-right">
+                        {{ claim.Amount | currency }}
+                    </div>
+                    <div id="divClaimTotalFee_{{era.EraHeaderId}}_{{i}}"
+                         class="submitted text-right">{{ claim.Matched ? (claim.ClaimsTotalFeeSubmitted | currency) : (claim.EraSubmittedAmount | currency) }}</div>
+                    <div id="divClaimStatus_{{era.EraHeaderId}}_{{i}}"
+                         class="status">{{ claim.ClaimStatusText }}</div>
+                    <div class="ellipsis">
+                        <app-ellipsis-select (functionCall)="call($event)"
+                                             [refObject]="claim"
+                                             [options]="claim.items"></app-ellipsis-select>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>
+<div class="showMoreSection">
+    <button class="showMoreButton btn btn-primary"
+            *ngIf="!firstPageLoading && !loadingMore && viewShowMoreButton"
+            (click)="showMoreResults()">
+        Show More
+    </button>
+</div>
+<div *ngIf="firstPageLoading || loadingMore"
+     class="loading">
+    <span class="fa fa-spinner fa-spin loading"></span>
+</div>

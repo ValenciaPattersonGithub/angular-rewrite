@@ -1,0 +1,13 @@
+<div title="{{ titleText }}">
+    <div class="signatureDisplay__title">{{ titleText }}</div>
+    <div ng-if="hasSignature && !!base64Signature">
+        <img class="signatureDisplay__image" ng-src="{{ base64Signature }}"  title="{{ titleText }}" alt="{{ altText }}" />
+    </div>
+    <div ng-if="!hasSignature">
+        <div ng-if="!fileAllocationId">{{ 'No signature recorded' | i18n }}</div>
+        <div ng-if="loading">
+            <no-results iDefaultMessage="loadingMessage" loading-message="loadingMessage" loading="loading"></no-results>
+        </div>
+        <div ng-if="error">{{ 'Unable to load signature' | i18n }}</div>
+    </div>
+</div>

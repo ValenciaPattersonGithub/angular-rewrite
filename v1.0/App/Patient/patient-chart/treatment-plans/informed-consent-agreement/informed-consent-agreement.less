@@ -1,0 +1,130 @@
+﻿
+@media screen, print {
+    .icAgreement {
+        padding: @brand-padding_lg;
+        &__signature{
+            width:50%;
+            padding:16px 16px 16px 0;
+        }
+        
+        &__signatureArea {            
+            border: 0;            
+            width:100%;
+            height:30px
+        } 
+        
+        &__unsignedSignatureArea {            
+            border: 0;
+            border-bottom: 1px solid #000;
+            width:100%;
+            height:30px
+        }                   
+
+        &__title {
+            margin-top: @brand-margin_md;
+            font-weight: bold;
+            padding-bottom: @brand-margin_md;
+        }
+
+        &__table {
+            width:100%;            
+        }
+
+        &__header {
+
+            > tr {
+                background-color: @brand-color_white;
+                border-bottom: 1px solid @brand-tbl_border-color;
+
+                > th {
+                    position: relative;
+                    padding: 10px 0 10px 0;
+                    cursor: pointer;
+                    
+                    &.descriptionColumn {
+                        padding-left: 10px;
+                        width: 50%;
+                        min-width: 200px;
+                    }
+
+                    &.defaultColumn {
+                        width: 10%;
+                        min-width: 78px;
+                    }
+
+                    &:first-child {
+                        padding-left: 10px;
+                    }
+                }
+            }
+        }
+
+        &__body {
+            border: 1px solid ridge;
+            padding: @brand-margin_md;
+
+            > tr {
+                background-color: @brand-color_white;
+                border-bottom: 1px solid @brand-tbl_border-color;
+
+                > td {
+                    position: relative;
+                    padding: 10px 0 10px 0;
+                    
+                    &.descriptionColumn {
+                        padding-left: 10px;
+                        width: 50%;
+                        min-width: 200px;
+                    }
+
+                    &.defaultColumn {
+                        width: 10%;
+                        min-width: 78px;
+                    }
+                }
+            }
+        }
+
+        &__footer {
+            padding: @brand-margin_md;
+           
+        }
+        
+    }
+}
+
+@media print {
+    .icAgreement {
+        font-size: 8pt;
+
+        &__notes {
+            background-color: @brand-color_white !important;
+            font-size: 8pt;
+            width:100%;
+            border-color:#A9A9A9;
+            border:1px solid;
+            min-height:75pt;
+            padding:8pt ;
+        }
+
+        
+    }
+}
+
+@media screen {
+    .icAgreement {
+        
+        .form-control {
+            padding: 5pt 8pt;
+            font-size: 10pt;
+        }
+        &__notes {
+            background-color: @brand-color_white !important;
+            width:100%;
+            border-color:#A9A9A9;
+            border:1px solid;
+            min-height:75px;
+            padding:10px ;
+        }
+    }
+}

@@ -1,0 +1,269 @@
+.prevCare {
+    .prevCare__header {
+        width: 96%;
+        max-width: 160rem;
+        margin: 0 auto;
+    }
+
+    .prevCare__title>h1 {
+        font-size: 26px;
+        line-height: 1;
+        margin: 8px 0;
+        padding: 0;
+    }
+
+    .prevCare__actions {
+        padding-bottom: 16px;
+    }
+
+    .preventiveNewGrid {
+        .servicesBody {
+            padding: 0px;
+        }
+
+        .servicesTable {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            height: 400px;
+        }
+
+        .searchInput {
+            padding-right: 0px;
+            margin-right: 0px;
+            width: 75%;
+        }
+
+        .searchIcon {
+            padding: 8px;
+            font-size: 20px;
+            width: 25%;
+        }
+
+        .serviceCodeTable {
+            margin-bottom: 5px;
+        }
+
+        .serviceCodeHeader {
+            padding-right: 33px;
+        }
+
+        .selectBtn {
+            width: 27%;
+
+            .qkBtn {
+                padding-right: 0;
+                padding-left: 0;
+                vertical-align: middle !important;
+            }
+
+            .qkCheck {
+                vertical-align: middle !important;
+                margin-top: 0;
+            }
+        }
+
+        .servCode {
+            width: 16%;
+            vertical-align: middle !important;
+            overflow-x: hidden;
+        }
+
+        .cdtCode {
+            width: 18%;
+            vertical-align: middle !important;
+            overflow-x: hidden;
+        }
+
+        .description {
+            width: 39%;
+            vertical-align: middle !important;
+            overflow-x: hidden;
+        }
+
+        .serviceCodeSearchBoxContainer {
+            width: 60%;
+        }
+
+        .serviceCodeTypeContainer {
+            width: 40%;
+            height: 10px;
+        }
+
+        .serviceCodeInactiveSelectorContainer {
+            margin-top: 8px;
+            margin-right: 0px;
+        }
+    }
+
+}
+
+.k-tooltip-validation {
+    background-color: #fff7e3;
+    color: #f9591f;
+    width: fit-content;
+    position: absolute;
+    left: 370px;
+    padding: 15px 15px;
+}
+
+.active {
+    max-width: 100rem;
+    overflow: unset;
+    opacity: 1;
+}
+
+.pl-0 {
+    padding-left: 0px;
+}
+
+.pr-0 {
+    padding-right: 0px;
+}
+
+.prevCare__body {
+    width: 96%;
+    max-width: 160rem;
+    margin: 0 auto;
+    padding-top: 16px;
+}
+
+.prevCare__body:before,
+.prevCare__body:after {
+    content: " ";
+    display: table;
+}
+
+.prevCare__body:after {
+    clear: both;
+}
+
+.prevCare__secondary {
+    position: relative;
+    float: left;
+    width: 33.33333333%;
+    min-height: 1px;
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow: hidden;
+    max-width: 0;
+    padding: 0;
+    opacity: 0;
+    background-color: #FFFFFF;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.prevCare__secondary.active {
+    max-width: 100rem;
+    overflow: unset;
+    opacity: 1;
+}
+
+.prevCare__secondary h4 {
+    margin-left: 16px;
+}
+
+.prevCare__secondary .k-grid-toolbar {
+    padding-left: 16px;
+}
+
+.prevCare__secondary .k-grid-content {
+    border-bottom: 1px solid #A9A9A9;
+    border-left: none;
+    border-right: none;
+}
+
+.prevCare__secondary .k-grid-content .grid-checkbox {
+    text-align: center;
+}
+
+.prevCare__secClose {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    color: #2DABCB;
+    padding: 8px 12px;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.prevCare__secClose:active {
+    border: 2px solid #000;
+    border-radius: 4px;
+}
+
+.prevCare__loading {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.prevCare__primary {
+    position: relative;
+    float: left;
+    width: 66.66666667%;
+    min-height: 1px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.prevCare__primary .k-icon {
+    display: none;
+}
+
+::ng-deep {
+
+    .k-grid .k-grid-content tr.k-detail-row td.k-detail-cell,
+    .k-grid .k-grid-content tr.k-alt.k-detail-row td.k-detail-cell {
+        padding: 8px 0;
+        padding-left: 25%;
+    }
+
+    .k-grid-norecords {
+        background-color: #DADCDC;
+    }
+
+    .k-grid .k-grid-header .k-grid-header-wrap .k-header {
+        border: none;
+        background-color: transparent;
+        font-weight: 700;
+        color: #333333 !important;
+    }
+
+    .k-grid .k-grid-header {
+        border: none;
+        background-color: #DADCDC;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+
+    .k-dropdown .k-dropdown-wrap .k-select {
+        color: #2DABCB !important;
+    }
+
+    .checkmark .label {
+        padding: 0.3em 0.3em 0.3em;
+    }
+
+    .prevCare__primary #preventiveGrid .k-hierarchy-col,
+    .prevCare__primary #preventiveGrid .k-hierarchy-cell {
+        display: none;
+    }
+
+    .delete-btn {
+        float: right
+    }
+    .k-grid .k-hierarchy-col {
+        width: 2px;
+    }
+
+    i.inactive-service-warning {
+        color: #f7b82d;
+        margin-top: 11px;
+    }
+
+    i.inactive-service-warning+div.popover {
+        background: #106c90;
+        color: #fff;
+        font-size: 12px;
+    }
+}

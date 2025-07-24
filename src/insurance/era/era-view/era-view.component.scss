@@ -1,0 +1,56 @@
+@import "variables";
+.era-display-migrated {
+    .header {
+        font-style: italic;
+        font-weight: bold;
+        // color: @brand-color_font-dark;
+        color: $action-blue;
+    }
+    .value {
+        font-weight:bold;
+    }
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .row > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+    .gridHeader {
+        margin-left: 0px;
+        .col-sm-2, .col-sm-3, .col-sm-1 {
+            color: white;
+            // background-color: @brand-color_font-dark;
+            background-color: $action-blue;
+            font-weight: bold;
+            border-bottom: 2px solid gray;
+        }
+    }
+    .gridBody {
+        margin-left: 0px;
+        .col-sm-2, .col-sm-3, .col-sm-1 {
+            border-right: 2px solid gray;
+            border-bottom: 2px solid gray;
+        }
+        .row > .col-sm-2:first-child,
+        .row > .col-sm-3:first-child{
+            border-left: 2px solid gray;
+        }
+    }
+    
+    .flex-container {
+        display: flex;
+        .column {
+            width: 33.33%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            div {
+                width: 50%;
+                padding-right: 15px;
+            }
+        }
+    }
+
+}

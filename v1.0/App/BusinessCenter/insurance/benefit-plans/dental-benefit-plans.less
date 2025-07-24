@@ -1,0 +1,84 @@
+﻿.benefitPlan {
+    &__container {
+        .containerStandard;
+        padding: 0;
+        max-width: 100%;
+        width: 99.5%;
+        padding: 0 20px 0 20px;
+    }
+
+    &__table {
+        table-layout: fixed;
+    }
+
+    &__header {
+        &Sort {
+            margin-left: 10px;
+        }
+
+        > tr > td {
+            > a {
+                .btn;
+            }
+
+            > a, > span {
+                .btn-link;
+                text-align: left;
+                width: 100%;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+
+            .active, a:focus, a:active {
+                color: black;
+            }
+        }
+
+        th {
+            font-weight: bold;
+            text-align: left;
+            width: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+
+    &__body {
+        .list-group;
+
+        tr {
+            .list-group-item;
+            padding: 0;
+            display: table-row;
+        }
+
+        td {
+            .truncate;
+            display: table-cell;
+            padding: 13px 20px 12px 20px;
+        }
+    }
+
+    &__options {
+        overflow: visible !important;
+
+        &Btn {
+            .pull-right;
+            .btn;
+            .btn-link;
+
+            > span {
+                font-size: 22px;
+            }
+        }
+
+        &List {
+            top: 30px;
+        }
+    }
+
+    .inactive {
+        color: @brand-deleted-transactions-color;
+    }
+}

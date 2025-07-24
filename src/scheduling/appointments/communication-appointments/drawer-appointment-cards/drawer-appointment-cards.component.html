@@ -1,0 +1,44 @@
+<div id="app-card-box" class="appointment-card-main">
+    <div class="appointment-no-records" *ngIf="!appointments.length && isLoading"> <i class="fa fa-spinner fa-spin"></i>
+        <span> {{ 'Loading Appointments...' | translate }}</span>
+    </div>
+    <div class="appointment-no-records" *ngIf="!appointments.length && !isLoading">{{ 'There are no Appointments.' | translate }}
+    </div>
+    <div id="app-card-detail" (click)="onAppCardSelection(appointment)" class="appointment-card-box"
+        *ngFor="let appointment of appointments; index as i" tabindex="0" [attr.data-index]="i">
+        <div class="appointment-card">
+            <div class="titleRow">
+                <span id="app-card-title" *ngIf="appointment.StartTime" class="appointment-title">
+                    {{appointment.StartTime ? (appointment.StartTime | date: 'MM-dd-yyyy') : ''}} {{
+                    appointment.StartTime ?
+                    (appointment.StartTime | date: 'h:mm a') : '' }} - {{ appointment.EndTime ? (appointment.EndTime |
+                    date:'h:mm a') : '' }} ({{ appointment.tzAbbr }})
+                </span>
+                <span id="app-card-unscheduled-title" class="appointment-title"
+                    *ngIf="!appointment.StartTime">{{'Unscheduled' | translate}}</span>
+                <span class="delete-icon" *ngIf="!appointment.StartTime"  (click)="onDeleteAppointment($event,appointment)">
+                    <svg version="1.2"  id="app-card-delete" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        overflow="visible" preserveAspectRatio="none" viewBox="0 0 24 24" width="18" height="18">
+                        <g>
+                            <path xmlns:default="http://www.w3.org/2000/svg"
+                                d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                                style="fill: rgb(45, 171, 203);" vector-effect="non-scaling-stroke" />
+                        </g>
+                    </svg>
+                </span>
+            </div>
+            <div class="typeRow">
+                <span id="app-card-type" class="appointment-text"><b>{{ 'Type: ' | translate }}
+                    </b>{{appointment.AppointmentType.Name}}</span>
+            </div>
+            <div class="providerRow">
+                <span id="app-card-provider" class="appointment-text"><b>{{'Provider: ' | translate }}
+                    </b>{{appointment.Provider.Name}}</span>
+            </div>
+            <div class="appointmentStatusRow">
+                <appointment-status-hover [(appointment)]="appointments[i]"
+                    (updateAppointmentStatus)="onUpdateAppointmentStatus($event)"></appointment-status-hover>
+            </div>
+        </div>
+    </div>
+</div>

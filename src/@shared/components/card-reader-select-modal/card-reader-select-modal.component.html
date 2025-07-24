@@ -1,0 +1,11 @@
+<div class="modal-overlay">
+    <div class="modal-content">
+        <div class="title">Select Card Reader</div>
+        <card-reader-select (onCardReaderChange)="cardReaderSelected($event)"
+            [preLoadedCardReaders]="preLoadedCardReaders"></card-reader-select>
+        <div class="button-container">
+            <button (click)="cancel()" class="btn btn-primary">Cancel</button>
+            <button (click)="next()" [disabled]="!hasSelectedCardReader" class="btn btn-primary">Next</button>
+        </div>
+    </div>
+</div>

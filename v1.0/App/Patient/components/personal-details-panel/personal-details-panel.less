@@ -1,0 +1,49 @@
+﻿.persInfoFrm {
+
+    &__formGrpRow {
+        .containerStandard;
+        width: 70%;
+    }
+
+    .fName, .lName {
+        display: inline-block;
+        .make-md-column(10);
+    }
+
+    .init, .suffix {
+        float: right;
+        .make-md-column(2);
+    }
+
+    .prefName {
+        display: inline-block;
+        .make-md-column(9);
+    }
+
+    .birthdate {
+        float: right;
+        .make-md-column(3);
+    }
+
+    .sex {
+        .make-md-column(12);
+        padding-left: @brand-padding_md;
+    }
+
+    .patientStatus {
+        .make-md-column(4);
+        padding-left: @brand-padding_md;
+    }
+
+    .responsible {
+        .make-md-column(8);
+    }
+
+    &__actions {
+        float: right;
+    }
+}
+
+.statusIcon{
+    color: limegreen;
+}

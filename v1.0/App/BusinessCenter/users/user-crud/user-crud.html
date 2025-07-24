@@ -1,0 +1,443 @@
+﻿<div ng-class="'fade-in'">
+    <div class="userCrud">
+        <div ng-form="frmUserCrud">
+            <div class="rowFull white userCrud__header-container">
+                <div class="userCrud__header" keep-top>
+                    <!--Breadcrumbs-->
+                    <ul class="locIdentifier__breadcrumb">
+                        <li ng-repeat="breadcrumb in dataForCrudOperation.BreadCrumbs">
+                            <ng-switch on="$last">
+                                <span id="lastBreadCrumbName" ng-switch-when="true">{{breadcrumb.name | i18n }}</span>
+                                <span id="breadCrumbName{{$index}}" ng-switch-default ng-click="changePageState(breadcrumb)"><a>{{breadcrumb.name | i18n }}</a></span>
+                            </ng-switch>
+                        </li>
+                    </ul>
+                    <div class="userCrud__title col-md-12">
+                        <h1 ng-show="!editMode">{{ 'Add {0}' | i18n:['a Team Member'] }}</h1>
+                        <h1 ng-show="editMode">{{ 'Edit {0}' | i18n:['Team Member'] }}</h1>
+                    </div>
+                    <div class="userCrud__actions ">
+                        <div class="col-md-6">
+                            <button id="btnCancel" ng-click="cancelChanges();" ng-disabled="savingUser" class="btn btn-default" tabindex="-1">{{ 'Cancel' | i18n }}</button>
+                            <button id="btnSave" ng-click="saveUser();" check-auth-z="{{ !hasAccess }}" ng-disabled="savingUser || hasInvalidTimes" class="btn btn-primary" tabindex="32">{{ 'Save' | i18n }}</button>
+                        </div>
+                        <div class="col-md-6 error help-text" ng-show="invalidDataForRx">
+                            <div>{{'Unable to add/update your team member for e-prescriptions, please verify the following:'| i18n }}</div>
+                            <div>{{'Must have a valid {0}.' |i18n: ['phone number']}}</div>
+                            <div>{{'Must have a valid {0}.' |i18n: ['zip code']}}</div>
+                            <div ng-if="user.RxUserType === 1">{{'Must have a valid {0}.' |i18n: ['NPI Number']}}</div>
+                        </div>
+                        <span class="pull-right">
+                            <strong>{{ 'Last Modified: ' | i18n }}</strong>
+                            {{lastModifiedMessage}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="rowFull white">
+                <div id="workArea" class="userCrud__form">
+                    <span class="pull-right">* {{ 'required' | i18n }}</span>
+
+                    <div class="form-container">
+
+                        <!-- personal information header -->
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    {{ 'Personal Information' | i18n }}
+                                </h4>
+                            </div>
+                            <!-- personal information section -->
+                            <div id="personalInfo" class="panel-body">
+                                <div class="col-xs-8">
+                                    <div class="clearfix">&nbsp;</div>
+
+                                    <!-- first name and middle initial -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'First Name' | i18n }} *</label>
+                                            <div ng-class="{error:hasErrors && !frmUserCrud.inpFirstName.$valid}">
+                                                <input class="form-input required valid" id="inpFirstName" placeholder="{{ 'First name' | i18n }}" ng-model="user.FirstName" capitalize-first-with-override name="inpFirstName" maxlength="64" type="text" required char-pattern="{{personalInfoRegex}}" />
+                                                <label id="lblFirstNameRequired" class="help-text " ng-show="hasErrors && !frmUserCrud.inpFirstName.$valid">
+                                                    {{ 'This field is required.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-2">
+                                            <label class="control-label">{{'MI' | i18n }}</label>
+                                            <input class="form-input" id="inpMiddleInitial" placeholder="{{ 'M.I.' | i18n }}" ng-model="user.MiddleName" capitalize-first-with-override name="inpMiddleInitial" maxlength="1" type="text" char-pattern="{{personalInfoRegex}}" />
+                                        </div>
+                                    </div>
+                                    <!--<div class="clearfix">&nbsp;</div>-->
+                                    <!-- last name -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'Last Name' | i18n }} *</label>
+                                            <div ng-class="{error:hasErrors && !frmUserCrud.inpLastName.$valid}">
+                                                <input class="form-input required valid" id="inpLastName" placeholder="{{ 'Last name' | i18n }}" ng-model="user.LastName" capitalize-first-with-override name="inpLastName" maxlength="64" type="text" required char-pattern="{{personalInfoRegex}}" />
+                                                <label id="lblLastNameRequired" class="help-text " ng-show="hasErrors && !frmUserCrud.inpLastName.$valid">
+                                                    {{ 'This field is required.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-2">
+                                            <label class="control-label">{{'Suffix' | i18n }}</label>
+                                            <input class="form-input" id="inpMiddleInitial" placeholder="{{ 'Jr., Sr., IV' | i18n }}" ng-model="user.SuffixName" capitalize-first-with-override name="inpMiddleInitial" maxlength="20" type="text" char-pattern="{{personalInfoRegex}}" />
+                                        </div>
+                                    </div>
+                                    <!--<div class="clearfix">&nbsp;</div>-->
+                                    <!-- preferred name -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{ 'Preferred {0}' | i18n:['Name'] }} </label>
+                                            <input class="form-input" id="inpPreferredName" placeholder="{{ 'Prefers to be called...' | i18n }}" ng-model="user.PreferredName" capitalize-first-with-override name="inpPreferredName" maxlength="64" type="text" char-pattern="{{personalInfoRegex}}" />
+                                        </div>
+                                        <div class="form-group col-xs-2">
+                                            <label class="control-label">{{'Date of Birth' | i18n }} </label>
+                                            <div ng-class="{error:hasErrors && !user.DateOfBirth && rxAccessRequirements}">
+                                                <date-selector input-id="inpDateOfBirth" placeholder="MM/DD/YYYY" max-date="maxDateOfBirth" date-var="user.DateOfBirth" valid="validDob" format="MM/dd/yyyy"></date-selector>
+                                                <label id="lblRxAccessRequiresDOB" class="help-text "
+                                                       ng-show="hasErrors && !user.DateOfBirth && rxAccessRequirements">
+                                                    {{ 'This field is required for Rx Access.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<div class="clearfix">&nbsp;</div>-->
+                                    <!-- professional designation -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{ 'Professional Designation' | i18n }} </label>
+                                            <input class="form-input" id="inpProfessionalDesignation" placeholder="{{ 'Professional designation' | i18n }}" ng-model="user.ProfessionalDesignation" capitalize-first-with-override name="inpProfessionalDesignation" maxlength="20" type="text" />
+                                        </div>
+                                    </div>
+                                    <!--<div class="clearfix">&nbsp;</div>-->
+                                    <!-- ssn -->
+                                    <!-- username -->
+                                    <div class="row">
+                                        <div class="form-group align-right col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'Username' | i18n }} *</label>
+                                            <label class="control-label" ng-if="!editMode">{{'(username@domain.ext)' | i18n }}</label>
+                                            <div ng-class="{error: (hasErrors && !frmUserCrud.inpUserName.$valid) || !userNameValid || duplicateEmailAdd}">
+                                                <input ng-change="clearValidation()" class="form-input" id="inpUserName" placeholder="{{ 'Username' | i18n }}" ng-model="user.UserName" name="inpUserName" type="text" ng-disabled="editMode" maxlength="{{ usernameMaxLength }}" required valid-email />
+                                                <label id="lblUserNameInvalidEmail" class="help-text " ng-show="hasErrors && !frmUserCrud.inpUserName.$valid">
+                                                    {{ 'This field requires a valid email address.'| i18n }}
+                                                </label>
+                                                <label id="lblUserNameNotUnique" class="help-text " ng-show="!userNameValid">
+                                                    {{ 'Username must be unique.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-2" ng-if="editMode">
+                                            <label class="full-width">&nbsp;</label>
+                                            <button class="btn btn-primary" ng-click="changePassword()" ng-if="user.UserName">{{ 'Change Password' | i18n }}</button>
+                                        </div>
+                                        <div class="form-group col-xs-4" ng-if="!editMode && AddPreverifiedUserAccess && developmentMode">
+                                            <label class="col-xs-12 full-width">&nbsp;</label>
+                                            <input id="pvcheck" type="checkbox" ng-model="preverified.status" />
+                                            <label for="pvcheck">Create Pre-verified User</label>
+                                        </div>
+                                    </div>
+
+                                    <!--Job Title-->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'Job Title' | i18n }} </label>
+                                            <input class="form-input" id="inpJobTitle" placeholder="{{ 'Job Title' | i18n }}" ng-model="user.JobTitle" capitalize-first-with-override name="inpJobTitle" maxlength="64" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <!--user rx access-->
+                                    <div class="row" check-auth-z="{{ !rxUserCreatePermissions }}">
+                                        <div class="form-group col-xs-2"></div>                                        
+                                        <rx-user-setup ng-if="rxUserCreatePermissions" [model]="rxSettings" (model-change)="rxSettingsChanged($event)" [user-id]="user.UserId"></rx-user-setup>
+                                    </div>
+
+                                    <!-- user employment start date -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'Employment Start Date' | i18n }} </label>
+                                            <date-selector input-id="inpEmpStartDate" placeholder="MM/DD/YYYY" max-date="maxDate" date-var="user.EmployeeStartDate" valid="validStartDate" format="MM/dd/yyyy"></date-selector>
+                                        </div>
+                                    </div>
+
+                                    <!-- user employment end date -->
+                                    <div class="row" ng-show="editMode">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-6">
+                                            <label class="control-label">{{'Employment End Date' | i18n }} </label>
+                                            <date-selector input-id="inpEmpEndDate" placeholder="MM/DD/YYYY" max-date="maxDate" date-var="user.EmployeeEndDate" valid="validEndDate" format="MM/dd/yyyy"></date-selector>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-if="editMode">
+                                        <div class="form-group col-xs-2"></div>
+                                        <div class="form-group col-xs-10" ng-class="{error:hasErrors && !frmUserCrud.datesChecking.$valid}">
+                                            <label id="lblDatesComparisionRequired" class="help-text " ng-show="hasErrors && !frmUserCrud.datesChecking.$valid">
+                                                {{ datesComparionValidationMessage | i18n }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">&nbsp;</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="clearfix">&nbsp;</div>
+                                    <div class="clearfix">&nbsp;</div>
+                                    <!-- upload image -->
+                                    <div class="row">
+                                        <div class="form-group col-xs-11">
+                                            <div class="col-xs-12 text-align-center">
+                                                <img id="imgLocationImage" class="form-image-new" src="Images/Smiley.png" />
+                                            </div>
+                                            <div class="col-xs-12 text-align-center">
+                                                <a id="btnLocationImage" class="disabled flex-shrink-1 font-16 btn btn-link padding-none">{{ 'Upload User Image' | i18n }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix">&nbsp;</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- contact information header -->
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                                    <h4 class="panel-title">
+                                        {{ 'Contact Information' | i18n }}
+                                    </h4>
+                                </div>
+                            </div>
+                            <!-- contact information section -->
+                            <div id="contactInfo" class="panel-body">
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+
+                                        <!-- phones -->
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                                <label class="form-label-newer">{{'Phone' | i18n }} </label>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" ng-class="{error:hasErrors && phones[0].PhoneNumber.length===0 && rxAccessRequirements}">
+                                                <phone-info show-label="false" phones="phones" max-limit="5" valid-phones="validPhones" valid-form="!hasErrors" has-texts="true" has-notes="true" area="'user-crud'"></phone-info>
+                                                <label id="lblRxAccessRequiresPhone" class="help-text "
+                                                       ng-show="hasErrors && phones[0].PhoneNumber.length===0  && rxAccessRequirements">
+                                                    {{ 'This field is required for Rx Access.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <!-- email
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                                <label class="form-label-newer">{{'Email' | i18n }} *</label>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+
+                                                <div ng-class="{error:hasErrors &&  !frmUserCrud.inpEmailAddress.$valid}">
+                                                    <input id="inpEmailAddress" class="form-input" placeholder="{{ 'Email address' | i18n }}" ng-model="user.Email" name="inpEmailAddress" maxlength="256" required type="text" valid-email />
+                                                    <label id="lblDisplayText" class="text-info font-weight-normal">
+                                                        {{ 'To be used in the event of password recovery.' | i18n }}
+                                                    </label>
+                                                    <label id="errEmailAddress" class="help-text" ng-show="hasErrors && !frmUserCrud.inpEmailAddress.$valid">
+                                                        {{ 'This field requires a valid email address.'| i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>-->
+                                        <!-- address -->
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                                <label class="form-label-newer">{{'Address' | i18n }} </label>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5" ng-class="{error:hasErrors && !frmUserCrud.inpAddressLine1.$valid && rxAccessRequirements}">
+                                                <input class="form-input" id="inpAddressLine1"
+                                                       placeholder="{{ 'Street address' | i18n }}"
+                                                       ng-model="user.Address.AddressLine1"
+                                                       name="inpAddressLine1"
+                                                       maxlength="128"
+                                                       ng-required="rxAccessRequirements"
+                                                       type="text"
+                                                       char-pattern="[^a-zA-Z0-9-'.\\()# ]" />
+                                                <label id="lblRxAccessRequiresAddress" class="help-text "
+                                                       ng-show="hasErrors && !frmUserCrud.inpAddressLine1.$valid  && rxAccessRequirements">
+                                                    {{ 'This field is required for Rx Access.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                            </div>
+                                            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5">
+                                                <input class="form-input" id="inpAddressLine2"
+                                                       placeholder="{{ 'Address 2' | i18n }}"
+                                                       ng-model="user.Address.AddressLine2"
+                                                       name="inpAddressLine2"
+                                                       maxlength="128"
+                                                       type="text"
+                                                       char-pattern="[^a-zA-Z0-9-'.\\()# ]" />
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <!-- city -->
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                                <label class="form-label-newer">{{'City' | i18n }} </label>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-5" ng-class="{error:hasErrors && !frmUserCrud.inpCity.$valid && rxAccessRequirements}">
+                                                <input class="form-input" id="inpCity"
+                                                       placeholder="{{ 'Enter city' | i18n }}"
+                                                       ng-model="user.Address.City"
+                                                       capitalize-first-with-override name="inpCity"
+                                                       maxlength="64"
+                                                       ng-required="rxAccessRequirements"
+                                                       type="text" alpha-only />
+                                                <label id="lblRxAccessRequiresAddress" class="help-text "
+                                                       ng-show="hasErrors && !frmUserCrud.inpCity.$valid  && rxAccessRequirements">
+                                                    {{ 'This field is required for Rx Access.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <!-- state -->
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                                <label class="form-label-newer">{{'State' | i18n }} </label>
+                                            </div>
+                                            <div class="col-xs-9 col-sm-4 col-md-3 col-lg-3" ng-class="{error: frmUserCrud.stateListComboBox.$invalid}">
+                                                <div ng-class="{error:hasErrors && !user.Address.State && rxAccessRequirements}">
+                                                    <state-list state-list-id="inpState" source="user.Address.State"></state-list>
+                                                    <label id="lblRxAccessRequiresState" class="help-text "
+                                                           ng-show="hasErrors && !user.Address.State && rxAccessRequirements">
+                                                        {{ 'This field is required for Rx Access.' | i18n }}
+                                                    </label>
+                                                </div>
+                                                <label id="lblStateInvalid" class="help-text" ng-show="frmUserCrud.stateListComboBox.$error.comboBox">
+                                                    {{ 'This entry is invalid.' | i18n }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+
+                                        <!-- zip code -->
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                                <label class="form-label-newer">{{'ZIP Code' | i18n }} </label>
+                                            </div>
+                                            <div class="col-xs-9 col-sm-4 col-md-3 col-lg-3">
+                                                <div ng-class="{error: hasErrors && !frmUserCrud.inpZip.$valid}">
+                                                    <!--zip 9 numeric-->
+                                                    <input id="inpZip" zip-field="user.Address.ZipCode"
+                                                           type="text" class="form-input required valid"
+                                                           name="inpZip" placeholder="{{ 'Enter ZIP code' | i18n }}"
+                                                           ng-model="user.Address.ZipCode"
+                                                           ng-required="rxAccessRequirements"
+                                                           maxlength="10" minlength="5" />
+                                                    <label id="errZipCode" class="help-text" ng-show="hasErrors && !frmUserCrud.inpZip.$valid && !frmUserCrud.inpZip.$error.required===true">
+                                                        {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n  }}
+                                                    </label>
+                                                    <label id="lblRxAccessRequiresZipCode" class="help-text "
+                                                           ng-show="hasErrors && !frmUserCrud.inpZip.$valid && frmUserCrud.inpZip.$error.required===true  && rxAccessRequirements">
+                                                        {{ 'This field is required for Rx Access.' | i18n }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <user-locations-setup user="user"
+                                              user-location-setups="userLocationSetups"
+                                              user-location-setups-data-changed="userLocationSetupsDataChanged"
+                                              user-locations-errors="userLocationsErrors"
+                                              user-activated="userActivated">
+                        </user-locations-setup>
+
+                        <div ng-if="loginTimePhase2 && loginTimeEnabled">
+                            <user-login-time-panel [user]="user" (login-time-changed)="loginTimesChange($event)">
+                            </user-login-time-panel>
+                        </div>
+                        
+
+                        <!--user identification-->
+                        <div ng-if="canViewProviderInfo">
+                            <user-identification taxonomy-dropdown-template="taxonomyDropdownTemplate"
+                                                 user="user"
+                                                 user-location-setups="userLocationSetups"
+                                                 user-location-setups-data-changed="userLocationSetupsDataChanged"
+                                                 valid-ids="validIds"
+                                                 valid-tax-id="validTaxId"
+                                                 has-errors="hasErrors"
+                                                 combo-box-blur="comboBoxBlur(event)"
+                                                 stateList="stateList">
+                            </user-identification>
+                        </div>
+
+                        <!-- additional identifiers header -->
+                        <div class="panel">
+                            <div class="panel-heading" ng-if="masterAdditionalIdentifiers">
+                                <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                                    <h4 class="panel-title">
+                                        {{ 'Additional Identifiers' | i18n }}
+                                    </h4>
+                                </div>
+                            </div>
+                            <!-- additional identifier section -->
+                            <div id="additionalIdentifiers" class="panel-body" ng-if="masterAdditionalIdentifiers">
+                                <div class="row">
+                                    <div class="clearfix">&nbsp;</div>
+                                    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                                        <div ng-repeat="identifier in masterAdditionalIdentifiers">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                                    <label class="form-label-newer">{{ identifier.Description | i18n }} </label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-7 col-md-3 col-lg-3">
+                                                    <input class="form-input" id="identifierValue" placeholder="{{ identifier.Description | i18n }}" ng-model="identifier.Value" capitalize-first-with-override name="inpAdditionalIdentifiers" maxlength="100" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">&nbsp;</div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- user status / activation -->
+                        <div class="panel" ng-show="editMode">
+                            <div class="col-xs-12 panel-heading">
+                                <h4 class="panel-title">
+                                    {{ 'Activation History' | i18n }}
+                                    <button ng-click="activationHistorySectionOpen = !activationHistorySectionOpen" class="pull-right icon-button fa fa-lg" ng-class="{'fa-minus': activationHistorySectionOpen, 'fa-plus': !activationHistorySectionOpen}" id="btnToggleActivationInfo" data-toggle="collapse" data-target="#activationHistory"></button>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div id="activationHistory" ng-show="editMode" class="form-section-container collapse in">
+                            <user-status user="user" refresh-history="statusChange" has-errors="hasErrors" update="saveUser(true)" show-toggle="false"></user-status>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

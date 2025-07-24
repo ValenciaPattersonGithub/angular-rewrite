@@ -1,0 +1,53 @@
+<div *ngIf="sectionItem" class="panel-group section-item-panel">
+    <div class="panel panel-default">
+        <div class="formContainer">
+            <!--Questions with Yes/No True/False-->
+
+            <div id="questionYesNoTrueFalse{{sectionIndex}}_{{sectionItemIndex}}" class="row"
+                *ngIf="sectionItem.FormItemType === formsName['Yes/No True/False'] || sectionItem.FormItemType === 8">
+                <yes-no-true-false [sectionItem]="sectionItem" [editItem]="editItem" [sectionIndex]="sectionIndex" [sectionItemIndex]="sectionItemIndex"
+                    [inputIsDisabled]="inputIsDisabled" [parentForm]="parentForm"></yes-no-true-false>
+            </div>
+            <!--Questions with Comments/Essay-->
+            <!-- TODO -->
+
+            <!--Questions with Multiple Choice-->
+            <div id="questionMultipleChoice{{sectionIndex}}_{{sectionItemIndex}}" class="row" *ngIf="sectionItem?.FormItemType === formsName['Multiple Choice']">
+                <multiple-choice [sectionItem]="sectionItem" [editItem]="editItem" [sectionIndex]="sectionIndex" [sectionItemIndex]="sectionItemIndex"
+                                 [inputIsDisabled]="inputIsDisabled" [parentForm]="parentForm"></multiple-choice>
+            </div>
+
+            <!--Questions with Signature Box-->
+            <!-- TODO -->
+            <!--Questions with Date of Completion-->
+            <div id="questionDateStamp{{sectionItemIndex}}_{{sectionItemIndex}}" class="row"
+                showFocus="{{sectionItem.FormItemType === formsName['Date of Completion']}}"
+                *ngIf="sectionItem.FormItemType === formsName['Date of Completion']">
+                <date-stamp></date-stamp>
+            </div>
+            <!--Questions with Emergency Stamp-->
+            <!-- TODO -->
+            <!--Question with Demographic Question/Answer -->
+            <!-- TODO -->
+            <!--Questions with Adlib-->
+            <div id="questionAdlib{{sectionIndex}}_{{sectionItemIndex}}" class="row"  *ngIf="sectionItem?.FormItemType ===  formsName['Ad-Lib']">
+                <adlib [sectionItem]="sectionItem" [editItem]="editItem" [sectionIndex]="sectionIndex" [sectionItemIndex]="sectionItemIndex"
+                       [inputIsDisabled]="inputIsDisabled"  [parentForm]="parentForm"></adlib>
+            </div>
+
+            <!--Questions with Link Tooth-->
+            <div id="questionLinkTooth{{sectionIndex}}_{{sectionItemIndex}}" class="row"  *ngIf="sectionItem?.FormItemType === formsName['Link Tooth']">
+                <link-tooth [sectionItem]="sectionItem" [editItem]="editItem" [sectionIndex]="sectionIndex" [sectionItemIndex]="sectionItemIndex"
+                            [inputIsDisabled]="inputIsDisabled" [parentForm]="parentForm"></link-tooth>
+            </div>
+
+            <!--Questions with Text Field-->
+            <div id="questionTextField{{sectionItemIndex}}_{{sectionItemIndex}}" class="row"
+                 showFocus="{{sectionItem.FormItemType === formsName['Note Text']}}"
+                 *ngIf="sectionItem.FormItemType === formsName['Note Text']">
+                <custom-text-field [sectionItem]="sectionItem" [editItem]="editItem" [sectionIndex]="sectionIndex" [sectionItemIndex]="sectionItemIndex"
+                    [inputIsDisabled]="inputIsDisabled" [parentForm]="parentForm"></custom-text-field>
+            </div>
+        </div>
+    </div>
+</div>

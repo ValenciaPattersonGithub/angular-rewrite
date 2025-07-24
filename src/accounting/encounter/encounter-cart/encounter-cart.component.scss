@@ -1,0 +1,146 @@
+@import 'variables';
+// NOTE, most of this should be moved to an appwide file after styleguide in place.
+// stuff like borders and font size aren't usually needed at a module level
+// some of this is patterned after payment types
+.encounter-cart {
+    margin: 15px;
+    font-family: $global-font-family;
+    font-size: 12px;
+
+    .col-sm-4,
+    .col-sm-6,
+    .col-sm-8,
+    .col-sm-12 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .panel {
+        padding: 15px;
+        border-radius: 5px;
+        background-color: $polar-white;
+        background-size: cover;
+        box-shadow: $global-drop-shadow;
+    }
+
+    .page_sub_title {
+        height: 20px;
+        font-family: $font-family;
+        font-size: 16px;
+        color: $page-content-header;
+        text-decoration: none solid rgb(51, 51, 51);
+        line-height: 16px;
+        font-weight: bold;
+
+        .service_title {
+            display: inline;
+        }
+    }
+
+
+
+    .title-bar {
+        border-bottom: 1px solid $border-grey;
+        margin-bottom: 15px;
+        height: 35px;
+    }
+
+    .footer-bar {
+        border-top: 1px solid $border-grey;
+        margin-top: 20px;
+        padding-top: 15px;
+    }
+
+    .form-row {
+        margin-bottom: 5px;
+    }
+
+    .row {
+        border-bottom: 1px solid $border-grey;
+        margin-top: 15px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .row:first-child {
+        margin-top: 0px;
+    }
+
+    .row:last-child {
+        border-bottom: 0px;
+        margin-bottom: -20px;
+    }
+
+    .date {
+        min-width: 175px;
+        padding-left: 0px;
+        padding-right: 10px;
+        padding-bottom: 20px;
+    }
+
+    .provider-on-claims-update {
+        min-width: 215px;
+        padding-bottom: 15px;
+        padding-right: 10px;
+        padding-left: 0px;
+    }
+
+    .command-button {
+        margin-left: 10px;
+    }
+
+    button.default_button:disabled,
+    .default_button[disabled] {
+        cursor: not-allowed;
+        border: 1px solid $disabled-grey;
+        color: $disabled-grey;
+        text-decoration: none solid rgb(204, 204, 204);
+    }
+
+    button.default_button:hover,
+    button.default_button:active,
+    button.default_button:focus {
+        border-color: $light-action-blue;
+    }
+
+    ::ng-deep .k-datepicker {
+        width: 100%;
+        height: 25px;
+
+        > .k-picker-wrap {
+            font-family: $global-font-family;
+            font-size: 12px;
+            border-radius: 5px;
+            padding: 0px 8px;
+            border: 1px solid $border-grey;
+            height: 23px;
+        }
+
+        input {
+            height: 23px;
+            padding: 0px;
+        }
+    }
+
+    ::ng-deep .k-dropdown {
+        width: 100%;
+
+        > .k-dropdown-wrap {
+            width: inherit;
+            height: 25px;
+            font-family: $global-font-family;
+            font-size: 12px;
+            border-radius: 5px;
+            border-color: $border-grey;
+
+            > .k-input {
+                line-height: 24px;
+                padding: 0px 8px;
+            }
+        }
+    }
+}
+
+
+
+

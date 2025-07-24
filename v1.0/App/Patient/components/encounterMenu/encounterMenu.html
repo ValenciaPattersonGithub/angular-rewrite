@@ -1,0 +1,99 @@
+﻿<div class="encounterMenu">
+    <div ng-if="isPendingEncounterGrid">
+        <button id="btnCheckout{{encounterIndex}}" class="btn btn-primary" ng-disabled="disableCheckoutAllButton" ng-click="checkoutActionFunction()" ng-if="!hideCheckoutAllButton">{{ 'Check out All Encounters' | i18n }}</button>
+    </div>
+    <div id="btnGroup{{encounterIndex}}" class="btn-group" ng-if="!isPendingEncounterGrid">
+        <button id="btnActionMenu{{encounterIndex}}" data-toggle="{{ !encounter.showDetail ? 'dropdown' : ''}}" class="btn btn-link dropdown-toggle" 
+                ng-click="toggleMenu()">
+            <i ng-if="!encounter.showDetail" class="fa fa-ellipsis-v"></i>
+            <span ng-if="encounter.showDetail">{{'Hide details' | i18n}}</span>
+        </button>
+        <ul class="pull-right dropdown-menu dropdown-menu-accounttab col-md-12" ng-if="!encounter.showDetail">
+            <li>
+                <div class="row" ng-if="showViewDetailButton">
+                    <a id="lnkEncounterMenuViewDetails" class="margin-left-5 col-md-12" ng-click="expandEncounter()">{{ 'View details' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="(encounter.TransactionTypeId == 2 || encounter.TransactionTypeId == 3) && encounter.IsDeposited">
+                    <a id="lnkEncounterMenuViewInvoice"
+                       class="margin-left-5 col-md-12"
+                       check-auth-z="soar-biz-dep-view"
+                       ng-class="{'disableAnchor': !encounter.IsDeposited}"
+                       ng-click="!encounter.IsDeposited ? $event.stopPropagation() : viewDeposit(encounter)">
+                        {{ 'View deposit' | i18n }}
+                    </a>
+                </div>
+                <!--view and print patient invoice-->
+                <div class="row" ng-if="encounter.EncounterId || encounter.ObjectType === 'EncounterBo' || encounter.TransactionTypeId === 1">
+                    <a id="lnkEncounterMenuViewInvoice"
+                       class="margin-left-5 col-md-12"
+                       check-auth-z="soar-acct-inv-print"
+                       ng-click="viewInvoice()">
+                        {{ 'View Original Invoice' | i18n }}
+                    </a>
+                </div>
+                <div class="row" ng-if="encounter.IsAccountStatementNote || encounter.ObjectType === 'AccountStatement'">
+                    <a id="lnkEncounterMenuViewStatement" class="margin-left-5 col-md-12" ng-click="viewStatement()">{{ 'View statement' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showDeleteButton" title="{{ !encounter.IsServiceLocationMatch ? 'Your current location does not match this service transaction\'s location.' : '' }}">
+                    <a id="lnkEncounterMenuDelete" class="margin-left-5 col-md-12" ng-class="{'disableAnchor': disableDeleteButton}" ng-click="disableDeleteButton ? $event.stopPropagation() : deleteEncounter()" check-auth-z="{{getDeleteButtonAmfa()}}"
+                       uib-tooltip="{{disableTransactionMessage | i18n}}"
+                       tooltip-placement="right auto"
+                       tooltip-enable="disableDeleteButton"
+                       tooltip-append-to-body="true">{{ 'Delete' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showViewClaimButton">
+                    <encounter-claims id="encounterClaimsMenu{{encounterIndex}}"
+                                      encounter-claims-list="encounterClaimsObj"></encounter-claims>
+                </div>
+                <div class="row" ng-if="showViewEditClaimNoteButton">
+                    <a id="lnkEncounterMenuEditClaimNote" class="margin-left-5 col-md-12" ng-click="openClaimNotes()" check-auth-z="soar-ins-iclaim-view">{{ 'View/Edit Note' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showEditButton">
+                    <a id="lnkTransactionsMenuEdit" class="margin-left-5 col-md-12" ng-class="{'disableAnchor': disableEditButton}" ng-click="disableEditButton ? $event.stopPropagation() : editTransaction()" check-auth-z="{{getEditButtonAmfa()}}"
+                       uib-tooltip="{{ disableTransactionMessage | i18n}}"
+                       tooltip-placement="right auto"
+                       tooltip-enable="disableEditButton"
+                       tooltip-append-to-body="true">
+                        <span>{{ (encounter.ObjectType === 'Document' || encounter.$$document ? 'Edit Document' : 'Edit transaction') | i18n }}</span>
+                    </a>
+                </div>
+                <div class="row" ng-if="showEditEncounterButton">
+                    <a id="lnkEncounterMenuEdit" class="margin-left-5 col-md-12" ng-class="{'disableAnchor': disableEditEncounterButton}" ng-click="disableEditEncounterButton ? $event.stopPropagation() : editTransaction()" check-auth-z="soar-acct-enctr-edit"
+                       uib-tooltip="{{'All services for this encounter are attached to a claim that is InProcess and it cannot be edited' | i18n}}"
+                       tooltip-placement="right auto"
+                       tooltip-enable="disableEditEncounterButton"
+                       tooltip-append-to-body="true">{{ 'Edit encounter' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showApplyPaymentButton">
+                    <a id="lnkEncounterMenuPayment" class="margin-left-5 col-md-12" ng-click="applyPayment()" check-auth-z="soar-acct-aapmt-add">{{ 'Apply a payment' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showApplyAdjustmentButton">
+                    <a id="lnkEncounterMenuAdjustment" class="margin-left-5 col-md-12" ng-click="applyAdjustment()" check-auth-z="soar-acct-cdtadj-add">{{ 'Apply adjustment' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showChangePaymentOrAdjustmentOption && (encounter.TransactionTypeId == 2 || encounter.TransactionTypeId ==4)">
+					<a id="lnkChangeHowPaymentIsApplied" class="margin-left-5 col-md-12" ng-click="changePaymentOrAdjustment()" check-auth-z="soar-acct-cdtadj-edit">{{'Change Distribution' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showViewCompleteEncounterButton">
+                    <a id="lnkEncounterMenuViewCompleteEncounter" class="margin-left-5 col-md-12" ng-click="viewEncounter()">{{ 'View Complete Encounter' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="encounter.TransactionTypeId == 2">
+                    <a id="lnkPrintReceipt" class="margin-left-5 col-md-12" ng-click="printReceipt()">{{ 'Print Receipt' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showCreateClaimButton">
+                    <a id="lnkEncounterMenuCreateClaim" class="margin-left-5 col-md-12" ng-class="{'disableAnchor': disableCreateClaimButton}" ng-click="disableCreateClaimButton ? $event.stopPropogation() : createClaimAction()" check-auth-z="soar-ins-iclaim-edit"
+                       uib-tooltip="{{disableMessage | i18n}}"
+                       tooltip-placement="left"
+                       tooltip-enable="disableCreateClaimButton"
+                       tooltip-append-to-body="true">{{ 'Create Claim' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="encounter.IsPredeterminationResponseNote">
+                    <a id="lnkViewCarrierResponse" class="margin-left-5 col-md-12" ng-click="viewCarrierResponse()" check-auth-z="soar-ins-iclaim-view">{{ 'View Carrier Response' | i18n }}</a>
+                </div>
+                <div class="row" ng-if="showViewEobButton">
+                    <a id="lnkViewEob" class="margin-left-5 col-md-12" ng-click="viewEob()">{{ 'View EOB' | i18n }}</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+

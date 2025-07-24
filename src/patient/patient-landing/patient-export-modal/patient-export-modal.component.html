@@ -1,0 +1,47 @@
+<div class="exportContainer">
+    <h2>{{'Include Contact Details?' | translate}}</h2>
+    <hr class="patientExportHr">
+    <div class="mainArea">
+        <label class="patientExportLabel">{{'Include:' | translate}}</label>
+        <div>
+            <select id="exportSelectionList" class="patientExportSelect" [(ngModel)]="selectedItems.value" (change)="setCategory($event)">
+                    <option *ngFor="let item of items" [value]="item?.value">{{item?.text}}</option>
+            </select>
+        </div>
+        <div class="checkboxAreaContainer">
+            <div [formGroup]="exportForm" class="checkboxArea" [ngClass]="{'hideCheckBox': !checkBoxSection}">
+                <div class="checkboxSection">
+                    <label class="checkBoxAreaHeader">{{'Patient' | translate}}</label>
+                    <div><input type="checkbox" id="patientCheckBox" (click)="toggleCheckBoxes(textFilterType?.Patient)" [checked]="patientCheckBox">{{'Select/Deselect All' | translate}}</div>
+                    <hr class="patientExportHr">
+                    <div>
+                        <div><input type="checkbox" id="mailingAddress" formControlName="PatientMailing" (change)="patientCheckBoxes()">{{'Mailing Address' | translate}}</div>
+                        <div><input type="checkbox" id="emailAddress" formControlName="PatientEmail" (change)="patientCheckBoxes()">{{'Email Address' | translate}}</div>
+                        <div><input type="checkbox" id="primaryPhone" formControlName="PatientPrimaryPhone" (change)="patientCheckBoxes()">{{'Primary Phone Number' | translate}}</div>
+                        <div><input type="checkbox" id="homePhone" formControlName="PatientHomePhone" (change)="patientCheckBoxes()">{{'Home Phone Number' | translate}}</div>
+                        <div><input type="checkbox" id="mobilePhone" formControlName="PatientMobilePhone" (change)="patientCheckBoxes()">{{'Mobile Phone Number' | translate}}</div>
+                        <div><input type="checkbox" id="workPhone" formControlName="PatientWorkPhone" (change)="patientCheckBoxes()">{{'Work Phone Number' | translate}}</div>
+                    </div>
+                </div>
+                <div class="checkboxSection">
+                    <label class="checkBoxAreaHeader">{{'Responsible Party' | translate}}</label>
+                    <div><input type="checkbox" id="responsiblePartyCheckBox" (click)="toggleCheckBoxes(textFilterType?.ResponsibleParty)" [checked]="responsiblePartyCheckBox">{{'Select/Deselect All' | translate}}</div>
+                    <hr class="patientExportHr">
+                    <div>
+                        <div><input type="checkbox" id="responsibleMailing" formControlName="ResponsibleMailing" (change)="responsibleCheckBoxes()">{{'Mailing Address' | translate}}</div>
+                        <div><input type="checkbox" id="responsibleEmail" formControlName="ResponsibleEmail" (change)="responsibleCheckBoxes()">{{'Email Address' | translate}}</div>
+                        <div><input type="checkbox" id="responsiblePrimaryPhone" formControlName="ResponsiblePrimaryPhone" (change)="responsibleCheckBoxes()">{{'Primary Phone Number' | translate}}</div>
+                        <div><input type="checkbox" id="responsibleHomePhone" formControlName="ResponsibleHomePhone" (change)="responsibleCheckBoxes()">{{'Home Phone Number' | translate}}</div>
+                        <div><input type="checkbox" id="responsibleMobilePhone" formControlName="ResponsibleMobilePhone" (change)="responsibleCheckBoxes()">{{'Mobile Phone Number' | translate}}</div>
+                        <div><input type="checkbox" id="responsibleWorkPhone" formControlName="ResponsibleWorkPhone" (change)="responsibleCheckBoxes()">{{'Work Phone Number' | translate}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="patientExportHr">
+    <div class="clearfixButtonArea">
+        <button id="patientExportCencel" class="patientExportCencelButton" type="button" (click)="cancel()">{{'Cancel' | translate}}</button>
+        <button id="patientExportSave" class="patientExportSaveButton" type="button" (click)="export()">{{'Export' | translate}}</button>
+    </div>
+</div>

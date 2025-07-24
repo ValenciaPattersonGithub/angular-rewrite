@@ -1,0 +1,7 @@
+﻿<div class="reportGrid">    
+    <div ng-if="showFilterMessage">{{setFiltersMessage}}</div>
+    <div ng-if="data.patientGroups.length === 0 && !showFilterMessage">{{noResultsMessage}}</div>
+    <div class="fusePrintGrid avoidPageBreak" ng-if="data.patientGroups.length > 0 && !showFilterMessage">
+        <patients-by-patient-groups-report [data]="data"></patients-by-patient-groups-report>
+    </div>
+</div>

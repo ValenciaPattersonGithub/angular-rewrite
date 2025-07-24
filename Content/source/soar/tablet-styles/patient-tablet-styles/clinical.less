@@ -1,0 +1,71 @@
+﻿@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    body {
+        //View
+        .view-container {
+            margin-top: 0px;
+        }
+
+        // Charting Favorites
+        .chartingControls {
+            &__btn {
+                width: 44px;
+                height: 44px;
+            }
+
+            &__btnIcon {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        .chartingControls {
+            &__btnText {
+                font-size: 9px;
+            }
+        }
+
+        .chartBtnLayoutCrud {
+            &__tabsContent {
+                .chartingControls__btn {
+                    img {
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+
+                .chartBtnLayoutServices {
+                    &__tabFilters {
+                        #srvcTypeDropdown {
+                            width: 30%;
+                        }
+
+                        .drag-label {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Navigation
+        .patChart__navSecondary {
+            margin-top: 10px;
+        }
+
+        // Timeline
+        .patChart__secTabs {
+            ul {
+                font-size: @brand-font-tablet_xs;
+                display: inline-flex;
+            }
+        }
+
+        // Tooth Chart
+        .odontogram {
+            min-width: 600px;
+        }
+    }
+}

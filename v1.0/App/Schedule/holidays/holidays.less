@@ -1,0 +1,48 @@
+﻿.holidays {
+    &__header {
+        .containerStandard;
+        .clearfix;
+        padding: 20px 0;
+    }
+
+    &__title {
+        display: inline-block;
+        width: 50%;
+        float: left;
+
+        h1 {
+            margin: 0;
+        }
+    }
+
+    &__add {
+        display: inline-block;
+        width: 50%;
+        float: left;
+        text-align: right;
+    }
+
+    &__content {
+        .containerStandard;
+
+        .utilCheckbox__ctrl[disabled] {
+            cursor: not-allowed;
+        }
+    }
+
+    &__buttons {
+        margin-top: -9px;
+    }
+
+    &__nameColumn {
+        width: 60%;
+    }
+
+    &__dateColumn {
+        width: 20%;
+    }
+
+    &__controlsColumn {
+        width: 20%;
+    }
+}

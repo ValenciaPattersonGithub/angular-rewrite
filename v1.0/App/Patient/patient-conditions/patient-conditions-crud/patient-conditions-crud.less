@@ -1,0 +1,74 @@
+﻿// Add Conditions Architecture
+.addCond {
+
+    .modal-dialog {
+        width: 90%;
+        max-width: 1250px;
+    }
+
+    &__body {
+        .clearfix;
+    }
+
+    &__conditions {
+        .make-xs-column(4);
+    }
+    &__formItem {
+        .clearfix;
+        display: block;
+        margin-bottom: 20px;
+    }
+    &__formLbl {
+        width: 25%;
+        float: left;
+        padding-top: 10px;
+        padding-right: 10px;
+        text-align: right;
+        font-weight: bold;
+    }
+    &__formCtrl {
+        width: 75%;
+        float: right;
+        
+        .date-selector-input {
+            padding: 8px 6px;
+        }
+        .date-selector-input,
+        .date-selector-input-group {
+            width: auto;
+        }
+    }
+    &__chart {
+        .make-xs-column(8);
+    }
+    &__teeth {
+        .make-xs-column(12);
+    }
+    &__surfaces {
+        .make-xs-column(12);
+        border-top: @brand-line_break
+    }
+    &__surfHeader {
+        text-align: center;
+    }
+    &__roots {
+        .make-xs-column(12);
+        border-top: @brand-line_break
+    }
+    &__rootHeader {
+        text-align: center;
+    }
+    &__toothTitle {
+        display: inline-block;
+        font-size: 2em;
+        transform: translateY(4px);
+    }
+}
+
+// Surface Chart
+.surfChart {
+  margin: 20px auto;
+  .btn {
+    width: 140px !important;
+  }
+}

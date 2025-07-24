@@ -1,0 +1,47 @@
+﻿<form name="frmHolidaySave" role="form" novalidate>
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-xs-12 ">
+                <div id="lblHolidayHeader" class="modal-title-responsive">
+                    {{ editMode ? 'Edit {0}' : 'Add {0}' | i18n:['Holiday'] }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12 col-sm-2">
+                <label class="form-label-newer">
+                    {{ ::('Name' | i18n) }} *
+                </label>
+            </div>
+            <div class="col-xs-12 col-sm-6" ng-class="{'error': hasErrors && (!frmHolidaySave.inpDescription.$valid)}">
+                <input id="inpDescription" name="inpDescription" required set-focus placeholder="{{ ::('Name' | i18n)}}" ng-model="holiday.Description" class="form-input" maxlength="50" />
+                <label id="errDescriptionRequired" class="help-text" ng-show="hasErrors && (!frmHolidaySave.inpDescription.$valid)">{{ ::('This field is required.' | i18n) }}</label>
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-2">
+                <label class="form-label-newer">
+                    {{ ::('Date' | i18n) }} *
+                </label>
+            </div>
+            <div class="col-xs-12 col-sm-6" ng-class="{'error': hasErrors && ((!validDate) || holiday.Date == null)}">
+                <date-selector id="inpDate" name="inpDate" input-id="inpDate" aria-required placeholder="MM/DD/YYYY" max-date="maxDate" date-var="holiday.Date" valid="validDate" format="MM/dd/yyyy"></date-selector>
+                <label id="errHolidayDateRequired" class="help-text" ng-show="holiday.Date == null">{{ ::('This field is required.' | i18n) }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pull-right">
+                    <button id="btnCancel" ng-click="cancelChanges();" ng-disabled="saving" class="btn btn-default">{{ ::('Cancel' | i18n) }}</button>
+                    <button id="btnSave" ng-click="saveHoliday();" ng-disabled="saving" class="btn btn-primary">{{ ::('Save' | i18n) }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

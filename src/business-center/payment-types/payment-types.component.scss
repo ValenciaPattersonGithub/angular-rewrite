@@ -1,0 +1,141 @@
+@import 'variables';
+@import 'toolTip.scss';
+
+::ng-deep body {
+  font-family: $font-family !important;
+  background-color: $page-content-background;
+  height: 100vh;
+}
+
+
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.col-sm-6,
+.col-sm-12 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 0;
+  border-top: 1px solid $page-content-divider-color;
+}
+.page_sub_title{
+  font-size: 18px;
+  font-weight: 600;
+  font-style: normal;
+  font-family: $font-family !important;
+  color: $page-content-header;
+  line-height: 18px;
+}
+.page_box {
+  background-position: center center;
+  background-repeat: repeat;
+  background-size: cover;
+  background-color: $page-content-background;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 15px;
+  height: 640px;
+  border-color: $page-content-border;
+  box-shadow: $page-content-border 0px 0px 2px 0px;
+  margin-top: 10px;
+}
+.serach_button .form-group {
+  margin-bottom: 0px;
+}
+.search_icon {
+  margin-right: 5px;
+  padding-right: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-left: 0px;
+  color: $placeholder-grey;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.search_icon i {
+  font-size: 12px;
+}
+
+.input-group {
+  display: inline-flex;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 100%;
+  }
+  body {
+    height: 100vh;
+  }
+}
+#search-input {
+  border-right: 0px !important;
+  height: 25px;
+  padding: 0px 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $page-search-input-border-color;
+  width: 200px;
+  color: $text-black;
+  background: $page-search-input-background;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  box-shadow: none;
+  &::placeholder,
+  &::-ms-input-placeholder {
+    color: $placeholder-grey;
+  }
+}
+
+#search-input:focus {
+  box-shadow: none;
+}
+
+.search_icon {
+  margin-right: 5px;
+  padding-right: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-left: 0px;
+  color: $page-search-input-color;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.search_icon i {
+  font-size: 12px;
+}
+.search_button {
+  background-color: $page-primary-button-background;
+  background-image: none;
+  background-position: center center;
+  background-repeat: repeat;
+  background-size: cover;
+  border-radius: 5px;
+  border-width: 0px;
+  border-color: $disabledLink;
+  border-style: solid;
+  padding: 0px;
+  width: 125px;
+  height: 25px;
+  color: $Tooltip-text-color;
+  font-size: 12px;
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-family: $font-family !important;
+  margin-top: -4px;
+}
+button.search_button.disabled {
+  cursor: not-allowed;
+}

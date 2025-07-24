@@ -1,0 +1,31 @@
+﻿<!-- Patient Discounts -->
+<div>
+    <div class="form-body-old" ng-form="frmPatientDiscount">
+        
+        <div class="col-xs-12">
+            <div class="row" ng-show="editing == false">
+                <!-- Patient Discount Name-->
+                <label id="lblPatientDiscount">{{currentDiscountName}}</label>
+            </div>
+
+            <div class="row" ng-show="editing == true">
+                <soar-select-list id="inpDiscount"
+                                  name="inpDiscount"
+                                  placeholder="{{'No {0}' | i18n:['Discount Selected'] }}"
+                                  text-field="DiscountName"
+                                  value-field="MasterDiscountTypeId"
+                                  option-list="discountTypes"
+                                  ng-model="patientDiscount.MasterDiscountTypeId"
+                                  sb-set-focus-if="{{editing}}">
+                </soar-select-list>
+
+                <br />
+                <div class="clearfix">&nbsp;</div>
+                <a id="btnEditDiscountTypes" check-auth-z="soar-biz-bizdsc-edit" ng-click="openMasterDiscountModal()" class="btn btn-default" >
+                    <span class="fa fa-cog"></span>
+                    {{ 'Edit Master: Patient Discounts' | i18n }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

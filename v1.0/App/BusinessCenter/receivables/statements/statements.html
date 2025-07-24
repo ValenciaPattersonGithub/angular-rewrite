@@ -1,0 +1,727 @@
+﻿<div ng-class="'fade-in'"
+    ng-controller="StatementsController"
+    class="statements"
+    ng-init="initialize()">
+    <div class="statement-nav-container">
+        <div class="location-selector-container">
+            <amfa-based-location-selector ms-disabled="isSingleAccount"
+                id="ddLocation"
+                open="false"
+                list="locations.masterLocations"
+                selected-list="locations.selectedLocations"
+                auth-z="'soar-biz-bizrcv-view'"
+                on-blur-fn="updateContents()"
+                amfa="soar-acct-astmt-add"
+                class="locMenu"
+                on-load-complete-fn="selectorLoaded()">
+            </amfa-based-location-selector>
+        </div>
+        <div class="nse-nav-container" ng-if="showNewStatementsExperience">
+            <button class="btn btn-primary" ng-click="enableNewStatementsExperience()" data-qa="enable-new-statements-experience-button">Enable New Statements Experience</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <fieldset class="form-group"
+                ng-disabled="showSavedBatchesGrid && savedBatchIsProcessed"
+                ng-form="filterCriteriaForm">
+                <fieldset class="row form-group"
+                    ng-disabled="isSingleAccount">
+                    <div class="col-xs-12 panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-xs-2 alignCenter">
+                                <label>Display Accounts</label>
+                            </div>
+                            <div class="col-xs-10">
+                                <div class="radio-inline col-sm-1 alignCenter">
+                                    <input type="radio"
+                                        name="displayAccountsRadios"
+                                        id="rdoDisplayAccountsAll"
+                                        ng-model="selectedMainFilterType"
+                                        value="ALL"><label for="rdoDisplayAccountsAll" class="radiolabel">All</label>
+                                </div>
+                                <div class="radio-inline col-sm-1 alignCenter">
+                                    <input type="radio"
+                                        name="displayAccountsRadios"
+                                        id="rdoDisplayAccountsAL"
+                                        ng-model="selectedMainFilterType"
+                                        value="AL"><label for="rdoDisplayAccountsAL" class="radiolabel">A-L</label>
+                                </div>
+                                <div class="radio-inline col-sm-1 alignCenter">
+                                    <input type="radio"
+                                        name="displayAccountsRadios"
+                                        id="rdoDisplayAccountsMZ"
+                                        ng-model="selectedMainFilterType"
+                                        value="MZ"><label for="rdoDisplayAccountsMZ" class="radiolabel">M-Z</label>
+                                </div>
+                                <div class="radio-inline col-sm-1 alignCenter">
+                                    <input type="radio"
+                                        name="displayAccountsRadios"
+                                        id="rdoDisplayAccountsCustom"
+                                        ng-model="selectedMainFilterType"
+                                        value="CUSTOM"><label for="rdoDisplayAccountsCustom" class="radiolabel">Custom</label>
+                                </div>
+                                <div class="col-lg-2 col-sm-3">
+                                    <select class="form-control displayAccountsSelects "
+                                        name="customDisplayAccountsFrom"
+                                        id="customDisplayAccountsFrom"
+                                        ng-disabled="!customLetterRangeEnabled"
+                                        ng-options="x.Value as x.Letter for x in alphaSelectionOptions"
+                                        ng-model="selectedDisplayAccountsFromLetter"
+                                        ng-change="filterCriteriaForm.$dirty = true"
+                                        ng-selected="selectedDisplayAccountsFromLetter"></select> to
+                                    <select class="form-control displayAccountsSelects"
+                                        name="customDisplayAccountsTo"
+                                        id="customDisplayAccountsTo"
+                                        ng-disabled="!customLetterRangeEnabled"
+                                        ng-options="x.Value as x.Letter for x in alphaSelectionOptions"
+                                        ng-model="selectedDisplayAccountsToLetter "
+                                        ng-change="filterCriteriaForm.$dirty = true"
+                                        ng-selected="selectedDisplayAccountsToLetter"></select>
+                                </div>
+                                <div class="radio-inline col-lg-3 col-md-4 col-sm-2 no-padding-right alignCenter">
+                                    <input type="radio"
+                                        name="displayAccountsRadios"
+                                        id="rdoDisplayAccountsNoStatementsIn"
+                                        ng-model="selectedMainFilterType"
+                                        value="NOSTATEMENTSIN"><label for="rdoDisplayAccountsNoStatementsIn" class="radiolabel text-nowrap">Accounts that have not received a statement in the  past</label>
+                                    <!-- <span class="text-nowrap">
+                                        past</span> -->
+                                </div>
+                                <div class="radio-inline col-sm-2 pull-right no-padding">
+                                    <select class="form-control displayAccountsSelects"
+                                        name="ddNumberOfDaysNoStatements"
+                                        id="ddNumberOfDaysNoStatements"
+                                        ng-model="numberOfDaysNoStatements"
+                                        ng-disabled="!numberOfDaysNoStatementsEnabled"
+                                        ng-options="n for n in numberRange(1, 365)"
+                                        ng-change="filterCriteriaForm.$dirty = true"></select>
+                                    <span> days.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="row form-group">
+                    <div class="col-xs-12">
+                        <fieldset class="col-xs-3 no-padding-left panel panel-default"
+                            ng-disabled="isSingleAccount">
+                            <div class="panel-body statementOptions">
+                                <label>Options</label>
+                                <br />
+                                Balance Greater than or Equal to
+                                <input class="form-control balanceGreaterThan"
+                                    model-format="currency"
+                                    name="inpBalanceGreaterThan"
+                                    id="inpBalanceGreaterThan"
+                                    ng-disabled="includeCreditBalance == true"
+                                    ng-model="balanceGreaterThan"
+                                    type="text" />
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="col-xs-4">
+                                            <checkbox checkbox-id="chkCreditBalance"
+                                                name="chkCreditBalance"
+                                                checkbox-value="includeCreditBalance"
+                                                checkbox-label="'Accounts with Credit Balance' | i18n" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>{{'Accounts With Insurance Claims' | i18n}} </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 ">
+                                        <div class="col-xs-12 claimRadioButton">
+                                            <input type="radio"
+                                                name="AccountsFilterTypeRadios"
+                                                id="rdoDoNotExclude"
+                                                ng-model="selectedAccountsFilterType"
+                                                ng-value="accountsFilterTypes[0].id"> <label for="rdoDoNotExclude" class="radiolabel ml15">{{accountsFilterTypes[0].labelText | i18n}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 ">
+                                        <div class="col-xs-12 claimRadioButton">
+                                            <input type="radio"
+                                                name="AccountsFilterTypeRadios"
+                                                id="rdoAnyInsuranceClaim"
+                                                ng-model="selectedAccountsFilterType"
+                                                ng-value="accountsFilterTypes[1].id"> <label for="rdoAnyInsuranceClaim" class="radiolabel ml15">{{accountsFilterTypes[1].labelText | i18n}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="col-xs-12 claimRadioButton">
+                                            <input type="radio"
+                                                name="AccountsFilterTypeRadios"
+                                                id="rdoEstimatedInsuranceClaim"
+                                                ng-model="selectedAccountsFilterType"
+                                                ng-value="accountsFilterTypes[2].id"><label for="rdoEstimatedInsuranceClaim" class="radiolabel ml15">{{accountsFilterTypes[2].labelText | i18n}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="col-xs-12 claimRadioButton">
+                                            <input type="radio"
+                                                name="AccountsFilterTypeRadios"
+                                                id="rdo100Percent"
+                                                ng-model="selectedAccountsFilterType"
+                                                ng-value="accountsFilterTypes[3].id"><label for="rdo100Percent" class="radiolabel ml15">{{accountsFilterTypes[3].labelText | i18n}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </fieldset>
+                        <div class="col-xs-5 no-padding-left panel panel-default">
+                            <div class="panel-body statementSettings">
+                                <label>Statement Settings</label>
+                                <br />
+                                Detail
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="col-md-5 col-xs-4">
+                                            <div class="radio-inline col-sm-12">
+                                                <input type="radio"
+                                                    name="detailDateRadios"
+                                                    id="rdoDetailSinceLastStatement"
+                                                    ng-model="detailDateType"
+                                                    value="SINCELASTSTATEMENT"><label for="rdoDetailSinceLastStatement" class="radiolabel" >Since Last Statement</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 col-xs-8"> 
+                                            <div class="radio-inline col-md-5 col-sm-4">
+                                                <input type="radio"
+                                                    name="detailDateRadios"
+                                                    id="rdoDetailCustomDate"
+                                                    ng-model="detailDateType"
+                                                    value="CUSTOM"><label for="rdoDetailCustomDate" class="radiolabel">Date</label>
+                                            </div>
+                                            <div class="col-md-7 col-xs-8">
+                                                <date-selector input-id="inpDetailCustomDate"
+                                                    ng-model="detailCustomDateValue"
+                                                    disable-date-input="detailDateType === 'CUSTOM'"
+                                                    placeholder="MM/DD/YYYY"
+                                                    max-date="maxDate"
+                                                    date-var="detailCustomDateValue"
+                                                    valid="validDetailCustomDate"
+                                                    format="MM/dd/yyyy"></date-selector>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                Due Date
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="col-md-5 col-xs-4">
+                                            <div class="radio-inline col-sm-12">
+                                                <input type="radio"
+                                                    name="dueDateRadios"
+                                                    id="rdoDueDateUponReceipt"
+                                                    ng-model="dueDateDateType"
+                                                    value="DUEUPONRECEIPT"> <label for="rdoDueDateUponReceipt" class="radiolabel">Due Upon Receipt</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 col-xs-8">
+                                            <div class="radio-inline col-md-5 col-sm-4">
+                                                <input type="radio"
+                                                    name="dueDateRadios"
+                                                    id="rdoDueCustomDate"
+                                                    ng-model="dueDateDateType"
+                                                    value="CUSTOM"><label for="rdoDueCustomDate" class="radiolabel">Date</label>
+                                            </div>
+                                            <div class="col-md-7 col-xs-8">
+                                                <date-selector input-id="inpDueDateCustomDate"
+                                                    ng-model="dueDateCustomDateValue"
+                                                    disable-date-input="dueDateDateType === 'CUSTOM'"
+                                                    placeholder="MM/DD/YYYY"
+                                                    min-date="dueDateMinDate"
+                                                    max-date="maxDate"
+                                                    date-var="dueDateCustomDateValue"
+                                                    valid="validDueDateCustomDate"
+                                                    format="MM/dd/yyyy"></date-selector>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                Finance Charge
+                                <div class="row financeCharge">
+                                    <div class="col-xs-12">
+                                        <div class="col-md-5 col-xs-4">
+                                            <div class="radio-inline col-sm-12">
+                                                <input type="radio"
+                                                    name="financeChargeRadios"
+                                                    id="rdoFinanceChargeNone"
+                                                    ng-model="isFinanceChargeOn"
+                                                    ng-change="filterCriteriaForm.$dirty = true"
+                                                    ng-value="false"><label for="rdoFinanceChargeNone" class="radiolabel">None</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 col-xs-8">
+                                            <div class="radio-inline">
+                                                <input type="radio"
+                                                    name="financeChargeRadios"
+                                                    id="rdoFinanceChargeDefault"
+                                                    ng-model="isFinanceChargeOn"
+                                                    ng-change="filterCriteriaForm.$dirty = true"
+                                                    ng-value="true"><label for="rdoFinanceChargeDefault" class="radiolabel">Location Default</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                Organize By
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="col-md-5 col-xs-4">
+                                            <div class="radio-inline col-sm-12">
+                                                <input type="radio"
+                                                    name="organizeByRadios"
+                                                    id="rdoOrganizeByPatient"
+                                                    ng-model="organizeByType"
+                                                    value="PATIENT"> <label for="rdoOrganizeByPatient" class="radiolabel">Patient</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 col-xs-8">
+                                            <div class="radio-inline col-sm-4">
+                                                <input type="radio"
+                                                    name="organizeByRadios"
+                                                    id="rdoOrganizeByDate"
+                                                    ng-model="organizeByType"
+                                                    value="DATE"> <label for="rdoOrganizeByDate" class="radiolabel">Date</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 panel panel-default">
+                            <div class="row panel-body statementMessage">
+                                <label>Message (one time message)</label>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <textarea class="form-control"
+                                            name="inpMessageText"
+                                            id="inpMessageText"
+                                            ng-model="messageTextValue"
+                                            ng-value="{{ messageTextValue | i18n }}"
+                                            ng-change="filterCriteriaForm.$dirty = true"
+                                            placeholder=""
+                                            maxlength="180"
+                                            rows="5"
+                                            type="text"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row labelsMargin">
+                                        <div class="col-sm-6">
+                                            <label class="text-nowrap">0-30 Day Accounts</label>
+                                            <select class="form-control"
+                                                name="statementMessage30"
+                                                id="statementMessage30"
+                                                ng-disabled="false"
+                                                ng-options="x.AccountStatementMessageId as x.Name for x in accountStatementMessages"
+                                                ng-model="selectedStatementMessageId30"></select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="text-nowrap">31-60 Day Accounts</label>
+                                            <select class="form-control"
+                                                name="statementMessage60"
+                                                id="statementMessage60"
+                                                ng-disabled="false"
+                                                ng-options="x.AccountStatementMessageId as x.Name for x in accountStatementMessages"
+                                                ng-model="selectedStatementMessageId60"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label class="text-nowrap">61-90 Day Accounts</label>
+                                            <select class="form-control"
+                                                name="statementMessage90"
+                                                id="statementMessage90"
+                                                ng-disabled="false"
+                                                ng-options="x.AccountStatementMessageId as x.Name for x in accountStatementMessages"
+                                                ng-model="selectedStatementMessageId90"></select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="text-nowrap">>90 Day Accounts</label>
+                                            <select class="form-control"
+                                                name="statementMessage90Plus"
+                                                id="statementMessage90Plus"
+                                                ng-disabled="false"
+                                                ng-options="x.AccountStatementMessageId as x.Name for x in accountStatementMessages"
+                                                ng-model="selectedStatementMessageId90Plus"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pull-right">
+                        <div class="pull-right">
+                            <button class="btn btn-default"
+                                ng-click="getSavedBatches($event, false)">Saved
+                                Batches</button>
+                            <button class="btn btn-primary"
+                                check-auth-z="soar-acct-astmt-add"
+                                ng-disabled="locations.selectedLocations.length === 0 || !filterCriteriaForm.$dirty"
+                                ng-click="createBatch()">Create Batch</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div>
+                <div class="panel panel-default"
+                    ng-show="showSavedBatchesGrid">
+                    <div class="panel-body">
+                        <div class="row">
+                            <h4 class="col-xs-1 text-nowrap">
+                                <span ng-show="loadingSavedBatch">
+                                    <span class="fa fa-spinner fa-spin"></span>
+                                </span>
+                                Saved Batches
+                            </h4>
+                            <div class="col-xs-10 statements__slider">
+                                <div ng-show="showNotProcessedSavedBatches === true">
+                                    <i title="Not Processed"
+                                        class="fa fa-2x fa-toggle-on active"
+                                        ng-click="getSavedBatches($event, true)"></i><label>Not Processed</label>
+                                </div>
+                                <div ng-show="showNotProcessedSavedBatches === false">
+                                    <i title="Processed"
+                                        class="fa fa-2x fa-toggle-on fa-rotate-180 inactive"
+                                        ng-click="getSavedBatches($event, false)"></i><label>Processed</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-1">
+                                <a ng-click="closeSavedBatchesGrid()"><i class="fa fa-times fa-1 pull-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="row processedDateRow"
+                            ng-show="!showNotProcessedSavedBatches">
+                            <div class="col-xs-1 processedDateColumn">
+                                <date-selector date-var="savedBatchesFromDate"
+                                    valid="savedBatchesFromDateValid"
+                                    max-date="savedBatchesToDate"
+                                    format="MM/dd/yyyy"></date-selector>
+                            </div>
+                            <div class="col-xs-1 processedDateTextColumn">
+                                {{'To' | i18n}}
+                            </div>
+                            <div class="col-xs-1 processedDateColumn">
+                                <date-selector date-var="savedBatchesToDate"
+                                    valid="savedBatchesToDateValid"
+                                    max-date="savedBatchesMaxToDate"
+                                    format="MM/dd/yyyy"></date-selector>
+                            </div>
+                            <div class="col-xs-1">
+                                <button class="btn btn-primary"
+                                    ng-click="getSavedBatches($event, true)">Search</button>
+                            </div>
+                            <div class="col-xs-8"></div>
+                        </div>
+                        <div class="fuseGrid container pull-left grid">
+                            <div class="row header"
+                                ng-show="showSavedBatchesGrid && savedBatches && savedBatches.Rows.length > 0">
+                                <table class="fuse_tableSavedBatches">
+                                    <colgroup>
+                                        <col class="w12">
+                                        <col class="w12">
+                                        <col class="w15">
+                                        <col class="w15">
+                                        <col class="w12">
+                                        <col class="w12">
+                                        <col class="w18">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Created By</th>
+                                            <th>Submission Method</th>
+                                            <th class="rightAlign">Number of Statements</th>
+                                            <th class="rightAlign">Total Due</th>
+                                            <th>Progress</th>
+                                            <th ng-if="showReportHeader"></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="row body">
+                                <table class="fuse_tableSavedBatches">
+                                    <colgroup>
+                                        <col class="w12">
+                                        <col class="w12">
+                                        <col class="w15">
+                                        <col class="w15">
+                                        <col class="w12">
+                                        <col class="w12">
+                                        <col class="w18">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr ng-repeat="row in savedBatches.Rows">
+                                            <td tooltip-enable="!row.UserHasAccess"
+                                                uib-tooltip="You do not have access to all locations within the batch">
+                                                <a ng-class="{'disabled': (!row.UserHasAccess || row.Status === 2 || row.Status === 4 || row.Status === 5)}"
+                                                    ng-click="getSingleSavedBatch(row.BatchStatementId, row.UserHasAccess, row.Status)">{{row.DateCreated}}</a>
+                                            </td>
+                                            <td>{{row.CreatedBy}}</td>
+                                            <td>{{row.SubmissionMethod}}</td>
+                                            <td class="rightAlign">{{row.NumberOfStatements}}</td>
+                                            <td class="rightAlign">{{row.TotalDue | formatCurrencyWithParensIfNeg }}
+                                            </td>
+                                            <td
+                                                ng-if="row.Status === 1 || row.Status === 2 || (row.Status === 3 && row.SubmissionMethod !== 'Print')">
+                                                {{row.Status | statementProgressStatus}}</td>
+                                            <td ng-if="row.Status === 3 && row.SubmissionMethod == 'Print'"><button
+                                                    class="btn btn-link btnProgress"
+                                                    ng-click="getBatchPdf(row.BatchStatementId)">{{row.Status |
+                                                    statementProgressStatus}}</button>
+                                            </td>
+                                            <td ng-if="row.Status === 4 || row.Status === 5 "><button
+                                                    class="btn btn-link btnProgress"
+                                                    ng-click="retryBatchModal(row)">{{row.Status |
+                                                    statementProgressStatus}}</button>
+                                            </td>
+                                            <td ng-if="showReportHeader"
+                                                tooltip-enable="!row.UserHasAccess"
+                                                uib-tooltip="You do not have access to all locations within the batch">
+                                                <button ng-if="row.HasReport"
+                                                    class="btn btn-link btnProgress"
+                                                    ng-class="{ 'disabled': !row.UserHasAccess }"
+                                                    ng-click="viewReport(row)">
+                                                    {{ 'View eStatement Report' | i18n}}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="showSavedBatchesGrid && savedBatches && savedBatches.Rows.length === 0">
+                {{ !showNotProcessedSavedBatches ? 'No statements found. Enter a new date range and try again.' : 'No
+                batches found' | i18n }}
+            </div>
+            <br />
+            <div class="form-group"
+                ng-show="batchData && batchData.Rows.length > 0 || showOnlyFaultedAccount">
+                <div class="row">
+                    <div class="col-xs-12">
+                        {{batchData.TotalCount}} Accounts with a Total Balance Due of
+                        {{batchData.TotalBalance | formatCurrencyWithParensIfNeg}}
+                    </div>
+                </div>
+                <div class="row"
+                    ng-show="!savedBatchIsProcessed">
+                    <div class="col-xs-12">
+                        <div class="col-xs-4">
+                            <checkbox checkbox-id="chkFaultedAccount"
+                                name="chkFaultedAccount"
+                                checkbox-value="showOnlyFaultedAccount"
+                                change-function="getFaultedAccounts()"
+                                checkbox-label="faultedAccountMessage"
+                                checkbox-disabled="(!showOnlyFaultedAccount && missingAddressAccountsCount===0)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 pull-left">
+                        <div class="col-xs-6 statementButton">
+                            <button class="btn btn-default"
+                                check-auth-z="soar-acct-astmt-edit"
+                                ng-click="create(false)"
+                                ng-disabled="savedBatchIsProcessed">Send Later</button>
+                        </div>
+                        <div class="col-xs-6 statementButton"
+                            uib-tooltip="{{(batchData | hasNoSelectedStatements) ? 'Select at least one statement' :
+                                          batchData.TotalCount > limitofCHCBatch ? 'The size of the statement batch exceeds the limit of 2500.' : '' | i18n}}">
+                            <button class="btn btn-primary"
+                                check-auth-z="soar-acct-astmt-edit"
+                                ng-click="confirmSubmissionMethod()"
+                                ng-disabled="(savedBatchIsProcessed) || (batchData.TotalCount > limitofCHCBatch) || (batchData | hasNoSelectedStatements)">Send
+                                Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fuseGrid container pull-left grid"
+                ng-form="batchDataGrid"
+                infinite-scroll="loadBatchData()"
+                infinite-scroll-disabled="isUpdating || allDataDisplayed">
+                <div id="statements-keep-top-div"
+                    class="row header"
+                    ng-show="batchData && batchData.Rows.length > 0"
+                    keep-top>
+                    <table class="fuse_table">
+                        <colgroup>
+                            <col class="w3">
+                            <col class="w3">
+                            <col class="w12">
+                            <col class="w12">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>
+                                    <input type="checkbox"
+                                        ng-model="batchData.SelectAll"
+                                        ng-change="toggleAll()"
+                                        ng-disabled="isSingleAccount || (isViewingASavedBatch && savedBatchIsProcessed) || updateInProgress" />
+                                </th>
+                                <th>Account</th>
+                                <th>Location</th>
+                                <th class="rightAlign">Balance</th>
+                                <th class="rightAlign">Est. Ins.</th>
+                                <th class="rightAlign">Due Now</th>
+                                <th>Due Date</th>
+                                <th>Due Upon Receipt</th>
+                                <th>Finance Charge</th>
+                                <th>Edit Message</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="row body">
+                    <table class="fuse_table">
+                        <colgroup>
+                            <col class="w3">
+                            <col class="w3">
+                            <col class="w12">
+                            <col class="w12">
+                        </colgroup>
+                        <tbody>
+
+                            <tr ng-repeat-start="row in batchData.Rows"
+                                ng-show="getRowVisibility(row)">
+                                <td>
+                                    <button class="btn btn-link"
+                                        ng-click="togglePdf(row)">
+                                        <i class="fa"
+                                            ng-class="{'fa-chevron-right': !row.showPdf, 'fa-chevron-down': row.showPdf}"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <input type="checkbox"
+                                        ng-model="row.IsSelectedOnBatch"
+                                        ng-change="toggleSelected(row, true)"
+                                        ng-disabled="isSingleAccount || (isViewingASavedBatch && savedBatchIsProcessed) || updateInProgress" />
+                                </td>
+                                <td id="idAccountName{{row.ResponsiblePersonId}}">
+                                    <a
+                                        ng-click="navigateToAccount(row.ResponsiblePersonId)">{{row.ResponsiblePartyName}}</a>
+                                    <div ng-if="row.StatementHistory === 1 || row.StatementHistory === 2"
+                                        uib-popover="{{row.accountInfoMessage}}"
+                                        popover-trigger="mouseenter"
+                                        popover-placement="auto bottom"
+                                        popover-append-to-body="true"
+                                        class="info-popover statements__faInfoCircle">
+                                        <span class="info fa fa-info-circle fa-1"></span>
+                                    </div>
+                                </td>
+                                <td id="idLocationName{{row.ResponsiblePersonId}}">{{row.Location.NameLine1}}</td>
+                                <td id="idBalance{{row.ResponsiblePersonId}}"
+                                    class="rightAlign">
+                                    {{row.Balance | formatCurrencyWithParensIfNeg}}</td>
+                                <td id="idTotalInsurance{{row.ResponsiblePersonId}}"
+                                    class="rightAlign">
+                                    {{row.TotalInsuranceEstimate | currency}}</td>
+                                <td id="idDueNow{{row.ResponsiblePersonId}}"
+                                    class="rightAlign">
+                                    {{row.DueNow | formatCurrencyWithParensIfNeg}}</td>
+                                <td>
+                                    <div class="datepicker">
+                                        <p class="input-group no-margin-bottom date-selector-input-group"
+                                            ng-form="dateForm">
+                                            <input type="text"
+                                                name="datePicker"
+                                                date-only
+                                                maxlength="10"
+                                                class="date-selector-input"
+                                                is-open="row.opened"
+                                                uib-datepicker-popup="{{ 'MM/dd/yyyy' }}"
+                                                show-button-bar="false"
+                                                ng-model="row.displayDueDate"
+                                                min-date="dueDateMinDate"
+                                                ng-change="updatePdf(row)"
+                                                datepicker-options="dateOptions"
+                                                datepicker-append-to-body="true"
+                                                ng-disabled="row.DueUponReceipt" />
+                                            <span class="input-group-btn">
+                                                <button type="button"
+                                                    class="date-selector-btn"
+                                                    ng-click="open($event, row)"
+                                                    tabindex="-1"
+                                                    ng-disabled="row.DueUponReceipt || (isViewingASavedBatch && savedBatchIsProcessed)">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                </button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="checkbox"
+                                        ng-model="row.DueUponReceipt"
+                                        ng-change="updatePdf(row)"
+                                        ng-disabled="isViewingASavedBatch && savedBatchIsProcessed" />
+                                </td>
+
+                                <td id="idFinanceCharge{{row.ResponsiblePersonId}}">
+                                    <input type="checkbox"
+                                        ng-model="row.ApplyFinanceCharge"
+                                        ng-change="updatePdf(row)"
+                                        ng-disabled="isViewingASavedBatch && savedBatchIsProcessed || row.FinanceChargeDisabled === true" />
+                                    &nbsp;{{isFinanceChargeOn ? row.FinanceChargeAmount : '0.00' | currency}}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span
+                                        ng-if="row.ValidationMessages.length && !batchData.BatchStatementFilters.IsProcessed"
+                                        class="error fa fa-exclamation-triangle"
+                                        uib-tooltip-html="getValidationsToolTip(row.ValidationMessages)"
+                                        tooltip-placement="top auto"
+                                        tooltip-append-to-body="true">
+                                    </span>
+                                </td>
+                                <td title="Statement Message">
+                                    <button class="btn btn-link"
+                                        ng-click="editMessage(row)">
+                                        <i class="far fa-edit fa-lg"></i>
+                                    </button>
+                                </td>
+
+                            </tr>
+                            <tr ng-repeat-end
+                                ng-if="row.showPdf">
+                                <td colspan="11">
+                                    <iframe ng-if="row && row.pdf"
+                                        src="{{row.pdf}}"
+                                        class="pdf-content"
+                                        frameborder="0"></iframe>
+                                    <span ng-if="!row.pdf">{{ !showPreviewError ? 'Loading...' : 'This statement no
+                                        longer exists due to a patient transfer.' | i18n }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div ng-show="batchData && batchData.Rows && batchData.Rows.length === 0">
+                {{'No Accounts for the specified query' | i18n}}
+            </div>
+            <a ng-show="hasScrolled"
+                id="statementBackToTop"
+                class="btn btn-primary"
+                ng-click="backToTop()"
+                icon="fa-arrow-circle-up">Top</a>
+        </div>
+    </div>
+</div>

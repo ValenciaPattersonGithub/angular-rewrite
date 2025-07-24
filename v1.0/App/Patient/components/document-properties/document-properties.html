@@ -1,0 +1,133 @@
+﻿<div class="docProps">
+    <div ng-if="isViewingInModal" class="doc-modal-header m-15" >{{'View Document Properties'}}</div>
+    <hr  ng-if="isViewingInModal">
+    <div class="form"  ng-class="{'m-15':isViewingInModal }">
+        <div class="form-row">
+            <div class="form-col-12">
+                <label class="control-label">{{ ::('Assigned Patient *' | i18n) }}</label>
+               
+
+                <div class="document-edit-patient-search-container">
+
+                    <typeahead id="typeAheadPersonSearch" class="typeahead soar-typeahead typeaheadResults"
+                        ng-show="true" clear-content="clearResult()" show-clear-button="document.ParentId"
+                        scroll-view="true" disable-input="disablePersonSearch" appearance="form-input"
+                        cancel="cancelSearch()" search="search(term)" select="onSelectPatient(item)"
+                        items="searchResults" term="searchTerm" loading="false" placeholder="{{ 'Search...'|i18n }}"
+                        tab-index="0">
+                        <ul id="lstPerson" soar-infinite-scroll="search(searchString, true)">
+                            <li ng-repeat="person in searchResults" typeahead-item="person" ng-animate="'animate'"
+                                ng-hide="false">
+                                <div class="row">
+                                    <div class="col-sm-5 col-md-5">
+                                        <span id="lblFirstName{{ $index }}"
+                                            ng-bind-html="person.FirstName | boldTextSearchCriteria:searchString "></span>
+                                        <span id="lblMiddleName{{ $index }}"
+                                            ng-bind-html="person.MiddleName | boldTextSearchCriteria:searchString "></span>
+                                        <span id="lblLastName{{ $index }}"
+                                            ng-bind-html="person.LastName | boldTextSearchCriteria:searchString "></span>
+                                        <span id="lblSuffix{{ $index }}"
+                                            ng-bind-html="person.Suffix | boldTextSearchCriteria:searchString "></span>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3" ng-if="person.PatientCode">
+                                        <span ng-show="person.PatientCode" id="lblPatientCode{{ $index }}"
+                                            ng-bind-html="person.PatientCode"></span>
+                                    </div>
+                                    <div class="col-sm-4 col-md-4">
+                                        <span ng-show="person.DateOfBirth" id="lblDateOfBirth{{ $index }}"
+                                            ng-bind-html="person.DateOfBirth | toShortDisplayDate| boldTextSearchCriteriaDate:searchString  "></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li ng-show="noSearchResults && searchResults.length==0">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span class="text-muted" id="lblResultMessage">
+                                            {{ 'No persons match the search criteria.'|i18n }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </typeahead>
+                    <div class="row has-error padding-left-20 padding-right-20"
+                        ng-show="!formIsValid && !document.ParentId">
+                        <label id="lblPatientRequired" class="help-block">{{ 'This field is required.' | i18n }}</label>
+                    </div>
+
+                    <div class="row has-error padding-left-20 padding-right-20"
+                        ng-show="showPatientLocationError===true">
+                        <label id="lblPatientLocationError" class="help-block">
+                            <p>{{'You are unable to view or schedule this patient as they are not authorized for your location.' | i18n}}</p>
+                            <p>{{'Please contact the administrator from their primary location to add your location as an alternative location.' | i18n}}</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col-12">
+                <label class="control-label">{{ ::('Document Name *' | i18n) }}</label>
+                <input class="form-control" maxlength="35" ng-blur="documentNameBlur()" ng-model="document.Name" ng-keypress="KeyPressed($event)" />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col-12">
+
+                <label class="control-label">{{ ::('Document Group *' | i18n) }}</label>
+                <soar-select-list placeholder="{{ ::('Select a Document Group' | i18n) }}"
+                    ng-model="document.DocumentGroupId" text-field="Description" value-field="DocumentGroupId"
+                    option-list="documentGroups" ng-if="documentGroups && loadKendoWidgets === true"
+                    disable-input="groupTypeDisabled" sb-change="docGroupChanged">
+                </soar-select-list>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-col-12">
+                <label class="control-label">{{ ::('Tooth' | i18n) }}</label>
+                <select kendo-multi-select k-data-source="patTeeth" k-options="teethSelectOptions"
+                    k-ng-model="document.ToothNumbers" k-change="activeTeethUpdated"
+                    ng-if="loadKendoWidgets === true"></select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col-12">
+                <label class="control-label">{{ ::('Document Type' | i18n) }}</label>
+                {{ ::(displayMimeType(document.MimeType))}}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col-12">
+                <label class="control-label">{{ ::('Document Size' | i18n) }}</label>
+                {{ ::(document.$$DocumentSize) }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col-12">
+                <label class="control-label">{{ ::('Team Member' | i18n)}}</label>
+                {{ ::uploadedByUser}}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col-12">
+                <label class="control-label">{{ ::('Date Uploaded' | i18n) }}</label>
+                {{ ::displayDateUtc}}
+            </div>
+        </div>
+    </div>
+    <div class="form-footer" ng-class="{'doc-modal-fotter':isViewingInModal }">
+        <button class="btn btn-primary" ng-click="save()" ng-disabled="!formIsValid===true||!dataHasChanged===true">
+            {{ ::('Save' | i18n) }}
+        </button>
+        <button class="btn btn-default" ng-click="close()">
+            {{ ::('Cancel' | i18n) }}
+        </button>
+    </div>
+</div>
+</div>

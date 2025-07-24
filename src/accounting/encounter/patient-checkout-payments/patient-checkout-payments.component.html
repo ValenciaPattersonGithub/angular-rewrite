@@ -1,0 +1,175 @@
+<div class="patient-checkout-payments">
+    <div class="panel"
+        *ngIf="creditTransaction">
+        <!-- only show credits if unapplied credits exist -->
+        <div class="panel-heading"
+            *ngIf="this.dataForUnappliedTransactions.unappliedCreditTransactions.length > 0">
+            <p class="text-left panel_heading_title">Credits</p>
+        </div>
+        <div class="panel-body"
+            *ngIf="this.dataForUnappliedTransactions.unappliedCreditTransactions.length > 0"
+            kendoTooltip
+            position="bottom"
+            tooltipClass="app-tooltip"
+            title="{{ noPermissionMessage }}">
+            <span class="text-left defaultTextInput">
+                <b>Select to Apply Available Credits</b>
+                {{ '(5 Oldest Credits Shown)'| translate }}
+            </span>
+            <div class="unappliedCreditRow"
+                *ngFor="let unappliedCreditTransaction of dataForUnappliedTransactions.unappliedCreditTransactions.slice(0, 5); index as i">
+                <app-button id="btnApplyUnappliedCredit{{ i }}"
+                    buttonLabel="{{ unappliedCreditTransaction.UnassignedAmount | currency }}"
+                    [isDisabled]="unappliedCreditTransaction.IsDisabled || disablePayment"
+                    variation="secondary"
+                    (onClick)="applyUnappliedCredit(unappliedCreditTransaction)">
+                </app-button>&nbsp;
+                <span id="lblUnappliedCreditDateEntered{{ i }}"
+                    class="unappliedCreditItem text-left">
+                    {{ unappliedCreditTransaction.DateEnteredDisplay | date }}
+                    &nbsp;
+                </span>
+                <span id="lblUnappliedCreditType{{ i }}"
+                    class="unappliedCreditItem text-left">
+                    {{ unappliedCreditTransaction.Type }}
+                    {{ unappliedCreditTransaction.Description | translate }}
+                </span>
+            </div>
+        </div>
+        <div class="panel-heading">
+            <p class="text-left panel_heading_title">{{ 'Payments and Adjustments' | translate }}</p>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-12">
+                <div class="col-sm-2">
+                    <label class="control-label">{{ 'Payment / Adjustment' | translate }}</label>
+                    <td class="padding_right">
+                        <select id="inpTransactionType"
+                            class="default-select"
+                            name="inpPaymentAdjustmentChoice"
+                            [disabled]=disablePayment
+                            [(ngModel)]="selectedTransactionTypeId"
+                            (change)="onTransactionTypeChange($event)">
+                            <option value="0">{{ 'Select Options'| translate }}</option>
+                            <option [value]='paymentAdjustmentChoice.value'
+                                *ngFor="let paymentAdjustmentChoice of paymentAdjustmentChoices">
+                                {{ paymentAdjustmentChoice.text }}
+                            </option>
+                        </select>
+                    </td>
+                </div>
+            </div>
+            <div>
+                <table kendoTooltip
+                    position="right"
+                    tooltipClass="app-tooltip"
+                    title="{{ noPermissionMessage }}">
+                    <thead>
+                        <tr>
+                            <th class="padding_right"><label class="control-label"
+                                    for="lblPaymentDate">{{ 'Date' | translate }}</label></th>
+                            <th class="padding_right"><label class="control-label"
+                                    for="lblPaymentAmount">{{ 'Amount' | translate }}</label></th>
+                            <th class="padding_right"><label class="control-label"
+                                    for="inpPaymentType">{{ 'Type' | translate }}</label></th>
+                            <th class="padding_right"  *ngIf="showCreditCardDropDown && isPaymentDevicesExist"><label class="control-label"
+                                        for="inpCreditCard"
+                                        >{{ 'Card Reader'}}</label>
+                            </th> 
+                            <th class="padding_right"><label class="control-label"
+                                    for="lblPaymentPrompt"
+                                    *ngIf="creditTransaction.PromptTitle">{{ creditTransaction.PromptTitle }}</label>
+                            </th>
+                            <th class="padding_right"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="payment-cell padding_right date-picker-cell">
+                                <kendo-datepicker [(value)]="creditTransaction.DateEntered"
+                                    [disabled]="disablePayment"
+                                    [(max)]="maxDate"
+                                    [(min)]="minDate"
+                                    [rangeValidation]="true"
+                                    [format]="'MM/dd/yyyy'"
+                                    (valueChange)="onCreditTransactionDateChanged($event)">
+                                </kendo-datepicker>
+                            </td>
+
+                            <td class="payment-cell">
+                                <currency-input id="lblPaymentAmount"
+                                    [(amount)]="creditTransaction.Amount"
+                                    [emitOnBlur]="true"
+                                    [isDisabled]="disablePayment"
+                                    (amountChange)="onPaymentChanged($event)">
+                                </currency-input>
+                            </td>
+                            <td class="payment-cell"
+                                *ngIf="creditTransaction.TransactionTypeId === 2 || creditTransaction.TransactionTypeId === '2'">
+                                <account-payment-types-dropdown [paymentTypes]="paymentTypes"
+                                    [isDisabled]="disablePayment"
+                                    *ngIf="paymentTypes"
+                                    [selectedPaymentTypeId]="creditTransaction.PaymentTypeId"
+                                    (selectedPaymentTypeChange)="onPaymentTypeChange($event)">
+                                </account-payment-types-dropdown>
+                            </td>
+                            <td class="payment-cell"
+                                *ngIf="creditTransaction.TransactionTypeId === 4 || creditTransaction.TransactionTypeId === '4'">
+                                <select id="inpAdjustmentType"
+                                    class="default-select"
+                                    name="selectAdjustmentType"
+                                    [(ngModel)]="creditTransaction.AdjustmentTypeId"
+                                    (change)="onAdjustmentTypeChange($event)"
+                                    [disabled]=disablePayment>
+                                    <option value="0">{{ 'Select Option'| translate }}</option>
+                                    <option [value]='negativeAdjustmentType.AdjustmentTypeId'
+                                        *ngFor="let negativeAdjustmentType of negativeAdjustmentTypes">
+                                        {{ negativeAdjustmentType.Description }}
+                                    </option>
+                                </select>
+                            </td>
+                           
+                            
+                            <td class="payment-cell"  *ngIf="showCreditCardDropDown">
+                                <card-reader-select [location]="location"
+                                    (onCardReaderChange)="onSelectedCardReader($event)"
+                                    (isCardReaderExist)="isCardReaderExist($event)"
+                                    height="25px">
+                                </card-reader-select>
+                            </td>
+
+                            <td class="payment-cell"
+                                *ngIf="creditTransaction.PromptTitle">
+                                <input type="text"
+                                    id="paymentTypeText"
+                                    class="defaultTextInput"
+                                    [disabled]="disablePayment"
+                                    [(ngModel)]="creditTransaction.PaymentTypePromptValue"
+                                    ng-readonly="false" />
+                            </td>
+                            <td class="payment-cell">
+                                <app-button id="btnApplyPayment"
+                                    buttonLabel="{{ 'Apply' | translate }}"
+                                    variation="primary"
+                                    (onClick)="applyPaymentOrAdjustment()"
+                                    [isDisabled]="!allowPaymentApply || disablePayment">
+                                </app-button>
+                            </td>
+                        </tr>
+                        <p class="error"
+                            *ngIf="!isValidDate">{{ invalidDateErrorMessage }}</p>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<paypage-modal *ngIf="showPayPageModal"
+  [isVisible]="showPayPageModal"
+  [iframeSrc]="payPageUrl"
+  (close)="closePaypage()"
+  (paypageRedirectCallBackEvent)="handlePayPageTransactionCallback()"
+></paypage-modal>

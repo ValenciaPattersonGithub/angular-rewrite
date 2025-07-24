@@ -1,0 +1,84 @@
+﻿<div class="acctAdjustment">
+    <div draggable-modal class="draggable-modal-header" id="modalScroll"></div>
+    <div class="acctAdjustment__header">
+        <h2 id="lblAdjustmentHeader" class="apply-label">{{ applyLabelText }}</h2>
+        <div id="divAdjustmentTypeSelector" class="dropdownNav dropdown" ng-if="!isAdjustmentOnUnappliedAmount && !isChangingAdjustmentOrPayment">
+            <button id="adjustmentTypeSelectorButton" class="dropdownNav__toggle" data-toggle="dropdown" role="button" ng-disabled="isForCloseClaim || disableOperationTypeSelectorDD">
+                <span id="lblSelectedAdjustmentType" class="dropdownNav__target">{{selectedAdjustmentType}}</span>
+            </button>
+            <input id="inputAdjustmentTypeSelected" class="dropdownNav__val dropdown-toggle" type="hidden" ng-model="selectedAdjustmentType" />
+            <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="option in adjustmentTypeOptions | orderBy: 'name'">
+                    <a id="adjustmentTypeOption{{$index}}" ng-show="showAdjType($index)" ng-click="adjustmentTypeOptionClicked(option)">{{option.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <h2 id="lblAdjustmentto" class="apply-label" ng-show="accountMembersOptions.length > 2 ? showAccountMemeberOption : false">{{ 'to' }}</h2>
+        <div id="divAccountMemberSelector" class="dropdownNav dropdown" ng-show="accountMembersOptions.length > 2 ? showAccountMemeberOption : false">
+            <button id="accountMemberSelectorButton" class="dropdownNav__toggle" data-toggle="dropdown" role="button" ng-disabled="isForCloseClaim || disableAccountMemberSelectorDD">
+                <span id="lblSelectedAaccountMember" class="dropdownNav__target">{{selectedAccountMemberOption}}</span>
+            </button>
+            <input id="accountMembersSelected" class="dropdownNav__val dropdown-toggle" type="hidden" ng-model="selectedAccountMemberOption" />
+            <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="option in accountMembersOptions">
+                    <a id="accountMembersOption{{$index}}" ng-click="accountMemberOptionClicked(option)">{{option.patientDetailedName}}</a>
+                </li>
+            </ul>
+        </div>
+        <span id="lblRequired" class="required" ng-if="!isAdjustmentOnUnappliedAmount && !isChangingAdjustmentOrPayment">*{{ 'Required' | i18n }}</span>
+    <div class="in-collection" ng-if="isInCollection">{{'In Collections' | i18n}}</div>
+    </div>
+    <div class="acctAdjustment__body">
+
+        <div class="acctAdjustment__formBox" ng-if="isLoading === false && selectedAdjustmentTypeIndex == 0 && dataForDebitTransaction">
+            <debit-transaction data="dataForDebitTransaction"></debit-transaction>
+        </div>
+
+        <div class="acctAdjustment__formBox" ng-if="isLoading === false && selectedAdjustmentTypeIndex != 0 && dataForCreditTransaction">
+            <credit-transaction data="dataForCreditTransaction"></credit-transaction>
+        </div>
+
+        <div class="acctAdjustment__formBox" ng-if="(adjustmentTypes.length == undefined || adjustmentTypes.length == 0 || providers.length == undefined || providers.length == 0) && !isAdjustmentOnUnappliedAmount && !isChangingAdjustmentOrPayment">
+            <div class="col-md-12" id="loaderSymbolHolder">
+                <no-results loading-message="'Failed to load required data'" filtering="false"
+                            loading="isLoading !== false"
+                            filtering-message=''></no-results>
+            </div>
+        </div>
+    </div>
+
+    <div class="acctAdjustment__footer">
+        <checkbox checkbox-id="btnPrintReceipt" ng-show="isLoading === false && selectedAdjustmentTypeIndex == 0" checkbox-label="'Apply unapplied amount(s) to this adjustment'" checkbox-value="applyUnappliedAfterCheckout"></checkbox>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <checkbox checkbox-id="btnPrintReceipt" ng-show="!isReadonly" checkbox-label="'Print Receipt'" checkbox-value="printReceiptAfterCheckout"></checkbox>
+    </div>
+
+    <div class="acctAdjustment__footer">
+        <button id="btnCancel" class="btn btn-default" ng-click="cancelAdjustmentModal();">
+            {{ 'Cancel' | i18n }}
+        </button>
+        <button id="btnApply" ng-if="!isReadonly" check-auth-z="{{soarAuthPaymentOrAdjustmentAccessKey}}" class="btn btn-primary" ng-click="applyAdjustment();" ng-disabled="applyingAdjustment || disableApplyButton  || dataForCreditTransaction.HasValidationError || applyAdjustmentClicked|| isDisableApplyButton()">
+            {{isLess(currentUnappliedTransactionIndex, unappliedTransactionsCount) ? 'Apply and Go To Next Transaction' : 'Apply' | i18n }}
+        </button>
+        <button ng-if="currentUnappliedTransactionIndex < unappliedTransactionsCount" id="btnSkip" class="btn btn-primary" ng-click="skipAdjustment();" ng-disabled="applyingAdjustment">
+            {{ 'Skip' | i18n }}
+        </button>
+        <div ng-show="selectedAdjustmentTypeIndex == 1 && negativeAdjustmentType == 1">
+            <label id="lblTotalNegativeAdjustmentForServiceLevel" class="font-weight-bold">
+                {{'Subtracting a Total of '| i18n}}{{ 0 | currency }}
+            </label>
+        </div>
+    </div>
+    <div ng-if="showPayPageModal" class="modal-overlay-paypage">
+        <div class="modal-content-paypage">
+             <button class="modal-close-button" ng-click="closePaypage()" id="btnClosePaypage" aria-label="Close">
+                <svg-icon  name="closeIcon"></svg-icon>
+            </button>
+           <div class="modal-loader-overlay" ng-if="modalLoading">
+                <loader-component></loader-component>    
+            </div>
+            <iframe #paypage ng-src={{payPageUrl}} class="paypage"></iframe>
+        </div>
+    </div>
+</div>
+

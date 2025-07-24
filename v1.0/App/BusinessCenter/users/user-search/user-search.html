@@ -1,0 +1,69 @@
+﻿<div class="userSearch">
+    <form name="frmUserSearch" role="form" novalidate>
+        <!--Filter-->
+        <div class="userSearch__search">
+            <div class="form-inline">
+                <div class="form-group has-feedback">
+                    <input class="form-control" id="filterUser" placeholder="{{ 'Find Team Member' | i18n }}" type="text" ng-model="filter" set-focus />
+                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+
+                </div>
+            </div>
+        </div>
+        <!--Secondary Filter-->
+        <div class="userSearch__primary">
+            <!--Results-->
+            <div class="col-xs-12 col-sm-12 col-md-9">
+                <div 
+                     class="row search-item-container" 
+                     ng-repeat="user in users  | filter:userFilter | orderBy: ['LastName','FirstName'] track by $index"
+                     ng-class-even="'item-zebra-light'" 
+                     ng-class-odd="'item-zebra-dark'" 
+                     ng-class="{inactiveItem: !user.IsActive}"
+                 >
+
+                    <div class="col-xs-12">
+                        <div class="pull-left search-item-index">
+                            <div>{{ $index+1 }}</div>
+                        </div>
+                        <div class="media">
+                            <div class="pull-left">
+                                <initial-badge ng-if="user != null" person="user" class="pull-left"></initial-badge>
+                            </div>
+                            <div class="media-body search-item-body">
+                                <p>
+                                    <a class="soar-link" check-auth-z="soar-biz-bizusr-edit" href="#/BusinessCenter/Users/Edit/{{ user.UserId }}">
+                                        <strong class="font-16" id="btnUserLastName{{$index}}" ng-bind-html="user.LastName | boldTextIfContains:filter"></strong>,
+                                        <strong class="font-16" id="btnUserFirstName{{$index}}" ng-bind-html="user.FirstName | boldTextIfContains:filter"></strong>
+                                        <span ng-show="user.PreferredName">(<strong class="font-16" id="btnUserPreferredName{{$index}}" ng-bind-html="user.PreferredName | boldTextIfContains:filter"></strong>)</span>
+                                    </a>
+                                </p>
+                                <p id="lblUserInformation" class="search-item-info">
+                                    <span ng-bind-html="user.ProviderTypeName | boldTextIfContains:filter" class="" ng-show="user.ProviderTypeName" id="lblrProviderType{{$index}}"></span>
+                                    <span class="search-result-item-separator" ng-show="user.ProviderTypeName">|</span>
+                                    <span ng-bind-html="user.DepartmentName | boldTextIfContains:filter" class="hidden-xs" ng-show="user.DepartmentName" id="lblDepartment{{$index}}"></span>
+                                    <span class="search-result-item-separator hidden-xs" ng-show="user.DepartmentName">|</span>
+                                    <span ng-bind-html="user.UserName | boldTextIfContains:filter" class="hidden-xs" ng-show="user.UserName" id="lblUserName{{$index}}"></span>
+                                    <span class="search-result-item-separator hidden-xs" ng-show="user.UserName">|</span>
+                                    <span ng-bind-html="user.UserCode | boldTextIfContains:filter" class="" ng-show="user.UserCode" id="lblUserCode{{$index}}"></span>
+                                    <span class="search-result-item-separator" ng-show="user.IsActive==false">|</span>
+                                    <span ng-show="user.IsActive==false" class="" id="lblStatus{{$index}}"> {{ 'User Access Off' | i18n }}  </span>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--Additional Filters-->
+            <div class="col-xs-12 col-sm-12 col-md-2">
+                <div class="col-xs-12 search-item-filter userSearch__secondary">
+                    <checkbox checkbox-id="chkActivePatientFilter" checkbox-value="activeFilter" checkbox-label="'Active Team Members'">&nbsp;</checkbox>
+                    <checkbox checkbox-id="chkInActivePatientFilter" checkbox-value="inactiveFilter" checkbox-label="'No User Access'">&nbsp;</checkbox>
+                    <checkbox ng-repeat="location in locations" checkbox-id="chkLocationFilter" checkbox-value="location.$active" checkbox-label="location.NameLine1" checkbox-disabled="!locationUsersRetrieved || locationUsersError || location.$disable">&nbsp;</checkbox>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

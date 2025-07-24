@@ -1,0 +1,16 @@
+<div class="practiceProviderSelector">
+    <kendo-dropdownlist [data]="filteredProviderList"
+                        [textField]="'Name'"
+                        [valueField]="'UserId'"
+                        [valuePrimitive]="true"
+                        [(ngModel)]="selectedProviderId" name="selectedProviderId"
+                        (valueChange)="onProviderChanged($event)"
+                        [popupSettings]="{ animate:false }"
+                        [defaultItem]="{ Name: '- Select Provider -', UserId: null }"
+                        ngDefaultControl>
+        <ng-template kendoDropDownListItemTemplate let-dataItem>
+            <span id="lblListItems" [ngStyle]="{'color': dataItem.IsActive ? 'black' : 'lightgrey', 'font-style': dataItem.IsActive ? 'normal' : 'italic',
+                  'font-weight': dataItem.IsPreferred ? 'bold' : 'normal','display': 'block', 'width': '100%' }">{{ dataItem?.Name }}</span>
+        </ng-template>
+    </kendo-dropdownlist>
+</div>

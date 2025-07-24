@@ -1,0 +1,32 @@
+<ng-container *ngIf="reportData$ | async as reportData">
+    <div *ngIf="isDataLoaded" class="no-outline">
+        <div class="benefit-plans-by-insurance-payment-type-report grid header">
+            <div class="col-sm-1-migration"></div>
+            <div class="col-sm-3-migration">{{ 'Insurance Payment Type' | translate }}</div>
+            <div class="col-sm-1-migration"></div>
+            <div class="col-sm-3-migration">{{ 'Benefit Plan' | translate }}</div>
+            <div class="col-sm-1-migration"></div>
+            <div class="col-sm-3-migration">{{ 'Plan/Group Number' | translate }}</div>
+        </div>
+        <ng-container>
+            <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="15" tabindex="0">
+                <div *cdkVirtualFor="let rowdata of reportData; index as i" class="{{rowdata.Class}}">
+                    <div class="benefit-plans-by-insurance-payment-type-report grid item" id="divMainInfo{{i}}"
+                        *ngIf="rowdata.IsHeader">
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-3-migration">{{ rowdata.description }}</div>
+                    </div>
+                    <div class="benefit-plans-by-insurance-payment-type-report grid item" id="divMainInfo{{i}}"
+                        *ngIf="!rowdata.IsHeader">
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-3-migration">{{ rowdata.name | translate }}</div>
+                        <div class="col-sm-1-migration"></div>
+                        <div class="col-sm-3-migration">{{ rowdata.planGroupNumber | translate }}</div>
+                    </div>
+                </div>
+            </cdk-virtual-scroll-viewport>
+        </ng-container>
+    </div>
+</ng-container>

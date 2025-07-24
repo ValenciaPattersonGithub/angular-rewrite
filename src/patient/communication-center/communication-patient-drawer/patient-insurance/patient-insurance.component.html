@@ -1,0 +1,35 @@
+<div class="insuranceheader" id="insurance-header">
+    <div class="insuranceheader-title" id="insurance-header-title">
+        <span class="insuranceheader-main-title" id="insurance-header-main-title">{{ 'Insurance' | translate }}
+            <span *ngIf="totalPlans" id="insuranceheader-total-plans">
+                ({{totalPlans}})
+            </span>
+            <span class="insuranceheader-moredetail" id="insuranceheader-more-detail">
+                <a (click)="insuranceInformation()">
+                    {{'More Detail'}}
+                </a>
+            </span>
+        </span>
+    </div>
+    <div class="insurance-no-records" *ngIf="!insurnceInfo.BenefitPlanName">{{ 'No insurance was found' | translate }}
+    </div>
+    <div class="insurancedetail" id="insurance-detail" *ngIf="insurnceInfo.BenefitPlanName">
+        <span class="insurancedetail-planlabel" id="insurance-detail-plan-label">{{ 'Primary Plan: ' | translate }}</span>
+        <span class="insurancedetail-plan" id="insurance-detail-plan" *ngIf="insurnceInfo.BenefitPlanName">{{insurnceInfo.BenefitPlanName}} ({{'Primary' | translate}})</span>
+        <span class="insurancedetail-carrierlabel" id="insurance-detail-carrier-label">{{ 'Carrier: ' | translate }}</span>
+        <span class="insurancedetail-carrier" id="insurance-carrier-email">{{insurnceInfo.CarrierName}}</span>
+        <span class="insurancedetail-carrierphonelabel" id="insurance-detail-carrier-phone-label">{{ 'Carrier Phone #: ' | translate }}</span>
+        <span class="insurancedetail-carrierphone" id="insurance-detail-carrier-phone"  *ngFor="let phoneNumber of insurnceInfo.CarrierPhoneNumber">{{phoneNumber.PhoneNumber | phoneNumber}}<br></span>
+        <span class="insurancedetail-carrierwebsitelabel" id="insurance-detail-carrier-website-label">{{ 'Carrier Website: ' | translate }}</span>
+        <span class="insurancedetail-carrierwebsite" id="insurance-detail-carrier-website"><a (click)="onNavigate(insurnceInfo.CarrierWebsite)">{{insurnceInfo.CarrierWebsite}}</a></span>
+        <span class="insurancedetail-policyholderlabel" id="insurance-detail-policyholder-label">{{ 'Policy Holder: ' | translate }}</span>
+        <span class="insurancedetail-policyholder" id="insurance-detail-policyholder">{{patientName}}</span>
+        <span class="insurancedetail-policyholderDOBlabel" id="insurance-detail-policyholderDOB-label">{{ 'Policy Holder DOB: ' | translate }}</span>
+        <span class="insurancedetail-policyholderDOB" id="insurance-detail-policyholderDOB">{{insurnceInfo.PolicyHolderDateOfBirth | date:'MM/dd/yyyy'}}</span>
+        <span class="insurancedetail-policyholderidlabel" id="insurance-detail-policyholderid-label">{{ 'Policy Holder ID: ' | translate }}</span>
+        <span class="insurancedetail-policyholderid" id="insurance-detail-policyholderid">{{insurnceInfo.PolicyHolderStringId}}</span>
+        <span class="insurancedetail-groupnamelabel" id="insurance-detail-groupname-label">{{ 'Group Number: ' | translate }}</span>
+        <span class="insurancedetail-groupname" id="insurance-detail-groupname">{{insurnceInfo.BenefitPlanGroupNumber}}</span>
+    </div>
+
+</div>

@@ -1,0 +1,90 @@
+﻿<!--TODO get correct amfas-->
+<div ng-class="{ 'fade-in': fadeIn, 'fade-out': fadeOut }">
+    <div class="idealDays">
+        <form name="frmIdealDays" ng-if="mode==='list'">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4>
+                            {{::'Ideal Day Templates'|i18n}}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="idealDays__content panel panel-default">
+                <div class="panel-body">
+                    <!--services-->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!--List of ideal templates for this practice-->
+                            <div class="fuseGrid container pull-left">
+                                <!--column headers-->
+                                <div class="row header">
+
+                                    <div id="gridHeaderName" class="col-sm-10 cell sortCursor"
+                                         ng-click="changeSortingForGrid('Name')">
+                                        {{'Template'|i18n}}
+                                        <span class="fa fas fa-lg pull-right" ng-class="orderBy.asc ? 'fa-sort-up' : 'fa-sort-down'" ng-show="orderBy.field == 'Name'"></span>
+                                    </div>
+                                </div>
+
+                                <!--grid-->
+                                <div class="idealDays__grid">
+                                    <div class="row body" ng-repeat="template in idealDayTemplates  | orderBy:orderBy.field:!orderBy.asc ">
+
+                                        <div id="gridTemplateRowName_{{$index}}" class="col-sm-10 cell ">{{template.Name}} {{template.$$Duration}}</div>
+                                        
+                                        <!--delete button-->
+                                        <div class="col-sm-1 cell margin-left-15">
+                                            <button id="btnIdealDayDelete{{$index}}"
+                                                    class="btn btn-default btn-link pull-right cursor-pointer"
+                                                    title="{{'Delete {0}' | i18n:['Ideal Day Template']}}"
+                                                    ng-disabled="false"
+                                                    check-auth-z="soar-sch-schidl-idlprv"
+                                                    ng-click="deleteTemplate(template)">
+                                                <i class="fa fa-times-circle fa-lg"></i>
+                                            </button>
+                                            &nbsp;
+                                            <!--edit button-->
+                                            <button id="btnIdealDayEdit{{$index}}"
+                                                    class="btn btn-default btn-link cursor-pointer"
+                                                    title="{{'Edit {0}' | i18n:['Ideal Day Template']}}"
+                                                    ng-disabled="false"
+                                                    ng-show="true"
+                                                    check-auth-z="soar-sch-schidl-idlprv"
+                                                    ng-click="editTemplate(template)">
+                                                <i class="far fa-edit fa-lg"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="idealDays__footer">
+                <div class="idealDays__actions">
+
+                    <button id="btnCreateIdealDay"
+                            class="btn btn-primary pull-right"
+                            check-auth-z="soar-clin-cplan-icadd"
+                            type="button"
+                            ng-disabled="!practiceSettings || !appointmentTypes"
+                            ng-click="newIdealDay()">
+                        {{ ::'New' | i18n }}
+                    </button>
+                    <button id="btnCloseManageIdealDays" class="btn btn-default pull-right" type="button" ng-click="closeModal()">{{ ::'Close' | i18n }}</button>
+
+                </div>
+            </div>
+        </form>
+
+        <div ng-if="(mode==='new'||mode==='edit') && practiceSettings && appointmentTypes">
+            <ideal-days-crud data="dataForCrudOperation" save-ideal-day="saveIdealDay" cancel="cancel"></ideal-days-crud>
+        </div>
+    </div>
+</div>
+
+

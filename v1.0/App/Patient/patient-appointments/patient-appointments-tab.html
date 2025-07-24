@@ -1,0 +1,56 @@
+﻿<div class="rowFull" ng-controller="PatientAppointmentsTabController">
+    <div class="patientAppointments">
+        <div class="patientAppointmentsNav">
+            <span class="for-label">
+                {{ ::('Appointments for' | i18n)}}
+            </span>
+            <div class="dropdownNav dropdown">
+                <button id="accountMembersButton" class="dropdownNav__toggle" data-toggle="dropdown" role="button">
+                    <span class="dropdownNav__accountMember">{{patientCopy.Data.$$DisplayName}}</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="member in allAccountMembers | orderBy: ['FirstName']">
+                        <a ng-click="accountMemberSelected(member)">{{member.$$DisplayName}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="patientAppointmentsPanels">
+            <div class="patientAppointmentsPanels__primary">
+                <div ng-if="canViewAppointments">
+                    <patient-appointments patient="patientCopy.Data" show-appointments="Scheduled"></patient-appointments>
+                </div>
+                <div ng-if="canViewAppointments">
+                    <patient-appointments patient="patientCopy.Data" show-appointments="Unscheduled"></patient-appointments>
+                </div>
+                <div ng-if="allAccountMembers">
+                    <treatment-plans-summary patient="patientCopy.Data" all-account-members="allAccountMembers"></treatment-plans-summary>
+                </div>
+                <div ng-if="appointments !== null && canViewAppointments">
+                    <past-appointments patient="patientCopy.Data" account-id="accountId" account-view="showAllAccountMembers" account-members="allAccountMembers"></past-appointments>
+                </div>
+                
+            </div>
+            <div class="patientAppointmentsPanels__secondary">
+                <profile-section ng-if="member.$$Visible==true && canViewAppointments && appointmentHistory.length > 0" 
+                    ng-repeat="member in allAccountMembers | filter: member.$$DisplayName !== allAccountMembersText | orderBy: ['FirstName']" 
+                    [base-id]="'health'" [section-title]="setPatientAppointmentsTitle(member)">
+                    <ng-container layout1>
+                        <appointment-history counts="appointmentHistory" data="member"></appointment-history> 
+                    </ng-container>                    
+                </profile-section>
+                <div ng-show="member.$$Visible" 
+                     ng-repeat="member in allAccountMembers | filter: member.$$DisplayName !== allAccountMembersText | orderBy: ['FirstName']" >                    
+                    <panel ng-show="member.$$Visible" ng-if="member.$$ServicesDue.length > 0" 
+                           id="preventiveCarePanelAppt"                             
+                           access="modifyPreventiveCareEditAccess" 
+                           additional-data="member"                           
+                           show-details="true"                                                                     
+                           title="{{member.$$PrevCarePanelTitle}}"                           
+                           template="App/Patient/patient-chart/health/panels/preventive-care-panel.html">
+                    </panel>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,200 @@
+﻿.feeSchedEdit {
+    .standardHeader;
+
+    &__body {
+        .containerStandard;
+    }
+
+    &__form {
+        padding: @brand-padding_md;
+        background-color: @brand-color_white;
+    }
+
+    &__grid {
+        .k-i-collapse {
+            display: none;
+        }
+    }
+
+    &__header {
+        margin-left: 30px;
+        .feeSchedEdit__title > h1{
+            font-size: 22px !important;
+        }
+    }
+
+    &__frmSpan {
+        .glyphicon;
+        .glyphicon-search;
+        .form-control-feedback;
+    }
+
+    &__frm {
+        .form-group;
+        .form-col-12;
+        .has-feedback;
+    }
+
+    &__frmInput {
+        .form-input;
+    }
+
+    &__serviceType-select-list {
+        > span {
+            width: 185px;
+        }
+    }
+
+    .text-bottom {
+        float: none;
+        display: inline-block;
+        vertical-align: bottom;
+    }
+
+    .keepTop {
+        position: fixed;
+        background-color: white;
+        width: 96%;
+        z-index: 1001;
+        max-width: 1600px;
+        margin-left: -16px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    #allowed-amount-header {
+        overflow-x: scroll;
+        margin-bottom: -17px;
+        margin-left: -13px;
+
+        > .row {
+            white-space: nowrap;
+
+            .allowed-amount-column {
+                width: 200px;
+                display: inline-block;
+                float: none;
+                border-left: 1px solid lightgray;
+                border-top: 1px solid lightgray;
+                border-right: 1px solid lightgray;
+                margin-right: -1px;
+                padding-top: 16px;
+
+                .location-select-error {
+                    white-space: normal;
+                }
+
+                .tags {
+                    margin-left: 0;
+                    padding-top: 8px;
+                    margin-right: -6px;
+                    white-space: normal;
+                    word-break: break-word;
+                }
+            }
+        }
+    }
+
+
+
+    .remove-column-icon {
+        color: red;
+        cursor: pointer;
+    }
+
+    .remove-column-icon.disabled {
+        cursor: not-allowed;
+    }
+
+    .details-row {
+        max-height: 300px;
+        overflow-y: scroll;
+        background-color: white;
+
+        .service-row {
+            height: 50px;
+
+            .service-row-column-padding {
+                padding-top: 15px;
+            }
+        }
+
+        .service-row-col {
+
+            > :nth-child(odd) {
+                background-color: @brand-color_dark-gray;
+            }
+
+            > :nth-child(even) {
+                background-color: white;
+            }
+        }
+
+        #allowed-amount-body {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            background-color: white;
+            margin-bottom: -17px;
+
+            > :nth-child(odd) {
+                background-color: @brand-color_dark-gray;
+
+                > div {
+                    background-color: @brand-color_dark-gray;
+                }
+            }
+
+            > :nth-child(even) {
+                background-color: white;
+
+                > div {
+                    background-color: white;
+                }
+            }
+
+            > .row {
+                white-space: nowrap;
+                height: 50px;
+
+                .allowed-amount {
+                    width: 200px;
+                    display: inline-block;
+                    float: none;
+                    padding: 6px;
+                    border-left: 1px solid lightgray;
+                    border-right: 1px solid lightgray;
+                    margin-right: -1px;
+                }
+
+            }
+        }
+
+        .white {
+            background-color: white;
+        }
+    }
+
+    .scroller-row {
+        white-space: nowrap;
+
+        #allowed-amount-scroller {
+            overflow-x: scroll;
+            height: 17px;
+            overflow-y: hidden;
+
+            .row {
+                white-space: nowrap;
+
+                .placeholder {
+                    width: 200px;
+                    display: inline-block;
+                    float: none;
+                }
+            }
+        }
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+}

@@ -1,0 +1,62 @@
+<ng-container *ngIf="reportData$ | async as reportData">
+    <div *ngIf="isDataLoaded" class="no-outline">
+        <ng-container>
+            <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="30" tabindex="0">
+                <div *cdkVirtualFor="let rowdata of reportData.locationPatients; index as i" class="">
+                    <div class="new-patients-seen-report grid item" class="stripEven">
+                        <div class="col-sm-12-migration center">
+                            <h4>{{ rowdata.location | translate }}</h4>
+                        </div>
+                    </div>
+                    <div class="stripOdd">
+                        <div class="new-patients-seen-report grid item">
+                            <div class="col-sm-2-migration"><b>{{ 'Patient' | translate }}</b></div>
+                            <div class="col-sm-2-migration"><b>{{ 'Address' | translate }}</b></div>
+                            <div class="col-sm-1-migration"><b>{{ 'Phone Number' | translate }}</b></div>
+                            <div class="col-sm-2-migration"><b>{{ 'Responsible Party' | translate }}</b></div>
+                            <div class="col-sm-1-migration"><b>{{ 'First Service Date' | translate }}</b></div>
+                            <div class="col-sm-2-migration"><b>{{ 'Description' | translate }}</b></div>
+                            <div class="col-sm-1-migration text-center"><b>{{ 'Tooth' | translate }}</b></div>
+                            <div class="col-sm-1-migration text-center"><b>{{ 'Area' | translate }}</b></div>
+                        </div>
+                    </div>
+                    <div class="stripOdd">
+                        <div *ngFor="let patient of rowdata.patients; let i = index" class="new-patients-seen-report grid item">
+                            <div class="col-sm-2-migration">{{ patient.lastName | translate }}, {{ patient.firstName | translate }} {{ patient.middleName != '' ? patient.middleName + '.' : '' }} - {{ patient.patientCode | translate }}
+                            </div>
+                            <div class="col-sm-2-migration">
+                                <div>{{ patient.address.line1 | translate }}</div>
+                                <div>{{ patient.address.line2 | translate }}</div>
+                                <div *ngIf="patient.address.city">
+                                    {{ patient.address.city | translate}},</div><div> {{ patient.address.state| translate }} {{ patient.address.zipCode| translate }}
+                                </div>
+                            </div>
+                            <div class="col-sm-1-migration">{{ patient.phone?.number }}
+                            </div>
+                            <div class="col-sm-2-migration">{{ patient.responsibleParty.lastName | translate }}, {{ patient.responsibleParty.firstName |
+                                translate }} {{ patient.responsibleParty.middleName != '' ? patient.responsibleParty.middleName + '.' : '' }} - {{
+                                patient.responsibleParty.patientCode | translate }}
+                            </div>
+                            <div class="col-sm-1-migration">{{ patient.serviceTransactions[0].shortDateEntered | date: 'MM/dd/yyyy' }}
+                            </div>
+                            <div class="col-sm-1-migration">{{ patient.serviceTransactions[0].description }}
+                            </div>
+                            <div class="col-sm-1-migration text-center">{{ patient.serviceTransactions[0].tooth }}
+                            </div>
+                            <div class="col-sm-1-migration text-center">{{ patient.serviceTransactions[0].area }}
+                            </div>
+                        </div>
+                        <div class="new-patients-seen-report" *ngIf="rowdata.totalPatientsSeen > 0">
+                            <div class="col-sm-6-migration text-center"><b>New Patients Seen: {{ rowdata.totalPatientsSeen | translate }}</b></div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="new-patients-seen-report-hr" />
+                <div class="new-patients-seen-report text-center">
+                    <div class="col-sm-6-migration"><b>Total Patients Seen: {{ reportData.totalPatientsSeen | translate }}</b></div>
+                </div>
+            </cdk-virtual-scroll-viewport>
+            <div class="text-center">{{'The Code on Dental Procedures and Nomenclature is Current Dental Terminology (CDT). Copyright &#169; American Dental Association (ADA). All rights reserved.' | translate}}</div>
+        </ng-container>
+    </div>
+</ng-container>

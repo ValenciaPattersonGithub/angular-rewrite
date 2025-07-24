@@ -1,0 +1,82 @@
+<div class="insurance-card-main">
+    <div class="insurance-card-box" *ngFor="let patientBenefitPlan of patientBenefitPlans; index as i" tabindex="0"
+        [attr.data-index]="i">
+        <div class="insurance-card-content">
+            <div class="insurance-card-content-priority">
+                <div class="insurance-card-priority-label">
+                    <span>{{patientBenefitPlan.PriorityLabel + ' - '}}</span>
+                    <span class="insurance-card-title" (click)="openNewTab(patientBenefitPlan.BenefitPlanId, 'Name')">
+                        {{patientBenefitPlan.PlanName}}
+                    </span>
+                </div>
+            </div>
+            <div class="insurance-card-content-row-break">
+                <hr>
+            </div>
+            <div class="insurance-card-content-policy-holder">
+                <div class="insurance-card-policy-holder-label">
+                    <app-label class="insurance-card-label" [label]="'Policy Holder'">
+                    </app-label>
+                </div>
+                <span class="insurance-card-policy-holder-title">
+                    {{patientBenefitPlan.PolicyHolderName}}
+                </span>
+            </div>
+            <div class="insurance-card-content-policy-holder-ID">
+                <div class="insurance-card-policy-holder-ID-label">
+                    <app-label class="insurance-card-label" [label]="'Policy Holder ID'">
+                    </app-label>
+                </div>
+                <span class="insurance-card-policy-holder-ID-title">
+                    {{patientBenefitPlan.PolicyHolderStringId}}
+                </span>
+            </div>
+            <div class="insurance-card-content-group">
+                <div class="insurance-card-group-label">
+                    <app-label class="insurance-card-label" [label]="'Group Number'">
+                    </app-label>
+                </div>
+                <span class="insurance-card-group-title">
+                    {{patientBenefitPlan.PlanGroupNumber}}
+                </span>
+            </div>
+            <div class="insurance-card-content-carrier-name">
+                <div class="insurance-card-carrier-name-label">
+                    <app-label class="insurance-card-label" [label]="'Carrier Name'">
+                    </app-label>
+                </div>
+                <span class="insurance-card-carrier-name-title">
+                    {{patientBenefitPlan.CarrierName}}
+                </span>
+            </div>
+            <div class="insurance-card-content-carrier-phone">
+                <div class="insurance-card-carrier-phone-label">
+                    <app-label class="insurance-card-label" [label]="'Carrier Phone #'">
+                    </app-label>
+                </div>
+                <span class="insurance-card-carrier-phone-title">
+                    {{patientBenefitPlan.CarrierPhoneNumber | phoneNumber}}
+                </span>
+            </div>
+            <div class="insurance-card-content-carrier-website">
+                <div class="insurance-card-carrier-website-label">
+                    <app-label class="insurance-card-label" [label]="'Carrier Website'">
+                    </app-label>
+                </div>
+                <span class="insurance-card-title"
+                    (click)="openNewTab(patientBenefitPlan.CarrierWebsite, 'Website')">
+                    {{patientBenefitPlan.CarrierWebsite}}
+                </span>
+            </div>
+            <div class="insurance-card-content-effective-date">
+                <div class="insurance-card-effective-date-label">
+                    <app-label class="insurance-card-label" [label]="'Effective Date'">
+                    </app-label>
+                </div>
+                <span class="insurance-card-effective-date-title">
+                    {{patientBenefitPlan.EffectiveDate | date: 'MM/dd/yyyy'}}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

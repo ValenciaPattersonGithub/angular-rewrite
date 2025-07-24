@@ -1,0 +1,20 @@
+﻿<div class="soarWidget">
+    <div class="panel-heading soarWidget__header">
+        <div class="w_row">
+            <label class="widget-handle">
+                {{barChartModel.title | i18n}}
+            </label>
+            <strong style="margin-left:10px" ng-click="drilldown()">{{totalValue}}</strong>
+        </div>
+        <div ng-show="showDropdown">
+            <soar-select-list text-field="Value"
+                              value-field="Value"
+                              option-list="dropdownOptions"
+                              ng-model="dateFilter"
+                              sb-change="dateFilterChanged()"></soar-select-list>
+        </div>
+    </div>
+    <div class="dashboardBarChart__body">
+        <div id="barChart-{{$id}}" class="chart" />
+    </div>
+</div>

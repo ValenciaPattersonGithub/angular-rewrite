@@ -1,0 +1,19 @@
+<div class="providerlocationheader" id="provider-location-header">
+    <div class="providerlocationheader-title" id="provider-location-header-title">
+        <span class="providerlocationheader-main-title" id="provider-location-header-main-title">{{ 'Providers & Locations' | translate }}</span>
+    </div>
+    <div class="providerlocationdetail" id="provider-location-detail">
+        <span class="providerlocationdetail-dentistlabel" id="provider-location-dentist-label">{{ 'Preferred Dentist: ' | translate }}</span>
+        <span class="providerlocationdetail-dentist" id="provider-location-dentist">{{dentist}}</span>
+        <span class="providerlocationdetail-hygenistlabel" id="provider-location-hygenist-label">{{ 'Preferred Hygienist: ' | translate }}</span>
+        <span class="providerlocationdetail-hygenist" id="provider-location-hygenist">{{hygenist}}</span>
+        <span class="providerlocationdetail-preferedLocationlabel" id="provider-location-preferred-location-label">{{ 'Preferred Location: ' | translate }}</span>
+        <span class="providerlocationdetail-preferedLocation" id="provider-location-preferred-location">{{preferedLocation}}</span>
+        <span class="providerlocationdetail-alternateLocationslabel" id="provider-location-alternate-location-label">{{ 'Alternate Location(s): ' | translate }}</span>
+        <span class="providerlocationdetail-alternateLocations" id="provider-location-alternate-location">
+            <span *ngFor="let location of alternateLocations" id="provider-location-alternate-locations">{{location}}<br></span>
+            <span *ngIf="!(alternateLocations && alternateLocations.length)" id="provider-location-no-alternate-location">{{'N/A' | translate}}</span>
+        </span>
+    </div>
+
+</div>

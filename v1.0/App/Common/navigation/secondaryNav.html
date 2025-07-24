@@ -1,0 +1,22 @@
+﻿<nav class="navbar navbar-default secondaryNav hidden-xs" keep-top-no-offset>
+	<div class="container-fluid">
+	    <div class="navbar-header">
+	        <a class="navbar-brand">{{ navData.secondaryNavHeaderText | i18n | uppercase }}</a>
+	    </div>
+	</div>
+	
+	<div class="flex flex-stretch">
+		<div class="flex-grow-1" ng-repeat="menuItem in navData.secondaryNavMenuItems">
+			<a class="btn secondaryNav-navBar form-control" ng-if="menuItem.href" href="{{ menuItem.href }}" check-auth-z="menuItem.access">{{ menuItem.text | i18n | uppercase }}</a>
+			<a class="btn secondaryNav-navBar form-control" ng-if="menuItem.onClick" ng-click="menuItem.onClick()" check-auth-z="menuItem.access">{{ menuItem.text | i18n | uppercase }}</a>
+
+			<div collapse="menuItem.isCollapsed">
+				<ul class="list-unstyled">
+					<li ng-repeat="subItem in menuItem.subItems">
+						<a class="btn secondaryNav-navBar form-control" href="{{ subItem.href }}" ng-click="subItem.onClick()" check-auth-z="subItem.access">{{ subItem.text | i18n | uppercase }}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>

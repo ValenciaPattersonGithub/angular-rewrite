@@ -1,0 +1,253 @@
+<div class="fuse_Grid container pull-left">
+  <kendo-grid #patientGrid [data]="patientGridData | async" [filterable]="true" [sortable]="true" [skip]="state.skip" [sort]="state.sort"
+    [pageSize]="state.take" (sortChange)="sortChange($event)" [loading]="loading">
+    <ng-template kendoGridToolbarTemplate>
+      <div class="k-toolbar-template">
+        <span *ngIf="!loading">Showing {{gridData?.length}} of {{ totalRecords }} records.</span>
+        <div class="loading" *ngIf="loading">{{ loadingText }}</div>
+      </div>
+    </ng-template>
+    <kendo-grid-column *ngFor="let column of columns" [field]="column?.field" [title]="column?.title | translate"
+      [format]="column?.format" [filterable]="column?.filterable" [sortable]="column?.sortable" [width]=column?.width>
+
+      <!-- kendoHeaderTemplate -->
+      <ng-template kendoGridHeaderTemplate let-column>
+        <span class="header-title" [ngClass]="{'headerMargin' : state?.sort[0]?.dir && state?.sort[0]?.field == column?.field}" [title]="column?.title | translate">
+          {{ column?.title | translate }}
+        </span>
+      </ng-template>
+
+      <ng-template *ngIf="column?.type == 'text'" kendoGridFilterCellTemplate let-filterService="filterService" let-filter="filter" let-column="column">
+        <div *ngIf="column?.field == textFilterType?.Name || column?.field == textFilterType?.ResponsibleParty || column?.field == textFilterType?.Status" [formGroup]="textFieldFilter" class="gridTextField">
+          <i class="fa fa-times" *ngIf="textFieldFilter?.controls[column?.field + 'Field']?.value?.length" (click)="clearField(column?.field)"></i>
+          <input #filterVal [formControlName]="column?.field + 'Field'" [id]="column?.field + 'Field'" class="custom-filter-input">
+        </div>
+      </ng-template>
+
+      <!-- kendoFilterCellTemplate -->
+      <ng-template *ngIf="column?.type == 'date'" kendoGridFilterCellTemplate let-filter="filter" let-column="column"
+        let-filterService="filterService">
+        <div class="dateRange">
+          <app-date-range-selector *ngIf="column?.field==dateRangeFilterType?.DateOfBirth" [dateRangeValidator]="true"
+            (onApply)="applyDateRangeFilter($event, column?.field)" [showPlaceholder]="false"
+            (onPopupOpen)="onPopupOpen(column?.field)" [startDate]="dateRangeFilter?.PatientDateOfBirthFrom"
+            [endDate]="dateRangeFilter?.PatientDateOfBirthTo" [tooltipPosition]="'dateRangepicker-patientGrid'"
+            [selectedDateResponseFormat]="dateFormatForFilters"
+            [showPopOver]="showDobPopOver"></app-date-range-selector>
+
+          <app-date-range-selector *ngIf="column?.field==dateRangeFilterType?.LastAppointment"
+            (onApply)="applyDateRangeFilter($event,column?.field)" [showPlaceholder]="false" [dateRangeValidator]="true"
+            (onPopupOpen)="onPopupOpen(column?.field)" [startDate]="dateRangeFilter?.PreviousAppointmentDateFrom"
+            [endDate]="dateRangeFilter?.PreviousAppointmentDateTo" [tooltipPosition]="'dateRangepicker-patientGrid'"
+            [showPopOver]="showLastApptPopOver"
+            [selectedDateResponseFormat]="dateFormatForFilters"></app-date-range-selector>
+
+          <app-date-range-selector *ngIf="column?.field==dateRangeFilterType?.OtherToDoLastAppointment"
+            (onApply)="applyDateRangeFilter($event,column?.field)" [showPlaceholder]="false" [dateRangeValidator]="true"
+            (onPopupOpen)="onPopupOpen(column?.field)" [startDate]="dateRangeFilter?.PreviousAppointmentDateFrom"
+            [endDate]="dateRangeFilter?.PreviousAppointmentDateTo" [tooltipPosition]="'dateRangepicker-patientGrid'"
+            [showPopOver]="showOtherToDoLastApptPopOver"
+            [selectedDateResponseFormat]="dateFormatForFilters"></app-date-range-selector>
+
+          <app-date-range-selector *ngIf="column?.field==dateRangeFilterType?.NextAppointment"
+            (onApply)="applyDateRangeFilter($event,column?.field)" [showPlaceholder]="false" [dateRangeValidator]="true"
+            (onPopupOpen)="onPopupOpen(column?.field)" [startDate]="dateRangeFilter?.NextAppointmentDateFrom"
+            [endDate]="dateRangeFilter?.NextAppointmentDateTo" [tooltipPosition]="'dateRangepicker-patientGrid'"
+            [showPopOver]="showNextApptPopOver"
+            [selectedDateResponseFormat]="dateFormatForFilters"></app-date-range-selector>
+
+          <app-date-range-selector *ngIf="column?.field==dateRangeFilterType?.PreventiveCare"
+            (onApply)="applyDateRangeFilter($event,column?.field)" [showPlaceholder]="false" [dateRangeValidator]="true"
+            (onPopupOpen)="onPopupOpen(column?.field)" [startDate]="dateRangeFilter?.PreventiveCareDueDateFrom"
+            [endDate]="dateRangeFilter?.PreventiveCareDueDateTo" [tooltipPosition]="'dateRangepicker-patientGrid'"
+            [showPopOver]="showPreventiveCarePopOver"
+            [selectedDateResponseFormat]="dateFormatForFilters"></app-date-range-selector>
+
+          <app-date-range-selector *ngIf="column?.field==dateRangeFilterType?.Appointments"
+            (onApply)="applyDateRangeFilter($event,column?.field)" [showPlaceholder]="false" [dateRangeValidator]="true"
+            (onPopupOpen)="onPopupOpen(column?.field)" [startDate]="dateRangeFilter?.AppointmentDateFrom"
+            [endDate]="dateRangeFilter?.AppointmentDateTo" [tooltipPosition]="'dateRangepicker-patientGrid'"
+            [showPopOver]="showAppointmentsPopOver"
+            [selectedDateResponseFormat]="dateFormatForFilters"></app-date-range-selector>
+
+          <app-date-range-selector *ngIf="column?.field==dateRangeFilterType?.LastCommunication" [dateRangeValidator]="true"
+            [showPlaceholder]="false" (onApply)="applyDateRangeFilter($event,column?.field)"
+            (onPopupOpen)="onPopupOpen(column?.field)" [startDate]="dateRangeFilter?.LastCommunicationFrom"
+            [endDate]="dateRangeFilter?.LastCommunicationTo" [tooltipPosition]="'dateRangepicker-patientGrid'"
+            [showPopOver]="showLastCommunicationPopOver"
+            [selectedDateResponseFormat]="dateFormatForFilters"></app-date-range-selector>
+
+          <app-date-range-selector *ngIf="column?.field==dateRangeFilterType?.DueDate" [showPlaceholder]="false" [dateRangeValidator]="true"
+            (onApply)="applyDateRangeFilter($event,column?.field)" (onPopupOpen)="onPopupOpen(column?.field)"
+            [startDate]="dateRangeFilter?.DueDateFrom" [endDate]="dateRangeFilter?.DueDateTo"
+            [tooltipPosition]="'dateRangepicker-patientGrid'" [showPopOver]="dueDatePopOver"
+            [selectedDateResponseFormat]="dateFormatForFilters"></app-date-range-selector>
+        </div>
+      </ng-template>
+
+      <ng-template *ngIf="column?.type == 'numeric'" kendoGridFilterCellTemplate let-filter="filter" let-column="column"
+        let-filterService="filterService">
+        <div class="numeric">
+          <numeric-range-selector [fromValue]="numericRangeFilter?.TreatmentPlanCountTotalFrom"
+            [toValue]="numericRangeFilter?.TreatmentPlanCountTotalTo"
+            (filterChange)="applyNumericRangeFilter($event)"></numeric-range-selector>
+        </div>
+      </ng-template>
+
+      <ng-template *ngIf="column?.type == 'boolean'" kendoGridFilterCellTemplate let-filter="filter" let-column="column"
+        let-filterService="filterService">
+        <div>
+          <kendo-dropdownlist class="patientSelect" [data]="appointmentFilterList" [textField]="'Value'" [valueField]="'Key'"
+            [defaultItem]="defaultItem" [popupSettings]="popupSettings" (valueChange)="onAppointmentStatusChanged($event,column?.field)">
+          </kendo-dropdownlist>
+        </div>
+      </ng-template>
+
+      <!-- kendoGridCellTemplate -->
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+        <ng-container 
+        *ngIf="![patientColumnsFields?.Name, patientColumnsFields?.DateofBirth, patientColumnsFields?.ResponsibleParty, patientColumnsFields?.NextAppt,patientColumnsFields?.LastAppt, patientColumnsFields?.PreventiveCare, 
+            patientColumnsFields?.OtherLastAppt, patientColumnsFields?.LastCommunication, patientColumnsFields?.TreatmentPlan, patientColumnsFields?.ApptDate]?.includes(column?.field)">
+          {{ dataItem[column?.field] }}
+        </ng-container>
+        
+        <!-- Name -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.Name" >
+          <a *ngIf="dataItem[column?.field]!=noValue" class="wrapButtonText" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" (click)="triggerNavToPatientProfile(dataItem?.patientId)">
+            <span *ngIf="dataItem?.isActivePatient == false" class="fa fa-user"></span>
+            {{ dataItem[column?.field] }}
+          </a>
+          <span class="noDataSpan" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" *ngIf="dataItem[column?.field]==noValue">{{dataItem[column?.field]}}</span>
+        </ng-container>
+
+        <!-- dob -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.DateofBirth && dataItem[column?.field]">
+          <div *ngIf="dataItem[column?.field]!=noValue"  [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}">
+            {{ dataItem[column?.field] }}
+          </div>
+          <span class="noDataSpan" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" *ngIf="dataItem[column?.field]==noValue">{{dataItem[column?.field]}}</span>
+        </ng-container>     
+
+         <!-- responsible party -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.ResponsibleParty">
+          <a *ngIf="dataItem[column?.field]!=noValue" class="wrapButtonText" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}"
+            (click)="triggerNavToPatientProfile(dataItem?.responsiblePartyId)">
+            {{ dataItem[column?.field] }}
+          </a>
+          <span class="noDataSpan" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" *ngIf="dataItem[column?.field]==noValue">{{dataItem[column?.field]}}</span>
+        </ng-container>        
+
+        <!-- lastAppointment -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.LastAppt && dataItem[column?.field]">
+          <button *ngIf="dataItem[column?.field]!=noValue" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}"
+            (click)="navigateToAppointment(dataItem?.previousAppointmentId, dataItem?.patientAccountId)"
+            class="btn btn-link btn-link-left wrapButtonText" checkRoleAccess="{{ dynamicAmfa }}"
+            [title]="tooltipContent" kendoTooltip position="top" tooltipClass="app-tooltip"
+            (mouseover)="populateTooltipContent(dataItem, column?.field)">{{ dataItem[column?.field] }}
+          </button>
+          <span class="noDataSpan" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" *ngIf="dataItem[column?.field]==noValue">{{dataItem[column?.field]}}</span>
+        </ng-container>
+
+        <!-- otherToDo lastAppointment -->
+        <ng-container *ngIf="column?.field == otherToDoColumnsFields?.OtherLastAppt && dataItem[column?.field]">
+          <button *ngIf="dataItem[column?.field]!=noValue" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}"
+            (click)="navigateToAppointment(dataItem?.previousAppointmentId, dataItem?.patientAccountId)"
+            class="btn btn-link btn-link-left wrapButtonText" checkRoleAccess="{{ dynamicAmfa }}"
+            [title]="tooltipContent" kendoTooltip position="top" tooltipClass="app-tooltip"
+            (mouseover)="populateTooltipContent(dataItem, column?.field)">{{ dataItem[column?.field] }}
+          </button>
+          <span class="noDataSpan" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" *ngIf="dataItem[column?.field]==noValue">{{dataItem[column?.field]}}</span>
+        </ng-container>
+
+        <!-- nextAppointment -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.NextAppt && dataItem[column?.field]">
+          <button *ngIf="dataItem[column?.field]!=noValue" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}"
+            (click)="navigateToAppointment(dataItem?.nextAppointmentId, dataItem?.patientAccountId)"
+            class="btn btn-link btn-link-left wrapButtonText" checkRoleAccess="{{ dynamicAmfa }}"
+            [title]="tooltipContent" kendoTooltip position="top" tooltipClass="app-tooltip"
+            (mouseover)="populateTooltipContent(dataItem, column?.field)">{{ dataItem[column?.field] }}
+          </button>
+          <span class="noDataSpan" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" *ngIf="dataItem[column?.field]==noValue">{{dataItem[column?.field]}}</span>
+        </ng-container>
+
+        <!-- appointmentDate -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.ApptDate && dataItem[column?.field]">
+          <button *ngIf="dataItem[column?.field]!=noValue" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}"
+            (click)="navigateToAppointment(dataItem?.appointmentId, dataItem?.patientAccountId, dataItem?.classification)"
+            class="btn btn-link btn-link-left wrapButtonText" checkRoleAccess="{{ dynamicAmfa }}"
+            [title]="tooltipContent" kendoTooltip position="top" tooltipClass="app-tooltip"
+            (mouseover)="populateTooltipContent(dataItem, column?.field)">{{ dataItem[column?.field] }}
+          </button>
+          <span class="noDataSpan" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" *ngIf="dataItem[column?.field]==noValue">{{dataItem[column?.field]}}</span>
+        </ng-container>
+
+        <!-- preventive care -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.PreventiveCare">
+          <div *ngIf="dataItem[column?.field]!=noValue"  [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}">
+            {{ dataItem[column?.field] }}
+          </div>
+          <span class="noDataSpan" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" *ngIf="dataItem[column?.field]==noValue">{{dataItem[column?.field]}}</span>
+        </ng-container>   
+
+        <!-- treatmentPlans -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.TreatmentPlan">
+          <div class="tPlan">
+            <div class="popover-container" *ngIf="dataItem[column?.field]!='(0)$0.00'" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}"
+              (mouseover)="showTooltip($event, dataItem?.patientId, rowIndex)" (mouseleave)="hideTxPlan()">
+              {{dataItem[column?.field]}}
+              <div *ngIf="dataItem?.patientId == currentPatientId && rowIndex == currentIndex">
+                <ng-container *ngTemplateOutlet="templateReference"></ng-container>
+              </div>
+            </div>
+            <span *ngIf="dataItem[column?.field]=='(0)$0.00'" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}">{{dataItem[column?.field]}}</span>
+          </div>
+        </ng-container>
+
+
+        <!-- lastCommunication -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.LastCommunication">
+          <a *ngIf="dataItem[column?.field] !=''" class="btn btn-link enableRow"  [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}"
+            (click)="openLastCommunicationModal(dataItem?.patientId,1,false)"
+            [title]="dataItem[column?.field]">{{dataItem[column?.field]}}</a>
+          <a *ngIf="dataItem[column?.field]==''" class="btn btn-link enableRow" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}"
+            (click)="openLastCommunicationModal(dataItem?.patientId,1,false)" title="Create Communication">Create
+            Communication</a>
+        </ng-container>
+
+        <!-- schedule -->
+        <ng-container *ngIf="column?.field == patientColumnsFields?.Schedule">
+          <button class="btn btn-link ng-binding ng-scope" [ngClass]="{'inactivePatient': !dataItem?.isActivePatient}" (click)="createAppointments(dataItem?.patientId)">
+            <span id="schedule-setup-icon" class="practiceSetup__icon far fa-calendar-alt" [ngClass]="iconClass"
+              title="Create new appointment"></span>
+          </button>
+        </ng-container>
+
+      </ng-template>
+
+
+    </kendo-grid-column>
+  </kendo-grid>
+</div>
+
+<ng-template #templateReference>
+  <div class="tx-plans-hover" [ngStyle]="{ 'top' : mouseY, 'left' : mouseX }"
+    *ngIf="isMouseUp && txPlansHover?.length > 0">
+    <table>
+      <tr class="tx-plans-header">
+        <th class="tx-plans-item-name">{{ 'Tx Plan Name' | translate }}</th>
+        <th class="tx-plans-item-date">{{ 'Create Date' | translate }}</th>
+        <th class="tx-plans-item-total">{{ 'Total' | translate }}</th>
+        <th class="tx-plans-item-status">{{ 'Status' | translate }}</th>
+      </tr>
+      <tr class="tx-plans-item-cursor" *ngFor="let tx of txPlansHover"
+        (click)="navToPatientTxPlan(tx?.PatientId, tx?.TreatmentPlanId)">
+        <td class="tx-plans-item-name">{{tx?.TreatmentPlanName | translate }}</td>
+        <td class="tx-plans-item-date">{{tx?.TreatmentPlanCreatedDate | date: 'MM/dd/yyyy' }}</td>
+        <td class="tx-plans-item-total">{{tx?.TreatmentPlanTotalBalance | currency }}</td>
+        <td class="tx-plans-item-status">{{tx?.TreatmentPlanStatus }}<i
+            class="fa {{getClass(tx?.TreatmentPlanStatus)}} fa-1x tx-plans-item-icon"></i></td>
+      </tr>
+    </table>
+  </div>
+</ng-template>

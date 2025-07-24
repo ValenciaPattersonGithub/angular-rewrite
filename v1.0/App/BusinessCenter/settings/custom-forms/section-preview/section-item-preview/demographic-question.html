@@ -1,0 +1,273 @@
+﻿<div ng-form="frmDemographicQuestion" class="form-group">
+    <div class="row">
+        <div class="container-fluid">
+
+            <!--First Name-->
+            <div class="col-md-4" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicFirstName.$valid}">
+                <div class="row">
+                    <label id="lblDemographicFirstName{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicFirstName{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'First Name' |i18n}}:
+                        <span ng-show="sectionItem.FormBankItemDemographic.IsRequiredFirstName" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-10" type="text" ng-model="sectionItem.FormBankItemDemographic.FirstName" set-focus
+                           name="questionDemographicFirstName" ng-required="sectionItem.FormBankItemDemographic.IsRequiredFirstName"
+                           id="questionDemographicFirstName{{sectionIndex}}_{{sectionIdexPreviewIndex}}" placeholder="First Name" maxlength="250"
+                           ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblFirstNameRequired" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicFirstName.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>                
+            </div>
+            <!--Last Name-->
+            <div class="col-md-4 " ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicLastName.$valid}">
+                <div class="row">
+                    <label id="lblDemographicLastName{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicLastName{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'Last Name' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredLastName" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-10 " type="text" ng-model="sectionItem.FormBankItemDemographic.LastName"
+                           name="questionDemographicLastName" ng-required="sectionItem.FormBankItemDemographic.IsRequiredFirstName"
+                           id="questionDemographicLastName{{sectionIndex}}_{{sectionIdexPreviewIndex}}" placeholder="Last Name" maxlength="250" ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblLastNameRequired" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicLastName.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>
+            </div>
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicPreferredName.$valid}">
+
+                <div class="row">
+                    <label id="lblDemographicPreferredName{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicPreferredName{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'Preferred {0}' | i18n:['Name'] }}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredPreferredName" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-11" type="text" ng-model="sectionItem.FormBankItemDemographic.PreferredName"
+                           name="questionDemographicPreferredName" ng-required="sectionItem.FormBankItemDemographic.IsRequiredPreferredName"
+                           id="questionDemographicPreferredName{{sectionIndex}}_{{sectionIdexPreviewIndex}}"
+                           placeholder="{{ 'Preferred {0}' | i18n:['Name'] }}" maxlength="250" ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblPreferredNameRequired" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicPreferredName.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>
+            </div>
+        </div>        
+        <h6>&nbsp;</h6>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicAddressLine1.$valid}">
+
+                <div class="row">
+                    <label id="lblDemographicAddressLine1{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicAddressLine1{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'Address Line 1' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredAddressLine1" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-11" type="text" ng-model="sectionItem.FormBankItemDemographic.AddressLine1"
+                           name="questionDemographicAddressLine1" ng-required="sectionItem.FormBankItemDemographic.IsRequiredAddressLine1"
+                           id="questionDemographicAddressLine1{{sectionIndex}}_{{sectionIdexPreviewIndex}}"
+                           placeholder="Address Line 1" maxlength="250" ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblAddress1Required" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicAddressLine1.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>
+            </div>
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicAddressLine2.$valid}">
+                <div class="row">
+                    <label id="lblDemographicAddressLine2{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicAddressLine2{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'Address Line 2' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredAddressLine2" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-11" type="text" ng-model="sectionItem.FormBankItemDemographic.questionDemographicAddressLine2"
+                           name="questionDemographicAddressLine2" ng-required="sectionItem.FormBankItemDemographic.IsRequiredAddressLine2"
+                           id="questionDemographicAddressLine2{{sectionIndex}}_{{sectionIdexPreviewIndex}}"
+                           placeholder="Address Line 2" maxlength="250" ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblAddress2Required" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicAddressLine2.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>
+            </div>
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicCity.$valid}">
+                <div class="row">
+                    <label id="lblDemographicCity{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicCity{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'City' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredCity" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-5" type="text" ng-model="sectionItem.FormBankItemDemographic.City"
+                           name="questionDemographicCity" ng-required="sectionItem.FormBankItemDemographic.IsRequiredCity"
+                           id="questionDemographicCity{{sectionIndex}}_{{sectionIdexPreviewIndex}}"
+                           placeholder="City" maxlength="250" ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblCityRequired" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicCity.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>
+            </div>
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" >
+                <div class="row">
+                    <label id="lblDemographicState{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicState{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'State' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredState" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <div class="" id="questionDemographicState{{sectionIndex}}_{{sectionIdexPreviewIndex}}" name="questionDemographicState">
+                        <state-list state-list-id="inpState" disable-input="inputIsDisabled" source="sectionItem.FormBankItemDemographic.State"></state-list>
+                    </div>
+                </div>
+                <!--<label id="lblStateRequired" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicState.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>-->
+            </div>
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicZip.$valid}">
+                <div class="row">
+                    <label id="lblDemographicZip{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicZip{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'Zip' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredZip" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-5" type="text" ng-model="sectionItem.FormBankItemDemographic.Zip" zip-field="sectionItem.FormBankItemDemographic.Zip"
+                           name="questionDemographicZip" ng-required="sectionItem.FormBankItemDemographic.IsRequiredZip"
+                           id="questionDemographicZip{{sectionIndex}}_{{sectionIdexPreviewIndex}}"
+                           placeholder="{{ 'ZIP Code' | i18n }}" maxlength="12" ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblZipRequired" class="help-block" ng-show="hasErrors && frmDemographicQuestion.questionDemographicZip.$dirty && !frmDemographicQuestion.questionDemographicZip.$valid">
+                    {{ 'ZIP code must be 5 to 9 numeric characters.' | i18n }}
+                </label>
+            </div>
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicEmail.$valid}">
+                <div class="row">
+                    <label id="lblDemographicEmail{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicEmail{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'Email Address' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredEmailAddress" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-5" type="text" ng-model="sectionItem.FormBankItemDemographic.Email"
+                           name="questionDemographicEmail" ng-required="sectionItem.FormBankItemDemographic.IsRequiredEmailAddress"
+                           id="questionDemographicEmail{{sectionIndex}}_{{sectionIdexPreviewIndex}}" valid-email
+                           placeholder="Email Address" maxlength="250" ng-disabled="inputIsDisabled" />
+                </div>
+                <label class="help-block" id="errPatientEmailOneAddress" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicEmail.$valid">
+                    {{ 'This field requires a valid email address.'| i18n }}
+                </label>
+            </div>
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicPrimaryNumber.$valid}">
+                <div class="row">
+                    <label id="lblDemographicPrimaryNumber{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicPrimaryNumber{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'Primary Phone Number' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredPrimaryNumber" class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-5" type="text" ng-model="sectionItem.FormBankItemDemographic.PrimaryNumber"
+                           name="questionDemographicPrimaryNumber" ng-required="sectionItem.FormBankItemDemographic.IsRequiredPrimaryNumber"
+                           id="questionDemographicPrimaryNumber{{sectionIndex}}_{{sectionIdexPreviewIndex}}" placeholder="Primary Phone Number" 
+                           maxlength="250" ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblPrimaryNumberRequired" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicPrimaryNumber.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>
+            </div>
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-md-8" ng-class="{'has-error':hasErrors && !frmDemographicQuestion.questionDemographicSecondaryNumber.$valid}">
+                <div class="row">
+                    <label id="lblDemographicSecondaryNumber{{sectionIndex}}_{{sectionIdexPreviewIndex}}" class="control-label"
+                           for="questionDemographicSecondaryNumber{{sectionIndex}}_{{sectionIdexPreviewIndex}}">
+                        {{ 'Secondary Phone Number' |i18n}}:<span ng-show="sectionItem.FormBankItemDemographic.IsRequiredSecondaryNumber" 
+                                                                  class="bold padding5 size-h4">*</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <input class="col-md-5" type="text" ng-model="sectionItem.FormBankItemDemographic.SecondaryNumber"
+                           name="questionDemographicSecondaryNumber" ng-required="sectionItem.FormBankItemDemographic.IsRequiredSecondaryNumber"
+                           id="questionDemographicSecondaryNumber{{sectionIndex}}_{{sectionIdexPreviewIndex}}" placeholder="Secondary Phone Number"
+                           maxlength="250" ng-disabled="inputIsDisabled" />
+                </div>
+                <label id="lblSecondaryNumberRequired" class="help-block" ng-show="hasErrors && !frmDemographicQuestion.questionDemographicSecondaryNumber.$valid">
+                    {{ 'This field is required.' | i18n }}
+                </label>
+            </div>
+
+        </div>
+        <h6>&nbsp;</h6>
+    </div>
+
+
+</div>

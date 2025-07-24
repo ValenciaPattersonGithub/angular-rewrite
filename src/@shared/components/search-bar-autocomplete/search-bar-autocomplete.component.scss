@@ -1,0 +1,62 @@
+@import "variables";
+
+.search-bar-autocomplete {
+    ::ng-deep .k-autocomplete {
+        width: 100%;
+        border: 1px solid $border-grey;
+        border-radius:4px;
+    }
+}
+
+.search-bar-autocomplete-wrapper {
+    display: grid;
+    height: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    position: relative;
+    border-bottom: 1px solid $border-grey;
+    min-width: 100%;
+    grid-gap: 10px;
+    &-plan {
+        grid-column: 1;
+    }
+    &-carrier {
+        grid-column: 2;
+    }
+    &-group {
+        grid-column: 3;
+    }
+}
+
+.patient-search-bar-autocomplete-wrapper {
+    display:grid;
+    grid-template:auto / 1fr 20px 2fr;
+    width:100%;
+}
+
+::ng-deep .k-popup .k-list .k-item {
+    border-bottom: 1px solid $border-grey;
+}
+
+::ng-deep .k-icon.k-clear-value.k-i-close {
+    height: 10px;
+    background-color: $polar-white;
+    padding: 5px;
+    color: #E43122;
+}
+
+::ng-deep #kendoSearchId .k-searchbar:before {
+    font-family: 'Font Awesome 5 Pro';
+    content: "\f002";
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 6px;
+}
+
+div .description-text {
+  overflow-x: hidden;
+  width: auto;
+}
+
+.text-center {
+  text-align: center;
+}

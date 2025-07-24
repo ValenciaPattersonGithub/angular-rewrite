@@ -1,0 +1,52 @@
+﻿export interface ServiceTransaction {
+    ServiceTransactionId: string;
+    ServiceCodeId: string;
+    TransactionType: number;
+    ServiceTransactionStatusId: number;
+    LocationId: number;
+    Description: string;
+    AppointmentId: string;
+    AccountMemberId: string;
+    ProposedLocationId: number;
+    ProposedProviderId: string;
+    ProviderOnClaimsId: string;
+    ProviderUserId: string;
+    Note: string;
+    AgingCategory: number;
+    AgingDate: Date;
+    AllowedAmount: string; // need to determine type
+    Amount: number;
+    Discount: number;
+    EncounterId: string;
+    FailedMessage: string;
+    Fee: number;
+    InsuranceEstimates: any; // need to figure out what needs to change with this yet
+    InsuranceOrder: number;
+    IsBalanceAlreadyUpdated: string;
+    IsDeleted: boolean;
+    IsDiscounted: boolean;
+    IsForClosingClame: boolean;
+    IsOnInformedConsent: boolean;
+    ObjectState: string;
+    PredeterminationHasResponse: string;
+    PriorFee: number;
+    RejectedReason: string;
+    RelatedRecordId: string;
+    Roots: string;
+    RootSummaryInfo: string;
+    Surface: string;
+    SurfaceSummaryInfo: string;
+    Tooth: string;
+    Tax: number;
+    TotalAdjEstimate: number;
+    TotalAdjPaidAmount: number;
+    TotalEstInsurance: number
+    TotalInsurancePaidAmount: number;
+    EnteredByUserId: string;
+    CreatedDate: Date;
+    DateEntered: Date;
+    DateCompleted: Date;
+    DataTag: string;
+    UserModified: string;
+    DateModified: string;
+}

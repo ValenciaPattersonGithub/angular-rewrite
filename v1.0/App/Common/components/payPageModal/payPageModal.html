@@ -1,0 +1,11 @@
+<div class="payPageModal">
+    <div class="modal-body" ng-if="showPayPageModal">
+        <button class="modal-close-button"  ng-click="closePaypage()"  id="btnClosePaypage" aria-label="Close">
+            <svg-icon  name="closeIcon"></svg-icon>
+        </button> 
+        <div class="modal-loader-overlay" ng-if="modalLoading">
+            <loader-component></loader-component>    
+        </div>
+        <iframe #paypage ng-src={{item.payPageUrl}} class="paypage" ></iframe>
+    </div>
+</div>

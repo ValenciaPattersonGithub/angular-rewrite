@@ -1,0 +1,603 @@
+﻿/* This is not the best way to fix the styling issues, however without making a new control this is the fix that we can put in place for the time being.
+    The real solution is to redo the header control and fix it to have renditions that do not have the alert and secondaryNav sections.
+    However that adds to how much our team needs to maintain independently from the other groups not a decision i think is a good one for the time being 
+    so the below important styles is how we are going to address the problem for the time being.
+*/
+.patient-communication-model .patientHeader__info .patientHeader__alertsContainer {
+    display: none !important;
+}
+
+.patient-communication-model .patientHeader__secondaryNavigation {
+    display: none !important;
+}
+
+.patient-communication-model .patientHeader__info .patientHeader__basicInfo {
+    width: 20% !important;
+}
+
+/*.patient-communication-model .no-wrap .col-xs-1 {
+    padding-left: 0px !important;
+}*/
+
+
+.pat-communication-header {
+    background-color: gray;
+    padding: 10px 10px 10px 15px;
+    color: white;
+    font-weight: normal;
+    width: 550px;
+}
+
+.pat-communication-title {
+    float: left;
+    padding-top: 5px;
+    width: 100%;
+    padding-left: 5px;
+
+    h1 {
+        font-size: @brand-font_h1;
+        margin: 0;
+        padding-top: @brand-padding_horizontal;
+        padding-bottom: @brand-padding_horizontal;
+    }
+}
+
+.pat-communication-close {
+    text-align: right;
+    position: absolute;
+    width: 100%;
+    z-index: 9999;
+}
+
+.pat-communication-column-left {
+    width: 61%;
+    float: left;
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
+.pat-communication-column-right {
+    width: 38%;
+    float: right;
+    padding-top: 15px;
+}
+
+.pat-communication-modal-body {
+    position: absolute;
+    background-color: white;
+    width: 100%;
+}
+
+.patCommunicationModal {
+    width: 80%;
+    background-color: white;
+    height: 750px;
+    
+    h4[aria-expanded=true] .glyphicon-chevron-up:before{
+        content:"\e114"
+    }
+    
+    .patientHeader {
+        margin: 0;
+        width: 100%;
+    }
+    .pat-communication-notes{
+        overflow:hidden !important;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;
+        -ms-word-wrap:break-word;
+        word-break:break-all;
+         -ms-text-overflow: ellipsis;
+         -o-text-overflow: ellipsis;
+         width:100%;
+         max-width:100%;
+         display:block;
+    }
+     
+    .commIcon{
+        font-size:25px;
+    }
+    .comm-unread-sms{
+        font-weight: bold;
+        border-left: 5px solid #2dabcb;
+    }
+}
+
+.pat-patient-header-top {
+    padding-left: 10px;
+}
+
+.patCommunicationModal .modal-header-text h1 {
+    margin-top: 5px;
+    color: black;
+}
+
+.patCommunicationModal .view-medical-history {
+    font-size: 14px;
+    font-weight: normal;
+    clear: left;
+}
+
+.patCommunicationModal .view-profile, .patCommunicationModal .view-medical-history {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.patCommunicationModal .btn-primary {
+    border-radius: 5px;
+    height: 38px;
+    background-color: #04b3de;
+    border-color: #04b3de;
+}
+
+.patCommunicationModal a[disabled] {
+    cursor: default;
+    pointer-events: none;
+}
+
+.patCommunicationModal #lblDate {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.patCommunicationModal .page-title-responsive {
+    background: transparent;
+    font-size: 20px;
+    color: black;
+}
+
+.patCommunicationModal label.page-title-responsive {
+    font-weight: normal;
+}
+
+.patCommunicationModal label#patient-label {
+    font-size: 14px;
+    color: #6A7575;
+    font-weight: bold;
+}
+
+.patCommunicationModal .soar-link {
+    background: transparent;
+    font-size: 14px;
+    color: @brand-color_font-dark;
+}
+
+.patCommunicationModal div.inline-block {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.patCommunicationModal .btn-save-newCommunication {
+    align-content: flex-end;
+    border-radius: 4px;
+    margin-left: 5px;
+}
+
+.patCommunicationModal .btn-violet {
+    background-color: #5c2d84;
+    border-color: #5c2d84;
+}
+
+.patCommunicationModal .btn-back {
+    background: white;
+    border-color: #04b3de;
+    border-radius: 4px;
+    font-size: 24px;
+    color: #04b3de;
+    width: 50px;
+    height: 38px;
+    float: left;
+}
+
+.patCommunicationModal .newCommunication-status-container .k-dropdown > .k-dropdown-wrap {
+    border-radius: 4px;
+    margin-left: 5px;
+}
+
+.patCommunicationModal .date-selector-container {
+    width: 120px;
+    float: left;
+    margin-right: 11px;
+}
+
+.patCommunicationModal .newCommunication-time-container .time-picker,
+.patCommunicationModal .newCommunication-time-container .time-picker .k-combobox {
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.patCommunicationModal .newCommunication-type-container, .patCommunicationModal .newCommunication-services-container {
+    padding-left: 31px;
+}
+
+.patCommunicationModal .transparent-text input.k-input {
+    color: transparent;
+}
+
+.patCommunicationModal #inpNewCommunicationStatus .k-dropdown-wrap {
+    border-color: #04b3de;
+    color: #04b3de;
+}
+
+.patCommunicationModal #modalScroll {
+    cursor: move;
+}
+
+.patCommunicationModal .newCommunication-duration-container .k-widget.k-combobox {
+    width: 60px;
+}
+
+.patCommunicationModal #btnAddProvider {
+    margin-right: 16px;
+}
+
+.patCommunicationModal #btnCancel {
+    position: absolute;
+    right: 20px;
+}
+
+.patCommunicationModal .provider-newCommunication-container {
+    max-height: 500px;
+    height: auto;
+    overflow: visible;
+}
+
+.patCommunicationModal .newCommunication-modal-right {
+    padding-right: 38px;
+}
+
+div.newCommunication-modal + div.modal-backdrop.in {
+    opacity: 0.2;
+}
+
+.patCommunication-edit-refactor-modal .modal-dialog {
+    width: 500px;
+}
+
+.patCommunicationModal .patCommunicationEdit__modalBody {
+    max-height: 80%;
+    overflow: visible;
+}
+
+div#inpStartTime-list div.font-18,
+ div#inpEndTime-list div.font-18 {
+    font-size: 100%;
+}
+
+/*.new-communication-body {
+    height: 300px;
+    width: 600px;
+}*/
+
+/*.intro {
+  max-width: 800px;
+  padding: 10px;
+}
+.whitespace {
+  padding: 75px;
+}
+ddn-sticky-wrapper,
+ddn-sticky {
+  display: block;
+}
+ddn-sticky-wrapper {
+  opacity:.8;
+}
+ddn-sticky-wrapper>ddn-sticky {
+  background: #2B3E50;
+  padding-left: 20px;
+  line-height: 40px;
+  z-index: 1;
+  color: #fff;
+}
+ddn-sticky-wrapper>ddn-sticky.fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+}
+ddn-sticky-wrapper>ddn-sticky.fixed.absolute {
+  position: absolute;
+}*/
+
+/*.fixedHeader {
+  box-sizing: border-box;
+  position: fixed;
+  width: 100%;
+  height: 100px;
+  padding: 10px 20px;
+  background: #111;
+  color: #fff;
+  z-index: 10;
+}
+
+.container {
+  padding-top: 100px;
+}
+
+.followMeBar {
+  background: #999;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}*/
+
+#divTimelinewrapper {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.divTimelineRow {
+    overflow-y: scroll;
+    height: 700px;
+}
+
+.divTimelineDetailRow {
+    padding-left: 0px;
+    padding-right: 10px;
+    padding-top: 0px;
+    overflow: hidden;
+}
+
+.divTimeline {
+    display: inline-block;
+    float: left;
+    vertical-align: middle;
+}
+
+.divComType {
+    width: 100px;
+    height: 35px;
+    text-align: -webkit-center;
+    padding-top: 20px;
+}
+
+.divOthers {
+    width: 250px;
+    height: 60px;
+}
+
+.divReason {
+    width: 250px;
+    height: 20px;
+}
+
+.divNotes {
+    width: 250px;
+    height: 35px;
+    overflow: hidden;
+}
+
+.divNotesDetail {
+    overflow-x: auto;
+    height: 122px;
+    padding-left: 16px;
+}
+
+.hoverme:hover {
+    background-color: #3DD6FF;
+    color: white;
+    border-color: #047fde;
+}
+
+.clicked {
+    background-color: #04b3de !important;
+    color: white;
+}
+
+.preferredText {
+    color: #04b3de;
+}
+
+.addressField {
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.communicationFltr {
+    .clearfix;
+    position: relative;
+    padding: 0 @brand-padding_sm;
+
+    &__item {
+        float: left;
+        width: 70px;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding-right: @brand-padding_sm;
+        padding-top: 8px;
+    }
+
+    &__ctrl {
+        .btn;
+        .btn-default;
+        .concatString;
+        width: 100%;
+        padding-left: 4px;
+        padding-right: 4px;
+        margin-bottom: 10px;
+
+        &.active {
+            .btn-primary;
+        }
+    }
+
+    &__btnContainer {
+        flex: 1;
+        text-align: center;
+
+        &.showDeleted {
+            background-color: @white;
+            border: solid 1px;
+        }
+    }
+
+    &__btn {
+        .btn;
+        .btn-default;
+        border-color: #2DABCB;
+        border-radius: 5px;
+        border-width: 3px;
+        height: 48px;
+        margin: auto;
+        padding: 2px;
+        width: 48px;
+
+        &.active {
+            .btn-primary;
+        }
+    }
+
+    &__btnIcon {
+        height: 34px;
+    }
+
+    &__btnTitle {
+        font-family: @brand-font;
+        font-size: 12px;
+    }
+
+    &__toggleLnk {
+        margin: @brand-margin_sm;
+        float: right !important;
+    }
+}
+
+.comm-item {
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 60px;
+    padding-bottom: 5px;
+}
+
+.comm-item-to-do-active {
+    color: #00CC00;
+}
+
+.relativeHeader {
+    //display: table-cell;
+    padding-left: 8px;
+    vertical-align: middle;
+    color: #FFFFFF;
+    font-family: @brand-font;
+    font-weight: 500;
+    padding: 5px;
+    background-color: #09466b;
+    //width: 400px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.fix-to-top {
+    //position: absolute;
+    z-index: 9999;
+    //top: 107px;
+    width: 96%;
+    height: 28.8889px;
+    .relativeHeader;
+}
+
+.set-to-center{
+    text-align:center;
+}
+
+.communicationNote {
+    white-space: pre-line;
+
+}
+
+.no-padding-left {
+    padding-left: 0 !important;
+}
+
+.no-padding-right {
+    padding-right: 0 !important;
+}
+
+.no-padding {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+div.modal.appointment-modal + div.modal.patient-modal-window {    
+    visibility: hidden;
+    opacity: 0;
+    transition-duration: 200ms, 0;
+    transition-property: opacity, visibility;
+    transition-delay: 0, 200ms;
+}
+
+.clickable{
+    cursor:pointer;
+}
+
+.prev-max-height{
+    max-height:600px;
+    overflow: auto;
+}
+.fa-eye{
+     cursor: pointer; 
+}
+
+.btn-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-tooltip .btn-tooltiptext {
+    visibility: hidden;
+    width: 220px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: 8%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.btn-tooltip .btn-tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.btn-tooltip:hover .btn-tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.text-left {
+    text-align:left;
+    padding-bottom: 10px;
+}
+
+.text-right {
+    text-align:right;
+}
+
+.sub-header{
+    position: absolute;
+    bottom: 0px;
+}
+
+.pat-communication-patient-header {
+    width: 122%;
+}

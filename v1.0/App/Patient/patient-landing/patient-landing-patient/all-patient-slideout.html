@@ -1,0 +1,204 @@
+﻿<div class="slideOutPatientFilter">
+    <div class="panel-group" id="accordion">
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#additionalIdentifiersDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Additional Identifiers
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="additionalIdentifiersDiv">
+                <ul id="AdditionalIdentifiers">
+                    <li ng-repeat="item in additionalIdentifiers" ng-show="item.isVisible"><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}"  ng-model="item.isSelected" ng-checked="item.isSelected" ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value}}</li>
+                </ul>
+                <span class="showMore" ng-show="isVisibleShowMorebuttonAI" ng-click="showMoreButtonAI()" type="button">Show More</span>
+                <span class="showMore" ng-show="isVisibleShowLessbuttonAI" ng-click="showLessButtonAI()" type="button">Show Less</span>
+            </div>
+        </div>
+
+        <div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse"  data-parent="#accordion" data-target="#appointmentDateDiv" class="soar-link font-weight-bold padding-2 text-left">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Appointment Date
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="appointmentDateDiv">
+                <ul id="AppointmentDates">
+                    <li ng-repeat="item in appointmentDates"><input type="radio" id="{{item.Value}}" class="prvntvCareFilters" name="apptDate" data-field="{{item.Field}}" data-key="{{item.Key}}" ng-checked="{{item.Checked}}" />{{item.Value}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#apptStateDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Appointment State
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="apptStateDiv">
+                <ul id="AppointmentStates">
+                    <li ng-repeat="item in appointmentStates"><input type="checkbox" id="{{item.Value}}" class="prvntvCareFilters" name="AppointmentStates" data-field="{{item.Field}}" data-key="{{item.Key}}"  ng-click="toggleSelect(item.Value,  'AppointmentStates')" />{{item.Value}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#birthMonths" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Birthday Month
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="birthMonths">
+                <ul id="BirthMonths">
+                    <li ng-repeat="item in birthMonths" ><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" id="{{item.Key}}" data-field="{{item.Field}}" data-key="{{item.Key}}" ng-checked="item.Checked" ng-model="item.Checked"  ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#groupTypesDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Group Types
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="groupTypesDiv">
+                <ul id="GroupTypes">
+                    <li ng-repeat="item in groupTypes" ng-show="item.isVisible"><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}" ng-model="item.isSelected" ng-checked="item.isSelected" ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value}}</li>
+                </ul>
+                <span class="showMore" ng-show="isVisibleShowMorebuttonGroup" ng-click="showMoreButtonGroup()" type="button">Show More</span>
+                <span class="showMore" ng-show="isVisibleShowLessbuttonGroup" ng-click="showLessButtonGroup()" type="button">Show Less</span>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse"  data-parent="#accordion" data-target="#hasInsuranceDiv" class="soar-link font-weight-bold padding-2 text-left">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Insurance
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="hasInsuranceDiv">
+                <ul id="InsuranceFilter">
+                    <li ng-repeat="item in insuranceFilters"><input type="radio" id="{{item.Value}}" class="prvntvCareFilters" name="insFilter" data-field="{{item.Field}}" data-key="{{item.Key}}" ng-checked="{{item.Checked}}" />{{item.Value}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#patientTypeStatus" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Patients/Non-Patients 
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="patientTypeStatus">
+                <ul id="PatientTypeStatus">
+                    <li ng-repeat="item in patientTypeStatus"> <input type="checkbox" class="prvntvCareFilters" id="{{item.Value}}" name="PatientTypeStatus" data-field="{{item.Field}}" data-key="{{item.Key}}" ng-checked="item.Checked" ng-click="toggleSelect(item.Value, 'PatientTypeStatus')" />{{item.Value}} </li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <div class="panel-heading"><a data-toggle="collapse" data-parent="#accordion" data-target="#preferredDentistsDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Preferred Dentist
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="preferredDentistsDiv">
+                <ul id="PreferredDentists">
+                    <li ng-repeat="item in preferredDentists" ng-show="item.isVisible"><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}"  ng-model="item.isSelected" ng-checked="item.isSelected" ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value}}</li>
+                </ul>
+                <span class="showMore" ng-show="isVisibleShowMorebuttonDentist" ng-click="showMoreButtonDentist()" type="button">Show More</span>
+                <span class="showMore" ng-show="isVisibleShowLessbuttonDentist" ng-click="showLessButtonDentist()" type="button">Show Less</span>
+            </div>
+        </div>
+
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#preferredHygienistsDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Preferred Hygienist
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="preferredHygienistsDiv">
+                <ul id="PreferredHygienists">
+                    <li ng-repeat="item in preferredHygienists" ng-show="item.isVisible">
+                        <input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}"  ng-model="item.isSelected" ng-checked="item.isSelected" ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value}}
+                    </li>
+                </ul>
+                <span class="showMore" ng-show="isVisibleShowMorebuttonHygienist" ng-click="showMoreButtonHygienist()" type="button">Show More</span>
+                <span class="showMore" ng-show="isVisibleShowLessbuttonHygienist" ng-click="showLessButtonHygienist()" type="button">Show Less</span>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#prefferedLocDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                   Preferred Location
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="prefferedLocDiv">
+                <ul id="PreferredLocations">
+                    <li ng-repeat="item in preferredLocations" ng-show="item.isVisible"><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}"  ng-model="item.isSelected" ng-checked="item.isSelected" ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value}} </li>
+                </ul>
+                <span class="showMore" ng-show="isVisibleShowMorebuttonPrefferedLoc" ng-click="showMoreButtonPrefferedLoc()" type="button">Show More</span>
+                <span class="showMore" ng-show="isVisibleShowLessbuttonPrefferedLoc" ng-click="showLessButtonPrefferedLoc()" type="button">Show Less</span>
+            </div>
+        </div>
+
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#preventiveCareStateDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Preventive Care
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="preventiveCareStateDiv">
+                <ul id="PreventiveCare">
+                    <li ng-repeat="item in preventiveCareStates" ><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}" checked ng-click="toggleSelect(item.Value,  'PreventiveCare')" />{{item.Value}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#reminderStatusDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Reminder Status
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="reminderStatusDiv">
+                <ul id="ReminderStatus">
+                    <li ng-repeat="item in reminderStatus" ><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}" checked ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#treatmentPlanStatesDiv" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Treatment Plans
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="treatmentPlanStatesDiv">
+                <ul id="TreatmentPlanStates">
+                    <li ng-repeat="item in treatmentPlanStates"><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}" checked ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value}}</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" data-target="#zipCodes" class="soar-link font-weight-bold padding-2">
+                    <i class="indicator glyphicon glyphicon-chevron-up"></i>
+                    Zip Codes
+                </a>
+            </div>
+            <div class="filter-option panel-collapse collapse patient-management-slideout" id="zipCodes">
+                <ul id="ZipCodes">
+                    <li ng-repeat="item in zipCodes" ng-show="item.isVisible" ><input type="checkbox" class="prvntvCareFilters" name="{{item.Field}}" data-field="{{item.Field}}" data-key="{{item.Key}}"  ng-model="item.isSelected" ng-checked="item.isSelected" ng-click="toggleSelect(item.Value, item.Field)" />{{item.Value | zipCode}}</li>
+                </ul>
+                <span class="showMore" ng-show="isVisibleShowMorebuttonZipCodes" ng-click="showMoreButtonZipCodes()" type="button">Show More</span>
+                <span class="showMore" ng-show="isVisibleShowLessbuttonZipCodes" ng-click="showLessButtonZipCodes()" type="button">Show Less</span>
+            </div>
+        </div>
+    </div>
+</div>

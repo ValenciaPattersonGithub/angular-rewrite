@@ -1,0 +1,29 @@
+﻿//Used all kendo class for kendo dialog design and visibility
+// ::ng-deep will apply the change to kendo popup and :host will apply these changes to current pages only
+
+:host ::ng-deep {
+	.k-window {
+		left: 15%;
+		top: 10%;
+		right: 25%;
+	}
+
+	.k-window-content, .k-prompt-container {
+		padding: 0px !important;
+		overflow: hidden;
+	}
+
+	.k-dialog .k-content {
+		padding: 0px !important;
+	}
+
+	.modal-body {
+		.pull-right {
+			button {
+				font-family: 'Font Awesome 5 Pro';
+				font-weight: 900;
+				font-size: 14px;
+			}
+		}
+	}
+}

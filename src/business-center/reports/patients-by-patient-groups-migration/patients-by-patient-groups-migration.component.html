@@ -1,0 +1,34 @@
+<ng-container *ngIf="reportData$ | async as reportData">
+    <div *ngIf="isDataLoaded" class="no-outline">
+        <div class="patients-by-patient-groups-report grid header">
+            <div class="col-sm-3-migration">{{ 'Patient Group' | translate }}</div>
+            <div class="col-sm-3-migration">{{ 'Patient' | translate }}</div>
+            <div class="col-sm-2-migration">{{ 'Location' | translate }}</div>
+            <div class="col-sm-2-migration">{{ 'Account Balance' | translate }}</div>
+            <div class="col-sm-2-migration">{{ 'Last Visit Date' | translate }}</div>
+        </div>
+        <ng-container>
+            <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="15" tabindex="0">
+                <div *cdkVirtualFor="let rowdata of reportData; index as i" class="{{rowdata.Class}}">
+                    <div class="patients-by-patient-groups-report-header" *ngIf="rowdata.IsHeader">
+                        <div class="col-sm-12-migration">{{ rowdata.patientGroupName }}</div>
+                    </div>
+                    <div class="patients-by-patient-groups-report grid item" id="divMainInfo{{i}}" *ngIf="!rowdata.IsHeader && !rowdata.IsFooter">
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration">{{ rowdata.lastName | translate }}, {{ rowdata.firstName | translate }} {{ rowdata.middleName | translate }}. - {{ rowdata.patientCode | translate }}</div> 
+                        <div class="col-sm-2-migration">{{ rowdata.location.nameLine1 | translate }}</div> 
+                        <div class="col-sm-2-migration">{{ rowdata.totalBalance | currency }}</div> 
+                        <div class="col-sm-2-migration">{{ rowdata.lastServiceDate | date: 'MM/dd/yyyy'}}</div> 
+                    </div>
+                    <div class="patients-by-patient-groups-report grid" *ngIf="rowdata.IsFooter">
+                        <div class="col-sm-3-migration"></div>
+                        <div class="col-sm-3-migration" style="text-align: right;"><b>{{rowdata.footerPatientGroupName}} Totals: {{ rowdata.patientCount }}</b></div>
+                        <div class="col-sm-2-migration" style="text-align: right;"><b>Total: </b></div>
+                        <div class="col-sm-2-migration"><b>{{ rowdata.totalBalance | currency }}</b></div>
+                        <div class="col-sm-2-migration"></div>
+                    </div>
+                </div>
+            </cdk-virtual-scroll-viewport>
+        </ng-container>
+    </div>
+</ng-container>

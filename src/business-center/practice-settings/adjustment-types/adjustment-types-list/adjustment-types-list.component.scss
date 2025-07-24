@@ -1,0 +1,84 @@
+@import 'variables';
+// These kendo files do not contain imports of Kendo, they merely overwrite kendo css
+@import 'toolTip.scss';
+
+.input-kendo {
+    height: 30px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    width: 260px!important;
+    padding: 0 8px!important;
+    outline: none!important;
+    box-sizing: border-box!important;
+    margin-top:10px!important;
+    &-left-margin{
+         margin-left:9px!important;
+    }
+}
+ul.dropdown-menu a.minus_zindex {
+    z-index: 0;
+    position: relative;
+    color: $text-black;
+}
+.dropdown-menu li a:last-child {
+    border-bottom: none !important;
+    position: initial;
+}
+
+.icon-right {
+    top: calc(40% - 6px);
+    float: right;
+}
+
+.sort-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 7px;
+}
+
+.disableMenu {
+    color: $disabled-grey;
+}
+
+.tooltipDisable .toolTipText {
+    visibility: hidden;
+    background-color: $Tooltip-backrground-color;
+    color: $Tooltip-text-color;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+    position: absolute;
+    z-index: 1;
+    left: -165px;
+    width:200px;
+}
+
+.tooltipDisable:hover .toolTipText {
+    visibility: visible;
+}
+.adjustmenttypeslist-hr {
+    border-top: 1px solid #dddddd !important;
+    margin-top: 10px !important;
+}
+input::placeholder {
+    color: $placeholder-grey;
+}
+::ng-deep {
+    .kendoNewStyle.k-grid .k-grid-content {
+        height: calc(100vh - 430px) !important;
+        margin-bottom:0px!important;
+    }
+
+    .dropdown-menu {
+        min-width: 130px !important;
+    }
+
+    .kendoNewStyle.k-grid .k-grid-header .k-grid-header-wrap .k-header {
+        border-right: 1px solid $grid-separator-color !important;        
+    }
+
+    .k-grid-header {
+        border: 1px solid $grid-separator-color !important;       
+    }
+}
+

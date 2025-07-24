@@ -1,0 +1,36 @@
+﻿<div class="multiselect-wrapper" [ngClass]="{'label-left' : labelDirection=='left'}" (click)="onMultiSelectClick()">
+    <app-label class="multiselect-label" ng-if="label" [label]="label" [fieldId]="id"></app-label>
+    <kendo-multiselect #list [filterable]="showSpecificList ? true : false" kendoMultiSelectSummaryTag [data]="groupData ? groups: listItems" [autoClose]="false" [(ngModel)]="model" [itemDisabled]="itemDisabled"
+        (ngModelChange)="onChange()" [textField]="'text'" [valueField]="'value'" [clearButton]="false"
+        [disabled]="disabled"
+        [placeholder]="placeholder" [popupSettings]="{
+                width: '1rem',animate:animatepopup,
+                popupClass: 'multiselect-popup-wrapper'
+            }" [class]="customClass" #multiselect clickOutside (clickOutside)="clickedOutside(multiselect)">
+        <ng-template kendoMultiSelectHeaderTemplate *ngIf="showSelectAll" let-dataItem>
+            <div class="multiselect-wrap ml-5" (click)="onSelectAll()">
+                <span>
+                    <input type="checkbox" id="chk" class="k-checkbox" [checked]="isChecked" />
+                    <label for="chk" class="k-checkbox-label multiselect-popup">{{ toggleAllText }}</label>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template kendoMultiSelectGroupTagTemplate let-dataItems>
+            <span *ngIf="dataItems.length > 1">
+                <span class="item-number">{{ dataItems?.length }}</span> items selected
+            </span>
+            <span *ngIf="dataItems.length <= 1">
+                <span>{{ dataItems[0]?.text }}</span>
+            </span>
+        </ng-template>
+        <ng-template kendoMultiSelectItemTemplate let-dataItem>
+            <div class="multiselect-wrap">
+                <input type="checkbox" class="k-checkbox">
+                <label class="k-checkbox-label multiselect-popup">
+                    {{ dataItem?.text}}
+                </label>
+            </div>
+        </ng-template>
+        <span class="k-icon k-i-arrow-s"></span>
+    </kendo-multiselect>
+</div>

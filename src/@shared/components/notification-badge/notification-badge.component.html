@@ -1,0 +1,12 @@
+<div [ngClass]="['notification-badge', hasOverlayContent ? 'notification-badge-overlay' : '']">
+    <div class="notification-badge__badge">
+        <span class="notification-badge-count">{{badgeCount}}</span> 
+        <span *ngIf="badgeText">&nbsp;{{badgeText}}</span>
+        <svg-icon name="downArrowIcon" iconHeight="24" iconWidth="24" class="notification-badge__icon"></svg-icon>
+    </div>
+    <div [ngClass]="['notification-badge__hover-container', hideOverlay ? 'notification-badge__hover-content-hidden' : '']">
+        <div class="notification-badge__hover-content">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>

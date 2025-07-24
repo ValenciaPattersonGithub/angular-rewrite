@@ -1,0 +1,23 @@
+﻿<div class="patRxTile" ng-class="{active:tileIsActive} " ng-click="activateTab('rx', null)" ng-form="frmRxTile">
+    <div class="timelineTile" ng-class="{timelineTileBorder : true}">
+        <div class="timelineTile__row">
+            <div ng-if="timelineView" class="timelineTile__iconContainer">
+                <img class="timelineTile__icon" ng-src="{{ 'Images/TimelineFilterIcons/rx.svg' }}" />
+            </div>
+            <div>
+            </div>
+            <div class="timelineTile__content">
+                <div>
+                    <a href="" id="btnRxDisplayName"
+                       class=""
+                       ng-disabled="">
+                        <span>{{tileData.DisplayName}} </span>                        
+                        <span>{{tileData.Quantity}} </span>
+                    </a>
+                </div>
+                <span id="lblDirections" class="">{{tileData.Notes}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+

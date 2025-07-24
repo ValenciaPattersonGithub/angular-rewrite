@@ -1,0 +1,39 @@
+<div *ngIf="isDataLoaded" class="no-outline">
+    <div class="claim grid header">
+        <div class="col-sm-1-migration">{{ 'Patient Name' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Patient ID' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Preferred Name' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'DOB' | translate }}</div>
+        <div class="col-sm-3-migration">{{ 'Address' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Phone' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Email' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Primary Location' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Responsible Party' | translate }}</div>
+        <div class="col-sm-1-migration">{{ 'Status' | translate }}</div>
+    </div>
+    <ng-container>
+        <cdk-virtual-scroll-viewport class="virtual-viewport-reports" [itemSize]="50" tabindex="0"
+            id="adjustmentsByProvider">
+            <div *cdkVirtualFor="let pat of reportData; index as i" class="{{pat.Class}}">
+                <div class="claim grid item">
+                    <div class="col-sm-1-migration">{{ pat.PatientName }}</div>
+                    <div class="col-sm-1-migration">{{ pat.PatientID }}</div>
+                    <div class="col-sm-1-migration">{{ pat.PerferredName }}</div>
+                    <div class="col-sm-1-migration">{{ pat.DOB | date: 'MM/dd/yyyy' }}</div>
+                    <div class="col-sm-3-migration">
+                        <div *ngIf="pat.Address">{{ pat.Address }}</div>
+                    </div>
+                    <div class="col-sm-1-migration">
+                        <div *ngIf="pat.Phone">
+                            {{ pat.Phone | phoneNumber}} - ({{pat.PhoneNumberType}})
+                        </div>
+                    </div>
+                    <div class="col-sm-1-migration">{{ pat.Email }}</div>
+                    <div class="col-sm-1-migration">{{ pat.PrimaryLocation }}</div>
+                    <div class="col-sm-1-migration">{{ pat.ResponsibleParty }}</div>
+                    <div class="col-sm-1-migration">{{ pat.Status }}</div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </ng-container>
+</div>

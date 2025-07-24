@@ -1,0 +1,32 @@
+﻿<div id="deleteConfirmPanel{{sectionIndex}}" ng-show="deleteSectionIndex == sectionIndex">
+    <div id="sectionDeleteMessageContainer{{sectionIndex}}" class="media-body master-list-warning-msg">
+        <are-you-sure message="{{ 'Are you sure you want to {0}' | i18n:['delete this section?'] }}" if-yes="deleteSection(sectionIndex)" if-no="cancelDeleteSection()"></are-you-sure>
+    </div>
+</div>
+<undo-support>
+    <div id="sectionEditPanel{{sectionIndex}}" ng-show="sectionIndex==customForm.IndexOfSectionInEditMode">
+        <div class="angular-accordion-container margin-bottom20">
+            <div class="angular-accordion-pane ng-scope">
+                <div id="sectionAccordionHeader{{sectionIndex}}" pane-header ng-class="{ 'angular-disabled-pane': disabled }" class="angular-accordion-header ng-scope">
+                    <section-header></section-header>
+                </div>
+                <div id="sectionAccordionBody{{sectionIndex}}" ng-show="expanded && section.FormSectionItems.length > 0" class="angular-accordion-pane-content section-accordion-bg ng-scope">
+                    <section-body></section-body>
+                </div>
+                <div id="sectionAccordionFooter{{sectionIndex}}" ng-show="expanded && showFooterPage" ng-class="{ 'angular-disabled-pane': disabled }" class="angular-accordion-footer ng-scope">
+                    <section-footer></section-footer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sectionPreviewPanel{{sectionIndex}}" ng-show="sectionIndex!=customForm.IndexOfSectionInEditMode">
+        <div class="panel-group">
+            <div class="panel panel-default no-border">
+                <div>
+                    <section-preview-directive></section-preview-directive>
+                </div>
+            </div>
+        </div>
+    </div>
+</undo-support>

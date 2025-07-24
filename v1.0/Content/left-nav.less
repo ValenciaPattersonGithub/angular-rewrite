@@ -1,0 +1,86 @@
+﻿@import "var.less";
+
+#nav-container {
+	z-index: 9; // should be lower than top header
+	position: fixed;
+	top: 50px;
+	bottom: 0;
+	left: 0;
+	width: 90px;
+	padding: 0;
+	background-color: @base-bg;
+	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: -blackberry-touch;
+	@media (min-width:@screen-sm) {
+		left: 0;
+	}
+
+	ul {
+		padding-left: 0;
+		list-style: none;
+	}
+}
+@media only screen and (min-width:320px ){
+	#nav-container {
+		top: 50px;
+	}
+}
+
+@media only screen and (min-width:768px ){
+	#nav-container {
+		top: 50px;
+	}
+}
+
+#side-nav{
+	margin: 0;
+	padding: 0;
+	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: -blackberry-touch;	
+}
+
+.side-nav-item {
+    height: 90px;
+	width: 100%;
+	text-align: center;
+	vertical-align: middle;
+	padding-top: 3px;
+
+	> a {
+        height: inherit;
+		text-decoration: none;
+        color: @base-color;
+        display: block;
+        padding-top: 15px;
+        
+		> span{
+			font-size: @font-size-normal;
+		}
+        
+	    &:hover, 
+        &.active {
+		    background: @base-bg-hover;	
+		    cursor: pointer;
+	    }
+	}
+    
+    &.disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        
+        > a {
+            color: @side_nav_item_text_disabled;            
+            display: block;
+        }
+    }	
+}
+
+.side-nav-btn { 
+    font-size: @font-size-normal;
+    background: transparent;
+    border: 0;
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+    color: @base-color;
+}

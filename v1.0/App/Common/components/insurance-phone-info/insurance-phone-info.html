@@ -1,0 +1,33 @@
+﻿<div class="phone-item" ng-repeat="phone in phones | filter: filterState('ObjectState') track by $index">
+    <div class="phone-container">
+        <phone-info-item show-label="showLabel"
+                         focus="$index == focusIndex && focusIf"
+                         phone-id="$index"
+                         phone="phone"
+                         valid-form="validForm"
+                         phone-types="phoneTypes"
+                         disable-input="disableInput"
+                         edit-mode="flags.editing"
+                         show-remove-option="phones.length > 1"
+                         hide-is-primary="true"
+                         remove-function="removePhone(phone)"
+                         has-notes="hasNotes"
+                         has-texts="hasTexts"
+                         phone-tabindex="{{ tabIndex }}"
+                         hide-phone-types="customTypeOnly == true"></phone-info-item>
+    </div>
+</div>
+
+<div class="phoneInfo__add" ng-show="!disableInput">
+    <button id="btnAddPhone"
+            class="btn btn-link"
+            icon="fa-plus"
+            tabindex="{{ tabIndex }}"
+            ng-click="addPhone()"
+            check-auth-z="soar-per-perdem-add"
+            ng-show="(phones.length - deletedPhones.length) < maxLimit">
+        {{ 'Add another phone' | i18n }}
+    </button>
+    <span id="lblMaxPhones" class="help-block" ng-show="(phones.length - deletedPhones.length) == maxLimit">{{ 'Maximum number of phones has been reached.' | i18n }}</span>
+</div>
+

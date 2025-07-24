@@ -1,0 +1,37 @@
+@import 'variables';
+@import 'toolTip.scss';
+
+.tooltip-container-left{
+    top:auto !important;
+    margin-top:10px !important;
+    background-color: black  !important;
+}
+.dropdown-menu li span {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    font-size: 12px;
+    white-space: break-spaces;
+}
+.accountNoteMenu{
+    .open>.dropdown-menu{
+        z-index:999999;
+    }
+    
+    }
+    
+    .disableSpan {
+        opacity: 0.65;
+        color: rgb(85, 85, 85);;
+
+    }
+    .disableSpan:hover {
+        cursor: not-allowed;
+        opacity: 0.65;
+        color: grey;
+    }
+    
+    .disableSpan:focus, .disableSpan:active {
+        border: none !important;
+        outline: none !important;
+    }
+    

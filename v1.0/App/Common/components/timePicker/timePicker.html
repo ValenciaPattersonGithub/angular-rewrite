@@ -1,0 +1,24 @@
+﻿<div ng-class="{ 'error': !valid }" class="inline time-picker">
+    <!--<soar-select-list id="{{ id }}"
+                      name="{{ id }}"
+                      placeholder=""
+                      text-field="Display"
+                      value-field="Display"
+                      value-template="dropdownTemplate"
+                      option-list="times"
+                      ng-model="currentTime"
+                      disable-input="tpDisabled"></soar-select-list>-->
+    <select kendo-drop-down-list
+            id="{{ id }}"
+            k-template="dropdownTemplate"
+            k-data-text-field="'Display'"
+            k-data-value-field="'Display'"
+            k-data-source="times"
+            k-ng-model="currentTime"
+            k-value-primitive="true"
+            k-change="currentTimeChanged"
+            k-open="comboOpen"
+            ng-disabled="tpDisabled"
+            style="width: 110px;"
+            tabindex="{{ tabIndex ? tabIndex : 1 }}"></select>
+</div>

@@ -1,0 +1,83 @@
+﻿<div class="rowFull">
+    <div class="patientOverview">
+
+        <div class="patientOverview__primary">
+            <div id="respPersonWarningArea" ng-if="patient.Data.ResponsiblePersonType == 0 && patient.Data.DirectoryAllocationId != null">
+                <div class="clearfix">&nbsp;</div>
+                <div ng-if="!patient.PersonAccount" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span id="lblRespPersonWarning" class="error">{{ 'No Responsible Person has been assigned! You will not be able to create an encounter until this is resolved.' | i18n }}</span>
+                    <div class="clearfix">&nbsp;</div>
+                    <a id="lnkResponsiblePersonNav" class="btn btn-link font-weight-bold" check-auth-z="soar-per-perdem-modify" href="#/Patient/{{ patientId }}/Summary/PI_RP">{{'Assign Responsible Person Now' | i18n}}</a>
+                </div>
+            </div>
+
+            <!--Patient pending Overview -->
+            <div ng-if="canViewAccountPendingEncounter">
+                <patient-pending-encounter patient="patient.Data"></patient-pending-encounter>
+            </div>
+
+            <!--Patient Appointments-->
+            <div ng-if="canViewAppointments">
+                <patient-appointments patient="patient.Data" show-appointments="All"></patient-appointments>
+            </div>
+
+            <!--Account Summary-->
+            <div ng-if="canViewAccount">
+                <profile-section [base-id]="'AccountSummary'" [section-title]="'Account Summary'" [show-no-account-icon]="!patient.Data.PersonAccount" [actions]="accountSummaryActions">
+                    <ng-container layout1>
+                        <patient-account-summary person="person"></patient-account-summary>
+                    </ng-container>                    
+                </profile-section>
+            </div>
+
+            <!--Clinical Summary-->
+            <div>
+                <profile-section [base-id]="'ClinicalSummary'" [section-title]="'Clinical Summary'" [actions]="clinicalSummmaryActions">
+                    <ng-container layout1>
+                        <!--TODO placeholder-->
+                        <div class="patientOdontogram" *ngIf="canViewChart">
+                            <odontogram-snapshot person-id="patient.Data.PatientId" patient-directory-id="patient.Data.DirectoryAllocationId"></odontogram-snapshot>
+                        </div>
+                        <div *ngIf="canViewPreventiveCare">
+                            <patient-preventive-care person="person"></patient-preventive-care>
+                        </div>
+                        <div *ngIf="canViewTreatmentPlansCount">
+                            <treatment-plans-count person="person"></treatment-plans-count>
+                        </div>
+                    </ng-container> 
+                </profile-section>
+            </div>
+        </div>
+
+        <div class="patientOverview__secondary">
+            <!--Patient Appointments-->
+            <div>                                
+                <profile-section [base-id]="'PatAlerts'" [section-title]="'Alerts & Flags'" [actions]="viewFlags">
+                    <ng-container layout1>
+                        <patient-alert-flags patient="person"></patient-alert-flags>
+                    </ng-container>
+                </profile-section>                
+            </div>
+
+            <profile-section id="aboutSection" [base-id]="'About'" [section-title]="'About'" [actions]="aboutActions">
+                <ng-container layout1>
+                    <sub-section section-title="Contact Info">
+                        <patient-contact-info editing="false" valid="validPhones" contact-info="contactInfo" patient="patient.Data">
+                        </patient-contact-info>
+                    </sub-section>
+
+                    <patient-preferences preferences="patient.Data" patient="patient.Data" editing="false"></patient-preferences>
+
+                    <sub-section section-title="Account Members">
+                        <patient-account-members account-id="patient.Data.PersonAccount.AccountId" patient-id="patient.Data.PatientId" ng-if="patient.Data.PersonAccount && patient.Data.PersonAccount.AccountId && patient.Data.PatientId"></patient-account-members>
+                    </sub-section>
+                </ng-container>
+            </profile-section>
+            
+            <patient-documents ng-if="patient.Data.DirectoryAllocationId != null" id="patientDocuments" section-title="Documents" patient-directory-id="patient.Data.DirectoryAllocationId" patient-data="patient.Data"></patient-documents>
+                        
+        </div>
+
+    </div>
+</div>

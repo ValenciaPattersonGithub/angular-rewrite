@@ -1,0 +1,16 @@
+﻿<div class="patientPrevCare">
+    <div class="patientPrevCare__item patientPrevCare__itemLarge">
+        <span class="patientPrevCare__name">{{'Preventive Care Due' | i18n}}:</span>
+        <span class="patientPrevCare__text">{{prevCareDue ? (prevCareDue + 'Z' | toDisplayDateMMDDYY): 'N/A' | i18n}}</span>
+    </div>
+    <div class="patientPrevCare__item patientPrevCare__itemLarge">
+        <span class="patientPrevCare__name">{{nextPrev ? 'Next Scheduled Prev' : 'Next Scheduled Preventive' | i18n}}:</span>
+        <span class="patientPrevCare__text">{{nextPrev ? (nextPrev | toDisplayDateMMDDYY): 'N/A' | i18n}}</span>
+    </div>
+    <div class="patientPrevCare__sectionDivider"></div>
+    <div class="patientPrevCare__item" ng-repeat="exam in patientPrevCareItems | orderBy: '$$Index'">
+        <span class="patientPrevCare__name">{{exam.PreventiveServiceTypeDescription}}:</span>
+        <span class="patientPrevCare__text">{{exam.DateServiceDue ? (exam.$$DateLabel + ' ' + (exam.DateServiceDue + 'Z' | toDisplayDateMMDDYY)): 'N/A' | i18n}}</span>
+        <i class="fa fa-exclamation-circle" ng-class="exam.$$Class" ng-if="exam.$$Class && exam.$$Class !== 'patientPrevCare__success'" ></i>
+    </div>
+</div>

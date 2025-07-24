@@ -1,0 +1,234 @@
+<div draggable-modal>
+    <form name="frmAppointment" class="appointmentModal" ng-click="closeProviderDropdown()">
+        <div class="appointmentEdit__modalHeader">
+            <div class="appointmentEdit__modalHeader__headerRow modal-header-text" id="modalScroll">
+                <!-- Remove the complexity of the top header value after other refactorings -->
+                <div class="row" ng-if="appointment.Data.ObjectState==saveStates.Add">
+                    <div class="col-sm-12">
+                        <h1>+ {{::(blockModalText.block)}}</h1>
+                    </div>
+                </div>
+                <div class="row" ng-if="appointment.Data.ObjectState!=saveStates.Add">
+                    <div class="col-sm-12">
+                        <h1 ng-if="editing">{{::(blockModalText.block)}}</h1>
+                        <h1 ng-if="!editing">+ {{::(blockModalText.block)}}</h1>
+                    </div>
+                </div>
+                <div class="close-button">
+                    <button class="btn btn-link" ng-click="showCancelModal();"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="appointmentEdit__modalHeader__headerRow">
+                <div class="appointmentEdit__modalHeader__contentSection">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="section-divider"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body appointmentEdit__modalBody">
+            <div id="scheduleBlockSection">
+                <!-- Date -->
+                <div class="row">
+                    <div class="col-xs-12 ">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label id="lblBlockDate" class="pull-left" ng-bind="::(blockModalText.date) + ' *'"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12" ng-class="{error:!blockDate.Valid && !blockTime}">
+                                <div class="date-selector-container">
+                                    <schedule-date-selector name="inpBlockDate" input-id="inpBlockDate" date-var="blockTime.date" min-date="minDate" max-date="maxDate" valid="dateIsValid" tab-index="1" format="MM/dd/yyyy"></schedule-date-selector>
+                                </div>
+                                <div class="error" ng-if="!appointment.Valid && !blockTime.date">
+                                    <label id="errBlockDateRequired" class="help-text">{{ ::('This field is required.' | i18n) }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Time -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label id="lblBlockTime" class="pull-left" ng-bind="::(blockModalText.blockTime) + ' *'"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span ng-class="{'error': !appointment.Valid && !blockTime.start }">
+                                    <time-picker name="inpBlockStartTime" ng-show="!saveClicked && !readOnly" id="inpBlockStartTime" selected-time="blockTime.start" selected-duration="blockStartTimeDuration" begin="blockData.begin" end="blockData.end" increment="timeIncrement"></time-picker>
+                                    <label ng-show="saveClicked" id="lblBlockTimeStart">{{ blockTime.start | date : 'h:mm a'}}</label>
+                                </span>
+                                <span class="margin-right-5" ng-bind="::(blockModalText.to)">
+                                </span>
+                                <span>
+                                    <span ng-class="{'error': (!appointment.Valid && !blockTime.end) || blockTime.start > blockTime.end || blockTime.start === blockTime.end }">
+                                        <time-picker ng-if="blockTime.start && blockTime.end" name="inpBlockEndTime" ng-show="!saveClicked && !readOnly" id="inpBlockEndTime" selected-time="blockTime.end" selected-duration="blockDuration" begin="blockTime.start" end="blockData.end" show-duration="true" increment="timeIncrement"></time-picker>
+                                        <label ng-show="saveClicked" id="lblBlockTimeEnd"> {{ blockTime.end | date : 'h:mm a'}}</label>
+                                    </span>
+                                    <span><label>({{timezoneInfo.Abbr}})</label></span>
+                                    <span ng-show="!saveClicked || blockDuration > 0" id="lblBlockDuration" class="text-muted">
+                                        {{ blockTime.Duration }} {{ ::(blockModalText.minutes) }}
+                                    </span>
+                                </span>
+                                <div class="error" ng-if="!appointment.Valid">
+                                    <label id="errBlockTimeRequired" class="help-text" ng-show="!blockTime.start">{{ ::('This field is required.' | i18n) }}</label>
+                                    <label id="errBlockStartGreaterThanEnd" class="help-text" ng-show="blockTime.start > blockTime.end || blockTime.Duration <= 0">{{ ::('The end time must be greater then start time.' | i18n) }}</label>
+                                    <label id="errScheduleBlockExists" class="help-text" ng-show="conflicts.IsBlock">{{ blockExistsMsg }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Location -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label id="lblLocationBlock" class="pull-left" ng-bind="::(blockModalText.location) + ' *'"></label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div ng-class="{error:!appointment.Valid && !appointment.Data.LocationId}">
+                                            <select kendo-drop-down-list
+                                                    class="fill-width"
+                                                    id="inpLocationBlock"
+                                                    k-data-text-field="'displayText'"
+                                                    k-data-value-field="'LocationId'"
+                                                    k-data-source="filteredLocations"
+                                                    k-template="locationBlockTemplate"
+                                                    k-value-template="locationBlockTemplate"
+                                                    ng-model="dropDownLocation.LocationId"
+                                                    ng-disabled="locationReadOnly || needToApplyPropTag"
+                                                    ng-if="filteredLocations != null && filteredLocations != undefined"
+                                                    tabindex="1"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label ng-show="!appointment.Valid && !appointment.Data.LocationId" id="lblLocationBlockRequired" class="error">{{ ::('This field is required.' | i18n) }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Room -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label id="lblRoom" class="pull-left" ng-bind="::(blockModalText.room)"><span ng-if="!blockData.UserId">*</span></label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div ng-class="{error:!appointment.Valid && !appointment.Data.TreatmentRoomId && !blockData.UserId}">
+                                            <select kendo-drop-down-list
+                                                    class="fill-width"
+                                                    id="inpRoom"
+                                                    k-option-label="'- {{ ::(blockModalText.selectRoom)}} -'"
+                                                    k-data-text-field="'Name'"
+                                                    k-data-value-field="'RoomId'"
+                                                    k-data-source="rooms"
+                                                    k-template="roomTemplate"
+                                                    k-value-template="roomTemplate"
+                                                    ng-model="appointment.Data.TreatmentRoomId"
+                                                    k-change="changedBlockTreatmentRoom"
+                                                    tabindex="1"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label ng-show="!appointment.Valid && !appointment.Data.TreatmentRoomId && !blockData.UserId" id="lblRoomRequired" class="error">{{ ::('This field is required.' | i18n) }}</label>
+                                        <label ng-show="!treatmentRoomAssigned && appointment.Data.TreatmentRoomId && appointment.Data.UserId" id="lblRoomNotAssignedBlock" class="warning">{{ ::("Not provider's preferred room" | i18n) }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Provider -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="provider-appointment-item">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <label id="lblProvider" class="pull-left" ng-bind="::(blockModalText.provider)"><span ng-if="!appointment.Data.TreatmentRoomId">*</span></label>
+                                        </div>
+                                    </div>
+                                    <!-- Provider Select -->
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <div ng-class="{error:!appointment.Valid && !blockData.UserId && !appointment.Data.TreatmentRoomId}" ng-if="providers && providers.length>0">
+                                                <select kendo-drop-down-list
+                                                        class="fill-width"                                                        
+                                                        id="inpBlockProvider"
+                                                        k-option-label="'- {{::(blockModalText.selectProvider)}} -'"
+                                                        k-data-text-field="'Name'"
+                                                        k-data-value-field="'UserId'"
+                                                        k-data-source="providers"
+                                                        k-value-template="valueTemplate"
+                                                        k-template="valueTemplate"
+                                                        ng-model="blockData.UserId"
+                                                        k-change="changedBlockProvider"
+                                                        tabindex="1"></select>
+                                                <div class="error" ng-if="!appointment.Valid && !blockData.UserId && !appointment.Data.TreatmentRoomId">
+                                                    <label id="lblProviderRequired{{$index}}" class="error">{{ ::('This field is required.' | i18n) }}</label>
+                                                </div>
+                                                <div ng-if="providerHasLocationConflict">
+                                                    <label id="lblProviderLocationConflictWarning" class="warning">{{ ::('The provider is already scheduled at {0} during this time!' | i18n:[providerLocationConflictName]) }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Description -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label id="lblBlockDescription" class="pull-left" ng-bind="::(blockModalText.description)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <textarea id="inpBlockDescription" ng-model="appointment.Data.Description" class="form-input" maxlength="64" tabindex="1" />
+                            </div>
+                        </div>
+                        <!-- Notes -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label id="lblBlockNotes" class="pull-left" ng-bind="::(blockModalText.notes)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <textarea id="inpBlockNotes" ng-model="appointment.Data.Note" class="form-input" maxlength="500" tabindex="1"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <label class="pull-left" ng-if="appointment.Data.UserModified">
+                        {{ ::(blockModalText.lastModified) }}:
+                    </label>
+                    <span class="pull-left margin-left-5" ng-if="appointment.Data.UserModified">
+                        {{lastModifiedMessage}}
+                    </span>
+                </div>
+                <button check-auth-z="soar-sch-sptapt-delete" ng-if="editing" id="btnBlockDelete" ng-click="showDeleteBlockModal();"
+                        ng-disabled="saveClicked || removeClicked || readOnly" class="btn btn-link" tabindex="1">
+                    <span><i class="far fa-trash-alt fa-lg margin-right-5"></i></span> <span ng-bind="::(blockModalText.remove)"></span>
+                </button>
+                <button check-auth-z="{{editing?'soar-sch-sptapt-edit':'soar-sch-sptapt-add'}}" id="btnCancelBlock" ng-click="showCancelModal();"
+                        ng-disabled="saveClicked || removeClicked" class="btn btn-default" tabindex="1" ng-bind="::(blockModalText.cancel)"></button>
+                <button check-auth-z="{{editing?'soar-sch-sptapt-edit':'soar-sch-sptapt-add'}}" id="btnBlockSave" ng-click="save();"
+                        ng-disabled="saveClicked || readOnly || blockTime.start === blockTime.end " class="btn btn-primary" tabindex="1" ng-bind="::(blockModalText.save)"></button>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="popover-overlay" ng-show="popOverTracker.closeAllCharge || popOverTracker.closeAllEstIns">
+        </div>
+    </form>
+</div>

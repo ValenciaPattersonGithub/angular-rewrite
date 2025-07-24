@@ -1,0 +1,63 @@
+﻿<!-- <div class="docUpload">    
+    <div class="form-row">
+        <div class="form-col-16">
+            <label class="control-label">{{'File' | i18n}} *</label>
+            <label class="btn btn-default btn-file" ng-if="!vm.scanMode && !vm.pasteMode">
+                {{ 'Select file...' | i18n }}<input type="file" class="fileInput" ng-model="selectedFile" onchange="DocUploadController.prototype.onSelect(this.files)" />
+            </label>
+            <button class="btn btn-default margin-left-5" ng-click="vm.toggleScanMode()" ng-disabled="vm.showLoading" ng-show="!vm.scanMode && !vm.pasteMode">
+                {{ ::('Scan...' | i18n) }}
+            </button>
+            <button class="btn btn-default margin-left-5" ng-click="vm.togglePasteMode()" ng-disabled="vm.showLoading" ng-show="!vm.pasteMode && !vm.scanMode">
+                {{ ::('Paste Image...' | i18n) }}
+            </button>
+            <div ng-show="vm.scanMode === true">
+                <doc-scanner (scan-success)="vm.scanSuccess()" (scan-failure)="vm.scanFailure()" [control]="vm.scanControl"></doc-scanner>
+            </div>
+            <div ng-show="vm.pasteMode === true">
+                <doc-paste-image (paste-success)="vm.onPasteSuccess($event)" [paste-active]="vm.pasteMode"></doc-paste-image>
+            </div>
+            <div ng-if="selectedFile.name || selectedFile.scanComplete === true" class="file">
+                <input type="text" id="fileName" class="form-input search fileName" ng-model="selectedFile.name" ng-readonly="vm.scanMode !== true" />
+                <span class="fa fa-times remove" ng-click="remove()"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-col-12">
+            <label class="control-label">{{'Document Group' | i18n}} *</label>
+            <soar-select-list id="favoritesDropdown"
+                              placeholder="{{ 'Select a Document Group' | i18n }}"
+                              text-field="Description"
+                              value-field="DocumentGroupId"
+                              option-list="documentgroups"
+                              sb-required="required"
+                              ng-model="selectedFavorite">
+            </soar-select-list>            
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-col-12">
+            <label class="control-label">{{'Tooth' | i18n}}</label>
+            <select kendo-multi-select k-data-source="patTeeth" k-options="teethSelectOptions" k-ng-model="activeTeeth" k-change="activeTeethUpdated" ng-if="loadKendoWidgets === true"></select>
+        </div>
+    </div>
+        <div class="form-row">
+            <div ng-show="vm.message != ''" class="message">
+                <span ng-show="!vm.isValid || vm.isValid" ng-class="{error: true}">{{vm.message}}</span>
+            </div>
+        </div>
+        <div class="form-row" ng-show="vm.showLoading">
+            <i id="iDefaultMessage" ng-show="vm.showLoading" class="fa fa-spinner fa-spin loading"></i>
+        </div>
+
+        <div class="form-footer">
+            <button class="btn btn-primary" ng-click="close()" ng-disabled="vm.showLoading">
+                {{'Cancel' | i18n}}
+            </button>
+            <button class="btn btn-primary" ng-click="vm.uploadDocument()" ng-disabled="vm.showLoading || vm.isError || !enableSave">
+                {{'Upload' | i18n}}
+            </button>
+        </div>
+        
+    </div> -->
