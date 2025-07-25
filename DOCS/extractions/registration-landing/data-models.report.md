@@ -1,4 +1,126 @@
-# Data Models Report: registration-landing
+# Data Models DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
+**Included Files:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+
+---
+
+## 1. Data Model Definitions and Usage
+
+**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+### a. PersonObject Model
+```typescript
+this.PersonObject = {
+  Profile: {
+    PatientId: personaldetail.PatientId,
+    PatientSince: personaldetail.PatientSince,
+    DataTag: personaldetail.DataTag,
+    IsActive: personaldetail.Status,
+    FirstName: personaldetail.FirstName,
+    MiddleName: personaldetail.MiddleInitial,
+    LastName: personaldetail.LastName,
+    PreferredName: personaldetail.PreferredName,
+    Suffix: personaldetail.Suffix,
+    DateOfBirth: this.getCalculateDOB(personaldetail.DateOfBirth),
+    Sex: personaldetail.Gender,
+    IsPatient: personaldetail.Patient,
+    ResponsiblePersonType: Number(personaldetail.ResponsiblePerson),
+    ResponsiblePersonId: personaldetail.ResponsiblePersonId ? personaldetail.ResponsiblePersonId : '',
+    IsSignatureOnFile: personaldetail.SignatureOnFile,
+    AddressReferrerId: contactDetail.MemberAddress ? contactDetail.MemberAddress : null,
+    AddressLine1: contactDetail.MemberAddress ? null : contactDetail.AddressLine1,
+    AddressLine2: contactDetail.MemberAddress ? null : contactDetail.AddressLine2,
+    City: contactDetail.MemberAddress ? null : contactDetail.City,
+    State: contactDetail.MemberAddress ? null : contactDetail.State,
+    ZipCode: contactDetail.MemberAddress ? null : contactDetail.ZipCode,
+    PreferredDentist: preferences.PreferredDentists,
+    PreferredHygienist: preferences.PreferredHygienists,
+    PreferredLocation: preferences.PrimaryLocation,
+    HeightFeet: personaldetail.HeightFt ? personaldetail.HeightFt : 0,
+    HeightInches: personaldetail.HeightIn ? personaldetail.HeightIn : 0,
+    Weight: personaldetail.Weight,
+    PrimaryDuplicatePatientId: personaldetail.PrimaryDuplicatePatientId,
+    PersonAccount: {
+      ReceivesStatements: preferences.ReceivesStatements,
+      ReceivesFinanceCharges: preferences.ReceivesFinanceCharges,
+      PersonId: profile ? this.route.patientId : null,
+      AccountId: profile && profile.PersonAccount ? profile.PersonAccount.AccountId : null,
+      DataTag: profile && profile.PersonAccount ? profile.PersonAccount.DataTag : null,
+    },
+  },
+  Phones: phones.valid ? [...patientPhones] : [],
+  Emails: emails.valid ? [...patientEmails] : [],
+  PreviousDentalOffice: {
+    Name: dentalRecords.PreviousDentist,
+    PatientId: dentalRecords.PatientId,
+    Address: {
+      AddressLine1: dentalRecords.AddressLine1,
+      AddressLine2: dentalRecords.AddressLine2,
+      City: dentalRecords.City,
+      State: dentalRecords.State,
+      ZipCode: dentalRecords.ZipCode,
+    },
+    PhoneNumber: dentalRecords.PhoneNumber,
+    Email: dentalRecords.Email,
+    Notes: dentalRecords.Notes,
+    PreviousDentalOfficeId: dentalRecords.PreviousDentalOfficeId,
+    DataTag: dentalRecords.DataTag,
+    ObjectState: dentalRecords.ObjectState,
+  },
+  Referral: referrals.ReferralType || referrals.ReferredPatientId ? referrals : null,
+  patientIdentifierDtos: identifires.PatientIdentifiers,
+  Flags: this.getPersonFlags(preferences.Flags),
+  PatientBenefitPlanDtos: policies.length === 1 && !policies[0].PolicyHolderType ? [] : policies,
+  PatientLocations: this.getPersonLocations(patientLocations),
+  patientDiscountTypeDto: preferences.PatientDiscountTypeId || preferences.DiscountType ? {
+    MasterDiscountTypeId: preferences.DiscountType,
+    ObjectState: preferences.DiscountTypeObjectState,
+    PatientId: this.route.patientId ? this.route.patientId : null,
+    PatientDiscountTypeId: preferences.PatientDiscountTypeId,
+    DataTag: preferences.PatientDiscountDataTag,
+  } : null,
+  patientGroupDtos: this.getPersonGroups(preferences.Groups),
+};
+```
+
+- **Purpose:**
+  - Aggregates all form and model data for API submission
+  - Nested structure for profile, phones, emails, insurance, referrals, etc.
+
+---
+
+## 2. Model Relationships and Usage
+
+- Models are mapped directly from form group values
+- All API requests and responses use these models
+- Relationships: Profile contains nested PersonAccount, PreviousDentalOffice contains nested Address, etc.
+
+---
+
+## 3. Edge Cases and Legacy Artifacts
+
+- Some fields are conditionally included based on form state
+- Uses both explicit and inferred models
+
+---
+
+## 4. Diagrams and Tables
+
+| Model | Fields | Relationships |
+|-------|--------|---------------|
+| PersonObject | Profile, Phones, Emails, PreviousDentalOffice, Referral, patientIdentifierDtos, Flags, PatientBenefitPlanDtos, PatientLocations, patientDiscountTypeDto, patientGroupDtos | Nested objects |
+| Profile | PatientId, PatientSince, DataTag, ... | PersonAccount |
+| PreviousDentalOffice | Name, PatientId, Address, ... | Address |
+
+---
+
+**End of Data Models Report**# Data Models Report: registration-landing
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 

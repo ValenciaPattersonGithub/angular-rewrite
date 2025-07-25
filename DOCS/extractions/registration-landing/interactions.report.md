@@ -1,4 +1,87 @@
-# Interactions Report: registration-landing
+# Interactions DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
+**Included Files:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+
+---
+
+## 1. Child Component Interactions
+
+**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+
+- `<registration-header [patientProfile]="this.personInfo.Profile"></registration-header>`
+- `<table-of-content></table-of-content>`
+- `<personal-details [personalDetails]="personGroup.controls.personalDetailsForm"></personal-details>`
+- `<contact-details [contactDetails]="personGroup.controls.contactDetailsForm" [phoneTypes]="phoneTypes" [states]="states"></contact-details>`
+- `<insurance-details [insuranceDetails]="personGroup.controls.insuranceDetailsForm" *ngIf="!route.patientId"></insurance-details>`
+- `<app-patient-insurance *ngIf="route.patientId"></app-patient-insurance>`
+- `<preferences [patientPreference]="personGroup.controls.preferencesForm" [onlyActive]="true"></preferences>`
+- `<dental-records [dentalRecords]="personGroup.controls.dentalRecordsForm"></dental-records>`
+- `<patient-referral-crud [fromAddPatientProfile]="true"></patient-referral-crud>`
+- `<additional-identifiers [additionalIdentifiers]="personGroup.controls.identifiresForm" [patientIdentifiers]="personInfo.patientIdentifierDtos"></additional-identifiers>`
+- `<app-patient-documents [patientProfile]="personInfo.Profile"></app-patient-documents>`
+- `<app-patient-account-members [featureName]="route.patientId?'PatientProfile':'PatientRegistration'"></app-patient-account-members>`
+
+---
+
+## 2. Service and Event Interactions
+
+**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+- Injected services: `PatientRegistrationService`, `ConfirmationModalService`, `FeatureFlagService`, `TranslateService`, `Title`, `Location`, etc.
+- RxJS Subjects and Subscriptions for event handling:
+  - `registrationService.getRegistrationEvent().pipe(takeUntil(this.unsubscribe$)).subscribe(...)`
+  - `featureFlagService.getOnce$(FuseFlag.ReleseOldReferral).subscribe(...)`
+- Event emission:
+  - `registrationService.setRegistrationEvent({ eventtype: RegistrationEvent.SelectedMenu, data: this.selectedMenuItem })`
+  - `registrationService.setRegistrationEvent({ eventtype: RegistrationEvent.FocusSection, data: ... })`
+  - `registrationService.setRegistrationEvent({ eventtype: RegistrationEvent.SavePatient, data: ... })`
+
+---
+
+## 3. @Input/@Output and ViewChild
+
+- Uses `@ViewChild` for direct references to DOM elements and child components:
+  - `@ViewChild('personalDetail') personalDetail: ElementRef;`
+  - `@ViewChild(PatientReferralCrudComponent) referralsComponent!: PatientReferralCrudComponent;`
+- No explicit @Input/@Output in this file, but passes form groups and data to child components via property bindings
+
+---
+
+## 4. Lifecycle and Side Effects
+
+- `ngOnInit`, `ngAfterContentInit`, `ngOnDestroy` manage subscriptions, data loading, and cleanup
+- Handles scroll events with `@HostListener('scroll', ['$event'])`
+- Modal and confirmation dialog interactions
+
+---
+
+## 5. Edge Cases and Legacy Artifacts
+
+- Uses AngularJS-style DI with `@Inject` for some dependencies
+- Handles both new and existing patient flows with conditional rendering and logic
+- Some legacy patterns in event handling and modal management
+
+---
+
+## 6. Diagrams and Tables
+
+| Interaction | Type | Details |
+|-------------|------|---------|
+| registrationService | Service | API, event, and state management |
+| confirmationModalService | Service | Modal dialogs |
+| featureFlagService | Service | Feature flag toggles |
+| Child Components | Component | Form sections, documents, referrals, etc. |
+| RxJS | Event | State and event subscriptions |
+
+---
+
+**End of Interactions Report**# Interactions Report: registration-landing
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 

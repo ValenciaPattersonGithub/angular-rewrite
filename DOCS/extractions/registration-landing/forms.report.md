@@ -1,4 +1,144 @@
-# Forms Report: registration-landing
+# Forms DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
+**Included Files:**
+
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+
+---
+
+## 1. FormGroups, FormControls, and FormArrays
+
+**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+### Main FormGroup Structure
+
+```typescript
+this.personGroup = this.fb.group({
+  personalDetailsForm: this.personalDetailsControls(),
+  contactDetailsForm: this.contactDetailControls(),
+  insuranceDetailsForm: this.insuranceDetailsControls(),
+  preferencesForm: this.prefrencesControls(),
+  dentalRecordsForm: this.dentalRecordControls(),
+  referralsForm: this.referralsControls(),
+  identifiresForm: this.additionalIdenitfiersControls(),
+});
+```
+
+### Example: Personal Details Controls
+
+```typescript
+this.fb.group({
+  FirstName: ['', [Validators.required, Validators.maxLength(64)]],
+  MiddleInitial: ['', [Validators.maxLength(1)]],
+  LastName: ['', [Validators.required, Validators.maxLength(64)]],
+  Suffix: ['', [Validators.maxLength(20)]],
+  PreferredName: ['', [Validators.maxLength(64)]],
+  DateOfBirth: [null],
+  Gender: [''],
+  Patient: [true],
+  ResponsiblePerson: [''],
+  SignatureOnFile: [true],
+  Status: [true],
+  ResponsiblePersonId: [''],
+  ResponsiblePersonName: [''],
+  HeightFt: [''],
+  HeightIn: [''],
+  Weight: [''],
+  DataTag: [null],
+  PatientId: [null],
+  PatientSince: [null],
+  unscheduleOnly: [false],
+  updatePatientActive: [false],
+  PrimaryDuplicatePatientId: [''],
+})
+```
+
+### Example: Contact Details Controls
+
+```typescript
+this.fb.group({
+  AddressLine1: [null],
+  AddressLine2: [null],
+  City: [null],
+  ZipCode: [null, [Validators.minLength(5), Validators.pattern('^[0-9]{5}(?:[0-9]{4})?$')]],
+  State: [''],
+  MemberAddress: [''],
+  Phones: this.route.patientId ? this.fb.array([]) : this.fb.array([this.newPhone(true)]),
+  Emails: this.route.patientId ? this.fb.array([]) : this.fb.array([this.newEmail(true)]),
+  optOutPhones: [null],
+  optOutEmails: [null],
+  showPhoneOwner: [false],
+  ResponsiblePersonId: [null],
+  RPLastName: [null],
+  RPFirstName: [null],
+  PersonAccountId: [null],
+})
+```
+
+### Example: Phones FormArray
+
+```typescript
+this.fb.group({
+  PhoneNumber: [null, [Validators.required, Validators.minLength(10)]],
+  PhoneType: [0, [Validators.required]],
+  IsPrimary: [isPrimary],
+  PhoneReminder: [true],
+  TextReminder: [false],
+  ValidPhoneNumber: [true],
+  ValidPhoneType: [true],
+  ObjectState: ['Add'],
+  PhoneOwner: [0],
+  ContactId: [null],
+  PatientId: [this.route.patientId],
+  PhoneReferrerId: [null],
+  isDisabled: [false],
+})
+```
+
+---
+
+## 2. PatchValue, Get, and Dynamic Logic
+
+- Uses `patchValue` to update form sections with API data
+- Uses `get` to access nested controls and arrays
+- Dynamic addition of phones, emails, policies, etc.
+
+---
+
+## 3. Validators and Error Messages
+
+- All validators are defined in the form group/control definitions
+- Error messages are surfaced via Angular error state and toast notifications
+
+---
+
+## 4. Mapping to Models and Business Logic
+
+- Form values are mapped directly to API models in `savePerson`
+- Business rules are enforced via form validation and custom logic
+
+---
+
+## 5. Diagrams and Tables
+
+| Form Section         | Controls/Arrays                   | Validators                   |
+| -------------------- | --------------------------------- | ---------------------------- |
+| personalDetailsForm  | FirstName, LastName, ...          | required, maxLength          |
+| contactDetailsForm   | AddressLine1, Phones, Emails, ... | required, minLength, pattern |
+| insuranceDetailsForm | Policies                          | required                     |
+| preferencesForm      | PrimaryLocation, Flags, ...       | required                     |
+| dentalRecordsForm    | PreviousDentist, PhoneNumber, ... | minLength, pattern           |
+| referralsForm        | referralCategory, provider, ...   | required, email, minLength   |
+| identifiresForm      | PatientIdentifiers                | n/a                          |
+
+---
+
+**End of Forms Report**# Forms Report: registration-landing
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
@@ -26,15 +166,15 @@
 
 ## Diagrams/Tables
 
-| Form Section | Controls | Validators |
-|--------------|----------|------------|
-| personalDetailsForm | FirstName, LastName, Gender, etc. | required, maxLength |
-| contactDetailsForm | Address, Phones, Emails | required, pattern |
-| insuranceDetailsForm | Policies, PlanName, etc. | required |
-| preferencesForm | Locations, Discounts, Flags | required |
-| dentalRecordsForm | Dentist, Address, Notes | pattern |
-| referralsForm | Type, Source, Patient | required, pattern |
-| identifiresForm | PatientIdentifiers | required |
+| Form Section         | Controls                          | Validators          |
+| -------------------- | --------------------------------- | ------------------- |
+| personalDetailsForm  | FirstName, LastName, Gender, etc. | required, maxLength |
+| contactDetailsForm   | Address, Phones, Emails           | required, pattern   |
+| insuranceDetailsForm | Policies, PlanName, etc.          | required            |
+| preferencesForm      | Locations, Discounts, Flags       | required            |
+| dentalRecordsForm    | Dentist, Address, Notes           | pattern             |
+| referralsForm        | Type, Source, Patient             | required, pattern   |
+| identifiresForm      | PatientIdentifiers                | required            |
 
 ## Rationale
 
@@ -168,15 +308,15 @@ Validators are defined inline in the form control definitions. Example:
 
 ## 6. Diagrams and Tables
 
-| Form Group           | Key Controls (Sample)                   | Validators/Notes                  |
-|----------------------|-----------------------------------------|-----------------------------------|
-| personalDetailsForm  | FirstName, LastName, Gender, DOB, ...   | required, maxLength, custom logic |
-| contactDetailsForm   | AddressLine1, Phones[], Emails[]        | minLength, pattern, required      |
-| insuranceDetailsForm | Policies[]                              | required, custom logic            |
-| preferencesForm      | PrimaryLocation, Flags[], Groups[]      | required, custom logic            |
-| dentalRecordsForm    | PreviousDentist, PhoneNumber, Email     | minLength, pattern                |
-| referralsForm        | ReferralType, ReferralSourceId, ...     | required, custom logic            |
-| identifiresForm      | PatientIdentifiers[]                    | required, custom logic            |
+| Form Group           | Key Controls (Sample)                 | Validators/Notes                  |
+| -------------------- | ------------------------------------- | --------------------------------- |
+| personalDetailsForm  | FirstName, LastName, Gender, DOB, ... | required, maxLength, custom logic |
+| contactDetailsForm   | AddressLine1, Phones[], Emails[]      | minLength, pattern, required      |
+| insuranceDetailsForm | Policies[]                            | required, custom logic            |
+| preferencesForm      | PrimaryLocation, Flags[], Groups[]    | required, custom logic            |
+| dentalRecordsForm    | PreviousDentist, PhoneNumber, Email   | minLength, pattern                |
+| referralsForm        | ReferralType, ReferralSourceId, ...   | required, custom logic            |
+| identifiresForm      | PatientIdentifiers[]                  | required, custom logic            |
 
 ---
 

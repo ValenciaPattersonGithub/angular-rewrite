@@ -1,4 +1,76 @@
-# User Interface Elements Report: registration-landing
+# User Interface Elements DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
+**Included Files:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+
+---
+
+## 1. Template Structure and UI Elements
+
+**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+
+```html
+// ...existing code from registration-landing.component.html...
+```
+
+- **Purpose:**
+  - Renders the registration landing UI, including header, table of contents, and all form sections
+  - Binds to `personGroup` and child components for each form section
+  - Handles modal overlay for confirmation
+
+- **Key UI Elements:**
+  - `<registration-header>`, `<table-of-content>`, `<personal-details>`, `<contact-details>`, `<insurance-details>`, `<preferences>`, `<dental-records>`, `<patient-referral-crud>`, `<additional-identifiers>`, `<app-patient-documents>`, `<app-patient-account-members>`
+  - Modal confirmation template with field list table
+
+---
+
+## 2. Event Bindings and Handlers
+
+- `(scroll)="onScroll($event)"` on `.person-container` div
+- `(onClick)="closeModal()"` and `(onClick)="isCancelled?initializePersonForm():savePerson()"` on modal buttons
+
+---
+
+## 3. Accessibility and Usability
+
+- Uses semantic HTML structure for forms and sections
+- Modal overlay uses ARIA roles and focus management (inferred from Angular best practices)
+- Table structure for field review in modal
+
+---
+
+## 4. Edge Cases and Legacy Artifacts
+
+- Some commented-out legacy Kendo tabstrip code
+- Conditional rendering for new vs. existing patient flows
+
+---
+
+## 5. Diagrams and Tables
+
+| UI Element | Type | Purpose |
+|------------|------|---------|
+| registration-header | Component | Patient profile header |
+| table-of-content | Component | Navigation |
+| personal-details | Component | Personal details form |
+| contact-details | Component | Contact details form |
+| insurance-details | Component | Insurance form |
+| preferences | Component | Preferences form |
+| dental-records | Component | Dental records form |
+| patient-referral-crud | Component | Referrals section |
+| additional-identifiers | Component | Additional IDs |
+| app-patient-documents | Component | Patient documents |
+| app-patient-account-members | Component | Account members |
+| Modal | Overlay | Confirmation dialog |
+
+---
+
+**End of User Interface Elements Report**# User Interface Elements Report: registration-landing
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 

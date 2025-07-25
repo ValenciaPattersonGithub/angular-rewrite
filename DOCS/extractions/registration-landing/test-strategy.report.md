@@ -1,4 +1,65 @@
-# Test Strategy and Requirements Report: registration-landing
+# Test Strategy and Requirements DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
+**Included Files:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+
+---
+
+## 1. Test Cases and Coverage
+
+**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+
+- Unit tests for component creation, form initialization, and update logic
+- Integration tests for service calls and event handling
+- Mocks for all injected services and dependencies
+- Test cases for:
+  - Creating the component
+  - Navigating after cancel (edit and add flows)
+  - Creating preferences form controls and updating person
+
+---
+
+## 2. Test Utilities and Mocks
+
+- Uses Angular TestBed for module setup
+- Mocks for all services, pipes, and child components
+- Uses Jasmine spies and RxJS observables for event simulation
+
+---
+
+## 3. Test Runner and Configuration
+
+- Uses Angular testing utilities and Jasmine
+- TestBed configuration includes all required modules and providers
+- HttpClientTestingModule for HTTP mocks
+
+---
+
+## 4. Gaps and Edge Cases
+
+- Some tests are skipped (xit) for navigation flows
+- No explicit e2e tests in this file
+- Some business logic and validation paths may not be fully covered
+
+---
+
+## 5. Diagrams and Tables
+
+| Test Case | Purpose |
+|-----------|---------|
+| should create | Component instantiation |
+| should navigate to patient management page after cancel (edit) | Navigation logic |
+| should navigate to patient management page after cancel (add) | Navigation logic |
+| should create preferences formcontrols and updateperson | Form and update logic |
+
+---
+
+**End of Test Strategy and Requirements Report**# Test Strategy and Requirements Report: registration-landing
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 

@@ -1,4 +1,6 @@
-#
+# System Prompt for DNA Extraction
+
+## MAIN DIRECTIVE: DO NOT SUMMARIZE. ALL EXTRACTION AND CATEGORY PROMPTS MUST INCLUDE PRECISE, EXPLICIT DETAILS FOR EVERY ASPECT (E.G., VALIDATOR TYPE, VALUE, ERROR MESSAGE, CODE, ETC.). THE PURPOSE IS TO ENABLE CODE GENERATION ON A DIFFERENT PLATFORM. SUMMARIES OR OMISSIONS ARE UNACCEPTABLE.
 ---
 requiredInputs:
     - name: TARGET_FOLDER
@@ -104,7 +106,20 @@ Typically, the target will be a specific component or set of components in the c
 
 
 
+
 ## DNA Extraction Workflow for `<TARGET_COMPONENT>` (Flexible Input)
+
+### Step 0: Input Validation
+
+- **Check for Required Inputs:**  
+   Before starting the extraction workflow, ensure that at least one of the following is provided:
+   - `TARGET_FOLDER`: a relative folder path for the component or feature
+   - `TARGET_FILES`: an array of relative file paths for a group of files
+- **If neither is provided:**  
+   Prompt the user:  
+   > "Please provide at least one required input: `TARGET_FOLDER` (relative folder path) or `TARGET_FILES` (array of relative file paths). The workflow cannot proceed without this information."
+
+
 
 ### Step 1: Preparation
 
@@ -122,7 +137,9 @@ Typically, the target will be a specific component or set of components in the c
 ### Step 2: Category Interrogation
 
 
+
 For each of the 15 categories, use the corresponding prompt in `DOCS/extraction-prompts`.
+**ALL CATEGORY PROMPTS AND EXTRACTIONS MUST INCLUDE PRECISE, EXPLICIT DETAILS FOR EVERY ASPECT (E.G., VALIDATOR TYPE, VALUE, ERROR MESSAGE, CODE, ETC.). SUMMARIES OR OMISSIONS ARE UNACCEPTABLE.**
 Each prompt and report must:
    - Accept and process any of the three input options (folder, file set, or both).
    - When both are provided, operate on the union of all files in the folder and the explicit file set, avoiding duplicates.

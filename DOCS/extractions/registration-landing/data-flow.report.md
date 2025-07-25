@@ -1,4 +1,97 @@
-# Data Flow and State Management Report: registration-landing
+# Data Flow and State Management DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
+**Included Files:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+
+---
+
+## 1. Data Sources and Destinations
+
+- **API Data:** Loaded via `PatientRegistrationService.getPersonByPersonId` and mapped to form controls
+- **Form State:** Managed via Angular Reactive Forms (`FormGroup`, `FormArray`)
+- **UI State:** Managed via component properties and RxJS subscriptions
+
+---
+
+## 2. Data Loading and Transformation
+
+**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+```typescript
+ngAfterContentInit() {
+  if (this.route.patientId) {
+    this.loadingModal = this.getLoadingModal();
+    this.registrationService
+      .getPersonByPersonId(this.route.patientId)
+      .subscribe((person: any) => {
+        this.personInfo = person;
+        this.titleService.setTitle(
+          `${person.Profile.PatientCode} - Edit Person`
+        );
+        this.handlePatchForms();
+      });
+  } else {
+    this.patientIdentifiers = [];
+    this.profile = null;
+  }
+}
+```
+
+- **Purpose:** Loads person data from API and patches all form groups with the returned data
+
+---
+
+## 3. State Management and Synchronization
+
+- **Form Initialization:**
+  - `initializePersonForm()` creates the main `FormGroup` with all subgroups and arrays
+- **Form Patching:**
+  - `handlePatchForms()` calls patch methods for each form section
+- **Event Subscriptions:**
+  - `registrationService.getRegistrationEvent().pipe(takeUntil(this.unsubscribe$)).subscribe(...)` for event-driven updates
+- **State Variables:**
+  - `personTabs`, `selectedMenuItem`, `personGroup`, `fieldList`, `phoneTypes`, `states`, etc.
+- **RxJS Subjects:**
+  - `unsubscribe$` for managing subscription cleanup
+
+---
+
+## 4. Event Handlers and Triggers
+
+- **Scroll Event:**
+  - `@HostListener('scroll', ['$event']) onScroll($event)` updates `selectedMenuItem` and emits registration events
+- **Form Events:**
+  - Form control changes trigger validation and UI updates
+- **Modal Events:**
+  - Modal open/close and confirmation handled via component state and service
+
+---
+
+## 5. Edge Cases and Legacy Artifacts
+
+- Handles both new and existing patient flows
+- Uses both direct property assignment and RxJS for state
+- Some legacy patterns in event and modal management
+
+---
+
+## 6. Diagrams and Tables
+
+| Data Source | Destination | Trigger/Event |
+|-------------|-------------|---------------|
+| API (getPersonByPersonId) | personInfo, form groups | ngAfterContentInit |
+| FormGroup | UI template | Data binding |
+| User input | FormGroup | Form events |
+| RegistrationEvent | Component state | RxJS subscription |
+
+---
+
+**End of Data Flow and State Management Report**# Data Flow and State Management Report: registration-landing
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 

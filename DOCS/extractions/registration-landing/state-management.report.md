@@ -1,4 +1,99 @@
-# Component State Management Report: registration-landing
+# Component State Management DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
+**Included Files:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+
+---
+
+## 1. State Variables and Initialization
+
+**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+- `personTabs: any[];`
+- `unsubscribe$: Subject<any> = new Subject<any>();`
+- `@ViewChild` references for DOM and child components
+- `selectedMenuItem: any = 1;`
+- `personGroup: FormGroup;`
+- `fieldList: any[];`
+- `phoneTypes: any[];`
+- `states: any[];`
+- `isCancelled = false;`
+- `patientIdentifiers: any[];`
+- `profile: any;`
+- `personInfo: any;`
+- `loadingModal: any;`
+- `PersonObject: any;`
+- `baseUrl`, `url`, `UrlPath`, `confirmationRef`, `confirmationModalSubscription`, `releseOldReferral`, `newPatientId`, `referralLocationId`, `enableNewReferral`
+
+---
+
+## 2. Initialization and Cleanup Logic
+
+- `ngOnInit()` initializes component state and subscriptions
+- `ngAfterContentInit()` loads data and patches forms
+- `ngOnDestroy()` cleans up subscriptions and resets state
+
+```typescript
+ngOnInit() {
+  this.UrlPath = this.loc.$$path;
+  this.initializeComponent();
+}
+ngOnDestroy() {
+  this.unsubscribe$.next();
+  this.unsubscribe$.complete();
+  this.isCancelled = false;
+}
+```
+
+---
+
+## 3. Subscription Management
+
+- Uses `unsubscribe$` Subject to manage RxJS subscriptions
+- All subscriptions are piped with `takeUntil(this.unsubscribe$)`
+
+```typescript
+this.registrationService.getRegistrationEvent()
+  .pipe(takeUntil(this.unsubscribe$))
+  .subscribe((event: RegistrationCustomEvent) => { ... });
+```
+
+---
+
+## 4. State Change Triggers
+
+- User actions (scroll, form input, modal confirmation)
+- API responses (person data, feature flags)
+- Event emissions (registration events)
+
+---
+
+## 5. Edge Cases and Legacy Artifacts
+
+- Handles both new and existing patient flows
+- Some state variables are only used in specific flows
+- Uses both Angular and legacy DI patterns
+
+---
+
+## 6. Diagrams and Tables
+
+| State Variable | Type | Initialized | Updated By | Cleaned Up |
+|---------------|------|-------------|------------|------------|
+| personTabs | any[] | initializeComponent | UI events | n/a |
+| unsubscribe$ | Subject | declaration | ngOnDestroy | ngOnDestroy |
+| personGroup | FormGroup | initializePersonForm | API, UI | n/a |
+| fieldList | any[] | BuildFieldList | Form changes | n/a |
+| isCancelled | boolean | false | Modal, save/cancel | ngOnDestroy |
+
+---
+
+**End of Component State Management Report**# Component State Management Report: registration-landing
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
