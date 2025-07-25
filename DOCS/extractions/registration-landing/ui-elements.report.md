@@ -2,6 +2,184 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Template Structure and UI Elements
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+
+```html
+<div class="registration-landing-container">
+  <div class="registration-landing-header">
+    <registration-header [patientProfile]="this.personInfo.Profile"></registration-header>
+  </div>
+  <div class="registration-landing-content">
+    <div class="registration-landing-content-toc">
+      <table-of-content></table-of-content>
+    </div>
+    <div class="registration-landing-content-person-detail">
+      <form [formGroup]="personGroup" class="form-horizontal" id="person-form">
+        <div class="person-container" (scroll)="onScroll($event)">
+          <div id="personalDetail" class="person-section person-personal-details" #personalDetail>
+            <personal-details [personalDetails]="personGroup.controls.personalDetailsForm"></personal-details>
+          </div>
+          <div class="person-section person-contact-details" id="contactDetail" #contactDetail>
+            <contact-details [contactDetails]="personGroup.controls.contactDetailsForm" [phoneTypes]="phoneTypes" [states]="states"></contact-details>
+          </div>
+          <div id="insurance" class="person-section person-insurance" #insurance>
+            <app-patient-insurance *ngIf="route.patientId"></app-patient-insurance>
+            <insurance-details [insuranceDetails]="personGroup.controls.insuranceDetailsForm" *ngIf="!route.patientId"></insurance-details>
+          </div>
+          <div id="prefrence" class="person-section person-prefrences" #prefrence>
+            <preferences [patientPreference]="personGroup.controls.preferencesForm" [onlyActive]="true"></preferences>
+          </div>
+          <div id="dentalRecord" class="person-section person-dental-record" #dentalRecord>
+            <dental-records [dentalRecords]="personGroup.controls.dentalRecordsForm"></dental-records>
+          </div>
+          <div id="referrals" class="person-section person-referrals" #referrals *ngIf="!route.patientId && enableNewReferral">
+            <div class="referrals-header">Referrals</div>
+            <hr class="referral-hr"/>
+            <div style="height: auto;">
+              <patient-referral-crud [fromAddPatientProfile]="true"></patient-referral-crud>
+            </div>
+          </div>
+          <div class="person-section person-identifiers" id="identifiers" #identifiers>
+            <additional-identifiers *ngIf="route.patientId && (personInfo.patientIdentifierDtos && personInfo.patientIdentifierDtos.length)"
+                        [additionalIdentifiers]="personGroup.controls.identifiresForm"
+                        [patientIdentifiers]="personInfo.patientIdentifierDtos">
+            </additional-identifiers>
+            <additional-identifiers *ngIf="!route.patientId"
+                        [additionalIdentifiers]="personGroup.controls.identifiresForm">
+            </additional-identifiers>
+          </div>
+          <div class="person-section person-documents" id="documents" #documents>
+            <app-patient-documents *ngIf="route.patientId && personInfo.Profile"
+                         [patientProfile]="personInfo.Profile"></app-patient-documents>
+            <app-patient-documents *ngIf="!route.patientId"></app-patient-documents>
+          </div>
+          <div class=" person-section person-account-members" id="accountMembers" #accountMembers>
+            <app-patient-account-members [featureName]="route.patientId?'PatientProfile':'PatientRegistration'"></app-patient-account-members>
+          </div>
+          &nbsp;
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="isOpen"
+  [cdkConnectedOverlayPanelClass]="'overlay-pane'" id="modalPatientRegistration">
+  <div class="reg-modal">
+    <div class="btnFlexContainer">
+      <p id="modal-header" class="reg-modal-header">
+        {{!isCancelled ? 'Is everything correct? Do you want to continue?':'Cancel now and you will lose the changes below. Do you want to continue?' | translate}}
+      </p>
+      <div class="closeModal" (click)="closeModal()">
+        <svg-icon [name]="'closeIcon'" [iconHeight]="'24px'" [iconWidth]="'24px'"></svg-icon>
+      </div>
+    </div>
+    <div class="reg-modal-body">
+      <div class="containerPadding">
+        <table class="fuseGrid fuseTable">
+          <thead>
+            <tr>
+              <th>
+                {{'Category/Field' | translate}}
+              </th>
+              <th>
+                {{'New Content' | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let field of fieldList;index as i">
+              <td id="fieldName" class="field">
+                {{field.Field}}
+              </td>
+              <td id="fieldValue" class="field">
+                {{field.Value}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="reg-modal-footer containerPadding">
+      <app-button id="btnRegisterNo" variation="secondary" class="reg-btn" (onClick)="closeModal()" buttonLabel="No"></app-button>
+      <app-button id="btnRegisterYes" variation="primary" class="reg-btn" buttonLabel="Yes" (onClick)="isCancelled?initializePersonForm():savePerson()"></app-button>
+    </div>
+  </div>
+</ng-template>
+```
+
+---
+
+## 2. Rendering, Bindings, and Event Logic
+
+- **FormGroup Binding:** All form sections are bound to their respective FormGroups via `[formGroup]` and `[formControl]` bindings.
+- **Event Bindings:**
+  - `(scroll)="onScroll($event)"` for section navigation
+  - `(onClick)="closeModal()"` and `(onClick)="isCancelled?initializePersonForm():savePerson()"` for modal actions
+- **Conditional Rendering:**
+  - `*ngIf="route.patientId"` and `*ngIf="!route.patientId"` for toggling between edit and add modes
+  - `*ngIf="!route.patientId && enableNewReferral"` for showing referrals section
+
+---
+
+## 3. Accessibility and Usability
+
+- **ARIA and Accessibility:**
+  - Uses semantic HTML for forms and tables
+  - Modal overlay for confirmation
+- **Usability:**
+  - Sectioned layout for clarity
+  - Scrollable container for large forms
+  - Modal confirmation before save/cancel
+
+---
+
+## 4. Edge Cases and Legacy Artifacts
+
+- Some legacy patterns (e.g., direct DOM access for scrolling/focus) are present in the component logic.
+- All UI logic is handled in the template or via Angular event bindings.
+
+---
+
+## 5. Diagrams and Tables
+
+| UI Element | Type | Binding/Event | Purpose |
+|------------|------|--------------|---------|
+| personal-details | Child Component | [personalDetails] | Personal info section |
+| contact-details | Child Component | [contactDetails], [phoneTypes], [states] | Contact info section |
+| insurance-details | Child Component | [insuranceDetails] | Insurance info section |
+| preferences | Child Component | [patientPreference], [onlyActive] | Preferences section |
+| dental-records | Child Component | [dentalRecords] | Dental info section |
+| patient-referral-crud | Child Component | [fromAddPatientProfile] | Referrals section |
+| additional-identifiers | Child Component | [additionalIdentifiers], [patientIdentifiers] | Identifiers section |
+| app-patient-documents | Child Component | [patientProfile] | Documents section |
+| app-patient-account-members | Child Component | [featureName] | Account members section |
+| Modal | Overlay | [cdkConnectedOverlayOpen], (onClick) | Confirmation dialog |
+
+---
+
+## 6. Rationale and Mapping to Requirements
+
+- All UI elements and bindings are required for the registration workflow, user navigation, and data entry.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of User Interface Elements Report**
+# User Interface Elements DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`

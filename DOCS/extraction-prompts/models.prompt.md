@@ -1,6 +1,27 @@
 # Models (Inferred/Explicit) Interrogation Prompt
 
-# DNA-Level Extraction Instructions
+---
+requiredInputs:
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
+
+# Models (Inferred/Explicit) Interrogation Prompt
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
+
+---
+requiredInputs:
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
+
+## External Context Integration (MANDATORY)
+Follow the instructions and checklist in `DOCS/extraction-prompts/external-context.instructions.md` to ensure all available external context is integrated, referenced, and reported as required.
+All external context files must be collected from the folder specified by `TARGET_CONTEXT_FOLDER` (and any other relevant context folders).
 
 **You are extracting the full DNA of all models (explicit or inferred) used for forms, patchValue, data binding, and business logic in the component for rehydration in a modern Nx/Angular workspace.**
 

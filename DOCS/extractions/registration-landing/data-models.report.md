@@ -2,6 +2,127 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Data Model Definitions and Usage
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+#### Person Object Model
+```typescript
+{
+  Profile: {
+    PatientId: string,
+    PatientSince: Date,
+    DataTag: string,
+    IsActive: boolean,
+    FirstName: string,
+    MiddleName: string,
+    LastName: string,
+    PreferredName: string,
+    Suffix: string,
+    DateOfBirth: Date,
+    Sex: string,
+    IsPatient: boolean,
+    ResponsiblePersonType: number,
+    ResponsiblePersonId: string,
+    IsSignatureOnFile: boolean,
+    AddressReferrerId: string,
+    AddressLine1: string,
+    AddressLine2: string,
+    City: string,
+    State: string,
+    ZipCode: string,
+    PreferredDentist: string,
+    PreferredHygienist: string,
+    PreferredLocation: string,
+    HeightFeet: number,
+    HeightInches: number,
+    Weight: string,
+    PrimaryDuplicatePatientId: string,
+    PersonAccount: {
+      ReceivesStatements: boolean,
+      ReceivesFinanceCharges: boolean,
+      PersonId: string,
+      AccountId: string,
+      DataTag: string,
+    },
+  },
+  Phones: Array<any>,
+  Emails: Array<any>,
+  PreviousDentalOffice: any,
+  Referral: any,
+  patientIdentifierDtos: Array<any>,
+  Flags: Array<any>,
+  PatientBenefitPlanDtos: Array<any>,
+  PatientLocations: Array<any>,
+  patientDiscountTypeDto: any,
+  patientGroupDtos: Array<any>,
+}
+```
+
+- **Rationale:** Central model for all patient registration data, used for form patching and API calls.
+
+---
+
+## 2. Model Usage in Code
+
+- Used in form patching (`patchPersonalDetail`, `patchContactDetail`, etc.)
+- Used in API calls (`addPerson`, `updatePerson`)
+- Used for UI binding and state management
+
+---
+
+## 3. Relationships and Dependencies
+
+- `Profile` is the main patient demographic model
+- `Phones`, `Emails`, `PreviousDentalOffice`, `Referral`, etc. are sub-models/arrays
+- All models are mapped to Angular FormGroups and FormArrays
+
+---
+
+## 4. Edge Cases and Legacy Artifacts
+
+- Some fields may be null/undefined depending on workflow (e.g., new vs. edit)
+- Legacy fields and patterns are present for compatibility
+
+---
+
+## 5. Diagrams and Tables
+
+| Model | Fields | Usage |
+|-------|--------|-------|
+| Profile | PatientId, FirstName, ... | Demographics, form patching |
+| Phones | PhoneNumber, PhoneType, ... | Contact info, form patching |
+| Emails | EmailAddress, ... | Contact info, form patching |
+| PreviousDentalOffice | Name, Address, ... | Dental info |
+| Referral | ReferralType, ... | Referrals |
+| patientIdentifierDtos | ... | Identifiers |
+| Flags | ... | Alerts/flags |
+| PatientBenefitPlanDtos | ... | Insurance |
+| PatientLocations | ... | Locations |
+| patientDiscountTypeDto | ... | Discounts |
+| patientGroupDtos | ... | Groups |
+
+---
+
+## 6. Rationale and Mapping to Requirements
+
+- All data models are required for form structure, API integration, and UI binding.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of Data Models Report**# Data Models DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`

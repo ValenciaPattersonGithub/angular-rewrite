@@ -2,6 +2,103 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. API Endpoints and Service Calls
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+#### Get Person by ID
+```typescript
+this.registrationService.getPersonByPersonId(this.route.patientId)
+  .subscribe((person: any) => {
+    this.personInfo = person;
+    this.titleService.setTitle(`${person.Profile.PatientCode} - Edit Person`);
+    this.handlePatchForms();
+  });
+```
+
+- **Endpoint:** PatientRegistrationService.getPersonByPersonId
+- **Payload:** `{ patientId: string }`
+- **Response:** `person` object with `Profile`, `Phones`, `Emails`, etc.
+
+#### Save/Update Person
+```typescript
+this.registrationService.updatePerson(personToUpdate).subscribe(
+  (updatedPatient: any) => { ... },
+  error => this.savePersonFailure(error)
+);
+this.registrationService.addPerson(personToAdd).subscribe(
+  (data: any) => this.savePersonSuccess(data),
+  error => this.savePersonFailure(error)
+);
+```
+
+- **Endpoint:** PatientRegistrationService.updatePerson / addPerson
+- **Payload:** `personToUpdate` or `personToAdd` (full person object)
+- **Response:** Updated or new patient object
+
+#### Feature Flag Checks
+```typescript
+this.featureFlagService.getOnce$(FuseFlag.ReleseOldReferral).subscribe((value) => { this.releseOldReferral = value; });
+this.featureFlagService.getOnce$(FuseFlag.ReleseEnableReferralNewPatientSection).subscribe((value) => { this.enableNewReferral = value; });
+```
+
+- **Endpoint:** FeatureFlagService.getOnce$
+- **Payload:** Feature flag enum
+- **Response:** Boolean value
+
+---
+
+## 2. Request/Response Payloads and Models
+
+- **Person Object:**
+  - `Profile`, `Phones`, `Emails`, `PreviousDentalOffice`, `Referral`, `patientIdentifierDtos`, `Flags`, `PatientBenefitPlanDtos`, `PatientLocations`, `patientDiscountTypeDto`, `patientGroupDtos`
+- **API Models:** Used for patching forms and saving/updating patient data
+
+---
+
+## 3. Error and Success Handling
+
+- All API errors are handled via `savePersonFailure`, surfacing errors to the user via toast notifications and modal closure.
+- Success responses update UI state and navigate as needed.
+
+---
+
+## 4. Edge Cases and Legacy Artifacts
+
+- Some legacy patterns (e.g., direct DOM access, legacy tokens) are present but do not affect API logic directly.
+
+---
+
+## 5. Diagrams and Tables
+
+| API Call | Endpoint | Payload | Response | Error Handling |
+|----------|----------|---------|----------|---------------|
+| getPersonByPersonId | PatientRegistrationService | patientId | person | savePersonFailure |
+| updatePerson | PatientRegistrationService | personToUpdate | updatedPatient | savePersonFailure |
+| addPerson | PatientRegistrationService | personToAdd | data | savePersonFailure |
+| getOnce$ | FeatureFlagService | flag | boolean | n/a |
+
+---
+
+## 6. Rationale and Mapping to Requirements
+
+- All API interactions are required for data loading, saving, and feature management.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of API Interactions Report**# API Interactions DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`

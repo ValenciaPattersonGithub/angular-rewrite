@@ -2,6 +2,128 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Data Sources and Destinations
+
+- **API Data:** Loaded via `PatientRegistrationService.getPersonByPersonId(this.route.patientId)` and patched into form groups.
+- **Form State:** Managed via Angular Reactive Forms (`FormGroup`, `FormArray`, etc.)
+- **Feature Flags:** Loaded via `FeatureFlagService.getOnce$` and used to toggle UI/logic.
+- **UI State:** Managed via component properties (e.g., `selectedMenuItem`, `isOpen`, `isCancelled`, etc.)
+
+---
+
+## 2. Data Loading, Transformation, and Storage
+
+```typescript
+ngAfterContentInit() {
+  if (this.route.patientId) {
+    this.loadingModal = this.getLoadingModal();
+    this.registrationService.getPersonByPersonId(this.route.patientId)
+      .subscribe((person: any) => {
+        this.personInfo = person;
+        this.titleService.setTitle(`${person.Profile.PatientCode} - Edit Person`);
+        this.handlePatchForms();
+      });
+  } else {
+    this.patientIdentifiers = [];
+    this.profile = null;
+  }
+}
+```
+
+- **Rationale:** Loads patient data from API, updates local state, and patches forms.
+
+---
+
+## 3. State Management and Synchronization
+
+### Form Initialization and Patching
+```typescript
+initializePersonForm = () => {
+  this.personGroup = this.fb.group({
+    personalDetailsForm: this.personalDetailsControls(),
+    contactDetailsForm: this.contactDetailControls(),
+    insuranceDetailsForm: this.insuranceDetailsControls(),
+    preferencesForm: this.prefrencesControls(),
+    dentalRecordsForm: this.dentalRecordControls(),
+    referralsForm: this.referralsControls(),
+    identifiresForm: this.additionalIdenitfiersControls(),
+  });
+  if (this.isCancelled) {
+    this.isCancelled = false;
+    this.closeModal();
+    this.location.back();
+  }
+};
+```
+
+### Event Subscriptions
+```typescript
+this.registrationService.getRegistrationEvent()
+  .pipe(takeUntil(this.unsubscribe$))
+  .subscribe((event: RegistrationCustomEvent) => {
+    if (event) {
+      switch (event.eventtype) {
+        case RegistrationEvent.FocusSection:
+          this.setFocusOnSection(event.data);
+          break;
+        case RegistrationEvent.SavePatient:
+          this.validateandSavePatient(event.data);
+          break;
+        case RegistrationEvent.PerformNavigation:
+          this.validateAndNavigate(event.data);
+          break;
+      }
+    }
+  });
+```
+
+---
+
+## 4. State Variables and Triggers
+
+- `personTabs`, `selectedMenuItem`, `fromTocEvent`, `isOpen`, `isCancelled`, `fieldList`, `phoneTypes`, `states`, `patientIdentifiers`, `profile`, `personInfo`, `loadingModal`, `PersonObject`, etc.
+- Triggers include form events, scroll events, modal actions, and service events.
+
+---
+
+## 5. Edge Cases and Legacy Artifacts
+
+- Use of legacy AngularJS tokens and direct DOM manipulation for section focus.
+- Manual subscription management with `unsubscribe$` for RxJS cleanup.
+
+---
+
+## 6. Diagrams and Tables
+
+| Data Source | Destination | Trigger/Event | Code Reference |
+|-------------|-------------|---------------|---------------|
+| API | personInfo | ngAfterContentInit | registrationService.getPersonByPersonId |
+| personInfo | FormGroups | handlePatchForms | patch* methods |
+| FeatureFlagService | enableNewReferral, releseOldReferral | ngOnInit | featureFlagService.getOnce$ |
+| User Actions | UI State | Scroll, Modal, Save | onScroll, openModal, savePerson |
+
+---
+
+## 7. Rationale and Mapping to Requirements
+
+- All data flow and state management logic is required for the registration workflow, UI navigation, and form handling.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of Data Flow and State Management Report**
+# Data Flow and State Management DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`

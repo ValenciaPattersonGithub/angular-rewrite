@@ -2,6 +2,75 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Log Messages and Notification Calls
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+#### Toast Notifications
+```typescript
+this.toastrFactory.error(
+  this.translate.instant(`Unable to ${mode} patient.`),
+  this.translate.instant('Server Error')
+);
+this.toastrFactory.success(
+  this.translate.instant(`Patient has been ${mode} successfully.`),
+  this.translate.instant('Success')
+);
+```
+
+- **Rationale:** All error and success messages are surfaced to the user via toast notifications.
+
+---
+
+## 2. Analytics and Monitoring Hooks
+
+- **No explicit analytics or monitoring hooks are present in this component.**
+
+---
+
+## 3. Relationships to Business Logic, API, and Forms
+
+- Logging and notifications are triggered by API responses, form validation, and business rule enforcement.
+- All error handling is centralized in `savePersonFailure` and form validation logic.
+
+---
+
+## 4. Edge Cases, Anti-Patterns, and Legacy Artifacts
+
+- Centralized error handling via toast notifications is a best practice.
+- No anti-patterns or legacy logging artifacts detected in this component.
+
+---
+
+## 5. Diagrams and Tables
+
+| Event | Log/Notification | Trigger | Code Reference |
+|-------|------------------|---------|---------------|
+| API Failure | toastrFactory.error | API error | savePersonFailure |
+| API Success | toastrFactory.success | API success | savePersonSuccess |
+| Form Error | Angular validation | Form invalid | Child components |
+
+---
+
+## 6. Rationale and Mapping to Requirements
+
+- All logging and error handling details are required for user feedback, workflow integrity, and state management.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of Logging and Error Handling Details Report**# Logging and Error Handling Details DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`

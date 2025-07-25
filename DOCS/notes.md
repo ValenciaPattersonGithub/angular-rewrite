@@ -39,7 +39,24 @@
   - [ ] Identify missing information
   - [ ] Identify missing code
   - [ ] update prompts for any gaps
+- [ ] Add external context for DNA extraction
+  - [ ] Confluence
+  - [ ] Azure DevOps
+- [ ] Identify Component-level workflows or sequeces
+- [ ] API Interactions
+  - [ ] Use: DOCS\extractions\registration-landing\api-interactions.report.md
+  - [ ] Need to extract API interaction details; service operation details, API endpoints, request/response structures.
+  - [ ] consider a separate "Service DNA Extraction" prompt/report.
+- [ ] Identify Child Components
+  - [ ] Use same process to recursively extract child component(s) DNA
+  - [ ] Use system prompt to extract child component DNA
 
+
+## Workflow
+
+1. identify target component by file/folder path.
+2. extract DNA from target component using system prompt.
+3. run the #review-system-prompt command to review the extraction report; updates missing information.
 
 ## Confluence | Azure DevOps
 

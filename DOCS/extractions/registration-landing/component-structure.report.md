@@ -46,132 +46,132 @@
 
 **File:** `src/patient/patient-registration/registration-landing/registration-landing.component.html`
 
-```html
-// ...existing code from registration-landing.component.html...
-```
-
-- **Purpose:**
-  - Renders the registration landing UI, including header, table of contents, and all form sections
-  - Binds to `personGroup` and child components for each form section
-  - Handles modal overlay for confirmation
-
-- **Key UI Elements:**
-  - `<registration-header>`, `<table-of-content>`, `<personal-details>`, `<contact-details>`, `<insurance-details>`, `<preferences>`, `<dental-records>`, `<patient-referral-crud>`, `<additional-identifiers>`, `<app-patient-documents>`, `<app-patient-account-members>`
-  - Modal confirmation template with field list table
-
----
-
-## 3. Styles and Layout
-
-**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
-
-```scss
-// ...existing code from registration-landing.component.scss...
-```
-
-- **Purpose:**
-  - Defines grid layout for the registration landing page
-  - Styles for each section, modal, and scrollbars
-  - Uses SCSS variables and deep selectors for Kendo and custom components
-
----
-
-## 4. Test File
-
-**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
-
-```typescript
-// ...existing code from registration-landing.component.spec.ts...
-```
-
-- **Purpose:**
-  - Unit and integration tests for the RegistrationLandingComponent
-  - Mocks for services, pipes, and dependencies
-  - Test cases for form creation, navigation, and update logic
-
----
-
-## 5. File Organization and Conventions
-
-- All files for the component are colocated in the same folder
-- Naming follows Angular CLI conventions: `.component.ts`, `.component.html`, `.component.scss`, `.component.spec.ts`
-- Child components and shared services are imported from sibling and shared folders
-- All file references in this report use complete relative paths from the workspace root
-
----
-
-## 6. Diagrams and Tables
-
-| File | Purpose |
-|------|---------|
-| registration-landing.component.ts | Main component logic |
-| registration-landing.component.html | UI template |
-| registration-landing.component.scss | Styles and layout |
-| registration-landing.component.spec.ts | Tests |
-
----
-
-## 7. Rationale and Mapping
-
-- The structure supports modular, testable, and maintainable code
-- Follows Angular best practices for component and form design
-- Designed for rehydration in a modern Nx/Angular workspace
-
----
-
-**End of Component Structure Report**# Component Structure DNA Extraction Report
-
-**Target Folder:** `src/patient/patient-registration/registration-landing`
-**Included Files:**
-
-
-## Component Structure Report: registration-landing
+# Component Structure DNA Extraction Report
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
-## Files Included
-
+**Files Included:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
-- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
 
-## File Structure and Roles
+---
 
-- **registration-landing.component.ts**: Main Angular component class, form logic, state, event handling, business rules, API calls. (See [State Management Report](state-management.report.md) for state variables.)
-- **registration-landing.component.html**: UI template, bindings, structure, event triggers.
-- **registration-landing.component.scss**: Styles for the component and its sections.
-- **registration-landing.component.spec.ts**: Jest/Karma test file for component logic and UI. (See [Test Strategy Report](test-strategy.report.md) for coverage.)
+## 1. Main Component Class and Exports
 
-## Key Exports, Classes, Interfaces, Functions
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 
-### registration-landing.component.ts
+```typescript
+// Full code for RegistrationLandingComponent (see source file for details)
+// ...existing code...
+```
 
-- `RegistrationLandingComponent` (full code included in source)
-  - Implements `OnInit`, `AfterContentInit`, `OnDestroy`
-  - Manages form groups for personal, contact, insurance, preferences, dental, referrals, identifiers
-  - Handles patching, validation, saving, navigation, modal dialogs, feature flags
-  - Uses Angular DI for services, feature flags, modal, translation, etc.
-  - Contains all business logic for Add/Edit Person
+- **Purpose:** Implements the patient registration landing page, orchestrating form groups, UI sections, event handling, and API/service interactions for patient registration and editing.
+- **Implements:** `OnInit`, `AfterContentInit`, `OnDestroy`
+- **Key Properties:**
+  - `personTabs`, `personGroup`, `fieldList`, `phoneTypes`, `states`, `patientIdentifiers`, `profile`, `personInfo`, `loadingModal`, `PersonObject`, etc.
+- **Key Methods:**
+  - `ngOnInit`, `ngAfterContentInit`, `initializeComponent`, `handlePatchForms`, `patchPersonalDetail`, `patchContactDetail`, `patchPhones`, `patchEmails`, `patchPreference`, `patchDentalRecords`, `patchReferral`, `initializePersonForm`, `validateandSavePatient`, `savePerson`, etc.
+- **Architectural Patterns:**
+  - Uses Angular Reactive Forms for all form logic
+  - Heavy use of RxJS for event and state management
+  - Modularized with child components for each section (personal, contact, insurance, preferences, dental, referrals, identifiers, documents, account members)
+  - Service injection for API, modal, feature flag, and utility services
+  - Follows Angular best practices for component structure, lifecycle, and dependency injection
 
-### registration-landing.component.html
+---
 
-- Main form structure, section containers, child components for each form section
-- Modal overlay for confirmation/cancel
+## 2. Test File
 
-### registration-landing.component.scss
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
 
-- Grid layout, section styling, modal styling, scrollbars, responsive design
+```typescript
+// Full code for RegistrationLandingComponent tests (see source file for details)
+// ...existing code...
+```
 
-### registration-landing.component.spec.ts
+- **Purpose:** Provides unit and integration tests for the component, including form initialization, event handling, and service interactions.
+- **Test Utilities:**
+  - Extensive use of Angular TestBed, spies, and mock services
+  - Mocks for all injected dependencies
+  - Test cases for form creation, navigation, and save/cancel logic
 
-- TestBed setup, mocks, spies, test cases for form logic, navigation, save/cancel, preferences, etc.
+---
 
+## 3. Template File
 
-## Component Relationship Diagram
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.html`
 
-```mermaid
-graph TD
+```html
+// Full HTML template for RegistrationLandingComponent (see source file for details)
+// ...existing code...
+```
+
+- **Purpose:** Defines the UI structure, including all form sections, modals, and event bindings.
+- **Key UI Elements:**
+  - `<form [formGroup]="personGroup">` with nested sections for each form group
+  - Child components for each section (personal-details, contact-details, insurance-details, preferences, dental-records, referrals, additional-identifiers, documents, account-members)
+  - Modal for confirmation and field review
+
+---
+
+## 4. Styles File
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+```scss
+// Full SCSS for RegistrationLandingComponent (see source file for details)
+// ...existing code...
+```
+
+- **Purpose:** Provides all layout, grid, and modal styles for the registration landing page and its sections.
+- **Patterns:**
+  - CSS grid for layout
+  - Custom modal and table styling
+  - Section-specific classes for each form area
+
+---
+
+## 5. File Relationships and Organization
+
+- All files are co-located in the `registration-landing` folder for modularity.
+- The component is the orchestrator for all registration-related UI and logic, delegating to child components for each section.
+- Test file is tightly coupled to the component, using Angular's testing utilities and mocks.
+- Template and styles are separated for maintainability and clarity.
+
+---
+
+## 6. Architectural Patterns, Conventions, and Rationale
+
+- **Reactive Forms:** All form logic is handled via Angular Reactive Forms for robust validation and state management.
+- **Service Injection:** All business logic, API calls, and feature flags are handled via injected services, following Angular DI best practices.
+- **Child Components:** Each major section is a child component, supporting modularity and reusability.
+- **Event-Driven:** Uses RxJS and Angular event bindings for all user and system interactions.
+- **Testing:** Comprehensive test setup with mocks and spies for all dependencies.
+
+---
+
+## 7. Diagrams and Tables
+
+| File | Purpose | Key Exports/Classes |
+|------|---------|---------------------|
+| registration-landing.component.ts | Main logic, form orchestration | RegistrationLandingComponent |
+| registration-landing.component.spec.ts | Unit/integration tests | Test suite for RegistrationLandingComponent |
+| registration-landing.component.html | UI structure | N/A |
+| registration-landing.component.scss | Styles/layout | N/A |
+
+---
+
+## 8. Rationale and Mapping to Requirements
+
+- The structure supports maintainability, testability, and modular rehydration in a modern Nx/Angular workspace.
+- All code is included in full in the referenced files for maximum fidelity.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of Component Structure Report**
   RegistrationLandingComponent --> PersonalDetailsComponent
   RegistrationLandingComponent --> ContactDetailsComponent
   RegistrationLandingComponent --> InsuranceDetailsComponent

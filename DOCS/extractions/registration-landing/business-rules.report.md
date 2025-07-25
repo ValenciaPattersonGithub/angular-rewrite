@@ -2,6 +2,111 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Rule Implementations and Enforcement
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+#### Save/Cancel Logic
+```typescript
+validateandSavePatient = (data: any) => {
+  // ...existing code...
+  if (data.cancelEvent) {
+    if (personaldetail.valid) {
+      this.triggerOrigin = data.triggerData;
+      this.BuildFieldList();
+      this.openModal();
+    } else {
+      this.isCancelled = false;
+      this.NavigateToResponseUrl('#/Patient');
+    }
+  } else {
+    // ...validation and save logic...
+  }
+}
+```
+
+- **Rationale:** Enforces business rules for cancel/save, including validation and modal confirmation.
+
+#### Duplicate Detection
+```typescript
+hasDuplicateEmail = (emailAddresses: string[]): boolean => {
+  return emailAddresses.some((emailAddress, index) => {
+    return emailAddresses.slice(index + 1).some(nextEmailAddress => nextEmailAddress.trim().toLowerCase().normalize("NFC") === emailAddress.trim().toLowerCase().normalize("NFC"));
+  });
+};
+```
+
+- **Rationale:** Prevents duplicate emails in the form.
+
+#### Responsible Person Enforcement
+```typescript
+if (personaldetail.value.ResponsiblePerson === '2' && !personaldetail.value.ResponsiblePersonId) {
+  personaldetail.get('ResponsiblePersonId').setErrors(Validators.required);
+  this.setscrollIntoView(this.personalDetail);
+}
+```
+
+- **Rationale:** Ensures a responsible person is selected if required by business rules.
+
+#### Feature Flag Checks
+```typescript
+this.featureFlagService.getOnce$(FuseFlag.ReleseOldReferral).subscribe((value) => {
+  this.releseOldReferral = value;
+});
+this.featureFlagService.getOnce$(FuseFlag.ReleseEnableReferralNewPatientSection).subscribe((value) => {
+  this.enableNewReferral = value;
+});
+```
+
+- **Rationale:** Enables/disables features based on configuration.
+
+---
+
+## 2. Configuration, Constants, and Supporting Code
+
+- Uses enums like `RegistrationEvent` for event types.
+- Uses constants for feature flags and modal messages.
+
+---
+
+## 3. Edge Cases, Exceptions, and Anti-Patterns
+
+- Handles edge cases for duplicate emails/phones, missing required fields, and feature toggles.
+- Some legacy patterns (e.g., direct DOM access, legacy tokens) are present.
+
+---
+
+## 4. Diagrams and Tables
+
+| Rule | Enforcement | Code Reference |
+|------|-------------|---------------|
+| Duplicate Email | hasDuplicateEmail | hasDuplicateEmail |
+| Responsible Person Required | validateandSavePatient | validateandSavePatient |
+| Feature Flag Toggle | featureFlagService.getOnce$ | checkFeatureFlags |
+| Save/Cancel Modal | validateandSavePatient | openModal |
+
+---
+
+## 5. Rationale and Mapping to Requirements
+
+- All business rules and logic are required for workflow enforcement, data integrity, and feature management.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of Business Rules and Logic Report**
+# Business Rules and Logic DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`

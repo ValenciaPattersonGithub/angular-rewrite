@@ -1,12 +1,29 @@
 
+---
+requiredInputs:
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
+
 # Error Handling and Messaging Interrogation Prompt
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
 
+---
+requiredInputs:
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
 
-# DNA-Level Extraction Instructions
+## External Context Integration (MANDATORY)
+Follow the instructions and checklist in `DOCS/extraction-prompts/external-context.instructions.md` to ensure all available external context is integrated, referenced, and reported as required.
+All external context files must be collected from the folder specified by `TARGET_CONTEXT_FOLDER` (and any other relevant context folders).
 
-**You are extracting the full DNA of the component for rehydration in a modern Nx/Angular workspace.**
-
-
+## Instructions
 
 For every error handling and messaging mechanism:
 - Extract and include the full, exact code for:

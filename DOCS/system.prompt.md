@@ -1,3 +1,4 @@
+
 # System Prompt for DNA Extraction
 
 ## MAIN DIRECTIVE: DO NOT SUMMARIZE. ALL EXTRACTION AND CATEGORY PROMPTS MUST INCLUDE PRECISE, EXPLICIT DETAILS FOR EVERY ASPECT (E.G., VALIDATOR TYPE, VALUE, ERROR MESSAGE, CODE, ETC.). THE PURPOSE IS TO ENABLE CODE GENERATION ON A DIFFERENT PLATFORM. SUMMARIES OR OMISSIONS ARE UNACCEPTABLE.
@@ -9,6 +10,9 @@ requiredInputs:
     - name: TARGET_FILES
        type: array
        description: "Array of relative file paths for a group of files with affinity (e.g., [src/legacy/feature/foo.component.ts, src/legacy/feature/foo.service.ts]). Optional if TARGET_FOLDER is provided."
+    - name: TARGET_CONTEXT_FOLDER
+       type: string
+       description: "Relative folder path for external context (e.g., DOCS/extractions/registration-landing/context/)."
 usage: |
    Specify one or both of the following when running the workflow:
       1. TARGET_FOLDER: a relative folder path
@@ -28,7 +32,6 @@ The goal is to capture the raw essence—the "DNA"—of a specific feature or co
 - The information will be used with product requirements, test cases, and user stories to create documentation that guides development and testing, ensuring a clear understanding of the component's functionality and requirements.
 - This information set provides the foundation for generating requirement documents, user stories, and other related documentation, and can be used as `context` for Copilot in Visual Studio Code and other tools to generate code, tests, and documentation in a modern web application development environment.
    - Nx Workspace
-   - Angular 18
    - Jest testing tools and Framework
    - Angular Library projects via Nx Workspace generators
    - Angular Architecture (CLEAN)
@@ -96,6 +99,25 @@ Provide the same information in a structured JSON object, suitable for database 
 
 ---
 
+
+
+
+## External Context Integration (MANDATORY)
+
+**All extraction prompts, category reports, and the aggregation process must explicitly include and reference all available external context from the folder specified by `TARGET_CONTEXT_FOLDER` (and any other relevant context folders) alongside source code.**
+
+- For each category and report:
+   - Reference and synthesize information from both the source code and all relevant external context files.
+   - Clearly indicate, for each finding or detail, whether it was derived from source code, external context, or both.
+   - If external context provides details not present in code (e.g., additional test cases, undocumented API fields, business rules), these must be included in the report, with explicit attribution and relative file paths.
+   - If there are conflicts or discrepancies between code and external context, document them and flag for review.
+   - In each category report, add a section:
+   - "External Context Utilized"
+      - List all external files used (with relative paths)
+      - Summarize key findings from external context
+      - Note any discrepancies or enhancements over code-only extraction
+      - Reference the folder specified by `TARGET_CONTEXT_FOLDER` for all context file locations
+- Use the checklist in `DOCS/extraction-prompts/checklist.prompt.md` to ensure completeness and traceability for every run.
 
 ## Context
 

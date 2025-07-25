@@ -2,6 +2,109 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Models Defined and Used
+
+- **PersonObject**: Main patient data model, includes Profile, Phones, Emails, etc.
+- **Profile**: Demographic and account fields for the patient
+- **PersonAccount**: Nested in Profile, holds account-specific fields
+- **Phones/Emails**: Arrays of contact info objects
+- **PreviousDentalOffice/Referral**: Objects for dental/referral info
+- **patientIdentifierDtos/Flags/PatientBenefitPlanDtos/PatientLocations/patientDiscountTypeDto/patientGroupDtos**: Arrays or objects for identifiers, flags, insurance, locations, discounts, and groups
+
+---
+
+## 2. Model Structure (TypeScript)
+
+```typescript
+interface PersonObject {
+  Profile: Profile;
+  Phones: Phone[];
+  Emails: Email[];
+  PreviousDentalOffice: PreviousDentalOffice;
+  Referral: Referral;
+  patientIdentifierDtos: any[];
+  Flags: any[];
+  PatientBenefitPlanDtos: any[];
+  PatientLocations: any[];
+  patientDiscountTypeDto: any;
+  patientGroupDtos: any[];
+}
+
+interface Profile {
+  PatientId: string;
+  PatientSince: Date;
+  DataTag: string;
+  IsActive: boolean;
+  FirstName: string;
+  MiddleName: string;
+  LastName: string;
+  PreferredName: string;
+  Suffix: string;
+  DateOfBirth: Date;
+  Sex: string;
+  IsPatient: boolean;
+  ResponsiblePersonType: number;
+  ResponsiblePersonId: string;
+  IsSignatureOnFile: boolean;
+  AddressReferrerId: string;
+  AddressLine1: string;
+  AddressLine2: string;
+  City: string;
+  State: string;
+  ZipCode: string;
+  PreferredDentist: string;
+  PreferredHygienist: string;
+  PreferredLocation: string;
+  HeightFeet: number;
+  HeightInches: number;
+  Weight: string;
+  PrimaryDuplicatePatientId: string;
+  PersonAccount: PersonAccount;
+}
+
+interface PersonAccount {
+  ReceivesStatements: boolean;
+  ReceivesFinanceCharges: boolean;
+  PersonId: string;
+  AccountId: string;
+  DataTag: string;
+}
+
+// ...other interfaces for Phones, Emails, etc.
+```
+
+---
+
+## 3. Model Usage
+
+- Used for form patching, API payloads, and UI binding
+- Mapped to Angular FormGroups/FormArrays
+- Passed to and from services for persistence
+
+---
+
+## 4. Rationale and Mapping to Requirements
+
+- Models are designed to match backend API contracts and UI requirements
+- Follows DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`
+
+---
+
+**End of Models Report**
+
+# Models DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
@@ -58,12 +161,12 @@ this.PersonObject = {
 
 ## 4. Diagrams and Tables
 
-| Model | Properties | Usage |
-|-------|------------|-------|
-| PersonObject | Profile, Phones, Emails, ... | API submission |
-| Profile | PatientId, FirstName, ... | Nested in PersonObject |
-| PreviousDentalOffice | Name, Address, ... | Nested in PersonObject |
-| FormGroups | personalDetailsForm, ... | UI state, validation |
+| Model                | Properties                   | Usage                  |
+| -------------------- | ---------------------------- | ---------------------- |
+| PersonObject         | Profile, Phones, Emails, ... | API submission         |
+| Profile              | PatientId, FirstName, ...    | Nested in PersonObject |
+| PreviousDentalOffice | Name, Address, ...           | Nested in PersonObject |
+| FormGroups           | personalDetailsForm, ...     | UI state, validation   |
 
 ---
 
@@ -96,17 +199,17 @@ this.PersonObject = {
 
 ## Diagrams/Tables
 
-| Model | Properties | Usage |
-|-------|------------|-------|
-| Profile | PatientId, Name, DOB, Gender, etc. | Form, API |
-| Phone | PhoneNumber, Type, IsPrimary, etc. | Form, API |
-| Email | EmailAddress, IsPrimary, etc. | Form, API |
-| Policy | PlanName, PolicyHolderType, etc. | Form, API |
-| Preferences | Locations, Discounts, Flags | Form, API |
-| Dental | PreviousDentist, Address, Notes | Form, API |
-| Referral | ReferralType, Source, Patient | Form, API |
-| Identifier | Id, Value, Description | Form, API |
-| Flag/Group | Description, Id, State | Form, API |
+| Model       | Properties                         | Usage     |
+| ----------- | ---------------------------------- | --------- |
+| Profile     | PatientId, Name, DOB, Gender, etc. | Form, API |
+| Phone       | PhoneNumber, Type, IsPrimary, etc. | Form, API |
+| Email       | EmailAddress, IsPrimary, etc.      | Form, API |
+| Policy      | PlanName, PolicyHolderType, etc.   | Form, API |
+| Preferences | Locations, Discounts, Flags        | Form, API |
+| Dental      | PreviousDentist, Address, Notes    | Form, API |
+| Referral    | ReferralType, Source, Patient      | Form, API |
+| Identifier  | Id, Value, Description             | Form, API |
+| Flag/Group  | Description, Id, State             | Form, API |
 
 ## Rationale
 
@@ -343,15 +446,15 @@ Profile: {
 
 ## 5. Diagrams and Tables
 
-| Form Group           | Key Properties (Sample)                |
-|----------------------|----------------------------------------|
-| personalDetailsForm  | FirstName, LastName, Gender, DOB, ...  |
-| contactDetailsForm   | AddressLine1, Phones[], Emails[]       |
-| insuranceDetailsForm | Policies[]                             |
-| preferencesForm      | PrimaryLocation, Flags[], Groups[]     |
-| dentalRecordsForm    | PreviousDentist, PhoneNumber, Email    |
-| referralsForm        | ReferralType, ReferralSourceId, ...    |
-| identifiresForm      | PatientIdentifiers[]                   |
+| Form Group           | Key Properties (Sample)               |
+| -------------------- | ------------------------------------- |
+| personalDetailsForm  | FirstName, LastName, Gender, DOB, ... |
+| contactDetailsForm   | AddressLine1, Phones[], Emails[]      |
+| insuranceDetailsForm | Policies[]                            |
+| preferencesForm      | PrimaryLocation, Flags[], Groups[]    |
+| dentalRecordsForm    | PreviousDentist, PhoneNumber, Email   |
+| referralsForm        | ReferralType, ReferralSourceId, ...   |
+| identifiresForm      | PatientIdentifiers[]                  |
 
 ---
 

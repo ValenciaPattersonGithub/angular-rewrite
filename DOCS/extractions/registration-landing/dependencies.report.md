@@ -2,6 +2,138 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Import Statements and Dependency Graph
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+```typescript
+import {
+  AfterContentInit,
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject, Subscription } from 'rxjs';
+import { filter, refCount, take, takeUntil } from 'rxjs/operators';
+import { ConfirmationModalOverlayRef } from 'src/@shared/components/confirmation-modal/confirmation-modal.overlayref';
+import { ConfirmationModalService } from 'src/@shared/components/confirmation-modal/confirmation-modal.service';
+import { PatientRegistrationService } from 'src/patient/common/http-providers/patient-registration.service';
+import { RegistrationEvent } from 'src/patient/common/models/enums';
+import { RegistrationCustomEvent } from 'src/patient/common/models/registration-custom-event.model';
+import { Location } from '@angular/common';
+import { FuseFlag } from 'src/@core/feature-flags';
+import { FeatureFlagService } from 'src/featureflag/featureflag.service';
+import { PatientReferralCrudComponent } from '../patient-referrals/patient-referral-crud/patient-referral-crud.component';
+```
+
+#### Rationale and Usage
+- **Angular Core:** For component, lifecycle, and DOM access.
+- **Reactive Forms:** For all form logic and validation.
+- **RxJS:** For state, event, and subscription management.
+- **@ngx-translate/core:** For i18n and translation.
+- **Custom Services:** For API, modal, and feature flag logic.
+- **Child Components:** For modular UI sections.
+
+---
+
+## 2. Dependency Injection and Configuration
+
+#### Constructor Injection (from `registration-landing.component.ts`):
+
+```typescript
+constructor(
+  private titleService: Title,
+  private registrationService: PatientRegistrationService,
+  private fb: FormBuilder,
+  @Inject('StaticData') private staticData,
+  @Inject('toastrFactory') private toastrFactory,
+  private translate: TranslateService,
+  @Inject('windowObject') private window,
+  @Inject('$routeParams') public route,
+  @Inject('$uibModal') private uibModal,
+  @Inject('ImagingPatientService') private imagingPatientService,
+  @Inject('PersonFactory') private personFactory,
+  private confirmationModalService: ConfirmationModalService,
+  private location: Location,
+  @Inject('$location') public loc,
+  private featureFlagService: FeatureFlagService
+) {}
+```
+
+- **Rationale:** All business logic, API, and UI services are injected for modularity and testability.
+
+---
+
+## 3. Third-Party and App Services
+
+- **@ngx-translate/core:** Used for all translation and i18n needs.
+- **RxJS:** Used for all event, state, and async logic.
+- **Custom Services:**
+  - `PatientRegistrationService`: API and data logic for patient registration.
+  - `ConfirmationModalService`: Modal dialog management.
+  - `FeatureFlagService`: Feature flag checks and toggles.
+  - `ImagingPatientService`, `PersonFactory`: Domain-specific logic.
+
+---
+
+## 4. Peer, Dev, and Transitive Dependencies
+
+- All dependencies are managed via `package.json` and Angular CLI/Nx workspace configuration.
+- Peer dependencies include Angular core, RxJS, and @ngx-translate/core.
+- Dev dependencies include testing libraries (Jasmine, TestBed, etc.).
+
+---
+
+## 5. Legacy or Deprecated Dependencies
+
+- Some injected tokens (e.g., `$routeParams`, `$uibModal`) are legacy AngularJS patterns, likely for compatibility with hybrid Angular/AngularJS codebases.
+- Rationale: These should be refactored to modern Angular services in a new Nx/Angular workspace.
+
+---
+
+## 6. Dependency Table
+
+| Dependency | Type | Usage |
+|------------|------|-------|
+| @angular/core | Peer | Component, lifecycle, DOM |
+| @angular/forms | Peer | Reactive forms |
+| @angular/platform-browser | Peer | Title service |
+| @ngx-translate/core | Peer | i18n/translation |
+| rxjs | Peer | State, events, async |
+| src/@shared/components/confirmation-modal | App | Modal dialogs |
+| src/patient/common/http-providers/patient-registration.service | App | API/data |
+| src/featureflag/featureflag.service | App | Feature flags |
+| ... | ... | ... |
+
+---
+
+## 7. Rationale and Mapping to Requirements
+
+- All dependencies are required for the business logic, UI, and state management of the registration landing page.
+- Legacy dependencies should be modernized in Nx/Angular rehydration.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of Dependencies Report**# Dependencies DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`

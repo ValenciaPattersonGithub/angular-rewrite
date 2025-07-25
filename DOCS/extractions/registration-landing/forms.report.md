@@ -2,6 +2,71 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Forms Defined in Component
+
+- Main form: `formGroup` (Angular Reactive Form)
+- Sub-forms: Nested FormGroups and FormArrays for phones, emails, addresses, etc.
+
+---
+
+## 2. Form Structure and Controls
+
+| Control/Group         | Type         | Validators                | Purpose                        |
+|-----------------------|--------------|---------------------------|--------------------------------|
+| `firstName`           | FormControl  | required                  | Patient first name             |
+| `lastName`            | FormControl  | required                  | Patient last name              |
+| `dateOfBirth`         | FormControl  | required, date            | Patient DOB                    |
+| `phones`              | FormArray    | required, pattern         | Patient phone numbers          |
+| `emails`              | FormArray    | required, email           | Patient email addresses        |
+| `address`             | FormGroup    | required, pattern         | Patient address                |
+| ...                   | ...          | ...                       | ...                            |
+
+---
+
+## 3. Form Initialization and Patching
+
+- Forms are initialized in `ngOnInit` and via helper methods
+- Data is patched from `personObject` and API responses
+- Form state is reset/cleared on new registration or cancel
+
+---
+
+## 4. Validation and Error Handling
+
+- Validators are set on controls and groups
+- Error messages are displayed in the template for invalid fields
+- Custom validation logic for business rules (e.g., age, duplicate check)
+
+---
+
+## 5. Form Submission and API Integration
+
+- On submit, form is validated and data is mapped to `personObject`
+- Calls `addPerson` or `updatePerson` API methods
+- Handles success and error responses, updates UI accordingly
+
+---
+
+## 6. Rationale and Mapping to Requirements
+
+- Form structure and validation ensure data integrity and user guidance
+- Follows DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`
+
+---
+
+**End of Forms Report**
+# Forms DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`

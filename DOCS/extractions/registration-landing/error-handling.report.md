@@ -2,20 +2,20 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
-**Included Files:**
+**Files Included:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
-- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
 
 ---
 
-## 1. Error Detection and Handling Logic
+## 1. Error Detection, Handling, and Propagation
 
-**File:** `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 
 ```typescript
-// Example error handling in savePersonFailure
+// Error handling in savePersonFailure
 savePersonFailure = (res: any) => {
   const mode = this.route.patientId ? 'update' : 'save';
   if (mode) {
@@ -28,57 +28,57 @@ savePersonFailure = (res: any) => {
 };
 ```
 
-- **Purpose:**
-  - Handles API and form submission errors
-  - Displays error messages to the user via `toastrFactory`
-  - Closes loading modals on error
+- **Rationale:** All API errors are surfaced to the user via toast notifications and modal closure.
 
 ---
 
-## 2. UI and Notification Code
+## 2. UI, Notification, and Error Boundary Code
 
-- Uses `toastrFactory.error` and `toastrFactory.success` for user feedback
-- Modal overlays for confirmation and error states
-- Error messages are translated using `TranslateService`
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+
+```html
+<p id="modal-header" class="reg-modal-header">
+  {{!isCancelled ? 'Is everything correct? Do you want to continue?':'Cancel now and you will lose the changes below. Do you want to continue?' | translate}}
+</p>
+<!-- Error messages for form fields are handled in child components and via Angular validators -->
+```
+
+- **Rationale:** Modal and toast notifications are used for user feedback. Field-level errors are handled in child components.
 
 ---
 
-## 3. Error Propagation and Logging
+## 3. Logging and Analytics Hooks
 
-- Errors from API calls are caught in subscription error handlers
-- All error messages are surfaced to the user via toast notifications
-- No explicit logging to external services in this component
+- **toastrFactory:** Used for all error and success notifications.
+- **No explicit analytics hooks in this component.**
 
 ---
 
-## 4. Edge Cases and Legacy Artifacts
+## 4. Edge Cases, Anti-Patterns, and Legacy Artifacts
 
-- Handles both save and update errors
-- Uses AngularJS-style DI for `toastrFactory`
-- Some error handling logic is embedded in form validation and modal flows
+- Error handling is centralized in `savePersonFailure` and via Angular form validation.
+- Some legacy patterns (e.g., direct DOM access, legacy tokens) are present but do not affect error handling directly.
 
 ---
 
 ## 5. Diagrams and Tables
 
-| Error Source | Handling | User Feedback |
-|--------------|----------|---------------|
-| API failure (save/update) | savePersonFailure | Toast error, modal close |
-| Form validation | validateandSavePatient | Toast error, scroll to section |
-| Modal confirmation | openConfirmationModal | Modal dialog |
+| Error Source | Handling | User Feedback | Code Reference |
+|--------------|----------|--------------|---------------|
+| API Failure | savePersonFailure | Toast notification, modal close | savePersonFailure |
+| Form Validation | Angular Validators | Field-level error messages | Child components |
+| Modal Actions | Modal logic | Confirmation/cancel messages | HTML template |
 
 ---
 
-**End of Error Handling and Messaging Report**# Error Handling and Messaging Report: registration-landing
+## 6. Rationale and Mapping to Requirements
 
-**Target Folder:** `src/patient/patient-registration/registration-landing`
+- All error handling and messaging logic is required for user feedback, workflow integrity, and state management.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
 
-## Error Detection and Handling
+---
 
-- **Form Validation:** Uses Angular Validators for required fields, patterns, and min/max lengths. Errors are surfaced in the UI via child components and form control states. (See [Validation Report](validation.report.md), Section 1.)
-- **API Errors:** API call failures (add/update person) are caught and surfaced via `toastrFactory.error` and modal dialogs. (See [API Interactions Report](api-interactions.report.md), Section 3.)
-- **Modal Confirmation:** User navigation or save triggers confirmation modal; errors in modal actions are handled gracefully.
-- **RxJS Subscriptions:** All subscriptions are cleaned up on destroy to prevent memory leaks.
+**End of Error Handling and Messaging Report**
 
 ## Messaging
 

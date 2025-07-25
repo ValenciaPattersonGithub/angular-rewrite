@@ -8,11 +8,30 @@ For each test strategy and requirement:
 ## Output Format
 Respond with a markdown report for this category, using headings, bullet points, and code blocks as needed.
 
-# DNA-Level Extraction Instructions
+---
+requiredInputs:
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
 
-**You are extracting the full DNA of the component's test strategy for rehydration in a modern Nx/Angular workspace.**
+# Test Strategy and Requirements Interrogation Prompt
+requiredInputs:
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
 
+---
+requiredInputs:
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
 
+## External Context Integration (MANDATORY)
+Follow the instructions and checklist in `DOCS/extraction-prompts/external-context.instructions.md` to ensure all available external context is integrated, referenced, and reported as required.
+All external context files must be collected from the folder specified by `TARGET_CONTEXT_FOLDER` (and any other relevant context folders).
 
 For every test aspect (unit, integration, e2e):
 - Extract and include the full, exact code for:
@@ -31,3 +50,8 @@ For every test aspect (unit, integration, e2e):
 - All file references must use complete relative paths from the workspace root.
 - Include diagrams, tables, and rationale sections as appropriate.
 - No summaries or omissions. Err on the side of including too much detail.
+- Add a section at the end of the report:
+  - "External Context Utilized"
+    - List all external files used (with relative paths)
+    - Summarize key findings from external context
+    - Note any discrepancies or enhancements over code-only extraction

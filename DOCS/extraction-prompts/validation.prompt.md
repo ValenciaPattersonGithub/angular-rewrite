@@ -1,8 +1,14 @@
-
+---
+requiredInputs:
+	- name: TARGET_CONTEXT_FOLDER
+		type: string
+		description: "Relative folder path for external context files (e.g., DOCS/extractions/registration-landing/context/). Required for all context integration."
+---
 
 # Validation and Error Handling for Forms Interrogation Prompt
 
 ## MAIN DIRECTIVE: DO NOT SUMMARIZE. ALL EXTRACTION MUST INCLUDE PRECISE, EXPLICIT DETAILS FOR EVERY VALIDATION RULE, VALIDATOR, VALUE, AND ERROR MESSAGE. THE PURPOSE IS TO ENABLE CODE GENERATION ON A DIFFERENT PLATFORM. SUMMARIES OR OMISSIONS ARE UNACCEPTABLE.
+
 
 
 # DNA-Level Extraction Instructions
@@ -10,6 +16,11 @@
 **You are extracting the full DNA of the component for rehydration in a modern Nx/Angular workspace.**
 
 
+
+
+## External Context Integration (MANDATORY)
+Follow the instructions and checklist in `DOCS/extraction-prompts/external-context.instructions.md` to ensure all available external context is integrated, referenced, and reported as required.
+All external context files must be collected from the folder specified by `TARGET_CONTEXT_FOLDER` (and any other relevant context folders).
 
 For each validation rule and error feedback:
 - List every field and its validators with explicit type, value, and code (e.g., `Validators.required`, `Validators.maxLength(64)`).
@@ -35,3 +46,8 @@ For each validation rule and error feedback:
 - Include diagrams, tables, and rationale sections as appropriate.
 - More detail is better: err on the side of including too much rather than too little.
 - **DO NOT SUMMARIZE. DO NOT OMIT ANY DETAIL.**
+- Add a section at the end of the report:
+	- "External Context Utilized"
+		- List all external files used (with relative paths)
+		- Summarize key findings from external context
+		- Note any discrepancies or enhancements over code-only extraction

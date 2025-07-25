@@ -2,6 +2,125 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Child Component Interactions
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+
+```html
+<personal-details [personalDetails]="personGroup.controls.personalDetailsForm"></personal-details>
+<contact-details [contactDetails]="personGroup.controls.contactDetailsForm" [phoneTypes]="phoneTypes" [states]="states"></contact-details>
+<insurance-details [insuranceDetails]="personGroup.controls.insuranceDetailsForm" *ngIf="!route.patientId"></insurance-details>
+<preferences [patientPreference]="personGroup.controls.preferencesForm" [onlyActive]="true"></preferences>
+<dental-records [dentalRecords]="personGroup.controls.dentalRecordsForm"></dental-records>
+<patient-referral-crud [fromAddPatientProfile]="true" *ngIf="!route.patientId && enableNewReferral"></patient-referral-crud>
+<additional-identifiers [additionalIdentifiers]="personGroup.controls.identifiresForm" [patientIdentifiers]="personInfo.patientIdentifierDtos"></additional-identifiers>
+<app-patient-documents [patientProfile]="personInfo.Profile"></app-patient-documents>
+<app-patient-account-members [featureName]="route.patientId?'PatientProfile':'PatientRegistration'"></app-patient-account-members>
+```
+
+- **Rationale:** Each section of the registration form is a child component, receiving its respective FormGroup or data as input.
+
+---
+
+## 2. Service and Event Interactions
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+#### Service Calls and Event Handling
+```typescript
+this.registrationService.getPersonByPersonId(this.route.patientId).subscribe(...);
+this.registrationService.setRegistrationEvent({ eventtype: RegistrationEvent.SelectedMenu, data: this.selectedMenuItem });
+this.registrationService.getRegistrationEvent().pipe(takeUntil(this.unsubscribe$)).subscribe((event: RegistrationCustomEvent) => { ... });
+this.featureFlagService.getOnce$(FuseFlag.ReleseOldReferral).subscribe((value) => { this.releseOldReferral = value; });
+this.featureFlagService.getOnce$(FuseFlag.ReleseEnableReferralNewPatientSection).subscribe((value) => { this.enableNewReferral = value; });
+```
+
+- **Rationale:** The component subscribes to service observables for data, feature flags, and events, and emits events to update registration state.
+
+---
+
+## 3. @ViewChild and DOM Interactions
+
+```typescript
+@ViewChild('personalDetail', { static: false }) personalDetail: ElementRef;
+@ViewChild('contactDetail', { static: false }) contactDetail: ElementRef;
+@ViewChild('insurance', { static: false }) insurance: ElementRef;
+@ViewChild('prefrence', { static: false }) prefrence: ElementRef;
+@ViewChild('dentalRecord', { static: false }) dentalRecord: ElementRef;
+@ViewChild('referrals', { static: false }) referrals: ElementRef;
+@ViewChild('identifiers', { static: false }) identifiers: ElementRef;
+@ViewChild('documents', { static: false }) documents: ElementRef;
+@ViewChild('accountMembers', { static: false }) accountMembers: ElementRef;
+@ViewChild(PatientReferralCrudComponent) referralsComponent!: PatientReferralCrudComponent;
+```
+
+- **Rationale:** Used for scrolling, focus, and direct DOM manipulation for section navigation and modal management.
+
+---
+
+## 4. Event Bindings and Outputs
+
+```html
+<div class="person-container" (scroll)="onScroll($event)">
+...
+<app-button (onClick)="closeModal()" ...></app-button>
+<app-button (onClick)="isCancelled?initializePersonForm():savePerson()" ...></app-button>
+```
+
+- **Rationale:** Handles user actions for scrolling, modal confirmation, and form submission/cancellation.
+
+---
+
+## 5. Lifecycle and Subscription Management
+
+```typescript
+ngOnInit() { ... }
+ngAfterContentInit() { ... }
+ngOnDestroy() { ... }
+```
+
+- **Rationale:** Ensures all subscriptions are managed and cleaned up, and all child components are initialized and patched as needed.
+
+---
+
+## 6. Edge Cases and Legacy Artifacts
+
+- Use of legacy AngularJS tokens (`$routeParams`, `$uibModal`) for hybrid compatibility.
+- Direct DOM access for scrolling/focus (should be modernized in Nx/Angular).
+
+---
+
+## 7. Diagrams and Tables
+
+| Interaction | Type | Code Reference |
+|-------------|------|---------------|
+| Child Components | Input/Output | HTML template, @ViewChild |
+| Services | Observable/Event | registrationService, featureFlagService |
+| DOM | ViewChild/ElementRef | Component class |
+| User Events | Event Binding | HTML template |
+
+---
+
+## 8. Rationale and Mapping to Requirements
+
+- All interactions are required for the registration workflow, UI navigation, and state management.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of Interactions Report**
+# Interactions DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`

@@ -2,6 +2,250 @@
 
 **Target Folder:** `src/patient/patient-registration/registration-landing`
 
+**Files Included:**
+- `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.spec.ts`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.html`
+- `src/patient/patient-registration/registration-landing/registration-landing.component.scss`
+
+---
+
+## 1. Validators and Validation Rules
+
+### File: `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
+
+#### Personal Details Form
+```typescript
+this.fb.group({
+  FirstName: ['', [Validators.required, Validators.maxLength(64)]],
+  MiddleInitial: ['', [Validators.maxLength(1)]],
+  LastName: ['', [Validators.required, Validators.maxLength(64)]],
+  Suffix: ['', [Validators.maxLength(20)]],
+  PreferredName: ['', [Validators.maxLength(64)]],
+  DateOfBirth: [null],
+  Gender: [''],
+  Patient: [true],
+  ResponsiblePerson: [''],
+  SignatureOnFile: [true],
+  Status: [true],
+  ResponsiblePersonId: [''],
+  ResponsiblePersonName: [''],
+  HeightFt: [''],
+  HeightIn: [''],
+  Weight: [''],
+  DataTag: [null],
+  PatientId: [null],
+  PatientSince: [null],
+  unscheduleOnly: [false],
+  updatePatientActive: [false],
+  PrimaryDuplicatePatientId: [''],
+});
+```
+
+#### Contact Details Form
+```typescript
+this.fb.group({
+  AddressLine1: [null],
+  AddressLine2: [null],
+  City: [null],
+  ZipCode: [null, [Validators.minLength(5), Validators.pattern('^[0-9]{5}(?:[0-9]{4})?$')]],
+  State: [''],
+  MemberAddress: [''],
+  Phones: this.route.patientId ? this.fb.array([]) : this.fb.array([this.newPhone(true)]),
+  Emails: this.route.patientId ? this.fb.array([]) : this.fb.array([this.newEmail(true)]),
+  optOutPhones: [null],
+  optOutEmails: [null],
+  showPhoneOwner: [false],
+  ResponsiblePersonId: [null],
+  RPLastName: [null],
+  RPFirstName: [null],
+  PersonAccountId: [null],
+});
+```
+
+#### Phone Control
+```typescript
+this.fb.group({
+  PhoneNumber: [null, [Validators.required, Validators.minLength(10)]],
+  PhoneType: [0, [Validators.required]],
+  IsPrimary: [isPrimary],
+  PhoneReminder: [true],
+  TextReminder: [false],
+  ValidPhoneNumber: [true],
+  ValidPhoneType: [true],
+  ObjectState: ['Add'],
+  PhoneOwner: [0],
+  ContactId: [null],
+  PatientId: [this.route.patientId],
+  PhoneReferrerId: [null],
+  isDisabled: [false],
+});
+```
+
+#### Email Control
+```typescript
+this.fb.group({
+  EmailAddress: [null, [Validators.required, Validators.pattern("^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$")]],
+  IsPrimary: [isPrimary],
+  EmailReminder: [true],
+  ValidEmail: [true],
+  ObjectState: ['Add'],
+  EmailOwner: [0],
+  PatientEmailId: [null],
+  PatientId: [this.route.patientId],
+  AcountEmailId: [null],
+  isDisabled: [false],
+});
+```
+
+#### Insurance Details Form
+```typescript
+this.fb.group({
+  showPlans: [false],
+  showPolicyHolderSearch: [false],
+  showRelationships: [false],
+  showPersonSearch: [false],
+  Policies: this.fb.array([this.newPolicy(0)]),
+});
+```
+
+#### Policy Control
+```typescript
+this.fb.group({
+  BenefitPlanId: [''],
+  PolicyHolderId: [''],
+  PolicyHolderType: [''],
+  PolicyHolderStringId: [null],
+  RelationshipToPolicyHolder: [''],
+  Priority: [policiesLength],
+  EffectiveDate: [new Date()],
+  PlanName: [''],
+  PersonName: [''],
+  validPolicy: [true],
+  DependentChildOnly: [false],
+  MemberId: [null]
+});
+```
+
+#### Preferences Form
+```typescript
+this.fb.group({
+  PrimaryLocation: [''],
+  PrimaryLocationName: [''],
+  CurrentPrimaryLocation: [''],
+  AlternateLocations: [''],
+  CloneAlternateLocations: [''],
+  DiscountType: [''],
+  DiscountTypeObjectState: [''],
+  PatientDiscountTypeId: [''],
+  PatientDiscountDataTag: [''],
+  DiscountName: [''],
+  PreferredHygienists: [''],
+  PreferredHygienistsName: [''],
+  PreferredDentists: [''],
+  PreferredDentistsName: [''],
+  CustomFlag: ['', [Validators.required]],
+  Flags: '',
+  EndDate: [''],
+  Groups: [''],
+  ReceivesStatements: [true],
+  ReceivesFinanceCharges: [true],
+  PrimaryLocations: [''],
+});
+```
+
+#### Dental Records Form
+```typescript
+this.fb.group({
+  PreviousDentist: [null],
+  PhoneNumber: [null, [Validators.minLength(10)]],
+  Email: [null, [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+  AddressLine1: [null],
+  AddressLine2: [null],
+  City: [null],
+  ZipCode: [null, [Validators.minLength(5), Validators.pattern('^[0-9]{5}(?:[0-9]{4})?$')]],
+  State: [''],
+  Notes: [''],
+  DataTag: [null],
+  ObjectState: ['Add'],
+  PreviousDentalOfficeId: [null],
+  PatientId: [null],
+});
+```
+
+#### Referrals Form
+```typescript
+this.fb.group({
+  referralDirection: [null],
+  referralCategory: ['', Validators.required],
+  provider: ['', Validators.required],
+  txPlan: [null],
+  chkPrintTxPlan: [],
+  notes: [],
+  referringTo: [null, Validators.required],
+  referringFrom: [null],
+  firstName: [],
+  lastName: [],
+  email: [, [Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,4}$')]],
+  phone: [, [Validators.minLength(10)]],
+  sourceName: [null],
+  referralSource: ['', Validators.required],
+  campaignName: [],
+  patient: [],
+  returnDate: [],
+  actualReturnDate: []
+});
+```
+
+#### Additional Identifiers Form
+```typescript
+this.fb.group({
+  PatientIdentifiers: this.fb.array([]),
+});
+```
+
+---
+
+## 2. Error Messages and UI Feedback
+
+- All error messages for validation failures are surfaced via Angular form validation and child component templates.
+- Example: Required, maxLength, minLength, pattern, and custom error messages are shown inline in the UI.
+- Modal and toast notifications are used for global errors (see Error Handling report).
+
+---
+
+## 3. Edge Cases and Business Logic
+
+- Duplicate phone/email detection and validation in `validateandSavePatient`.
+- Conditional disabling of fields based on business rules (e.g., ResponsiblePerson).
+- Custom logic for patching and validating nested form arrays.
+
+---
+
+## 4. Diagrams and Tables
+
+| Field | Validators | Error Messages | UI Binding |
+|-------|------------|---------------|------------|
+| FirstName | required, maxLength(64) | Required, max 64 chars | personal-details |
+| LastName | required, maxLength(64) | Required, max 64 chars | personal-details |
+| EmailAddress | required, pattern | Required, invalid email | contact-details |
+| PhoneNumber | required, minLength(10) | Required, min 10 digits | contact-details |
+| ... | ... | ... | ... |
+
+---
+
+## 5. Rationale and Mapping to Requirements
+
+- All validation and error handling logic is required for data integrity, user feedback, and workflow enforcement.
+- Follows the DNA extraction checklist and rehydration guidance in `DOCS/system.prompt.md`.
+
+---
+
+**End of Validation and Error Handling for Forms Report**
+# Validation and Error Handling for Forms DNA Extraction Report
+
+**Target Folder:** `src/patient/patient-registration/registration-landing`
+
 **Included Files:**
 - `src/patient/patient-registration/registration-landing/registration-landing.component.ts`
 - `src/patient/patient-registration/registration-landing/registration-landing.component.html`

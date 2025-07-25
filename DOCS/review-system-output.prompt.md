@@ -49,9 +49,10 @@ If any of these assets are missing or invalid, halt the review and report the is
 ## Instructions
 
 1. For **each extracted report** in `${EXTRACTION_REPORTS_FOLDER}`:
-   - **Read and understand the corresponding category prompt** from `${CATEGORY_PROMPTS_FOLDER}` to clarify the intent, required details, and expected structure for that report.
+1. For **each file matching `*.report.md` in `${EXTRACTION_REPORTS_FOLDER}`**:
+   - **Read and understand the corresponding category prompt** from `${CATEGORY_PROMPTS_FOLDER}` (if one exists) to clarify the intent, required details, and expected structure for that report.
    - **Thoroughly review the report** for accuracy, completeness, and alignment with both the category prompt and the actual source code in `${TARGET_SOURCE}`.
-   - **Use the content of all other reports as context**: cross-reference details, fill in missing information, resolve inconsistencies, and ensure that related rules, dependencies, and errors are consistently described and linked across reports.
+   - **Use the content of all other `*.report.md` files as context**: cross-reference details, fill in missing information, resolve inconsistencies, and ensure that related rules, dependencies, and errors are consistently described and linked across reports.
    - **Update and enhance the existing report content** (do not append or duplicate sections):
       - Add missing or additive information, especially where the category prompt or other reports indicate more detail is needed.
       - Correct inaccuracies or outdated information.
